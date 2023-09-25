@@ -101,26 +101,33 @@
                                     </div>
                                     <div class="collapse show h-100" id="collapseicon2" aria-labelledby="collapseicon2" data-parent="#accordion">
                                         <div class="card-body post-about h-100">
+                                            <div class="text-center">
+                                                <img src="{{ Auth::user()->company_logo ? asset('storage/file_image'.'/'.Auth::user()->company_logo) : asset('Bromi-Logo-card.png')}}" alt="Avatar" style="width:150px;height:150px;">
+                                            </div>
                                             <ul>
                                                 <li>
                                                     <div class="icon"><i data-feather="book"></i></div>
                                                     <div>
                                                         <h5>{{ $user->address }}</h5>
-
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="icon"><i data-feather="briefcase"></i></div>
                                                     <div>
                                                         <h5>{{ $user->company_name }}</h5>
-
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="icon"><i data-feather="phone"></i></div>
+                                                    <div>
+                                                        <h5>{{ $user->mobile_number }}
+                                                        </h5>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div class="icon"><i data-feather="heart"></i></div>
                                                     <div>
                                                         <h5>{{ isset($user->City->name) ? $user->City->name : '' }}</h5>
-
                                                     </div>
                                                 </li>
                                                 <li>
@@ -133,7 +140,7 @@
                                             </ul>
                                             <div class="row">
                                                 <div class="col-md-4 text-center webd">                                                   
-                                                        <button class="btn btn-secondary text-center btn-edit">Edit Profile</button>
+                                                        <button class="btn btn-secondary text-center btn-edit">Edit</button>
                                                 </div>
                                                 <div class="col-md-8 text-center">
                                                         <button class="btn btn-secondary text-center changepwd">Change Password</button></a>
@@ -152,9 +159,8 @@
                 @if ($user->plan_id == $plan->id)
                 <div class="col-xl-4 col-md-4 col-sm-3">
                     <div class="pricing-block card text-center h-100">
+                        <div class="mb-3 mt-5"><h2>{{ $plan->name }}</h2></div>
                         <div class="pricing-header">
-                            <h2>{{ $plan->name }}</h2>
-
                             <div class="price-box">
                                 <div>
                                     <h3>{{ $plan->price }}</h3>
