@@ -67,11 +67,11 @@
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
-                                    {{-- <span
+                                    <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_source"
                                         class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                    >Add</span>
                                     <h6>Property Source
                                     </h6>
                                     <div class="row details mt-5">
@@ -177,11 +177,11 @@
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
-                                    {{-- <span
+                                    <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_amenities"
                                         class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                    >Add</span>
                                     <h6>Amenities</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_amenities_ul">
