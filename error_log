@@ -1,0 +1,55 @@
+[15-Jun-2023 18:09:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('config')
+#1 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('config')
+#2 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(851): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(836): Illuminate\Container\Container->make('config', Array)
+# in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[15-Jun-2023 18:09:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('config')
+#1 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('config')
+#2 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(851): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(836): Illuminate\Container\Container->make('config', Array)
+# in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[15-Jun-2023 18:09:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('config')
+#1 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('config')
+#2 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(851): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(836): Illuminate\Container\Container->make('config', Array)
+# in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[15-Jun-2023 18:09:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('config')
+#1 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('config')
+#2 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(851): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(836): Illuminate\Container\Container->make('config', Array)
+# in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[15-Jun-2023 18:09:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('config')
+#1 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('config')
+#2 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(851): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(836): Illuminate\Container\Container->make('config', Array)
+# in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[15-Jun-2023 18:09:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('config')
+#1 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('config')
+#2 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(851): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(836): Illuminate\Container\Container->make('config', Array)
+# in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[15-Jun-2023 18:09:17 UTC] PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('config')
+#1 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('config')
+#2 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(851): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/mrwebcoi/updates.mrweb.co.in/bromi/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(836): Illuminate\Container\Container->make('

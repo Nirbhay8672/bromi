@@ -1,0 +1,2178 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use Carbon\Carbon;
+use App\Models\City;
+use App\Models\User;
+use App\Models\Areas;
+use App\Models\State;
+use App\Models\Taluka;
+use App\Helpers\Helper;
+use App\Models\Village;
+use App\Models\District;
+use App\Models\Projects;
+use App\Models\Enquiries;
+use App\Models\Properties;
+use App\Scopes\VendorScope;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\PropertyReport;
+use App\Models\PropertyViewer;
+use App\Models\QuickSiteVisit;
+use App\Models\SharedProperty;
+use App\Models\LandImages;
+use App\Models\DropdownSettings;
+use App\Models\DropdownTemplate;
+use Yajra\DataTables\DataTables;
+use App\Models\UserNotifications;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Rap2hpoutre\FastExcel\FastExcel;
+use Illuminate\Support\Facades\Session;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
+use Illuminate\Support\Facades\DB as FacadesDB;
+use PDF;
+
+class PropertyController extends Controller
+{
+
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+
+	public function index(Request $request)
+	{
+		$sharedlk = '';
+		$shareddata = '';
+		if (!empty($request->shareproperty)) {
+			$prop = Helper::theDecrypt($request->shareproperty);
+			$sharedlk = $request->shareproperty;
+			if (empty(Properties::find($prop))) {
+				$shareddata = [];
+				$sharedpr = Properties::with('Projects.Area')->withoutGlobalScopes()->find($prop);
+				if (isset($sharedpr->property_for)) {
+					$shareddata['for'] = ($sharedpr->property_for == 'Both') ? 'Rent & Sell' : '';
+				}
+				if (!empty($sharedpr->building_id)) {
+					$sahred_project = Projects::withoutGlobalScopes()->find($sharedpr->building_id);
+					$shareddata['project_name'] = isset($sahred_project->project_name) ? $sahred_project->project_name : '';
+					if (!empty($sahred_project->area_id)) {
+						$shareddata['area'] = isset(Areas::withoutGlobalScopes()->find($sahred_project->area_id)->name) ? Areas::withoutGlobalScopes()->find($sahred_project->area_id)->name : '';
+					}
+					if (!empty($sharedpr->configuration)) {
+						$shareddata['config'] = isset(DropdownSettings::withoutGlobalScopes()->find($sharedpr->configuration)->name) ? DropdownSettings::withoutGlobalScopes()->find($sharedpr->configuration)->name : '';
+					}
+				}
+			}
+		}
+
+		if ($request->ajax()) {
+			$dropdowns = DropdownSettings::get()->toArray();
+			$dropdownsarr = [];
+			foreach ($dropdowns as $key => $value) {
+				$dropdownsarr[$value['id']] = $value;
+			}
+
+			$enq = '';
+			if (!empty($request->search_enq)) {
+				$enq = Enquiries::find($request->search_enq);
+			}
+			$dropdowns = $dropdownsarr;
+			$data = Properties::select('properties.*')->with('Projects.Area')
+				->join('projects', 'projects.id', '=', 'properties.project_id')
+				->where('properties.property_category', '!=', '256')
+				->where('properties.property_category', '!=', '261')
+				->where('properties.property_category', '!=', '262')
+				->when($request->filter_by, function ($query) use ($request) {
+					if ($request->filter_by == 'reminder') {
+						return $query->whereDate('reminder', '>=', Carbon::now()->subDays(7)->format('y-m-d'));
+					} elseif ($request->filter_by == 'favourite') {
+						return $query->where('is_favourite', 1);
+					} elseif ($request->filter_by == 'new') {
+						return $query->whereDate('created_at', '>=', Carbon::now()->subDays(30)->format('y-m-d'));
+					}
+				})
+				->when(!empty(Auth::user()->property_for_id), function ($query) use ($request) {
+					// dd("testtt",(Auth::user()->property_type_id));
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.property_for', Auth::user()->property_for_id)->orWhere('properties.property_for', 'Both');
+					});
+				})
+				->when(!empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
+					// dd("345",(Auth::user()->property_type_id));
+					return $query->whereIn('properties.property_type', json_decode(Auth::user()->property_type_id));
+				})
+				->when(!empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {
+					// dd("123",(Auth::user()->property_type_id));
+					return $query->whereIn('properties.property_category', json_decode(Auth::user()->specific_properties));
+				})
+				->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
+					});
+				})
+				->when($request->filter_property_type && empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {;
+					return $query->where('properties.property_type', $request->filter_property_type);
+				})
+				->when($request->filter_specific_type && empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {;
+					return $query->where('properties.property_category', $request->filter_specific_type);
+				})
+				->when($request->filter_configuration, function ($query) use ($request) {
+					return $query->where('properties.configuration', $request->filter_configuration);
+				})
+				->when($request->filter_building_id, function ($query) use ($request) {
+					return $query->where('properties.project_id', $request->filter_building_id);
+				})
+				->when($request->filter_area_id, function ($query) use ($request) {
+					return $query->where('projects.area_id', $request->filter_area_id);
+				})
+				->when($request->filter_furnished_status, function ($query) use ($request) {
+					return $query->where('furnished_status', $request->filter_furnished_status);
+				})
+				// ->when($request->filter_building_quality, function ($query) use ($request) {
+				// 	// dd("in",$request->filter_building_quality);
+				// 	return $query->where('projects.building_quality', $request->filter_building_quality);
+				// })
+				->when($request->filter_availability_status, function ($query) use ($request) {
+					return $query->where('properties.availability_status', $request->filter_availability_status);
+				})
+				->when($request->filter_owner_is, function ($query) use ($request) {;
+					return $query->where('owner_is', $request->filter_owner_is);
+				})
+				->when($request->filter_Property_priority, function ($query) use ($request) {;
+					return $query->where('Property_priority', $request->filter_Property_priority);
+				})
+				->when(($request->filter_property_status || $request->filter_property_status == '0'), function ($query) use ($request) {
+					return $query->where('properties.status', $request->filter_property_status);
+				})
+				->when($request->filter_from_date, function ($query) use ($request) {;
+					return $query->whereDate('properties.created_at', '>=', $request->filter_from_date);
+				})
+				->when($request->filter_to_date, function ($query) use ($request) {;
+					return $query->whereDate('properties.created_at', '<=', $request->filter_to_date);
+				})
+				->when($request->filter_is_prime, function ($query) use ($request) {;
+					return $query->where('projects.is_prime', $request->filter_is_prime);
+				})
+				->when($request->filter_is_hot, function ($query) use ($request) {;
+					return $query->where('hot_property', $request->filter_is_hot);
+				})
+				->when($request->filter_is_preleased, function ($query) use ($request) {;
+					return $query->where('is_pre_leased', $request->filter_is_preleased);
+				})
+				->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
+					if (!empty($enq)) {
+						// property for
+						if ($request->match_enquiry_for) {
+							$property_for = ($enq->enquiry_for == 'Buy') ? 'Sell' : $enq->enquiry_for;
+							// dd("match_enquiry_for", $enq->enquiry_for, "..", $property_for);
+							// dd($request->all(), $enq);
+							$query->where('properties.property_for', $property_for);
+						}
+						//requirement ytpe
+						if ($request->match_property_type && !empty($enq->requirement_type)) {
+							// dd("match_property_type", $enq->requirement_type, "..", $request->match_property_type);
+							$query->where('properties.property_type', $enq->requirement_type);
+						}
+						//property category
+						if ($request->match_specific_type && !empty($enq->property_type)) {
+							// dd("match_specific_type", $enq->property_type, "..", $request->match_specific_type);
+							$query->where('properties.property_category', $enq->property_type);
+						}
+						//property price & unit_price
+						if ($request->match_budget_from_type) {
+							// dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
+
+							// surveyprice = commercial->plot/land matcehd
+							// $query->where('properties.survey_price', '>=', $enq->budget_from)
+							// 	->where('properties.survey_price', '<=', $enq->budget_to);
+
+							// $query->where(function ($query) use ($enq) {
+							// 	$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', str_replace(',', '', $enq->budget_from))
+							// 		->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', str_replace(',', '', $enq->budget_to));
+							// });
+
+							$budgetFrom = str_replace(',', '', $enq->budget_from);
+							$budgetTo = str_replace(',', '', $enq->budget_to);
+
+							// $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+							// 	$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+							// 		$query->where('properties.survey_price', '>=', $budgetFrom)
+							// 			->where('properties.survey_price', '<=', $budgetTo);
+							// 	})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+							// 		$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+							// 			->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+							// 	});
+
+							// });
+							$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+								$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+									$query->where('properties.survey_price', '>=', $budgetFrom)
+										->where('properties.survey_price', '<=', $budgetTo);
+								})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+									$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+										->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+								})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+									$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+										->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+								});
+							});
+						}
+
+
+						if ($request->match_enquiry_size) {
+							// $enq->area_from = '1000';
+							// $enq->area_to = '1800';
+
+							//enq 48=vigha
+							dd("match_enquiry_size 32", $request->match_enquiry_size, "area_from..", $enq->area_from, $enq->area_from_measurement, "area_to...", $enq->area_to, $enq->area_to_measurement);
+
+							$query->where(function ($query) use ($enq) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+									->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+									->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
+							});
+							// survey_plot_size
+						}
+
+						// if ($request->match_building && !empty(json_decode($enq->building_id)[0])) {
+						// 	return $query->whereIn('properties.project_id', json_decode($enq->building_id));
+						// }
+
+						if ($request->match_inquiry_source && !empty($enq->enquiry_source)) {
+							// dd("match_inquiry_source", $enq->enquiry_source, "..", $request->match_inquiry_source);
+							$query->where('properties.source_of_property', $enq->enquiry_source);
+						}
+					}
+				})
+				->orderBy('properties.id', 'desc')
+				// ->orderBy('properties.prop_status', 'desc')
+				->get();
+			foreach ($data as $key => $value) {
+				$theArea = 0;
+				if (!empty($value->salable_area)) {
+					$theArea = explode('_-||-_', $value->salable_area)[0];
+				} elseif (!empty($value->salable_plot_area)) {
+					$theArea = explode('_-||-_', $value->salable_plot_area);
+				}
+				if ((!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area))) {
+					unset($data[$key]);
+					continue;
+				}
+				if (!empty($request->filter_to_area) && !($theArea <= $request->filter_to_area)) {
+					unset($data[$key]);
+					continue;
+				}
+				$allPrices  = [];
+
+				if (!empty($value->unit_details) && !empty(json_decode($value->unit_details)[0])) {
+					foreach (json_decode($value->unit_details) as $key3 => $value3) {
+						if (!empty($value3['7'])) {
+							array_push($allPrices, $value3['7']);
+						}
+						if (!empty($value3['4'])) {
+							array_push($allPrices, $value3['4']);
+						}
+						if (!empty($value3['3'])) {
+							array_push($allPrices, $value3['3']);
+						}
+					}
+				}
+				if (!empty($request->filter_from_price)) {
+					$from_passed = 0;
+					foreach ($allPrices as $key5 => $value5) {
+						if ((Helper::c_to_n($value5) >= Helper::c_to_n($request->filter_from_price))) {
+							$from_passed = 1;
+							break;
+						}
+					}
+					if (!$from_passed) {
+						unset($data[$key]);
+						continue;
+					}
+				}
+				if (!empty($request->filter_to_price)) {
+					$to_passed = 0;
+					foreach ($allPrices as $key6 => $value6) {
+						if ((Helper::c_to_n($value6) <= Helper::c_to_n($request->filter_to_price))) {
+							$to_passed = 1;
+							break;
+						}
+					}
+					if (!$to_passed) {
+						unset($data[$key]);
+					}
+				}
+			}
+			return DataTables::of($data)
+				->editColumn('project_id', function ($row) use ($request) {
+					$first =  '<td style="vertical-align:top">
+						<font size="3"><a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . ((isset($row->Projects->project_name)) ? $row->Projects->project_name : '') . '</a>';
+					$first_middle = '';
+					if (isset($row->Projects->is_prime) && $row->Projects->is_prime) {
+						$first_middle = '<img style="height:24px" src="' . asset('assets/images/primeProperty.png') . '" alt="">';
+					}
+					if ($row->hot_property) {
+						$first_middle = $first_middle . '<img style="height:24px" src="' . asset('assets/images/hotProperty.png') . '" alt="">';
+					}
+
+					if ($row->property_for == 'Both') {
+						$first_middle = $first_middle . '<img style="height:24px" src="' . asset('assets/images/rentAndsell.jpg') . '" alt="">';
+					}
+					$first_end = '</font>';
+					// $second = '<br> <a href="' . $row->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font> </a>';
+					$second = '<br>Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font>';
+					$third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a>' : "");
+					// $third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->created_at)->format('d-m-Y') . '</font>';
+					$last = 	'</td>';
+					'</td>';
+					return $first . $first_middle . $first_end . $second . $third . $last;
+
+					return '';
+				})
+				->editColumn('updated_at', function ($row) {
+					return '<td style="vertical-align:top">
+					' . Carbon::parse($row->updated_at)->format('d-m-Y') . '<br>' . Carbon::parse($row->updated_at)->diffInDays() . ' days</td>';
+				})
+				->editColumn('property_category', function ($row) use ($dropdowns) {
+
+					// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
+					$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk', 'Test', 'testw');
+					if ($row->property_for == 'Both') {
+						$forr = 'Rent & Sell';
+					} else {
+						$forr = $row->property_for;
+					}
+					$sub_cat = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | ' . $dropdowns[$row->property_category]['name'] : '');
+
+					if (!is_null($row->configuration)) {
+						$catId = (int)$row->configuration;
+						// dd("cat id :",$catId);
+						//$getsub_category = Helper::getsubcategory($catId);
+						$getsub_category = $new_array[$catId];
+						// dd($getsub_category);
+
+						// dd($catId,$getsub_category);
+						if (!is_null($getsub_category)) {
+							$sub_cat = ' | ' . $getsub_category;
+							if ($sub_cat == " | Agricultural/Farm Land") {
+								$sub_cat = " | Agricultural";
+							}
+						}
+					}
+					//$category = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | '. $dropdowns[$row->property_category]['name'] : '');
+					$category = $sub_cat;
+					// BHARAT HIDE FURNISHED
+					// dd($row->property_category,"fr");
+					if ($row->property_category == '256') {
+						$fstatus  = '';
+					} else {
+						$fstatus  = 'Unfurnished';
+						if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+							$vv = json_decode($row->unit_details);
+							if (isset($vv[0][8])) {
+								if (!empty($vv[0][8])) {
+									if ($vv[0][8] == "106" || $vv[0][8] == "34") {
+										$fstatus = 'Furnished';
+									} elseif ($vv[0][8] == "107" || $vv[0][8] == "35") {
+										$fstatus = 'Semi Furnished';
+									} elseif ($vv[0][8] == "108" || $vv[0][8] == "36") {
+										$fstatus = 'Unfurnished';
+									} else {
+										$fstatus = 'Can Furnished';
+									}
+								}
+							}
+						}
+					}
+
+					$salable_area_print = $this->generateAreaDetails($row, $dropdowns[$row->property_category]['name'], $dropdowns);
+
+					if (empty($salable_area_print)) {
+						$salable_area_print = "Area Not Available";
+					}
+
+					try {
+						return '
+						<td style="vertical-align:top">
+						' . ((!empty($forr)) ?  $forr : '')  . $category . '
+						<font size="2" style="font-style:italic">
+						<br>
+						' . $salable_area_print . '
+						</font>
+						<br>' . $fstatus . '
+						</td>';
+					} catch (\Throwable $th) {
+						dd($th);
+					}
+				})
+				->editColumn('contact_details', function ($row) {
+					$detail = '';
+					if (!empty($row->contact_details)) {
+						$contacts = json_decode($row->contact_details);
+						foreach ($contacts as $key => $value) {
+							if (!empty($value[0]) && !empty($value[1])) {
+								$detail =  '<td align="center" style="vertical-align:top">
+								' . $value[0] . ' <br>
+								<a href="tel:' . $value[1] . '">' . $value[1] . '</a>
+				 				</td>';
+								break;
+							}
+						}
+					};
+					return $detail;
+				})
+				->editColumn('unit_details', function ($row) {
+					$all_units = [];
+					if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+						$vv = json_decode($row->unit_details);
+						// dd($vv,"unit_details");
+						foreach ($vv as $key => $value) {
+							if ($value[2] == "Rent Out" ||  $value[2] == "Sold Out") {
+								$all_units = [];
+							} else {
+								$price = '';
+								if (!empty($value['7'])) {
+									$price = $value['7'];
+								} else if (!empty($value['4'])) {
+									$price = $value['4'];
+								} else if (!empty($value['3'])) {
+									$price = $value['3'];
+								}
+								$data = [];
+								$data[0] = $value[0];
+								$data[1] = $value[1];
+								$data[2] = $price;
+								array_push($all_units, $data);
+							}
+						}
+					}
+					// dd("all1",$all_units);
+
+					if (!empty($all_units)) {
+						$vvv = '';
+						$all_units_length = count($all_units);
+						// dd($all_units_length);
+						if ($all_units_length > 2) {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
+							}
+							$second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
+							return $second;
+						} else {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv .  ((!empty($value[0])) ? $value[0] . '-' : ' ') . ((!empty($value[1])) ? $value[1] . '<br>' : '');
+							}
+							return $vvv;
+						}
+					}
+					// if (!empty($all_units)) {
+					// 	$vvv = '';
+					// 	foreach ($all_units as $key => $value) {
+					// 		$vvv = $vvv .  ((!empty($value[0])) ? $value[0] . '-' : ' ') . ((!empty($value[1])) ? $value[1] . '<br>' : '');
+					// 	}
+
+					// 	return $vvv;
+					// }
+					return;
+				})
+				->editColumn('price', function ($row) {
+					//$all_units = [];
+					$all_units = [];
+					// dd($row->unit_details,"price",$row->property_for);
+					if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+						$vv = json_decode($row->unit_details);
+						// dd($vv,"price");
+						$all_units_length = count($all_units);
+						foreach ($vv as $key => $value) {
+							$price = '';
+							if ($row->property_for === 'Both') {
+								if (!empty($value['7']) && !empty($value['4'])) {
+									$price = '  R : ' . $value['4'] . '<br>' . '  S : ' . $value['7'];
+								}elseif(!empty($value['3']) && !empty($value['4'])){
+									$price = '  R : ' . $value['3'] . '<br>' . '  S : ' . $value['4'];
+								}
+							} else {
+								if (!empty($value['7'])) {
+									$price = $value['7'];
+								} else if (!empty($value['4'])) {
+									$price = $value['4'];
+								} else if (!empty($value['3'])) {
+									$price = $value['3'];
+								}
+							}
+							$data = [];
+							$data[0] = $value[0];
+							$data[1] = $value[1];
+							$data[2] = $price;
+							array_push($all_units, $data);
+						}
+					}
+					// dd("all2",$all_units);
+
+					if (!empty($all_units)) {
+						$vvv = '';
+						// foreach ($all_units as $key => $value) {
+						// 	$vvv = $vvv .  ((!empty($value[2])) ? $value[2] . ' ' : ''); // . ((!empty($value[1])) ? $value[1] : '');
+						// }
+
+
+						// return $vvv;
+						$all_units_length = count($all_units);
+						if ($all_units_length > 2) {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv . '<br> ' . ((!empty($value[2])) ? $value[2] : '') ;
+							}
+							$second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2]  : '')  .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
+							return $second;
+						} else {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv .   ((!empty($value[2])) ? $value[2] . '<br>' : '');
+							}
+							return $vvv;
+						}
+					}
+					return;
+				})
+				->editColumn('status_change', function ($row) {
+					$ischecked = $row->status;
+					$status = '<div class="d-flex align-items-center mb-3 col-md-2">
+						<div class="media-body text-end icon-state">
+							<label class="switch mb-0">
+								<input type="checkbox" class="changeTheStatus"  data-id="' . $row->id . '" ' . (($ischecked) ? 'checked' : '') . ' >
+								<span class="switch-state"></span>
+							</label>
+						</div>
+					</div>';
+
+					return $status;
+				})
+				->editColumn('select_checkbox', function ($row) {
+					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
+					<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
+					<label class="form-check-label" for="checkbox-primary-' . $row->id . '"></label>
+				  	</div>';
+					return $abc;
+				})
+				->addColumn('Actions2', function ($row) use ($dropdowns) {
+					$buttons = '';
+					$building_name = '';
+					$area = '';
+					$config = '';
+					$super_built_area = '';
+					$super_built_measure = '';
+					$carpet_area = '';
+					$carpet_measure = '';
+					$furniture = '';
+					// bharat edit
+					$buttons =  $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+
+					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
+
+
+					if (isset($row->Projects->project_name)) {
+						$building_name = $row->Projects->project_name;
+					}
+					if (isset($row->Projects->Area->name)) {
+						$area = $row->Projects->Area->name;
+					}
+					if (isset($dropdowns[$row->property_category]['name'])) {
+						$config = $dropdowns[$row->property_category]['name'];
+					}
+
+					if (isset($row->carpet_area)) {
+						$carpet_area = $row->carpet_area;
+					}
+					if (isset($dropdowns[$row->carpet_measurement]['name'])) {
+						$carpet_measure = $dropdowns[$row->carpet_measurement]['name'];
+					}
+					if (isset($dropdowns[$row->furnished_status]['name'])) {
+						$furniture =  $dropdowns[$row->furnished_status]['name'];
+					}
+
+					// $sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $building_name . ' | ' . $area . ' %2c%0D%0A ' . $config . '%20 | %20' . $this->generateAreaDetails($row, $config, $dropdowns)  . $row->price . '%2c%0D%0AAvailable%20For%20' . (($row->property_for == 'Both') ? 'Rent & Sell' : '') . '%0a%0a%0a Link: ' . $row->location_link;
+					$building_name = urlencode($building_name);
+					$area = urlencode($area);
+					$config = urlencode($config);
+					$price = urlencode($row->price);
+					$property_for = urlencode(($row->property_for == 'Both') ? 'Rent & Sell' : '');
+					$details = urlencode($this->generateAreaDetails($row, $config, $dropdowns));
+					$location_link = urlencode($row->location_link);
+					$message = "$building_name | $area \n $config | $details | $price \n Available For : $property_for\n\n | Link: $location_link";
+					$sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
+					$buttons =  $buttons . '<i title="Send On Whatsapp" data-share_string="' . $sharestring . '"  onclick=openwamodel(this)  class="fa fs-22 py-2 mx-2 fa-whatsapp text-success"></i><br>';
+
+					$buttons =  $buttons . '<i title="Matching Enquiry" data-id="' . $row->id . '" onclick=matchingEnquiry(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
+					// 	$buttons =  $buttons . '<a  href="javascript:void(0)" onclick="ShareLink(this)" data-link="' . route('admin.properties') . '?shareproperty=' . encrypt($row->id) . '"><i title="Share" data-id="' . $row->id . '"  class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
+					$buttons =  $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
+
+
+					$vvv = '';
+					if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
+						$cd = json_decode($row->other_contact_details);
+						foreach ($cd as $key => $value) {
+							if ($vvv == '') {
+								$space = '';
+							} else {
+								$space = '<br> ';
+							}
+							// $vvv = $vvv . $space . $value[0] . ' : ' . $value[1];
+							$vvv = $vvv . $space  . $value[1];
+						}
+						// if ($vvv) {
+						// 	$vvv = $vvv . '<br> ' . $row->care_taker_name . ' : ' . $row->care_taker_contact;
+						// }
+					}
+					$contact_info = ($vvv != "") ? $vvv : ' ';
+					// $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
+					$buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : 'No Contacts') . '" data-bs-trigger="hover focus"></i>';
+					// $buttons =  $buttons . '<i title="Contacts"  data-bs-content="' . $contact_info . '" class="fa fs-22 py-2 mx-2 fa fa-phone-square fa-2x"></i><br>';
+					return $buttons;
+				})
+				->rawColumns(['select_checkbox', 'project_id', 'unit_details', 'updated_at', 'property_category', 'contact_details', 'price', 'Actions2', 'status_change'])
+				->make(true);
+		}
+		$projects = Projects::whereNotNull('project_name')->where('id', '!=', 261)->get();
+		$areas = Areas::whereNotNull('name')->get();
+		$conatcts_numbers = [];
+		$contacts =  Enquiries::get();
+
+		foreach ($contacts as $key => $value) {
+			if (!empty($value->client_mobile) && !empty($value->client_name)) {
+				$arr = [];
+				$arr['name'] = $value->client_name;
+				$arr['number'] = $value->client_mobile;
+				array_push($conatcts_numbers, $arr);
+			}
+			if (!empty($value->other_contacts)) {
+				$val = json_decode($value->other_contacts);
+				foreach ($val as $key1 => $value1) {
+					$arr = [];
+					$arr['name'] = $value1[0];
+					$arr['number'] = $value1[1];
+					array_push($conatcts_numbers, $arr);
+				}
+			}
+		}
+		$property_configuration_settings = DropdownSettings::get()->toArray();
+		$prop_type = [];
+		foreach ($property_configuration_settings as $key => $value) {
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
+				array_push($prop_type, $value['id']);
+			}
+		}
+
+		return view('admin.properties.index', compact('projects', 'property_configuration_settings', 'areas', 'conatcts_numbers', 'prop_type', 'shareddata', 'sharedlk'));
+	}
+
+
+	public function generateAreaDetails($row, $type, $dropdowns)
+	{
+		$area = '';
+		$measure = '';
+
+		if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Land/Plot') {
+			$area = explode('_-||-_', $row->salable_area)[0];
+			$measure = explode('_-||-_', $row->salable_area)[1];
+		} elseif ($type == 'Storage/industrial') {
+			$area = explode('_-||-_', $row->salable_plot_area)[0];
+			$measure = explode('_-||-_', $row->salable_plot_area)[1];
+		} elseif ($type == 'Vila/Bunglow') {
+			$salable = explode('_-||-_', $row->salable_plot_area)[0];
+			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+			$measure = explode('_-||-_', $row->constructed_salable_area)[1];
+			if (empty($salable)) {
+				$salable = '';
+			}
+			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+		    $area = "P:" . $salable . ' - C: ' . $constructed;
+		} elseif ($type == 'Farmhouse') {
+			$area = explode('_-||-_', $row->salable_plot_area)[0];
+			$measure = explode('_-||-_', $row->salable_plot_area)[1];
+		}
+
+		if (!empty($area) && !empty($measure)) {
+			$formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
+			return $formattedArea;
+		} else {
+			return "Area Not Available";
+		}
+	}
+
+	public function sendRequest(Request $request)
+	{
+		if ($request->ajax()) {
+			$response_mesage = '';
+			if (!empty($request->shareproperty)) {
+				$prop = Helper::theDecrypt($request->shareproperty);
+
+				if (Properties::find($prop)) {
+					$response_mesage = 'This property is already in your list';
+				} else {
+					$pr = Properties::withoutGlobalScopes()->find($prop);
+					$co = SharedProperty::where('main_owner_id', $pr->user_id)->where('owner_id', Session::get('parent_id'))->where('property_id', $prop)->count();
+					if ($co == 0) {
+						$sc = new SharedProperty;
+						$sc->main_owner_id = $pr->user_id;
+						$sc->property_id = $prop;
+						$sc->owner_id = Session::get('parent_id');
+						$sc->save();
+						UserNotifications::create(['user_id' => $pr->user_id, 'notification' => 'You have received request for property']);
+					}
+					$response_mesage = 'Request sent to the owner';
+				}
+			}
+			return $response_mesage;
+		}
+	}
+
+	// shared 4
+	public function acceptRequest(Request $request)
+	{
+		if ($request->ajax()) {
+			if (!empty($request->id)) {
+				SharedProperty::find($request->id)->update(['accepted' => 1]);
+			}
+		}
+	}
+
+	// shared 3
+	public function cancelRequest(Request $request)
+	{
+		if ($request->ajax()) {
+			if (!empty($request->id)) {
+				SharedProperty::find($request->id)->update(['accepted' => 2]);
+				$dlt_share_prop = SharedProperty::where('id', $request->id)->delete();
+				return json_encode($dlt_share_prop);
+			}
+		}
+	}
+
+	// shared 1
+	public function sharedPropertyRequests(Request $request)
+	{
+		dd("shared-requests");
+		if ($request->ajax()) {
+			$data = SharedProperty::where('partner_id', Auth::user()->id)->with(['Property', 'User'])->get();
+
+			// dd("data",$data);
+			return DataTables::of($data)
+				->addColumn('project_name', function (SharedProperty $shared) {
+					if (!empty($shared->Property->Projects->project_name)) {
+						dd($shared->Property->Projects->project_name);
+					} else {
+						return 'N/A';
+					}
+				})
+				->addColumn('user_name', function (SharedProperty $shared) {
+					if (!empty($shared->User->first_name || $shared->User->last_name)) {
+						return $shared->User->first_name . ' ' . $shared->User->last_name;
+						// return $shared->User->first_name . ' ' . $shared->User->last_name . ' | ' . $shared->User->company_name;
+					} else {
+						return 'N/A';
+					}
+				})
+
+				->editColumn('Action', function ($row) {
+					$buttons = '';
+					if (!$row->accepted) {
+						$buttons .=   ' <button data-id="' . $row->id . '" onclick=acceptRequest(this) class="btn btn-pill btn-danger" type="button">Accept</button>';
+					}
+					$buttons .=   ' <button data-id="' . $row->id . '" onclick=cancelRequest(this) class="btn btn-pill btn-primary" type="button">Cancel</button>';
+					return $buttons;
+				})
+				->rawColumns(['project_name', 'user_name', 'Action'])
+				->make(true);
+		}
+		return view('admin.properties.shared_requets');
+	}
+
+	public function changePropertyStatus(Request $request)
+	{
+		if ($request->ajax()) {
+			if (isset($request->id)) {
+				$vv = Properties::find($request->id);
+				$vv->status = $request->status;
+				$vv->save();
+			}
+		}
+	}
+
+	// to update property status on view
+	public function updatePropertyStatus(Request $request)
+	{
+		$status=$request->status;
+		$vv = Properties::where('id',$request->id)->update(['prop_status'=>$status]);//find and update property status
+		return redirect('admin/Properties');
+	}
+
+	public function importPropertyTemplate(Request $request)
+	{
+		$spreadsheet = new Spreadsheet;
+		$sheet = $spreadsheet->getActiveSheet();
+
+		// $allFields = ['Property For','Property Type','category','subcategory','Project','city','locality','address','location link','district','taluka','village','zone','Constructed Carpet Area','Constructed Salable Area','Constructed Builtup Area','Salable Plot Area','Carpet Plot Area','Centre Height','Salable Area','Length of plot','Width of plot','Carpet Area','Opening Width','Ceiling Height','Builtup Area','Plot Area','Terrace','Contruction Area','Terrace Carpet Area','Terrace Salable Area','Total Units in project','Total no. of floor','Total Units in tower','Property On Floor','No Of Elavators','No Of Balcony','Total No. of units','No. of room','No Of Bathrooms','No Of Floors Allowed','No Of Side Open','Service Elavator','Servant Room','Hot','Favourite','Washrooms','Road width of front side','constructed allowed for','Fsi','Four Wheeler Parking','Two wheeler Parking','Pre Leased','Pre leased remarks','Availability','Age of Property','Amenities','Swimming Pool','Club house','Passenger Lift','Garden & Children Play Area','Service Lift','Streature Lift','Central AC','Gym','Pollution Control Board','EC NOC','Bail Membership','Discharge','Gas','Power','Water','Machinery','ETL CEPT NLTL','Two Road Corner','Survey Number ','Plot Size','Survey Price','TP Number','FP Number','Plot Size','FP Price ','Owner is','Owner Name','Contact','Email','NRI','Other contact','Other contact No.','Care Taker Name','Care Taker Contact','Key available at','Wing 1','Unit 1','Available Status 1','Price Rent 1','Price 1','Furnished Status 1','Wing 2','Unit 2','Available Status 2','Price Rent 2','Price 2','Furnished Status 2','Wing 3','Unit 3','Available Status 3','Price Rent 3','Price 3','Furnished Status 3'];
+
+		$allCells = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ', 'BA', 'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BK', 'BL', 'BM', 'BN', 'BO', 'BP', 'BQ', 'BR', 'BS', 'BT', 'BU', 'BV', 'BW', 'BX', 'BY', 'BZ', 'CA', 'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP', 'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ', 'DA', 'DB', 'DC', 'DD'];
+
+		$allFields = [];
+		$type = 'Flat';
+
+		if (!empty($request->type)) {
+			$type = $request->type;
+		}
+
+		if ($type  == 'Flat') {
+			$allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Builtup Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Two wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+		} else if ($type  == 'Vila,Bunglow') {
+			$allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+		} else if ($type  == 'Land,Plot') {
+			$allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Carpet Plot Area', 'Salable Area', 'Length of plot', 'Width of plot', 'Total No. of units', 'No Of Floors Allowed', 'No Of Side Open', 'Hot', 'Favourite', 'Pre Leased', 'Pre leased remarks', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3'];
+		} else if ($type  == 'Penthouse') {
+			$allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Builtup Area', 'Terrace Carpet Area', 'Terrace Salable Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Balcony', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+		} else if ($type  == 'Farmhouse') {
+			$allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'district', 'taluka', 'village', 'zone', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+		} else if ($type  == 'Office') {
+			$allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Washrooms', 'Four Wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+		} else if ($type  == 'Retail') {
+			$allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Opening Width', 'Ceiling Height', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'No Of Elavators', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Washrooms', 'Four Wheeler Parking', 'Two wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Two Road Corner', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+		} else if ($type  == 'Storage,industrial') {
+			$allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link',    'Constructed Carpet Area', 'Constructed Salable Area', 'Salable Plot Area', 'Carpet Plot Area', 'Centre Height', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Two wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Pollution Control Board', 'EC NOC', 'Bail Membership', 'Discharge', 'Gas', 'Power', 'Water', 'Machinery', 'ETL CEPT NLTL', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+		} else if ($type  == 'Plot,Land') {
+			$allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'district', 'taluka', 'village', 'zone', 'Length of plot', 'Width of plot', 'No Of Floors Allowed', 'Hot', 'Favourite', 'Road width of front side', 'constructed allowed for', 'Fsi', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Survey Number ', 'Plot Size', 'Survey Price', 'TP Number', 'FP Number', 'Plot Size', 'FP Price ', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.'];
+		}
+
+		$allCells2 = [];
+		foreach ($allFields as $key => $value) {
+			$allCells2[] = $allCells[$key];
+		}
+
+		$allCells = $allCells2;
+
+		foreach ($allCells as $key => $value) {
+			$sheet->setCellValue($value . '1', $allFields[$key]);
+		}
+
+		foreach ($allCells as $key => $value) {
+			$spreadsheet->getActiveSheet()->getColumnDimension($value)->setWidth(15);
+		}
+
+		$dd1 = Projects::whereNotNull('project_name')->with('Area')->get()->toArray();
+		$projects = [];
+		foreach ($dd1 as $key => $value) {
+			$projects[] = $value['project_name']  . ((isset($value['area']['name'])) ? ' - ' . $value['area']['name'] : '');
+		}
+		$projects = '"' . implode(",", $projects) . '"';
+
+		$dd1 = City::whereNotNull('name')->get()->toArray();
+		$cities = [];
+		foreach ($dd1 as $key => $value) {
+			$cities[] = $value['name'];
+		}
+		$cities = '"' . implode(",", $cities) . '"';
+
+		$dd1 = Areas::whereNotNull('name')->get()->toArray();
+		$localities = [];
+		foreach ($dd1 as $key => $value) {
+			$localities[] = $value['name'];
+		}
+		$localities = '"' . implode(",", $localities) . '"';
+
+		$dd1 = District::whereNotNull('name')->get()->toArray();
+		$districts = [];
+		foreach ($dd1 as $key => $value) {
+			$districts[] = $value['name'];
+		}
+		$districts = '"' . implode(",", $districts) . '"';
+
+		$dd1 = Taluka::whereNotNull('name')->get()->toArray();
+		$talukas = [];
+		foreach ($dd1 as $key => $value) {
+			$talukas[] = $value['name'];
+		}
+		$talukas = '"' . implode(",", $talukas) . '"';
+
+		$dd1 = Village::whereNotNull('name')->get()->toArray();
+		$villages = [];
+		foreach ($dd1 as $key => $value) {
+			$villages[] = $value['name'];
+		}
+		$villages = '"' . implode(",", $villages) . '"';
+
+
+		$dropdowns = DropdownSettings::get()->toArray();
+		$dropdownsarr = [];
+		foreach ($dropdowns as $key => $value) {
+			$dropdownsarr[$value['dropdown_for']][] = $value['name'];
+		}
+
+		$property_configuration = [];
+		foreach (config('constant.property_configuration') as $key => $value) {
+			array_push($property_configuration, $value);
+		}
+
+		$configuaration = '"' . implode(",", $property_configuration) . '"';
+		$propertyFor = '"Rent, Sell , Both"';
+		$PropertyType = '"' . implode(",", $dropdownsarr['property_construction_type']) . '"';
+		$specificType = '"' . implode(",", $dropdownsarr['property_specific_type']) . '"';
+		$zone = '"' . implode(",", $dropdownsarr['property_zone']) . '"';
+		$furnishedStatus = '"' . implode(",", $dropdownsarr['property_furniture_type']) . '"';
+		$constructedallowed = '"Commercial, Industrial, Residential"';
+		$washrooms_type_2 = '"Private Washrooms,Public Washrooms,Not-Available"';
+		$availability_status = '"Available,Under construction"';
+		$unit_available = '"Available,Rent Out,Sold Out"';
+		$property_age = '"0-1 years,1-5 years,5-10 years,10+ years"';
+		$yes_no = '"Yes,No"';
+		$owner_is = '"Builder,Individual Owner,Investor"';
+		$key_available_at = '"Office,Owner,Care Taker"';
+
+		$arrDetails['Property For'] = $propertyFor;
+		$arrDetails['Property Type'] = $PropertyType;
+		$arrDetails['Category'] = $specificType;
+		$arrDetails['Subcategory'] = $configuaration;
+		$arrDetails['Project'] = $projects;
+		$arrDetails['zone'] = $zone;
+		$arrDetails['Service Elavator'] = $yes_no;
+		$arrDetails['Servant Room'] = $yes_no;
+		$arrDetails['Hot'] = $yes_no;
+		$arrDetails['Favourite'] = $yes_no;
+		$arrDetails['Washrooms'] = $washrooms_type_2;
+		$arrDetails['constructed allowed for'] = $constructedallowed;
+		$arrDetails['Pre Leased'] = $yes_no;
+		$arrDetails['Availability'] = $availability_status;
+		$arrDetails['Age of Property'] = $property_age;
+		$arrDetails['Amenities'] = $yes_no;
+		$arrDetails['Swimming Pool'] = $yes_no;
+		$arrDetails['Club house'] = $yes_no;
+		$arrDetails['Passenger Lift'] = $yes_no;
+		$arrDetails['Garden & Children Play Area'] = $yes_no;
+		$arrDetails['Service Lift'] = $yes_no;
+		$arrDetails['Streature Lift'] = $yes_no;
+		$arrDetails['Central AC'] = $yes_no;
+		$arrDetails['Gym'] = $yes_no;
+		$arrDetails['Two Road Corner'] = $yes_no;
+		$arrDetails['Owner is'] = $owner_is;
+		$arrDetails['NRI'] = $yes_no;
+		$arrDetails['Key available at'] = $key_available_at;
+		$arrDetails['Available Status 1'] = $unit_available;
+		$arrDetails['Furnished Status 1'] = $furnishedStatus;
+		$arrDetails['Available Status 2'] = $unit_available;
+		$arrDetails['Furnished Status 2'] = $furnishedStatus;
+		$arrDetails['Available Status 3'] = $unit_available;
+		$arrDetails['Furnished Status 3'] = $furnishedStatus;
+
+		foreach ($allCells as $key => $value) {
+			if (isset($arrDetails[$allFields[$key]])) {
+				$validation = $spreadsheet->getActiveSheet()->getcell($value . '1')->getDataValidation();
+				$validation->setType(DataValidation::TYPE_LIST);
+				$validation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+				$validation->setAllowBlank(false);
+				$validation->setShowInputMessage(true);
+				$validation->setShowErrorMessage(true);
+				$validation->setShowDropDown(true);
+				$validation->setErrorTitle('Input error');
+				$validation->setError('Value is not in list.');
+				$validation->setPromptTitle('Pick from list');
+				$validation->setPrompt('Please pick a value from the drop-down list.');
+				$validation->setFormula1($arrDetails[$allFields[$key]]);
+				$validation->setSqref(strval($value . '2:' . $value . '1048576'));
+				info($arrDetails[$allFields[$key]]);
+			}
+		}
+
+		$writer = new Xlsx($spreadsheet);
+		$writer->save(public_path('imports/property_sample.xlsx'));
+		return redirect(asset('imports/property_sample.xlsx'));
+	}
+
+
+	public function exportProperty(Request $request)
+	{
+		$properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->get();
+
+		$dropdowns = DropdownSettings::get()->toArray();
+		$dropdownsarr = [];
+		foreach ($dropdowns as $key => $value) {
+			$dropdownsarr[$value['id']] = $value;
+		}
+		$dropdowns = $dropdownsarr;
+		$enqs = [];
+		foreach ($properties as $key => $property) {
+			$arr = [];
+			$arr['Property For'] = '';
+			$arr['Property Type'] = '';
+			$arr['Property Category'] = '';
+			$arr['configuration'] = '';
+			$arr['Project Name'] = '';
+			$arr['Address'] = '';
+			$arr['District'] = '';
+			$arr['Taluka'] = '';
+			$arr['Village'] = '';
+			$arr['Zone'] = '';
+			$arr['Storage Centre Height'] = '';
+			$arr['Length Of Plot'] = '';
+			$arr['Width Of Plot'] = '';
+			$arr['Entrance Width'] = '';
+			$arr['Ceiling Height'] = '';
+			$arr['Total Units In Project'] = '';
+			$arr['Total No Of Floor'] = '';
+			$arr['Total Units In Tower'] = '';
+			$arr['Property On Floors'] = '';
+			$arr['No Of Elavators'] = '';
+			$arr['No Of Balcony'] = '';
+			$arr['Total No Of Units'] = '';
+			$arr['No Of Room'] = '';
+			$arr['No Of Bathrooms'] = '';
+			$arr['No Of Floors Allowed'] = '';
+			$arr['Washrooms2 Type'] = '';
+			$arr['No Of Side Open'] = '';
+			$arr['Front Road Width'] = '';
+			$arr['Construction Allowed For'] = '';
+			$arr['Fsi'] = '';
+			$arr['No Of Borewell'] = '';
+			$arr['Availability Status'] = '';
+			$arr['Property Age'] = '';
+			$arr['Available From'] = '';
+			$arr['Two Road Corner'] = '';
+			$arr['Survey Number'] = '';
+			$arr['Survey Plot Size'] = '';
+			$arr['Survey Price'] = '';
+			$arr['Tp Number'] = '';
+			$arr['Fp Number'] = '';
+			$arr['Fp Plot Size'] = '';
+			$arr['Fp Plot Price'] = '';
+			$arr['Service Elavator'] = '';
+			$arr['Servant Room'] = '';
+			$arr['Carpet Area'] = '';
+			$arr['Salable Area'] = '';
+			$arr['Carpet Plot Area'] = '';
+			$arr['Salable Plot Area'] = '';
+			$arr['Constructed Salable Area'] = '';
+			$arr['Constructed Carpet Area'] = '';
+			$arr['Constructed Builtup Area'] = '';
+			$arr['Builtup Area'] = '';
+			$arr['Terrace Carpet Area'] = '';
+			$arr['Terrace Salable Area'] = '';
+			$arr['Hot Property'] = '';
+			$arr['Is Favourite'] = '';
+			$arr['Owner Is'] = '';
+			$arr['Owner Name'] = '';
+			$arr['Owner Contact'] = '';
+			$arr['Is Nri'] = '';
+			$arr['Owner Email'] = '';
+			$arr['Care Taker Name'] = '';
+			$arr['Care Taker Contact'] = '';
+			$arr['Key Available At'] = '';
+			$arr['Fourwheller Parking'] = '';
+			$arr['Twowheeler Parking'] = '';
+			$arr['Property Source Refrence'] = '';
+			$arr['Property Priority'] = '';
+			$arr['Source Of Property'] = '';
+			$arr['Is Pre Leased'] = '';
+			$arr['Pre Leased Remarks'] = '';
+			$arr['Location Link'] = '';
+
+			if (!empty($property->property_for)) {
+				$arr['Property For'] =  $property->property_for ? $property->property_for : '';
+			}
+			if (!empty($dropdowns[$property->property_type]['name'])) {
+				$arr['Property Type'] =  isset($dropdowns[$property->property_type]['name']) ? $dropdowns[$property->property_type]['name'] : '';
+			}
+			if (!empty($dropdowns[$property->property_category]['name'])) {
+				$arr['Property Category'] =  isset($dropdowns[$property->property_category]['name']) ? $dropdowns[$property->property_category]['name'] : '';
+			}
+			if (!empty($property->configuration)) {
+				$subcategory = FacadesDB::table('dropdown_settings')->select('name')->where('id', '=', $property->configuration)->first();
+				$arr['configuration'] =  $property->configuration ? $property->configuration : '';
+			}
+			if (!empty($property->Projects->project_name)) {
+				$arr['Project Name'] =  $property->Projects != null ? $property->Projects->project_name : '';
+			}
+			if (!empty($property->Projects->address)) {
+				$arr['Address'] =  isset($property->Projects->address) ? $property->Projects->address : '';
+			}
+			if (!empty($property->District->name)) {
+				$arr['District'] =  isset($property->District->name) ? $property->District->name : '';
+			}
+			if (!empty($property->Taluka->name)) {
+				$arr['Taluka'] =  isset($property->Taluka->name) ? $property->Taluka->name : '';
+			}
+			if (!empty($property->Village->name)) {
+				$arr['Village'] =  isset($property->Village->name) ? $property->Village->name : '';
+			}
+			if (!empty($dropdowns[$property->zone]['name'])) {
+				$arr['Zone'] =  isset($dropdowns[$property->zone]['name']) ? $dropdowns[$property->zone]['name'] : '';
+			}
+			if (!empty(explode('_-||-_', $property->storage_centre_height)[0]) && !empty(explode('_-||-_', $property->storage_centre_height)[1])) {
+				$arr['Storage Centre Height'] = (explode('_-||-_', $property->storage_centre_height)[0] . ' ' . explode('_-||-_', $property->storage_centre_height)[1]);
+			}
+			if (!empty(explode('_-||-_', $property->length_of_plot)[0]) && !empty(explode('_-||-_', $property->length_of_plot)[1])) {
+				$arr['Length Of Plot'] = (explode('_-||-_', $property->length_of_plot)[0] . ' ' . explode('_-||-_', $property->length_of_plot)[1]);
+			}
+			if (!empty(explode('_-||-_', $property->width_of_plot)[0]) && !empty(explode('_-||-_', $property->width_of_plot)[1])) {
+				$arr['Width Of Plot'] = (explode('_-||-_', $property->width_of_plot)[0] . ' ' . explode('_-||-_', $property->width_of_plot)[1]);
+			}
+			if (!empty(explode('_-||-_', $property->entrance_width)[0]) && !empty(explode('_-||-_', $property->entrance_width)[1])) {
+				$arr['Entrance Width'] = (explode('_-||-_', $property->entrance_width)[0] . ' ' . explode('_-||-_', $property->entrance_width)[1]);
+			}
+			if (!empty(explode('_-||-_', $property->ceiling_height)[0]) && !empty(explode('_-||-_', $property->ceiling_height)[1])) {
+				$arr['Ceiling Height'] = (explode('_-||-_', $property->ceiling_height)[0] . ' ' . explode('_-||-_', $property->ceiling_height)[1]);
+			}
+			if (!empty($property->total_units_in_project)) {
+				$arr['Total Units In Project'] =  $property->total_units_in_project ? $property->total_units_in_project : '';
+			}
+			if (!empty($property->total_no_of_floor)) {
+				$arr['Total No Of Floor'] =  $property->total_no_of_floor ? $property->total_no_of_floor : '';
+			}
+			if (!empty($property->total_units_in_tower)) {
+				$arr['Total Units In Tower'] =  $property->total_units_in_tower ? $property->total_units_in_tower : '';
+			}
+			if (!empty($property->property_on_floors)) {
+				$arr['Property On Floors'] =  $property->property_on_floors ? $property->property_on_floors : '';
+			}
+			if (!empty($property->no_of_elavators)) {
+				$arr['No Of Elavators'] =  $property->no_of_elavators ? $property->no_of_elavators : '';
+			}
+			if (!empty($property->no_of_balcony)) {
+				$arr['No Of Balcony'] =  $property->no_of_balcony ? $property->no_of_balcony : '';
+			}
+			if (!empty($property->total_no_of_units)) {
+				$arr['Total No Of Units'] =  $property->total_no_of_units ? $property->total_no_of_units : '';
+			}
+			if (!empty($property->no_of_room)) {
+				$arr['No Of Room'] =  $property->no_of_room ? $property->no_of_room : '';
+			}
+			if (!empty($property->no_of_bathrooms)) {
+				$arr['No Of Bathrooms'] =  $property->no_of_bathrooms ? $property->no_of_bathrooms : '';
+			}
+			if (!empty($property->no_of_floors_allowed)) {
+				$arr['No Of Floors Allowed'] =  $property->no_of_floors_allowed ? $property->no_of_floors_allowed : '';
+			}
+			if (!empty($property->washrooms2_type)) {
+				$arr['Washroom Type'] =  $property->washrooms2_type ? $property->washrooms2_type : '';
+			}
+			if (!empty($property->no_of_side_open)) {
+				$arr['No Of Side Open'] =  $property->no_of_side_open ? $property->no_of_side_open : '';
+			}
+			if (!empty(explode('_-||-_', $property->front_road_width)[0]) && !empty(explode('_-||-_', $property->front_road_width)[1])) {
+				$arr['Front Road Width'] = (explode('_-||-_', $property->front_road_width)[0] . ' ' . explode('_-||-_', $property->front_road_width)[1]);
+			}
+			if (!empty($property->construction_allowed_for)) {
+				$arr['Construction Allowed For'] =  $property->construction_allowed_for ? $property->construction_allowed_for : '';
+			}
+			if (!empty($property->fsi)) {
+				$arr['Fsi'] =  $property->fsi ? $property->fsi : '';
+			}
+			if (!empty($property->no_of_borewell)) {
+				$arr['No Of Borewell'] =  $property->no_of_borewell ? $property->no_of_borewell : '';
+			}
+			if (!empty($property->availability_status)) {
+				$arr['Availability Status'] =  $property->availability_status ? $property->availability_status : '';
+			}
+			if (!empty($property->propertyage)) {
+				$arr['Property Age'] =  $property->propertyage ? $property->propertyage : '';
+			}
+			if (!empty($property->available_from)) {
+				$arr['Available From'] =  $property->available_from ? $property->available_from : '';
+			}
+			if (!empty($property->two_road_corner)) {
+				$arr['Two Road Corner'] =  $property->two_road_corner ? 'Yes' : 'No';
+			}
+			if (!empty($property->survey_number)) {
+				$arr['Survey Number'] =  $property->survey_number ? $property->survey_number : '';
+			}
+			if (!empty(explode('_-||-_', $property->survey_plot_size)[0]) && !empty(explode('_-||-_', $property->survey_plot_size)[1])) {
+				$arr['Survey Plot Size'] = (explode('_-||-_', $property->survey_plot_size)[0] . ' ' . $dropdowns[explode('_-||-_', $property->survey_plot_size)[1]]['name']);
+			}
+			if (!empty($property->survey_price)) {
+				$arr['Survey Price'] =  $property->survey_price ? $property->survey_price : '';
+			}
+			if (!empty($property->tp_number)) {
+				$arr['Tp Number'] =  $property->tp_number ? $property->tp_number : '';
+			}
+			if (!empty($property->fp_number)) {
+				$arr['Fp Number'] =  $property->fp_number ? $property->fp_number : '';
+			}
+
+			if (!empty(explode('_-||-_', $property->fp_plot_size)[0]) && !empty(explode('_-||-_', $property->fp_plot_size)[1])) {
+				$arr['Fp Plot Size'] = (explode('_-||-_', $property->fp_plot_size)[0] . ' ' . $dropdowns[explode('_-||-_', $property->fp_plot_size)[1]]['name']);
+			}
+			if (!empty($property->fp_plot_price)) {
+				$arr['Fp Plot Price'] =  $property->fp_plot_price ? $property->fp_plot_price : '';
+			}
+			if (!empty($property->service_elavator)) {
+				$arr['Service Elavator'] =  $property->service_elavator ? 'Yes' : 'No';
+			}
+			if (!empty($property->servant_room)) {
+				$arr['Servant Room'] =  $property->servant_room ? 'Yes' : 'No';
+			}
+			if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty(explode('_-||-_', $property->carpet_area)[1])) {
+				$arr['Carpet Area'] = (explode('_-||-_', $property->carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_area)[1]]['name']);
+			}
+			if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty(explode('_-||-_', $property->salable_area)[1])) {
+				$arr['Salable Area'] = (explode('_-||-_', $property->salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_area)[1]]['name']);
+			}
+			if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty(explode('_-||-_', $property->carpet_plot_area)[1])) {
+				$arr['Carpet Plot Area'] = (explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_plot_area)[1]]['name']);
+			}
+			if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty(explode('_-||-_', $property->salable_plot_area)[1])) {
+				$arr['Salable Plot Area'] = (explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_plot_area)[1]]['name']);
+			}
+			if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty(explode('_-||-_', $property->constructed_salable_area)[1])) {
+				$arr['Constructed Salable Area'] = (explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_salable_area)[1]]['name']);
+			}
+			if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty(explode('_-||-_', $property->constructed_carpet_area)[1])) {
+				$arr['Constructed Carpet Area'] = (explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_carpet_area)[1]]['name']);
+			}
+			if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty(explode('_-||-_', $property->constructed_builtup_area)[1])) {
+				$arr['Constructed Builtup Area'] = (explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_builtup_area)[1]]['name']);
+			}
+			if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty(explode('_-||-_', $property->builtup_area)[1])) {
+				$arr['Builtup Area'] = (explode('_-||-_', $property->builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->builtup_area)[1]]['name']);
+			}
+			if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty(explode('_-||-_', $property->terrace_carpet_area)[1])) {
+				$arr['Terrace Carpet Area'] = (explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_carpet_area)[1]]['name']);
+			}
+			if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty(explode('_-||-_', $property->terrace_salable_area)[1])) {
+				$arr['Terrace Salable Area'] = (explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_salable_area)[1]]['name']);
+			}
+			if (!empty($property->hot_property)) {
+				$arr['Hot Property'] =  $property->hot_property ? 'Yes' : 'No';
+			}
+			if (!empty($property->is_favourite)) {
+				$arr['Is Favourite'] =  $property->is_favourite ? 'Yes' : 'No';
+			}
+			if (!empty($dropdowns[$property->owner_is]['name'])) {
+				$arr['Owner Is'] =  isset($dropdowns[$property->owner_is]['name']) ? $dropdowns[$property->owner_is]['name'] : '';
+			}
+			if (!empty($property->owner_name)) {
+				$arr['Owner Name'] =  $property->owner_name ? $property->owner_name : '';
+			}
+			if (!empty($property->owner_contact)) {
+				$arr['Owner Contact'] =  $property->owner_contact ? $property->owner_contact : '';
+			}
+			if (!empty($property->is_nri)) {
+				$arr['Is Nri'] =  $property->is_nri ? 'Yes' : 'No';
+			}
+			if (!empty($property->owner_email)) {
+				$arr['Owner Email'] =  $property->owner_email ? $property->owner_email : '';
+			}
+			if (!empty($property->care_taker_name)) {
+				$arr['Care Taker Name'] =  $property->care_taker_name ? $property->care_taker_name : '';
+			}
+			if (!empty($property->care_taker_contact)) {
+				$arr['Care Taker Contact'] =  $property->care_taker_contact ? $property->care_taker_contact : '';
+			}
+			if (!empty($property->key_available_at)) {
+				$arr['Key Available At'] =  $property->key_available_at ? $property->key_available_at : '';
+			}
+			if (!empty($property->fourwheller_parking)) {
+				$arr['Fourwheller Parking'] =  $property->fourwheller_parking ? $property->fourwheller_parking : '';
+			}
+			if (!empty($property->twowheeler_parking)) {
+				$arr['Twowheeler Parking'] =  $property->twowheeler_parking ? $property->twowheeler_parking : '';
+			}
+			if (!empty($property->property_source_refrence)) {
+				$arr['Property Source Refrence'] =  $property->property_source_refrence ? $property->property_source_refrence : '';
+			}
+			if (!empty($dropdowns[$property->Property_priority]['name'])) {
+				$arr['Property Priority'] =  isset($dropdowns[$property->Property_priority]['name']) ? $dropdowns[$property->Property_priority]['name'] : '';
+			}
+			if (!empty($dropdowns[$property->source_of_property]['name'])) {
+				$arr['Source Of Property'] =  isset($dropdowns[$property->source_of_property]['name']) ? $dropdowns[$property->source_of_property]['name'] : '';
+			}
+			if (!empty($property->is_pre_leased)) {
+				$arr['Is Pre Leased'] =  $property->is_pre_leased ? 'Yes' : 'No';
+			}
+			if (!empty($property->pre_leased_remarks)) {
+				$arr['Pre Leased Remarks'] =  $property->pre_leased_remarks ? $property->pre_leased_remarks : '';
+			}
+			if (!empty($property->location_link)) {
+				$arr['Location Link'] =  $property->location_link ? $property->location_link : '';
+			}
+
+			for ($i = 0; $i < 5; $i++) {
+				$arr['Unit ' . ($i + 1)] = '';
+			}
+
+			$type = $arr['Property Type'];
+			if (!empty(json_decode($property->unit_details)[0])) {
+				$units = json_decode($property->unit_details);
+
+				foreach ($units as $key => $value) {
+					if (isset($arr['Unit ' . ($key + 1)])) {
+						$arr['Unit ' . ($key + 1)]  = $arr['Unit ' . ($key + 1)] . (isset($value[0]) ? $value[0] : '') . (isset($value[1]) ? $value[1] : '');
+						if (($type == 'Vila,Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse' || $type == 'Storage,industrial') && ($property->property_for == 'Sell' || $property->property_for == 'Both')) {
+							$arr['Unit ' . ($key + 1)] = $arr['Unit ' . ($key + 1)] . ' Price:' . (isset($value[7]) ? $value[7] : '');
+						} elseif (!empty($value[3])) {
+							$arr['Unit ' . ($key + 1)] = $arr['Unit ' . ($key + 1)] . ' Price:' . (isset($value[3]) ? $value[3] : '');
+						}
+						if (!empty($value[4])) {
+							$arr['Unit ' . ($key + 1)] = $arr['Unit ' . ($key + 1)] . ' Rent:' . (isset($value[4]) ? $value[4] : '');
+						}
+						if (!empty($dropdowns[$value[8]]['name'])) {
+							$arr['Unit ' . ($key + 1)] = $arr['Unit ' . ($key + 1)] . ' Furnished:' . $dropdowns[$value[8]]['name'];
+						}
+					}
+				}
+			}
+			array_push($enqs, $arr);
+		}
+
+
+
+		$time = time() . Session::get('parent_id');
+		File::isDirectory(public_path('excel')) or File::makeDirectory(public_path('excel'), 0777, true, true);
+		(new FastExcel(collect($enqs)))->export(public_path('excel/' . $time . '_file.xlsx'));
+
+		echo asset('excel/' . $time . '_file.xlsx');
+	}
+	public function saveProperty(Request $request)
+	{
+		// dd("save Prop :", $request->all());
+		if (!empty($request->id) && $request->id != '') {
+			$data = Properties::find($request->id);
+			if (empty($data)) {
+				$data =  new Properties();
+			}
+		} else {
+			$data =  new Properties();
+		}
+		$data->user_id = Session::get('parent_id');
+		$data->added_by = Auth::user()->id;
+		$data->project_id = $request->project_id;
+		$searched  = Projects::find($request->project_id);
+		// do not update this if condition
+		$data->project_id = $request->project_id;
+		$searched = Projects::where('project_name', $request->project_id)->orWhere('id', $request->project_id)->first();
+		if (empty($searched->id)) {
+			$new_project = new Projects();
+			$new_project->fill([
+				'project_name' => ucfirst($request->project_id),
+				'address' => $request->address,
+				'user_id' => $data->user_id,
+				'area_id' => $request->locality_id,
+				'state_id' => $request->state_id,
+				'city_id' => $request->city_id,
+				'is_indirectly_store' => 1,
+			])->save();
+			$data->project_id = $new_project->id;
+		}
+
+		$data->property_for = $request->property_for;
+		$data->property_type = $request->property_type;
+		$data->property_category = $request->property_category;
+		$data->configuration = $request->configuration;
+		$data->city_id = $request->city_id;
+		$data->locality_id = $request->locality_id;
+		$data->address = $request->address;
+		$data->location_link = $request->property_link;
+		$data->district_id = $request->district_id;
+		$data->taluka_id = $request->taluka_id;
+		$data->village_id = $request->village_id;
+		$data->zone_id = $request->zone_id;
+		$data->constructed_carpet_area = $request->constructed_carpet_area;
+		$data->constructed_salable_area = $request->constructed_salable_area;
+		$data->constructed_builtup_area = $request->constructed_builtup_area;
+		$data->salable_plot_area = $request->salable_plot_area;
+		$data->carpet_plot_area = $request->carpet_plot_area;
+		$data->salable_area = $request->salable_area;
+		$data->carpet_area = $request->carpet_area;
+		$data->storage_centre_height = $request->storage_centre_height;
+		$data->length_of_plot = $request->length_of_plot;
+		$data->width_of_plot = $request->width_of_plot;
+		$data->entrance_width = $request->entrance_width;
+		$data->ceiling_height = $request->ceiling_height;
+		$data->builtup_area = $request->builtup_area;
+		$data->plot_area = $request->plot_area;
+		$data->terrace = $request->terrace;
+		$data->construction_area = $request->construction_area;
+		$data->terrace_carpet_area = $request->terrace_carpet_area;
+		$data->terrace_salable_area = $request->terrace_salable_area;
+		$data->total_units_in_project = $request->total_units_in_project;
+		$data->total_no_of_floor = $request->total_no_of_floor;
+		$data->total_units_in_tower = $request->total_units_in_tower;
+		$data->property_on_floors = $request->property_on_floors;
+		$data->no_of_elavators = $request->no_of_elavators;
+		$data->no_of_balcony = $request->no_of_balcony;
+		$data->total_no_of_units = $request->total_no_of_units;
+		$data->no_of_room = $request->no_of_room;
+		$data->no_of_bathrooms = $request->no_of_bathrooms;
+		$data->no_of_floors_allowed = $request->no_of_floors_allowed;
+		$data->washrooms2_type = $request->washrooms2_type;
+		$data->no_of_side_open = $request->no_of_side_open;
+		$data->service_elavator = $request->service_elavator;
+		$data->servant_room = $request->servant_room;
+		$data->hot_property = $request->hot_property;
+		$data->is_favourite = $request->is_favourite;
+		$data->front_road_width = $request->front_road_width;
+		$data->construction_allowed_for = $request->construction_allowed_for;
+		$data->fsi = $request->fsi;
+		$data->no_of_borewell = $request->no_of_borewell;
+		$data->fourwheller_parking = $request->fourwheller_parking;
+		$data->twowheeler_parking = $request->twowheeler_parking;
+		$data->is_pre_leased = $request->is_pre_leased;
+		$data->is_terrace = $request->is_terrace;
+		$data->pre_leased_remarks = $request->pre_leased_remarks;
+		$data->Property_priority = $request->Property_priority;
+		$data->source_of_property = $request->property_source;
+		$data->property_source_refrence = $request->refrence;
+		$data->availability_status = $request->availability_status;
+		$data->propertyage = $request->propertyage;
+		$data->available_from = $request->available_from;
+		$data->amenities = $request->amenities;
+		$data->other_industrial_fields = $request->other_industrial_fields;
+		$data->two_road_corner = $request->two_road_corner;
+		$data->unit_details = $request->unit_details;
+		$data->survey_number = $request->survey_number;
+		$data->survey_plot_size = $request->survey_plot_size;
+		$data->survey_price = $request->survey_price;
+		$data->tp_number = $request->tp_number;
+		$data->fp_number = $request->fp_number;
+		$data->fp_plot_size = $request->fp_plot_size;
+		$data->fp_plot_price = $request->fp_plot_price;
+		$data->owner_is = $request->owner_is;
+		$data->owner_name = $request->owner_name;
+		$data->owner_contact = $request->owner_contact;
+		$data->owner_email = $request->owner_email;
+		$data->owner_nri = $request->owner_nri;
+		$data->contact_details = $request->contact_details;
+		$data->care_taker_name = $request->care_taker_name;
+		$data->care_taker_contact = $request->care_taker_contact;
+		$data->key_available_at = $request->key_available_at;
+		$data->conference_room = $request->conference_room;
+		$data->reception_area = $request->reception_area;
+		$data->pantry_type = $request->pantry_type;
+		$data->remarks = $request->remarks;
+		$data->state_id = $request->state_id;
+		$data->other_contact_details = $request->other_contact_details;
+		$data->other_name = implode(",", $request->other_name);
+		$data->other_contact = implode(",", $request->other_contact);
+		$data->position = implode(",", $request->position);
+		$data->save();
+		if (!empty($request->carpet_measurement)) {
+			Helper::add_default_measuerement($request->carpet_measurement);
+		}
+		if (!empty($request->super_builtup_measurement)) {
+			Helper::add_default_measuerement($request->super_builtup_measurement);
+		}
+		if (!empty($request->plot_measurement)) {
+			Helper::add_default_measuerement($request->plot_measurement);
+		}
+		if (!empty($request->terrace_measuremnt)) {
+			Helper::add_default_measuerement($request->terrace_measuremnt);
+		}
+		return response()->json(['status' => 'success', 'data' => $data]);
+	}
+
+
+	// shared 2
+	public function sharedPropertyIndex(Request $request)
+	{
+		// dd("shared-properties  ===>");
+		if ($request->ajax()) {
+			$dropdowns = DropdownSettings::get()->toArray();
+			$dropdownsarr = [];
+			foreach ($dropdowns as $key => $value) {
+				$dropdownsarr[$value['id']] = $value;
+			}
+			$dropdowns = $dropdownsarr;
+			// $data = SharedProperty::where('user_id', Auth::user()->id)
+			// 	->Where('accepted', '1')
+			// 	->with(['Property', 'User'])->get();
+			$data = SharedProperty::with(['Property', 'User'])
+				// ->where('partner_id', Auth::user()->id)
+				// ->Where('accepted', '1')
+				->get();
+			// $data = SharedProperty::with('Property', 'User')->where('user_id', Auth::user()->id)->get();
+
+			dd("SharedProperty", $data, Auth::user()->id);
+			return DataTables::of($data)
+				->editColumn('project_name', function ($row) use ($request) {
+					$first =  '<td style="vertical-align:top">
+						<font size="3"><a href="#" style="font-weight: bold;">' . ((isset($row->Property->Projects->project_name)) ? $row->Property->Projects->project_name : '') . '</a>';
+					$first_middle = '';
+					if (isset($row->Property->Projects->is_prime) && $row->Property->Projects->is_prime) {
+						$first_middle = '<img style="height:24px" src="' . asset('assets/images/primeProperty.png') . '" alt="">';
+					}
+					if ($row->Property->hot_property) {
+						$first_middle = $first_middle . '<img style="height:24px" src="' . asset('assets/images/hotProperty.png') . '" alt="">';
+					}
+
+					if ($row->Property->property_for == 'Both') {
+						$first_middle = $first_middle . '<img style="height:24px" src="' . asset('assets/images/rentAndsell.jpg') . '" alt="">';
+					}
+					$first_end = '</font>';
+					$second = '<br> <a href="' . $row->Property->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Property->Projects->Area->name)) ? $row->Property->Projects->Area->name : '') . '	</font> </a>';
+					// $third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->Property->created_at)->format('d-m-Y') . '</font>';
+					$last = 	'</td>';
+
+					'</td>';
+					return $first . $first_middle . $first_end . $second  .  $last;
+
+					return '';
+				})
+				->editColumn('super_builtup_area', function ($row) use ($dropdowns) {
+					$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk', 'Test', 'testw', 'fgfgmf', 'sfbsbsfn', '252626', 'sh');
+					if ($row->Property->property_for == 'Both') {
+						$forr = 'Rent & Sell';
+					} else {
+						$forr = $row->Property->property_for;
+					}
+
+					$sub_cat = ((!empty($dropdowns[$row->Property->property_category]['name'])) ? ' | ' . $dropdowns[$row->Property->property_category]['name'] : '');
+					if (!is_null($row->Property->configuration)) {
+						$catId = (int)$row->Property->configuration;
+						//$getsub_category = Helper::getsubcategory($catId);
+						$getsub_category = $new_array[$catId];
+
+						if (!is_null($getsub_category)) {
+							$sub_cat = ' | ' . $getsub_category;
+							if ($sub_cat == " | Agricultural/Farm Land") {
+								$sub_cat = " | Agricultural";
+							}
+						}
+					}
+					$category = $sub_cat;
+					if ($row->Property->property_category == '256') {
+						$fstatus  = '';
+					} else {
+						$fstatus  = 'Unfurnished';
+						if (!empty($row->Property->unit_details) && !empty(json_decode($row->Property->unit_details)[0])) {
+							$vv = json_decode($row->Property->unit_details);
+							if (isset($vv[0][8])) {
+								if (!empty($vv[0][8])) {
+									if ($vv[0][8] == "106") {
+										$fstatus = 'Furnished';
+									} elseif ($vv[0][8] == "107") {
+										$fstatus = 'Semi Furnished';
+									} elseif ($vv[0][8] == "108") {
+										$fstatus = 'Unfurnished';
+									} else {
+										$fstatus = 'Can Furnished';
+									}
+								}
+							}
+						}
+					}
+
+					$salable_area_print = $this->generateAreaDetails($row->Property, $dropdowns[$row->Property->property_category]['name'], $dropdowns);
+
+					if (empty($salable_area_print)) {
+						$salable_area_print = "Area Not Available";
+					}
+					try {
+						return '
+					<td style="vertical-align:top">
+					   ' . ((!empty($forr)) ?  $forr : '')  . $category . '
+					   <font size="2" style="font-style:italic">
+					   <br>
+					   ' . $salable_area_print . '
+					   </font>
+					   <br>' . $fstatus . '
+					</td>';
+					} catch (\Throwable $th) {
+						//throw $th;
+					}
+				})
+				->editColumn('owner_details', function ($row) {
+					$detail = '';
+					if (!empty($row->User)) {
+						$detail =  '<td align="center" style="vertical-align:top">
+							' . $row->User->first_name . ' ' . $row->User->last_name . ' <br>
+							<a href="tel:' .  $row->User->office_number . '">' . $row->User->mobile_number . '</a>
+							 </td>';
+					};
+					return $detail;
+				})
+				->editColumn('units', function ($row) {
+					$all_units = [];
+					if (!empty($row->Property->unit_details) && !empty(json_decode($row->Property->unit_details)[0])) {
+						$vv = json_decode($row->Property->unit_details);
+						foreach ($vv as $key => $value) {
+							$price = '';
+							if (!empty($value['7'])) {
+								$price = $value['7'];
+							} else if (!empty($value['4'])) {
+								$price = $value['4'];
+							} else if (!empty($value['3'])) {
+								$price = $value['3'];
+							}
+							$data = [];
+							$data[0] = $value[0];
+							$data[1] = $value[1];
+							$data[2] = $price;
+							array_push($all_units, $data);
+						}
+					}
+					if (!empty($all_units)) {
+						$vvv = '';
+						foreach ($all_units as $key => $value) {
+							$vvv = $vvv .  ((!empty($value[0])) ? $value[0] . '<br>' : '') . ((!empty($value[1])) ? $value[1] : '');
+						}
+						return $vvv;
+					}
+
+					return "N/A";
+				})
+				->editColumn('price', function ($row) {
+					//$all_units = [];
+					$all_units = [];
+					// dd(($row->Property->unit_details));
+					if (!empty($row->Property->unit_details) && !empty(json_decode($row->Property->unit_details)[0])) {
+						$vv = json_decode($row->Property->unit_details);
+						foreach ($vv as $key => $value) {
+							$price = '';
+							if (!empty($value['7'])) {
+								$price = $value['7'];
+							} else if (!empty($value['4'])) {
+								$price = $value['4'];
+							} else if (!empty($value['3'])) {
+								$price = $value['3'];
+							}
+							$data = [];
+							$data[0] = $value[0];
+							$data[1] = $value[1];
+							$data[2] = $price;
+							array_push($all_units, $data);
+						}
+					}
+					if (!empty($all_units)) {
+						$vvv = "";
+						foreach ($all_units as $key => $value) {
+							if (count($all_units) > 1 && $key > 0) {
+								$vvv .= ' <br> ';
+							}
+							$vvv .= $value[2];
+						}
+						return nl2br($vvv);
+					}
+					return;
+				})
+				->editColumn('remarks', function ($row) {
+					return $row->Property->remarks;
+				})
+				->rawColumns(['project_name',  'super_builtup_area', 'remarks', 'property_unit_no', 'units', 'price', 'owner_details'])
+				->make(true);
+		}
+
+
+		return view('admin.properties.shared_index');
+	}
+	public function importProperty(Request $request)
+	{
+		$file = $request->file('csv_file');
+		$name = Str::random(10) . '.xlsx';
+		$file->move(storage_path('app'), $name);
+		try {
+			$collection = (new FastExcel)->import(storage_path('app/' . $name));
+		} catch (\Throwable $th) {
+			$collection = [];
+		}
+
+		unlink(storage_path('app/' . $name));
+		foreach ($collection as $key => $value) {
+
+			$project_id = NULL;
+			if (!empty($value['Project'])) {
+
+				$area_name = Areas::where('name', 'like', '%' . $value['Project'])->first();
+				$project = Projects::where('project_name', 'like', '%' . $value['Project'] . '%')->first();
+				// $project = Projects::where('project_name', 'like', '%' . $value['Project'] . '%')->when($value['Project'] && $area_name->name), function ($query) use ($area_name) {
+				// 	$query->where('area_id', $area_name->id);
+				// })->first();
+			}
+
+			if (!empty($project->id) && !empty($value['Project'])) {
+				$project_id = $project->id;
+			}
+
+			$property_type_id = NULL;
+			$property_type = DropdownSettings::where('name', 'like', '%' . $value['Property Type'] . '%')->first();
+			if (!empty($property_type->id) && !empty($value['Property Type'])) {
+				$property_type_id = $property_type->id;
+			}
+
+			$specific_property_id = NULL;
+			$specific_property = DropdownSettings::where('name', 'like', '%' . $value['Category'] . '%')->first();
+			if (!empty($specific_property->id) && !empty($value['Category'])) {
+				$specific_property_id = $specific_property->id;
+			}
+
+			$Configuration_id = NULL;
+			$Configuration = DropdownSettings::where('name', 'like', '%' . $value['Subcategory'] . '%')->first();
+			if (!empty($Configuration->id) && !empty($value['Subcategory'])) {
+				$Configuration_id = $Configuration->id;
+			}
+
+			$carpet_measurement_id = NULL;
+			$carpet_measurement = DropdownSettings::where('name', 'like', '%' . $value['Carpet Area'] . '%')->first();
+			if (!empty($carpet_measurement->id) && !empty($value['Carpet Area'])) {
+				$carpet_measurement_id = $carpet_measurement->id;
+			}
+
+			$super_measurement_id = NULL;
+			$super_measurement = DropdownSettings::where('name', 'like', '%' . $value['Builtup Area'] . '%')->first();
+
+			if (!empty($super_measurement->id) && !empty($value['Builtup Area'])) {
+				$super_measurement_id = $super_measurement->id;
+			}
+			$furnished_status_id[] = NULL;
+			$arr = [];
+			$array = [1 => 'Furnished Status 1', 2 => 'Furnished Status 2', 3 => 'Furnished Status 3'];
+			// foreach($array as $key => $d){
+			// 	//dd($value['Wing '. $key]);
+			// 	$dataUnit[]=
+
+			// 	[array_push($arr, $value['Wing 1']),
+			// 	array_push($arr, 'unit:'.$value['Unit '. $key]),
+			// 	array_push($arr, 'available_status:'.$value['Available Status '. $key]),
+			// 	array_push($arr, 'price_rent:'.$value['Price Rent '. $key]),
+			// 	array_push($arr, 'price:'.$value['Price '. $key]),
+			// 	array_push($arr,'furnished_status:'.$value['Furnished Status '. $key]),
+			// 	];
+			// 	array_push($dataUnit, $arr);
+			// 	$furnished_status = DropdownSettings::where('name', 'like', '%' . $d . '%')->first();
+
+			// 	if (!empty($furnished_status->id) && !empty($d)) {
+			// 		$furnished_status_id = $furnished_status->id;
+			// 	}
+			// 	// $dataUnit = [];
+			// 	// $arr = [];
+			// 	// array_push($arr, 'wing:'.$value['Wing '. $key]);
+			// 	// array_push($arr, 'unit:'.$value['Unit '. $key]);
+			// 	// array_push($arr, 'available_status:'.$value['Available Status '. $key]);
+			// 	// array_push($arr, 'price_rent:'.$value['Price Rent '. $key]);
+			// 	// array_push($arr, 'price:'.$value['Price '. $key]);
+			// 	// array_push($arr,'furnished_status:'.$value['Furnished Status '. $key]);
+			// 	// array_push($dataUnit, $arr);
+			// }
+
+
+			$dataUnit = [];
+			//$arr = [];
+			array_push($arr, $value['Wing 1']);
+			array_push($arr, $value['Unit 1']);
+			array_push($arr, $value['Available Status 1']);
+			array_push($arr, $value['Price Rent 1']);
+			array_push($arr, $value['Price 1']);
+			array_push($arr, $value['Furnished Status 1']);
+			array_push($arr, "");
+			array_push($arr, "");
+			array_push($arr, "");
+			array_push($dataUnit, $arr);
+			$arr = [];
+			array_push($arr, $value['Wing 2']);
+			array_push($arr, $value['Unit 2']);
+			array_push($arr, $value['Available Status 2']);
+			array_push($arr, $value['Price Rent 2']);
+			array_push($arr, $value['Price 2']);
+			array_push($arr, $value['Furnished Status 2']);
+			array_push($dataUnit, $arr);
+			$arr = [];
+			array_push($arr, $value['Wing 3']);
+			array_push($arr, $value['Unit 3']);
+			array_push($arr, $value['Available Status 3']);
+			array_push($arr, $value['Price Rent 3']);
+			array_push($arr, $value['Price 3']);
+			array_push($arr, $value['Furnished Status 3']);
+			array_push($dataUnit, $arr);
+
+
+			$dataUnit['array2'] = [$dataUnit[1]];
+			$unit[] = array_merge($dataUnit[0], $dataUnit['array2'], $dataUnit['array2']);
+
+			// dd(json_encode($unit));
+
+			$hot_property = 0;
+			if ($value['Hot'] == 'Yes') {
+				$hot_property = 1;
+			}
+
+			$created_at = Carbon::now()->format('Y-m-d H:i:s');
+			if (isset($value['CreatedOn']) == false) {
+				$created_at = Carbon::parse($created_at)->format('Y-m-d H:i:s');
+			}
+
+			$contact_details = [];
+			$arr = [];
+			array_push($arr, $value['Owner Name']);
+			array_push($arr, $value['Contact']);
+			array_push($arr, 'Other contact No.');
+			array_push($contact_details, $arr);
+			$arr = [];
+			array_push($arr, $value['Owner Name']);
+			array_push($arr, $value['Contact']);
+			array_push($arr, 'Other contact No.');
+			array_push($contact_details, $arr);
+
+			if (!empty($project_id)) {
+				$data =  new Properties();
+				Properties::create([
+					'added_by' => Auth::user()->id,
+					'user_id' => Session::get('parent_id'),
+					'building_id' => $project_id,
+					'property_for' => $value['Property For'],
+					'property_type' => $property_type_id,
+					'specific_type' => $specific_property_id,
+					// 'property_wing' => $value['Wing'],
+					// 'property_unit_no' => $value['UnitNo'],
+					'unit_details' => json_encode($unit),
+					'configuration' => $value['Subcategory'],
+					'carpet_area' => $value['Carpet Area'],
+					'carpet_measurement' => $carpet_measurement_id,
+					'super_builtup_area' => $value['Salable Area'],
+					'super_builtup_measurement' => $super_measurement_id,
+					'hot_property' => $hot_property,
+					'furnished_status' => $furnished_status_id,
+					// 'price' => $value['Price'] . ' ' . $value['Price Unit'],
+					'owner_details' => json_encode($contact_details),
+					'property_remarks' => "",
+					'created_at' => $created_at,
+				]);
+			}
+		}
+	}
+
+	public function getSpecificProperty(Request $request)
+	{
+		// for edit selected
+		if (!empty($request->id)) {
+			$data = Properties::where('id', $request->id)->first();
+			return json_encode($data);
+		}
+	}
+
+	public function destroy(Request $request)
+	{
+		if (!empty($request->id)) {
+			$data = Properties::where('id', $request->id)->delete();
+			if ($data) {
+				$data = [];
+				$data['user_id'] = Session::get('parent_id');
+				$data['action_by'] = Auth::User()->id;
+				$data['action_on'] = $request->id;
+				$data['action'] = 'deleted';
+				PropertyReport::create($data);
+			}
+			return json_encode($data);
+		}
+		if (!empty($request->allids) && isset(json_decode($request->allids)[0])) {
+			$data = Properties::whereIn('id', json_decode($request->allids))->delete();
+			if ($data) {
+				foreach (json_decode($request->allids) as $key => $value) {
+					$data = [];
+					$data['user_id'] = Session::get('parent_id');
+					$data['action_by'] = Auth::User()->id;
+					$data['action_on'] = $value;
+					$data['action'] = 'deleted';
+					PropertyReport::create($data);
+				}
+			}
+			return json_encode($data);
+		}
+	}
+
+	public function view($id)
+	{
+		$property = Properties::with('Projects', 'District', 'Taluka', 'Village')->find(Helper::theDecrypt($id));
+		$dropdowns = DropdownSettings::get()->toArray();
+		$vv = PropertyViewer::create(['user_id' => Session::get('parent_id'), 'visited_by' => Auth::user()->id, 'property_id' => $property->id]);
+		$dropdownsarr = [];
+		foreach ($dropdowns as $key => $value) {
+			$dropdownsarr[$value['id']] = $value;
+		}
+		$dropdowns = $dropdownsarr;
+		// price
+		$unitDetails = json_decode($property->unit_details, true);
+		$unit_price = !empty($unitDetails[0][4]) ? $unitDetails[0][4] : (!empty($unitDetails[0][7]) ? $unitDetails[0][7] : $unitDetails[0][3]);
+		// salable_area
+		$area_parts = explode("_-||-_", $property->salable_area);
+		$area_size = str_replace(',', '', $area_parts[0]);
+		// constructed_salable_area
+		$constructed_area_parts = explode("_-||-_", $property->constructed_salable_area);
+		$constructed_area = str_replace(',', '', $constructed_area_parts[0]);
+
+		$enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
+			->where('requirement_type', $property->property_type)
+			->where('property_type', $property->property_category)
+			->when(!empty($unit_price), function ($query) use ($unit_price) {
+				return $query->where('budget_from', '<=', $unit_price)
+					->where('budget_to', '>=', $unit_price);
+			}, function ($query) use ($property) {
+				return $query->where('budget_from', '<=', $property->survey_price)
+					->where('budget_to', '>=', $property->survey_price);
+			})
+			->when(!empty($area_size), function ($query) use ($area_size) {
+				return $query->where(function ($query) use ($area_size) {
+					$query->where('area_from', '<=', $area_size)
+						->where('area_to', '>=', $area_size);
+				});
+			}, function ($query) use ($constructed_area) {
+				return $query->where(function ($query) use ($constructed_area) {
+					$query->where('area_from', '<=', $constructed_area)
+						->where('area_to', '>=', $constructed_area);
+				});
+			})
+			->get();
+
+
+		$prop_type = [];
+		foreach ($dropdowns as $key => $value) {
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
+				array_push($prop_type, $value['id']);
+			}
+		}
+		//subcategory View
+		if (!empty($property->configuration) && !empty(config('constant.property_configuration')[$property->configuration])) {
+			$configuration_name = config('constant.property_configuration')[$property->configuration];
+		} else {
+			$configuration_name = "-";
+		}
+
+		$visits = QuickSiteVisit::with('Enquiry')->where('property_list', 'like', '%"' . $property->id . '"%')->whereNotNull('visit_status')->orderBy('id', 'DESC')->get();
+
+		$projects = Projects::all();
+		$areas = Areas::all();
+
+		$multiple_image = LandImages::where('pro_id', $property->id)->get();
+		//  dd($multiple_image);
+		return view('admin.properties.view', compact('property', 'multiple_image', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+	}
+	public function changeFormType(Request $request)
+	{
+		switch ($request->type) {
+			case 'industrial':
+				$form_data['projects'] = Projects::orderBy('project_name')->get();
+				$form_data['areas'] = Areas::orderBy('name')->get();
+				$form_data['cities'] = City::orderBy('name')->get();
+				$form_data['states'] = State::orderBy('name')->get();
+				$property_configuration_settings = DropdownSettings::get()->toArray();
+				$prop_type = [];
+				foreach ($property_configuration_settings as $key => $value) {
+					if (($value['name'] == 'Industrial') && str_contains($value['dropdown_for'], 'property_')) {
+						array_push($prop_type, $value['id']);
+					}
+				}
+				$form_data['prop_type'] = $prop_type;
+				$form_data['property_configuration_settings'] = $property_configuration_settings;
+				$view = view('admin.properties.add_industrial_property', $form_data)->render();
+				break;
+			case 'land':
+
+				$form_data['projects'] = Projects::orderBy('project_name')->get();
+				$form_data['areas'] = Areas::orderBy('name')->get();
+				$form_data['cities'] = City::orderBy('name')->get();
+				$form_data['states'] = State::orderBy('name')->get();
+				$form_data['districts'] = District::orderBy('name')->get();
+				$form_data['talukas'] = Taluka::orderBy('name')->get();
+				$form_data['villages'] = Village::orderBy('name')->get();
+				$property_configuration_settings = DropdownSettings::get()->toArray();
+				$prop_type = [];
+				foreach ($property_configuration_settings as $key => $value) {
+					if (($value['name'] == 'Industrial') && str_contains($value['dropdown_for'], 'property_')) {
+						array_push($prop_type, $value['id']);
+					}
+				}
+				$form_data['prop_type'] = $prop_type;
+				$form_data['property_configuration_settings'] = $property_configuration_settings;
+				$view = view('admin.properties.add_land_property_form', $form_data)->render();
+				break;
+			default:
+
+				$form_data['projects'] = Projects::all();
+				$form_data['areas'] = Areas::all();
+				$conatcts_numbers = [];
+				$contacts =  Enquiries::get();
+
+				foreach ($contacts as $key => $value) {
+					if (!empty($value->client_mobile) && !empty($value->client_name)) {
+						$arr = [];
+						$arr['name'] = $value->client_name;
+						$arr['number'] = $value->client_mobile;
+						array_push($conatcts_numbers, $arr);
+					}
+					if (!empty($value->other_contacts)) {
+						$val = json_decode($value->other_contacts);
+						foreach ($val as $key1 => $value1) {
+							$arr = [];
+							$arr['name'] = $value1[0];
+							$arr['number'] = $value1[1];
+							array_push($conatcts_numbers, $arr);
+						}
+					}
+				}
+				$form_data['conatcts_numbers'] = $conatcts_numbers;
+				$property_configuration_settings = DropdownSettings::get()->toArray();
+				$prop_type = [];
+				foreach ($property_configuration_settings as $key => $value) {
+					if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
+						array_push($prop_type, $value['id']);
+					}
+				}
+				$form_data['prop_type'] = $prop_type;
+				$form_data['property_configuration_settings'] = $property_configuration_settings;
+				$view = view('admin.properties.add_property_form', $form_data)->render();
+				break;
+		}
+		return response()->json(['content' => $view], 200);
+	}
+
+	public function editProperty(Request $request)
+	{
+		$data['projects'] 	= Projects::whereNotNull('project_name')->get();
+		// $data['areas'] 		= Areas::all();
+		$conatcts_numbers = [];
+		$data['contacts'] 	= Enquiries::get();
+		// $data['cities'] = City::orderBy('name')->get();
+		// $data['states'] = State::orderBy('name')->get();
+		$data['cities'] = City::orderBy('name')->where('user_id', Auth::user()->id)->get();
+		$data['states'] = State::orderBy('name')->where('user_id', Auth::user()->id)->get();
+		$data['areas'] = Areas::orderBy('name')
+			->where('user_id', Auth::user()->id)
+			->where('status', 1)
+			->get();
+		$data['districts'] = District::orderBy('name')->get();
+		$data['talukas'] = Taluka::orderBy('name')->get();
+		$data['villages'] = Village::orderBy('name')->get();
+		$data['current_id'] = $request->id;
+		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
+		$prop_type = [];
+		foreach ($data['property_configuration_settings'] as $key => $value) {
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
+				array_push($prop_type, $value['id']);
+			}
+		}
+		$parent_id =  Session::get('parent_id');
+		$amenities =  DropdownSettings::where('user_id', $parent_id)->where('dropdown_for', 'property_amenities')->get()->toArray();
+		$data['amenities'] = $amenities;
+		$data['prop_type'] = $prop_type;
+		$edit_configuration = Properties::where('id', $request->id)->pluck('configuration');
+		$edit_category = Properties::where('id', $request->id)->pluck('property_category');
+		return view('admin.properties.add_property', $data, compact('edit_category', 'edit_configuration'));
+	}
+
+	public function addProperty(Request $request)
+	{
+		$data['projects'] 	= Projects::whereNotNull('project_name')->get();
+		// $data['areas'] 		= Areas::all();
+		$conatcts_numbers = [];
+		$data['contacts'] 	=  Enquiries::get();
+		// $data['cities'] = City::orderBy('name')->get();
+		// $data['states'] = State::orderBy('name')->get();
+
+		$data['cities'] = City::orderBy('name')->where('user_id', Auth::user()->id)->get();
+		$data['states'] = State::orderBy('name')->where('user_id', Auth::user()->id)->get();
+		$data['areas'] = Areas::orderBy('name')
+			->where('user_id', Auth::user()->id)
+			->where('status', 1)
+			->get();
+		$data['districts'] = District::orderBy('name')->get();
+		$data['talukas'] = Taluka::orderBy('name')->get();
+		$data['villages'] = Village::orderBy('name')->get();
+		$parent_id =  Session::get('parent_id');
+		$amenities =  DropdownSettings::where('user_id', $parent_id)->where('dropdown_for', 'property_amenities')->get()->toArray();
+		foreach ($data['contacts'] as $key => $value) {
+			if (!empty($value->client_mobile) && !empty($value->client_name)) {
+				$arr = [];
+				$arr['name'] = $value->client_name;
+				$arr['number'] = $value->client_mobile;
+				array_push($conatcts_numbers, $arr);
+			}
+			if (!empty($value->other_contacts)) {
+				$val = json_decode($value->other_contacts);
+				foreach ($val as $key1 => $value1) {
+					$arr = [];
+					$arr['name'] = $value1[0];
+					$arr['number'] = $value1[1];
+					array_push($conatcts_numbers, $arr);
+				}
+			}
+		}
+
+		$data['conatcts_numbers'] 	= $conatcts_numbers;
+		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
+		$prop_type 			= [];
+		foreach ($data['property_configuration_settings'] as $key => $value) {
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
+				array_push($prop_type, $value['id']);
+			}
+		}
+		$data['prop_type'] = $prop_type;
+		$data['amenities'] = $amenities;
+		return view('admin.properties.add_property', $data);
+	}
+
+	// invoice form view
+	public function createInvoice()
+	{
+		return view('admin.invoice.create');
+	}
+
+	// invoice create
+	public function invoice(Request $request)
+	{
+		$user = Auth::user();
+		$data = [];
+		$totalSum = 0;
+		foreach ($request->property_name as $key => $value) {
+			$data[] = [
+				"property_name" => $request->property_name[$key],
+				"property_description" => $request->description[$key],
+				"property_total" => $request->property_total[$key],
+			];
+			$totalSum += $request->property_total[$key];
+		}
+		$pdf = PDF::loadView('admin.invoice.invoice', compact('user', 'request', 'data', 'totalSum'));
+		return $pdf->download('invoice.pdf');
+	}
+
+	public function state(Request $request)
+	{
+		$data['states'] = City::select('name', 'id')->where("state_id", $request->state_id)
+			->get(["name", "id"]);
+		return response()->json($data);
+	}
+	public function getPropertyConfiguration(Request $request)
+	{
+		$selectedCategory = $request->query('selectedCategory');
+		$filteredKeys = [];
+		$filteredConfig = [];
+		if ($selectedCategory === 'Flat' || $selectedCategory === 'Penthouse') {
+			$filteredKeys = ['13', '14', '15', '16', '17', '18'];
+		}
+		if ($selectedCategory === 'Vila/Bunglow') {
+			// $filteredKeys = ['21', '22', '23', '24', '25'];
+			$filteredKeys = ['14', '15', '16', '17', '18'];
+		}
+		if ($selectedCategory === 'Land/Plot' || $selectedCategory === 'Plot/Land') {
+			$filteredKeys = ['10', '11', '12'];
+		}
+		if ($selectedCategory === 'Farmhouse') {
+			$filteredKeys = [];
+		}
+		if ($selectedCategory === 'Office') {
+			$filteredKeys = ['1', '2'];
+		}
+		if ($selectedCategory === 'Retail') {
+			$filteredKeys = ['3', '4', '5', '6'];
+		}
+		if ($selectedCategory === 'Storage/industrial') {
+			$filteredKeys = ['7', '8', '9', '20'];
+		}
+		$propertyConfiguration = config('constant.property_configuration');
+		foreach ($filteredKeys as $key) {
+			if (isset($propertyConfiguration[$key])) {
+				$filteredConfig[$key] = $propertyConfiguration[$key];
+			}
+		}
+		return response()->json($filteredConfig);
+	}
+}
