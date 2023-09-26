@@ -64,6 +64,10 @@
                     <input type="text" placeholder="Company Name" name="company_name" class="form-control"
                             id="company_name" value="{{ $user->company_name }}" style="text-transform:none;">
                     </div>
+                    <div class="form-group col-md-6 m-b-4 mb-3">
+                        <input type="text" placeholder="Address" name="address" class="form-control"
+                                id="address" value="{{ $user->address }}" style="text-transform:none;">
+                        </div>
                     <input type="hidden" name="shar_string" id="shar_string">
                 </div>
                 <p class="error-message" style="color:red"></p>
@@ -277,9 +281,9 @@
        }
       
     }
-    function checkProfileDetails(firstname,lastname,mobile_number,company_name)
+    function checkProfileDetails(firstname,lastname,mobile_number,company_name,address)
     {
-       if(firstname == "" || lastname == "" || mobile_number == "" || company_name == "")
+       if(firstname == "" || lastname == "" || mobile_number == "" || company_name == "" || address == "")
        {
              $(".error-message").text("all fields are required")
              return false;
@@ -330,36 +334,42 @@
        var lastname =  $("#lastname").val();
        var mobile_number =  $("#mobile_number").val();
        var company_name =  $("#company_name").val();
-       var isValid = checkProfileDetails(firstname,lastname,mobile_number,company_name);
+       var address =  $("#address").val();
+       var isValid = checkProfileDetails(firstname,lastname,mobile_number,company_name,address);
        if(isValid)
        { 
             $.ajaxSetup({
                 headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-             $.ajax({
-                        url: "{{url('admin/changeprofile')}}",
-                        method: 'POST',
-                        data: {firstname:firstname,lastname:lastname,mobile_number:mobile_number,company_name:company_name},
-                        dataType: 'JSON',
-                        success:function(response)
-                        {
-                           if(response.success)
-                           {
-                               $("#userpfmodel").modal('hide');
-                               Swal.fire({
-                                    title: "Your Profile Updated Successfully!!"
-                                })
-                           }
-                           else
-                           {
-                               $(".error-message").text(response.message);
-                           }
-                        }
-                   });
+            $.ajax({
+                url: "{{url('admin/changeprofile')}}",
+                method: 'POST',
+                data: {
+                    firstname:firstname,
+                    lastname:lastname,
+                    mobile_number:mobile_number,
+                    company_name:company_name,
+                    address : address,
+                },
+                dataType: 'JSON',
+                success:function(response)
+                {
+                    if(response.success)
+                    {
+                        $("#userpfmodel").modal('hide');
+                        Swal.fire({
+                            title: "Your Profile Updated Successfully!!"
+                        })
+                    }
+                    else
+                    {
+                        $(".error-message").text(response.message);
+                    }
+                }
+            });
        }
-       
     });
     $('#state_id').select2();
 		$('#city_id').select2();

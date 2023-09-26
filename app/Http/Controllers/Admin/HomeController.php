@@ -582,11 +582,12 @@ class HomeController extends Controller
 
 		}
 		$profile_details = array(
-			                          'first_name'    =>  $params['firstname'],   
-			                          'last_name'     =>  $params['lastname'],   
-			                          'mobile_number' =>  $params['mobile_number'],   
-			                          'company_name'  =>  $params['company_name']
-		                         ); 
+			'first_name'    =>  $params['firstname'],   
+			'last_name'     =>  $params['lastname'],   
+			'mobile_number' =>  $params['mobile_number'],   
+			'company_name'  =>  $params['company_name'],
+			'address'  =>  $params['address'],
+		); 
 	    $user->update($profile_details);
 		return response(['success' => true,'message' => 'Profile change successfully!!'], 200);
 	}
