@@ -36,6 +36,7 @@ use Spatie\Activitylog\Models\Activity;
 use Throwable;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
+use Illuminate\Http\UploadedFile;
 
 class HomeController extends Controller
 {
@@ -571,8 +572,16 @@ class HomeController extends Controller
 	    $user->update(['password' => Hash::make($params['newPwd'])]);
 		return response(['success' => true,'message' => 'Password change successfully!!'], 200);
 	}
+
+	public function storeFile(UploadedFile $file)
+    {
+        $path = "company_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
+        $file->storeAs("public/file_image/",$path);
+        return $path;
+    }
     
 	public function chnageProfile(Request $request){
+
 		$params = $request->all();
 		$user_id =  Auth::user()->id;
 		$user = User::select('id','email','password')->where('id',$user_id)->first();
@@ -587,7 +596,12 @@ class HomeController extends Controller
 			'mobile_number' =>  $params['mobile_number'],   
 			'company_name'  =>  $params['company_name'],
 			'address'  =>  $params['address'],
-		); 
+		);
+
+		if($request->profile_image) {
+			$profile_details['company_logo'] = $this->storeFile($request->profile_image); 
+		}
+		
 	    $user->update($profile_details);
 		return response(['success' => true,'message' => 'Profile change successfully!!'], 200);
 	}

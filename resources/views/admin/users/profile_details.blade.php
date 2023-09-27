@@ -68,6 +68,15 @@
                         <input type="text" placeholder="Address" name="address" class="form-control"
                                 id="address" value="{{ $user->address }}" style="text-transform:none;">
                         </div>
+                    <div class="form-group col-md-6 m-b-4 mb-3">
+                        <input
+                            type="file"
+                            name="profile_image"
+                            class="form-control"
+                            id="profile_image"
+                            accept="image/png, image/jpeg"
+                        >
+                    </div>
                     <input type="hidden" name="shar_string" id="shar_string">
                 </div>
                 <p class="error-message" style="color:red"></p>
@@ -257,6 +266,8 @@
 @endphp
 @endsection
 @push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js" integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
     $(document).on('click','.changepwd',function(){
           $("#changepwModal").modal('show');
@@ -330,46 +341,46 @@
        
     });
     $(document).on('click','#updateprofile',function(){
-       var firstname =  $("#firstname").val();
-       var lastname =  $("#lastname").val();
-       var mobile_number =  $("#mobile_number").val();
-       var company_name =  $("#company_name").val();
-       var address =  $("#address").val();
-       var isValid = checkProfileDetails(firstname,lastname,mobile_number,company_name,address);
-       if(isValid)
-       { 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+
+        var firstname =  $("#firstname").val();
+        var lastname =  $("#lastname").val();
+        var mobile_number =  $("#mobile_number").val();
+        var company_name =  $("#company_name").val();
+        var address =  $("#address").val();
+
+        var isValid = checkProfileDetails(firstname,lastname,mobile_number,company_name,address);
+
+        let form_data = new FormData();
+        let profile_image = document.getElementById('profile_image');
+
+        if(profile_image && profile_image.files.length > 0) {
+            let file = profile_image.files[0];
+            form_data.set('profile_image', file, file.name);
+        }
+
+        form_data.set('firstname', firstname);
+        form_data.set('lastname', lastname);
+        form_data.set('mobile_number', mobile_number);
+        form_data.set('company_name', company_name);
+        form_data.set('address', address);
+
+        let settings = { headers:{
+            'content-type': 'multipart/form-data',
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        }};
+
+        let url = "{{url('admin/changeprofile')}}";
+
+        if(isValid)
+        {
+            axios.post(url, form_data , settings ).then(response => {
+                // $("#userpfmodel").modal('hide');
+                // Swal.fire({
+                //     title: "Your Profile Updated Successfully!!"
+                // });
+                window.location.href = "{{ route('admin.profile.details') }}";
             });
-            $.ajax({
-                url: "{{url('admin/changeprofile')}}",
-                method: 'POST',
-                data: {
-                    firstname:firstname,
-                    lastname:lastname,
-                    mobile_number:mobile_number,
-                    company_name:company_name,
-                    address : address,
-                },
-                dataType: 'JSON',
-                success:function(response)
-                {
-                    if(response.success)
-                    {
-                        $("#userpfmodel").modal('hide');
-                        Swal.fire({
-                            title: "Your Profile Updated Successfully!!"
-                        })
-                    }
-                    else
-                    {
-                        $(".error-message").text(response.message);
-                    }
-                }
-            });
-       }
+        }
     });
     $('#state_id').select2();
 		$('#city_id').select2();
