@@ -162,11 +162,11 @@
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
-                                    {{-- <span
+                                    <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_zone"
                                         class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                    >Add</span>
                                     <h6>Property Zone</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_zone_ul">
@@ -483,25 +483,40 @@ function getSubcategory() {
 }
 
 function generateListHtml1(params) {
-    var myvar = '<div class="col-lg-6 col-md-6 sm-12 d-inline-block">' + '<div class="row">' +
-        ' <div class="col-lg-7 col-md-7 col-sm-12 mb-2">' + params['name'] + '</div>' +
-        ' <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right">';
-    myvar += '         </div>' +
-        '' +
-        '     </div>' +
-        ' </div>';
+    var myvar = `<div class="col-lg-6 col-md-6 sm-12 d-inline-block">
+        <div class="row">
+            <div class="col-lg-7 col-md-7 col-sm-12 mb-2">${params['name']}</div>
+        </div>
+    </div>`;
     return myvar;
 }
 
 function generateListHtml(params) {
-    var myvar = '<div class="col-lg-6 col-md-6 sm-12 d-inline-block">' + '<div class="row">' +
-        ' <div class="col-lg-7 col-md-7 col-sm-12 mb-2">' + params['name'] + '</div>' +
-        ' <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right">';
-    myvar += '         </div>' +
-        '' +
-        '     </div>' +
-        ' </div>';
-    return myvar;
+
+    if(params.dropdown_for == 'property_zone' || params.dropdown_for == 'property_source' || params.dropdown_for == 'property_amenities') {
+        var myvar = `<div class="col-lg-6 col-md-6 sm-12 d-inline-block">
+            <div class="row">
+                <div class="col-lg-7 col-md-7 col-sm-12 mb-2">${params['name']}</div>
+                <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right">
+                    <i data-name="${params['name']}" data-parent_id="${params['parent_id']}" data-dropdown_for="${params['dropdown_for']}" data-id="${params['id']}"
+                    role="button" class="openEditFieldMOdal pointer fa-pencil fa"></i>
+                    <i data-id="${params['id']}" role="button" class="deleteField fa pointer m-l-5 fa-trash">
+                    </i>
+                </div>
+            </div>
+        </div>`;
+
+        return myvar;
+
+    } else {
+        var myvar = `<div class="col-lg-6 col-md-6 sm-12 d-inline-block">
+            <div class="row">
+                <div class="col-lg-7 col-md-7 col-sm-12 mb-2">${params['name']}</div>
+            </div>
+        </div>`;
+
+        return myvar;
+    }
 }
 
 $(document).on('click', '#saveField', function(e) {

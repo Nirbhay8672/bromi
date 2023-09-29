@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
-use GuzzleHttp\Client;
+use Goutte\Client;
 
 class integrationController extends Controller
 {
@@ -53,20 +53,29 @@ public function emaildatagetOld(Request $request)
 
 public function emaildataget(Request $request)
 {
+    $validatedData = $request->validate([
+        'email' => 'required',
+        'password' => 'required',
+    ]);
+
     $email = $request->input('email');
     $password = $request->input('password');
 
-	// $response = Http::withHeaders([
-	// 	'Content-Type' => 'application/x-www-form-urlencoded'
-	// ])->post('https://emailidea.biz/api/AddBulkContacts', [
-	// 	'ApiKey' => '687c378dba3d4f0f88c5840d8bcaa46f',
-	// 	'EmailGroupId' => '123456',
-	// 	'ContactsJson' => "[{'ud_User_Id':1234,'EmailAddress':'xy@yopmail.com','ApiKey':'687c378dba3d4f0f88c5840d8bcaa46f'},{'ud_User_Id':1234,'EmailAddress':'xy1@yopmail.com','ApiKey':'687c378dba3d4f0f88c5840d8bcaa46f'}]",
-	// ]);
+	$client = new Client();
+    $crawler = $client->request('GET', 'https://emailidea.biz/Login.aspx');
+    
+    $form = $crawler->selectButton('Login')->form();
+    $form['txtEmailAddress'] = $email;
+    $form['txtpass'] = $password;
+    $crawler = $client->submit($form);
+    
+    $user_name = $crawler->filter('#topNavbar_lblUserFullName')->text();
+    $exp_validity = $crawler->filter('#cphMain_BreadCrumb_lblValidity')->text();
+    $current_email_balance = $crawler->filter('#cphMain_BreadCrumb_lblEmailBalance')->text();
 
-	// echo $response->body();
-	$userData = $request->input('email');
-	return response()->json($userData);
+    
+
+	return response()->json($user_name);
 
 }
 

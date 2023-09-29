@@ -99,7 +99,7 @@
             <div class="modal-body">
                 <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
                     <div class="form-row">
-
+                        <span id="error" class="mb-3 text-danger"></span>
                         <div class="form-group col-md-12 d-inline-block m-b-20">
                             <label for="Email">Email</label>
                             <input class="form-control" name="email" id="email" type="email" required="" autocomplete="off">
@@ -130,7 +130,6 @@
             <div class="modal-body">
                 <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
                     <div class="form-row">
-
                         <div class="form-group col-md-12 d-inline-block m-b-20">
                             <label for="Email">Email</label>
                             <input class="form-control" name="email" id="email" type="email" required="" autocomplete="off">
@@ -148,10 +147,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -171,13 +166,14 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-            		console.log(response);
                     $('#cityModal').modal('hide');
 					$('#sendmail').modal('hide');
+                    document.getElementById('email').value = '';
+                    document.getElementById('password').value = '';
+                    document.getElementById('error').innerHTML = '';
 				},
-                error: function(xhr) {
-                    // Handle error response
-                    console.log(xhr.responseText);
+                error: function(response) {
+                    document.getElementById('error').innerHTML = 'All field are required.';
                 }
             });
         });
