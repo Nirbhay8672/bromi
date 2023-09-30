@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 use Goutte\Client;
+use Illuminate\Support\Facades\DB;
 
 class integrationController extends Controller
 {
@@ -68,15 +69,20 @@ public function emaildataget(Request $request)
     $form['txtEmailAddress'] = $email;
     $form['txtpass'] = $password;
     $crawler = $client->submit($form);
-    
+
     $user_name = $crawler->filter('#topNavbar_lblUserFullName')->text();
     $exp_validity = $crawler->filter('#cphMain_BreadCrumb_lblValidity')->text();
     $current_email_balance = $crawler->filter('#cphMain_BreadCrumb_lblEmailBalance')->text();
 
-    
+    DB::table('email_bulk')->insert([
+        'email' => $email,
+        'user_name' => $user_name,
+        'expired_date' => $exp_validity,
+        'email_balance' => $current_email_balance,
+        'user_id' => Auth::user()->id,
+    ]);
 
 	return response()->json($user_name);
-
 }
 
 public function integrationemailsendmailform (){

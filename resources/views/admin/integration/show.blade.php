@@ -171,6 +171,7 @@
                     document.getElementById('email').value = '';
                     document.getElementById('password').value = '';
                     document.getElementById('error').innerHTML = '';
+                    
 				},
                 error: function(response) {
                     document.getElementById('error').innerHTML = 'All field are required.';
