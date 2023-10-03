@@ -23,12 +23,10 @@ use Illuminate\Support\Facades\DB;
 class integrationController extends Controller
 {
  
-    public function show(Request $request)
-	{
-		return view("admin.integration.show");
-	}
-
-
+public function show(Request $request)
+{
+    return view("admin.integration.show")->with(['email_bulk' => DB::table('email_bulk')->get()]);
+}
 
 public function emaildatagetOld(Request $request)
 {
@@ -71,18 +69,25 @@ public function emaildataget(Request $request)
     $crawler = $client->submit($form);
 
     $user_name = $crawler->filter('#topNavbar_lblUserFullName')->text();
-    $exp_validity = $crawler->filter('#cphMain_BreadCrumb_lblValidity')->text();
-    $current_email_balance = $crawler->filter('#cphMain_BreadCrumb_lblEmailBalance')->text();
 
-    DB::table('email_bulk')->insert([
-        'email' => $email,
-        'user_name' => $user_name,
-        'expired_date' => $exp_validity,
-        'email_balance' => $current_email_balance,
-        'user_id' => Auth::user()->id,
-    ]);
+    if($user_name) {
+        $exp_validity = $crawler->filter('#cphMain_BreadCrumb_lblValidity')->text();
+        $current_email_balance = $crawler->filter('#cphMain_BreadCrumb_lblEmailBalance')->text();
 
-	return response()->json($user_name);
+        DB::table('email_bulk')->delete();
+
+        DB::table('email_bulk')->insert([
+            'email' => $email,
+            'user_name' => $user_name,
+            'expired_date' => $exp_validity,
+            'email_balance' => $current_email_balance,
+            'user_id' => Auth::user()->id,
+        ]);
+
+	    return response()->json($user_name);
+    }
+    
+    return response()->json(['error' => 'Somthing wrong.'], 404);
 }
 
 public function integrationemailsendmailform (){
