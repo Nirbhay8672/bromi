@@ -81,19 +81,21 @@
                     <div class="modal-body" x-show="email_bulk_array.length == 0">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
                             <div class="form-row">
-                                <span id="error" class="mb-3 text-danger"></span>
-                                <div class="form-group col-md-12 d-inline-block m-b-20">
+                                <span id="error" class="text-danger"></span>
+                                <div class="form-group col-md-12 d-inline-block m-b-5">
                                     <label for="Email">Email</label>
                                     <input class="form-control" name="email" id="email" type="email" required="" autocomplete="off">
                                 </div>
-                                <div class="form-group col-md-12 d-inline-block m-b-20">
+                                <span id="email_error" class="text-danger"></span>
+                                <div class="form-group col-md-12 d-inline-block m-b-5 mt-3">
                                     <label for="City">Password</label>
                                     <input class="form-control" name="password" id="password" type="text" required="" autocomplete="off">
                                 </div>
+                                <span id="password_error" class="text-danger"></span>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
-                            <button class="btn btn-secondary" id="saveCity">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <button class="btn btn-secondary mt-3" id="saveCity">Save</button>
+                            <button class="btn btn-danger mt-3" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
                     </div>
                     <template x-if="email_bulk_array.length > 0">
@@ -105,7 +107,7 @@
 
                             <div class="row">
                                 <div class="col-6">
-                                    <button class="btn btn-primary" @click="chnageEmail">Change Email</button>
+                                    <button class="btn btn-primary" @click="chnageEmail">Change Account</button>
                                 </div>
                             </div>
                         </div>
@@ -181,6 +183,23 @@
 
             var email = $('#email').val();
             var password = $('#password').val();
+
+            document.getElementById('email_error').innerHTML = '';
+            document.getElementById('password_error').innerHTML = '';
+
+            let valid = ( email != '' &&  password != '');
+
+            if(!valid) {
+                if(email == '') {
+                    document.getElementById('email_error').innerHTML = 'Email is required.';
+                }
+
+                if(password == '') {
+                    document.getElementById('password_error').innerHTML = 'Password is required.';
+                }
+
+                return;
+            }
 
             $.ajax({
                 url: "{{ route('admin.integrationemaildataget') }}",
