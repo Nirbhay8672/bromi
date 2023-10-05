@@ -1560,11 +1560,8 @@
                                                     <div class="row mb-3 div_construction_allowed_for" id="">
 
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
-                                                            <label class="select2_label"
-                                                                for="Select Construction allowed for"> Construction allowed
-                                                                for</label>
-                                                            <select class="form-select" id="construction_allowed_for"
-                                                                name="construction_allowed_for[]" multiple>
+															<label class="select2_label" for="Select Construction allowed for"> Construction allowed for</label>
+                                                            <select class="form-select" id="construction_allowed_for" multiple>
                                                                 <option value="residential">Residential </option>
                                                                 <option value="commercial">Commercial </option>
                                                                 <option value="industrial">Industrial </option>
@@ -1572,11 +1569,8 @@
                                                         </div>
 
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
-                                                            <label class="select2_label"
-                                                                for="Select Construction Documents"> Construction
-                                                                Documents</label>
-                                                            <select class="form-select" id="construction_documents"
-                                                                multiple>
+															<label class="select2_label" for="Select Construction Documents"> Construction Documents</label>
+                                                            <select class="form-select" id="construction_documents" multiple>
                                                                 <option value="prop_tax">Receipt of property tax</option>
                                                                 <option value="non_object">Non-objection certificate
                                                                 </option>
@@ -1592,7 +1586,7 @@
                                                     <div class="row div_plot_ind_common" id="">
 
                                                         <div class="form-group col-md-3 mb-3">
-                                                            <label for="FSI">FSI/FAR</label>
+                                                            <label for="FSI">FSI</label>
                                                             <input class="form-control" name="fsi" id="fsi"
                                                                 type="text" autocomplete="off">
                                                         </div>
@@ -2692,26 +2686,6 @@
             citiesar = JSON.parse(cities);
             areass = JSON.parse(areas);
             $(document).ready(function() {
-                //Disable Price on Plot/Land
-                var $price1 = $('#price');
-                var $price2 = $('#price2');
-
-                $price1.on('input', function() {
-                    if ($(this).val() !== '') {
-                        $price2.prop('disabled', true);
-                    } else {
-                        $price2.prop('disabled', false);
-                    }
-                });
-
-                $price2.on('input', function() {
-                    if ($(this).val() !== '') {
-                        $price1.prop('disabled', true);
-                    } else {
-                        $price1.prop('disabled', false);
-                    }
-                });
-
                 //Add property default select state-city-locality
                 let id = '{{ isset($current_id) ? $current_id : 'null' }}';
                 if (id === 'null') {
@@ -2958,7 +2932,7 @@
                 } else {
                     $('.the_price_rent').show()
                     $('.the_price').show()
-                    // $('.div_flat_details_5').hide()
+					// $('.div_flat_details_5').hide()
 
                 }
                 $('.the_constructed_plot_price').hide()
@@ -2985,7 +2959,7 @@
                     $('.the_constructed_plot_price').show()
                     $('.the_price').hide()
                 }
-                if (theFor2 == 'Land/Plot' || theFor2 == 'Storage/industrial' || theFor2 == 'Plot/Land') {
+                if (theFor2 == 'Land/Plot' || theFor2 == 'Storage/industrial') {
                     $('.the_furnished_status').hide();
                 }
                 if (theFor2 == 'Land/Plot') {
@@ -3312,7 +3286,7 @@
                     showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
                         'div_area_size_details', 'div_borewell',
                         'the_length_of_plot', 'the_width_of_plot',
-                        'the_no_of_floors_allowed', 'div_flat_details_7',
+                        'the_no_of_floors_allowed','div_flat_details_7',
                         // 'div_care_taker','div_flat_details_5',
                         'div_property_source', 'div_checkboxes1', 'div_construction_allowed_for', 'div_tp_details',
                         'div_flat_details_8', 'div_plot_ind_common', 'div_document_section', 'div_survey_details',
@@ -3516,7 +3490,7 @@
                     '                type="text"  autocomplete="off">' +
                     '        </div>' +
                     '<div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-20">' +
-                    '<label>Survey No</label>' +
+                    '<label>Unit No</label>' +
                     '            <input class="form-control" name="unit_unit_no" ' +
                     '                type="text"  autocomplete="off">' +
                     '        </div>' +
@@ -4133,6 +4107,7 @@
                 var id = $('#this_data_id').val()
                 console.log("val", $('#constructed_salable_area').val() + '_-||-_' + $(
                     '#constructed_salable_area_measurement').val());
+                // return;
                 // save property
                 $.ajax({
                     type: "POST",
@@ -4252,23 +4227,15 @@
                         // is_key: is_key
                     },
                     success: function(data) {
-                        console.log("data ==", data.data.property_category);
-                        // return;
-
                         if (data.data != '') {
-
                             var fd = new FormData();
                             var filesImages = $('#land_images')[0].files;
                             var filesDocuments = $('#land_document')[0].files;
                             if (filesImages.length == 0 || filesDocuments.length == 0) {
-								let propertyCategory = data.data.property_category;
-								if (propertyCategory === '262' || propertyCategory === '256') {
-									window.location.href = "{{ route('admin.land.properties') }}";
-								}else if (propertyCategory === '261') {
-									window.location.href = "{{ route('admin.industrial.properties') }}";
-								} else {
-									window.location.href = "{{ route('admin.properties') }}";
-								}// property_image.innerHTML = 'Property Image is required.';
+                                console.log("empty image");
+                                var redirect_url = "{{ route('admin.properties') }}";
+                                window.location.href = redirect_url;
+                                // property_image.innerHTML = 'Property Image is required.';
                             }
                             if (filesImages.length > 0) {
                                 for (let i = 0; i < filesImages.length; i++) {
@@ -4283,6 +4250,53 @@
                             fd.append('land_id', $('#this_data_id').val());
                             fd.append('pro_id', data.data.id);
                             fd.append('_token', '{{ csrf_token() }}');
+                            console.log("fddddddddd :", fd);
+                            // $.ajax({
+                            //     url: "{{ route('admin.saveLandImages') }}",
+                            //     type: 'post',
+                            //     data: fd,
+                            //     contentType: false,
+                            //     processData: false,
+                            // 	success: function(response) {
+                            // 		console.log("success :",success);
+                            //         $('#all_images').html('');
+                            //         $('#land_images').val('');
+                            //         $('#land_document').val('');
+                            //         if (response != '') {
+                            //             images = JSON.parse(response);
+                            //             for (let i = 0; i < images.length; i++) {
+                            //                 var src = land_image_show_url + '/' + images[i];
+                            //                 var fileType = images[i].split('.').pop()
+                            //                     .toLowerCase();
+                            //                 if (isImageFile(fileType)) {
+                            //                     // $('#all_images').append(
+                            //                     //     '<div class="col-md-4 m-b-4 mb-3"><img src="' +
+                            //                     //     src +
+                            //                     //     '" alt="" height="200" width="200"></div>'
+                            //                     // );
+                            //                     $('#all_images').append('');
+                            //                     $('#all_document').append('');
+                            //                 } else {
+                            //                     $('#all_images').append('');
+                            //                     $('#all_document').append('');
+                            //                 }
+                            //             }
+
+                            //             function isImageFile(fileType) {
+                            //                 var imageExtensions = ['jpg', 'jpeg', 'png', 'gif',
+                            //                     'bmp'
+                            //                 ];
+                            //                 return imageExtensions.includes(fileType);
+                            //             }
+                            //             $('#propertyModal').modal('hide');
+                            //             setTimeout(function() {
+                            //                 var redirect_url =
+                            //                     "{{ route('admin.properties') }}";
+                            //                 window.location.href = redirect_url;
+                            //             }, 3000); // 3 seconds delay before redirecting
+                            //         }
+                            //     },
+                            // });
                             $.ajax({
                                 url: "{{ route('admin.saveLandImages') }}",
                                 type: 'post',
@@ -4290,33 +4304,55 @@
                                 contentType: false,
                                 processData: false,
                                 success: function(response) {
+                                    console.log("success :",
+                                        success
+                                    ); // This line seems to be a typo, you can remove it.
                                     $('#all_images').html('');
                                     $('#land_images').val('');
                                     $('#land_document').val('');
                                     if (response != '') {
+                                        // images = JSON.parse(response);
+                                        // images = (response);
+                                        // for (let i = 0; i < images.length; i++) {
+                                        //     var src = land_image_show_url + '/' + images[i];
+                                        //     var fileType = images[i].split('.').pop()
+                                        //         .toLowerCase();
+                                        //     if (isImageFile(fileType)) {
+                                        //         // $('#all_images').append(
+                                        //         //     '<div class="col-md-4 m-b-4 mb-3"><img src="' +
+                                        //         //     src +
+                                        //         //     '" alt="" height="200" width="200"></div>'
+                                        //         // );
+                                        //         $('#all_images').append('');
+                                        //         $('#all_document').append('');
+                                        //     } else {
+                                        //         $('#all_images').append('');
+                                        //         $('#all_document').append('');
+                                        //     }
+                                        // }
+
                                         function isImageFile(fileType) {
                                             var imageExtensions = ['jpg', 'jpeg', 'png', 'gif',
                                                 'bmp'
                                             ];
                                             return imageExtensions.includes(fileType);
                                         }
+
                                         $('#propertyModal').modal('hide');
 
-                                        // Redirect to different routes based on property_category after a delay
+                                        // Redirect to the properties.index page after a delay
                                         setTimeout(function() {
-                                            let propertyCategory = data.data.property_category;
-                                            if (propertyCategory === '262' || propertyCategory === '256') {
-                                                window.location.href = "{{ route('admin.land.properties') }}";
-                                            }else if (propertyCategory === '261') {
-                                                window.location.href = "{{ route('admin.industrial.properties') }}";
-                                            } else {
-                                                window.location.href = "{{ route('admin.properties') }}";
-											}
-                                        }, 3000);
+                                            var redirect_url =
+                                                "{{ route('admin.properties') }}";
+                                            window.location.href = redirect_url;
+                                        }, 3000); // 3 seconds delay before redirecting
                                     }
                                 },
                             });
+
+
                         }
+
                         // $('#propertyModal').modal('hide');
                         // var redirect_url = "{{ route('admin.properties') }}";
                         // window.location.href = redirect_url;
@@ -4325,6 +4361,44 @@
                 });
             })
 
+            // File Validations
+            // var uploadField = document.getElementById("land_images");
+            // var maxPDFCount = 5;
+            // var maxImageCount = 20;
+            // uploadField.onchange = function() {
+            //     var pdfCount = 0;
+            //     var imageCount = 0;
+            //     for (var i = 0; i < this.files.length; i++) {
+            //         var file = this.files[i];
+            //         var fileType = file.type;
+
+            //         if (isPDFExcelWordFile(fileType)) {
+            //             pdfCount++;
+            //         } else {
+            //             imageCount++;
+            //         }
+            //         if (file.size > 2097152) {
+            //             uploadField.value = '';
+            //             Swal.fire({
+            //                 title: "Maximum file size limit is 2MB",
+            //                 icon: "warning",
+            //             });
+            //             return;
+            //         }
+            //     }
+            //     if (pdfCount > maxPDFCount || imageCount > maxImageCount) {
+            //         uploadField.value = '';
+            //         var message = "Maximum ";
+            //         message += (pdfCount > maxPDFCount) ? "PDF, Excel, or Word" : "image";
+            //         message += " count limit is ";
+            //         message += (pdfCount > maxPDFCount) ? maxPDFCount : maxImageCount;
+
+            //         Swal.fire({
+            //             title: message,
+            //             icon: "warning",
+            //         });
+            //     }
+            // };
             var uploadImageField = document.getElementById("land_images");
             var uploadDocumentField = document.getElementById("land_document");
 

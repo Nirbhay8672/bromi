@@ -128,18 +128,14 @@ class PropertyController extends Controller
 					return $query->where('properties.configuration', $request->filter_configuration);
 				})
 				->when($request->filter_building_id, function ($query) use ($request) {
-					return $query->where('properties.project_id', $request->filter_building_id);
+					return $query->whereIn('properties.project_id', ($request->filter_building_id));
 				})
 				->when($request->filter_area_id, function ($query) use ($request) {
-					return $query->where('projects.area_id', $request->filter_area_id);
+					return $query->whereIn('projects.area_id', $request->filter_area_id);
 				})
 				->when($request->filter_furnished_status, function ($query) use ($request) {
 					return $query->where('furnished_status', $request->filter_furnished_status);
 				})
-				// ->when($request->filter_building_quality, function ($query) use ($request) {
-				// 	// dd("in",$request->filter_building_quality);
-				// 	return $query->where('projects.building_quality', $request->filter_building_quality);
-				// })
 				->when($request->filter_availability_status, function ($query) use ($request) {
 					return $query->where('properties.availability_status', $request->filter_availability_status);
 				})
@@ -158,8 +154,8 @@ class PropertyController extends Controller
 				->when($request->filter_to_date, function ($query) use ($request) {;
 					return $query->whereDate('properties.created_at', '<=', $request->filter_to_date);
 				})
-				->when($request->filter_is_prime, function ($query) use ($request) {;
-					return $query->where('projects.is_prime', $request->filter_is_prime);
+				->when($request->filter_is_terraced, function ($query) use ($request) {;
+					return $query->where('properties.is_terrace', $request->filter_is_terraced);
 				})
 				->when($request->filter_is_hot, function ($query) use ($request) {;
 					return $query->where('hot_property', $request->filter_is_hot);
@@ -186,6 +182,13 @@ class PropertyController extends Controller
 							// dd("match_specific_type", $enq->property_type, "..", $request->match_specific_type);
 							$query->where('properties.property_category', $enq->property_type);
 						}
+
+						// property Sub Category
+						if ($request->match_specific_sub_type && !empty($enq->configuration)) {
+							// dd("match_specific_sub_type", $enq->configuration, "..", $request->match_specific_sub_type);
+							$query->where('properties.configuration', json_decode($enq->configuration));
+						}
+
 						//property price & unit_price
 						if ($request->match_budget_from_type) {
 							// dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
@@ -232,7 +235,7 @@ class PropertyController extends Controller
 							// $enq->area_to = '1800';
 
 							//enq 48=vigha
-							dd("match_enquiry_size 32", $request->match_enquiry_size, "area_from..", $enq->area_from, $enq->area_from_measurement, "area_to...", $enq->area_to, $enq->area_to_measurement);
+							// dd("match_enquiry_size 32", $request->match_enquiry_size, "area_from..", $enq->area_from, $enq->area_from_measurement, "area_to...", $enq->area_to, $enq->area_to_measurement);
 
 							$query->where(function ($query) use ($enq) {
 								$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
@@ -252,8 +255,12 @@ class PropertyController extends Controller
 						}
 					}
 				})
-				->orderBy('properties.id', 'desc')
+				// ->orderBy('properties.id', 'desc')
 				// ->orderBy('properties.prop_status', 'desc')
+				->orderByRaw('CASE
+				WHEN properties.prop_status = 1 THEN 1
+				ELSE 2
+				END, properties.prop_status DESC, properties.id DESC')
 				->get();
 			foreach ($data as $key => $value) {
 				$theArea = 0;
@@ -311,20 +318,26 @@ class PropertyController extends Controller
 					}
 				}
 			}
+			// dd("dataaa",$data);
 			return DataTables::of($data)
 				->editColumn('project_id', function ($row) use ($request) {
+
 					$first =  '<td style="vertical-align:top">
-						<font size="3"><a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . ((isset($row->Projects->project_name)) ? $row->Projects->project_name : '') . '</a>';
+						<font size="3"><a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . ((isset($row->Projects->project_name)) ? $row->Projects->project_name : 'tests') . '</a>';
+					//Project name or vilage
+						// if ($row->property_category === '258' && $row->project_id !== '') {
+					// 	// dd("on");
+					// 	// if (isset($row->Village->name)) {
+					// 	// 	$first = $row->Village->name;
+					// 	// }
+					// 	// return '<a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . $name . '</a>';
+					// }
 					$first_middle = '';
 					if (isset($row->Projects->is_prime) && $row->Projects->is_prime) {
 						$first_middle = '<img style="height:24px" src="' . asset('assets/images/primeProperty.png') . '" alt="">';
 					}
 					if ($row->hot_property) {
 						$first_middle = $first_middle . '<img style="height:24px" src="' . asset('assets/images/hotProperty.png') . '" alt="">';
-					}
-
-					if ($row->property_for == 'Both') {
-						$first_middle = $first_middle . '<img style="height:24px" src="' . asset('assets/images/rentAndsell.jpg') . '" alt="">';
 					}
 					$first_end = '</font>';
 					// $second = '<br> <a href="' . $row->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font> </a>';
@@ -342,7 +355,6 @@ class PropertyController extends Controller
 					' . Carbon::parse($row->updated_at)->format('d-m-Y') . '<br>' . Carbon::parse($row->updated_at)->diffInDays() . ' days</td>';
 				})
 				->editColumn('property_category', function ($row) use ($dropdowns) {
-
 					// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
 					$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk', 'Test', 'testw');
 					if ($row->property_for == 'Both') {
@@ -430,13 +442,30 @@ class PropertyController extends Controller
 					return $detail;
 				})
 				->editColumn('unit_details', function ($row) {
+					// dd($row->property_for);
 					$all_units = [];
 					if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
 						$vv = json_decode($row->unit_details);
 						// dd($vv,"unit_details");
 						foreach ($vv as $key => $value) {
-							if ($value[2] == "Rent Out" ||  $value[2] == "Sold Out") {
-								$all_units = [];
+							if ($value[2] == "Rent Out") {
+								$all_units = ['Rent Out'];
+							} else if ($value[2] == "Sold Out") {
+								$all_units = ['Sold Out'];
+							} else if ($row->property_for === 'Both') {
+								$price = '';
+								if (!empty($value['7'])) {
+									$price = $value['7'];
+								} else if (!empty($value['4'])) {
+									$price = $value['4'];
+								} else if (!empty($value['3'])) {
+									$price = $value['3'];
+								}
+								$data = [];
+								$data[0] = $value[0];
+								$data[1] = $value[1];
+								$data[2] = $price;
+								array_push($all_units, $data);
 							} else {
 								$price = '';
 								if (!empty($value['7'])) {
@@ -454,12 +483,11 @@ class PropertyController extends Controller
 							}
 						}
 					}
-					// dd("all1",$all_units);
+					// dd($all_units);
 
 					if (!empty($all_units)) {
 						$vvv = '';
 						$all_units_length = count($all_units);
-						// dd($all_units_length);
 						if ($all_units_length > 2) {
 							foreach ($all_units as $key => $value) {
 								$vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
@@ -491,13 +519,14 @@ class PropertyController extends Controller
 						$vv = json_decode($row->unit_details);
 						// dd($vv,"price");
 						$all_units_length = count($all_units);
+						//price
 						foreach ($vv as $key => $value) {
 							$price = '';
 							if ($row->property_for === 'Both') {
 								if (!empty($value['7']) && !empty($value['4'])) {
 									$price = '  R : ' . $value['4'] . '<br>' . '  S : ' . $value['7'];
-								}elseif(!empty($value['3']) && !empty($value['4'])){
-									$price = '  R : ' . $value['3'] . '<br>' . '  S : ' . $value['4'];
+								} elseif (!empty($value['3']) && !empty($value['4'])) {
+									$price = '  R : ' .  $value['4'] . '<br>' . '  S : ' . $value['3'];
 								}
 							} else {
 								if (!empty($value['7'])) {
@@ -519,6 +548,7 @@ class PropertyController extends Controller
 
 					if (!empty($all_units)) {
 						$vvv = '';
+						$unit_wing = '';
 						// foreach ($all_units as $key => $value) {
 						// 	$vvv = $vvv .  ((!empty($value[2])) ? $value[2] . ' ' : ''); // . ((!empty($value[1])) ? $value[1] : '');
 						// }
@@ -528,9 +558,11 @@ class PropertyController extends Controller
 						$all_units_length = count($all_units);
 						if ($all_units_length > 2) {
 							foreach ($all_units as $key => $value) {
-								$vvv = $vvv . '<br> ' . ((!empty($value[2])) ? $value[2] : '') ;
+								$vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
+								$vvv = $vvv . ' - ' . ((!empty($value[2])) ? $value[2] : '');
 							}
-							$second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2]  : '')  .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
+							$second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2]  : '')  .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $unit_wing . $vvv . '" data-bs-trigger="hover focus"></i>';
+							// $second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
 							return $second;
 						} else {
 							foreach ($all_units as $key => $value) {
@@ -668,7 +700,6 @@ class PropertyController extends Controller
 				array_push($prop_type, $value['id']);
 			}
 		}
-
 		return view('admin.properties.index', compact('projects', 'property_configuration_settings', 'areas', 'conatcts_numbers', 'prop_type', 'shareddata', 'sharedlk'));
 	}
 
@@ -692,7 +723,7 @@ class PropertyController extends Controller
 				$salable = '';
 			}
 			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-		    $area = "P:" . $salable . ' - C: ' . $constructed;
+			$area = "P:" . $salable . ' - C: ' . $constructed;
 		} elseif ($type == 'Farmhouse') {
 			$area = explode('_-||-_', $row->salable_plot_area)[0];
 			$measure = explode('_-||-_', $row->salable_plot_area)[1];
@@ -758,7 +789,7 @@ class PropertyController extends Controller
 	// shared 1
 	public function sharedPropertyRequests(Request $request)
 	{
-		dd("shared-requests");
+		// dd("shared-requests");
 		if ($request->ajax()) {
 			$data = SharedProperty::where('partner_id', Auth::user()->id)->with(['Property', 'User'])->get();
 
@@ -808,8 +839,8 @@ class PropertyController extends Controller
 	// to update property status on view
 	public function updatePropertyStatus(Request $request)
 	{
-		$status=$request->status;
-		$vv = Properties::where('id',$request->id)->update(['prop_status'=>$status]);//find and update property status
+		$status = $request->status;
+		$vv = Properties::where('id', $request->id)->update(['prop_status' => $status]); //find and update property status
 		return redirect('admin/Properties');
 	}
 
@@ -1336,7 +1367,8 @@ class PropertyController extends Controller
 	}
 	public function saveProperty(Request $request)
 	{
-		// dd("save Prop :", $request->all());
+		// dd(json_decode($request->construction_allowed_for));
+		// dd(($request->property_category));
 		if (!empty($request->id) && $request->id != '') {
 			$data = Properties::find($request->id);
 			if (empty($data)) {
@@ -1355,7 +1387,7 @@ class PropertyController extends Controller
 		if (empty($searched->id)) {
 			$new_project = new Projects();
 			$new_project->fill([
-				'project_name' => ucfirst($request->project_id),
+				'project_name' => $request->project_id,
 				'address' => $request->address,
 				'user_id' => $data->user_id,
 				'area_id' => $request->locality_id,
@@ -1413,7 +1445,8 @@ class PropertyController extends Controller
 		$data->hot_property = $request->hot_property;
 		$data->is_favourite = $request->is_favourite;
 		$data->front_road_width = $request->front_road_width;
-		$data->construction_allowed_for = $request->construction_allowed_for;
+		$data->construction_allowed_for = is_array($request->construction_allowed_for) ? implode(",", $request->construction_allowed_for) : $request->construction_allowed_for;
+		$data->construction_documents = is_array($request->construction_documents) ? implode(",", $request->construction_documents) : $request->construction_documents;
 		$data->fsi = $request->fsi;
 		$data->no_of_borewell = $request->no_of_borewell;
 		$data->fourwheller_parking = $request->fourwheller_parking;
@@ -1469,6 +1502,7 @@ class PropertyController extends Controller
 		if (!empty($request->terrace_measuremnt)) {
 			Helper::add_default_measuerement($request->terrace_measuremnt);
 		}
+
 		return response()->json(['status' => 'success', 'data' => $data]);
 	}
 
@@ -1487,13 +1521,13 @@ class PropertyController extends Controller
 			// $data = SharedProperty::where('user_id', Auth::user()->id)
 			// 	->Where('accepted', '1')
 			// 	->with(['Property', 'User'])->get();
-			$data = SharedProperty::with(['Property', 'User'])
-				// ->where('partner_id', Auth::user()->id)
-				// ->Where('accepted', '1')
-				->get();
-			// $data = SharedProperty::with('Property', 'User')->where('user_id', Auth::user()->id)->get();
+			// $data = SharedProperty::with(['Property', 'User'])
+			// 	// ->where('partner_id', Auth::user()->id)
+			// 	// ->Where('accepted', '1')
+			// 	->get();
+			$data = SharedProperty::with('Property', 'User')->where('user_id', Auth::user()->id)->get();
 
-			dd("SharedProperty", $data, Auth::user()->id);
+			// dd("SharedProperty", $data, Auth::user()->id);
 			return DataTables::of($data)
 				->editColumn('project_name', function ($row) use ($request) {
 					$first =  '<td style="vertical-align:top">
@@ -1504,10 +1538,6 @@ class PropertyController extends Controller
 					}
 					if ($row->Property->hot_property) {
 						$first_middle = $first_middle . '<img style="height:24px" src="' . asset('assets/images/hotProperty.png') . '" alt="">';
-					}
-
-					if ($row->Property->property_for == 'Both') {
-						$first_middle = $first_middle . '<img style="height:24px" src="' . asset('assets/images/rentAndsell.jpg') . '" alt="">';
 					}
 					$first_end = '</font>';
 					$second = '<br> <a href="' . $row->Property->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Property->Projects->Area->name)) ? $row->Property->Projects->Area->name : '') . '	</font> </a>';

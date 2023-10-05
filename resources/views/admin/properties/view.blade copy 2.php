@@ -76,23 +76,41 @@
                                                 </a>
                                             </div>
                                         </div>
+                                        {{-- <div class="col-md-2 align-self-center">
+                                            <div class="input-group mb-3">
+                                                <select class="form-select form-control" id="enquiry_progress_status">
+                                                    <option value="">Property Progress</option>
+                                                    <option value="active">Active</option>
+                                                    <option value="inactive">Inactive</option>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary"
+                                                        id="save_property_progress_status">Update</button>
+                                                </div>
+                                            </div>
+                                        </div> --}}
+										<div class="col-md-2 align-self-center">
+											<form action="{{route('admin.updatePropertyStatus')}}" method="get">
+												@csrf
+												@method('post')
+												<div class="input-group mb-3">
+													<input type="text" hidden value="{{$property['id']}}" name="id">
+													<select class="form-select form-control" id="enquiry_progress_status" name="status">
+														<option value="">Property Progress</option>
+														<option value="1">Active</option>
+														<option value="0">Inactive</option>
+													</select>
+													<div class="input-group-append">
+														<button class="btn btn-primary"
+														type="submit">Update</button>
+														{{-- <button class="btn btn-primary"
+															id="save_enquiry_progress_status">Update</button> --}}
+													</div>
+												</div>
+											</form>
+										</div>
                                     </ul>
-									<form action="{{route('admin.updatePropertyStatus')}}" class="row row-cols g-1" method="get">
-                                        @csrf
-                                        @method('post')
-                                        <div class="col-lg-3 col-md-6 col-12">
-                                            <input type="text" hidden value="{{$property['id']}}" name="id">
-                                            <select class="form-select" id="enquiry_progress_status" name="status">
-                                                <option value="">Property Progress</option>
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
-                                            </select>
-                                        </div>
 
-                                        <div class="col-lg-3 col-md-6 col-12" style="margin-left: 10px;">
-                                            <button class="btn btn-primary" type="submit">Update</button>
-                                        </div>
-                                    </form>
 
                                     <div class="tab-content mt-3" id="top-tabContent">
                                         <div class="tab-pane fade show active" id="v-view-summary" role="tabpanel"
@@ -108,7 +126,7 @@
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_1">
                                                             <div>:
-                                                                {{ $property->property_for ? ucfirst(strtolower($property->property_for)) : '-' }}
+                                                                {{ $property->property_for ? $property->property_for : '-' }}
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_2">
@@ -116,7 +134,7 @@
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_2">
                                                             <div>:
-                                                                {{ isset($dropdowns[$property->property_type]['name']) ? ucfirst(strtolower($dropdowns[$property->property_type]['name'])) : '' }}
+                                                                {{ isset($dropdowns[$property->property_type]['name']) ? $dropdowns[$property->property_type]['name'] : '' }}
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_3">
@@ -140,15 +158,7 @@
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_4">
                                                             <div>:
-                                                                {{ $property->Projects != null ? ucfirst(strtolower($property->Projects->project_name)) : '' }}
-                                                            </div>
-                                                        </div>
-														<div class="form-group col-4 m-b-10 data_conent_5">
-                                                            <h6><b>Property Address</b></h6>
-                                                        </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_5">
-                                                            <div>:
-                                                                {{ isset($property->address) ? ucfirst(strtolower($property->address)) : '-' }}
+                                                                {{ $property->Projects != null ? $property->Projects->project_name : '' }}
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_5">
@@ -156,7 +166,7 @@
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_5">
                                                             <div>:
-                                                                {{ isset($property->Projects->address) ? ucfirst(strtolower($property->Projects->address)) : '-' }}
+                                                                {{ isset($property->Projects->address) ? $property->Projects->address : '-' }}
                                                             </div>
                                                         </div>
 														@if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse')
@@ -298,7 +308,7 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_6">
                                                                 <div>:
-                                                                    {{ isset($property->District->name) ? ucfirst(strtolower($property->District->name)) : '-' }}
+                                                                    {{ isset($property->District->name) ? $property->District->name : '-' }}
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-4 m-b-10 data_conent_7">
@@ -306,7 +316,7 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_7">
                                                                 <div>:
-                                                                    {{ isset($property->Taluka->name) ? ucfirst(strtolower($property->Taluka->name)) : '-' }}
+                                                                    {{ isset($property->Taluka->name) ? $property->Taluka->name : '-' }}
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-4 m-b-10 data_conent_8">
@@ -314,7 +324,7 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_8">
                                                                 <div>:
-                                                                    {{ isset($property->Village->name) ? ucfirst(strtolower($property->Village->name)) : '-' }}
+                                                                    {{ isset($property->Village->name) ? $property->Village->name : '-' }}
                                                                 </div>
                                                             </div>
 
@@ -323,7 +333,7 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_9">
                                                                 <div>:
-                                                                    {{ isset($dropdowns[$property->zone_id]['name']) ? ucfirst(strtolower($dropdowns[$property->zone_id]['name'])) : '' }}
+                                                                    {{ isset($dropdowns[$property->zone_id]['name']) ? $dropdowns[$property->zone_id]['name'] : '' }}
                                                                 </div>
                                                             </div>
                                                         @endif
@@ -485,7 +495,7 @@
                                                                 </div>
                                                                 <div class="form-group col-8 m-b-10 data_conent_23">
                                                                     <div>:
-                                                                        {{ $property->no_of_bathrooms ? ucfirst(strtolower($property->no_of_bathrooms)) : '-' }}
+                                                                        {{ $property->no_of_bathrooms ? $property->no_of_bathrooms : '-' }}
                                                                     </div>
                                                                 </div>
                                                             @endif
@@ -545,46 +555,39 @@
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Plot/Land')
-                                                            @if (!empty($property->construction_allowed_for))
-                                                                <div class="form-group col-4 m-b-10 data_conent_106">
-                                                                    <h6><b>Construction Allowed For</b></h6>
+                                                            <div class="form-group col-4 m-b-10 data_conent_28">
+                                                                <h6><b>Construction Allowed For</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_28">
+                                                                <div>:
+                                                                    {{ $property->construction_allowed_for ? $property->construction_allowed_for : '-' }}
                                                                 </div>
-                                                                <div class="form-group col-8 m-b-10 data_conent_106">
-                                                                    <div>:
-                                                                        {{ $property->construction_allowed_for ? $property->construction_allowed_for : '-' }}
-                                                                    </div>
+                                                            </div>
+															<div class="form-group col-4 m-b-10 data_conent_28">
+                                                                <h6><b>Construction Documents</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_28">
+                                                                <div>:
+                                                                    {{ $property->construction_documents ? $property->construction_documents : '-' }}
                                                                 </div>
-                                                            @endif
-                                                            @if (!empty($property->construction_documents))
-                                                                <div class="form-group col-4 m-b-10 data_conent_106">
-                                                                    <h6><b>Construction Documents</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-4 m-b-10 data_conent_29">
+                                                                <h6><b>FSI</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_29">
+                                                                <div>:
+                                                                    {{ $property->fsi ? $property->fsi : '-' }}
                                                                 </div>
-                                                                <div class="form-group col-8 m-b-10 data_conent_106">
-                                                                    <div>:
-                                                                        {{ $property->construction_documents ? $property->construction_documents : '-' }}
-                                                                    </div>
+                                                            </div>
+
+                                                            <div class="form-group col-4 m-b-10 data_conent_30">
+                                                                <h6><b>No. of borewell</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_30">
+                                                                <div>:
+                                                                    {{ $property->no_of_borewell ? $property->no_of_borewell : '-' }}
                                                                 </div>
-                                                            @endif
-                                                            @if (!empty($property->fsi))
-                                                                <div class="form-group col-4 m-b-10 data_conent_107">
-                                                                    <h6><b>FSI</b></h6>
-                                                                </div>
-                                                                <div class="form-group col-8 m-b-10 data_conent_107">
-                                                                    <div>:
-                                                                        {{ $property->fsi ? $property->fsi : '-' }}
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                            @if (!empty($property->no_of_borewell))
-                                                                <div class="form-group col-4 m-b-10 data_conent_108">
-                                                                    <h6><b>No. of borewell</b></h6>
-                                                                </div>
-                                                                <div class="form-group col-8 m-b-10 data_conent_108">
-                                                                    <div>:
-                                                                        {{ $property->no_of_borewell ? $property->no_of_borewell : '-' }}
-                                                                    </div>
-                                                                </div>
-                                                            @endif
+                                                            </div>
                                                         @endif
 
                                                         @if ($type == 'Flat' || $type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse')
@@ -592,6 +595,7 @@
                                                                 <h6><b>Availability Status</b></h6>
 
                                                             </div>
+                                                            {{-- @dd($property->availability_status); --}}
                                                             <div class="form-group col-8 m-b-10 data_conent_31">
                                                                 <div>:
                                                                     {{-- {{ $property->availability_status ? $property->availability_status : '-' }} --}}
@@ -625,38 +629,114 @@
                                                                 {{-- {{ $property->propertyage ? $property->propertyage : '-' }} --}}
                                                             </div>
                                                         </div>
+
+
                                                         <div class="form-group col-4 m-b-10 data_conent_33">
                                                             <h6><b>Available From</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_33">
                                                             <div>:
-                                                                {{ $property->available_from ? ucfirst(strtolower($property->available_from)) : '-' }}
+                                                                {{ $property->available_from ? $property->available_from : '-' }}
                                                             </div>
                                                         </div>
-                                                        @if (!empty($property->remarks))
-                                                            <div class="form-group col-4 m-b-10 data_conent_33">
-                                                                <h6><b>Remarks</b></h6>
+
+
+                                                        @if ($type == 'Flat' || $type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse')
+                                                            <?php
+                                                            $amenitiesArray = json_decode($property->amenities);
+                                                            $valueAtIndex0 = $amenitiesArray[2];
+                                                            ?>
+                                                            <div class="form-group col-4 m-b-10 data_conent_34">
+																<h6><b>Swimming Pool</b></h6>
                                                             </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_33">
+                                                            <div class="form-group col-8 m-b-10 data_conent_34">
                                                                 <div>:
-                                                                    {{ $property->remarks ? ucfirst(strtolower($property->remarks)) : '-' }}
+                                                                    {{ !empty($amenitiesArray) && $amenitiesArray[0] === 1 ? 'Yes' : '-' }}
                                                                 </div>
                                                             </div>
+
+                                                            <div class="form-group col-4 m-b-10 data_conent_35">
+                                                                <h6><b>Club house</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_35">
+                                                                <div>:
+                                                                    {{ !empty($amenitiesArray) && $amenitiesArray[1] === 1 ? 'Yes' : '-' }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-4 m-b-10 data_conent_36">
+                                                                <h6><b>Passenger Lift</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_36">
+                                                                <div>:
+                                                                    {{ !empty($amenitiesArray) && $amenitiesArray[2] === 1 ? 'Yes' : '-' }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-4 m-b-10 data_conent_37">
+                                                                <h6><b>Garden & Children Play Area</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_37">
+                                                                <div>:
+                                                                    {{ !empty($amenitiesArray) && $amenitiesArray[3] === 1 ? 'Yes' : '-' }}
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="form-group col-4 m-b-10 data_conent_38">
+                                                                <h6><b>Service Lift</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_38">
+                                                                <div>:
+                                                                    {{ !empty($amenitiesArray) && $amenitiesArray[4] === 1 ? 'Yes' : '-' }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-4 m-b-10 data_conent_39">
+                                                                <h6><b>Streature Lift</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_39">
+                                                                <div>:
+                                                                    {{ !empty($amenitiesArray) && $amenitiesArray[5] === 1 ? 'Yes' : '-' }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-4 m-b-10 data_conent_40">
+                                                                <h6><b>Central AC</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_40">
+                                                                <div>:
+                                                                    {{ !empty($amenitiesArray) && $amenitiesArray[6] === 1 ? 'Yes' : '-' }}
+                                                                </div>
+                                                            </div>
+
+                                                            {{-- <div class="form-group col-4 m-b-10 data_conent_41">
+                                                                <h6><b>Gym</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_41">
+                                                                <div>:
+                                                                    {{ !empty($amenitiesArray) && $amenitiesArray[7] === 1 ? 'Yes' : '-' }}
+                                                                </div>
+                                                            </div> --}}
                                                         @endif
+														{{-- @dd($property->other_industrial_fields)[3]; --}}
                                                         @if (
                                                             $type == 'Storage/industrial' &&
                                                                 !empty($property->other_industrial_fields) &&
                                                                 !empty(json_decode($property->other_industrial_fields)[3]))
                                                             @foreach (json_decode($property->other_industrial_fields)[3] as $key => $value)
                                                                 <div class="form-group col-4 m-b-10 ">
-                                                                    <h6><b>{{ $value }}</b></h6>
+                                                                    <h6><b>{{ $value }}
+																	@if (!empty(json_decode($property->other_industrial_fields)[1][$key]))
+																		({{ json_decode($property->other_industrial_fields)[1][$key] }})
+																	@else
+																	@endif
+
+																</b></h6>
                                                                 </div>
                                                                 <div class="form-group col-8 m-b-10 ">
                                                                     <div>:
                                                                         {{ json_decode($property->other_industrial_fields)[0][$key]  ? 'Yes' : 'No' }}
-																		@if (!empty(json_decode($property->other_industrial_fields)[1][$key]))
-																			({{ json_decode($property->other_industrial_fields)[1][$key] }})
-																		@endif
                                                                     </div>
                                                                 </div>
                                                             @endforeach
@@ -772,12 +852,12 @@
                                                         <div class="form-group col-8 m-b-10 data_conent_63">
                                                             <div>: {{ $property->hot_property ? 'Yes' : 'No' }}</div>
                                                         </div>
-                                                        {{-- <div class="form-group col-4 m-b-10 data_conent_64">
+                                                        <div class="form-group col-4 m-b-10 data_conent_64">
                                                             <h6><b>Favourite</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_64">
                                                             <div>: {{ $property->is_favourite ? 'Yes' : 'No' }}</div>
-                                                        </div> --}}
+                                                        </div>
                                                     </div>
 
                                                     {{-- @if ($type !== 'Land/Plot' && $type !== 'Plot/Land' && $type !== 'Storage/industrial')
@@ -824,7 +904,7 @@
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_65">
                                                             <div>:
-                                                                {{ isset($dropdowns[$property->owner_is]['name']) ? ucfirst(strtolower($dropdowns[$property->owner_is]['name'])) : '' }}
+                                                                {{ isset($dropdowns[$property->owner_is]['name']) ? $dropdowns[$property->owner_is]['name'] : '' }}
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_66">
@@ -832,7 +912,7 @@
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_66">
                                                             <div>:
-                                                                {{ $property->owner_name ? ucfirst(strtolower($property->owner_name)) : '-' }}
+                                                                {{ $property->owner_name ? $property->owner_name : '-' }}
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_67">
@@ -932,27 +1012,6 @@
 																</a>
 															</div>
 														</div>
-														@if ($type == 'Flat' || $type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse')
-															<?php
-															$amenitiesArray = json_decode($property->amenities);
-															$valueAtIndex0 = $amenitiesArray[2];
-															?>
-															<div class="form-group col-4 m-b-10 data_conent_34">
-																<h6><b>Amenities</b></h6>
-															</div>
-															<div class="form-group col-8 m-b-10 data_conent_34">
-																<div>:
-																	{{ !empty($amenitiesArray) && $amenitiesArray[0] === 1 ? 'Swimming Pool,' : '' }}
-																	{{ !empty($amenitiesArray) && $amenitiesArray[1] === 1 ? 'Club house,' : '' }}
-																	{{ !empty($amenitiesArray) && $amenitiesArray[2] === 1 ? 'Garden,' : '' }}
-																	{{ !empty($amenitiesArray) && $amenitiesArray[3] === 1 ? 'Children Play Area,' : '' }}
-																	{{-- {{ !empty($amenitiesArray) && $amenitiesArray[4] === 1 ? 'Service Lift,' : '' }} --}}
-																	{{ !empty($amenitiesArray) && $amenitiesArray[5] === 1 ? 'Streature Lift,' : '' }}
-																	{{ !empty($amenitiesArray) && $amenitiesArray[6] === 1 ? 'Central AC,' : '' }}
-																	{{-- {{ !empty($amenitiesArray) && $amenitiesArray[7] === 1 ? 'Gym,' : '' }} --}}
-																</div>
-															</div>
-														@endif
 
 														@if ($property->is_terrace === '1')
 															<div class="form-group col-4 m-b-10 data_conent_159">
@@ -1026,7 +1085,7 @@
 																			@forelse (json_decode($property->unit_details) as $value)
 																				<tr>
 																					@if ($type !== 'Vila/Bunglow' && $type !== 'Land/Plot' && $type !== 'Farmhouse')
-																						<td>{{ isset($value[0]) ? ucfirst(strtolower($value[0])) : '-' }}
+																						<td>{{ isset($value[0]) ? strtoupper($value[0]) : '-' }}
 																						</td>
 																					@endif
 																					<td>{{ isset($value[1]) ? $value[1] : '-' }}
@@ -1056,6 +1115,65 @@
 														</div>
                                                     @endif
 
+													@if ($type === "Vila/Bunglow" || $type === "Farmhouse" || $type === 'Penthouse' || $type === "Storage/industrial" ||
+														$type === "Retail" || $type === "Flat" || $type === "Farmhouse")
+														<div class="row mt-4">
+															<div class="form-group col-md-12">
+																<h5 class="border-style">Unit Details</h5>
+															</div>
+															<div class="col-md-12">
+																<table class="table custom-table-design">
+																	<thead>
+																		<tr>
+																			@if ($type !== 'Vila/Bunglow' && $type !== 'Land/Plot' && $type !== 'Farmhouse')
+																				<th scope="col">Wing</th>
+																			@endif
+																			<th scope="col">Unit</th>
+																			{{-- @if (($type === 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse' || $type == 'Storage/industrial') && ($property->property_for == 'Sell' || $property->property_for == 'Both')) --}}
+																			<th scope="col">Price</th>
+																			<th scope="col">Rent Price</th>
+																			{{-- @endif --}}
+																			<th scope="col">Status</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+
+																	<tbody>
+
+
+																		@if (isset(json_decode($property->unit_details)[0]))
+																			@forelse (json_decode($property->unit_details) as $value)
+																				<tr>
+																					@if ($type !== 'Vila/Bunglow' && $type !== 'Land/Plot' && $type !== 'Farmhouse')
+																						<td>{{ isset($value[0]) ? strtoupper($value[0]) : '-' }}
+																						</td>
+																					@endif
+																					<td>{{ isset($value[1]) ? $value[1] : '-' }}
+																					</td>
+																					@if (
+																						($type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse' || $type == 'Storage/industrial') &&
+																							($property->property_for == 'Sell' || $property->property_for == 'Both'))
+																						<td>{{ isset($value[7]) ? $value[7] : '-' }}
+																						</td>
+																					@else
+																						<td>{{ isset($value[3]) ? $value[3] : '-' }}
+																						</td>
+																					@endif
+																					<td>{{ !empty(isset($value[4])) ? $value[4] : '-' }}
+																					</td>
+																					<td>{{ !empty(isset($value[2])) ? $value[2] : '-' }}
+																					</td>
+																				</tr>
+																			@empty
+																			@endforelse
+																		@endif
+
+																	</tbody>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+                                                    @endif
 
                                                     <div class="row">
                                                         <div class="form-group col-md-12">
@@ -1076,9 +1194,9 @@
                                                                     @if (isset(json_decode($property->other_contact_details)[0]))
                                                                         @forelse (json_decode($property->other_contact_details) as $value)
                                                                             <tr>
-                                                                                <td>{{ isset($value[0]) ? ucfirst(strtolower($value[0])) : '-' }}</td>
+                                                                                <td>{{ isset($value[0]) ? $value[0] : '-' }}</td>
                                                                                 <td>{{ isset($value[1]) ? $value[1] : '-' }}</td>
-                                                                                <td>{{ isset($value[2]) ? ucfirst(strtolower($value[2])) : '-' }}</td>
+                                                                                <td>{{ isset($value[2]) ? $value[2] : '-' }}</td>
 
                                                                             </tr>
                                                                         @empty
@@ -1437,46 +1555,39 @@
                                                     </div>
                                                 @endif
                                                 @if ($type == 'Plot/Land')
-													@if (!empty($property->construction_allowed_for))
-														<div class="form-group col-4 m-b-10 data_conent_106">
-															<h6><b>Construction Allowed For</b></h6>
-														</div>
-														<div class="form-group col-8 m-b-10 data_conent_106">
-															<div>:
-																{{ $property->construction_allowed_for ? $property->construction_allowed_for : '-' }}
-															</div>
-														</div>
-													@endif
-													@if (!empty($property->construction_documents))
-														<div class="form-group col-4 m-b-10 data_conent_106">
-															<h6><b>Construction Documents</b></h6>
-														</div>
-														<div class="form-group col-8 m-b-10 data_conent_106">
-															<div>:
-																{{ $property->construction_documents ? $property->construction_documents : '-' }}
-															</div>
-														</div>
-													@endif
-													@if (!empty($property->fsi))
-														<div class="form-group col-4 m-b-10 data_conent_107">
-															<h6><b>FSI</b></h6>
-														</div>
-														<div class="form-group col-8 m-b-10 data_conent_107">
-															<div>:
-																{{ $property->fsi ? $property->fsi : '-' }}
-															</div>
-														</div>
-													@endif
-													@if (!empty($property->no_of_borewell))
-														<div class="form-group col-4 m-b-10 data_conent_108">
-															<h6><b>No. of borewell</b></h6>
-														</div>
-														<div class="form-group col-8 m-b-10 data_conent_108">
-															<div>:
-																{{ $property->no_of_borewell ? $property->no_of_borewell : '-' }}
-															</div>
-														</div>
-													@endif
+                                                    <div class="form-group col-4 m-b-10 data_conent_106">
+                                                        <h6><b>Construction Allowed For</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_106">
+                                                        <div>:
+                                                            {{ $property->construction_allowed_for ? $property->construction_allowed_for : '-' }}
+                                                        </div>
+                                                    </div>
+													<div class="form-group col-4 m-b-10 data_conent_106">
+                                                        <h6><b>Construction Documents</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_106">
+                                                        <div>:
+                                                            {{ $property->construction_documents ? $property->construction_documents : '-' }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-10 data_conent_107">
+                                                        <h6><b>FSI</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_107">
+                                                        <div>:
+                                                            {{ $property->fsi ? $property->fsi : '-' }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-4 m-b-10 data_conent_108">
+                                                        <h6><b>No. of borewell</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_108">
+                                                        <div>:
+                                                            {{ $property->no_of_borewell ? $property->no_of_borewell : '-' }}
+                                                        </div>
+                                                    </div>
                                                 @endif
 
                                                 @if ($type == 'Flat' || $type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse')
@@ -1517,25 +1628,95 @@
                                                     </div>
                                                 </div>
 
-												@if ($property->available_from)
-													<div class="form-group col-4 m-b-10 data_conent_111">
-														<h6><b>Available From</b></h6>
-													</div>
-													<div class="form-group col-8 m-b-10 data_conent_111">
-														<div>:
-															{{ $property->available_from ? $property->available_from : '-' }}
-														</div>
-													</div>
-												@endif
-                                                @if (!empty($property->remarks))
-                                                    <div class="form-group col-4 m-b-10 data_conent_33">
-                                                        <h6><b>Remarks</b></h6>
+
+                                                <div class="form-group col-4 m-b-10 data_conent_111">
+                                                    <h6><b>Available From</b></h6>
+                                                </div>
+                                                <div class="form-group col-8 m-b-10 data_conent_111">
+                                                    <div>:
+                                                        {{ $property->available_from ? $property->available_from : '-' }}
                                                     </div>
-                                                    <div class="form-group col-8 m-b-10 data_conent_33">
+                                                </div>
+
+                                                @if ($type == 'Flat' || $type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse')
+                                                    <div class="form-group col-4 m-b-10 data_conent_112">
+                                                        <h6><b>Swimming Pool</b></h6>
+                                                    </div>
+                                                    {{-- $amenitiesArray = json_decode($property->amenities); --}}
+                                                    <?php
+                                                    // $amenitiesArray = $property->amenities;
+                                                    $amenitiesArray = json_decode($property->amenities);
+                                                    $valueAtIndex0 = $amenitiesArray[2];
+                                                    // print_r($valueAtIndex0);
+                                                    // die();
+                                                    ?>
+                                                    <div class="form-group col-8 m-b-10 data_conent_112">
                                                         <div>:
-                                                            {{ $property->remarks ? ucfirst(strtolower($property->remarks)) : '-' }}
+                                                            {{ !empty($amenitiesArray) && $amenitiesArray[0] === 1 ? 'Yes' : '-' }}
                                                         </div>
                                                     </div>
+                                                    <div class="form-group col-4 m-b-10 data_conent_113">
+                                                        <h6><b>Club house</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_113">
+                                                        <div>:
+                                                            {{ !empty($amenitiesArray) && $amenitiesArray[1] === 1 ? 'Yes' : '-' }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-4 m-b-10 data_conent_114">
+                                                        <h6><b>Passenger Lift</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_114">
+                                                        <div>:
+                                                            {{ !empty($amenitiesArray) && $amenitiesArray[2] === 1 ? 'Yes' : '-' }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-4 m-b-10 data_conent_115">
+                                                        <h6><b>Garden & Children Play Area</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_115">
+                                                        <div>:
+                                                            {{ !empty($amenitiesArray) && $amenitiesArray[3] === 1 ? 'Yes' : '-' }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-4 m-b-10 data_conent_116">
+                                                        <h6><b>Service Lift</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_116">
+                                                        <div>:
+                                                            {{ !empty($amenitiesArray) && $amenitiesArray[4] === 1 ? 'Yes' : '-' }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-4 m-b-10 data_conent_117">
+                                                        <h6><b>Streature Lift</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_117">
+                                                        <div>:
+                                                            {{ !empty($amenitiesArray) && $amenitiesArray[5] === 1 ? 'Yes' : '-' }}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-4 m-b-10 data_conent_118">
+                                                        <h6><b>Central AC</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_118">
+                                                        <div>:
+                                                            {{ !empty($amenitiesArray) && $amenitiesArray[6] === 1 ? 'Yes' : '-' }}
+                                                        </div>
+                                                    </div>
+
+                                                    {{-- <div class="form-group col-4 m-b-10 data_conent_119">
+                                                        <h6><b>Gym</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_119">
+                                                        <div>:
+                                                            {{ !empty($amenitiesArray) && $amenitiesArray[7] === 1 ? 'Yes' : '-' }}
+                                                        </div>
+                                                    </div> --}}
                                                 @endif
                                                 @if (
                                                     $type == 'Storage/industrial' &&
@@ -1796,12 +1977,12 @@
                                                 <div class="form-group col-8 m-b-10 data_conent_141">
                                                     <div>: {{ $property->hot_property ? 'Yes' : 'No' }}</div>
                                                 </div>
-                                                {{-- <div class="form-group col-4 m-b-10 data_conent_142">
+                                                <div class="form-group col-4 m-b-10 data_conent_142">
                                                     <h6><b>Favourite</b></h6>
                                                 </div>
                                                 <div class="form-group col-8 m-b-10 data_conent_142">
                                                     <div>: {{ $property->is_favourite ? 'Yes' : 'No' }}</div>
-                                                </div> --}}
+                                                </div>
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style">Other Details</h5>
                                                 </div>
@@ -1874,27 +2055,6 @@
 														</a>
 													</div>
 												</div>
-												@if ($type == 'Flat' || $type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse')
-														<?php
-														$amenitiesArray = json_decode($property->amenities);
-														$valueAtIndex0 = $amenitiesArray[2];
-														?>
-														<div class="form-group col-4 m-b-10 data_conent_34">
-															<h6><b>Amenities</b></h6>
-														</div>
-														<div class="form-group col-8 m-b-10 data_conent_34">
-															<div>:
-																{{ !empty($amenitiesArray) && $amenitiesArray[0] === 1 ? 'Swimming Pool,' : '' }}
-																{{ !empty($amenitiesArray) && $amenitiesArray[1] === 1 ? 'Club house,' : '' }}
-																{{ !empty($amenitiesArray) && $amenitiesArray[2] === 1 ? 'Garden,' : '' }}
-																{{ !empty($amenitiesArray) && $amenitiesArray[3] === 1 ? 'Children Play Area,' : '' }}
-																{{-- {{ !empty($amenitiesArray) && $amenitiesArray[4] === 1 ? 'Service Lift,' : '' }} --}}
-																{{ !empty($amenitiesArray) && $amenitiesArray[5] === 1 ? 'Streature Lift,' : '' }}
-																{{ !empty($amenitiesArray) && $amenitiesArray[6] === 1 ? 'Central AC,' : '' }}
-																{{-- {{ !empty($amenitiesArray) && $amenitiesArray[7] === 1 ? 'Gym,' : '' }} --}}
-															</div>
-														</div>
-												@endif
                                             </div>
                                         </div>
 
@@ -1925,64 +2085,9 @@
 															</tbody>
 														</table>
                                                     </div>
-                                                </div>
-                                            @elseif (($type === "Vila/Bunglow" || $type === "Farmhouse" || $type === 'Penthouse' || $type === "Storage/industrial" ||
-											$type === "Retail" || $type === "Flat" || $type === "Farmhouse"))
-												<div class="row">
-                                                    <div class="form-group col-md-12">
-                                                        <h5 class="border-style">Unit Details</h5>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <table class="table custom-table-design">
-															<thead>
-																<tr>
-																	@if ($type !== 'Vila/Bunglow' && $type !== 'Land/Plot' && $type !== 'Farmhouse')
-																		<th scope="col">Wing</th>
-																	@endif
-																	<th scope="col">Unit</th>
-																	{{-- @if (($type === 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse' || $type == 'Storage/industrial') && ($property->property_for == 'Sell' || $property->property_for == 'Both')) --}}
-																	<th scope="col">Price</th>
-																	<th scope="col">Rent Price</th>
-																	{{-- @endif --}}
-																	<th scope="col">Status</th>
-																</tr>
-															</thead>
-															<tbody>
 
-															<tbody>
-																@if (isset(json_decode($property->unit_details)[0]))
-																	@forelse (json_decode($property->unit_details) as $value)
-																		<tr>
-																			@if ($type !== 'Vila/Bunglow' && $type !== 'Land/Plot' && $type !== 'Farmhouse')
-																				<td>{{ isset($value[0]) ? ucfirst(strtolower($value[0])) : '-' }}
-																				</td>
-																			@endif
-																			<td>{{ isset($value[1]) ? $value[1] : '-' }}
-																			</td>
-																			@if (
-																				($type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse' || $type == 'Storage/industrial') &&
-																					($property->property_for == 'Sell' || $property->property_for == 'Both'))
-																				<td>{{ isset($value[7]) ? $value[7] : '-' }}
-																				</td>
-																			@else
-																				<td>{{ isset($value[3]) ? $value[3] : '-' }}
-																				</td>
-																			@endif
-																			<td>{{ !empty(isset($value[4])) ? $value[4] : '-' }}
-																			</td>
-																			<td>{{ !empty(isset($value[2])) ? $value[2] : '-' }}
-																			</td>
-																		</tr>
-																	@empty
-																	@endforelse
-																@endif
-
-															</tbody>
-															</tbody>
-														</table>
-                                                    </div>
                                                 </div>
-											@endif
+                                            @endif
                                         </div>
                                         <div class="tab-pane fade " id="v-property-owner" role="tabpanel"
                                             aria-labelledby="v-property-owner-tab">
@@ -1995,7 +2100,7 @@
                                                 </div>
                                                 <div class="form-group col-8 m-b-10 data_conent_150">
                                                     <div>:
-                                                        {{ isset($dropdowns[$property->owner_is]['name']) ? ucfirst(strtolower($dropdowns[$property->owner_is]['name'])) : '' }}
+                                                        {{ isset($dropdowns[$property->owner_is]['name']) ? $dropdowns[$property->owner_is]['name'] : '' }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-4 m-b-10 data_conent_151">
@@ -2003,7 +2108,7 @@
                                                 </div>
                                                 <div class="form-group col-8 m-b-10 data_conent_151">
                                                     <div>:
-                                                       {{ $property->owner_name ? ucfirst(strtolower($property->owner_name)) : '-' }}
+                                                       {{ $property->owner_name ? $property->owner_name : '-' }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-4 m-b-10 data_conent_152">
@@ -2045,9 +2150,9 @@
                                                             @if (isset(json_decode($property->other_contact_details)[0]))
                                                                 @forelse (json_decode($property->other_contact_details) as $value)
                                                                     <tr>
-																		<td>{{ isset($value[0]) ? ucfirst(strtolower($value[0])) : '-' }}</td>
+																		<td>{{ isset($value[0]) ? $value[0] : '-' }}</td>
 																		<td>{{ isset($value[1]) ? $value[1] : '-' }}</td>
-																		<td>{{ isset($value[2]) ? ucfirst(strtolower($value[2])) : '-' }}</td>
+																		<td>{{ isset($value[2]) ? $value[2] : '-' }}</td>
 																	</tr>
                                                                 @empty
                                                                 @endforelse

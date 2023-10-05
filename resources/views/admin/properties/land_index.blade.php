@@ -22,7 +22,7 @@ $is_dynamic_form = true;
                                 @include('admin.properties.change_menu')
                                 <div class="col-md-8">
 											<a class="btn btn-primary btn-air-primary"  href="{{route('admin.property.add')}}">Add  Property</a>
-                            
+
                                     <button class="btn btn-primary btn-air-primary" type="button" data-bs-toggle="modal"
                                         data-bs-target="#filtermodal">Filter</button>
                                     <button style="display:none" class="btn btn-danger" id="resetfilter">Clear Filter</button>
@@ -41,11 +41,12 @@ $is_dynamic_form = true;
                                                     <label class="form-check-label" for="select_all_checkbox"></label>
                                                 </div>
                                             </th>
-                                            <th>Village</th>
-                                            <th>Survey</th>
-                                            <th>FP size</th>
+											<th>Project</th>
+                                            <th>Property Info</th>
+                                            <th>Unit</th>
                                             <th>Price</th>
-                                            <th>Contact</th>
+                                            <th>Details</th>
+											<th>Remarks</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -177,24 +178,28 @@ $is_dynamic_form = true;
 							orderable: false
                         },
                         {
-                            data: 'village_id',
-                            name: 'village_id'
+							data: 'project_id',
+							name: 'project_id'
+						},
+                        {
+                            data: 'property_category',
+                            name: 'property_category'
+                        },
+						{
+                            data: 'unit_details',
+                            name: 'unit_details'
+                        },
+						{
+                            data: 'price',
+                            name: 'price'
                         },
                         {
-                            data: 'survey',
-                            name: 'survey'
+                            data: 'details',
+                            name: 'details'
                         },
-                        {
-                            data: 'fp',
-                            name: 'fp'
-                        },
-                        {
-                            data: 'survey_price',
-                            name: 'survey_price'
-                        },
-                        {
-                            data: 'contact_details',
-                            name: 'contact_details'
+						{
+                            data: 'remarks',
+                            name: 'remarks'
                         },
                         {
                             data: 'actions',
