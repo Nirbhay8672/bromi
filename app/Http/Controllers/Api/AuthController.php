@@ -39,15 +39,17 @@ class AuthController extends Controller
                 'city_id' => 'required|integer',
                 'password' => 'required|string|min:8|confirmed',
                 'password_confirmation' => 'required_with:password|same:password',
+                'device_type' => 'sometimes|string', 
+                'device_token' => 'sometimes|string',
             ]);
 
             // If validation fails, return the error response
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => 'error',
+                    'status' => 422,
                     'message' => 'Validation failed',
                     'data' => $validator->errors(),
-                ], 422);
+                ]);
             }
 
             $verifitoken = rand(1000,9999);
@@ -62,39 +64,40 @@ class AuthController extends Controller
                 "city_id"=> $request->city_id,
                 'password' => Hash::make($request->password),
                 'verification_token' => $verifitoken,
-             ]);
-            $update=User::where('id',$user->id)->update(['parent_id'=>$user->id]);
+                'device_type' => $request->device_type ?? null,
+                'device_token' => $request->device_token ?? null,
+            ]);
+
+            // $update = User::where('id',$user->id)->update(['parent_id'=>$user->id]);
+            $user->update(['parent_id'=> $user->id]);
             $token = $user->createToken('auth_token')->plainTextToken;
             //       VerificationToken::create([
             //     'token' => $verifitoken,
             //     'user_id' => $user->id,
             // ]);
-        Mail::raw("Dear User,\n\nYour verification token is: $verifitoken\n\nPlease use this token for verification purposes.", function ($message) use ($user) {
-            $message->from('rjnbutani@gmail.com')
-            ->to($user->email)
-                    ->subject('Verification Token');
-        });
+            Mail::raw("Dear User,\n\nYour verification token is: $verifitoken\n\nPlease use this token for verification purposes.", function ($message) use ($user) {
+                $message->from('rjnbutani@gmail.com')
+                ->to($user->email)
+                        ->subject('Verification Token');
+            });
     
-                    return response()->json(["status"=> 200,
-                        "message"=>"Registration successful. Please verify your email.",
-                        "data"=> $user]);
-                    // return response()
-                    //     ->json(['data' => $user,'access_token' => $token, 'token_type' => 'Bearer', ]);
-        } catch (\exception $e) {
-           
             return response()->json([
-                'status' => 'error',
-                'message' => '$e',
+                "status" => 200,
+                "message" =>"Registration successful. Please verify your email.",
+                "data" => $user
+            ]);
+
+        } catch (\exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Something went wrong',
+                'error' => $e->getMessage(),
                 'data' => null,
             ], 500);
-            //throw $th;
         }
-        
-
-        
     }
 
-     public function verifyToken(Request $request)
+    public function verifyToken(Request $request)
     {
         $request->validate([
             'id' => 'required',
@@ -115,38 +118,62 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
-                       return response()->json(['message' => 'Invalid Login credential'], 401);
-        } else {
-            $user = User::where('email', $request['email'])->firstOrFail();
-    
-            if (!empty($user->is_verified)) {
-                $token = $user->createToken('auth_token')->plainTextToken;
-                $data = [
-                    'first_name' => $user->first_name,
-                    'last_name' => $user->last_name,
-                    'email' => $user->email,
-                    'mobile_number' => $user->mobile_number,
-                    'company_name' => $user->company_name,
-                    'role_id' => $user->role_id,
-                    'state_id' => (int) $user->state_id,
-                    'city_id' => (int) $user->city_id,
-                    'verification_token' => (int) $user->verification_token,
-                    'id' => $user->id,
-                    'token' => $token,
-                    'token_type' => 'Bearer',
-                ];
-    
-                // Set the session value
-                Session::put('parent_id', $user->parent_id);
-    
-                return response()->json([
-                    'status' => 200,
-                    'data' => $data,
-                ]);
+        try {
+            if (!Auth::attempt($request->only('email', 'password'))) {
+                        return response()->json([
+                                'message' => 'Invalid Login credential'
+                            ], 401);
             } else {
-                return response()->json(['error' => 'Your email is not verified.'], 403);
+                $user = User::where('email', $request['email'])->firstOrFail();
+        
+                $input = [];
+                if (!empty($request->input('device_type'))) { // check if device_type param exist
+                    $input['device_type'] = $request->input('device_type');
+                }
+                if (!empty($request->input('device_token'))) { // check if device_token param exist
+                    $input['device_token'] = $request->input('device_token');
+                }
+                if (!empty($input)) { // if any of the param exist then update user model
+                    $user->update($input);
+                }
+                
+                if (!empty($user->is_verified)) {
+                    $token = $user->createToken('auth_token')->plainTextToken;
+                    $data = [
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
+                        'mobile_number' => $user->mobile_number,
+                        'company_name' => $user->company_name,
+                        'role_id' => $user->role_id,
+                        'state_id' => (int) $user->state_id,
+                        'city_id' => (int) $user->city_id,
+                        'verification_token' => (int) $user->verification_token,
+                        'id' => $user->id,
+                        'device_type' => $user->device_type,
+                        'device_token' => $user->device_token,
+                        'token' => $token,
+                        'token_type' => 'Bearer',
+                    ];
+        
+                    // Set the session value
+                    Session::put('parent_id', $user->parent_id);
+        
+                    return response()->json([
+                        'status' => 200,
+                        'data' => $data,
+                    ]);
+                } else {
+                    return response()->json(['error' => 'Your email is not verified.'], 403);
+                }
             }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong',
+                'error' => $th->getMessage(),
+                'data' => null,
+            ], 500);
         }
     }
     
