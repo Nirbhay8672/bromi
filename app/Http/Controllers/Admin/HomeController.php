@@ -510,11 +510,14 @@ class HomeController extends Controller
 			$builders  = Builders::where('name', 'LIKE', "%{$request->search}%")->get()->toArray();
 			$areas  = Areas::where('name', 'LIKE', "%{$request->search}%")->get()->toArray();
 
+			$properties = Properties::where('owner_name', 'LIKE', "%{$request->search}%")->get()->toArray();
 
 			$data['enquiries'] = $enquiries;
 			$data['projects'] = $projects;
 			$data['users'] = $users;
 			$data['areas'] = $areas;
+			$data['properties'] = $properties;
+			
 			return json_encode($data);
 		}
 	}
