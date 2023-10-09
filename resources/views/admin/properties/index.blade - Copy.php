@@ -22,7 +22,7 @@
                                 @include('admin.properties.change_menu')
                                 <div class="col-md-8">
                                     <a class="btn btn-primary btn-air-primary" href="{{ route('admin.property.add') }}">Add
-                                        Property</a>
+                                        New Property</a>
                                     <button class="btn btn-primary btn-air-primary" type="button" data-bs-toggle="modal"
                                         data-bs-target="#filtermodal">Filter</button>
                                     <button style="display:none" class="btn btn-primary btn-air-primary"
@@ -359,7 +359,7 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add Property</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Add New Property</h5>
                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
@@ -388,6 +388,8 @@
                         <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
                             @csrf
                             <div class="form-row">
+
+
                                 <div class="form-group col-md-5 m-b-20">
                                     <label for="Choose File">File</label>
                                     <input class="form-control" type="file" accept=".xlsx" name="import_file"
@@ -407,10 +409,13 @@
                                         @endforelse
                                     </select>
                                 </div>
+
+
                                 <div class="form-group col-md-5 m-b-10">
                                     <a id="import_url" href="{{ route('admin.importpropertyTemplate') }}">Download Sample
                                         file</a>
                                 </div>
+
                                 <br>
                             </div>
                             <button class="btn btn-secondary" id="importFile">Save</button>
@@ -453,30 +458,32 @@
                                             @endforelse
                                         </select>
                                     </div>
-                                    {{-- Villa --}}
+                                    <div class="form-group col-md-2 m-b-4 mb-3">
+                                        <select class="form-select" id="filter_configuration">
+                                            <option value="">Sub Category</option>
+                                            @forelse (config('constant.property_configuration') as $key=>$props)
+                                                <option value="{{ $key }}">{{ $props }}
+                                                </option>
+                                            @empty
+                                            @endforelse
+                                        </select>
+                                    </div>
                                     <div class="form-group col-md-2 m-b-4 mb-3">
                                         <select class="form-select" id="filter_specific_type">
                                             <option value="">Category</option>
                                             @forelse ($property_configuration_settings as $props)
                                                 @if ($props['dropdown_for'] == 'property_specific_type' && in_array($props['parent_id'], $prop_type))
                                                     <option data-parent_id="{{ $props['parent_id'] }}"
-                                                        value="{{ $props['id'] }}">{{ $props['name'] }}</option>
+                                                        value="{{ $props['id'] }}">{{ $props['name'] }}
+                                                    </option>
                                                 @endif
                                             @empty
                                             @endforelse
                                         </select>
                                     </div>
-
-
                                     <div class="form-group col-md-2 m-b-4 mb-3">
-                                        <select class="form-select" id="filter_configuration">
-                                            <option value="">Sub Category</option>
-                                        </select>
-                                    </div>
-
-									<div class="form-group col-md-2 m-b-4 mb-3">
-										<label class="select2_label" for="Select Project"> Project</label>
-                                        <select class="form-select" id="filter_building_id" multiple>
+                                        <select class="form-select" id="filter_building_id">
+                                            <option value=""> Project</option>
                                             @foreach ($projects as $building)
                                                 <option value="{{ $building->id }}">{{ $building->project_name }}
                                                 </option>
@@ -484,8 +491,8 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2 m-b-4 mb-3">
-										<label class="select2_label" for="Select Area"> Locality</label>
-                                        <select class="form-select" id="filter_area_id" multiple>
+                                        <select class="form-select" id="filter_area_id">
+                                            <option value=""> Locality</option>
                                             @foreach ($areas as $area)
                                                 <option value="{{ $area->id }}">{{ $area->name }}</option>
                                             @endforeach
@@ -506,6 +513,15 @@
                                         </select>
                                     </div>
                                      --}}
+                                    <div class="form-group col-md-2 m-b-4 mb-3">
+                                        <select class="form-select" id="filter_building_quality">
+                                            <option value="">Quality Of Building</option>
+                                            <option value="1">Average</option>
+                                            <option value="2">Excellent</option>
+                                            <option value="3">Good</option>
+                                            <option value="4">Poor</option>
+                                        </select>
+                                    </div>
                                     <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_availability_status">
                                             <option value="">Availability Status</option>
@@ -513,7 +529,7 @@
                                             <option value="0">Under construction</option>
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-3 m-b-4 mb-3">
+                                    <div class="form-group col-md-2 m-b-4 mb-3">
                                         <select class="form-select" id="filter_owner_is">
                                             <option value="">Owner is</option>
                                             @forelse ($property_configuration_settings as $props)
@@ -527,7 +543,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="form-group col-md-3 m-b-4 mb-3">
+                                    <div class="form-group col-md-2 m-b-4 mb-3">
                                         <select class="form-select" id="filter_Property_priority">
                                             <option value="">Priority</option>
                                             @forelse ($property_configuration_settings as $props)
@@ -571,7 +587,7 @@
                                             type="text" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-3 m-b-20">
-                                        <label for="To Area">Locality</label>
+                                        <label for="To Area">To Area</label>
                                         <input class="form-control" name="filter_to_area" id="filter_to_area"
                                             type="text" autocomplete="off">
                                     </div>
@@ -589,6 +605,7 @@
                                                 data-language="en">
                                         </div>
                                     </div>
+
                                     <hr class="color-hr">
                                     <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_is_preleased" type="checkbox">
@@ -599,9 +616,10 @@
                                         <label class="form-check-label" for="filter_is_hot">Hot</label>
                                     </div>
                                     <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="filter_is_terraced" type="checkbox">
-                                        <label class="form-check-label" for="filter_is_terraced">Terrace</label>
+                                        <input class="form-check-input" id="filter_is_prime" type="checkbox">
+                                        <label class="form-check-label" for="filter_is_prime">Prime</label>
                                     </div>
+
                                 </div>
                             </div>
                             <button class="btn btn-secondary" id="filtersearch">Filter</button>
@@ -611,7 +629,6 @@
                 </div>
             </div>
         </div>
-
         {{-- <div class="modal fade" id="matchModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -658,6 +675,7 @@
             </div>
         </div> --}}
 
+
         <div class="modal fade" id="matchModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
@@ -683,11 +701,6 @@
                                         <input class="form-check-input" checked id="match_specific_type" type="checkbox">
                                         <label class="form-check-label" for="match_specific_type">Property
                                             Category</label>
-                                    </div>
-									<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
-                                        <input class="form-check-input" checked id="match_specific_sub_type" type="checkbox">
-                                        <label class="form-check-label" for="match_specific_sub_type">Property
-                                          Sub Category</label>
                                     </div>
                                     {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
                                         <input class="form-check-input" id="match_building" type="checkbox">
@@ -750,36 +763,35 @@
                     </div>
                 </div>
             </div>
+
+           
         @endif
         {{-- shared modal --}}
-        <div class="modal fade" id="sharedModelId" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="sharedModelId" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-l" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Users</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
-                            id="btnClose">
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" id="btnClose">
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form class="form-bookmark needs-validation modal_form" route="" id="userRecordForm"
+                        <form class="form-bookmark needs-validation modal_form" route="" id="findRecordForm"
                             novalidate="">
-                            <div class="modal-content">
-                                <div class="row">
-                                    <div class="form-group col-md-12 m-b-4 mb-4">
-                                        <label class="mb-0">&nbsp;</label>
-                                        <label class="select2_label" for="Property list">Select User </label>
-                                        <select class="form-select" id="users_list" multiple>
-                                            {{-- <option value="">Select Users</option> --}}
-                                        </select>
-                                    </div>
-                                    <span style="color: #FF0000" id="err_partner"></span>
-                                    <div class="form-group col-md-6 m-b-4 mb-3">
-                                        <button class="btn btn-secondary" id="shareData" data-id=""
-                                            type="button">Share
-                                            Property</button>
-                                    </div>
+                            <div class="row">
+                                <div class="form-group col-md-612 m-b-4 mb-3">
+                                    <label class="mb-0">&nbsp;</label>
+                                    <label class="select2_label" for="Property list">Users</label>
+                                    <select class="form-select" id="property_list" multiple>
+                                        <option value="">1</option>
+                                        <option value="">2</option>
+                                        <option value="">3</option>
+                                        <option value="">4</option>
+                                    </select>
+                                </div>
+                                <span style="color: #FF0000" id="err_partner"></span>
+                                <div class="form-group col-md-2 m-b-4 mb-3">
+                                    <button class="btn btn-secondary" id="saveSchedule" data-id="">find</button>
                                 </div>
                             </div>
                         </form>
@@ -787,147 +799,28 @@
                 </div>
             </div>
         </div>
-        <?php
-        $matchEnquiryFor = isset($_GET['match_enquiry_for']) ? $_GET['match_enquiry_for'] : null;
-        $matchPropertyType = isset($_GET['match_property_type']) ? $_GET['match_property_type'] : null;
-        $matchSpecificType = isset($_GET['match_specific_type']) ? $_GET['match_specific_type'] : null;
-        $matchSpecificSubType = isset($_GET['match_specific_sub_type']) ? $_GET['match_specific_sub_type'] : null;
-        $matchBudgetType = isset($_GET['match_budget_from_type']) ? $_GET['match_budget_from_type'] : null;
-        $matchEnqSize = isset($_GET['match_enquiry_size']) ? $_GET['match_enquiry_size'] : null;
-        $matchEnqSource = isset($_GET['match_inquiry_source']) ? $_GET['match_inquiry_source'] : null;
-        // dd($matchEnquiryFor,$matchPropertyType,$matchBudgetType,$matchSpecificType,$matchEnqSize,$matchEnqSource);
-        ?>
+    </div>
     @endsection
     @push('scripts')
         <script>
-            $(document).ready(function() {
-                // Check or uncheck checkboxes based on PHP variables
-                $('#match_enquiry_for').prop('checked', <?= $matchEnquiryFor === '1' ? 'true' : 'false' ?>);
-                $('#match_property_type').prop('checked', <?= $matchPropertyType === '1' ? 'true' : 'false' ?>);
-                $('#match_specific_type').prop('checked', <?= $matchSpecificType === '1' ? 'true' : 'false' ?>);
-                $('#match_specific_sub_type').prop('checked', <?= $matchSpecificSubType === '1' ? 'true' : 'false' ?>);
-				$('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
-                $('#match_enquiry_size').prop('checked', <?= $matchEnqSize === '1' ? 'true' : 'false' ?>);
-                $('#match_inquiry_source').prop('checked', <?= $matchEnqSource === '1' ? 'true' : 'false' ?>);
-
-            });
-
-            //Start Shared Partner Property
-            function shareUserModal(clickedElement) {
-                $('#users_list').val("");
+            function sharedModal() {
+                console.log("clcik");
                 $('#sharedModelId').modal('show');
-                // Add User Partner
-                const dataId = $(clickedElement).data("id");
-                $('#shareData').data('data-id', dataId);
             }
-            // Get record Users
-            $(document).ready(function() {
-                try {
-                    axios.get("{{ route('admin.partnerUsers') }}")
-                        .then(function(response) {
-                            response.data.forEach(function(user) {
-                                const option = document.createElement("option");
-                                const selectElement = document.getElementById("users_list");
-                                option.value = user.partner_id;
-                                option.textContent = user.user.first_name + ' ' + user.user.last_name;
-                                selectElement.appendChild(option);
-                            });
-                        })
-                        .catch(function(error) {
-                            console.log("Error: ", error);
-                        });
-                } catch (error) {
-                    console.log("err", error)
-                }
-            });
-            // Add User Partner
-            $('#shareData').on('click', function() {
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                const selectedUserId = $('#users_list').val();
-                const property_id = $(this).data('data-id');
-                console.log("selectedUserId", selectedUserId);
-                console.log("property_id", property_id);
-                axios({
-                    method: 'post',
-                    url: "{{ route('admin.sharePartner') }}",
-                    data: {
-                        partner_id: selectedUserId,
-                        property_id: property_id,
-                        _token: csrfToken, // Include the CSRF token
-                    },
-                }).then(response => {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Property Shared Successfully.',
-                        showConfirmButton: false,
-                        timer: 1500,
-                    }).then(function() {
-                        window.location.href = "{{ route('admin.properties') }}";
-                    });
-                }).catch(error => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error occurred',
-                        text: 'An error occurred while sharing data.',
-                    });
-                });
-            });
-            //End Shared Partner Property
-
-            // category to sub category on change filter
-            $('#filter_specific_type').on('change', function() {
-                let selectedCategory = this.options[this.selectedIndex].text.trim();
-                let url = "{{ route('admin.getPropertyConfiguration') }}";
-
-                try {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("GET", `${url}?selectedCategory=${encodeURIComponent(selectedCategory)}`, true);
-
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState === XMLHttpRequest.DONE) {
-                            if (xhr.status === 200) {
-                                var data = JSON.parse(xhr.responseText);
-                                console.log("data", data);
-
-                                var subCategorySelect = document.getElementById('filter_configuration');
-                                subCategorySelect.innerHTML = '<option value="">Sub Category</option>';
-
-                                for (var key in data) {
-                                    if (data.hasOwnProperty(key)) {
-                                        var option = document.createElement('option');
-                                        option.value = key;
-                                        option.text = data[key];
-                                        option.dataset.category = data[key];
-                                        subCategorySelect.appendChild(option);
-                                    }
-                                }
-                            } else {
-                                console.error("An error occurred:", xhr.statusText);
-                            }
-                        }
-                    };
-
-                    xhr.send();
-                } catch (error) {
-                    console.error("An error occurred:", error);
-                }
-            });
 
             $('#property_form_type').select2();
             //match enquiry
             matching_enquiry_url = "{{ route('admin.enquiries') }}";
 
-            //matching popup
             function matchingEnquiry(data) {
-                $('#matchModal').modal('show');
-                // $('#propertyTable').DataTable().draw();
-                //     $('#matchModal').modal('hide');
-
-                $('#matchagain').attr('data-id', $(data).attr('data-id'));
-
-                // urll = matching_enquiry_url + '?pro=' + encryptSimpleString($(data).attr('data-id'));
-                // window.location = urll;
+                // console.log("matching matching_enquiry_url", matching_enquiry_url);
+                // console.log("matching data id", $(data).attr('data-id'));
+                // return;
+                urll = matching_enquiry_url + '?pro=' + encryptSimpleString($(data).attr('data-id'));
+                // urll = matching_enquiry_url + '?pro=' + ($(data).attr('data-id'));
+                window.location = urll;
             }
+
 
             $(document).on("click", ".open_modal_with_this", function(e) {
                 $('#all_owner_contacts').html('')
@@ -957,7 +850,6 @@
                         });
                     }
                 })
-                console.log("msg ::", msg);
                 $('#shar_string').val('https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' + msg)
                 $('#whatsappModal').modal('show');
             }
@@ -984,7 +876,11 @@
             $(document).ready(function() {
                 // var queryString = window.location.search;
                 var queryString = window.location.search;
+                console.log("queryString :", queryString);
+
                 var urlParams = new URLSearchParams(queryString);
+                console.log("enqq", urlParams);
+
                 var enqq = urlParams.get('enq')
                 var filter_by = urlParams.get('filter_by')
                 $('.matchbutton').hide()
@@ -1028,59 +924,17 @@
 
                 $(document).on('click', '#shareonwhatsapp', function(e) {
                     var url = $('#shar_string').val()
-                    console.log("ulr1 ==>", url);
                     url = url.replace('the_phone_number_to_send', $('#CountryCode').val() + $(
                         '#whatsapp_number').val().toString())
-                    console.log("ulr2 ==>", url);
                     window.open(url, '_blank').focus();
                 })
-
-                //matching popup
-                // $(document).on('click', '#matchagain', function(e) {
-                // 	console.log("Matching 1");
-                //     e.preventDefault();
-                //     $('#propertyTable').DataTable().draw();
-                //     $('#matchModal').modal('hide');
-                // })
-                // $(document).on('click', '#matchagain', function(e) {
-                //     console.log("Matching Done");
-                //     e.preventDefault();
-                //     let dataId = $(this).attr('data-id');
-                //     urll = matching_enquiry_url + '?pro=' + (dataId);
-                //     // urll = matching_enquiry_url + '?pro=' + encryptSimpleString(dataId);
-                //     window.location = urll;
-                //     $('#propertyTable').DataTable().draw();
-                //     $('#matchModal').modal('hide');
-                // });
 
 
                 $(document).on('click', '#matchagain', function(e) {
                     e.preventDefault();
-
-                    // Gather selected checkbox values
-                    let selectedCheckboxes = {
-                        match_enquiry_for: $('#match_enquiry_for').prop('checked') ? 1 : 0,
-                        match_property_type: $('#match_property_type').prop('checked') ? 1 : 0,
-                        match_specific_type: $('#match_specific_type').prop('checked') ? 1 : 0,
-                        match_specific_sub_type: $('#match_specific_sub_type').prop('checked') ? 1 : 0,
-                        match_budget_from_type: $('#match_budget_from_type').prop('checked') ? 1 : 0,
-                        match_enquiry_size: $('#match_enquiry_size').prop('checked') ? 1 : 0,
-                        match_inquiry_source: $('#match_inquiry_source').prop('checked') ? 1 : 0,
-                    };
-
-                    // Construct the URL with selected checkbox values
-                    let queryString = Object.entries(selectedCheckboxes)
-                        .filter(([key, value]) => value === 1)
-                        .map(([key, value]) => `${key}=${value}`)
-                        .join('&');
-
-                    let dataId = $(this).attr('data-id');
-                    let url = matching_enquiry_url + '?' + queryString + '&pro=' + encryptSimpleString(dataId);
-
-                    // Redirect to the new URL
-                    window.location = url;
-                });
-
+                    $('#propertyTable').DataTable().draw();
+                    $('#matchModal').modal('hide');
+                })
 
                 $('#propertyTable').DataTable({
                     processing: true,
@@ -1098,6 +952,7 @@
                             d.filter_configuration = $('#filter_configuration').val();
                             d.filter_building_id = $('#filter_building_id').val();
                             d.filter_area_id = $('#filter_area_id').val();
+                            d.filter_building_quality = $('#filter_building_quality').val();
                             d.filter_availability_status = $('#filter_availability_status').val();
                             d.filter_owner_is = $('#filter_owner_is').val();
                             d.filter_Property_priority = $('#filter_Property_priority').val();
@@ -1111,12 +966,11 @@
                             d.filter_measurement = $('#filter_measurement').val();
                             d.filter_is_preleased = Number($('#filter_is_preleased').prop('checked'));
                             d.filter_is_hot = Number($('#filter_is_hot').prop('checked'));
-                            d.filter_is_terraced = Number($('#filter_is_terraced').prop('checked'));
+                            d.filter_is_prime = Number($('#filter_is_prime').prop('checked'));
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
-                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop('checked'));
-							d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
+                            d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
                             d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
                             d.match_enquiry_size = Number($('#match_enquiry_size').prop('checked'));
                             d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
@@ -1160,19 +1014,19 @@
                             "targets": 0
                         },
                         {
-                            "width": "20%",
+                            "width": "18%",
                             "targets": 1
                         },
                         {
-                            "width": "17%",
+                            "width": "18%",
                             "targets": 2
                         },
                         {
-                            "width": "10%",
+                            "width": "5%",
                             "targets": 3
                         },
                         {
-                            "width": "12%",
+                            "width": "10%",
                             "targets": 4
                         },
                         {
@@ -1197,7 +1051,6 @@
                         });
                     }
                 });
-                table.order([1, 'desc']).draw();
             });
 
             function getProperty(data) {
@@ -1315,6 +1168,8 @@
                 }
                 $('#show_building_address').parent().parent().addClass('focused')
             })
+
+
 
             function ShareLink(params) {
                 var share_link = $(params).attr('data-link');
@@ -1764,7 +1619,6 @@
 
             $(document).on('change', '#property_type', function(e) {
                 var parent_value = $(this).val();
-                console.log("proper type click", parent_value);
                 $("#specific_type option , #configuration option").each(function() {
                     if (parent_value !== '') {
                         if ($(this).attr('value') != '') {
@@ -1783,7 +1637,6 @@
 
             $(document).on('change', '#filter_property_type', function(e) {
                 var parent_value = $(this).val();
-                console.log("type changed", parent_value);
                 $("#filter_specific_type option , #filter_configuration option").each(function() {
                     if (parent_value !== '') {
                         if ($(this).attr('value') != '') {
