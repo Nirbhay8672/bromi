@@ -2,6 +2,7 @@
 
 namespace App\Models\Api;
 
+use App\Models\Projects;
 use App\Scopes\VendorScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -141,6 +142,11 @@ class Properties extends Model
 	{
 		return $this->belongsTo(Projects::class, 'project_id', 'id')->withTrashed();
 	}
+
+    public function Project() // related project to this property
+    {
+        return $this->belongsTo(Projects::class, 'project_id');
+    }
 
 	public function Locality()
 	{

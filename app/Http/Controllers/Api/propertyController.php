@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Hash;
 // use Validator;
 use App\Http\Requests\ProjectFormRequest;
 use App\Models\DropdownSettings;
+use App\Models\Form;
+use App\Models\FormFields;
 use App\Models\LandImages;
 use App\Models\User;
 use Carbon\Carbon;
@@ -142,14 +144,69 @@ public function IsFavorites(Request $request)
 	
 		return response()->json($response, 200);
 	}
-	public function show($id)
+	public function show(Request $request, $id)
     {
-		$show=Properties::find($id);
-		$show->amenities = json_decode($show->amenities);
-		$show->unit_details = json_decode($show->unit_details);
-		$show->other_industrial_fields = json_decode($show->other_industrial_fields);
-		$show->other_contact_details = json_decode($show->other_contact_details);
-		return response()->json(['status' => '200', 'data' => $show]);
+        // dd($id, $request->form_name);
+        try {
+            $show = Properties::find($id);
+            $form = Form::with(['formFields' => function($q) {
+                $q->select('id', 'form_id', 'field_type_id')->with('fieldDetails');
+            }])->where('form_name', $request->input('form_name'))->first();
+            
+            if (!$form) {
+                throw new Exception("No form details found.", 400);
+            }
+            
+            $groupedData = [];
+
+            // Loop through the form fields and group them by "group_name"
+            foreach ($form->formFields as $field) {
+                $group = $field->fieldDetails->group_name;
+                $label = $field->fieldDetails->field_name;
+
+                if (!isset($groupedData[$group])) {
+                    $groupedData[$group] = [
+                        'group_name' => $group,
+                        'fields' => [],
+                    ];
+                }
+
+                $groupedData[$group]['fields'][] = [
+                    'id' => $field->id,
+                    'label_name' => $label,
+                    'value' => null, // You can set the value as needed
+                ];
+            }
+
+            // Convert the associative array to a numerical array
+            $groupedData = array_values($groupedData);
+
+            return response()->json([
+                "status" => 200,
+                "message" => "Project detail has been fetched successfully",
+                "data" => $groupedData
+            ]);
+            
+            /* 
+            $show->amenities = json_decode($show->amenities);
+            $show->unit_details = json_decode($show->unit_details);
+            $show->other_industrial_fields = json_decode($show->other_industrial_fields);
+            $show->other_contact_details = json_decode($show->other_contact_details);
+            return response()->json([
+                'status' => '200',
+                'message' => "Project detail has been fetched successfully",
+                'data' => $show
+            ]); */
+        } catch (\Throwable $th) {
+            //throw $th;
+            // dd($th->getLine(), $th->getFile());
+            return response()->json([
+                'status' => '400',
+                'message' => "Something went wrong",
+                'error' => $th->getMessage(),
+                'data' => null
+            ]);
+        }
 
 	}
 	public function destory($id)
