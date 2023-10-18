@@ -75,6 +75,7 @@
                                                                         x-model="website"
                                                                         id="website"
                                                                         type="text"
+                                                                        style="text-transform: none !important;"
                                                                         autocomplete="off"
                                                                         :class="errors.hasOwnProperty('website') ? 'is-invalid' : ''"
                                                                     >
@@ -219,7 +220,7 @@
                                                             <div class="fname" :class="rera_no == '' ? '' : 'focused' ">
                                                                 <label for="Rarea No">Rera No</label>
                                                                 <div class="fvalue">
-                                                                    <input class="form-control" x-model="rera_no" type="text" autocomplete="off" :class="errors.hasOwnProperty('rera_number') ? 'is-invalid' : ''">
+                                                                    <input class="form-control" x-model="rera_no" type="text" autocomplete="off" :class="errors.hasOwnProperty('rera_number') ? 'is-invalid' : ''" style="text-transform: none !important;">
                                                                     <div class="invalid-feedback">
                                                                         <span x-text="errors.rera_number"></span>
                                                                     </div>
@@ -284,6 +285,7 @@
                                                                                 <input
                                                                                     class="form-control"
                                                                                     x-model="other_contact.email"
+                                                                                    style="text-transform: none !important;"
                                                                                     name="other_contact_email" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
                                                                         </div>
@@ -423,11 +425,6 @@
                                                                         <input type="radio" class="btn-check" value="35" id="extraofficeekind1" x-model="sub_category_single" name="sub_category_single" data-bs-original-title="" title="">
                                                                         <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraofficeekind1">office space</label>
                                                                     </div>
-    
-                                                                    <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                                                                        <input type="radio" class="btn-check" value="36" id="extraofficekind2" x-model="sub_category_single" name="sub_category_single" data-bs-original-title="" title="">
-                                                                        <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraofficekind2">Co-working</label>
-                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div class="row mt-2" x-show="sub_category_single != ''">
@@ -457,16 +454,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group col-md-3 m-b-20">
-                                                                    <div class="fname" :class="if_office_or_retail.number_of_unit == '' ? '' : 'focused' ">
-                                                                        <label>Total Units </label>
-                                                                        <div class="fvalue">
-                                                                            <input class="form-control" x-model="if_office_or_retail.number_of_unit" name="first_total_units" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group col-md-3 m-b-20">
                                                                     <div class="fname" :class="if_office_or_retail.number_of_unit_each_block == '' ? '' : 'focused' ">
-                                                                        <label>No. of Unit each block </label>
+                                                                        <label>No. of Unit each tower </label>
                                                                         <div class="fvalue">
                                                                             <input class="form-control" name="first_number_of_unit_each_block" x-model="if_office_or_retail.number_of_unit_each_block" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                         </div>
@@ -552,14 +541,6 @@
                                                                                 <label>Tower Name</label>
                                                                                 <div class="fvalue">
                                                                                     <input class="form-control" name="tower_name" x-model="tower_detail.tower_name" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group col-md-3 m-b-20">
-                                                                            <div class="fname" :class="tower_detail.total_floor == '' ? '' : 'focused' ">
-                                                                                <label>Total Floors</label>
-                                                                                <div class="fvalue">
-                                                                                    <input class="form-control" x-model="tower_detail.total_floor" name="total_floors" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -1344,20 +1325,6 @@
                                                                         for="officeekind1"
                                                                     >office space</label>
                                                                 </div>
-
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input
-                                                                        type="radio"
-                                                                        class="btn-check"
-                                                                        value="2"
-                                                                        id="officekind2"
-                                                                        x-model="sub_category_single"
-                                                                        name="sub_category_single"
-                                                                    >
-                                                                    <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="officekind2">Co-working</label>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1597,7 +1564,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row mb-3" x-show="property_category == 262 || property_category == 256">
+                                                    <div class="row mb-3" x-show="property_category == 262">
                                                         <div class="col-md-12 mb-2">
                                                             <div>
                                                                 <label><b>Sub category</b></label>
@@ -1801,6 +1768,18 @@
                                                                                                 <option value="122">Meter</option>
                                                                                             </select>
                                                                                         </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-3 m-b-20">
+                                                                                <div class="fname" :class="types.number_of_units == '' ? '' : 'focused' ">
+                                                                                    <label>Total No. Of Units</label>
+                                                                                    <div class="fvalue">
+                                                                                        <input
+                                                                                            class="form-control"
+                                                                                            x-model="types.number_of_units"
+                                                                                            type="text"
+                                                                                        >
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -2094,7 +2073,7 @@
                                                                     </div>
                                                                     <div class="form-group col-md-3 m-b-20">
                                                                         <div class="fname" :class="if_office_or_retail.number_of_unit_each_block == '' ? '' : 'focused' ">
-                                                                            <label>No. of Unit each block </label>
+                                                                            <label>No. of Unit each tower </label>
                                                                             <div class="fvalue">
                                                                                 <input class="form-control" name="first_number_of_unit_each_block" x-model="if_office_or_retail.number_of_unit_each_block" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
@@ -2184,23 +2163,6 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3 m-b-20">
-                                                                            <div class="fname" :class="tower_detail.total_floor == '' ? '' : 'focused' ">
-                                                                                <label>Total Floors</label>
-                                                                                <div class="fvalue">
-                                                                                    <input class="form-control" x-model="tower_detail.total_floor" name="total_floors" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group col-md-3 m-b-20">
-                                                                            <div class="fname" :class="tower_detail.total_unit == '' ? '' : 'focused' ">
-                                                                                <label>Total Units</label>
-                                                                                <div class="fvalue">
-                                                                                    <input class="form-control" x-model="tower_detail.total_unit" name="total_units" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
                                                                         <div class="row">
                                                                             <div class="form-group col-md-4 m-b-5">
                                                                                 <span>Saleable Area</span>
@@ -2523,7 +2485,7 @@
                                                             <template x-if="property_type == 87 && (property_category != '256') &&  (property_category != '258')">
                                                                 <div class="row">
                                                                     <div>
-                                                                        <label><b>Wing Details</b></label>
+                                                                        <label><b>Tower Details</b></label>
                                                                         <span x-text="nextTickForIfResidentialWings()"></span>
                                                                     </div>
                                                                 </div>
@@ -2534,7 +2496,7 @@
                                                                     <div class="row">
                                                                         <div class="form-group col-md-3 m-b-20">
                                                                             <div class="fname" :class="wing.wing_name == '' ? '' : 'focused' ">
-                                                                                <label>Wing Name</label>
+                                                                                <label>Tower Name</label>
                                                                                 <input
                                                                                     class="form-control"
                                                                                     x-model="wing.wing_name"
@@ -2633,7 +2595,7 @@
                                                                         
                                                                         <div class="row">
                                                                             <div class="form-group col-md-auto mb-3">
-                                                                                <a style="color:#0078DB!important" @click="unit.has_built_up = !unit.has_built_up" href="javascript:void(0)" data-bs-original-title="" title=""> + Add Built Up Area
+                                                                                <a style="color:#0078DB!important" @click="unit.has_built_up = !unit.has_built_up" href="javascript:void(0)" data-bs-original-title="" title="">+ Add Built Up Area
                                                                                 </a>
                                                                             </div>
                                                                             <div class="form-group col-md-auto mb-3">
@@ -2644,7 +2606,7 @@
     
                                                                         <div class="row mt-2" x-show="unit.has_built_up">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <div class="fname" :class="unit.built_up == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Built up Area</label>
                                                                                         <input class="form-control" x-model="unit.built_up" name="built_up_areass" type="text" autocomplete="off">
@@ -2653,13 +2615,13 @@
                                                                                 <div class="form-group">
                                                                                     <span class="input-group-text" style="min-height:41px;">To</span>
                                                                                 </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <div class="fname" :class="unit.built_up_to == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Built up Area</label>
                                                                                         <input class="form-control" x-model="unit.built_up_to" name="built_up_areass" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`built_up_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2672,7 +2634,7 @@
     
                                                                         <div class="row mt-2" x-show="unit.has_carpet">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <div class="fname" :class="unit.carpet_area == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Carpet Area</label>
                                                                                         <input class="form-control" x-model="unit.carpet_area" name="carpet_area" type="text" autocomplete="off">
@@ -2681,13 +2643,13 @@
                                                                                 <div class="form-group">
                                                                                     <span class="input-group-text" style="min-height:41px;">To</span>
                                                                                 </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <div class="fname" :class="unit.carpet_area_to == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Carpet Area</label>
                                                                                         <input class="form-control" x-model="unit.carpet_area_to" name="carpet_area" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`carpet_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2698,24 +2660,15 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="row mt-2">
+                                                                        <div class="col-md-4">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-7 m-b-10">
                                                                                     <div class="fname" :class="unit.wash_area == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Wash Area</label>
                                                                                         <input class="form-control" x-model="unit.wash_area" name="wash_area" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group">
-                                                                                    <span class="input-group-text" style="min-height:41px;">To</span>
-                                                                                </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
-                                                                                    <div class="fname" :class="unit.wash_area_to == '' ? '' : 'focused' ">
-                                                                                        <label class="mb-0">Wash Area</label>
-                                                                                        <input class="form-control" x-model="unit.wash_area_to" name="wash_area" type="text" autocomplete="off">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-5 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`wash_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2726,24 +2679,15 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="row mt-2">
+                                                                        <div class="col-md-4">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-7 m-b-10">
                                                                                     <div class="fname" :class="unit.balcony == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Balcony Area</label>
                                                                                         <input class="form-control" x-model="unit.balcony" name="balcony_area" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group">
-                                                                                    <span class="input-group-text" style="min-height:41px;">To</span>
-                                                                                </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
-                                                                                    <div class="fname" :class="unit.balcony_to == '' ? '' : 'focused' ">
-                                                                                        <label class="mb-0">Balcony Area</label>
-                                                                                        <input class="form-control" x-model="unit.balcony_to" name="balcony_area" type="text" autocomplete="off">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-5 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`balcony_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2814,28 +2758,6 @@
                                                                             <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
                                                                                 <div class="input-group">
                                                                                     <div class="form-group col-md-7 m-b-20">
-                                                                                        <div class="fname" :class="unit.terrace_carpet_area == '' ? '' : 'focused' ">
-                                                                                            <label class="mb-0">Terrace carpet</label>
-                                                                                            <input class="form-control" x-model="unit.terrace_carpet_area" name="terrace_carpet_area" type="text" autocomplete="off">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="input-group-append col-md-5 m-b-20">
-                                                                                        <div class="form-group form_measurement">
-                                                                                            <select class="form-select form_measurement measure_select" :id="`terrace_carpet_select_${index}`"
-                                                                                                name="terrace_carpet_area_measurement">
-                                                                                                <option value="117" selected>Sq.Ft.</option>
-                                                                                                <option value="118">Sq.Yard</option>
-                                                                                                <option value="119">Sq.Meter</option>
-                                                                                                <option value="120">VIGHA</option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                    
-                                                                            <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
-                                                                                <div class="input-group">
-                                                                                    <div class="form-group col-md-7 m-b-20">
                                                                                         <div class="fname" :class="unit.terrace_saleable_area == '' ? '' : 'focused' ">
                                                                                             <label class="mb-0">Terrace saleable</label>
                                                                                             <input
@@ -2851,6 +2773,27 @@
                                                                                         <div class="form-group form_measurement">
                                                                                             <select class="form-select form_measurement measure_select" :id="`terrace_saleable_select_${index}`"
                                                                                                 name="terrace_super_builtup_area_measurement">
+                                                                                                <option value="117" selected>Sq.Ft.</option>
+                                                                                                <option value="118">Sq.Yard</option>
+                                                                                                <option value="119">Sq.Meter</option>
+                                                                                                <option value="120">VIGHA</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
+                                                                                <div class="input-group">
+                                                                                    <div class="form-group col-md-7 m-b-20">
+                                                                                        <div class="fname" :class="unit.terrace_carpet_area == '' ? '' : 'focused' ">
+                                                                                            <label class="mb-0">Terrace carpet</label>
+                                                                                            <input class="form-control" x-model="unit.terrace_carpet_area" name="terrace_carpet_area" type="text" autocomplete="off">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="input-group-append col-md-5 m-b-20">
+                                                                                        <div class="form-group form_measurement">
+                                                                                            <select class="form-select form_measurement measure_select" :id="`terrace_carpet_select_${index}`"
+                                                                                                name="terrace_carpet_area_measurement">
                                                                                                 <option value="117" selected>Sq.Ft.</option>
                                                                                                 <option value="118">Sq.Yard</option>
                                                                                                 <option value="119">Sq.Meter</option>
@@ -3406,13 +3349,6 @@
                                                         <div
                                                             class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                                             <input class="project_amenity form-check-input"
-                                                                id="amenity_pool" x-model="amenities" type="checkbox" value="swimming_pool">
-                                                            <label class="form-check-label" for="amenity_pool">Swimming
-                                                                Pool</label>
-                                                        </div>
-                                                        <div
-                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                                            <input class="project_amenity form-check-input"
                                                                 id="amenity_club_house" type="checkbox" x-model="amenities" value="club_house">
                                                             <label class="form-check-label" for="amenity_club_house">Club
                                                                 house</label>
@@ -3423,12 +3359,6 @@
                                                                 id="amenity_passenger_lift" type="checkbox" x-model="amenities" value="passenger_lift">
                                                             <label class="form-check-label"
                                                                 for="amenity_passenger_lift">Passenger Lift</label>
-                                                        </div>
-                                                        <div
-                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                                            <input class="project_amenity form-check-input"
-                                                                id="amenity_garden" type="checkbox" x-model="amenities" value="garden_and_children_area">
-                                                            <label class="form-check-label" for="amenity_garden">Garden & Children Play Area</label>
                                                         </div>
                                                         <div
                                                             class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
@@ -3490,7 +3420,7 @@
                                                             <div class="form-group col-md-6 m-b-4 mb-3">
                                                                 <div class="fname">
                                                                     <div class="fvalue">
-                                                                        <input class="form-control" :class="errors.hasOwnProperty('document_image') ? 'is-invalid' : ''" accept="image/*" type="file" id="document_image" name="document_image">
+                                                                        <input class="form-control" :class="errors.hasOwnProperty('document_image') ? 'is-invalid' : ''" accept="image/*,.pdf" type="file" id="document_image" name="document_image">
                                                                         <div class="invalid-feedback">
                                                                             <span x-text="errors.document_image"></span>
                                                                         </div>
@@ -3515,6 +3445,28 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <hr>
+
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6 m-b-4 mb-3">
+                                                            <div class="fname">
+                                                                <div class="fvalue">
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        placeholder="Enter remark"
+                                                                        x-model="remark"
+                                                                        :class="errors.hasOwnProperty('remark') ? 'is-invalid' : ''"
+                                                                    >
+                                                                    <div class="invalid-feedback">
+                                                                        <span x-text="errors.remark"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
                                                     <button @click="submitHandle()" class="btn btn-secondary pull-right"
                                                     type="button">Finish!</button>
                                                 </div>
@@ -3590,7 +3542,7 @@
                     document.getElementById('area_id').disabled = false;
 
                     $('#area_id').html('');
-                    $('#area_id').append(`<option value="" selected disabled>Area</option>`);
+                    $('#area_id').append(`<option value="" selected disabled>Locality</option>`);
                     for (let i = 0; i < areass.length; i++) {
                         if (areass[i]['state_id'] == $("#state_id").val()) {
                             $('#area_id').append(`<option value="${areass[i]['id']}"
@@ -3629,7 +3581,7 @@
                         $("#city_id").val(project_data['city_id']).trigger('change');
 
                         $('#area_id').html('');
-                        $('#area_id').append(`<option value="" selected disabled>Area</option>`);
+                        $('#area_id').append(`<option value="" selected disabled>Locality</option>`);
                         for (let i = 0; i < areass.length; i++) {
     						if (areass[i]['state_id'] == $("#state_id").val()) {
     							$('#area_id').append(`<option value="${areass[i]['id']}"
@@ -3983,6 +3935,8 @@
                         this.amenities = JSON.parse(project_data['amenities']);
 
                         $('#image_category').val(project_data['document_category']).trigger('change');
+
+                        this.remark = project_data['remark'] ?? "";
                     }
                 },
 
@@ -4227,6 +4181,7 @@
                 },
 
                 if_ware_cold_ind_plot : {
+                    number_of_unit : '',
                     types : [
                         {
                             plot_area_from : '',
@@ -4447,6 +4402,7 @@
                     };
 
                     this.if_ware_cold_ind_plot = {
+                        number_of_unit : '',
                         types : [
                             {
                                 plot_area_from : '',
@@ -4879,6 +4835,7 @@
                 amenities : [],
 
                 document_category : '',
+                remark : '',
 
                 // submit section
                 submitHandle() {
@@ -5077,6 +5034,8 @@
                         form_data.set('catlog_file', file, file.name);
                     }
 
+                    form_data.set('remark', this.remark);
+
                     let url = "{{ route('admin.saveProject') }}";
                     
                     axios.post(url, form_data, {
@@ -5187,7 +5146,7 @@
                 $(document).on('change', '#city_id', function(e) {
                     $('#area_id').html('');
                     areass = JSON.parse(areas);
-                    $('#area_id').append('<option value="" selected disabled>Select Area</option>');
+                    $('#area_id').append('<option value="" selected disabled>Locality</option>');
                     for (let i = 0; i < areass.length; i++) {
                         if (areass[i]['city_id'] == $("#city_id").val()) {
                             $('#area_id').append(`<option value="${areass[i]['id']}"
