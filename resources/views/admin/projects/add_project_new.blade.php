@@ -2739,14 +2739,6 @@
                                                                         <div class="row">
                                                                             <div class="form-check checkbox  checkbox-solid-success col-md-3 m-b-20">
                                                                                 <input
-                                                                                    class="project_amenity form-check-input" :id="`terrace_and_penthouse_checkbox_${index}`"
-                                                                                    x-model="unit.has_terrace_and_carpet"
-                                                                                    :name="`terrace_and_penthouse_checkbox_${index}`" type="checkbox">
-                                                                                <label class="form-check-label" :for="`terrace_and_penthouse_checkbox_${index}`">Terrace & Penthouse</label>
-                                                                            </div>
-        
-                                                                            <div class="form-check checkbox  checkbox-solid-success col-md-3 m-b-20">
-                                                                                <input
                                                                                     class="project_amenity form-check-input" :id="`servant_room_checkbox_${index}`"
                                                                                     x-model="unit.servant_room"
                                                                                     :name="`servant_room_checkbox_${index}`" type="checkbox">
@@ -2821,106 +2813,36 @@
 
                                                     <template x-if="property_category == '262' || property_category == '256' || property_category == '258'">
                                                         <div class="row mt-4">
+                                                            <span x-text="nexttickForFarm()"></span>
                                                             <div class="row mt-2">
-                                                                <div class="input-group mb-3">
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.total_land_area == '' ? '' : 'focused' ">
-                                                                            <span x-text="nexttickForFarm()"></span>
-                                                                            <label class="mb-0">Total Land Area</label>
-                                                                            <div class="fvalue">
-                                                                                <input class="form-control" name="total_land_area" type="text" x-model="if_farm_plot_land.total_land_area" autocomplete="off" data-bs-original-title="" title="">
+                                                                <div class="col-md-4">
+                                                                    <div class="input-group mb-3">
+                                                                        <div class="form-group col-md-6 m-b-10">
+                                                                            <div class="fname" :class="if_farm_plot_land.total_open_area == '' ? '' : 'focused' ">
+                                                                                <label class="mb-0">Total Open Area</label>
+                                                                                <div class="fvalue">
+                                                                                    <input class="form-control" x-model="if_farm_plot_land.total_open_area" name="total_open_area" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <span class="input-group-text" style="min-height:41px;">To</span>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.total_land_area_to == '' ? '' : 'focused' ">
-                                                                            <span x-text="nexttickForFarm()"></span>
-                                                                            <label class="mb-0">Total Land Area</label>
-                                                                            <div class="fvalue">
-                                                                                <input class="form-control" name="total_land_area" type="text" x-model="if_farm_plot_land.total_land_area_to" autocomplete="off" data-bs-original-title="" title="">
-                                                                            </div>
+                                                                        <div class="form-group col-md-6 m-b-10">
+                                                                            <select class="form-select form_measurement measure_select" name="open_area_map_select" id="open_area_select">
+                                                                                <option value="117" selected>Sq.Ft.</option>
+                                                                                <option value="118">Sq.Yard</option>
+                                                                                <option value="119">Sq.Meter</option>
+                                                                                <option value="120">VIGHA</option>
+                                                                            </select>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <select class="form-select form_measurement measure_select" name="land_area_map_select" id="land_area_select">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
-                                                                        </select>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="row mt-2">
-                                                                <div class="input-group mb-3">
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.total_open_area == '' ? '' : 'focused' ">
-                                                                            <label class="mb-0">Total Open Area</label>
+                                                                <div class="col-md-6">
+                                                                    <div class="col-md-6 m-b-20">
+                                                                        <div class="fname" :class="if_farm_plot_land.total_number_of_plot == '' ? '' : 'focused' ">
+                                                                            <label>Total No. of Plots</label>
                                                                             <div class="fvalue">
-                                                                                <input class="form-control" x-model="if_farm_plot_land.total_open_area" name="total_open_area" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                                <input class="form-control" x-model="if_farm_plot_land.total_number_of_plot" name="total_no_of_plots" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <span class="input-group-text" style="min-height:41px;">To</span>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.total_open_area_to == '' ? '' : 'focused' ">
-                                                                            <label class="mb-0">Total Open Area</label>
-                                                                            <div class="fvalue">
-                                                                                <input class="form-control" x-model="if_farm_plot_land.total_open_area_to" name="total_open_area" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <select class="form-select form_measurement measure_select" name="open_area_map_select" id="open_area_select">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-3 m-b-20">
-                                                                <div class="fname" :class="if_farm_plot_land.total_number_of_plot == '' ? '' : 'focused' ">
-                                                                    <label>Total No. of Plots</label>
-                                                                    <div class="fvalue">
-                                                                        <input class="form-control" x-model="if_farm_plot_land.total_number_of_plot" name="total_no_of_plots" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row mt-2">
-                                                                <div class="input-group mb-3">
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.common_area == '' ? '' : 'focused' ">
-                                                                            <label class="mb-0">Common Area</label>
-                                                                            <div class="fvalue">
-                                                                                <input class="form-control" name="common_area" type="text" x-model="if_farm_plot_land.common_area" autocomplete="off" data-bs-original-title="" title="">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <span class="input-group-text" style="min-height:41px;">To</span>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.common_area_to == '' ? '' : 'focused' ">
-                                                                            <label class="mb-0">Common Area</label>
-                                                                            <div class="fvalue">
-                                                                                <input class="form-control" name="common_area" type="text" x-model="if_farm_plot_land.common_area_to" autocomplete="off" data-bs-original-title="" title="">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <select class="form-select form_measurement measure_select" name="common_area_map_select" id="common_area_select">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
-                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -2960,7 +2882,7 @@
                                                             </div>
                                                             <div class="row mt-2">
                                                                 <div class="input-group mb-3">
-                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                    <div class="form-group col-md-2 m-b-10">
                                                                         <div class="fname" :class="if_farm_plot_land.plot_size_from == '' ? '' : 'focused' ">
                                                                             <label class="mb-0">Saleable Plot from</label>
                                                                             <div class="fvalue">
@@ -2971,7 +2893,7 @@
                                                                     <div class="form-group">
                                                                         <span class="input-group-text" style="min-height:41px;">To</span>
                                                                     </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                    <div class="form-group col-md-2 m-b-10">
                                                                         <div class="fname" :class="if_farm_plot_land.plot_size_to == '' ? '' : 'focused' ">
                                                                             <label class="mb-0">Saleable Plot to</label>
                                                                             <div class="fvalue">
@@ -2979,7 +2901,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                    <div class="form-group col-md-2 m-b-10">
                                                                         <select class="form-select form_measurement measure_select" name="common_area_map_select" id="plot_size_from_select">
                                                                             <option value="117" selected>Sq.Ft.</option>
                                                                             <option value="118">Sq.Yard</option>
@@ -3004,7 +2926,7 @@
                                                     <template x-if="if_farm_plot_land.add_carpet_plot_size">
                                                         <div class="row mt-2">
                                                             <div class="input-group mb-3">
-                                                                <div class="form-group col-md-3 m-b-10">
+                                                                <div class="form-group col-md-2 m-b-10">
                                                                     <div class="fname" :class="if_farm_plot_land.carpet_plot_size == '' ? '' : 'focused' ">
                                                                         <span x-text="selectOnCarpetPlot()" class="d-none"></span>
                                                                         <label class="mb-0">Carpet Plot Size</label>
@@ -3016,7 +2938,7 @@
                                                                 <div class="form-group">
                                                                     <span class="input-group-text" style="min-height:41px;">To</span>
                                                                 </div>
-                                                                <div class="form-group col-md-3 m-b-10">
+                                                                <div class="form-group col-md-2 m-b-10">
                                                                     <div class="fname" :class="if_farm_plot_land.carpet_plot_size_to == '' ? '' : 'focused' ">
                                                                         <span x-text="selectOnCarpetPlot()" class="d-none"></span>
                                                                         <label class="mb-0">Carpet Plot Size</label>
@@ -3025,7 +2947,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-md-3 m-b-10">
+                                                                <div class="form-group col-md-2 m-b-10">
                                                                     <select class="form-select" name="carpet_plot_size_select" tabindex="-1" aria-hidden="true" id="carpet_plot_size_select">
                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                         <option value="118">Sq.Yard</option>
@@ -3063,7 +2985,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-md-3 m-b-10">
+                                                                <div class="form-group col-md-2 m-b-10">
                                                                     <select class="form-select" name="constructed_saleable_area_select" tabindex="-1" aria-hidden="true" id="constructed_saleable_area_select">
                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                         <option value="118">Sq.Yard</option>
@@ -4456,14 +4378,23 @@
                 },
 
                 addWingSubCategory(event, value) {
+                    let newArray = [];
                     if(event.target.checked) {
                         this.sub_category_array.push(value);
+                        newArray = this.sub_category_array;
                     } else {
-                        const index = this.sub_category_array.indexOf(value);
-                        if (index > -1) {
-                            this.sub_category_array.splice(index, 1);
-                        }
+                        let originalArray = this.sub_category_array;
+                        const valueToRemove = value;
+                        newArray = originalArray.filter(item => item !== valueToRemove);
                     }
+
+                    console.log(newArray);
+
+                    this.sub_category_array = [];
+
+                    newArray.forEach((element, index) => {
+                        this.sub_category_array.push(element);
+                    });
                 },
 
                 manageWingNameArray() {

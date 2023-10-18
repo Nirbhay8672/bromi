@@ -228,6 +228,12 @@
                                                         <div style="text-transform: none !important;">: {{ $project->rera_number }}</div>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
+                                                        <h6><b>Total Land Area</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-20 data_conent_4">
+                                                        <div style="text-transform: none !important;">: {{ $project->land_area }} {{ $map_unit[ $project->land_size_unit]}}</div>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Remark</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_4">
@@ -667,22 +673,10 @@
                                                         <h5 class="border-style">Basic Detail</h5>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_1">
-                                                        <h6 for="Client Name"><b>Total Land Area</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-8 m-b-20 data_conent_2">
-                                                        <div>: {{ $project->land_plot['total_land_area'] }} {{ $map_unit[$project->land_plot['land_area_map_unit']] }}</div>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_1">
                                                         <h6 for="Client Name"><b>Total Open Area</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_2">
                                                         <div>: {{ $project->land_plot['total_open_area'] }} {{ $map_unit[$project->land_plot['open_area_map_unit']] }}</div>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_1">
-                                                        <h6 for="Client Name"><b>Total Common Area</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-8 m-b-20 data_conent_2">
-                                                        <div>: {{ $project->land_plot['common_area'] }} {{ $map_unit[$project->land_plot['common_area_map_unit']] }}</div>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_1">
                                                         <h6 for="Client Name"><b>Phase Name</b></h6>
