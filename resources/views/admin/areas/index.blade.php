@@ -15,12 +15,23 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Locality</h5>
-                                <button class="btn btn-primary btn-air-primary open_modal_with_this" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#areaModal">Add New Locality</button>
-									<button class="btn btn-primary btn-air-primary" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#importmodal"> Import Locality</button>
-									<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()"
-									type="button">Delete</button>
+                            <button
+                                class="btn btn-primary btn-air-primary open_modal_with_this"
+                                type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#areaModal"
+                            >Add New Locality</button>
+                            <button
+                                class="btn btn-primary btn-air-primary"
+                                type="button"
+                                data-bs-toggle="modal" data-bs-target="#importmodal"
+                            >Import Locality</button>
+                            <button
+                                class="btn btn-primary btn-air-primary delete_table_row"
+                                style="display: none"
+                                onclick="deleteTableRow()"
+                                type="button"
+                            >Delete</button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -76,7 +87,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-
                                 <div class="form-group col-md-5 d-inline-block m-b-20">
                                     <label class="mb-0">City</label>
                                     <select id="city_id" required>
@@ -90,17 +100,28 @@
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                                 <div class="form-group col-md-5 d-inline-block m-b-20">
-                                    <label for="area_name">Locality Name</label>
-                                    <input class="form-control" name="test_name" id="area_name" type="text"
-                                        required="" autocomplete="off" required>
+                                    <div>
+                                        <label for="area_name">Locality Name</label>
+                                        <input
+                                            class="form-control"
+                                            name="test_name"
+                                            id="area_name"
+                                            type="text"
+                                            required=""
+                                            autocomplete="off"
+                                            required
+                                        >
+                                    </div>
+                                    <label id="area_name-error" class="error" for="area_name"></label>
                                 </div>
                                 <div class="form-group col-md-3 d-inline-block m-b-20">
-                                    <label for="pincode">Pincode</label>
-                                    <input class="form-control" name="pincode" id="pincode" type="text"
+                                    <div>
+                                        <label for="pincode">Pincode</label>
+                                        <input class="form-control" name="pincode" id="pincode" type="text"
                                         autocomplete="off" required>
+                                    </div>
+                                    <label id="pincode-error" class="error" for="pincode"></label>
                                 </div>
-
-
                                 <div class="d-flex align-items-center mb-3 col-md-2">
                                     <div class="form-group me-2">
                                         <label for="area_active" class="mb-1">Active</label>
@@ -178,6 +199,7 @@
                         $('#city_id').select2('destroy');
                         citiesar = JSON.parse(cities);
                         $('#city_id').html('');
+                        $('#city_id').html('<option value="" disabled>Select City</option>');
                         for (let i = 0; i < citiesar.length; i++) {
                             if (citiesar[i]['state_id'] == $("#state_id").val()) {
                                 $('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][

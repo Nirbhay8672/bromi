@@ -58,18 +58,21 @@
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
                             novalidate="">
-                            <div class="form-row">
-                                <div class="form-group col-md-7 d-inline-block m-b-20">
-                                    <label for="City">City</label>
-                                    <input
-                                        class="form-control"
-                                        name="city_name"
-                                        id="city_name"
-                                        type="text"
-                                        required
-                                    >
+                            <div class="row mb-2">
+                                <div class="col-6 mb-2" style="margin-top: 20px;">
+                                    <div class="form-group mb-1">
+                                        <label for="City">City</label>
+                                        <input
+                                            class="form-control"
+                                            name="city_name"
+                                            id="city_name"
+                                            type="text"
+                                            required
+                                        >  
+                                    </div>
+                                    <label id="city_name-error" class="error" for="city_name"></label>
                                 </div>
-                                <div class="form-group col-md-4 d-inline-block m-b-4 mt-1">
+                                <div class="col-6 mb-2">
                                     <label class="mb-0">State</label>
                                     <select class="form-select" id="state_id" required>
                                         <option value="">State</option>

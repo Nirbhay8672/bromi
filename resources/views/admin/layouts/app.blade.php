@@ -1213,10 +1213,9 @@ Helper::set_default_measuerement();
         var view_area_url = "{{ route('admin.areas') }}";
         var view_projects_url = "{{ route('admin.projects') }}";
         var view_user_url = "{{ route('admin.users') }}";
+        var view_properties_url  = "{{ route('admin.properties') }}";
 
         $("form select").each(function(index) {
-
-
             var attrs = $(this).attr('multiple');
             if (typeof attrs === 'undefined' || attrs === false) {
                 $(this).find('option:first').attr('selected', 'selected')

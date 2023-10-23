@@ -66,6 +66,7 @@ class Projects extends Model
 		'catlog_file',
 		
 		'is_indirectly_store',
+		'remark',
 	];
 
 	protected static function boot()

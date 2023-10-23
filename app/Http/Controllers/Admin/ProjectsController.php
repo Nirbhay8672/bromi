@@ -352,6 +352,7 @@ class ProjectsController extends Controller
 		}
 		
 		$data->is_indirectly_store = 0;
+		$data->remark = $request->remark;
 
 		$data->save();
 

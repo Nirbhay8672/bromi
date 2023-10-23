@@ -156,7 +156,6 @@ class RegisterController extends Controller
             "address" => 'required',
             "state_id" => 'required',
             "city_id" => 'required',
-            "file" => 'required|file|mimes:jpeg,png|max:500000', 
             "password" => 'required',
             "password_confirmation" => 'required|same:password',
         ]);
@@ -175,7 +174,7 @@ class RegisterController extends Controller
 				'state_id' =>  $request->state_id,
 				'company_name' =>  $request->company_name,
                 'address' => $request->address,
-                'company_logo' => $this->storeFile($request->file),
+                'company_logo' => $request->file ? $this->storeFile($request->file) : '',
                 'vendor_id' => Str::random(10),
                 'is_active' => 0,
             ]
