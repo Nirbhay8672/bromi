@@ -28,6 +28,7 @@ use Yajra\DataTables\DataTables;
 use App\Models\UserNotifications;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PropertyFormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -1334,9 +1335,9 @@ class PropertyController extends Controller
 
 		echo asset('excel/' . $time . '_file.xlsx');
 	}
-	public function saveProperty(Request $request)
+	public function saveProperty(PropertyFormRequest $request)
 	{
-		// dd("save Prop :", $request->all());
+		dd(1);
 		if (!empty($request->id) && $request->id != '') {
 			$data = Properties::find($request->id);
 			if (empty($data)) {

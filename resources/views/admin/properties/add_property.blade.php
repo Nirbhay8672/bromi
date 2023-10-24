@@ -4343,6 +4343,12 @@
                         // var redirect_url = "{{ route('admin.properties') }}";
                         // window.location.href = redirect_url;
                         // $('#saveProperty').prop('disabled',false);
+                    },
+                    error:function (response){
+                        $.each(response.responseJSON.errors,function(field_name,error){
+                            let error_element = `${field_name}_error`;
+                            document.getElementById(error_element).innerHTML = error[0]; 
+                        })
                     }
                 });
             })
