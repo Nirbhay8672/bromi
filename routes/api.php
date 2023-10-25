@@ -72,6 +72,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/isfavorites', [App\Http\Controllers\Api\propertyController::class, 'IsFavorites']);
     Route::post('/export-property', [App\Http\Controllers\Api\PropertyController::class, 'exportProperty']);
 
+    // add proprty in steps routes
+    Route::post('properties/step1', [App\Http\Controllers\Api\propertyController::class, 'createPropertyStep1']);
+    Route::patch('properties/step2/{property}', [App\Http\Controllers\Api\propertyController::class, 'createPropertyStep2']);
+    Route::patch('properties/step3/{property}', [App\Http\Controllers\Api\propertyController::class, 'createPropertyStep3']);
+
+
 
     //Enquiry
     Route::get('/list_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'index']);
