@@ -373,6 +373,7 @@ function search() {
 					"projects",
 					"users",
 					"areas",
+					"properties",
 				];
 				$("#result_container").append('<p class="mb-0 mt-2"><b id="result_count">0</b> results</p>');
 				var total_result = 0;

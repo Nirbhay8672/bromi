@@ -95,9 +95,12 @@
                                             </div>
                                             <div class="flip-card-back outlined-card" id="back1" style="background-image: url( {{asset('card/1.png')}} );background-size: cover;">
                                                 <div class="row">
-                                                    <div class="col-md-6" style="margin-top: 70px;">
+                                                    <div class="col-md-6" style="margin-top: 120px;">
                                                         <h3 style="margin-left: 20px;" id="company_name_1">{{ Auth::user()->company_name ?? 'Company Name'}}</h3>
                                                         <ul style="margin-left: 20px;" id="card_detail_1">
+                                                            <li class="mb-2">
+                                                                <span>{{ Auth::user()->first_name ?? 'person name' }}</span>
+                                                            </li>
                                                             <li class="mb-2">
                                                                 <span>{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
                                                             </li>
@@ -129,29 +132,23 @@
                                     <div class="flip-card">
                                         <div class="flip-card-inner" id="card2">
                                             <div class="flip-card-front text-center outlined-card" id="front2" style="background-color: rgb(147, 192, 255)">
-                                                <img src="{{ asset('Bromi-Logo-card.png')}}" alt="Avatar" style="width:200px;height:200px;">
-                                                <h3 x-text="company_detail.company_name" id="company_name_2"></h3>
+                                                <img src="{{ Auth::user()->company_logo ? asset('storage/file_image'.'/'.Auth::user()->company_logo) : asset('Bromi-Logo-card.png')}}" alt="Avatar" style="width:200px;height:200px;">
+                                                <h3 id="company_name_2">{{ Auth::user()->company_name ?? 'Company Name'}}</h3>
                                             </div>
                                             <div class="flip-card-back text-center outlined-card" id="back2">
-                                                <h3 x-text="company_detail.company_name" style="margin-top: 60px;" id="company_name_2_back"></h3>
+                                                <h3 style="margin-top: 60px;" id="company_name_2_back">{{ Auth::user()->company_name ?? 'Company Name'}}</h3>
                                                 <ul id="card_detail_2">
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.position ?? 'Position'"></span>
+                                                        <span>{{ Auth::user()->first_name ?? 'person name' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.company_site ?? 'Company Site'"></span>
+                                                        <span>{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.company_contact ?? '00000 00000'"></span>
+                                                        <span>{{ Auth::user()->mobile_number ?? '00000 00000' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.company_email ?? 'Email Address'"></span>
-                                                    </li>
-                                                    <li class="mb-2">
-                                                        <span x-text="company_detail.company_gst ?? 'Gst Number'"></span>
-                                                    </li>
-                                                    <li class="mb-2">
-                                                        <span x-text="company_detail.address ?? 'Address'"></span>
+                                                        <span>{{ Auth::user()->address ?? 'company address' }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -170,29 +167,23 @@
                                     <div class="flip-card">
                                         <div class="flip-card-inner" id="card3">
                                             <div class="flip-card-front outlined-card" id="front3"  style="background-image: url({{asset('card/front-3.png')}});background-size: cover;">
-                                                <img src="{{ asset('Bromi-Logo-card.png')}}" alt="Avatar" style="width:200px;height:200px;margin-left: 284px;">
-                                                <h3 x-text="company_detail.company_name" id="company_name_3" style="margin-left: 350px;"></h3>
+                                                <img src="{{ Auth::user()->company_logo ? asset('storage/file_image'.'/'.Auth::user()->company_logo) : asset('Bromi-Logo-card.png')}}" alt="Avatar" style="width:200px;height:200px;margin-left: 284px;">
+                                                <h3 id="company_name_3" style="margin-left: 350px;">{{ Auth::user()->company_name ?? 'Company Name'}}</h3>
                                             </div>
                                             <div class="flip-card-back outlined-card" id="back3" style="background-image: url({{asset('card/back-3.png')}});background-size: cover;">
-                                                <h3 x-text="company_detail.company_name" style="margin-top: 60px;margin-left: 250px;" id="company_name_3_back"></h3>
+                                                <h3 style="margin-top: 60px;margin-left: 250px;" id="company_name_3_back">{{ Auth::user()->company_name ?? 'Company Name'}}</h3>
                                                 <ul id="card_detail_3" style="margin-left: 250px;">
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.position ?? 'Position'"></span>
+                                                        <span>{{ Auth::user()->first_name ?? 'person name' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.company_site ?? 'Company Site'"></span>
+                                                        <span>{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.company_contact ?? '00000 00000'"></span>
+                                                        <span>{{ Auth::user()->mobile_number ?? '00000 00000' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.company_email ?? 'Email Address'"></span>
-                                                    </li>
-                                                    <li class="mb-2">
-                                                        <span x-text="company_detail.company_gst ?? 'Gst Number'"></span>
-                                                    </li>
-                                                    <li class="mb-2">
-                                                        <span x-text="company_detail.address ?? 'Address'"></span>
+                                                        <span>{{ Auth::user()->address ?? 'company address' }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -211,29 +202,23 @@
                                     <div class="flip-card">
                                         <div class="flip-card-inner" id="card4">
                                             <div class="flip-card-front outlined-card" id="front4"  style="background-image: url({{asset('card/front-4.png')}});background-size: cover;">
-                                                <img src="{{ asset('Bromi-Logo-card.png')}}" alt="Avatar" style="width:200px;height:200px;margin-left: 40px;">
-                                                <span class="h2" x-text="company_detail.company_name" id="company_name_4" style="margin-left: 10px;"></span>
+                                                <img src="{{ Auth::user()->company_logo ? asset('storage/file_image'.'/'.Auth::user()->company_logo) : asset('Bromi-Logo-card.png')}}" alt="Avatar" style="width:200px;height:200px;margin-left: 40px;">
+                                                <span class="h2" id="company_name_4" style="margin-left: 10px;">{{ Auth::user()->company_name ?? 'Company Name'}}</span>
                                             </div>
                                             <div class="flip-card-back outlined-card" id="back4" style="background-image: url({{asset('card/back-4.png')}});background-size: cover;">
-                                                <h3 x-text="company_detail.company_name" style="margin-top: 60px;margin-left: 250px;" id="company_name_4_back"></h3>
+                                                <h3 style="margin-top: 60px;margin-left: 250px;" id="company_name_4_back">{{ Auth::user()->company_name ?? 'Company Name'}}</h3>
                                                 <ul id="card_detail_4" style="margin-left: 250px;">
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.position ?? 'Position'"></span>
+                                                        <span>{{ Auth::user()->first_name ?? 'person name' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.company_site ?? 'Company Site'"></span>
+                                                        <span>{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.company_contact ?? '00000 00000'"></span>
+                                                        <span>{{ Auth::user()->mobile_number ?? '00000 00000' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span x-text="company_detail.company_email ?? 'Email Address'"></span>
-                                                    </li>
-                                                    <li class="mb-2">
-                                                        <span x-text="company_detail.company_gst ?? 'Gst Number'"></span>
-                                                    </li>
-                                                    <li class="mb-2">
-                                                        <span x-text="company_detail.address ?? 'Address'"></span>
+                                                        <span>{{ Auth::user()->address ?? 'company address' }}</span>
                                                     </li>
                                                 </ul>
                                             </div>

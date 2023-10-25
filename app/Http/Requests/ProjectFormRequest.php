@@ -48,6 +48,7 @@ class ProjectFormRequest extends FormRequest
 			'total_floor_for_parking' => 'required|gt:0',
 			'parking_details' => 'required',
 			'amenities' => 'required|min:1',
+			'remark' => 'required',
 		];
 
 		if($this->id == '' || $this->id == null) {

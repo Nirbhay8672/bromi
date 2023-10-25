@@ -51,11 +51,20 @@
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
                             novalidate="">
-                            <div class="form-row">
-                                <div class="form-group col-md-12 m-b-20">
-									<label for="State">State</label>
-                                    <input class="form-control" name="state_name" id="state_name" type="text"
-                                        required="" autocomplete="off" >
+                            <div class="form-row mb-2">
+                                <div>
+                                    <div class="form-group col-md-12 mb-1">
+                                        <label for="State">State</label>
+                                        <input
+                                            class="form-control"
+                                            name="state_name"
+                                            id="state_name"
+                                            type="text"
+                                            required=""
+                                            autocomplete="off"
+                                        >
+                                    </div>
+                                    <label id="state_name-error" class="error" for="state_name"></label>
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
@@ -158,6 +167,9 @@
             $(document).on('click', '#saveState', function(e) {
                 e.preventDefault();
 				$("#modal_form").validate();
+
+                console.log($("#modal_form").validate());
+
                 if (!$("#modal_form").valid()) {
 					return
                 }

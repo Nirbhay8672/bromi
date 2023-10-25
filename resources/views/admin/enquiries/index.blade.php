@@ -804,8 +804,8 @@
                                 </div> --}}
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="nfdDate" class="mb-0">NFD:</label>
-                                    <input class="form-control" id="site_visit_date" name="nfdDate"
-                                        max='31-12-2050' type="date" oninput="limitYearTo4Digits()">
+                                    <input class="form-control" id="ndf" name="nfdDate"
+                                        max='31-12-2050' type="date" onkeydown="limitYearTo4Digits()">
                                 </div>
 								<div class="form-group col-md-3 m-b-20">
                                     <label for="nfdTime" class="mb-0">Site Visit Time:</label>
@@ -912,16 +912,10 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                {{-- <div class="form-group col-md-3 m-b-20">
-                                    <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
-                                    <input class="form-control " id="site_visit_time" max='31-10-2050'
-                                        name="site_visit_time" type="datetime-local" oninput="limitYearTo4Digits()">
-                                </div> --}}
-                                {{-- bharat date --}}
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="site_visit_date" class="mb-0">Site Visit Date:</label>
                                     <input class="form-control" id="site_visit_date" name="site_visit_date"
-                                        type="date" oninput="limitYearTo4Digits()">
+                                        type="date" onkeydown="limitYearTo4Digits()">
                                 </div>
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
@@ -1113,7 +1107,13 @@
     @push('scripts')
         <script>
             function limitYearTo4Digits() {
-                const dateInput = document.getElementById('site_visit_date');
+                let dateInput = document.getElementById('site_visit_date');
+                let ndfInput = document.getElementById('ndf');
+
+                dateInput.value = '';
+                ndf.value = '';
+
+                return;
                 const inputValue = dateInput.value;
 
                 // Split the input by the hyphen separator
