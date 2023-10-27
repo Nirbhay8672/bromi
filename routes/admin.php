@@ -234,6 +234,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/save-insta-property', [InstaPropertiesController::class, 'saveProperty'])->name('admin.saveinstaProperty');
 
 		//Settings
+		Route::post('/settings-get-area-for-import', [SettingsController::class, 'getAreaForImport'])->name('admin.settings.getAreaForImport');
 		Route::get('/settings-city', [SettingsController::class, 'cities_index'])->name('admin.settings.city');
 		Route::post('/settings-get-city', [SettingsController::class, 'get_city'])->name('admin.settings.getcity');
 		Route::post('/settings-save-city', [SettingsController::class, 'cities_store'])->name('admin.settings.savecity');

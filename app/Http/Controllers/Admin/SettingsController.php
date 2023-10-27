@@ -9,6 +9,7 @@ use App\Models\City;
 use App\Models\DropdownSettings;
 use App\Models\Subcategory;
 use App\Models\State;
+use App\Models\SuperAreas;
 use App\Models\SuperCity;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -66,6 +67,17 @@ class SettingsController extends Controller
 			'message' => 'Detail fetch',
 			'data' => [
 				'city_data' => SuperCity::where('state_id',$request->state_id)->get()	
+			]
+		]);
+	}
+
+
+	public function getAreaForImport(Request $request)
+	{
+		return response()->json([
+			'message' => 'Detail fetch',
+			'data' => [
+				'area_data' => SuperAreas::where('super_city_id',$request->city_id)->get()	
 			]
 		]);
 	}

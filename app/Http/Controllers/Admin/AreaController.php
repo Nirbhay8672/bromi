@@ -118,68 +118,65 @@ class AreaController extends Controller
 
 	public function importArea(Request $request)
 	{
-		if($request->ajax())
+		if(!empty($request->state_id) && !empty($request->city_id) && count($request->area_array) > 0)
 		{
-			if(!empty($request->state_id) && !empty($request->city_id))
+			$allarea = SuperAreas::whereIn('id',$request->area_array)->get();
+
+			foreach ($allarea as $value)
 			{
-				$allarea = SuperAreas::where('state_id',$request->state_id)->where('super_city_id',$request->city_id)->get();
+				$state_obj = State::find($request->state_id);
+				$user_state = State::where('name',$state_obj->name)->where('user_id',Auth::user()->id)->first();
 
-				foreach ($allarea as $key => $value)
+				$state_id = 0;
+				if($user_state)
 				{
-					$state_obj = State::find($request->state_id);
-					$user_state = State::where('name',$state_obj->name)->where('user_id',Auth::user()->id)->first();
+					$state_id = $user_state->id;
+				}
+				else
+				{
+					$new_state = new State();
+					$new_state->fill([
+						'name' => $state_obj->name,
+						'user_id' => Auth::user()->id,
+					])->save();
 
-					$state_id = 0;
-					if($user_state)
-					{
-						$state_id = $user_state->id;
-					}
-					else
-					{
-						$new_state = new State();
-						$new_state->fill([
-							'name' => $state_obj->name,
-							'user_id' => Auth::user()->id,
-						])->save();
+					$state_id = $new_state->id;
+				}
 
-						$state_id = $new_state->id;
-					}
+				$super_city = SuperCity::find($request->city_id);
 
-					$super_city = SuperCity::find($request->city_id);
+				$city = City::where('name',$super_city->name)
+					->where('user_id', Auth::user()->id)
+					->first();
 
-					$city = City::where('name',$super_city->name)
-						->where('user_id', Auth::user()->id)
-						->first();
+				$city_id = 0;
 
-					$city_id = 0;
+				if(empty($city))
+				{
+					$city = City::create([
+						'name'=>$super_city->name,
+						'state_id'=>$state_id,
+						'user_id'=> Auth::User()->id
+					]);
 
-					if(empty($city))
-					{
-						$city = City::create([
-						    'name'=>$super_city->name,
-						    'state_id'=>$state_id,
-						    'user_id'=> Auth::User()->id
-					    ]);
+					$city_id = $city->id;
+				} else {
+					$city_id = $city->id;
+				}
 
-						$city_id = $city->id;
-					} else {
-						$city_id = $city->id;
-					}
+				$exist = Areas::where('name',$value->name)
+					->where('city_id',$city->id)
+					->where('user_id', Auth::user()->id)
+					->first();
 
-					$exist = Areas::where('name',$value->name)
-						->where('city_id',$city->id)
-						->where('user_id', Auth::user()->id)
-						->first();
-
-					if (empty($exist->id)){
-						$areas = new Areas();
-						$areas->user_id = Auth::user()->id;
-						$areas->name = $value->name;
-						$areas->city_id = $city_id;
-						$areas->pincode = $value->pincode;
-						$areas->state_id =$state_id;
-						$areas->save();
-					}
+				if (empty($exist->id)){
+					$areas = new Areas();
+					$areas->user_id = Auth::user()->id;
+					$areas->name = $value->name;
+					$areas->city_id = $city_id;
+					$areas->pincode = $value->pincode;
+					$areas->state_id =$state_id;
+					$areas->save();
 				}
 			}
 		}

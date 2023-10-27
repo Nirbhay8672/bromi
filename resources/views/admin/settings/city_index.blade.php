@@ -190,7 +190,6 @@
                     importCity() {
                         let _this = this;
                         document.getElementById('state_error').innerHTML = '';
-                        document.getElementById('city_error').innerHTML = '';
 
                         let state_id = $('#import_state_id').val();
                         if(state_id == '' || this.selected_city.length == 0) {
