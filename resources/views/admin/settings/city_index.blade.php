@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-    <div class="page-body">
+    <div class="page-body" x-data="city_form">
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
@@ -103,20 +103,37 @@
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation" method="post" id="import_form" novalidate="">
 							<div class="form-row">
-							<div class="form-group col-md-5 d-inline-block m-b-20">
-                                <label class="mb-0">State</label>
-                                <select id="import_state_id" required>
-									<option value=""> State</option>
-									@foreach ($states as $state)
-									    @if($state->user_id == 6)
-										    <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
-										@endif
-									@endforeach
-								</select>
+                                <div class="form-group col-md-5 d-inline-block m-b-20">
+                                    <label class="mb-0">State</label>
+                                    <select id="import_state_id" required>
+                                        <option value=""> State</option>
+                                        @foreach ($states as $state)
+                                            @if($state->user_id == 6)
+                                                <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger" id="state_error"></span>
                                 </div>
-
 							</div>
-                            <button class="btn btn-secondary" type="button" id="importCity">Import</button>
+                            <template x-if="city_array.length > 0">
+                                <div class="row p-2">
+                                    <div class="row mb-3">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-6 m-b-20">
+                                            <input class="project_amenity form-check-input filled" id="check_all" x-model="check_all" type="checkbox" value="" @click="selectCheckbox($event)">
+                                            <label class="form-check-label" for="check_all">Select All City</label>
+                                        </div>
+                                        <span class="text-danger" id="city_error"></span>
+                                    </div>
+                                    <template x-for="(city, index) in city_array">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                            <input class="project_amenity form-check-input filled" :id="`city_${city.id}`" type="checkbox" :value="city.id" x-model="selected_city">
+                                            <label class="form-check-label" :for="`city_${city.id}`" x-text="city.name"></label>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                            <button class="btn btn-secondary" type="button" @click="importCity">Import</button>
                             <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
                     </div>
@@ -125,7 +142,92 @@
         </div>
     @endsection
     @push('scripts')
+
+        <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+        <script type="text/javascript">
+
+            document.addEventListener('alpine:init', () => {
+    
+                Alpine.data('city_form', () => ({
+
+                    init() {
+                        let _this = this;
+                        $('#import_state_id').on('change', function() {
+                            _this.setcities();
+                        });
+                    },
+
+                    city_array : [],
+                    selected_city : [],
+                    check_all : false,
+
+                    selectCheckbox(event) {
+                        _this = this;
+                        if(event.target.checked) {
+                            _this.city_array.forEach((city) => {
+                                _this.selected_city.push(city.id);   
+                            });
+                        } else {
+                            _this.selected_city = [];
+                        }
+                    },
+
+                    setcities() {
+                        let _this = this;
+                        if($('#import_state_id').val() != '') {
+                            _this.selected_city = [];
+                            let url = "{{ route('admin.settings.getCityForImport') }}";
+                            axios.post(url , { 'state_id' : $('#import_state_id').val()}).then((response) => {
+                                _this.city_array = response.data.data.city_data;
+                            });
+                        } else {
+                            _this.city_array = [];
+                        }
+                    },
+
+                    importCity() {
+                        let _this = this;
+                        document.getElementById('state_error').innerHTML = '';
+                        document.getElementById('city_error').innerHTML = '';
+
+                        let state_id = $('#import_state_id').val();
+                        if(state_id == '' || this.selected_city.length == 0) {
+                            if(state_id == '') {
+                                document.getElementById('state_error').innerHTML = 'State field is required.';
+                            }
+
+                            if(this.selected_city.length == 0) {
+                                let city_error =  document.getElementById('city_error');
+
+                                if(city_error) {
+                                    city_error.innerHTML = 'Please select at least one city.';
+                                }
+                            }
+
+                            return;
+                        }
+
+                        let url = "{{ route('admin.importcity') }}";
+                    
+                        axios.post(url, {
+                            'city_array' : _this.selected_city,
+                            'state_id' : state_id,
+                        })
+                        .then((res) => {
+                            $('#cityTable').DataTable().draw();
+                            $('#importmodal').modal('hide');
+                            $('#import_form')[0].reset();
+                        });
+                    }
+                }));
+            });
+
+        </script>
+
         <script>
+
             $(document).ready(function() {
                 $('#cityTable').DataTable({
                     processing: true,
@@ -291,27 +393,6 @@
                     }
                 });
             })
-
-			$(document).on('click', '#importCity', function(e) {
-                e.preventDefault();
-                $("#import_form").validate();
-                if (!$("#import_form").valid()) {
-					return
-                }
-				$.ajax({
-                    type: "POST",
-                    url: "{{ route('admin.importcity') }}",
-                    data: {
-                        state_id: $('#import_state_id').val(),
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        $('#cityTable').DataTable().draw();
-                        $('#importmodal').modal('hide');
-						$('#import_form')[0].reset();
-                    }
-                });
-			})
 
         </script>
     @endpush

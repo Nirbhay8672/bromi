@@ -9,6 +9,7 @@ use App\Models\City;
 use App\Models\DropdownSettings;
 use App\Models\Subcategory;
 use App\Models\State;
+use App\Models\SuperCity;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +58,16 @@ class SettingsController extends Controller
 		}
 		$states = State::orderBy('name')->get();;
 		return view('admin.settings.city_index', compact('states'));
+	}
+
+	public function getCityForImport(Request $request)
+	{
+		return response()->json([
+			'message' => 'Detail fetch',
+			'data' => [
+				'city_data' => SuperCity::where('state_id',$request->state_id)->get()	
+			]
+		]);
 	}
 
 	public function get_city(Request $request)
