@@ -645,8 +645,6 @@
                                             <div class="col-xs-12">
                                                 <div class="col-md-12">
                                                     <div class="row div_flat_details_2" id="">
-
-                                                        {{-- Project Dropdown  --}}
                                                         <div class="col-md-2 m-b-4 mb-4" id="project_hide">
                                                             <select class="form-select" name="project_id"
                                                                 data-error="#project_id_error" id="project_id">
@@ -659,10 +657,9 @@
                                                                         {{ $building->project_name }}</option>
                                                                 @endforeach
                                                             </select>
-                                                            <div id="project_id_error"></div>
+                                                            <div class="text-danger custom-validation" id="project_id_error"></div>
                                                         </div>
 
-                                                        {{-- state city --}}
                                                         @php
                                                             $authStateId = Auth::user()->state_id;
                                                         @endphp
@@ -677,27 +674,10 @@
                                                                     @endif
                                                                 @endforeach
                                                             </select>
+                                                            <div class="text-danger custom-validation" id="state_id_error"></div>
                                                         </div>
-                                                        {{-- <div class="form-group col-md-3 m-b-4 mb-3">
-                                                            <select class="form-select" id="state_id">
-                                                                <option value="">Select States</option>
-                                                                @foreach ($states as $state)
-                                                                    @if ($state['user_id'] == auth()->user()->id)
-                                                                        <option value="{{ $state['id'] }}">
-                                                                            {{ $state['name'] }}
-                                                                        </option>
-                                                                    @endif
-                                                                @endforeach
-                                                            </select>
-                                                        </div> --}}
+
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
-                                                            {{-- <select class="form-select" id="city_id">
-                                                                <option value=""> City</option>
-                                                                @foreach ($cities as $city)
-                                                                    <option value="{{ $city['id'] }}">
-                                                                        {{ $city['name'] }}</option>
-                                                                @endforeach
-                                                            </select> --}}
                                                             <select id="state-dropdown" class="form-control">
                                                                 <option value="">Select City</option>
                                                                 @foreach ($cities as $city)
@@ -707,6 +687,7 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            <div class="text-danger custom-validation" id="city_id_error"></div>
                                                         </div>
 
                                                         <div class="form-group col-md-3 m-b-4 mb-3 cl-locality">
@@ -719,6 +700,7 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            <div class="text-danger custom-validation" id="locality_id_error"></div>
                                                         </div>
 
                                                         <div class="col-md-5 m-b-4 mb-3">
@@ -995,10 +977,13 @@
                                                         <div class="col-md-3 the_salable_area">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
-                                                                    <label for="Salable Area">Salable Area</label>
-                                                                    <input class="form-control" name="salable_area"
-                                                                        id="salable_area" type="text"
-                                                                        autocomplete="off">
+                                                                    <div>
+                                                                        <label for="Salable Area">Salable Area</label>
+                                                                        <input class="form-control" name="salable_area"
+                                                                            id="salable_area" type="text"
+                                                                            autocomplete="off">
+                                                                    </div>
+                                                                    <span class="text-danger" id="saleable_error"></span>
                                                                 </div>
 
                                                                 <div class="input-group-append col-md-5 m-b-20">
@@ -1694,6 +1679,7 @@
                                                                         for="availability0">Under construction</label>
                                                                 </div>
                                                             </div>
+                                                            <span class="text-danger custom-validation" id="available_status"></span>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3 div_age_of_property" id="">
@@ -2864,7 +2850,6 @@
             })
 
             $(document).on('change', '[name="property_for"]', function(e) {
-                // console.log("prop chnged");
                 setSellRentBoth();
             });
 
@@ -3161,7 +3146,6 @@
             resetallfields()
             $(document).on('change', '[name="property_category"]', function(e) {
                 var category_type = $(this).attr('data-val');
-                console.log("cat type", category_type);
                 resetallfields();
                 setIndividualfields();
                 $('#all_units').html('')
@@ -3655,9 +3639,11 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
-                        if (data == '') {
-                            return
+
+                        if (data == '' || data == 'null') {
+                            return;
                         }
+                        
                         // edit property selected valdata.width_of_plot, 1
                         data = JSON.parse(data);
                         $('#this_data_id').val(data.id);
@@ -3961,7 +3947,7 @@
                 if (!$("#modal_form").valid()) {
                     return
                 }
-                $(this).prop('disabled', true);
+                // $(this).prop('disabled', true);
                 var owner_details = [];
                 var unit_details = [];
                 var amenity_details = [];
@@ -4090,11 +4076,59 @@
                         return $(this).val();
                     }).get();
 
-                var id = $('#this_data_id').val()
-                console.log("val", $('#constructed_salable_area').val() + '_-||-_' + $(
-                    '#constructed_salable_area_measurement').val());
-                // return;
-                // save property
+                var id = $('#this_data_id').val();
+
+                let project_id = $('#project_id').val();
+                let state_id = $('#state_id').val();
+                let city_id = $('#state-dropdown').val();
+                let locality_id = $('#area_id').val();
+
+                // after locality
+                let saleable_area = $('#salable_area').val();
+                let available_status = $('input[name=availability_status]:checked').val();
+
+                let is_invalid = false;
+
+                let all_error = document.querySelectorAll('.custom-validation');
+
+                all_error.forEach((error) => {
+                    error.innerHTML = '';
+                });
+
+                if(project_id == '' || project_id == null) {
+                    document.getElementById('project_id_error').innerHTML = 'Project field is required';
+                    is_invalid = true;
+                }
+                if(state_id == '' || state_id == null) {
+                    document.getElementById('state_id_error').innerHTML = 'State field is required';
+                    is_invalid = true;
+                }
+                if(city_id == '' || city_id == null) {
+                    document.getElementById('city_id_error').innerHTML = 'City field is required';
+                    is_invalid = true;
+                }
+                if(locality_id == '' || locality_id == null) {
+                    document.getElementById('locality_id_error').innerHTML = 'Locality field is required';
+                    is_invalid = true;
+                }
+
+                if(saleable_area == '' || saleable_area == null) {
+                    document.getElementById('saleable_error').innerHTML = 'Saleable field is required';
+                    is_invalid = true;
+                }
+
+                if(!available_status) { 
+                    document.getElementById('available_status').innerHTML = 'Availability Status field is required';
+                    is_invalid = true;
+                }
+
+                if(is_invalid) {
+                    return;
+                } else {
+                    is_invalid = false;
+                }
+
+                
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.saveProperty') }}",
@@ -4218,7 +4252,6 @@
                             var filesImages = $('#land_images')[0].files;
                             var filesDocuments = $('#land_document')[0].files;
                             if (filesImages.length == 0 || filesDocuments.length == 0) {
-                                console.log("empty image");
                                 var redirect_url = "{{ route('admin.properties') }}";
                                 window.location.href = redirect_url;
                                 // property_image.innerHTML = 'Property Image is required.';
@@ -4236,7 +4269,6 @@
                             fd.append('land_id', $('#this_data_id').val());
                             fd.append('pro_id', data.data.id);
                             fd.append('_token', '{{ csrf_token() }}');
-                            console.log("fddddddddd :", fd);
                             // $.ajax({
                             //     url: "{{ route('admin.saveLandImages') }}",
                             //     type: 'post',
@@ -4244,7 +4276,6 @@
                             //     contentType: false,
                             //     processData: false,
                             // 	success: function(response) {
-                            // 		console.log("success :",success);
                             //         $('#all_images').html('');
                             //         $('#land_images').val('');
                             //         $('#land_document').val('');
@@ -4290,9 +4321,6 @@
                                 contentType: false,
                                 processData: false,
                                 success: function(response) {
-                                    console.log("success :",
-                                        success
-                                    ); // This line seems to be a typo, you can remove it.
                                     $('#all_images').html('');
                                     $('#land_images').val('');
                                     $('#land_document').val('');
