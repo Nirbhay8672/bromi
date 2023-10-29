@@ -86,9 +86,9 @@
                                     </select>
                                 </div>
 								<div class="form-group col-md-4 m-b-20">
-									<label class="mb-0">Area</label>
+									<label class="mb-0">Locality</label>
                                     <select id="area_id">
-                                        <option value=""> Area</option>
+                                        <option value=""> Locality</option>
                                         @foreach ($areas as $area)
                                             <option value="{{ $area['id'] }}">{{ $area['name'] }}</option>
                                         @endforeach
@@ -321,7 +321,7 @@
                 if (shouldchangecity) {
                     $('#area_id').select2('destroy');
                     $('#area_id').html('');
-                    $('#area_id').append(`<option value="" disabled>Select Area</option>`);
+                    $('#area_id').append(`<option value="" disabled>Select Locality</option>`);
                     JSON.parse(areas).forEach(area => {
                         if(area.city_id == $("#city_id").val()) {
                             document.getElementById('area_id').disabled = false;

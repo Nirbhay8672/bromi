@@ -17,17 +17,16 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
-use GuzzleHttp\Client;
+use Goutte\Client;
+use Illuminate\Support\Facades\DB;
 
 class integrationController extends Controller
 {
  
-    public function show(Request $request)
-	{
-		return view("admin.integration.show");
-	}
-
-
+public function show(Request $request)
+{
+    return view("admin.integration.show")->with(['email_bulk' => DB::table('email_bulk')->get()]);
+}
 
 public function emaildatagetOld(Request $request)
 {
@@ -53,21 +52,42 @@ public function emaildatagetOld(Request $request)
 
 public function emaildataget(Request $request)
 {
+    $validatedData = $request->validate([
+        'email' => 'required',
+        'password' => 'required',
+    ]);
+
     $email = $request->input('email');
     $password = $request->input('password');
 
-	// $response = Http::withHeaders([
-	// 	'Content-Type' => 'application/x-www-form-urlencoded'
-	// ])->post('https://emailidea.biz/api/AddBulkContacts', [
-	// 	'ApiKey' => '687c378dba3d4f0f88c5840d8bcaa46f',
-	// 	'EmailGroupId' => '123456',
-	// 	'ContactsJson' => "[{'ud_User_Id':1234,'EmailAddress':'xy@yopmail.com','ApiKey':'687c378dba3d4f0f88c5840d8bcaa46f'},{'ud_User_Id':1234,'EmailAddress':'xy1@yopmail.com','ApiKey':'687c378dba3d4f0f88c5840d8bcaa46f'}]",
-	// ]);
+	$client = new Client();
+    $crawler = $client->request('GET', 'https://emailidea.biz/Login.aspx');
+    
+    $form = $crawler->selectButton('Login')->form();
+    $form['txtEmailAddress'] = $email;
+    $form['txtpass'] = $password;
+    $crawler = $client->submit($form);
 
-	// echo $response->body();
-	$userData = $request->input('email');
-	return response()->json($userData);
+    $user_name = $crawler->filter('#topNavbar_lblUserFullName')->text();
 
+    if($user_name) {
+        $exp_validity = $crawler->filter('#cphMain_BreadCrumb_lblValidity')->text();
+        $current_email_balance = $crawler->filter('#cphMain_BreadCrumb_lblEmailBalance')->text();
+
+        DB::table('email_bulk')->delete();
+
+        DB::table('email_bulk')->insert([
+            'email' => $email,
+            'user_name' => $user_name,
+            'expired_date' => $exp_validity,
+            'email_balance' => $current_email_balance,
+            'user_id' => Auth::user()->id,
+        ]);
+
+	    return response()->json($user_name);
+    }
+    
+    return response()->json(['error' => 'Somthing wrong.'], 404);
 }
 
 public function integrationemailsendmailform (){

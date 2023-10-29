@@ -192,17 +192,11 @@
                                     <span class="input-group-text">Company Logo</span>
                                     <input
                                         name="file"
-                                        class="form-control @error('logo') is-invalid @enderror"
                                         type="file"
                                         style="margin-left: 5px;"
                                         placeholder="Logo"
                                         accept="image/png, image/jpeg"
                                     />
-                                    @error('logo')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
