@@ -23,6 +23,7 @@
                                 <table class="display" id="userTable">
                                     <thead>
                                         <tr>
+                                            <th>Id</th>
                                             <th>First Name</th>
                                             <th>Last Name</th>
                                             <th>Email</th>
@@ -39,7 +40,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -55,26 +55,100 @@
                     <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
                         <input type="hidden" name="this_data_id" id="this_data_id">
                         <div class="row">
-                            <div class="form-group col-md-3 m-b-20">
-                                <input class="form-control" name="first_name" id="first_name" type="text"
-                                    autocomplete="off" placeholder="Name">
-                            </div>
-
-                            <div class="form-group col-md-3 m-b-20">
-                                <input class="form-control" name="last_name" id="last_name" type="text"
-                                    autocomplete="off" placeholder="Last Name">
-                            </div>
-
-
                             <div class="form-group col-md-4 m-b-20">
-                                <input class="form-control" name="email" id="email" type="text" autocomplete="off"
-                                    placeholder="Email">
+                                <div class="fname">
+                                    <input
+                                        class="form-control"
+                                        name="first_name"
+                                        id="first_name"
+                                        type="text"
+                                        autocomplete="off"
+                                        placeholder="Name"
+                                    >
+                                </div>
                             </div>
+                            <div class="form-group col-md-4 m-b-20">
+                                <div class="fname">
+                                    <input
+                                        class="form-control"
+                                        name="last_name"
+                                        id="last_name"
+                                        type="text"
+                                        autocomplete="off"
+                                        placeholder="Last Name"
+                                    >
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 m-b-20">
+                                <div class="fname">
+                                    <input
+                                        class="form-control"
+                                        name="email"
+                                        id="email"
+                                        style="text-transform: none !important;"
+                                        type="text"
+                                        autocomplete="off"
+                                        placeholder="Email"
+                                    >
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4 m-b-20">
+                                <div class="fname">
+                                    <input
+                                        class="form-control"
+                                        name="password"
+                                        id="password"
+                                        type="text"
+                                        autocomplete="off"
+                                        placeholder="Password"
+                                    >
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="card bg-white" style="border-style: groove;">
+                                    <div class="card-body shadow-none">
+                                        <h6 class="text-center">Total Property</h6>
+                                        <h5 class="text-center mt-3">15</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card bg-white" style="border-style: groove;">
+                                    <div class="card-body shadow-none">
+                                        <h6 class="text-center">Total Project</h6>
+                                        <h5 class="text-center mt-3">25</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="card bg-white" style="border-style: groove;">
+                                    <div class="card-body shadow-none">
+                                        <h6 class="text-center">Total Inquiry</h6>
+                                        <h5 class="text-center mt-3">45</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div class="form-group col-md-3 m-b-20">
-                                <input class="form-control" name="password" id="password" type="text" autocomplete="off"
-                                    placeholder="Password">
+                        <div class="row mb-3" id="user_table">
+                            <h4 class="text-center">Sub Users</h4>
+                            <div class="col p-2">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="user_data">                                     
+
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
@@ -108,7 +182,12 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('superadmin.users') }}",
-                columns: [{
+                columns: [
+                    {
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
                         data: 'first_name',
                         name: 'first_name'
                     },
@@ -169,12 +248,34 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
-                    dataa = JSON.parse(data);
-                    $('#this_data_id').val(dataa.id)
-                    $('#first_name').val(dataa.first_name)
-                    $('#last_name').val(dataa.last_name)
-                    $('#email').val(dataa.email)
+
+                    $('#this_data_id').val(data.main_user.id)
+                    $('#first_name').val(data.main_user.first_name)
+                    $('#last_name').val(data.main_user.last_name)
+                    $('#email').val(data.main_user.email)
                     $('#userModal').modal('show');
+
+                    let table = document.getElementById('user_table');
+                    let table_data = document.getElementById('user_data');
+
+                    if(data.sub_user.length > 0 ) {
+                        table.classList.remove('d-none');
+
+                        table_data.innerHTML = '';
+
+                        data.sub_user.forEach((user) => {
+                            table_data.innerHTML += `<tr>
+                                <td>${user.first_name}</td>
+                                <td>${user.last_name}</td>
+                                <td>${user.email}</td>
+                                <td>${user.mobile_number}</td>
+                            </tr>`;
+                        });
+
+                    } else {
+                        table.classList.add('d-none');
+                        table_data.innerHTML = '';
+                    }
                 }
             });
         }

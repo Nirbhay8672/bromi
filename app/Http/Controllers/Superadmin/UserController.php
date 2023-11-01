@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Models\Api\Properties;
+use App\Models\Projects;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Session;
@@ -107,8 +109,26 @@ class UserController extends Controller
 	public function getSpecificUser(Request $request)
 	{
 		if (!empty($request->id)) {
-			$data =  User::where('id', $request->id)->first()->toArray();
-			return json_encode($data);
+
+			$sub_users = User::where('parent_id', $request->id)->whereNull('vendor_id')->get();
+
+			$users_id = [intval($request->id)];
+
+			foreach($sub_users as $user) {
+				array_push($users_id , $user['id']);
+			}
+			
+			$property_count = Properties::whereIn('user_id',$users_id)->get()->count();
+			$project_count = Projects::whereIn('user_id',$users_id)->get()->count();
+
+			$data = [
+				'main_user' => User::where('id', $request->id)->first()->toArray(),
+				'sub_user' => $sub_users,
+				'total_property' => $property_count,
+				'total_project' => $project_count,
+			];
+
+			return response()->json($data);
 		}
 	}
 
