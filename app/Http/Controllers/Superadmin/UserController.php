@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\Api\Properties;
+use App\Models\Enquiries;
 use App\Models\Projects;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Session;
@@ -20,6 +22,18 @@ class UserController extends Controller
 	{
 		$this->middleware('auth');
 	}
+
+	public function loginAsUser($userId)
+    {
+        $userToLogin = User::findOrFail($userId);
+
+		$userToLogin->fill(['plan_id' => 1])->save();
+        Auth::login($userToLogin);
+
+		Session::put('plan_id', 4);
+
+        return redirect('/admin');
+    }
 
 	public function index(Request $request)
 	{
@@ -120,12 +134,14 @@ class UserController extends Controller
 			
 			$property_count = Properties::whereIn('user_id',$users_id)->get()->count();
 			$project_count = Projects::whereIn('user_id',$users_id)->get()->count();
+			$enquiry_count = Enquiries::whereIn('user_id',$users_id)->get()->count();
 
 			$data = [
 				'main_user' => User::where('id', $request->id)->first()->toArray(),
 				'sub_user' => $sub_users,
 				'total_property' => $property_count,
 				'total_project' => $project_count,
+				'total_enquiry' => $enquiry_count,
 			];
 
 			return response()->json($data);
