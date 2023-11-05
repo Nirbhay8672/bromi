@@ -93,6 +93,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/add_projects', [App\Http\Controllers\Api\ProjectsController::class, 'saveProject']);
     Route::post('/update_projects', [App\Http\Controllers\Api\ProjectsController::class, 'saveProject']);
 
+    // Add projects in steps
+    Route::post('projects/step1', [App\Http\Controllers\Api\ProjectsController::class, 'createProjectStep1']);
+    Route::patch('projects/step2/{project}', [App\Http\Controllers\Api\ProjectsController::class, 'createProjectStep2']);
+    Route::post('projects/step3/{project}', [App\Http\Controllers\Api\ProjectsController::class, 'createProjectStep3']);
+
     //Report
     Route::any('/employee-audit-log', [App\Http\Controllers\Api\ReportsController::class, 'EmployeeAuditLog']);
     Route::any('/employee-by-enquiry', [App\Http\Controllers\Api\ReportsController::class, 'EmployeeByEnquiry']);
