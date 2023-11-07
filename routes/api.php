@@ -79,12 +79,27 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
 
+
     //Enquiry
     Route::get('/list_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'index']);
     Route::post('/add_Inquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'saveEnquiry']);
     Route::post('/update_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'saveEnquiry']);
-    Route::get('/show_enquiry/{id}', [App\Http\Controllers\Api\EnquiriesController::class, 'show']);
-    Route::get('/delete_enquiry/{id}', [App\Http\Controllers\Api\EnquiriesController::class, 'destory']);
+    Route::Post('/show_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'show']);
+    Route::post('/delete_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'destory']);
+    Route::post('/filter_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'filterEnquiry']);
+    Route::post('/import_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'importEnquiry']);
+    Route::post('/export_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'exportEnquiry']);
+    Route::post('/matching_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'matchingEnquiry']);
+    Route::post('/prograss_list_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'listPrograss']);
+    Route::post('/add_transfer_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'transferEnquiry']);
+    Route::post('/transfer_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'listTransferEnquiry']);
+    Route::post('/get_contact_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'getContacts']);
+    Route::post('/add_contact_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'saveContacts']);
+    
+    Route::post('enquiry-step-one', [App\Http\Controllers\Api\EnquiriesController::class, 'step1']);
+    Route::post('enquiry-step-two', [App\Http\Controllers\Api\EnquiriesController::class, 'step2']);
+    Route::post('enquiry-step-three', [App\Http\Controllers\Api\EnquiriesController::class, 'step3']);
+ 
 
     //Project
     Route::get('/Projects', [App\Http\Controllers\Api\ProjectsController::class, 'index']);
@@ -97,6 +112,81 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('projects/step1', [App\Http\Controllers\Api\ProjectsController::class, 'createProjectStep1']);
     Route::patch('projects/step2/{project}', [App\Http\Controllers\Api\ProjectsController::class, 'createProjectStep2']);
     Route::post('projects/step3/{project}', [App\Http\Controllers\Api\ProjectsController::class, 'createProjectStep3']);
+
+    
+    //Setting
+    Route::group(['prefix' => 'setting'], function () {
+    
+        Route::get('/list_state', [App\Http\Controllers\Api\SettingsController::class, 'getstate']);
+        Route::post('/add_state', [App\Http\Controllers\Api\SettingsController::class, 'addState']);
+        Route::post('/delete_state', [App\Http\Controllers\Api\SettingsController::class, 'destroyState']);
+    
+        Route::get('/list_city', [App\Http\Controllers\Api\SettingsController::class, 'getcity']);
+        Route::post('/add_city', [App\Http\Controllers\Api\SettingsController::class, 'addcity']);
+        Route::post('/delete_city', [App\Http\Controllers\Api\SettingsController::class, 'destroycity']);
+    
+        Route::get('/list_area', [App\Http\Controllers\Api\SettingsController::class, 'areaList']);
+        Route::post('/add_area', [App\Http\Controllers\Api\SettingsController::class, 'areaAdd']);
+        Route::post('/delete_area', [App\Http\Controllers\Api\SettingsController::class, 'areaDestroy']);
+
+        Route::get('/list_village', [App\Http\Controllers\Api\SettingsController::class, 'villageList']);
+        Route::post('/add_village', [App\Http\Controllers\Api\SettingsController::class, 'villageAdd']);
+        Route::post('/delete_village', [App\Http\Controllers\Api\SettingsController::class, 'villageDestroy']);
+
+
+        Route::get('/list_district', [App\Http\Controllers\Api\SettingsController::class, 'districtList']);
+        Route::post('/add_district', [App\Http\Controllers\Api\SettingsController::class, 'districtAdd']);
+        Route::post('/delete_district', [App\Http\Controllers\Api\SettingsController::class, 'districtDestroy']);
+    
+        Route::get('/list_taluka', [App\Http\Controllers\Api\SettingsController::class, 'talukaList']);
+        Route::post('/add_taluka', [App\Http\Controllers\Api\SettingsController::class, 'talukaAdd']);
+        Route::post('/delete_taluka', [App\Http\Controllers\Api\SettingsController::class, 'talukaDestroy']);
+    
+        Route::get('/list_builder', [App\Http\Controllers\Api\SettingsController::class, 'builder_index']);
+        Route::post('/add_builder', [App\Http\Controllers\Api\SettingsController::class, 'builder_store']);
+        Route::post('/delete_builder', [App\Http\Controllers\Api\SettingsController::class, 'builder_destroy']);
+    
+        Route::get('/property_configuration', [App\Http\Controllers\Api\SettingsController::class, 'property_configuration']);
+        Route::post('/add_property_configration/{id}', [App\Http\Controllers\Api\SettingsController::class, 'add_configuration']);
+        Route::get('/delete_property_configuration', [App\Http\Controllers\Api\SettingsController::class, 'delete_configuration']);
+
+        Route::get('/building_configuration', [App\Http\Controllers\Api\SettingsController::class, 'building_configuration']);
+        Route::post('/add_building_configration/{id}', [App\Http\Controllers\Api\SettingsController::class, 'add_configuration']);
+        Route::get('/delete_building_configuration', [App\Http\Controllers\Api\SettingsController::class, 'delete_configuration']);
+
+        Route::get('/enquiry_configuration', [App\Http\Controllers\Api\SettingsController::class, 'enquiry_configuration']);
+        Route::post('/add_enquiry_configration/{id}', [App\Http\Controllers\Api\SettingsController::class, 'add_configuration']);
+        Route::get('/delete_enquiry_configuration', [App\Http\Controllers\Api\SettingsController::class, 'delete_configuration']);
+
+        //invoice
+        Route::post('/add_invoice', [App\Http\Controllers\Api\SettingsController::class, 'addInvoice']);
+        //Cards
+        Route::get('/cards', [App\Http\Controllers\Api\SettingsController::class, 'Cards']);
+
+      
+    
+       
+    });
+
+     //Branchs Rout
+	Route::any('/Branches', [App\Http\Controllers\Api\BranchesController::class, 'index']);
+    Route::post('/get-branch', [App\Http\Controllers\Api\BranchesController::class, 'getSpecificBranch']);
+    Route::post('/save-branch', [App\Http\Controllers\Api\BranchesController::class, 'saveBranch']);
+    Route::post('/delete-branch', [App\Http\Controllers\Api\BranchesController::class, 'destroy']);
+//user Route	
+    Route::get('/list_user', [App\Http\Controllers\Api\UserController::class, 'user_index']);
+    Route::post('/add_user', [App\Http\Controllers\Api\UserController::class, 'saveUser']);
+    Route::post('/delete_user', [App\Http\Controllers\Api\UserController::class, 'user_destroy']);
+
+    //Role
+    Route::post('/add_role', [App\Http\Controllers\Api\UserController::class, 'saveRole']);
+    Route::get('/role_list', [App\Http\Controllers\Api\UserController::class, 'roleList']);
+    Route::post('/delete_role', [App\Http\Controllers\Api\UserController::class, 'destroyRole']);
+
+    //profile
+    Route::post('/user_profile', [App\Http\Controllers\Api\UserController::class, 'ProfileDetails']);
+    Route::post('/edit_profile1', [App\Http\Controllers\Api\UserController::class, 'chnageProfile']);
+    Route::post('/changepassword1', [App\Http\Controllers\Api\UserController::class, 'chnagePassword']);
 
     //Report
     Route::any('/employee-audit-log', [App\Http\Controllers\Api\ReportsController::class, 'EmployeeAuditLog']);
