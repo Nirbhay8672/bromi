@@ -11,6 +11,7 @@ use App\Http\Controllers\Superadmin\UserController;
 use App\Http\Controllers\Superadmin\TicketsController;
 use App\Http\Controllers\Superadmin\CommentsController;
 use App\Http\Controllers\Superadmin\ProjectsController;
+use App\Http\Controllers\Superadmin\SuperTalukaController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -27,10 +28,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'revalidate'], function () {
 
-	Route::get('optimize_clear', function(){
+	Route::get('optimize_clear', function () {
 		return Artisan::call('optimize:clear');
 	});
-	Route::get('optimize', function(){
+	Route::get('optimize', function () {
 		return Artisan::call('optimize');
 	});
 
@@ -59,7 +60,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/save-tpimages', [HomeController::class, 'saveTpImages'])->name('superadmin.TpImages');
 		Route::post('/change-user-status', [UserController::class, 'changeStatus'])->name('superadmin.changeUserStatus');
 		Route::any('/Rera', [ReraController::class, 'index'])->name('superadmin.rera');
-		
+
 		// project routes
 		Route::any('/superadmin/Projects', [ProjectsController::class, 'projects'])->name('superadmin.projects');
 		Route::get('/superadmin/project/add', [ProjectsController::class, 'addproject'])->name('superadmin.project.add');
@@ -86,7 +87,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/email-template/update/{id}', [EmailTemplateController::class, 'update'])->name('superadmin.email.update');
 		Route::post('/email-template/delete/{id}', [EmailTemplateController::class, 'destroy'])->name('superadmin.email.delete');
 		Route::post('/email-template/show/{id}', [EmailTemplateController::class, 'show'])->name('superadmin.email.show');
-		
+
 		Route::get('/sms-template', [EmailTemplateController::class, 'smsindex'])->name('superadmin.sms.index');
 		Route::get('/sms-template/create', [EmailTemplateController::class, 'smscreate'])->name('superadmin.sms.create');
 		Route::post('/sms-template/store', [EmailTemplateController::class, 'smsstore'])->name('superadmin.sms.store');
@@ -94,11 +95,16 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/sms-template/update/{id}', [EmailTemplateController::class, 'smsupdate'])->name('superadmin.sms.update');
 		Route::post('/sms-template/delete/{id}', [EmailTemplateController::class, 'smsdestroy'])->name('superadmin.sms.delete');
 		Route::post('/sms-template/show/{id}', [EmailTemplateController::class, 'smsshow'])->name('superadmin.sms.show');
-	
-		
-		Route::any('tickets', [TicketsController :: class,'index'])->name('superadmin.tickets');
-		Route::any('close_ticket/{ticket_id}', [TicketsController :: class,'close']);
-		Route::any('tickets/{ticket_id}', [TicketsController :: class,'show']);
-		 Route::any('comment', [CommentsController:: class,'postComment'])->name('superadmin.comment');
+
+
+		Route::any('tickets', [TicketsController::class, 'index'])->name('superadmin.tickets');
+		Route::any('close_ticket/{ticket_id}', [TicketsController::class, 'close']);
+		Route::any('tickets/{ticket_id}', [TicketsController::class, 'show']);
+		Route::any('comment', [CommentsController::class, 'postComment'])->name('superadmin.comment');
+
+		Route::get('/settings-taluka', [SuperTalukaController::class, 'index'])->name('superadmin.settings.taluka');
+		Route::post('/settings-save-taluka', [SuperTalukaController::class, 'store'])->name('superadmin.settings.savetaluka');
+		Route::post('/settings-edit-taluka', [SuperTalukaController::class, 'details'])->name('superadmin.settings.talukaDetails');
+		Route::post('/settings-delete-taluka', [SuperTalukaController::class, 'talukas_destroy'])->name('superadmin.settings.deletetaluka');
 	});
 });
