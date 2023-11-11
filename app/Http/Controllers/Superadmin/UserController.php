@@ -24,16 +24,16 @@ class UserController extends Controller
 	}
 
 	public function loginAsUser($userId)
-    {
-        $userToLogin = User::findOrFail($userId);
+	{
+		$userToLogin = User::findOrFail($userId);
 
 		$userToLogin->fill(['plan_id' => 1])->save();
-        Auth::login($userToLogin);
+		Auth::login($userToLogin);
 
 		Session::put('plan_id', 4);
 
-        return redirect('/admin');
-    }
+		return redirect('/admin');
+	}
 
 	public function index(Request $request)
 	{
@@ -86,18 +86,15 @@ class UserController extends Controller
 	{
 		if (!empty($request->id) && $request->id != '') {
 			$data = User::find($request->id);
-			if (!empty($data)) {
-				$data =  new User();
-				$data->first_name = $request->first_name;
-				$data->last_name = $request->last_name;
-				$data->email = $request->email;
-				if (!empty($request->password)) {
-					$data->password = Hash::make($request->password);
-				}
-				$data->status = 1;
-				$data->role_id = 1;
-				$data->save();
+			$data->first_name = $request->first_name;
+			$data->last_name = $request->last_name;
+			$data->email = $request->email;
+			if (!empty($request->password)) {
+				$data->password = Hash::make($request->password);
 			}
+			$data->status = 1;
+			$data->role_id = 1;
+			$data->save();
 		} else {
 			$data =  new User();
 			$data->first_name = $request->first_name;
@@ -128,13 +125,13 @@ class UserController extends Controller
 
 			$users_id = [intval($request->id)];
 
-			foreach($sub_users as $user) {
-				array_push($users_id , $user['id']);
+			foreach ($sub_users as $user) {
+				array_push($users_id, $user['id']);
 			}
-			
-			$property_count = Properties::whereIn('user_id',$users_id)->get()->count();
-			$project_count = Projects::whereIn('user_id',$users_id)->get()->count();
-			$enquiry_count = Enquiries::whereIn('user_id',$users_id)->get()->count();
+
+			$property_count = Properties::whereIn('user_id', $users_id)->get()->count();
+			$project_count = Projects::whereIn('user_id', $users_id)->get()->count();
+			$enquiry_count = Enquiries::whereIn('user_id', $users_id)->get()->count();
 
 			$data = [
 				'main_user' => User::where('id', $request->id)->first()->toArray(),
