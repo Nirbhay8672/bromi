@@ -12,6 +12,7 @@ use App\Http\Controllers\Superadmin\TicketsController;
 use App\Http\Controllers\Superadmin\CommentsController;
 use App\Http\Controllers\Superadmin\ProjectsController;
 use App\Http\Controllers\Superadmin\SuperTalukaController;
+use App\Http\Controllers\Superadmin\SuperVillageController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -106,5 +107,10 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/settings-save-taluka', [SuperTalukaController::class, 'store'])->name('superadmin.settings.savetaluka');
 		Route::post('/settings-edit-taluka', [SuperTalukaController::class, 'details'])->name('superadmin.settings.talukaDetails');
 		Route::post('/settings-delete-taluka', [SuperTalukaController::class, 'talukas_destroy'])->name('superadmin.settings.deletetaluka');
+
+		Route::get('/settings-village', [SuperVillageController::class, 'village_index'])->name('superadmin.settings.village');
+		Route::post('/settings-get-village', [SuperVillageController::class, 'get_village'])->name('superadmin.settings.getvillage');
+		Route::post('/settings-save-village', [SuperVillageController::class, 'village_store'])->name('superadmin.settings.saveVillage');
+		Route::post('/settings-delete-village', [SuperVillageController::class, 'village_delete'])->name('superadmin.settings.deletevillage');
 	});
 });
