@@ -22,7 +22,6 @@
                             <table class="display" id="userTable">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Email</th>
@@ -158,10 +157,6 @@
             serverSide: true,
             ajax: "{{ route('superadmin.users') }}",
             columns: [{
-                    data: 'id',
-                    name: 'id'
-                },
-                {
                     data: 'first_name',
                     name: 'first_name'
                 },
