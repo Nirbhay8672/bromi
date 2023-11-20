@@ -609,14 +609,14 @@
                                         <input class="form-check-input" id="filter_new_enquiry" type="checkbox">
                                         <label class="form-check-label" for="filter_new_enquiry">New Enquiry</label>
                                     </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_draft" type="checkbox">
                                         <label class="form-check-label" for="filter_draft">Draft Enquiry</label>
-                                    </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    </div> --}}
+                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_prospect" type="checkbox">
                                         <label class="form-check-label" for="filter_prospect">Potential Prospect</label>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <button class="btn btn-secondary" id="filtersearch">Filter</button>
@@ -1035,6 +1035,10 @@
                                         <input class="form-check-input" checked id="match_specific_type" type="checkbox">
                                         <label class="form-check-label" for="match_specific_type">Enquiry Category</label>
                                     </div>
+									<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                        <input class="form-check-input" checked id="match_specific_sub_type" type="checkbox">
+                                        <label class="form-check-label" for="match_specific_sub_type">Enquiry Sub Category</label>
+                                    </div>
                                     {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
                                         <input class="form-check-input" id="match_building" type="checkbox">
                                         <label class="form-check-label" for="match_building">Project</label>
@@ -1099,6 +1103,7 @@
         $matchEnquiryFor = isset($_GET['match_enquiry_for']) ? $_GET['match_enquiry_for'] : null;
         $matchPropertyType = isset($_GET['match_property_type']) ? $_GET['match_property_type'] : null;
         $matchSpecificType = isset($_GET['match_specific_type']) ? $_GET['match_specific_type'] : null;
+        $matchSpecificSubType = isset($_GET['match_specific_sub_type']) ? $_GET['match_specific_sub_type'] : null;
         $matchBudgetType = isset($_GET['match_budget_from_type']) ? $_GET['match_budget_from_type'] : null;
         $matchEnqSize = isset($_GET['match_enquiry_size']) ? $_GET['match_enquiry_size'] : null;
         $matchEnqSource = isset($_GET['match_inquiry_source']) ? $_GET['match_inquiry_source'] : null;
@@ -1149,7 +1154,8 @@
                 $('#match_enquiry_for').prop('checked', <?= $matchEnquiryFor === '1' ? 'true' : 'false' ?>);
                 $('#match_property_type').prop('checked', <?= $matchPropertyType === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_type').prop('checked', <?= $matchSpecificType === '1' ? 'true' : 'false' ?>);
-                $('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
+                $('#match_specific_sub_type').prop('checked', <?= $matchSpecificSubType === '1' ? 'true' : 'false' ?>);
+				$('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
                 $('#match_enquiry_size').prop('checked', <?= $matchEnqSize === '1' ? 'true' : 'false' ?>);
                 $('#match_inquiry_source').prop('checked', <?= $matchEnqSource === '1' ? 'true' : 'false' ?>);
 
@@ -1278,6 +1284,7 @@
                     match_enquiry_for: $('#match_enquiry_for').prop('checked') ? 1 : 0,
                     match_property_type: $('#match_property_type').prop('checked') ? 1 : 0,
                     match_specific_type: $('#match_specific_type').prop('checked') ? 1 : 0,
+                    match_specific_sub_type: $('#match_specific_sub_type').prop('checked') ? 1 : 0,
                     match_budget_from_type: $('#match_budget_from_type').prop('checked') ? 1 : 0,
                     match_enquiry_size: $('#match_enquiry_size').prop('checked') ? 1 : 0,
                     match_inquiry_source: $('#match_inquiry_source').prop('checked') ? 1 : 0,
@@ -1414,13 +1421,14 @@
                             d.filter_to_budget = $('#filter_to_budget').val();
                             d.filter_favourite = Number($('#filter_favourite').prop('checked'));
                             d.filter_new_enquiry = Number($('#filter_new_enquiry').prop('checked'));
-                            d.filter_draft = Number($('#filter_draft').prop('checked'));
-                            d.filter_prospect = Number($('#filter_prospect').prop('checked'));
+                            // d.filter_draft = Number($('#filter_draft').prop('checked'));
+                            // d.filter_prospect = Number($('#filter_prospect').prop('checked'));
                             d.go_data_id = go_data_id;
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
-                            d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
+                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop('checked'));
+							d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
                             d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
                             d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
                             // d.match_budget_to_type = Number($('#match_budget_to_type').prop('checked'));
@@ -2258,7 +2266,7 @@
                         return true;
                     }
                 }
-            }, 'Budget To Must be greater than budget from');
+            }, 'Budget To Must be greater than budget from hereeee');
 
             $.validator.addMethod("checkArea", function(value, element) {
                 val2 = $('#area_size_from').val()

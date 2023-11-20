@@ -87,8 +87,8 @@ class UserController extends Controller
 				->rawColumns(['Actions','status','email'])
 				->make(true);
 		}
-		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$cities = City::orderBy('name')->get();
+		$states = State::orderBy('name')->get();
 		$projects = Projects::get();
 		$property_configuration_settings = DropdownSettings::get()->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
@@ -165,8 +165,8 @@ class UserController extends Controller
 	public function addUser(Request $request){
 
 
-		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$cities = City::orderBy('name')->get();
+		$states = State::orderBy('name')->get();
 		$projects = Projects::get();
 		$property_configuration_settings = DropdownSettings::get()->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
@@ -176,10 +176,11 @@ class UserController extends Controller
 		return view('admin.users.add_user', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches'));
 	}
 
-	public function editUser(Request $request)
-	{
-		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+	public function editUser(Request $request){
+
+
+		$cities = City::orderBy('name')->get();
+		$states = State::orderBy('name')->get();
 		$projects = Projects::get();
 		$property_configuration_settings = DropdownSettings::get()->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();

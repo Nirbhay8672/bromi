@@ -169,13 +169,13 @@
                                                             <h5 class="border-style">Remarks</h5>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_5">
-                                                            <h6><b>Telephonic Discussion:</b></h6>
+                                                            <h6><b>Remarks</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_5">
                                                             <div>: {{ $data->telephonic_discussion }}</div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_6">
-                                                            <h6><b>Highligths:</b></h6>
+                                                            <h6><b>Remarks</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_6">
                                                             <div>: {{ $data->highlights }}</div>
@@ -205,22 +205,25 @@
                                                         <div class="form-group col-8 m-b-10 data_conent_8">
                                                             <div>: {{ $prop_type }}</div>
                                                         </div>
+                                                        @if (!@empty($configuration_name))
                                                         <div class="form-group col-4 m-b-10 data_conent_10">
                                                             <h6><b>Sub category</b></h6>
                                                         </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_10">
-                                                            <div>:
-                                                                @foreach ($configuration_name as $configuration)
+                                                            <div class="form-group col-8 m-b-10 data_conent_10">
+                                                                <div>:
+                                                                    @foreach ($configuration_name as $configuration)
                                                                     {{ $configuration }},
-                                                                @endforeach
+                                                                    @endforeach
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        @endif
+
                                                         <div class="form-group col-4 m-b-10 data_conent_11">
-                                                            <h6><b>Area:</b></h6>
+                                                            <h6><b>Area</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_11">
                                                             <div>:
-                                                                {{ $data->area_from . ' ' . (isset($dropdowns[$data->area_from_measurement]['name']) ? $dropdowns[$data->area_from_measurement]['name'] . ' to' : '') }}
+                                                                {{ $data->area_from . ' to' }}
 
                                                                 {{ $data->area_to . ' ' . (isset($dropdowns[$data->area_to_measurement]['name']) ? $dropdowns[$data->area_to_measurement]['name'] : '') }}
                                                             </div>
@@ -241,6 +244,8 @@
                                                             <div>: {{ $furnished }}</div>
                                                         </div>
 
+
+
                                                         <div class="form-group col-4 m-b-10 data_conent_14">
                                                             <h6><b>Budget</b></h6>
                                                         </div>
@@ -258,45 +263,65 @@
                                                             <div>: {{ $data->purpose }}</div>
                                                         </div>
 
-                                                        <div class="form-group col-4 m-b-10 data_conent_16">
-                                                            <h6><b>Building</b></h6>
-                                                        </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_16">
-                                                            <div>: {{ $project_name }}</div>
-                                                        </div>
+                                                        @if (!empty($project_name))
+                                                            <div class="form-group col-4 m-b-10 data_conent_16">
+                                                                <h6><b>Building</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_16">
+                                                                <div>: {{ $project_name }}</div>
+                                                            </div>
+                                                        @endif
 
                                                         <div class="form-group col-4 m-b-10 data_conent_17">
                                                             <h6><b>Status</b></h6>
                                                         </div>
-
                                                         <div class="form-group col-8 m-b-10 data_conent_17">
                                                             <div>: {{ $data->enquiry_status ? 'Active' : 'In Active' }}
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group col-4 m-b-10 data_conent_18">
-                                                            <h6><b>Project Status</b></h6>
-                                                        </div>
 
-                                                        <div class="form-group col-8 m-b-10 data_conent_18">
-                                                            <div>:
-                                                                {{ isset($dropdowns[$data->project_status]['name']) ? $dropdowns[$data->project_status]['name'] : '' }}
+
+                                                        @if (!empty($dropdowns[$data->project_status]['name']))
+                                                            <div class="form-group col-4 m-b-10 data_conent_18">
+                                                                <h6><b>Project Status</b></h6>
                                                             </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_18">
+                                                                <div>:
+                                                                    {{ isset($dropdowns[$data->project_status]['name']) ? $dropdowns[$data->project_status]['name'] : '' }}
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
+                                                        @if (!empty($area_name))
+                                                            <div class="form-group col-4 m-b-10 data_conent_19">
+                                                                <h6><b>Locality</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_19">
+                                                                <div>: {{ $area_name }}</div>
+                                                            </div>
+                                                        @endif
+                                                        @if (!empty($data->is_preleased))
+                                                            <div class="form-group col-4 m-b-10 data_conent_20">
+                                                                <h6><b>Pre-leased</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_20">
+                                                                <div>: {{ $data->is_preleased ? 'Yes' : 'No' }}</div>
+                                                            </div>
+                                                        @endif
+
+                                                        <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Created Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d', strtotime($data->created_at)) }}</div>
                                                         </div>
 
-                                                        <div class="form-group col-4 m-b-10 data_conent_19">
-                                                            <h6><b>Locality</b></h6>
+                                                        <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Last Modified Date</b></h6>
                                                         </div>
-
-                                                        <div class="form-group col-8 m-b-10 data_conent_19">
-                                                            <div>: {{ $area_name }}</div>
-                                                        </div>
-
-                                                        <div class="form-group col-4 m-b-10 data_conent_20">
-                                                            <h6><b>Pre-leased</b></h6>
-                                                        </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_20">
-                                                            <div>: {{ $data->is_preleased ? 'Yes' : 'No' }}</div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d', strtotime($data->updated_at)) }}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -577,7 +602,7 @@
                                                             <h5 class="border-style">Remarks</h5>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_25">
-                                                            <h6><b>Telephonic Discussion:</b></h6>
+                                                            <h6><b>Telephonic Discussion</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_25">
                                                             <div>: {{ $data->telephonic_discussion }}</div>
@@ -613,22 +638,24 @@
                                                         <div class="form-group col-8 m-b-10 data_conent_28">
                                                             <div>: {{ $prop_type }}</div>
                                                         </div>
+                                                        @if (!@empty($configuration_name))
                                                         <div class="form-group col-4 m-b-10 data_conent_30">
                                                             <h6><b>Sub category</b></h6>
                                                         </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_10">
-                                                            <div>:
-                                                                @foreach ($configuration_name as $configuration)
+                                                            <div class="form-group col-8 m-b-10 data_conent_10">
+                                                                <div>:
+                                                                    @foreach ($configuration_name as $configuration)
                                                                     {{ $configuration }},
-                                                                @endforeach
+                                                                    @endforeach
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        @endif
                                                         <div class="form-group col-4 m-b-10 data_conent_31">
                                                             <h6><b>Area:</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_31">
                                                             <div>:
-                                                                {{ $data->area_from . ' ' . (isset($dropdowns[$data->area_from_measurement]['name']) ? $dropdowns[$data->area_from_measurement]['name'] : '') }}
+                                                                {{ $data->area_from }}
                                                                 to
                                                                 {{ $data->area_to . ' ' . (isset($dropdowns[$data->area_to_measurement]['name']) ? $dropdowns[$data->area_to_measurement]['name'] : '') }}
                                                             </div>

@@ -13,7 +13,7 @@ use Spatie\Activitylog\Models\Activity;
 class Areas extends Model
 {
 	use HasFactory;
-    use SoftDeletes;
+	use SoftDeletes;
 	use LogsActivity;
 
 	protected static $recordEvents = ['created', 'updated', 'deleted'];
@@ -49,5 +49,4 @@ class Areas extends Model
 	{
 		return $this->belongsTo(State::class, 'state_id', 'id')->withTrashed();
 	}
-
 }

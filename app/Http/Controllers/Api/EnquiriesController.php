@@ -42,34 +42,12 @@ class EnquiriesController extends Controller
 		$this->middleware('auth');
 	}
 
-public function index(Request $request)
+	public function index(Request $request)
 	{
 		$perPage = $request->input('per_page', 10);
-        $Enquiry = Enquiries::where('user_id',Auth::user()->id)->get();
-		$EnquiryData=[];
-		foreach ($Enquiry as $key => $value) {
-			$EnquiryData[]=[
-				"id"=> $value->id,
-				"client_name"=> $value->client_name,
-				"enquiry_for"=> $value->enquiry_for,
-				"budget_from"=> $value->budget_from,
-				"budget_to"=> $value->budget_to,
-				"requirement"=> $value->requirement,
-				"created_at"=> $value->created_at,
-				"updated_at"=> $value->updated_at,
-			];
-			
-		}
-		
-  
-		$response = [
-			'message' => 'Enquiry list has been fetched successfully.',
-			'current_page' => 0, // Set the current page number here
-			'total_records' => $Enquiry->count(), // Set the total number of records here
-			'limit' => $perPage, // Set the limit per page here
-			'data' => $EnquiryData,
-		];
-		return response()->json($response, 200);
+        $property = Enquiries::paginate($perPage);
+		return response()->json(['status' => '200','message' => 'List of Enquiry', 'data' => $property]);
+
 	}
 
 	public function saveEnquiry(Request $request)

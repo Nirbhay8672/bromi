@@ -972,6 +972,7 @@ class EnquiriesController extends Controller
 
 	public function saveEnquiry(Request $request)
 	{
+		// dd($request->all(),"res");
 		if (!empty($request->id) && $request->id != '') {
 			$data = Enquiries::find($request->id);
 			if (empty($data)) {
@@ -1015,7 +1016,7 @@ class EnquiriesController extends Controller
 		$data->is_favourite = $request->is_favourite;
 		$data->district_id = $request->district_id;
 		$data->taluka_id = $request->taluka_id;
-		$data->village_id = $request->village_id;
+		$data->village_id = json_encode($request->village_id);
 		$data->zone_id    = isset($request->zone) ? $request->zone : NULL;
 		$data->save();
 		if (!empty($request->area_measurement)) {

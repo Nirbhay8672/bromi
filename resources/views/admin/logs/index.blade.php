@@ -75,8 +75,7 @@
                             data: 'old',
                             name: 'old'
                         },
-                    ],
-                    "order":  [[ 1, "asc"]],
+                    ]
                 });
             });
 

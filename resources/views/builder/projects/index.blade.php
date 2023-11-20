@@ -595,15 +595,9 @@
                             name: 'project_name',
                             render : function ( data, type, row, meta ) {
                                 let project_data = row;
-                                
-                                if(project_data.is_indirectly_store > 0) {
-                                    return `<span style="cursor: pointer;" title="View after fill all data">${data}</span>`;
-                                } else {
-                                    var url = '{{ route("builder.viewProject", ":id") }}';
-                                    url = url.replace(':id', project_data.id);
-                                    return `<a href="${url}">${data}</a>`;    
-                                }
-                                
+                                var url = '{{ route("builder.viewProject", ":id") }}';
+                                url = url.replace(':id', project_data.id);
+                                return `<a href="${url}">${data}</a>`;
                             }
                         },
                         {
