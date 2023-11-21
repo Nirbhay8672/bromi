@@ -322,8 +322,9 @@ $(".color-selector ul li ").on("click", function (e) {
 // custom javascript
 
 function generate_result(params, i, str) {
+	result = params[i]['address'];
 	if (str == "areas" || str == "building") {
-		 if (str == "areas") {
+		if (str == "areas") {
 			url = view_area_url + "?data_id=" + params[i]["id"];
 		}
 		result = params[i]["name"];
@@ -336,14 +337,17 @@ function generate_result(params, i, str) {
 	} else if (str == "projects") {
 		result = params[i]["project_name"];
 		url = view_projects_url + "?data_id=" + params[i]["id"];
+	} else if (str == 'properties') {
+		result = params[i]["address"];
+		url = view_properties_url + "?data_id=" + params[i]["id"];
 	} else {
 		url = "javascript:voide(0)";
 	}
 	var myvar =
 		'<div>' +
-		'	<a href="'+url+'" class="header-search-action py-2" <p class="mb-0">' +
+		'	<a href="' + url + '" class="header-search-action py-2" <p class="mb-0">' +
 		result +
-		" (" + str +")" +"</p></a>" +
+		" (" + str + ")" + "</p></a>" +
 		"</div>";
 	return myvar;
 }
@@ -375,11 +379,11 @@ function search() {
 					"areas",
 					"properties",
 				];
+				$("#result_container").html("");
 				$("#result_container").append('<p class="mb-0 mt-2"><b id="result_count">0</b> results</p>');
 				var total_result = 0;
 				for (let i = 0; i < arrs.length; i++) {
 					if (dataaa[arrs[i]] !== undefined) {
-
 						total_result = total_result + dataaa[arrs[i]].length;
 						$("#result_count").html(total_result);
 						if (dataaa[arrs[i]].length > 0) {
@@ -652,15 +656,15 @@ function setFocus() {
 
 //filter empty array
 function filtercona_arr(arr) {
-	whatreturn =  0;
+	whatreturn = 0;
 	for (let i = 0; i < arr.length; i++) {
-		if (arr[i] !== 'undefined '&& arr[i] !== undefined && arr[i] !== '' && arr[i] !== null && arr[i] !== 'null') {
+		if (arr[i] !== 'undefined ' && arr[i] !== undefined && arr[i] !== '' && arr[i] !== null && arr[i] !== 'null') {
 			str = arr[i]
-			if (typeof str === 'string' || str instanceof String){
+			if (typeof str === 'string' || str instanceof String) {
 				str = str.trim()
 			}
 			if (str != '') {
-				whatreturn =  1;
+				whatreturn = 1;
 				break;
 			}
 		}
