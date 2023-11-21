@@ -18,7 +18,6 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Mail;
 use Session;
 use App\Models\Otp;
-use Illuminate\Http\UploadedFile;
 
 class RegisterController extends Controller
 {
@@ -135,14 +134,6 @@ class RegisterController extends Controller
         return redirect('admin/login');
         //     ->with('success', 'We sent you an activation link. Check your email and click on the link to verify.');
     }
-
-    
-	public function storeFile(UploadedFile $file)
-    {
-        $path = "company_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
-        $file->storeAs("public/file_image/",$path);
-        return $path;
-    }
     
     public function storeUser(Request $request)
     {
@@ -153,14 +144,11 @@ class RegisterController extends Controller
             "mobile_number" => 'required',
             "company_name" => 'required',
             "role_id" => 'required',
-            "address" => 'required',
             "state_id" => 'required',
             "city_id" => 'required',
             "password" => 'required',
             "password_confirmation" => 'required|same:password',
         ]);
-
-        $all_user_count = count(User::all());
 
         $user = User::create(
             [   
@@ -169,20 +157,22 @@ class RegisterController extends Controller
                 'mobile_number' => $request->mobile_number,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role_id' => $all_user_count > 0 ? $request->role_id : 1,
+                'role_id' => $request->role_id,
 				'city_id' =>  $request->city_id,
 				'state_id' =>  $request->state_id,
 				'company_name' =>  $request->company_name,
-                'address' => $request->address,
-                'company_logo' => $request->file ? $this->storeFile($request->file) : '',
                 'vendor_id' => Str::random(10),
-                'is_active' => 0,
+                'plan_id' =>  4,
+                'is_active' => 1,
             ]
         );
 
         $role_name = '';
 
-        if($user->role_id != 1) {
+        if($request->role_id == 1) {
+            
+        } else {
+
             $role_name = 'Builder_---_' . $user->id;
 
             $role =  new Role();
@@ -199,45 +189,33 @@ class RegisterController extends Controller
             $user->assignRole($role->name);
             Helper::setDroddownConfigurations($user->id);
         }
-
-        $state = State::find($request->state_id);
-        $city = City::find($request->city_id);
-
-        $new_state = new State();
-        $new_state->fill([
-            'name' => $state->name,
-            'user_id' => $user->id,
-        ])->save();
-
-        $new_city = new City();
-        $new_city->fill([
-            'name' => $city->name,
-            'user_id' => $user->id,
-            'state_id' => $new_state->id,
-        ])->save();
     
-        $otp = new Otp();
-        $otp->fill([
-            'otp' => random_int(100000, 999999),
-            'user_id' => $user->id,
-        ])->save();
+        // $otp = new Otp();
+        // $otp->fill([
+        //     'otp' => random_int(100000, 999999),
+        //     'user_id' => $user->id,
+        // ])->save();
         
-        $datas = [
-            'name' => $user->first_name.' '.$user->last_name,
-            'email' => $user->email,
-            'otp' => $otp->otp,
-        ];
+        // $datas = [
+        //     'name' => $user->first_name.' '.$user->last_name,
+        //     'email' => $user->email,
+        //     'otp' => $otp->otp,
+        // ];
 
-        Mail::send('success',$datas,function($msg) use ($datas)
-        {
-			$msg->to($datas['email'],'Bromi')->subject('Registration Successfully');
-			$msg->from('hathaliyank@gmail.com','Bromi');
-        });
+        // Mail::send('success',$datas,function($msg) use ($datas)
+        // {
+		// 	$msg->to($datas['email'],'Bromi')->subject('Registration Successfully');
+		// 	$msg->from('hathaliyank@gmail.com','Bromi');
+        // });
         
-        Session::put('user_id', $user->id);
+        // Session::put('user_id', $user->id);
+
+        // if($user->exists) {
+        //     return redirect('admin/otp-form');
+        // }
 
         if($user->exists) {
-            return redirect('admin/otp-form');
+            return redirect('admin/login');
         }
     }
 }

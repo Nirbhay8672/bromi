@@ -170,7 +170,7 @@
 
                                                         <div class="form-group col-md-4 m-b-4">
                                                             <select class="form-select" id="state_id">
-                                                                <option value="" disabled selected>Select State</option>
+                                                                <option value=""> State</option>
                                                                 @foreach ($states as $state)
                                                                     <option value="{{ $state->id }}">{{ $state->name }}
                                                                     </option>
@@ -305,21 +305,19 @@
 			var cities = @Json($city_encoded);
 			var states = @Json($state_encoded);
 
-            document.getElementById('city_id').disabled = true;
-
 			$(document).on('change', '#state_id', function(e) {
-                $('#city_id').select2('destroy');
-                citiesar = JSON.parse(cities);
-                $('#city_id').html('');
-                $('#city_id').append('<option value="" disabled selected>Select City</option>');
-                for (let i = 0; i < citiesar.length; i++) {
-                    document.getElementById('city_id').disabled = false;
-                    if (citiesar[i]['state_id'] == $("#state_id").val()) {
-                        $('#city_id').append('<option value="'+citiesar[i]['id']+'">'+citiesar[i]['name']+'</option>')
-                    }
-                }
-                $('#city_id').select2();
-			});
+				if (shouldchangecity) {
+					$('#city_id').select2('destroy');
+				citiesar = JSON.parse(cities);
+				$('#city_id').html('');
+				for (let i = 0; i < citiesar.length; i++) {
+					if (citiesar[i]['state_id'] == $("#state_id").val()) {
+						$('#city_id').append('<option value="'+citiesar[i]['id']+'">'+citiesar[i]['name']+'</option>')
+					}
+				}
+				$('#city_id').select2();
+				}
+			})
 
 			var queryString = window.location.search;
 			var urlParams = new URLSearchParams(queryString);
@@ -359,8 +357,8 @@
 						$('#status').val(dataa.status).trigger('change');
 						$('#address').val(dataa.address)
 						$('#pincode').val(dataa.pincode)
+						$('#city_id').val(dataa.city_id).trigger('change');
 						$('#state_id').val(dataa.state_id).trigger('change');
-                        $('#city_id').val(dataa.city_id).trigger('change');
 						$('#mobile_number').val(dataa.mobile_number);
 						$('#office_no').val(dataa.office_no);
 						$('#email').val(dataa.email);

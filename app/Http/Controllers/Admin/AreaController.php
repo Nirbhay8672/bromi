@@ -74,9 +74,9 @@ class AreaController extends Controller
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
 						$buttons =  $buttons . '<i role="button" title="Edit" data-id="' . $row->id . '" onclick=getArea(this) class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
-				
+
 						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteArea(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
-					
+
 					return $buttons;
 				})
 				->rawColumns(['Actions','select_checkbox'])
@@ -91,7 +91,7 @@ class AreaController extends Controller
 	public function saveArea(Request $request)
 	{
 		if (!empty($request->id) && $request->id != '') {
-	
+
 			$data = Areas::find($request->id);
 			if (empty($data)) {
 				$exist = Areas::where('name',$request->name)->where('city_id',$request->city_id)->first();

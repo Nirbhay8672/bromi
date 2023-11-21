@@ -48,12 +48,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="login-card h-auto">
-                    <form
-                        class="theme-form login-form p-4"
-                        action="{{ route('admin.storeUser') }}"
-                        method="POST"
-                        enctype="multipart/form-data"
-                    >
+                    <form class="theme-form login-form p-4" method="post" action="{{ route('admin.storeUser') }}">
                         <img height="150" width="150" class="mainLogo"
                             src="{{ asset('admins/assets/images/logo/Bromi-Logo.png') }}" alt="">
                         @csrf
@@ -69,7 +64,7 @@
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input
                                         class="form-control @error('first_name') is-invalid @enderror"
-                                        value="{{ old('first_name') ?? 'Nirbhay' }}"
+                                        value="{{ old('first_name') }}"
                                         name="first_name"
                                         type="text"
                                         placeholder="First Name"
@@ -86,7 +81,7 @@
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input
                                         class="form-control @error('last_name') is-invalid @enderror"
-                                        value="{{ old('last_name') ?? 'Hathaliya' }}"
+                                        value="{{ old('last_name') }}"
                                         name="last_name"
                                         type="text"
                                         placeholder="Last Name"
@@ -104,7 +99,7 @@
                                 <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
                                     <input
                                         class="form-control @error('email') is-invalid @enderror"
-                                        value="{{ old('email') ?? 'hathaliyank@gmail.com' }}"
+                                        value="{{ old('email') }}"
                                         name="email"
                                         type="email"
                                         placeholder="E-mail Address"
@@ -121,7 +116,7 @@
                                     <i class="icon-mobile"></i></span>
                                     <input
                                         class="form-control @error('mobile_number') is-invalid @enderror"
-                                        value="{{ old('mobile_number') ?? '8200186326' }}"
+                                        value="{{ old('mobile_number') }}"
                                         name="mobile_number"
                                         type="text"
                                         placeholder="Contact Number"
@@ -139,7 +134,7 @@
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input
                                         class="form-control @error('company_name') is-invalid @enderror"
-                                        value="{{ old('company_name') ?? 'Teccel' }}"
+                                        value="{{ old('company_name') }}"
                                         name="company_name"
                                         type="text"
                                         placeholder="Company Name"
@@ -157,8 +152,8 @@
                                     name="role_id"
                                     id="role_id"
                                 >   
-                                    <option value="">Account Created For</option>
-                                    <option value="1" {{ old('role_id') == 1 ? 'selected' : '' }}>Agent</option>
+                                    <option value="">Role</option>
+                                    <option value="1" {{ old('role_id') == 1 ? 'selected' : '' }}>Aagent</option>
                                     <option value="4" {{ old('role_id') == 4 ? 'selected' : '' }}>Builder</option>
                                 </select>
                                 @error('role_id')
@@ -169,52 +164,18 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-12">
-                                <div class="input-group"><span class="input-group-text"><i class="icon-map"></i></span>
-                                    <input
-                                        name="address"
-                                        class="form-control @error('address') is-invalid @enderror"
-                                        type="text"
-                                        placeholder="Enter address"
-                                        value="{{ old('address') ?? 'Near pragati nagar garden' }}"
-                                    />
-                                    @error('address')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <div class="input-group">
-                                    <span class="input-group-text">Company Logo</span>
-                                    <input
-                                        name="file"
-                                        type="file"
-                                        style="margin-left: 5px;"
-                                        placeholder="Logo"
-                                        accept="image/png, image/jpeg"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="form-group col-md-6 m-b-4 mb-3">
                                 <select
                                     class="form-select @error('state_id') is-invalid @enderror"
                                     name="state_id"
                                     id="state_id"
                                 >
-                                    <option value="" disabled selected>Select State</option>
+                                    <option value="">State</option>
                                     @foreach ($states as $state)
-                                        @if ($state['user_id'] == 39)
-                                            <option
-                                                value="{{ $state['id'] }}"
-                                                {{ old('state_id') == $state['id'] ? 'selected' : ''}}
-                                            >{{ $state['name']  }}</option>
-                                        @endif
+                                        <option
+                                            value="{{ $state['id'] }}"
+                                            {{ old('state_id') == $state['id'] ? 'selected' : ''}}
+                                        >{{ $state['name']  }}</option>
                                     @endforeach
                                 </select>
                                 @error('state_id')
@@ -229,7 +190,13 @@
                                     name="city_id"
                                     id="city_id"
                                 >
-                                    <option value="" disabled selected>Select City</option>
+                                    <option value="">Cities</option>
+                                    @foreach ($cities as $city)
+                                        <option
+                                            value="{{ $city['id'] }}"
+                                            {{ old('city_id') == $city['id'] ? 'selected' : ''}}
+                                        >{{ $city['name'] }}</option>
+                                    @endforeach
                                 </select>
                                 @error('city_id')
                                     <span class="invalid-feedback" role="alert">
@@ -314,23 +281,10 @@
         $(document).on('change', '#state_id', function(e) {
             $('#city_id').select2('destroy');
             citiesar = JSON.parse(cities);
-
-            let new_array = [];
-
-            citiesar.forEach(element => {
-                let result = new_array.filter(city => city.name == element.name);
-
-                if(result.length == 0) {
-                    new_array.push(element);
-                }
-            });
-
             $('#city_id').html('');
-            $('#city_id').append('<option value="" disabled selected>Select City</option>');
-
-            for (let i = 0; i < new_array.length; i++) {
-                if (new_array[i]['state_id'] == $("#state_id").val()) {
-                    $('#city_id').append('<option value="' + new_array[i]['id'] + '">' + new_array[i][
+            for (let i = 0; i < citiesar.length; i++) {
+                if (citiesar[i]['state_id'] == $("#state_id").val()) {
+                    $('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
                         'name'
                     ] + '</option>')
                 }

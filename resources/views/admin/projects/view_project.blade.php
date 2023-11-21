@@ -194,7 +194,7 @@
                                                         <h6><b>Website</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_3">
-                                                        <div style="text-transform: none !important;">: {{ $project->website }}</div>
+                                                        <div>: {{ $project->website }}</div>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Project Status</b></h6>
@@ -225,19 +225,7 @@
                                                         <h6><b>Rera Number</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_4">
-                                                        <div style="text-transform: none !important;">: {{ $project->rera_number }}</div>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_4">
-                                                        <h6><b>Total Land Area</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-8 m-b-20 data_conent_4">
-                                                        <div style="text-transform: none !important;">: {{ $project->land_area }} {{ $map_unit[ $project->land_size_unit]}}</div>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_4">
-                                                        <h6><b>Remark</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-8 m-b-20 data_conent_4">
-                                                        <div>: {{ $project->remark ?? '' }}</div>
+                                                        <div>: {{ $project->rera_number }}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -259,7 +247,7 @@
                                                         <div>: {{ $project->city_name }}</div>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_2">
-                                                        <h6><b>Locality</b></h6>
+                                                        <h6><b>Area</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_2">
                                                         <div>: {{ $project->area_name }}</div>
@@ -346,7 +334,7 @@
                                                             <tr>
                                                                 <td>{{$contact['name']}}</td>
                                                                 <td>{{$contact['mobile']}}</td>
-                                                                <td style="text-transform: none !important;">{{$contact['email']}}</td>
+                                                                <td>{{$contact['email']}}</td>
                                                                 <td>{{$contact['designation']}}</td>
                                                             </tr>
                                                         @endforeach
@@ -369,7 +357,7 @@
                                                             <th scope="col">Number Of Tower</th>
                                                             <th scope="col">Number Of Floor</th>
                                                             <th scope="col">Number Of Unit</th>
-                                                            <th scope="col">Number of units in each tower</th>
+                                                            <th scope="col">Number of units in each block</th>
                                                             <th scope="col">Number of lift</th>
                                                             <th scope="col">Road Width</th>
                                                             <th scope="col">Washroom</th>
@@ -422,7 +410,7 @@
                                                                 <span>{{ $map_unit[$office_tower['saleable_from_to_map_unit']] }}</span>
                                                             </td>
                                                             <td>
-                                                                {{$office_tower['carpet']}} }}
+                                                                {{$office_tower['carpet']}} - {{ $office_tower['carpet_to'] }}
                                                                 <span>{{ $map_unit[$office_tower['carpet_from_to_map_unit']] }}</span>
                                                             </td>
                                                             <td>
@@ -483,13 +471,13 @@
                                         @if ($project->property_type  == 87 && ($project->property_category == '254' || $project->property_category == '257' || $project->property_category == '255'))
                                             <div class="row">
                                                 <div class="form-group col-md-12">
-                                                    <h5 class="border-style mb-1">Tower Details</h5>
+                                                    <h5 class="border-style mb-1">Wing Details</h5>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <table class="table custom-table-design">
                                                         <thead>
                                                             <tr>
-                                                                <th scope="col">Tower Name</th>
+                                                                <th scope="col">Wing Name</th>
                                                                 <th scope="col">Number Of Floor</th>
                                                                 <th scope="col">Number Of Unit</th>
                                                                 <th scope="col">Sub Category</th>
@@ -524,7 +512,7 @@
                                                 <table class="table custom-table-design">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Tower Name</th>
+                                                            <th scope="col">Wing Name</th>
                                                             <th scope="col">Saleable</th>
                                                             <th scope="col">Built Up</th>
                                                             <th scope="col">Carpet Area</th>
@@ -573,7 +561,6 @@
                                                             <th scope="col">Constructed Area</th>
                                                             <th scope="col">Road width Area</th>
                                                             <th scope="col">Ceiling Height</th>
-                                                            <th scope="col">Number Of Units</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -586,8 +573,6 @@
                                                             <td>{{$st['road_width_of_front_side_area_from']}} - {{$st['road_width_of_front_side_area_to']}} {{ $map_unit[$st['road_width_of_front_side_area_from_to_unit_map']] }}</td>
 
                                                             <td>{{$st['ceiling_height']}} {{ $map_unit[$st['ceiling_height_unit_map']] }}</td>
-
-                                                            <td>{{ $st['number_of_units'] }}</td>
                                                         </tr>
                                                         @endforeach
                                                     <tbody>
@@ -600,56 +585,40 @@
                                                 <h5 class="border-style mb-1">Facilities</h5>
                                             </div>
 
-                                            @if ($project->stor_indu_facility['pcb_detail'] != '')
-                                                <div class="form-group col-4 m-b-20 data_conent_4 mt-3">
-                                                    <h6><b>Pollution Control Board</b></h6>
-                                                </div>
-                                                <div class="form-group col-8 m-b-20 data_conent_4 mt-3">
-                                                    <div>: {{$project->stor_indu_facility['pcb_detail']}}</div>
-                                                </div>
-                                            @endif
+                                            <div class="form-group col-4 m-b-20 data_conent_4 mt-3">
+                                                <h6><b>Pollution Control Board</b></h6>
+                                            </div>
+                                            <div class="form-group col-8 m-b-20 data_conent_4 mt-3">
+                                                <div>: {{$project->stor_indu_facility['pcb_detail']}}</div>
+                                            </div>
 
-                                            @if ($project->stor_indu_facility['ec_detail'] != '')
+                                            <div class="form-group col-4 m-b-20 data_conent_4">
+                                                <h6><b>EC</b></h6>
+                                            </div>
+                                            <div class="form-group col-8 m-b-20 data_conent_4">
+                                                <div>: {{$project->stor_indu_facility['ec_detail']}}</div>
+                                            </div>
 
-                                                <div class="form-group col-4 m-b-20 data_conent_4">
-                                                    <h6><b>EC</b></h6>
-                                                </div>
-                                                <div class="form-group col-8 m-b-20 data_conent_4">
-                                                    <div>: {{$project->stor_indu_facility['ec_detail']}}</div>
-                                                </div>
+                                            <div class="form-group col-4 m-b-20 data_conent_4">
+                                                <h6><b>Gas</b></h6>
+                                            </div>
+                                            <div class="form-group col-8 m-b-20 data_conent_4">
+                                                <div>: {{$project->stor_indu_facility['gas_detail']}}</div>
+                                            </div>
 
-                                            @endif
+                                            <div class="form-group col-4 m-b-20 data_conent_4">
+                                                <h6><b>Power</b></h6>
+                                            </div>
+                                            <div class="form-group col-8 m-b-20 data_conent_4">
+                                                <div>: {{$project->stor_indu_facility['power_detail']}}</div>
+                                            </div>
 
-                                            @if ($project->stor_indu_facility['gas_detail'] != '')
-                                                <div class="form-group col-4 m-b-20 data_conent_4">
-                                                    <h6><b>Gas</b></h6>
-                                                </div>
-                                                <div class="form-group col-8 m-b-20 data_conent_4">
-                                                    <div>: {{$project->stor_indu_facility['gas_detail']}}</div>
-                                                </div>
-                                            @endif
-
-                                            @if ($project->stor_indu_facility['power_detail'] != '')
-
-                                                <div class="form-group col-4 m-b-20 data_conent_4">
-                                                    <h6><b>Power</b></h6>
-                                                </div>
-                                                <div class="form-group col-8 m-b-20 data_conent_4">
-                                                    <div>: {{$project->stor_indu_facility['power_detail']}}</div>
-                                                </div>
-
-                                            @endif
-
-                                            @if ($project->stor_indu_facility['water_detail'] != '')
-
-                                                <div class="form-group col-4 m-b-20 data_conent_4">
-                                                    <h6><b>Water</b></h6>
-                                                </div>
-                                                <div class="form-group col-8 m-b-20 data_conent_4">
-                                                    <div>: {{$project->stor_indu_facility['water_detail']}}</div>
-                                                </div>
-
-                                            @endif
+                                            <div class="form-group col-4 m-b-20 data_conent_4">
+                                                <h6><b>Water</b></h6>
+                                            </div>
+                                            <div class="form-group col-8 m-b-20 data_conent_4">
+                                                <div>: {{$project->stor_indu_facility['water_detail']}}</div>
+                                            </div>
 
                                             @foreach ($project->extra_facility as $facility)
                                                 <div class="form-group col-4 m-b-20 data_conent_4">
@@ -673,10 +642,22 @@
                                                         <h5 class="border-style">Basic Detail</h5>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_1">
+                                                        <h6 for="Client Name"><b>Total Land Area</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-20 data_conent_2">
+                                                        <div>: {{ $project->land_plot['total_land_area'] }} {{ $map_unit[$project->land_plot['land_area_map_unit']] }}</div>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-20 data_conent_1">
                                                         <h6 for="Client Name"><b>Total Open Area</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_2">
                                                         <div>: {{ $project->land_plot['total_open_area'] }} {{ $map_unit[$project->land_plot['open_area_map_unit']] }}</div>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-20 data_conent_1">
+                                                        <h6 for="Client Name"><b>Total Common Area</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-20 data_conent_2">
+                                                        <div>: {{ $project->land_plot['common_area'] }} {{ $map_unit[$project->land_plot['common_area_map_unit']] }}</div>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_1">
                                                         <h6 for="Client Name"><b>Phase Name</b></h6>
@@ -702,6 +683,36 @@
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <div>: {{ $project->land_plot['constructed_saleable_area'] }} {{ $map_unit[$project->land_plot['constructed_saleable_area_map_unit']] }}</div>
+                                                    </div>
+                                                    <div class="form-group col-6 m-b-20 data_conent_4">
+                                                        <h6><b>No. of room</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-20 data_conent_4">
+                                                        <div>: {{ $project->land_plot['number_of_room'] }} </div>
+                                                    </div>
+                                                    <div class="form-group col-6 m-b-20 data_conent_4">
+                                                        <h6><b>No. of bathroom</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-20 data_conent_4">
+                                                        <div>: {{ $project->land_plot['number_of_bathroom'] }} </div>
+                                                    </div>
+                                                    <div class="form-group col-6 m-b-20 data_conent_4">
+                                                        <h6><b>No. of balcony</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-20 data_conent_4">
+                                                        <div>: {{ $project->land_plot['number_of_balcony'] }} </div>
+                                                    </div>
+                                                    <div class="form-group col-6 m-b-20 data_conent_4">
+                                                        <h6><b>No. of open side</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-20 data_conent_4">
+                                                        <div>: {{ $project->land_plot['number_of_open_side'] }} </div>
+                                                    </div>
+                                                    <div class="form-group col-6 m-b-20 data_conent_4">
+                                                        <h6><b>No. of car park</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-20 data_conent_4">
+                                                        <div>: {{ $project->land_plot['number_of_car_park'] }} </div>
                                                     </div>
                                                     <div class="form-group col-6 m-b-20 data_conent_4">
                                                         <h6><b>Servant Room</b></h6>
@@ -785,7 +796,7 @@
                                                             <th scope="col">Number Of Tower</th>
                                                             <th scope="col">Number Of Floor</th>
                                                             <th scope="col">Number Of Unit</th>
-                                                            <th scope="col">Number of units in each tower</th>
+                                                            <th scope="col">Number of units in each block</th>
                                                             <th scope="col">Number of lift</th>
                                                             <th scope="col">Road Width</th>
                                                             <th scope="col">Washroom</th>
@@ -935,13 +946,13 @@
                                             <h4 class="text-center mt-4">Flat And Penthouse Detail</h4>
                                             <div class="row">
                                                 <div class="form-group col-md-12">
-                                                    <h5 class="border-style mb-1">Tower Details</h5>
+                                                    <h5 class="border-style mb-1">Wing Details</h5>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <table class="table custom-table-design">
                                                         <thead>
                                                             <tr>
-                                                                <th scope="col">Tower Name</th>
+                                                                <th scope="col">Wing Name</th>
                                                                 <th scope="col">Number Of Floor</th>
                                                                 <th scope="col">Number Of Unit</th>
                                                                 <th scope="col">Sub Category</th>
@@ -976,7 +987,7 @@
                                                 <table class="table custom-table-design">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Tower Name</th>
+                                                            <th scope="col">Wing Name</th>
                                                             <th scope="col">Saleable</th>
                                                             <th scope="col">Built Up</th>
                                                             <th scope="col">Carpet Area</th>

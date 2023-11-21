@@ -41,45 +41,231 @@ class IndustrialPropertyController extends Controller
 			$dropdowns = $dropdownsarr;
 			$indId = '';
 			foreach ($dropdowns as $key => $value) {
-				if($value['name'] == 'Storage/industrial'){
+				if ($value['name'] == 'Storage/industrial') {
 					$indId = $key;
 				}
 			}
-			$data = Properties::with('Projects','Locality')->where('property_category',$indId)->orderBy('id','desc')->get();
+			$data = Properties::with('Projects', 'Locality')->where('property_category', $indId)
+			->when($request->filter_building_id, function ($query) use ($request) {
+				return $query->whereIn('properties.project_id', ($request->filter_building_id));
+			})
+			->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
+				// dd($request->filter_property_type,"...",Auth::user()->property_type);
+				return $query->where(function ($query) use ($request) {
+					$query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
+				});
+			})
+			->when($request->filter_specific_type && empty(Auth::user()->property_category), function ($query) use ($request) {
+				// dd($request->filter_specific_type,"...",Auth::user()->property_category);
+				return $query->where(function ($query) use ($request) {
+					$query->where('properties.property_category', $request->filter_specific_type);
+				});
+			})
+			->when($request->filter_configuration && empty(Auth::user()->configuration), function ($query) use ($request) {
+				// dd($request->filter_configuration,"...",Auth::user()->configuration);
+				return $query->where(function ($query) use ($request) {
+					$query->where('properties.configuration', $request->filter_configuration);
+				});
+			})
+			->when($request->filter_source_of_property && empty(Auth::user()->source_of_property), function ($query) use ($request) {
+				// dd($request->filter_source_of_property,"...",Auth::user()->source_of_property);
+				return $query->where(function ($query) use ($request) {
+					$query->where('properties.source_of_property', $request->filter_source_of_property);
+				});
+			})
+			
+			->orderBy('id', 'desc')->get();
 
 			return DataTables::of($data)
-				->editColumn('project_id', function ($row) {
+				->editColumn('project_id', function ($row) use ($request) {
 					if (isset($row->Projects->project_name)) {
-						$project_name = $row->Projects->project_name;
-					}else{
-						$project_name = '';
+						$first =  '<td style="vertical-align:top">																				
+					<font size="3"><a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . (!empty($row->Projects->project_name) ? $row->Projects->project_name : $row->Village->name) . '</a>';
+					} else {
+						$first = '';
 					}
-					return '<a href="'.route('admin.project.view',encrypt($row->id)).'" style="font-weight: bold;">' . $project_name . '</a>';
-				})
-				->editColumn('area_id', function ($row) {
-					if (isset($row->Locality->name)) {
-						return $row->Locality->name;
+					$first_middle = '';
+					if (isset($row->Projects->is_prime) && $row->Projects->is_prime) {
+						$first_middle = '<img style="height:24px" src="' . asset('assets/images/primeProperty.png') . '" alt="">';
 					}
+					if (isset($row->hot_property) && $row->hot_property) {
+						$first_middle = $first_middle . '<img style="height:24px" src="' . asset('assets/images/hotProperty.png') . '" alt="">';
+					} else {
+						$row->hot_property = '';
+					}
+					$first_end = '</font>';
+					// $second = '<br> <a href="' . $row->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '    </font> </a>';
+					$second = '<br>Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font>';
+					$third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a>' : "");
+					$third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->created_at)->format('d-m-Y') . '</font>';
+					$last = '</td>';
+					'</td>';
+					return
+						$first .
+						$first_middle .
+						$first_end .
+						$second .
+						$third .
+						$last;
+
+					return '';
 				})
+				// ->editColumn('area_id', function ($row) {
+				// 	if (isset($row->Locality->name)) {
+				// 		return $row->Locality->name;
+				// 	}
+				// })
+				// ->editColumn('property_for', function ($row) use ($dropdowns) {
+				// 	return $row->property_for;
+				// })
 				->editColumn('property_for', function ($row) use ($dropdowns) {
-					return $row->property_for;
-				})
-			->editColumn('configuration', function ($row) use ($dropdowns) {
-					$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk', 'test', 'Plotting');
+					// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
+					$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk', 'Plotting', 'Test', 'testw');
+					if ($row->property_for == 'Both') {
+						$forr = 'Rent & Sell';
+					} else {
+						$forr = $row->property_for;
+					}
 					$sub_cat = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | ' . $dropdowns[$row->property_category]['name'] : '');
+
 					if (!is_null($row->configuration)) {
-						$catId = (int)$row->configuration;
+						$catId = (int) $row->configuration;
+						// dd("cat id :",$catId);
+						//$getsub_category = Helper::getsubcategory($catId);
 						$getsub_category = $new_array[$catId];
+						// dd($getsub_category);
+
+						// dd($catId,$getsub_category);
 						if (!is_null($getsub_category)) {
-							$sub_cat = '  ' . $getsub_category;
+							$sub_cat = ' | ' . $getsub_category;
 							if ($sub_cat == " | Agricultural/Farm Land") {
 								$sub_cat = " | Agricultural";
 							}
 						}
 					}
+					//$category = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | '. $dropdowns[$row->property_category]['name'] : '');
 					$category = $sub_cat;
-					return $category;
+					// BHARAT HIDE FURNISHED
+					// dd($row->property_category,"fr");
+					if ($row->property_category == '256') {
+						$fstatus = '';
+					} else {
+						$fstatus = 'Unfurnished';
+						if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+							$vv = json_decode($row->unit_details);
+							if (isset($vv[0][8])) {
+								if (!empty($vv[0][8])) {
+									if ($vv[0][8] == "106" || $vv[0][8] == "34") {
+										$fstatus = 'Furnished';
+									} elseif ($vv[0][8] == "107" || $vv[0][8] == "35") {
+										$fstatus = 'Semi Furnished';
+									} elseif ($vv[0][8] == "108" || $vv[0][8] == "36") {
+										$fstatus = 'Unfurnished';
+									} else {
+										$fstatus = 'Can Furnished';
+									}
+								}
+							}
+						}
+					}
+
+					$salable_area_print = $this->generateAreaDetails($row, $dropdowns[$row->property_category]['name'], $dropdowns);
+					if (empty($salable_area_print)) {
+						$salable_area_print = "Area Not Available";
+					}
+
+					try {
+						return '
+						<td style="vertical-align:top">
+						' . ((!empty($forr)) ? $forr : '') . $category . '
+						<font size="2" style="font-style:italic">
+						<br>
+						' . $salable_area_print . '
+						</font>
+						<br>' . $fstatus . '
+						</td>';
+					} catch (\Throwable $th) {
+						dd($th);
+					}
 				})
+
+				// ->editColumn('configuration', function ($row) use ($dropdowns) {
+				// 	$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk', 'test', 'Plotting');
+				// 	$sub_cat = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | ' . $dropdowns[$row->property_category]['name'] : '');
+				// 	if (!is_null($row->configuration)) {
+				// 		$catId = (int)$row->configuration;
+				// 		$getsub_category = $new_array[$catId];
+				// 		if (!is_null($getsub_category)) {
+				// 			$sub_cat = '  ' . $getsub_category;
+				// 			if ($sub_cat == " | Agricultural/Farm Land") {
+				// 				$sub_cat = " | Agricultural";
+				// 			}
+				// 		}
+				// 	}
+				// 	$category = $sub_cat;
+				// 	return $category;
+				// })
+				->editColumn('unit_details', function ($row) {
+					// dd($row->property_for);
+					$all_units = [];
+					if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+						$vv = json_decode($row->unit_details);
+						// dd($vv,"unit_details");
+						foreach ($vv as $key => $value) {
+							if ($value[2] == "Rent Out") {
+								$all_units = [];
+							} else if ($value[2] == "Sold Out") {
+								$all_units = [];
+							} else if ($row->property_for === 'Both') {
+								$price = '';
+								if (!empty($value['7'])) {
+									$price = $value['7'];
+								} else if (!empty($value['4'])) {
+									$price = $value['4'];
+								} else if (!empty($value['3'])) {
+									$price = $value['3'];
+								}
+								$data = [];
+								$data[0] = $value[0];
+								$data[1] = $value[1];
+								$data[2] = $price;
+								array_push($all_units, $data);
+							} else {
+								$price = '';
+								if (!empty($value['7'])) {
+									$price = $value['7'];
+								} else if (!empty($value['4'])) {
+									$price = $value['4'];
+								} else if (!empty($value['3'])) {
+									$price = $value['3'];
+								}
+								$data = [];
+								$data[0] = $value[0];
+								$data[1] = $value[1];
+								$data[2] = $price;
+								array_push($all_units, $data);
+							}
+						}
+					}
+					if (!empty($all_units)) {
+						$vvv = '';
+						$all_units_length = count($all_units);
+						if ($all_units_length > 2) {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
+							}
+							$second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] . ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
+							return $second;
+						} else {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv . ((!empty($value[0])) ? $value[0] . '-' : ' ') . ((!empty($value[1])) ? $value[1] . '<br>' : '');
+							}
+							return $vvv;
+						}
+					}
+					return;
+				})
+
 				->editColumn('select_checkbox', function ($row) {
 					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
 					<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
@@ -103,17 +289,79 @@ class IndustrialPropertyController extends Controller
 					};
 					return $detail;
 				})
+
+				->editColumn('price', function ($row) {
+					//$all_units = [];
+					$all_units = [];
+					// dd($row->unit_details,"price",$row->property_for);
+					if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+						$vv = json_decode($row->unit_details);
+						// dd($vv,"price");
+						$all_units_length = count($all_units);
+						//price
+						foreach ($vv as $key => $value) {
+							$price = '';
+							if ($row->property_for === 'Both') {
+								if (!empty($value['7']) && !empty($value['4'])) {
+									$price = '  R : ' . $value['4'] . '<br>' . '  S : ' . $value['7'];
+								} elseif (!empty($value['3']) && !empty($value['4'])) {
+									$price = '  R : ' . $value['4'] . '<br>' . '  S : ' . $value['3'];
+								}
+							} else {
+								if (!empty($value['7'])) {
+									$price = $value['7'];
+								} else if (!empty($value['4'])) {
+									$price = $value['4'];
+								} else if (!empty($value['3'])) {
+									$price = $value['3'];
+								}
+							}
+							$data = [];
+							$data[0] = $value[0];
+							$data[1] = $value[1];
+							$data[2] = $price;
+							array_push($all_units, $data);
+						}
+					}
+					// dd("all2",$all_units);
+
+					if (!empty($all_units)) {
+						$vvv = '';
+						$unit_wing = '';
+						// foreach ($all_units as $key => $value) {
+						//     $vvv = $vvv .  ((!empty($value[2])) ? $value[2] . ' ' : ''); // . ((!empty($value[1])) ? $value[1] : '');
+						// }
+
+						// return $vvv;
+						$all_units_length = count($all_units);
+						if ($all_units_length > 2) {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
+								$vvv = $vvv . ' - ' . ((!empty($value[2])) ? $value[2] : '');
+							}
+							$second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2] : '') . ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $unit_wing . $vvv . '" data-bs-trigger="hover focus"></i>';
+							// $second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
+							return $second;
+						} else {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv . ((!empty($value[2])) ? $value[2] . '<br>' : '');
+							}
+							return $vvv;
+						}
+					}
+					return;
+				})
 				->addColumn('actions', function ($row) {
 					$buttons = '';
-						$buttons =  $buttons . '<a href="'.route('admin.property.edit',$row->id).'"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
-			
-				
-						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
-					
+					$buttons =  $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+
+
+					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+
 					return $buttons;
 				})
-			->rawColumns(['project_id', 'contact_details','configuration', 'actions', 'select_checkbox'])
-					->make(true);
+				->rawColumns(['project_id', 'contact_details', 'price', 'property_for', 'unit_details', 'actions', 'select_checkbox'])
+				->make(true);
 		}
 		$projects = Projects::orderBy('project_name')->get();
 		$areas = Areas::orderBy('name')->get();
@@ -122,17 +370,53 @@ class IndustrialPropertyController extends Controller
 		$property_configuration_settings = DropdownSettings::get()->toArray();
 		$prop_type = [];
 		foreach ($property_configuration_settings as $key => $value) {
-			if (($value['name'] == 'Industrial') && str_contains($value['dropdown_for'],'property_')) {
-				array_push($prop_type,$value['id']);
+			// if (($value['name'] == 'Industrial') && str_contains($value['dropdown_for'], 'property_')) {
+			// 	array_push($prop_type, $value['id']);
+			// }
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
+				array_push($prop_type, $value['id']);
 			}
 		}
-		return view('admin.properties.industrial_index', compact('projects', 'property_configuration_settings', 'areas', 'cities', 'states','prop_type'));
+		return view('admin.properties.industrial_index', compact('projects', 'property_configuration_settings', 'areas', 'cities', 'states', 'prop_type'));
+	}
+
+	public function generateAreaDetails($row, $type, $dropdowns)
+	{
+		$area = '';
+		$measure = '';
+
+		if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Land/Plot') {
+			$area = explode('_-||-_', $row->salable_area)[0];
+			$measure = explode('_-||-_', $row->salable_area)[1];
+		} elseif ($type == 'Storage/industrial') {
+			$area = explode('_-||-_', $row->salable_plot_area)[0];
+			$measure = explode('_-||-_', $row->salable_plot_area)[1];
+		} elseif ($type == 'Vila/Bunglow') {
+			$salable = explode('_-||-_', $row->salable_plot_area)[0];
+			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+			$measure = explode('_-||-_', $row->constructed_salable_area)[1];
+			if (empty($salable)) {
+				$salable = '';
+			}
+			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+			$area = "P:" . $salable . ' - C: ' . $constructed;
+		} elseif ($type == 'Farmhouse') {
+			$area = explode('_-||-_', $row->salable_plot_area)[0];
+			$measure = explode('_-||-_', $row->salable_plot_area)[1];
+		}
+
+		if (!empty($area) && !empty($measure)) {
+			$formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
+			return $formattedArea;
+		} else {
+			return "Area Not Available";
+		}
 	}
 
 	public function saveProperty(Request $request)
 	{
 		if (!empty($request->id) && $request->id != '') {
-	
+
 			$data = IndustrialProperty::find($request->id);
 			if (empty($data)) {
 				$data =  new IndustrialProperty();
@@ -487,7 +771,7 @@ class IndustrialPropertyController extends Controller
 			return json_encode($data);
 		}
 
-		if (!empty($request->allids) && isset(json_decode($request->allids)[0]) ) {
+		if (!empty($request->allids) && isset(json_decode($request->allids)[0])) {
 			$data = IndustrialProperty::whereIn('id', json_decode($request->allids))->delete();
 		}
 	}

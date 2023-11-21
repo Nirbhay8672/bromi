@@ -78,7 +78,7 @@
                         data: 'Actions',
                         name: 'Actions'
                     },
-                ],
+                ]
             });
         });
 
