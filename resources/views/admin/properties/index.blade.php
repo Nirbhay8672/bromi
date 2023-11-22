@@ -1135,6 +1135,7 @@
                             // d.match_building = Number($('#match_building').prop('checked'));
                             d.filter_by = filter_by;
 
+                            d.location = window.location.href;
                         },
                     },
                     columns: [{
