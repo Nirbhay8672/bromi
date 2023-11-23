@@ -583,6 +583,7 @@
                         url: "{{ route('admin.projects') }}",
                         data: function(d) {
                             d.go_data_id = go_data_id;
+                            d.location = window.location.href;
                         }
                     },
                     columns: [

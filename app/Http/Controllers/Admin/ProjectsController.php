@@ -36,8 +36,23 @@ class ProjectsController extends Controller
 		if ($request->ajax()) {
 
 			$data = Projects::with('Area', 'Builder', 'City', 'State')
-				->orderBy('id','desc')
-				->get();
+				->orderBy('id','desc');
+
+			$parts = explode('?', $request->location);
+
+			if (count($parts) > 1) {
+				$value = $parts[1];
+				$value = trim($value);
+
+				if (strpos($value, 'data_id') !== false) {
+					$value_part = explode('=', $value);
+					if($value_part[1] > 0) {
+						$data->where('id', $value_part[1]);
+					}
+				}
+			}
+
+			$data->get();
 
 			return DataTables::of($data)
 				->editColumn('area', function ($row) {
