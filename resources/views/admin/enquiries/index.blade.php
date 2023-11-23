@@ -1434,9 +1434,11 @@
                             // d.match_budget_to_type = Number($('#match_budget_to_type').prop('checked'));
                             d.match_enquiry_size = Number($('#match_enquiry_size').prop('checked'));
                             // d.match_building = Number($('#match_building').prop('checked'));
-                            d.filter_by = filter_by
-                            d.calendar_date = calendar_date
-                            d.calendar_type = calendar_type
+                            d.filter_by = filter_by;
+                            d.calendar_date = calendar_date;
+                            d.calendar_type = calendar_type;
+
+                            d.location = window.location.href;
                         },
                     },
                     columns: [{
