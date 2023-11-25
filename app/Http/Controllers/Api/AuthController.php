@@ -31,7 +31,7 @@ class AuthController extends Controller
             $validator = Validator::make($request->all(), [
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
-                'email' => 'required|email|unique:users',
+                'email' => 'required|email',
                 'mobile_number' => 'required|string',
                 'company_name' => 'required|string',
                 'role_id' => 'required|string',
@@ -49,6 +49,15 @@ class AuthController extends Controller
                     'status' => 422,
                     'message' => 'Validation failed',
                     'data' => $validator->errors(),
+                ]);
+            }
+
+            $emailUser = User::where('email', $request->email)->first();
+            if($emailUser) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Email Already Exist.',
+                    'data' => $emailUser,
                 ]);
             }
 
