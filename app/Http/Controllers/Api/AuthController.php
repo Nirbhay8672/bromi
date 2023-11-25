@@ -31,7 +31,7 @@ class AuthController extends Controller
             $validator = Validator::make($request->all(), [
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
-                'email' => 'required|email|unique:users',
+                'email' => 'required|email',
                 'mobile_number' => 'required|string',
                 'company_name' => 'required|string',
                 'role_id' => 'required|string',
@@ -49,6 +49,15 @@ class AuthController extends Controller
                     'status' => 422,
                     'message' => 'Validation failed',
                     'data' => $validator->errors(),
+                ]);
+            }
+
+            $emailUser = User::where('email', $request->email)->first();
+            if($emailUser) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Email Already Exist.',
+                    'data' => $emailUser,
                 ]);
             }
 
@@ -114,10 +123,8 @@ class AuthController extends Controller
                 'message' => 'An error occurred',
                 'data' => $e,
             ], 500);
-            //throw $th;
         }
     }
-
 
     public function verifyToken(Request $request)
     {
@@ -172,8 +179,56 @@ class AuthController extends Controller
                     'data' => $data,
                 ]);
             } else {
-                return response()->json(['error' => 'Your email is not verified.'], 403);
+                $user = User::where('email', $request['email'])->firstOrFail();
+        
+                $input = [];
+                if (!empty($request->input('device_type'))) { // check if device_type param exist
+                    $input['device_type'] = $request->input('device_type');
+                }
+                if (!empty($request->input('device_token'))) { // check if device_token param exist
+                    $input['device_token'] = $request->input('device_token');
+                }
+                if (!empty($input)) { // if any of the param exist then update user model
+                    $user->update($input);
+                }
+                
+                if (!empty($user->is_verified)) {
+                    $token = $user->createToken('auth_token')->plainTextToken;
+                    $data = [
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
+                        'mobile_number' => $user->mobile_number,
+                        'company_name' => $user->company_name,
+                        'role_id' => $user->role_id,
+                        'state_id' => (int) $user->state_id,
+                        'city_id' => (int) $user->city_id,
+                        'verification_token' => (int) $user->verification_token,
+                        'id' => $user->id,
+                        'device_type' => $user->device_type,
+                        'device_token' => $user->device_token,
+                        'token' => $token,
+                        'token_type' => 'Bearer',
+                    ];
+        
+                    // Set the session value
+                    Session::put('parent_id', $user->parent_id);
+        
+                    return response()->json([
+                        'status' => 200,
+                        'data' => $data,
+                    ]);
+                } else {
+                    return response()->json(['error' => 'Your email is not verified.'], 403);
+                }
             }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong',
+                'error' => $th->getMessage(),
+                'data' => null,
+            ], 500);
         }
     }
     public function login(Request $request)
