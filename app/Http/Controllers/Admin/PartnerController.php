@@ -46,13 +46,14 @@ class PartnerController extends Controller
 	 */
 	public function index(Request $request)
 	{
+		// dd("index-partner");
 		if ($request->ajax()) {
 			// $partner = Partner::with('user')->where('partner_id', Auth::user()->id)->get();
 			$partner = Partner::with('user')->where('user_id', Auth::user()->id)->get();
 			return DataTables::of($partner)->addIndexColumn()
 				->addColumn('partner_name', function (Partner $partner) {
-					if (!empty($partner->user->first_name)) {
-						return $partner->user->first_name;
+					if (!empty($partner->user->first_name) || !empty($partner->user->last_name)) {
+						return $partner->user->first_name.' '.$partner->user->last_name;
 					} else {
 						return 'N/A';
 					}
@@ -104,6 +105,7 @@ class PartnerController extends Controller
 	 */
 	public function addPartner(Request $request)
 	{
+			// dd("Add Partner");
 		if (Auth::check()) {
 			$Partner_Check = Partner::where('partner_id', $request->user_id)->first();
 			if (empty($Partner_Check)) {
@@ -134,9 +136,11 @@ class PartnerController extends Controller
 	 */
     public function partnerRequest(Request $request)
 	{
+		// dd("request-partner");
 		if ($request->ajax()) {
 			$sharedproperty = SharedProperty::with('Property', 'User')->where('user_id', Auth::user()->id)->withTrashed()->get();
-// 			dd($sharedproperty);
+			// $sharedproperty = SharedProperty::with('Property', 'User')->where('partner_id', Auth::user()->id)->withTrashed()->get();
+ 			// dd("shared",$sharedproperty);
 			return DataTables::of($sharedproperty)->addIndexColumn()
 				->addColumn('partner_name', function (SharedProperty $sharedproperty) {
 					if (!empty($sharedproperty->User->first_name)) {
@@ -199,6 +203,7 @@ class PartnerController extends Controller
 	 */
 	public function userPartner(Request $request)
 	{
+		// dd("user");
 		foreach ($request->partner_id as $val) {
 			try {
 				SharedProperty::create([

@@ -21,6 +21,7 @@ class LandImages extends Model
 	protected $fillable = [
 		'land_id',
 		'user_id',
+		'construction_documents',
 		'pro_id',
 		'image',
 	];

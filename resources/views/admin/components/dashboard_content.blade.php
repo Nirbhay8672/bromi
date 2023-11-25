@@ -70,13 +70,9 @@
     <div class="col-md-12" x-show="isIncludes('New Leads')">
         <div class="card o-hidden">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>New Leads</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('New Leads')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>New Leads</h5>
                     </div>
                 </div>
             </div>
@@ -94,13 +90,9 @@
     <div class="col-md-12" x-show="isIncludes('New Leads Source Wise')">
         <div class="card o-hidden">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>New Leads Source Wise</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('New Leads Source Wise')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>New Leads Source Wise</h5>
                     </div>
                 </div>
             </div>
@@ -118,13 +110,9 @@
     <div class="col-md-12" x-show="isIncludes('All Assign Leads')">
         <div class="card o-hidden">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>All Assign Leads</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('All Assign Leads')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>All Assign Leads</h5>
                     </div>
                 </div>
             </div>
@@ -142,13 +130,9 @@
     <div class="col-md-6" x-show="isIncludes('Active Lead Source Wise')">
         <div class="card o-hidden">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>Active lead Source Wise</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('Active Lead Source Wise')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>Active lead Source Wise</h5>
                     </div>
                 </div>
             </div>
@@ -166,13 +150,9 @@
     <div class="col-md-6" x-show="isIncludes('Lost Leads Source Wise')">
         <div class="card o-hidden">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>Lost Leads Source Wise</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('Lost Leads Source Wise')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>Lost Leads Source Wise</h5>
                     </div>
                 </div>
             </div>
@@ -192,13 +172,9 @@
     <div class="col-md-6">
         <div class="card o-hidden" x-show="isIncludes('Stage Wise Leads')">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>Stage wise Leads</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('Stage Wise Leads')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>Stage wise Leads</h5>
                     </div>
                 </div>
             </div>
@@ -214,13 +190,9 @@
         </div>
         <div class="card o-hidden" x-show="isIncludes('Person Wise Leads')">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>Person Wise Leads</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('Person Wise Leads')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>Person Wise Leads</h5>
                     </div>
                 </div>
             </div>
@@ -239,13 +211,9 @@
     <div class="col-md-6" x-show="isIncludes('Stage And Person Wise Leads')">
         <div class="card o-hidden h-100">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>Stage and Person Wise Leads</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('Stage And Person Wise Leads')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>Stage and Person Wise Leads</h5>
                     </div>
                 </div>
             </div>
@@ -265,13 +233,9 @@
     <div class="col-md-6" x-show="isIncludes('Person Wise Activity Report')">
         <div class="card o-hidden">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>Person wise Activity Report</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('Person Wise Activity Report')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>Person wise Activity Report</h5>
                     </div>
                 </div>
             </div>
@@ -290,13 +254,9 @@
     <div class="col-md-6" x-show="isIncludes('Activity Not Planned In Lead')">
         <div class="card o-hidden">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>Activity Not Planned in Lead</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('Activity Not Planned In Lead')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>Activity Not Planned in Lead</h5>
                     </div>
                 </div>
             </div>
@@ -315,13 +275,9 @@
     <div class="col-md-6" x-show="isIncludes('Assign Leads To Person Date Wise')">
         <div class="card o-hidden">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>Assign Leads to Person date wise</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('Assign Leads To Person Date Wise')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>Assign Leads to Person date wise</h5>
                     </div>
                 </div>
             </div>
@@ -340,13 +296,9 @@
     <div class="col-md-6" x-show="isIncludes('Lead Lost Reason Person Wise')">
         <div class="card o-hidden">
             <div class="card-header pb-0">
-                <div class="d-flex justify-content-between">
-                    <h5>Lead Lost Reason Person wise</h5>
-                    <div class="p-2">
-                        <button
-                            class="btn btn-danger"
-                            @click="removeChart('Lead Lost Reason Person Wise')"
-                        >X</button>
+                <div class="media">
+                    <div class="media-body">
+                        <h5>Lead Lost Reason Person wise</h5>
                     </div>
                 </div>
             </div>

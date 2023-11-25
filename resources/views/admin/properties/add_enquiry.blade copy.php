@@ -215,7 +215,7 @@
                                                                         ?>>
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="officeekind1">Ready to move office
+                                                                        for="officeekind1">office
                                                                         space</label>
                                                                 </div>
                                                                 <div class="btn-group bromi-checkbox-btn me-1"
@@ -945,7 +945,7 @@
                                                         </div>
                                                         <div class="form-group col-md-4 m-b-4 mb-3">
                                                             <select class="form-select" id="enquiry_city_id">
-                                                                <option value="">City</option>
+                                                                <option value="">Select City</option>
                                                                 @foreach ($cities as $city)
                                                                     <option value="{{ $city->id }}">
                                                                         {{ $city->name }}</option>
@@ -993,6 +993,35 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
         <script>
+
+			//Default Selected display on add Enquiry City- locality
+			let id = '{{ isset($current_id) ? $current_id : 'null' }}';
+                if (id === 'null') {
+					function updateStateSelect() {
+						let auth = '{{ Auth::user() }}';
+                        // let authStateId = '{{ Auth::user()->state_id }}';
+                        let authCityId = '{{ Auth::user()->city_id }}';
+						console.log("==> authCityId",authCityId);
+
+                        // $('#state_id').val(authStateId).trigger('change');
+                        $('#enquiry_city_id').val(authCityId).trigger('change');
+
+                        // $('#area_ids').html('');
+                        // for (let i = 0; i < areass.length; i++) {
+                        //     if (areass[i]['city_id'] == $("#state-dropdown").val()) {
+                        //         $('#area_id').append(`<option value="${areass[i]['id']}"
+                        //     data-pincode="${areass[i]['pincode']}"
+                        //     data-city_id="${areass[i]['city_id']}"
+                        //     data-state_id="${areass[i]['state_id']}">
+                        //     ${areass[i]['name']}
+                        // 	</option>`);
+                        //     }
+                        // }
+                        // $('#area_ids').select2();
+                    }
+                    updateStateSelect();
+				}
+
             var search_enq = '';
             var queryString = window.location.search;
             var urlParams = new URLSearchParams(queryString);

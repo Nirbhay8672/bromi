@@ -11,7 +11,7 @@ use App\Models\BuildingImages;
 use App\Models\City;
 use App\Models\DropdownSettings;
 use App\Models\Projects;
-use App\Models\Api\Properties;
+use App\Models\Properties;
 use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -32,39 +32,8 @@ class ProjectsController extends Controller
 	public function index(Request $request)
 	{
 		$perPage = $request->input('per_page', 10);
-        $Projects = Projects::where('user_id',Auth::user()->id)->get();
-		// dd($Projects->count());
-		$ProjectsData=[];
-		foreach ($Projects as $key => $value) {
-			if(!empty($value->builder_id)){
-
-				$buildersData=Builders::find($value->builder_id);
-				$buildername=$buildersData->name;
-			}else{
-				$buildername=null;
-			}
-			
-			$ProjectsData[]=[
-				"id"=>$value->id ,
-				"project_name"=>$value->project_name,
-				"address"=>$value->address ,
-				"property_type"=>$value->property_type ,
-				"builder_name"=>$buildername,
-				"created_at"=>$value->created_at,
-				"updated_at"=>$value->updated_at
-
-			];
-			
-		}
-  
-		$response = [
-			'message' => 'Projects list has been fetched successfully.',
-			'current_page' => 0, // Set the current page number here
-			'total_records' => $Projects->count(), // Set the total number of records here
-			'limit' => $perPage, // Set the limit per page here
-			'data' => $ProjectsData,
-		];
-		return response()->json($response, 200);
+        $Project = Projects::paginate($perPage);
+		return response()->json(['status' => '200','message' => 'List of project', 'data' => $Project]);
 	}
 
 	public function show($id)

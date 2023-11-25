@@ -85,11 +85,6 @@
                     'Lost Leads Source Wise',
                     'Stage Wise Leads',
                     'Stage And Person Wise Leads',
-                    'Person Wise Leads',
-                    'Person Wise Activity Report',
-                    'Activity Not Planned In Lead',
-                    'Assign Leads To Person Date Wise',
-                    'Lead Lost Reason Person Wise',
                 ],
                 
                 chart_option : [
@@ -110,11 +105,6 @@
                 isIncludes(chart_name) {
                     return this.charts.includes(chart_name);
                 },
-                
-                removeChart(chart_name) {
-                    let index = this.charts.findIndex(chart => chart == chart_name);
-                    this.charts.splice(index , 1);
-                }
             }));
         });
 
@@ -691,58 +681,12 @@
                     }
                 }
             };
-            
-            
-            
-            
-            // third chart
 
-            let third_chart_labels = [];
-            let third_chart_data = [];
-    
-            @json($third_chart).forEach(element => {
-                third_chart_labels.push(element['user_name']);
-                third_chart_data.push(parseInt(element['total_inquiries']));
-            });
-    
-            new Chartist.Bar('#pro-chart-rented', {
-                labels: third_chart_labels,
-                series: [
-                    third_chart_data,
-                ]
-            }, {
-                stackBars: true,
-                axisX: {
-                    labelInterpolationFnc: function(value) {
-                        return value.split(/\s+/).map(function(word) {
-                            return word[0];
-                        }).join('');
-                    }
-                },
-                axisY: {
-                    offset: 20
-                }
-            }, [
-                ['screen and (min-width: 400px)', {
-                    reverseData: true,
-                    horizontalBars: true,
-                    axisX: {
-                        labelInterpolationFnc: Chartist.noop
-                    },
-                    axisY: {
-                        offset: 60
-                    }
-                }],
-                ['screen and (min-width: 800px)', {
-                    stackBars: false,
-                    seriesBarDistance: 10
-                }],
-                ['screen and (min-width: 1000px)', {
-                    reverseData: false,
-                    horizontalBars: false,
-                    seriesBarDistance: 15
-                }]
-            ]);
+            var chart_rented_chart = new ApexCharts(
+                document.querySelector("#pro-chart-rented"),
+                chart_rented_options
+            );
+            chart_rented_chart.render();
 
             var data2 = [];
 
@@ -987,14 +931,6 @@
             let seven_chart_data = [];
 
             let new_array = [];
-
-            let p_labels = [];
-            let p_data = [];
-    
-            @json($third_chart).forEach(element => {
-                p_labels.push(element['user_name']);
-                p_data.push(parseInt(element['total_inquiries']));
-            });
             
             @json($seventh_chart).forEach(element => {
                 new_array.push({
@@ -1022,7 +958,7 @@
                 },
                 series: new_array,
                 xaxis: {
-                    categories: p_labels,
+                    categories: ['QATest',],
                 },
                 colors:['#e6f6e0', '#b4e5cc', '#50c5d1', '#0d90b1', '#213751', '#191922', '#07080b' ]
             }
@@ -1035,15 +971,6 @@
         }
         
         if ($("#person-wise-leads-chart").length > 0) {
-            
-            let p_labels = [];
-            let p_data = [];
-    
-            @json($third_chart).forEach(element => {
-                p_labels.push(element['user_name']);
-                p_data.push(parseInt(element['total_inquiries']));
-            });
-
             // basic bar chart
             var options2 = {
                 chart: {
@@ -1062,10 +989,10 @@
                     enabled: false
                 },
                 series: [{
-                    data: p_data,
+                    data: [1, 5, 8, 3, 7]
                 }],
                 xaxis: {
-                    categories: p_labels,
+                    categories: ['Pankaj Dev', 'Developer User', 'Test Account', 'New test user', 'John Example'],
                 },
                 colors:['#db008c' ]
             }

@@ -64,9 +64,6 @@ class Projects extends Model
 		'document_category',
 		'document_image',
 		'catlog_file',
-		
-		'is_indirectly_store',
-		'remark',
 	];
 
 	protected static function boot()

@@ -609,14 +609,14 @@
                                         <input class="form-check-input" id="filter_new_enquiry" type="checkbox">
                                         <label class="form-check-label" for="filter_new_enquiry">New Enquiry</label>
                                     </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_draft" type="checkbox">
                                         <label class="form-check-label" for="filter_draft">Draft Enquiry</label>
-                                    </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    </div> --}}
+                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_prospect" type="checkbox">
                                         <label class="form-check-label" for="filter_prospect">Potential Prospect</label>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <button class="btn btn-secondary" id="filtersearch">Filter</button>
@@ -804,13 +804,12 @@
                                 </div> --}}
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="nfdDate" class="mb-0">NFD:</label>
-                                    <input class="form-control" id="ndf" name="nfdDate"
-                                        max='31-12-2050' type="date" onkeydown="limitYearTo4Digits()">
+                                    <input class="form-control limitYear4digits" id="site_visit_date1" name="nfdDate"
+                                        max='31-12-2050' type="date" oninput="limitYearTo4Digits1()">
                                 </div>
-								<div class="form-group col-md-3 m-b-20">
+                                <div class="form-group col-md-3 m-b-20">
                                     <label for="nfdTime" class="mb-0">Site Visit Time:</label>
-                                    <input class="form-control" id="site_visit_time" name="nfdTime"
-                                        type="time">
+                                    <input class="form-control" id="site_visit_time1" name="nfdTime" type="time">
                                 </div>
 
                                 <div class="form-group col-md-12 m-b-20">
@@ -912,10 +911,16 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                {{-- <div class="form-group col-md-3 m-b-20">
+                                    <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
+                                    <input class="form-control " id="site_visit_time" max='31-10-2050'
+                                        name="site_visit_time" type="datetime-local" oninput="limitYearTo4Digits()">
+                                </div> --}}
+                                {{-- bharat date --}}
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="site_visit_date" class="mb-0">Site Visit Date:</label>
-                                    <input class="form-control" id="site_visit_date" name="site_visit_date"
-                                        type="date" onkeydown="limitYearTo4Digits()">
+                                    <input class="form-control limitYear4digits" id="site_visit_date"
+                                        name="site_visit_date" type="date" oninput="limitYearTo4Digits()">
                                 </div>
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
@@ -1029,9 +1034,11 @@
                                         <input class="form-check-input" checked id="match_specific_type" type="checkbox">
                                         <label class="form-check-label" for="match_specific_type">Enquiry Category</label>
                                     </div>
-									<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
-                                        <input class="form-check-input" checked id="match_specific_sub_type" type="checkbox">
-                                        <label class="form-check-label" for="match_specific_sub_type">Enquiry Sub Category</label>
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                        <input class="form-check-input" checked id="match_specific_sub_type"
+                                            type="checkbox">
+                                        <label class="form-check-label" for="match_specific_sub_type">Enquiry Sub
+                                            Category</label>
                                     </div>
                                     {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
                                         <input class="form-check-input" id="match_building" type="checkbox">
@@ -1106,16 +1113,29 @@
     @endsection
     @push('scripts')
         <script>
+            function limitYearTo4Digits1() {
+                const dateInput = document.getElementById('site_visit_date1');
+                const inputValue = dateInput.value;
+                // Split the input by the hyphen separator
+                const parts = inputValue.split('-');
+                if (parts.length === 3) {
+                    // Ensure the year part has 4 digits
+                    const year = parts[0].trim();
+                    if (year.length > 4) {
+                        parts[0] = year.slice(-4); // Keep only the last 4 digits
+                    }
+                    // Reconstruct the formatted date
+                    const formattedDate = parts.join('-');
+                    // Update the input value with the modified date
+                    dateInput.value = formattedDate;
+                }
+            }
+
             function limitYearTo4Digits() {
-                let dateInput = document.getElementById('site_visit_date');
-                let ndfInput = document.getElementById('ndf');
-
-                dateInput.value = '';
-                ndf.value = '';
-
-                return;
+                const dateInput = document.getElementById('site_visit_date');
                 const inputValue = dateInput.value;
 
+                console.log("inputValue", inputValue);
                 // Split the input by the hyphen separator
                 const parts = inputValue.split('-');
 
@@ -1155,7 +1175,7 @@
                 $('#match_property_type').prop('checked', <?= $matchPropertyType === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_type').prop('checked', <?= $matchSpecificType === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_sub_type').prop('checked', <?= $matchSpecificSubType === '1' ? 'true' : 'false' ?>);
-				$('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
+                $('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
                 $('#match_enquiry_size').prop('checked', <?= $matchEnqSize === '1' ? 'true' : 'false' ?>);
                 $('#match_inquiry_source').prop('checked', <?= $matchEnqSource === '1' ? 'true' : 'false' ?>);
 
@@ -1195,8 +1215,6 @@
                 }
                 //
             });
-
-
             // category to sub category on change filter
             $('#filter_specific_type').on('change', function() {
                 let selectedCategory = this.options[this.selectedIndex].text.trim();
@@ -1235,8 +1253,7 @@
                     console.error("An error occurred:", error);
                 }
             });
-        </script>
-        <script>
+
             matching_property_url = "{{ route('admin.properties') }}";
 
             var search_enq = '';
@@ -1421,14 +1438,15 @@
                             d.filter_to_budget = $('#filter_to_budget').val();
                             d.filter_favourite = Number($('#filter_favourite').prop('checked'));
                             d.filter_new_enquiry = Number($('#filter_new_enquiry').prop('checked'));
-                            d.filter_draft = Number($('#filter_draft').prop('checked'));
-                            d.filter_prospect = Number($('#filter_prospect').prop('checked'));
+                            // d.filter_draft = Number($('#filter_draft').prop('checked'));
+                            // d.filter_prospect = Number($('#filter_prospect').prop('checked'));
                             d.go_data_id = go_data_id;
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
-                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop('checked'));
-							d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
+                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop(
+                                'checked'));
+                            d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
                             d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
                             d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
                             // d.match_budget_to_type = Number($('#match_budget_to_type').prop('checked'));
@@ -1845,6 +1863,7 @@
 
                 var email = email_reminder.checked == true ? 1 : 0;
                 var sms = sms_reminder.checked == true ? 1 : 0;
+                console.log("NFD PROGRESS:", $('#site_visit_date1').val(), $('#site_visit_time1').val());
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.saveProgress') }}",
@@ -1853,7 +1872,7 @@
                         progress: $('#progress_enquiry_progress').val(),
                         lead_type: $('input[name="progress_lead_type"]:checked').val(),
                         sales_comment_id: $('#progress_sales_comment').val(),
-						nfd: $('#site_visit_date').val() + ' ' + $('#site_visit_time').val(),
+                        nfd: $('#site_visit_date1').val() + ' ' + $('#site_visit_time1').val(),
                         remarks: $('#progress_remarks').val(),
                         time_before: JSON.stringify($('#reminider_before_minute').val()),
                         email_reminder: email,
@@ -1867,33 +1886,21 @@
                     }
                 });
             });
-
-
-            // $("#schedule_form").validate({
-            //     rules: {
-            //         site_visit_time: {
-            //             date: true,
-            //             maxDate: true
-            //         }
-            //     }
-            // });
+            // Show Schedule Visit
+            console.log("NFD Schedule:", $('#site_visit_date').val(), $('#site_visit_time').val());
 
             $(document).on('click', '#saveSchedule', function(e) {
                 e.preventDefault();
                 if (!$('#schedule_form').valid()) {
-                    return;
+                    return
                 }
                 $(this).prop('disabled', true);
                 var id = $('#schedule_visit_id').val()
-
                 reminder_time_before = $('#reminider_before_minute').val();
-
                 var email_reminder = document.getElementById("email_reminder");
                 var sms_reminder = document.getElementById("sms_reminder");
-
                 var email = email_reminder.checked == true ? 1 : 0;
                 var sms = sms_reminder.checked == true ? 1 : 0;
-
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.saveSchedule') }}",
@@ -1911,12 +1918,12 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
-                        console.log("data", data);
+                        console.log("data ==", data);
                         $('#enquiryTable').DataTable().draw();
                         $('#saveSchedule').prop('disabled', false);
                     },
                     error: function(data) {
-                        console.log("err", data);
+                        console.log("err ==", data);
                         $('#saveSchedule').prop('disabled', false);
                     }
                 });
@@ -2266,7 +2273,7 @@
                         return true;
                     }
                 }
-            }, 'Budget To Must be greater than budget from');
+            }, 'Budget To Must be greater than budget from hereeee');
 
             $.validator.addMethod("checkArea", function(value, element) {
                 val2 = $('#area_size_from').val()

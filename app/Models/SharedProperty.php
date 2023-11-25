@@ -22,6 +22,7 @@ class SharedProperty extends Model
 	public function Property()
 	{
 		return $this->belongsTo(Properties::class, 'property_id', 'id')->with('Projects')->withTrashed();
+		// return $this->belongsTo(Properties::class, 'property_id', 'id');
 	}
 
 	public function User()

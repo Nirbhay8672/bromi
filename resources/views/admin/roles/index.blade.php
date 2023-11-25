@@ -422,7 +422,7 @@
                                         Property</label>
                                 </div>
 
-                                {{--  <h5 class="border-style">Insta Property</h5>
+                                <h5 class="border-style">Insta Property</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_9"
                                         type="checkbox" data-bs-original-title="" title="">
@@ -476,7 +476,7 @@
                                         name="permission[]" data-id="56" type="checkbox" data-bs-original-title=""
                                         title="">
                                     <label class="form-check-label" for="permission_id_56">Mask Phone No</label>
-                                </div>  --}}
+                                </div>
 
                                 <h5 class="border-style">Reports</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">

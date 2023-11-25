@@ -20,12 +20,9 @@
                     <div class="card-body">
                         <div class="row" id="configuration_container">
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    {{-- <span
-                                        id="openAddFieldMOdal"
+                                <div class="project-box"><span id="openAddFieldMOdal"
                                         data-dropdown_for="property_construction_type"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Property Construction Type</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_construction_type_ul">
@@ -35,12 +32,9 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    {{-- <span
-                                        id="openAddFieldMOdal"
+                                <div class="project-box"><span id="openAddFieldMOdal"
                                         data-dropdown_for="property_priority_type"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Priority Type</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_priority_type_ul">
@@ -50,12 +44,9 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    {{-- <span
-                                        id="openAddFieldMOdal"
+                                <div class="project-box"><span id="openAddFieldMOdal"
                                         data-dropdown_for="property_specific_type"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Category
                                     </h6>
                                     <div class="row details mt-5">
@@ -66,12 +57,9 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    <span
-                                        id="openAddFieldMOdal"
+                                <div class="project-box"><span id="openAddFieldMOdal"
                                         data-dropdown_for="property_source"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span>
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Property Source
                                     </h6>
                                     <div class="row details mt-5">
@@ -82,12 +70,8 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6" style="display: none">
-                                <div class="project-box">
-                                    {{-- <span
-                                        id="openAddFieldMOdal"
-                                        data-dropdown_for="property_for"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                <div class="project-box"><span id="openAddFieldMOdal" data-dropdown_for="property_for"
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Property For
                                     </h6>
                                     <div class="row details mt-5">
@@ -98,12 +82,8 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    {{-- <span
-                                        id="openAddFieldMOdal1"
-                                        data-dropdown_for="property_plan_type"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                <div class="project-box"><span id="openAddFieldMOdal1" data-dropdown_for="property_plan_type"
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Sub Category</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_plan_type_ul">
@@ -113,12 +93,9 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    {{-- <span
-                                        id="openAddFieldMOdal"
+                                <div class="project-box"><span id="openAddFieldMOdal"
                                         data-dropdown_for="property_owner_type"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Owner Type
                                     </h6>
                                     <div class="row details mt-5">
@@ -129,12 +106,9 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    {{-- <span
-                                        id="openAddFieldMOdal"
+                                <div class="project-box"><span id="openAddFieldMOdal"
                                         data-dropdown_for="property_furniture_type"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Furniture Type
                                     </h6>
                                     <div class="row details mt-5">
@@ -145,12 +119,9 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    {{-- <span
-                                        id="openAddFieldMOdal"
+                                <div class="project-box"><span id="openAddFieldMOdal"
                                         data-dropdown_for="property_measurement_type"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span> --}}
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Mesurement Type
                                     </h6>
                                     <div class="row details mt-5">
@@ -161,12 +132,8 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    <span
-                                        id="openAddFieldMOdal"
-                                        data-dropdown_for="property_zone"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span>
+                                <div class="project-box"><span id="openAddFieldMOdal" data-dropdown_for="property_zone"
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Property Zone</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_zone_ul">
@@ -176,26 +143,13 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    <span
-                                        id="openAddFieldMOdal"
+                                <div class="project-box"><span id="openAddFieldMOdal"
                                         data-dropdown_for="property_amenities"
-                                        class="badge btn btn-primary badge-primary"
-                                    >Add</span>
+                                        class="badge btn btn-primary badge-primary">Add</span>
                                     <h6>Amenities</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_amenities_ul">
 
-                                        </ul>
-                                        <ul>
-                                            <li class="mb-2">Swimming Pool</li>
-                                            <li class="mb-2">Club house</li>
-                                            <li class="mb-2">Passenger Lift</li>
-                                            <li class="mb-2">Garden & Children Play Area</li>
-                                            <li class="mb-2">Service Lift</li>
-                                            <li class="mb-2">Streature Lift</li>
-                                            <li class="mb-2">Central AC</li>
-                                            <li class="mb-2">Gym</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -389,57 +343,8 @@ function getList() {
             });
             if (data != '') {
                 var data = JSON.parse(data);
-
-                let new_data = data.filter(data => data.dropdown_for ==  'property_construction_type');
-                let new_object_for_print = [];
-                new_data.forEach(element => {
-                    let result = new_object_for_print.filter(abc => abc.name == element.name);
-                    if(result.length == 0) {
-                        new_object_for_print.push(element);
-                    }
-                });
-                new_object_for_print.forEach(element => {
-                    if(element.name != 'Residentia l& Commercial' && element.name != 'A' && element.name != 'dsda' && element.name != 'dsdsadasda')
-                    {
-                        var html = generateListHtml(element);
-                        $('#' + element.dropdown_for + '_ul').append(html)
-                    } 
-                });
-
-
-                let new_1_data = data.filter(data => data.dropdown_for ==  'property_specific_type');
-                let new_1_object_for_print = [];
-                new_1_data.forEach(element => {
-                    let result = new_1_object_for_print.filter(abc => abc.name == element.name);
-                    if(result.length == 0) {
-                        new_1_object_for_print.push(element);
-                    }   
-                });
-                new_1_object_for_print.forEach(element => {
-                    if(element.name != 'Residentia l& Commercial' && element.name != 'A' && element.name != 'dsda' && element.name != 'dsdsadasda')
-                    {
-                        var html = generateListHtml(element);
-                        $('#' + element.dropdown_for + '_ul').append(html)
-                    }
-                });
-
-                let extra = [];
-                data.forEach(element => {
-                    let result = extra.filter(abc => abc.name == element.name);
-                    if(result.length == 0) {
-                        extra.push(element);
-                    }   
-                });
-                extra.forEach(element => {
-                    if(element.dropdown_for != 'property_specific_type' && element.dropdown_for != 'property_construction_type' && element.name != 'dsasadsadas' && element.name != 'dsadsadsad' && element.name != 'dsdsadsad' && element.name != 'sddsadsadasd' && element.name != 'sdadsadsad' && element.name != 'rthrthrthrthrh' && element.name != 'ttttttttttt') {
-                        var html = generateListHtml(element);
-                        $('#' + element.dropdown_for + '_ul').append(html)
-                    }
-                });
-
                 $('#parent_id').html('<option value="">Property Construction Type*</option>')
                 $('#parent_id1').html('<option value="">Select Category*</option>')
-
                 for (let i = 0; i < data.length; i++) {
                     if (data[i]['dropdown_for'] == 'property_construction_type') {
                         $('#parent_id').append('<option value="' + data[i]['id'] + '">' + data[i][
@@ -451,6 +356,8 @@ function getList() {
                             'name'
                         ] + '</option>')
                     }
+                    var html = generateListHtml(data[i])
+                    $('#' + data[i]['dropdown_for'] + '_ul').append(html)
                 }
                 getSubcategory()
             }
@@ -483,40 +390,37 @@ function getSubcategory() {
 }
 
 function generateListHtml1(params) {
-    var myvar = `<div class="col-lg-6 col-md-6 sm-12 d-inline-block">
-        <div class="row">
-            <div class="col-lg-7 col-md-7 col-sm-12 mb-2">${params['name']}</div>
-        </div>
-    </div>`;
+    var myvar = '<div class="col-lg-6 col-md-6 sm-12 d-inline-block">' + '<div class="row">' +
+        ' <div class="col-lg-7 col-md-7 col-sm-12 mb-2">' + params['name'] + '</div>' +
+        ' <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right">';
+    if (params['editable'] != 1) {
+        myvar += ' <i data-name="' + params['name'] + '" data-parent_id="' + params['cat_id'] +
+            '" data-dropdown_for="' + params['dropdown_for'] + '"' + '     data-id="' + params['id'] +
+            '"  role="button" class="openEditFieldMOdal1 pointer  fa-pencil fa"></i>' + '<i data-id="' + params['id'] +
+            '"  role="button" class="deleteField1 fa pointer m-l-5  fa-trash"></i>';
+    }
+    myvar += '         </div>' +
+        '' +
+        '     </div>' +
+        ' </div>';
     return myvar;
 }
 
 function generateListHtml(params) {
-
-    if(params.dropdown_for == 'property_zone' || params.dropdown_for == 'property_source' || params.dropdown_for == 'property_amenities') {
-        var myvar = `<div class="col-lg-6 col-md-6 sm-12 d-inline-block">
-            <div class="row">
-                <div class="col-lg-7 col-md-7 col-sm-12 mb-2">${params['name']}</div>
-                <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right">
-                    <i data-name="${params['name']}" data-parent_id="${params['parent_id']}" data-dropdown_for="${params['dropdown_for']}" data-id="${params['id']}"
-                    role="button" class="openEditFieldMOdal pointer fa-pencil fa"></i>
-                    <i data-id="${params['id']}" role="button" class="deleteField fa pointer m-l-5 fa-trash">
-                    </i>
-                </div>
-            </div>
-        </div>`;
-
-        return myvar;
-
-    } else {
-        var myvar = `<div class="col-lg-6 col-md-6 sm-12 d-inline-block">
-            <div class="row">
-                <div class="col-lg-7 col-md-7 col-sm-12 mb-2">${params['name']}</div>
-            </div>
-        </div>`;
-
-        return myvar;
+    var myvar = '<div class="col-lg-6 col-md-6 sm-12 d-inline-block">' + '<div class="row">' +
+        ' <div class="col-lg-7 col-md-7 col-sm-12 mb-2">' + params['name'] + '</div>' +
+        ' <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right">';
+    if (params['editable'] != 1) {
+        myvar += ' <i data-name="' + params['name'] + '" data-parent_id="' + params['parent_id'] +
+            '" data-dropdown_for="' + params['dropdown_for'] + '"' + '     data-id="' + params['id'] +
+            '"  role="button" class="openEditFieldMOdal pointer  fa-pencil fa"></i>' + '<i data-id="' + params['id'] +
+            '"  role="button" class="deleteField fa pointer m-l-5  fa-trash"></i>';
     }
+    myvar += '         </div>' +
+        '' +
+        '     </div>' +
+        ' </div>';
+    return myvar;
 }
 
 $(document).on('click', '#saveField', function(e) {

@@ -10,19 +10,15 @@ use App\Models\FormType;
 use Illuminate\Support\Facades\Hash;
 // use Auth;
 // use Validator;
-use Illuminate\Support\Str;
 use App\Models\User;
 // use App\Rules\ruleIdExist;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class FormsController extends Controller
 {
-
-    
     public function addForm(Request $request)
     {
         try {
@@ -185,112 +181,6 @@ class FormsController extends Controller
 
         
     }
-
-    public function getformdata(Request $request)
-    {
-        $getForm = Form::where('form_name',$request->input('form_name'))->first();
-       
-        $data =FormFields::where('form_id',$getForm->id)->get();
-        $formField=[];
-        $formattedData=[];
-        foreach ($data as $key => $value) {
-            $formField = DB::table('form_types')
-                ->whereNotNull('group_name')
-                ->select('group_name', DB::raw('MAX(field_name) as field_name'), DB::raw('MAX(option_type) as option_type')) // Replace column1, column2, etc. with your actual column names
-                ->groupBy('group_name')
-                ->get();
-                
-        }
-        foreach ($formField as $key => $value) {
-         
-             $groupExists=$value->group_name;
-             if (!empty($groupExists)) {
-                 $fields= DB::table('form_types')
-                 ->where('group_name',$groupExists)
-                 ->get();
-                
-                 $fetchFileds=[];
-                 foreach ($fields as $key => $field) {
-                    $fetchFileds[]=[
-                        "id"=>(int)$field->id,
-                        "field_type"=>$field->field_type,
-                        "option_type"=>$field->option_type,
-                        "field_name"=>$field->field_name,
-                        "label_name"=>Str::title(str_replace('_', ' ', $field->field_name)),
-                        "parent_id"=>$field->parent_id,
-                        "group_name"=>$field->group_name,
-                        "created_at"=>$field->created_at,
-                        "updated_at"=>$field->updated_at
-                    ];
-                 }
-                 $formattedData[] = [
-                     "group_name" => $groupExists,
-                     "fields" =>$fetchFileds
-                 ];
-             }
-         }
-        if(!empty($formattedData)){
-            return response()->json([
-                "message" => $request->input('form_name')." fields have been fetched successfully.",
-                "data" => $formattedData,
-            ]);
-        }else{
-            return response()->json([
-                "message" => $request->input('form_name')." fields No data found",
-                "data" => [],
-            ]);
-        }
-        
-         
-    }
-
-    public function getformdataProject(Request $request)
-    {
-        dd($request);
-        $data =FormFields::where('form_name',$request)->get();
-        $formField=[];
-        $formattedData=[];
-        foreach ($data as $key => $value) {
-            $formField = DB::table('form_types')
-                ->whereNotNull('group_name')
-                ->select('group_name', DB::raw('MAX(field_name) as field_name'), DB::raw('MAX(option_type) as option_type')) // Replace column1, column2, etc. with your actual column names
-                ->groupBy('group_name')
-                ->get();
-                
-        }
-        foreach ($formField as $key => $value) {
-         
-             $groupExists=$value->group_name;
-             if (!empty($groupExists)) {
-                 $fields= DB::table('form_types')
-                 ->where('group_name',$groupExists)
-                 ->get();
-                 $formattedData[] = [
-                     "group_name" => $groupExists,
-                     "fields" =>
-                     [
-                        "id"=>$fields->id,
-                        "field_type"=>$fields->field_type,
-                        "option_type"=>$fields->option_type,
-                        "field_name"=>$fields->field_name,
-                        "label_name"=>Str::title(str_replace('_', ' ', $fields->label_name)),
-                        "parent_id"=>$fields->parent_id,
-                        "group_name"=>$fields->group_name,
-                        "created_at"=>$fields->created_at,
-                        "updated_at"=>$fields->updated_at
-    
-                    ]
-                    
-                 ];
-             }
-         }
-        return response()->json([
-            "message" => "Property fields have been fetched successfully.",
-            "data" => $formattedData,
-        ]);
-         
-    }
-
-    
+   
     
 }

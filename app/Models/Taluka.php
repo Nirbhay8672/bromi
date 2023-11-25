@@ -9,14 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Taluka extends Model
 {
 	use HasFactory;
-	use SoftDeletes;
+use SoftDeletes;
 
 	protected $table = 'taluka';
 
-	protected $guarded = [];
-
-	public function District()
-	{
-		return $this->belongsTo(District::class, 'district_id', 'id')->withTrashed();
-	}
+	protected $fillable = [
+		'district_id',
+		'name',
+	];
 }

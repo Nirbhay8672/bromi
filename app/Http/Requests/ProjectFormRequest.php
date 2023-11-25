@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Projects;
 
 class ProjectFormRequest extends FormRequest
 {
@@ -47,8 +46,7 @@ class ProjectFormRequest extends FormRequest
 
 			'total_floor_for_parking' => 'required|gt:0',
 			'parking_details' => 'required',
-			'amenities' => 'required|min:1',
-			'remark' => 'required',
+			'amenities' => 'required',
 		];
 
 		if($this->id == '' || $this->id == null) {
@@ -58,16 +56,7 @@ class ProjectFormRequest extends FormRequest
 		} else {
 			$rules['document_image'] = 'file|mimes:jpeg,png|max:2000'; 
 			$rules['catlog_file'] = 'file|max:500000';
-			
-			$data = Projects::find((int) $this->id);
-			
-			if($data->is_indirectly_store == 1) {
-		    	$rules['document_category'] = 'required';
-    			$rules['document_image'] = 'required|file|mimes:jpeg,png|max:2000'; 
-    			$rules['catlog_file'] = 'required|file|max:500000';
-			}
 		}
-		
 
 		if($this->document_image) {
 			$rules['document_category'] = 'required';

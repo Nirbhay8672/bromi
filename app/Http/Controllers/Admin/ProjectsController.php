@@ -36,7 +36,7 @@ class ProjectsController extends Controller
 		if ($request->ajax()) {
 
 			$data = Projects::with('Area', 'Builder', 'City', 'State')
-				->orderBy('id','desc')
+				->orderBy('id', 'desc')
 				->get();
 
 			return DataTables::of($data)
@@ -71,13 +71,13 @@ class ProjectsController extends Controller
 				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$buttons =  $buttons . '<a href="'.route('admin.project.edit',$row->id).'"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+					$buttons =  $buttons . '<a href="' . route('admin.project.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
 					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProject(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
 
 					return $buttons;
 				})
-				->rawColumns(['Actions','status_change'])
-				->rawColumns(['Actions','select_checkbox'])
+				->rawColumns(['Actions', 'status_change'])
+				->rawColumns(['Actions', 'select_checkbox'])
 				->make(true);
 		}
 
@@ -87,7 +87,7 @@ class ProjectsController extends Controller
 		$builders = Builders::orderBy('name')->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
 
-		return view('admin.projects.index', compact('cities', 'states', 'areas', 'builders','project_configuration_settings'));
+		return view('admin.projects.index', compact('cities', 'states', 'areas', 'builders', 'project_configuration_settings'));
 	}
 
 	public function viewProject($project_id)
@@ -99,10 +99,10 @@ class ProjectsController extends Controller
 				DB::raw("state.name AS state_name"),
 				DB::raw("city.name AS city_name"),
 				DB::raw("areas.name AS area_name"),
-			])->join('builders','projects.builder_id','builders.id')
-			->join('city','projects.city_id','city.id')
-			->join('state','projects.state_id','state.id')
-			->join('areas','projects.area_id','areas.id')
+			])->join('builders', 'projects.builder_id', 'builders.id')
+			->join('city', 'projects.city_id', 'city.id')
+			->join('state', 'projects.state_id', 'state.id')
+			->join('areas', 'projects.area_id', 'areas.id')
 			->where('projects.id', $project_id)->first();
 
 		$project->contacts = json_decode($project->contact_details, true);
@@ -133,7 +133,7 @@ class ProjectsController extends Controller
 		$project->stor_indu = json_decode($project->storage_industrial_details, true);
 		$project->stor_indu_facility = json_decode($project->storage_industrial_facilities, true);
 		$project->extra_facility = json_decode($project->extra_facilities, true);
-		
+
 		$project->land_plot = json_decode($project->land_plot_details, true);
 
 		$project->parkings_decode = json_decode($project->parking_details, true);
@@ -144,9 +144,10 @@ class ProjectsController extends Controller
 		return view('admin.projects.view_project')->with(['project' => $project]);
 	}
 
-	public function changeProjectStatus(Request $request){
+	public function changeProjectStatus(Request $request)
+	{
 		if ($request->ajax()) {
-			if(isset($request->id)){
+			if (isset($request->id)) {
 				$vv = Projects::find($request->id);
 				$vv->status = $request->status;
 				$vv->save();
@@ -178,7 +179,7 @@ class ProjectsController extends Controller
 					$building_images->save();
 				}
 			}
-			$all =  BuildingImages::where('building_id',$request->building_id)->get()->toArray();
+			$all =  BuildingImages::where('building_id', $request->building_id)->get()->toArray();
 			if (!empty($all)) {
 				return json_encode($all);
 			}
@@ -186,39 +187,40 @@ class ProjectsController extends Controller
 	}
 
 	public function storeFile(UploadedFile $file)
-    {
-        $path = "file_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
-        $file->storeAs("public/file_image/", $path);
-        return $path;
-    }
-	
+	{
+		$path = "file_" . time() . (string) random_int(0, 5) . '.' . $file->getClientOriginalExtension();
+		$file->storeAs("public/file_image/", $path);
+		return $path;
+	}
+
 	public function saveProject(ProjectFormRequest $request)
 	{
 		$data = null;
 
-		if($request->id == '' || $request->id == null) {
+		if ($request->id == '' || $request->id == null) {
 			$data = new Projects();
 		} else {
 			Projects::where('id', (int) $request->id)
-				->update([
-					'property_type' => null,
-					'property_category' => null,
-					'sub_categories' => null,
-					'sub_category_single' => null,
+				->update(
+					[
+						'property_type' => null,
+						'property_category' => null,
+						'sub_categories' => null,
+						'sub_category_single' => null,
 
-					'tower_details' => null,
-					'wing_details' => null,
-					'unit_details' => null,
-					'land_plot_details' => null,
-					'storage_industrial_details' => null,
-					'storage_industrial_facilities' => null,
-				]
-			);
+						'tower_details' => null,
+						'wing_details' => null,
+						'unit_details' => null,
+						'land_plot_details' => null,
+						'storage_industrial_details' => null,
+						'storage_industrial_facilities' => null,
+					]
+				);
 
 			$data = Projects::find((int) $request->id);
 		}
 
-		if($request->id == '' || $request->id == null) {
+		if ($request->id == '' || $request->id == null) {
 			$data->user_id = Session::get('parent_id');
 			$data->added_by = Auth::user()->id;
 		}
@@ -235,8 +237,8 @@ class ProjectsController extends Controller
 		$data->state_id = $request->state;
 		$data->city_id = $request->city;
 		$data->pincode = $request->pincode;
-		$data->location_link= $request->location_link;
-		
+		$data->location_link = $request->location_link;
+
 		$data->land_area = $request->land_area;
 		$data->land_size_unit = $request->land_size_unit;
 		$data->rera_number = $request->rera_number;
@@ -269,10 +271,10 @@ class ProjectsController extends Controller
 		$data->wing_details = $request->if_residential_only_wings;
 		$data->land_plot_details = $request->if_farm_plot_land;
 
-		if($request->propery_type == 87 || $request->property_category == 259 || $request->property_category == 260) {
-			if($request->propery_type == 87) {
+		if ($request->propery_type == 87 || $request->property_category == 259 || $request->property_category == 260) {
+			if ($request->propery_type == 87) {
 				$array = '[';
-				foreach(json_decode($data->unit_details) as $unit) {
+				foreach (json_decode($data->unit_details) as $unit) {
 					// if($unit->wing) {
 					// 	$array .= '[';
 					// 	$array .= $unit->wing;
@@ -293,29 +295,29 @@ class ProjectsController extends Controller
 				$decode_obj = json_decode($new_data);
 
 				$array = '[';
-				foreach(json_decode($decode_obj->if_office_tower_details) as $tower) {
-					if($tower->tower_name != '') {
+				foreach (json_decode($decode_obj->if_office_tower_details) as $tower) {
+					if ($tower->tower_name != '') {
 						$array .= '[';
 						$array .= $tower->tower_name;
-						$array .= ','.$tower->total_floor;
-						$array .= ','.$tower->total_unit;
-						$array .= ','.$tower->carpet;
-						$array .= ','.$tower->saleable;
+						$array .= ',' . $tower->total_floor;
+						$array .= ',' . $tower->total_unit;
+						$array .= ',' . $tower->carpet;
+						$array .= ',' . $tower->saleable;
 						$array .= '],';
 					}
 				}
 				$array .= ']';
 
-				if($array == "[]") {
-					$array = '['; 
-					foreach(json_decode($decode_obj->if_retail_tower_details) as $tower) {
-						if($tower->tower_name != '') {
+				if ($array == "[]") {
+					$array = '[';
+					foreach (json_decode($decode_obj->if_retail_tower_details) as $tower) {
+						if ($tower->tower_name != '') {
 							$array .= '[';
 							$array .= $tower->tower_name;
-							$array .= ','.$tower->size_from;
-							$array .= ','.$tower->size_to;
-							$array .= ','.$tower->front_opening;
-							$array .= ','.$tower->number_of_each_floor;
+							$array .= ',' . $tower->size_from;
+							$array .= ',' . $tower->size_to;
+							$array .= ',' . $tower->front_opening;
+							$array .= ',' . $tower->number_of_each_floor;
 							$array .= '],';
 						}
 					}
@@ -340,34 +342,34 @@ class ProjectsController extends Controller
 
 		$data->amenities = $request->amenities;
 
-		if($request->document_image) {
+		if ($request->document_image) {
 			$data->document_category = $request->document_category;
 			$document_image = $request->document_image;
 			$data->document_image = $this->storeFile($document_image);
 		}
 
-		if($request->catlog_file) {
+		if ($request->catlog_file) {
 			$catlot_file = $request->catlog_file;
 			$data->catlog_file = $this->storeFile($catlot_file);
 		}
-		
+
 		$data->is_indirectly_store = 0;
-		$data->remark = $request->remark;
 
 		$data->save();
 
-		if($request->id == '' || $request->id == null) {
+		if ($request->id == '' || $request->id == null) {
 			Session::flash('message',  'Project has been created successfully.');
 		} else {
 			Session::flash('message',  'Project has been updated successfully.');
 		}
-		
+
 		return response()->json([
 			'Project added or update successfully.'
 		]);
 	}
 
-	public function projectByUnit(Request $request){
+	public function projectByUnit(Request $request)
+	{
 		if ($request->ajax()) {
 			$data = Properties::with('Projects')->whereHas('Projects')->when(!empty($request->project_id), function ($query) use ($request) {
 				return $query->where('project_id', $request->project_id);
@@ -375,7 +377,6 @@ class ProjectsController extends Controller
 			$dataa = [];
 			foreach ($data as $key => $value2) {
 				//bhrt furnished
-
 				if (!empty($value2->unit_details) && isset(json_decode($value2->unit_details)[0])) {
 					$arr = json_decode($value2->unit_details);
 					foreach ($arr as $key => $value) {
@@ -383,40 +384,95 @@ class ProjectsController extends Controller
 							$arrr['id'] = $value2->id;
 							$arrr['wing'] = $value[0];
 							$arrr['project'] = $value2->projects->project_name;
+							$arrr['property_for'] = $value2->property_for;
 							$arrr['unit'] = $value[1];
 							$arrr['status'] = $value[2];
 							$arrr['price'] = $value2->price;
-							if ($value[8] == "106") {
-								$fstatus = 'Furnished';
-							} elseif ($value[8] == "107") {
-								$fstatus = 'Semi Furnished';
-							} elseif ($value[8] == "108") {
-								$fstatus = 'Unfurnished';
-							} else {
-								$fstatus = '-';
-							}
 
+							$fstatus = '-';
+							if ($value2->property_category == '256') {
+								$fstatus  = '';
+							} else {
+								$fstatus  = 'Unfurnished';
+								if ($value[8] == "106" || $value[8] == "34") {
+									$fstatus = 'Furnished';
+								} elseif ($value[8] == "107" || $value[8] == "35") {
+									$fstatus = 'Semi Furnished';
+								} elseif ($value[8] == "108" || $value[8] == "36") {
+									$fstatus = 'Unfurnished';
+								} else {
+									$fstatus = 'Can Furnished';
+								}
+							}
 							$arrr['fstatus'] = $fstatus;
-							$arrr['contact_name'] = $value2->owner_info_name;
+							$arrr['contact_name'] = $value2->other_contact_details;
 							$arrr['contact_no'] = $value2->owner_contact_specific_no;
+							// Calculate and set the 'price' based on conditions
+							$price = '';
+							if ($value2->property_for === 'Both') {
+								if (!empty($value[7]) && !empty($value[4])) {
+									$price = 'R : ' . $value[4] . ' / ' . 'S : ' . $value[7];
+								} elseif (!empty($value[3]) && !empty($value[4])) {
+									$price = 'R : ' . $value[4] . ' / ' . 'S : ' . $value[3];
+								}
+							} else {
+								if (!empty($value[7])) {
+									$price = $value[7];
+								} elseif (!empty($value[4])) {
+									$price = $value[4];
+								} elseif (!empty($value[3])) {
+									$price = $value[3];
+								}
+							}
+							$arrr['price'] = $price;
+
 							array_push($dataa, $arrr);
 						}
 					}
 				}
 			}
-
 			return DataTables::of($dataa)
+				->editColumn('project', function ($row) {
+					if (isset($row['project'])) {
+						return '<a href="' . route('admin.project.view', encrypt($row['id'])) . ' ">' . $row['project'] . '</a>';
+					} else {
+						return ''; // Handle the case where project is not set
+					}
+				})
+
+				->editColumn('property_for', function ($row) {
+					return   $row['property_for'];
+				})
 				->editColumn('wing', function ($row) {
-					return   $row['wing'] ;
+					return   $row['wing'];
+				})
+				->editColumn('unit', function ($row) {
+					$row['Sold Out'] = "sold ";
+					$row['Rent Out'] = "Rent";
+					if ($row['status'] == 'Sold Out') {
+						return  ' ';
+					} elseif ($row['status'] == 'Rent Out') {
+						return  ' ';
+					} elseif($row['status'] == "Available") {
+						return '<a href="' . route('admin.project.view', encrypt($row['id'])) . ' ">' . $row['unit'] . '</a>';
+					}
 				})
 				->editColumn('contact', function ($row) {
-					return $row['contact_name'] .' - '. $row['contact_no'];
+					$contactArray = json_decode($row['contact_name'], true);
+					$contact = !empty($contactArray[0][0]) ? $contactArray[0][0] : '-';
+					$contact_number = !empty($contactArray[0][1]) ? $contactArray[0][1] : '-';
+					$telLink = !empty($contact_number) ? '<a href="tel:' . $contact_number . '">' . $contact_number . '</a>' : '-';
+					return '<a href="' . route('admin.project.view', encrypt($row['id'])) . ' ">' . $contact . ' - ' . $telLink . '</a>';
 				})
-				->rawColumns(['wing'])
+
+				->editColumn('price', function ($row) {
+					return $row['price'];
+				})
+				->rawColumns(['wing','contact', 'project', 'unit', 'property_for'])
 				->make(true);
 		}
 		$projects = Projects::whereNotNull('project_name')->get();
-		return view('admin.properties.project_by_unit',compact('projects'));
+		return view('admin.properties.project_by_unit', compact('projects'));
 	}
 
 	public function importProject(Request $request)
@@ -491,12 +547,13 @@ class ProjectsController extends Controller
 		}
 	}
 
-	public function addproject(Request $request){
-		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+	public function addproject(Request $request)
+	{
+		$cities = City::orderBy('name')->where('user_id', Auth::user()->id)->get();
+		$states = State::orderBy('name')->where('user_id', Auth::user()->id)->get();
 		$areas = Areas::orderBy('name')
-			->where('user_id',Auth::user()->id)
-			->where('status',1)
+			->where('user_id', Auth::user()->id)
+			->where('status', 1)
 			->get();
 
 		$builders = Builders::orderBy('name')->get();
@@ -505,22 +562,20 @@ class ProjectsController extends Controller
 		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
 		$prop_type = [];
 		foreach ($data['property_configuration_settings'] as $key => $value) {
-			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'],'property_')) {
-				array_push($prop_type,$value['id']);
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
+				array_push($prop_type, $value['id']);
 			}
 		}
 		$data['prop_type'] = $prop_type;
 
-		$first_state = State::where('user_id',Auth::user()->id)->first();
-		$first_city = City::where('user_id',Auth::user()->id)->first();
-
-		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city'), $data);
+		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders', 'project_configuration_settings'), $data);
 	}
 
 
-	public function editproject(Projects $id){
+	public function editproject(Projects $id)
+	{
 		$cities = City::orderBy('name')->get();
-		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$states = State::orderBy('name')->where('user_id', Auth::user()->id)->get();
 		$areas = Areas::orderBy('name')->get();
 		$builders = Builders::orderBy('name')->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
@@ -528,16 +583,13 @@ class ProjectsController extends Controller
 		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
 		$prop_type = [];
 		foreach ($data['property_configuration_settings'] as $key => $value) {
-			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'],'property_')) {
-				array_push($prop_type,$value['id']);
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
+				array_push($prop_type, $value['id']);
 			}
 		}
 		$data['prop_type'] = $prop_type;
 
-		$first_state = State::where('user_id',Auth::user()->id)->first();
-		$first_city = City::where('user_id',Auth::user()->id)->first();
-
-		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings', 'id','first_state','first_city'), $data);
+		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders', 'project_configuration_settings', 'id'), $data);
 	}
 
 
@@ -554,7 +606,7 @@ class ProjectsController extends Controller
 		if (!empty($request->id)) {
 			$data = Projects::where('id', $request->id)->delete();
 		}
-		if (!empty($request->allids) && isset(json_decode($request->allids)[0]) ) {
+		if (!empty($request->allids) && isset(json_decode($request->allids)[0])) {
 			$data = Projects::whereIn('id', json_decode($request->allids))->delete();
 		}
 	}

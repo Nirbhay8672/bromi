@@ -62,8 +62,7 @@
                             data: 'created_at',
                             name: 'created_at'
                         },
-                    ],
-                    "order":  [[ 1, "asc"]],
+                    ]
                 });
             });
         </script>

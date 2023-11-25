@@ -38,7 +38,7 @@
                         
                         
                                                                     
-                                            <form class="form-horizontal" role="form" method="POST" action="{{route('admin.new.ticket')}}" style="
+                                            <form class="form-horizontal" role="form" method="POST" action="https://updates.mrweb.co.in/bromi/public/admin/new-ticket" style="
                                                                     padding-left: 4%;
                                                                 ">
                                                 {!! csrf_field() !!}

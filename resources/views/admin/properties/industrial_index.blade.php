@@ -1,8 +1,8 @@
 @extends('admin.layouts.app')
 @section('content')
-@php
-$is_dynamic_form = true;
-@endphp
+    @php
+        $is_dynamic_form = true;
+    @endphp
     <div class="page-body">
         <div class="container-fluid">
             <div class="page-title">
@@ -21,15 +21,17 @@ $is_dynamic_form = true;
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col-md-8">
-											<a class="btn btn-primary btn-air-primary"  href="{{route('admin.property.add')}}">Add
-												Property</a>
+                                    <a class="btn btn-primary btn-air-primary" href="{{ route('admin.property.add') }}">Add
+                                        Property</a>
                                     <button class="btn btn-primary btn-air-primary" type="button" data-bs-toggle="modal"
                                         data-bs-target="#filtermodal">Filter</button>
-                                        <button style="display:none" class="btn btn-danger" id="resetfilter">Clear Filter</button>
-                                        <button class="btn btn-primary btn-air-primary" onclick="importProperties()"
+                                    <button style="display:none" class="btn btn-primary btn-air-primary"
+                                        id="resetfilter">Clear
+                                        Filter</button>
+                                    <button class="btn btn-primary btn-air-primary" onclick="importProperties()"
                                         type="button">Import</button>
-										<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()"
-									type="button">Delete</button>
+                                    <button class="btn btn-primary btn-air-primary delete_table_row" style="display: none"
+                                        onclick="deleteTableRow()" type="button">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -38,17 +40,19 @@ $is_dynamic_form = true;
                                 <table class="display" id="propertyTable">
                                     <thead>
                                         <tr>
-											<th>
+                                            <th>
                                                 <div class="form-check form-check-inline checkbox checkbox-dark mb-0 me-0">
-                                                    <input class="form-check-input" id="select_all_checkbox" name="selectrows" type="checkbox">
+                                                    <input class="form-check-input" id="select_all_checkbox"
+                                                        name="selectrows" type="checkbox">
                                                     <label class="form-check-label" for="select_all_checkbox"></label>
                                                 </div>
                                             </th>
                                             <th>Project</th>
-                                            <th>Locality</th>
                                             <th>Property For</th>
-                                            <th>Configuration</th>
+                                            <th>Units</th>
+                                            <th>Price</th>
                                             <th>Contact</th>
+                                            <th>Remarks</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -90,52 +94,57 @@ $is_dynamic_form = true;
                             @csrf
                             <div>
                                 <div class="row">
-                                    <div class="form-group col-md-3 m-b-4 mb-3">
+                                    {{-- <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_building_id">
                                             <option value=""> Project</option>
                                             @foreach ($projects as $project)
                                                 <option value="{{ $project->id }}">{{ $project->project_name }}</option>
                                             @endforeach
                                         </select>
-                                    </div>
+                                    </div> --}}
+                                    
                                     <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_property_for">
-											<option value="">Property For</option>
+                                            <option value="">Property For</option>
                                             <option value="Rent">Rent</option>
                                             <option value="Sell">Sell</option>
-											<option value="Both">Both</option>
+                                            <option value="Both">Both</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group col-md-3 m-b-4 mb-3">
-                                        <select class="form-select" id="filter_specific_type">
-                                            <option value="">Category</option>
+                                        <select class="form-select" id="filter_property_type">
+                                            <option value="">Property Type</option>
                                             @forelse ($property_configuration_settings as $props)
-                                                @if ($props['dropdown_for'] == 'property_specific_type'  && in_array($props['parent_id'],$prop_type))
+                                                @if ($props['dropdown_for'] == 'property_construction_type' && in_array($props['id'], $prop_type))
                                                     <option data-parent_id="{{ $props['parent_id'] }}"
                                                         value="{{ $props['id'] }}">{{ $props['name'] }}
                                                     </option>
-                                                    </option>
+                                                    {{-- @dd($props['name']); --}}
                                                 @endif
                                             @empty
                                             @endforelse
                                         </select>
                                     </div>
-
+                                    {{-- Villa --}}
                                     <div class="form-group col-md-3 m-b-4 mb-3">
-                                        <select class="form-select" id="filter_configuration">
-                                            <option value="">Configuration</option>
-											@forelse (config('constant.property_configuration') as $key=>$props)
-											<option
-												value="{{ $key }}">{{ $props }}
-											</option>
-											@empty
-											@endforelse
+                                        <select class="form-select" id="filter_specific_type">
+                                            <option value="">Category</option>
+                                            @forelse ($property_configuration_settings as $props)
+                                                @if ($props['dropdown_for'] == 'property_specific_type' && in_array($props['parent_id'], $prop_type))
+                                                    <option data-parent_id="{{ $props['parent_id'] }}"
+                                                        value="{{ $props['id'] }}">{{ $props['name'] }}</option>
+                                                @endif
+                                            @empty
+                                            @endforelse
                                         </select>
                                     </div>
-
-
-									<div class="form-group col-md-3 m-b-4 mb-3">
+                                    <div class="form-group col-md-3 m-b-4 mb-3">
+                                        <select class="form-select" id="filter_configuration">
+                                            <option value="">Sub Category</option>
+                                        </select>
+                                    </div>
+                                    {{-- <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_zone">
                                             <option value="">Zone</option>
                                             @forelse ($property_configuration_settings as $props)
@@ -148,17 +157,26 @@ $is_dynamic_form = true;
                                             @empty
                                             @endforelse
                                         </select>
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="form-group col-md-3 m-b-4 mb-3">
+                                    {{-- <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_property_status">
                                             <option value=""> Status</option>
                                             <option value="Available">Available</option>
                                             <option value="SoldOut">Sold Out</option>
                                         </select>
+                                    </div> --}}
+                                    <div class="form-group col-md-4 m-b-4 mb-3">
+                                        <label class="select2_label" for="Select Project"> Project</label>
+                                        <select class="form-select" id="filter_building_id" multiple>
+                                            @foreach ($projects as $building)
+                                                <option value="{{ $building->id }}">{{ $building->project_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
-
-                                    <div class="form-group col-md-3 m-b-4 mt-1">
+                                    <div class="form-group col-md-4 m-b-4 mb-3">
+                                        {{-- <label class="select2_label" for="Select Project"> Source Of Property</label> --}}
                                         <select class="form-select" id="filter_source_of_property">
                                             <option value="">Source Of Property</option>
                                             @forelse ($property_configuration_settings as $props)
@@ -172,7 +190,7 @@ $is_dynamic_form = true;
                                             @endforelse
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-3 m-b-4 mb-3">
+                                    <div class="form-group col-md-4 m-b-4 mb-3">
                                         <select class="form-select" id="filter_area_id">
                                             <option value=""> Area</option>
                                             @foreach ($areas as $area)
@@ -183,22 +201,23 @@ $is_dynamic_form = true;
 
                                     <hr class="color-hr">
 
-                                    <div class="form-group col-md-4 m-b-20">
-										<label for="From Area">From Area</label>
+                                    {{-- <div class="form-group col-md-4 m-b-20">
+                                        <label for="From Area">From Area</label>
                                         <input class="form-control" name="filter_from_area" id="filter_from_area"
-                                            type="text" autocomplete="off" >
+                                            type="text" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-4 m-b-20">
-										<label for="To Area">To Area</label>
+                                        <label for="To Area">To Area</label>
                                         <input class="form-control" name="filter_to_area" id="filter_to_area"
-                                            type="text" autocomplete="off" >
-                                    </div>
-                                    <div class="form-group col-md-2 m-b-4 mb-3">
-										<select class="form-select form_measurement measure_select" id="filter_measurement">
-											<option value="">Measurement</option>
+                                            type="text" autocomplete="off">
+                                    </div> --}}
+                                    {{-- <div class="form-group col-md-2 m-b-4 mb-3">
+                                        <select class="form-select form_measurement measure_select"
+                                            id="filter_measurement">
+                                            <option value="">Measurement</option>
                                             @forelse ($property_configuration_settings as $props)
                                                 @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                    <option  data-parent_id="{{ $props['parent_id'] }}"
+                                                    <option data-parent_id="{{ $props['parent_id'] }}"
                                                         value="{{ $props['id'] }}">{{ $props['name'] }}
                                                     </option>
                                                     </option>
@@ -206,17 +225,17 @@ $is_dynamic_form = true;
                                             @empty
                                             @endforelse
                                         </select>
-                                    </div>
-                                    <div class="form-group col-md-4 m-b-20">
-										<label for="From Price">From Price</label>
-                                        <input class="form-control indian_currency_amount" name="filter_from_price" id="filter_from_price"
-                                            type="text" autocomplete="off" >
-                                    </div>
-                                    <div class="form-group col-md-4 m-b-20">
-										<label for="To Price">To Price</label>
-                                        <input class="form-control indian_currency_amount" name="filter_to_price" id="filter_to_price"
-                                            type="text" autocomplete="off" >
-                                    </div>
+                                    </div> --}}
+                                    {{-- <div class="form-group col-md-4 m-b-20">
+                                        <label for="From Price">From Price</label>
+                                        <input class="form-control indian_currency_amount" name="filter_from_price"
+                                            id="filter_from_price" type="text" autocomplete="off">
+                                    </div> --}}
+                                    {{-- <div class="form-group col-md-4 m-b-20">
+                                        <label for="To Price">To Price</label>
+                                        <input class="form-control indian_currency_amount" name="filter_to_price"
+                                            id="filter_to_price" type="text" autocomplete="off">
+                                    </div> --}}
 
 
 
@@ -229,7 +248,7 @@ $is_dynamic_form = true;
                 </div>
             </div>
         </div>
-		<div class="modal fade" id="importmodal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="importmodal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -241,16 +260,17 @@ $is_dynamic_form = true;
                             @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-5 m-b-20">
-									<label for="Choose File">File</label>
+                                    <label for="Choose File">File</label>
                                     <input class="form-control" type="file" accept=".xlsx" name="import_file"
                                         id="import_file">
                                 </div>
-								<br>
-								<div class="form-group col-md-5 m-b-10">
-                                    <a href="{{route('admin.importindustrialpropertyTemplate')}}">Download Sample file</a>
+                                <br>
+                                <div class="form-group col-md-5 m-b-10">
+                                    <a href="{{ route('admin.importindustrialpropertyTemplate') }}">Download Sample
+                                        file</a>
                                 </div>
 
-								<br>
+                                <br>
                             </div>
                             <button class="btn btn-secondary" id="importFile">Save</button>
                             <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
@@ -259,23 +279,84 @@ $is_dynamic_form = true;
                 </div>
             </div>
         </div>
-		{{-- @php
+        {{-- @php
 		$city_encoded = json_encode($cities);
 		$state_encoded = json_encode($states);
 		@endphp --}}
     @endsection
     @push('scripts')
-    @include('admin.properties.industrial_property_javascript',['cities'=>$cities,'states'=>$states])
+        @include('admin.properties.industrial_property_javascript', [
+            'cities' => $cities,
+            'states' => $states,
+        ])
         <script>
-			var shouldchangecity = 1;
+            $(document).on('change', '#filter_property_type', function(e) {
+                var parent_value = $(this).val();
+                console.log("type changed", parent_value);
+                $("#filter_specific_type option , #filter_configuration option").each(function() {
+                    if (parent_value !== '') {
+                        if ($(this).attr('value') != '') {
+                            if ($(this).attr('data-parent_id') == '' || $(this).attr('data-parent_id') !=
+                                parent_value) {
+                                $(this).hide();
+                            } else {
+                                $(this).show();
+                            }
+                        }
+                    } else {
+                        $(this).show();
+                    }
+                });
+            });
+
+            // category to sub category on change filter
+            $('#filter_specific_type').on('change', function() {
+                let selectedCategory = this.options[this.selectedIndex].text.trim();
+                let url = "{{ route('admin.getPropertyConfiguration') }}";
+
+                try {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", `${url}?selectedCategory=${encodeURIComponent(selectedCategory)}`, true);
+
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                var data = JSON.parse(xhr.responseText);
+                                console.log("Subcat Filter data == ", data);
+
+                                var subCategorySelect = document.getElementById('filter_configuration');
+                                subCategorySelect.innerHTML = '<option value="">Sub Category</option>';
+
+                                for (var key in data) {
+                                    if (data.hasOwnProperty(key)) {
+                                        var option = document.createElement('option');
+                                        option.value = key;
+                                        option.text = data[key];
+                                        option.dataset.category = data[key];
+                                        subCategorySelect.appendChild(option);
+                                    }
+                                }
+                            } else {
+                                console.error("An error occurred:", xhr.statusText);
+                            }
+                        }
+                    };
+
+                    xhr.send();
+                } catch (error) {
+                    console.error("An error occurred:", error);
+                }
+            });
+
+            var shouldchangecity = 1;
 
             $(document).ready(function() {
                 $('#propertyTable').DataTable({
                     processing: true,
                     serverSide: true,
-					@if(!Auth::user()->can('search-industrial-property'))
-					searching:false,
-					@endif
+                    @if (!Auth::user()->can('search-industrial-property'))
+                        searching: false,
+                    @endif
                     ordering: true,
                     ajax: {
                         url: "{{ route('admin.industrial.properties') }}",
@@ -284,42 +365,45 @@ $is_dynamic_form = true;
                             d.filter_property_for = $('#filter_property_for').val()
                             d.filter_specific_type = $('#filter_specific_type').val()
                             d.filter_configuration = $('#filter_configuration').val()
-                            d.filter_zone = $('#filter_zone').val()
-                            d.filter_property_status = $('#filter_property_status').val()
+                            // d.filter_zone = $('#filter_zone').val()
+                            // d.filter_property_status = $('#filter_property_status').val()
                             d.filter_source_of_property = $('#filter_source_of_property').val()
                             d.filter_area_id = $('#filter_area_id').val()
-                            d.filter_from_area = $('#filter_from_area').val()
-                            d.filter_to_area = $('#filter_to_area').val()
-                            d.filter_measurement = $('#filter_measurement').val()
+                            // d.filter_from_area = $('#filter_from_area').val()
+                            // d.filter_to_area = $('#filter_to_area').val()
+                            // d.filter_measurement = $('#filter_measurement').val()
                             d.filter_from_price = $('#filter_from_price').val()
                             d.filter_to_price = $('#filter_to_price').val()
                         },
                     },
-                    columns: [
-						{
+                    columns: [{
                             data: 'select_checkbox',
                             name: 'select_checkbox',
-							orderable: false
-                        },
-						{
-                            data: 'project_id',
-                            name: 'project_id',
+                            orderable: false
                         },
                         {
-                            data: 'area_id',
-                            name: 'area_id'
+                            data: 'project_id',
+                            name: 'project_id',
                         },
                         {
                             data: 'property_for',
                             name: 'property_for'
                         },
                         {
-                            data: 'configuration',
-                            name: 'configuration'
+                            data: 'unit_details',
+                            name: 'unit_details'
+                        },
+                        {
+                            data: 'price',
+                            name: 'price'
                         },
                         {
                             data: 'contact_details',
                             name: 'contact_details'
+                        },
+                        {
+                            data: 'remarks',
+                            name: 'remarks'
                         },
                         {
                             data: 'actions',
@@ -334,25 +418,25 @@ $is_dynamic_form = true;
             $(document).on('click', '#filtersearch', function(e) {
                 e.preventDefault();
                 search_enq = '';
-				$('#resetfilter').show();
+                $('#resetfilter').show();
                 $('#propertyTable').DataTable().draw();
                 $('#filtermodal').modal('hide');
             });
 
             $(document).on('click', '#resetfilter', function(e) {
                 e.preventDefault();
-				$(this).hide();
+                $(this).hide();
                 $('#filter_form').trigger("reset");
                 $('#propertyTable').DataTable().draw();
                 $('#filtermodal').modal('hide');
-				triggerResetFilter()
+                triggerResetFilter()
             });
 
-			function importProperties(params) {
-				$('#importmodal').modal('show');
-			}
+            function importProperties(params) {
+                $('#importmodal').modal('show');
+            }
 
-			$(document).on('click', '#importFile', function(e) {
+            $(document).on('click', '#importFile', function(e) {
                 e.preventDefault();
                 var formData = new FormData();
                 var files = $('#import_file')[0].files[0];
@@ -375,33 +459,33 @@ $is_dynamic_form = true;
                 });
             })
 
-            $(document).on('change', '#filter_property_type', function(e) {
-                var parent_value = $(this).val();
-                $("#filter_specific_type option , #filter_configuration option").each(function() {
-                    if (parent_value !== '') {
-                        if ($(this).attr('value') != '') {
-                            if ($(this).attr('data-parent_id') == '' || $(this).attr('data-parent_id') !=
-                                parent_value) {
-                                $(this).hide();
-                            } else {
-                                $(this).show();
-                            }
-                        }
-                    } else {
-                        $(this).show();
-                    }
-                });
-            });
+            // $(document).on('change', '#filter_property_type', function(e) {
+            //     var parent_value = $(this).val();
+            //     $("#filter_specific_type option , #filter_configuration option").each(function() {
+            //         if (parent_value !== '') {
+            //             if ($(this).attr('value') != '') {
+            //                 if ($(this).attr('data-parent_id') == '' || $(this).attr('data-parent_id') !=
+            //                     parent_value) {
+            //                     $(this).hide();
+            //                 } else {
+            //                     $(this).show();
+            //                 }
+            //             }
+            //         } else {
+            //             $(this).show();
+            //         }
+            //     });
+            // });
 
 
 
             $(document).on('click', '.showNumberNow', function(e) {
                 numb = $(this).attr('data-val');
-                $(this).replaceWith('<a href="tel:'+numb+'">'+numb+'</a>');
+                $(this).replaceWith('<a href="tel:' + numb + '">' + numb + '</a>');
             })
 
             function getProperty(data) {
-				shouldchangecity = 0
+                shouldchangecity = 0
                 $('#modal_form').trigger("reset");
                 var id = $(data).attr('data-id');
                 $.ajax({
@@ -456,7 +540,7 @@ $is_dynamic_form = true;
                         $('#machinery_remark').val(data.machinery_remarks);
                         $('#etl_necpt').prop('checked', Number(data.etl_necpt));
                         $('#etl_necpt_remark').val(data.etl_necpt_remarks);
-						shouldchangecity = 1
+                        shouldchangecity = 1
                         $('#all_owner_contacts').html('')
                         if (data.owner_details != '') {
                             details = JSON.parse(data.owner_details);
@@ -464,14 +548,15 @@ $is_dynamic_form = true;
                                 id = makeid(10);
                                 $('#all_owner_contacts').append(generate_contact_detail2(id))
                                 floatingField();
-								$("[data-contact_id=" + id + "] select[name=owner_status]").select2()
+                                $("[data-contact_id=" + id + "] select[name=owner_status]").select2()
                                 $("[data-contact_id=" + id + "] input[name=owner_name]").val(details[i][0]);
                                 $("[data-contact_id=" + id + "] input[name=owner_contact_no]").val(details[i][1]);
-                                $("[data-contact_id=" + id + "] select[name=owner_status]").val(details[i][2]).trigger('change');
+                                $("[data-contact_id=" + id + "] select[name=owner_status]").val(details[i][2])
+                                    .trigger('change');
                             }
                         }
                         $('#industrialpropertyModal').modal('show');
-						triggerChangeinput()
+                        triggerChangeinput()
                     }
                 });
             }
@@ -486,75 +571,75 @@ $is_dynamic_form = true;
                 return result;
             }
 
-			$(document).on("click", ".open_modal_with_this", function (e) {
-				$('#all_owner_contacts').html('')
-				$('#all_owner_contacts').append(generate_contact_detail2(makeid(10)));
-				$("#all_owner_contacts select").each(function(index) {
-					$(this).select2();
-				})
+            $(document).on("click", ".open_modal_with_this", function(e) {
+                $('#all_owner_contacts').html('')
+                $('#all_owner_contacts').append(generate_contact_detail2(makeid(10)));
+                $("#all_owner_contacts select").each(function(index) {
+                    $(this).select2();
+                })
                 floatingField();
-			})
+            })
 
-			$(document).on('change', '#select_all_checkbox', function(e) {
-				if ($(this).prop('checked')) {
-					$('.delete_table_row').show();
+            $(document).on('change', '#select_all_checkbox', function(e) {
+                if ($(this).prop('checked')) {
+                    $('.delete_table_row').show();
 
-					$(".table_checkbox").each(function(index) {
-						$(this).prop('checked',true)
-					})
-				}else{
-					$('.delete_table_row').hide();
-					$(".table_checkbox").each(function(index) {
-						$(this).prop('checked',false)
-					})
-				}
-			})
+                    $(".table_checkbox").each(function(index) {
+                        $(this).prop('checked', true)
+                    })
+                } else {
+                    $('.delete_table_row').hide();
+                    $(".table_checkbox").each(function(index) {
+                        $(this).prop('checked', false)
+                    })
+                }
+            })
 
-			$(document).on('change', '.table_checkbox', function(e) {
-				var rowss = [];
-				$(".table_checkbox").each(function(index) {
-					if ($(this).prop('checked')) {
-						rowss.push($(this).attr('data-id'))
-					}
-				})
-				if (rowss.length > 0) {
-					$('.delete_table_row').show();
-				}else{
-					$('.delete_table_row').hide();
-				}
-			})
-
-			function deleteTableRow(params) {
-				var rowss = [];
-				$(".table_checkbox").each(function(index) {
-					if ($(this).prop('checked')) {
-						rowss.push($(this).attr('data-id'))
-					}
-				})
-				if (rowss.length>0) {
-					Swal.fire({
-                    title: "Are you sure?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                }).then(function(isConfirm) {
-                    if (isConfirm.isConfirmed) {
-                        $.ajax({
-                            type: "POST",
-                            url: "{{ route('admin.deleteProperty') }}",
-                            data: {
-								allids: JSON.stringify(rowss),
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function(data) {
-								$('.delete_table_row').hide();
-                                $('#propertyTable').DataTable().draw();
-                            }
-                        });
+            $(document).on('change', '.table_checkbox', function(e) {
+                var rowss = [];
+                $(".table_checkbox").each(function(index) {
+                    if ($(this).prop('checked')) {
+                        rowss.push($(this).attr('data-id'))
                     }
                 })
-				}
-			}
+                if (rowss.length > 0) {
+                    $('.delete_table_row').show();
+                } else {
+                    $('.delete_table_row').hide();
+                }
+            })
+
+            function deleteTableRow(params) {
+                var rowss = [];
+                $(".table_checkbox").each(function(index) {
+                    if ($(this).prop('checked')) {
+                        rowss.push($(this).attr('data-id'))
+                    }
+                })
+                if (rowss.length > 0) {
+                    Swal.fire({
+                        title: "Are you sure?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                    }).then(function(isConfirm) {
+                        if (isConfirm.isConfirmed) {
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ route('admin.deleteProperty') }}",
+                                data: {
+                                    allids: JSON.stringify(rowss),
+                                    _token: '{{ csrf_token() }}'
+                                },
+                                success: function(data) {
+                                    $('.delete_table_row').hide();
+                                    $('#propertyTable').DataTable().draw();
+                                }
+                            });
+                        }
+                    })
+                }
+            }
 
 
             function deleteProperty(data) {
@@ -582,7 +667,7 @@ $is_dynamic_form = true;
 
             }
 
-            function floatingField(){
+            function floatingField() {
                 //changed by Subhash
                 $("form input").each(function(index) {
                     if ($(this).attr('type') == 'text' || $(this).attr('type') == 'email') {

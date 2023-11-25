@@ -58,28 +58,23 @@
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
                             novalidate="">
-                            <div class="row mb-2">
-                                <div class="col-6 mb-2" style="margin-top: 20px;">
-                                    <div class="form-group mb-1">
-                                        <label for="City">City</label>
-                                        <input
-                                            class="form-control"
-                                            name="city_name"
-                                            id="city_name"
-                                            type="text"
-                                            required
-                                        >  
-                                    </div>
-                                    <label id="city_name-error" class="error" for="city_name"></label>
+                            <div class="form-row">
+                                <div class="form-group col-md-7 d-inline-block m-b-20">
+                                    <label for="City">City</label>
+                                    <input
+                                        class="form-control"
+                                        name="city_name"
+                                        id="city_name"
+                                        type="text"
+                                        required
+                                    >
                                 </div>
-                                <div class="col-6 mb-2">
+                                <div class="form-group col-md-4 d-inline-block m-b-4 mt-1">
                                     <label class="mb-0">State</label>
                                     <select class="form-select" id="state_id" required>
                                         <option value="">State</option>
                                         @forelse ($states as $state)
-                                            @if($state->user_id == auth()->user()->id)
-                                                <option value="{{ $state->id }}">{{ $state->name }}</option>
-                                            @endif
+                                            <option value="{{ $state->id }}">{{ $state->name }}
                                         @empty
                                         @endforelse
                                     </select>
@@ -108,9 +103,7 @@
                                 <select id="import_state_id" required>
 									<option value=""> State</option>
 									@foreach ($states as $state)
-									    @if($state->user_id == 6)
-										    <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
-										@endif
+										<option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
 									@endforeach
 								</select>
                                 </div>

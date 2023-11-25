@@ -46,7 +46,6 @@ class User extends Authenticatable
 		'city_id',
 		'state_id',
 		'email',
-		'company_logo',
 		'mobile_number',
 		'office_number',
 		'home_number',

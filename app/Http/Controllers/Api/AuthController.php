@@ -39,7 +39,7 @@ class AuthController extends Controller
                 'city_id' => 'required|integer',
                 'password' => 'required|string|min:8|confirmed',
                 'password_confirmation' => 'required_with:password|same:password',
-                'device_type' => 'sometimes|string', 
+                'device_type' => 'sometimes|string',
                 'device_token' => 'sometimes|string',
             ]);
 
@@ -61,16 +61,16 @@ class AuthController extends Controller
                 ]);
             }
 
-            $verifitoken = rand(1000,9999);
+            $verifitoken = rand(1000, 9999);
             $user = User::create([
-                "first_name"=> $request->first_name,
-                "last_name"=> $request->last_name,
+                "first_name" => $request->first_name,
+                "last_name" => $request->last_name,
                 'email' => $request->email,
-                "mobile_number"=> $request->mobile_number,
-                "company_name"=> $request->company_name,
-                "role_id"=> $request->role_id,
-                "state_id"=> $request->state_id,
-                "city_id"=> $request->city_id,
+                "mobile_number" => $request->mobile_number,
+                "company_name" => $request->company_name,
+                "role_id" => $request->role_id,
+                "state_id" => $request->state_id,
+                "city_id" => $request->city_id,
                 'password' => Hash::make($request->password),
                 'verification_token' => $verifitoken,
                 'device_type' => $request->device_type ?? null,
@@ -78,30 +78,50 @@ class AuthController extends Controller
             ]);
 
             // $update = User::where('id',$user->id)->update(['parent_id'=>$user->id]);
-            $user->update(['parent_id'=> $user->id]);
+            $user->update(['parent_id' => $user->id]);
             $token = $user->createToken('auth_token')->plainTextToken;
             //       VerificationToken::create([
             //     'token' => $verifitoken,
             //     'user_id' => $user->id,
             // ]);
-            Mail::raw("Dear User,\n\nYour verification token is: $verifitoken\n\nPlease use this token for verification purposes.", function ($message) use ($user) {
-                $message->from('rjnbutani@gmail.com')
-                ->to($user->email)
-                        ->subject('Verification Token');
+            // Mail::raw("Dear User,\n\nYour verification token is: $verifitoken\n\nPlease use this token for verification purposes.", function ($message) use ($user) {
+            //     $message->from('rjnbutani@gmail.com')
+            //     ->to($user->email)
+            //             ->subject('Verification Token');
+            // });         
+            //sending mail for token
+            config(['mail.driver' => 'smtp']);
+            config(['mail.from_name' => 'Bromi']);
+            config(['mail.host' => 'smtp.gmail.com']);
+            config(['mail.port' => 587]);
+            config(['mail.username' => 'hathaliyank@gmail.com']);
+            config(['mail.password' => 'jzmk iqib mstp njln']);
+            config(['mail.encryption' => 'tls']);
+
+
+
+
+            Mail::raw("Dear User,\n\nYour verification token is: $verifitoken\n\nPlease use this token for verification purposes.", function ($message) use ($request) {
+                $message
+                    ->to($request->email)
+                    ->subject('Verification Token');
             });
-    
+
+
+
             return response()->json([
                 "status" => 200,
-                "message" =>"Registration successful. Please verify your email.",
+                "message" => "Registration successful. Please verify your email.",
                 "data" => $user
             ]);
-
+            // return response()
+            //     ->json(['data' => $user,'access_token' => $token, 'token_type' => 'Bearer', ]);
         } catch (\exception $e) {
+            // dd($e);
             return response()->json([
-                'status' => 500,
-                'message' => 'Something went wrong',
-                'error' => $e->getMessage(),
-                'data' => null,
+                'status' => 'error',
+                'message' => 'An error occurred',
+                'data' => $e,
             ], 500);
         }
     }
@@ -125,13 +145,39 @@ class AuthController extends Controller
         return response()->json(['message' => 'User successfully verified.'], 200);
     }
 
-    public function login(Request $request)
+    public function login1(Request $request)
     {
-        try {
-            if (!Auth::attempt($request->only('email', 'password'))) {
-                        return response()->json([
-                                'message' => 'Invalid Login credential'
-                            ], 401);
+
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Invalid Login credential'], 401);
+        } else {
+            $user = User::where('email', $request['email'])->firstOrFail();
+
+            if (!empty($user->is_verified)) {
+                $token = $user->createToken('auth_token')->plainTextToken;
+                $data = [
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                    'mobile_number' => $user->mobile_number,
+                    'company_name' => $user->company_name,
+                    'company_logo' => $user->company_logo,
+                    'role_id' => $user->role_id,
+                    'state_id' => (int) $user->state_id,
+                    'city_id' => (int) $user->city_id,
+                    'verification_token' => (int) $user->verification_token,
+                    'id' => $user->id,
+                    'token' => $token,
+                    'token_type' => 'Bearer',
+                ];
+
+                // Set the session value
+                Session::put('parent_id', $user->parent_id);
+
+                return response()->json([
+                    'status' => 200,
+                    'data' => $data,
+                ]);
             } else {
                 $user = User::where('email', $request['email'])->firstOrFail();
         
@@ -185,28 +231,86 @@ class AuthController extends Controller
             ], 500);
         }
     }
-    
-    public function chnageProfile(Request $request){
-		$params = $request->all();
-		$user_id =  Auth::user()->id;
-		$user = User::select('id','email','password')->where('id',$user_id)->first();
-		if(!$user)
-		{
-			return response(['status' => 200,'message' => 'Something went wrong']);
+    public function login(Request $request)
+    {
+        try {
+            if (!Auth::attempt($request->only('email', 'password'))) {
+                return response()->json([
+                    'message' => 'Invalid Login credential'
+                ], 401);
+            } else {
+                $user = User::where('email', $request['email'])->firstOrFail();
 
-		}
-		$profile_details = array(
-			                          'first_name'    =>  $params['firstname'],   
-			                          'last_name'     =>  $params['lastname'],   
-			                          'mobile_number' =>  $params['mobile_number'],   
-			                          'company_name'  =>  $params['company_name']
-		                         ); 
-	    $user->update($profile_details);
-		return response(['status' => 200,'message' => 'Profile change successfully!!', 'data'=>$profile_details], 200);
-	}
+                $input = [];
+                if (!empty($request->input('device_type'))) { // check if device_type param exist
+                    $input['device_type'] = $request->input('device_type');
+                }
+                if (!empty($request->input('device_token'))) { // check if device_token param exist
+                    $input['device_token'] = $request->input('device_token');
+                }
+                if (!empty($input)) { // if any of the param exist then update user model
+                    $user->update($input);
+                }
+
+                if (!empty($user->is_verified)) {
+                    $token = $user->createToken('auth_token')->plainTextToken;
+                    $data = [
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        'email' => $user->email,
+                        'mobile_number' => $user->mobile_number,
+                        'company_name' => $user->company_name,
+                        'role_id' => $user->role_id,
+                        'state_id' => (int) $user->state_id,
+                        'city_id' => (int) $user->city_id,
+                        'verification_token' => (int) $user->verification_token,
+                        'id' => $user->id,
+                        'device_type' => $user->device_type,
+                        'device_token' => $user->device_token,
+                        'token' => $token,
+                        'token_type' => 'Bearer',
+                    ];
+
+                    // Set the session value
+                    Session::put('parent_id', $user->parent_id);
+
+                    return response()->json([
+                        'status' => 200,
+                        'data' => $data,
+                    ]);
+                } else {
+                    return response()->json(['error' => 'Your email is not verified.'], 403);
+                }
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong',
+                'error' => $th->getMessage(),
+                'data' => null,
+            ], 500);
+        }
+    }
+    public function chnageProfile(Request $request)
+    {
+        $params = $request->all();
+        $user_id =  Auth::user()->id;
+        $user = User::select('id', 'email', 'password')->where('id', $user_id)->first();
+        if (!$user) {
+            return response(['status' => 200, 'message' => 'Something went wrong']);
+        }
+        $profile_details = array(
+            'first_name'    =>  $params['firstname'],
+            'last_name'     =>  $params['lastname'],
+            'mobile_number' =>  $params['mobile_number'],
+            'company_name'  =>  $params['company_name']
+        );
+        $user->update($profile_details);
+        return response(['status' => 200, 'message' => 'Profile change successfully!!', 'data' => $profile_details], 200);
+    }
     public function generateToken(Request $request)
     {
-        
+
         $request->validate([
             'id' => 'required',
         ]);
@@ -217,7 +321,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        $token = rand(1000,9999);
+        $token = rand(1000, 9999);
 
         VerificationToken::create([
             'token' => $token,
@@ -225,7 +329,7 @@ class AuthController extends Controller
         ]);
         Mail::raw("Dear User,\n\nYour verification token is: $token\n\nPlease use this token for verification purposes.", function ($message) use ($user) {
             $message->to($user->email)
-                    ->subject('Verification Token');
+                ->subject('Verification Token');
         });
 
 
@@ -243,29 +347,29 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
-        
-      
-        $verificationToken =DB::table('verification_tokens')->where([['token', $request->token],['user_id', $user->id],['deleted_at', null]])->first();
+
+
+        $verificationToken = DB::table('verification_tokens')->where([['token', $request->token], ['user_id', $user->id], ['deleted_at', null]])->first();
 
         if (!$verificationToken) {
             return response()->json(['message' => 'Invalid verification token'], 422);
-        }else{
-        // Token verified successfully, you can perform any additional actions here if needed.
-        VerificationToken::destroy($verificationToken->id);
-        // dd($verificationToken);
+        } else {
+            // Token verified successfully, you can perform any additional actions here if needed.
+            VerificationToken::destroy($verificationToken->id);
+            // dd($verificationToken);
 
-        return response()->json(['message' => 'Verification token is valid']);
-                }
-
-       
+            return response()->json(['message' => 'Verification token is valid']);
+        }
     }
     public function getstate()
     {
         try {
-            $state=State::all();
-       return response()->json(["status"=> 200,
-                        "message"=>"State List",
-                        "data"=> $state]);
+            $state = State::all();
+            return response()->json([
+                "status" => 200,
+                "message" => "State List",
+                "data" => $state
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -273,12 +377,11 @@ class AuthController extends Controller
                 'data' => $e,
             ], 500);
         }
-       
     }
 
     public function getcity(Request $request)
     {
-         $state_id = $request->input('id');
+        $state_id = $request->input('id');
 
         try {
             $cities = City::where('state_id', $state_id)->get();
@@ -295,16 +398,16 @@ class AuthController extends Controller
             ], 500);
         }
     }
-    
+
     public function sendResetLinkEmail(Request $request)
     {
         try {
             // $request->validate([
             //     'email' => 'required|email|exists:users',
             // ]);
-    
+
             $user = User::where('email', $request->email)->first();
-    
+
             $token = Str::random(15);
             PasswordReset::updateOrCreate(
                 ['email' => $user->email],
@@ -312,37 +415,39 @@ class AuthController extends Controller
             );
             Mail::send([], [], function ($message) use ($user, $token) {
                 $message->to($user->email)
-                        ->subject('Reset Your Password')
-                        ->setBody("Click the link below to reset your password:\n\n" . url("api/reset-password")."<br> $token");
+                    ->subject('Reset Your Password')
+                    ->setBody("Click the link below to reset your password:\n\n" . url("api/reset-password") . "<br> $token");
             });
-            return response()->json(["status"=> 200,
-            "message"=>"Password reset link sent successfully",
-            "data"=> $token]);
+            return response()->json([
+                "status" => 200,
+                "message" => "Password reset link sent successfully",
+                "data" => $token
+            ]);
         } catch (\Exception $e) {
             dd($e);
-            return response()->json(["status"=> 500,
-            "message"=>"Error",
-            "data"=> $e]);
+            return response()->json([
+                "status" => 500,
+                "message" => "Error",
+                "data" => $e
+            ]);
         }
-        
+
         // return response()->json(['message' => 'Password reset link sent successfully','token' => $token]);
     }
     public function chnagePassword(Request $request)
-	{
-		$params = $request->all();
-		$user_id =  Auth::user()->id;
-		$user = User::select('id','email','password')->where('id',$user_id)->first();
-		if(!$user)
-		{
-			return response(['status' => 401,'message' => 'Something went wrong']);
-
-		}
-		if(!Hash::check($params['oldPwd'],$user->password)) {
-			return response(['status' => 401,'message' => 'old password is wrong']);
-		}
-	    $user->update(['password' => Hash::make($params['newPwd'])]);
-		return response(['status' => 200,'message' => 'Password change successfully!!']);
-	}
+    {
+        $params = $request->all();
+        $user_id =  Auth::user()->id;
+        $user = User::select('id', 'email', 'password')->where('id', $user_id)->first();
+        if (!$user) {
+            return response(['status' => 401, 'message' => 'Something went wrong']);
+        }
+        if (!Hash::check($params['oldPwd'], $user->password)) {
+            return response(['status' => 401, 'message' => 'old password is wrong']);
+        }
+        $user->update(['password' => Hash::make($params['newPwd'])]);
+        return response(['status' => 200, 'message' => 'Password change successfully!!']);
+    }
     public function reset(Request $request)
     {
         try {
@@ -352,33 +457,38 @@ class AuthController extends Controller
             if (!$passwordReset) {
                 return response()->json(['message' => 'Invalid reset token'], 422);
             }
-    
+
             $user = User::where('email', $request->email)->first();
-    
+
             $user->update([
                 'password' => Hash::make($request->password)
             ]);
-    
+
             $passwordReset->delete();
-            return response()->json(["status"=> 200,
-            "message"=>"Password reset successful",
-            "data"=> ""]);
+            return response()->json([
+                "status" => 200,
+                "message" => "Password reset successful",
+                "data" => ""
+            ]);
         } catch (\Exception $e) {
-           
-            return response()->json(["status"=> 401,
-            "message"=>"Error",
-            "data"=> $e]);
+
+            return response()->json([
+                "status" => 401,
+                "message" => "Error",
+                "data" => $e
+            ]);
         }
-        
     }
-    
-    
+
+
     // method for user logout and delete token
     public function profile()
     {
-        return response()->json(["status"=> 200,
-                        "message"=>"Profile Details",
-                        "data"=> auth()->user()]);
+        return response()->json([
+            "status" => 200,
+            "message" => "Profile Details",
+            "data" => auth()->user()
+        ]);
     }
 
     public function logout()
