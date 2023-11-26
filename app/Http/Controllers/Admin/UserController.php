@@ -129,7 +129,7 @@ class UserController extends Controller
 		$data->mobile_number = $request->mobile_number;
 		$data->office_number = $request->office_no;
 		$data->email = $request->email;
-		$data->role_id = 1;
+		$data->role_id = $request->role_id;
 		$data->home_number = $request->home_phone_no;
 		$data->position = $request->position;
 		$data->branch_id = $request->branch_id;
