@@ -224,6 +224,18 @@
                                     <label class="form-check-label" for="permission_id_21">Delete Enquiry Progress</label>
                                 </div>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    <input class="form-check-input permission_checkbox select_all_4" id="permission_id_76"
+                                        name="permission[]" data-id="76" type="checkbox" data-bs-original-title=""
+                                        title="">
+                                    <label class="form-check-label" for="permission_id_76">Only Assigned</label>
+                                </div>
+                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    <input class="form-check-input permission_checkbox select_all_4" id="permission_id_77"
+                                        name="permission[]" data-id="77" type="checkbox" data-bs-original-title=""
+                                        title="">
+                                    <label class="form-check-label" for="permission_id_77">Export Enquiry</label>
+                                </div>
+                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all_4" id="permission_id_22"
                                         name="permission[]" data-id="22" type="checkbox" data-bs-original-title=""
                                         title="">
