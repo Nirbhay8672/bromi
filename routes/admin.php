@@ -65,7 +65,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 
 	// });
 	Route::get('logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
-	Route::group(['middleware' => ['auth', 'admin']], function () {
+	Route::group(['middleware' => ['auth']], function () {
 		Route::get('/', [HomeController::class, 'index'])->name('admin');
 		
 		Route::any('/districts', [DistrictController::class, 'index'])->name('admin.districts');

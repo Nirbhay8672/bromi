@@ -16,6 +16,7 @@ class User
      */
     public function handle($request, Closure $next)
     {
+        return;
         $user = Auth::user();
         if ($user) {
             if (in_array($user->role_id, [2])) {
