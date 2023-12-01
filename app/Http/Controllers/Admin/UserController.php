@@ -13,11 +13,13 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Controllers\Controller;
+use App\Models\Areas;
 use App\Models\Branches;
 use App\Models\City;
 use App\Models\DropdownSettings;
 use App\Models\Projects;
 use App\Models\State;
+use App\Models\SuperAreas;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
@@ -145,6 +147,39 @@ class UserController extends Controller
 		if (!empty($request->role_id)) {
 			$data->assignRole($request->input('role_id'));
 		}
+
+		$state = State::find($request->state_id);
+        $city = City::find($request->city_id);
+
+        $new_state = new State();
+        $new_state->fill([
+            'name' => $state->name,
+            'user_id' => $data->id,
+        ])->save();
+
+        $new_city = new City();
+        $new_city->fill([
+            'name' => $city->name,
+            'user_id' => $data->id,
+            'state_id' => $new_state->id,
+        ])->save();
+
+        $allarea = SuperAreas::where('super_city_id',$request->city_id)
+            ->where('state_id',$request->state_id)
+            ->get();
+            
+        foreach ($allarea as $area_obj)
+        {
+            $area = new Areas();
+
+            $area->fill([
+                'user_id' => $data->id,
+                'name' => $area_obj->name,
+                'city_id' => $new_city->id,
+                'pincode' => $area_obj->pincode,
+                'state_id' => $new_state->id,
+            ])->save();
+        }
 
 		return response()->json();
 	}
