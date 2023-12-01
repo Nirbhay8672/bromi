@@ -69,11 +69,12 @@
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input
                                         class="form-control @error('first_name') is-invalid @enderror"
-                                        value="{{ old('first_name') ?? 'Nirbhay' }}"
+                                        value="{{ old('first_name') }}"
                                         name="first_name"
                                         type="text"
                                         placeholder="First Name"
                                         autofocus
+                                        autocomplete="off"
                                     >
                                     @error('first_name')
                                         <span class="invalid-feedback" role="alert">
@@ -86,10 +87,11 @@
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input
                                         class="form-control @error('last_name') is-invalid @enderror"
-                                        value="{{ old('last_name') ?? 'Hathaliya' }}"
+                                        value="{{ old('last_name') }}"
                                         name="last_name"
                                         type="text"
                                         placeholder="Last Name"
+                                        autocomplete="off"
                                     >
                                     @error('last_name')
                                         <span class="invalid-feedback" role="alert">
@@ -104,10 +106,11 @@
                                 <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
                                     <input
                                         class="form-control @error('email') is-invalid @enderror"
-                                        value="{{ old('email') ?? 'hathaliyank@gmail.com' }}"
+                                        value="{{ old('email') }}"
                                         name="email"
                                         type="email"
                                         placeholder="E-mail Address"
+                                        autocomplete="off"
                                     >
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -121,10 +124,11 @@
                                     <i class="icon-mobile"></i></span>
                                     <input
                                         class="form-control @error('mobile_number') is-invalid @enderror"
-                                        value="{{ old('mobile_number') ?? '8200186326' }}"
+                                        value="{{ old('mobile_number') }}"
                                         name="mobile_number"
                                         type="text"
                                         placeholder="Contact Number"
+                                        autocomplete="off"
                                     >
                                     @error('mobile_number')
                                         <span class="invalid-feedback" role="alert">
@@ -139,10 +143,11 @@
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input
                                         class="form-control @error('company_name') is-invalid @enderror"
-                                        value="{{ old('company_name') ?? 'Teccel' }}"
+                                        value="{{ old('company_name') }}"
                                         name="company_name"
                                         type="text"
                                         placeholder="Company Name"
+                                        autocomplete="off"
                                     >
                                     @error('company_name')
                                         <span class="invalid-feedback" role="alert">
@@ -169,38 +174,6 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-12">
-                                <div class="input-group"><span class="input-group-text"><i class="icon-map"></i></span>
-                                    <input
-                                        name="address"
-                                        class="form-control @error('address') is-invalid @enderror"
-                                        type="text"
-                                        placeholder="Enter address"
-                                        value="{{ old('address') ?? 'Near pragati nagar garden' }}"
-                                    />
-                                    @error('address')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <div class="input-group">
-                                    <span class="input-group-text">Company Logo</span>
-                                    <input
-                                        name="file"
-                                        type="file"
-                                        style="margin-left: 5px;"
-                                        placeholder="Logo"
-                                        accept="image/png, image/jpeg"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="form-group col-md-6 m-b-4 mb-3">
                                 <select
                                     class="form-select @error('state_id') is-invalid @enderror"
@@ -209,7 +182,7 @@
                                 >
                                     <option value="" disabled selected>Select State</option>
                                     @foreach ($states as $state)
-                                        @if ($state['user_id'] == 39)
+                                        @if ($state['user_id'] == 6)
                                             <option
                                                 value="{{ $state['id'] }}"
                                                 {{ old('state_id') == $state['id'] ? 'selected' : ''}}
@@ -247,6 +220,7 @@
                                         name="password"
                                         value=""
                                         placeholder="Password"
+                                        autocomplete="off"
                                     >
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
@@ -263,6 +237,7 @@
                                         value=""
                                         name="password_confirmation"
                                         placeholder="Confirm Password"
+                                        autocomplete="off"
                                     >
                                     @error('password_confirmation')
                                         <span class="invalid-feedback" role="alert">
