@@ -20,6 +20,15 @@
 
                         </div>
                         <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-3">
+                                    <select name="" id="change_location_link" class="form-control">
+                                        <option value="{{ route('admin.settings.state') }}">States</option>
+                                        <option value="{{ route('admin.settings.city') }}">Cities</option>
+                                        <option value="{{ route('admin.areas') }}">Localities</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="display" id="stateTable">
                                     <thead>
@@ -35,11 +44,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
         </div>
         <div class="modal fade" id="stateModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -102,6 +108,13 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
+
+                $("#change_location_link").select2();
+                
+                $(document).on('change', '#change_location_link', function(e) {
+                    window.location.href = $(this).val();
+                })
+                
                 $('#stateTable').DataTable({
                     processing: true,
                     serverSide: true,
