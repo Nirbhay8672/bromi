@@ -14,26 +14,25 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Partner Requests</h5>
+                            <h5 class="mb-3">User Requests</h5>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="display" id="sharedTable">
+                                <table class="display" id="sharedUserTable">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">
+                                            <th>
                                                 <div class="form-check form-check-inline checkbox checkbox-dark mb-0 me-0">
                                                     <input class="form-check-input" id="select_all_checkbox"
                                                         name="selectrows" type="checkbox">
                                                     <label class="form-check-label" for="select_all_checkbox"></label>
                                                 </div>
                                             </th>
-                                            <th class="text-center">Project Name</th>
-                                            <th class="text-center">Name</th>
-                                            <th class="text-center">Company Name</th>
-                                            <th class="text-center">Email</th>
-                                            <th class="text-center">Status</th>
-                                            {{-- <th>Actions</th> --}}
+                                            <th>Name</th>
+                                            {{-- <th>Company Name</th> --}}
+                                            <th>Email</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -52,38 +51,34 @@
     @push('scripts')
         <script>
             // Index View Partner Data
-            $('#sharedTable').DataTable({
+            $('#sharedUserTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ordering: true,
                 ajax: {
-                    url: "{{ route('admin.partnerRequest') }}",
+                    url: "{{ route('admin.userRequest') }}",
                     data: function(d) {
-                        console.log("ddddddd", d);
+                        console.log("userRequest", d);
                     },
                 },
                 columns: [{
-                        data: 'id',
-                        name: 'id'
-                    },
-                    {
-                        data: 'project_name',
-                        name: 'project_name'
-                    },
-                    {
-                        data: 'partner_name',
-                        name: 'partner_id'
-                    }, {
-                        data: 'company_name',
-                        name: 'company_name'
-                    }, {
-                        data: 'partner_email',
-                        name: 'email'
-                    }, {
-                        data: 'status',
-                        name: 'status'
-                    }
-                ],
+                    data: 'id',
+                    name: 'id'
+                }, {
+                    data: 'partner_name',
+                    name: 'partner_id'
+                }, {
+                    data: 'partner_email',
+                    name: 'email'
+                },
+				{
+                    data: 'company_name',
+                    name: 'company_name'
+                },
+				{
+                    data: 'action',
+                    name: 'action'
+                },],
                 columnDefs: [{
                         "width": "2%",
                         "targets": 0
@@ -100,13 +95,9 @@
                         "width": "12%",
                         "targets": 3
                     },
-                    {
-                        "width": "15%",
+					{
+                        "width": "12%",
                         "targets": 4
-                    },
-                    {
-                        "width": "10%",
-                        "targets": 5
                     },
 
                 ],
@@ -124,6 +115,34 @@
                 }
             });
 
+
+			 // Accept Request
+			 function acceptUsersRequest(data) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                }).then(function(isConfirm) {
+                    if (isConfirm.isConfirmed) {
+                        var id = $(data).attr('data-id');
+						console.log("id",id);
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('admin.userShared.accept') }}",
+                            data: {
+                                id: id,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+								console.log("Data ==>",data);
+                                $('#sharedUserTable').DataTable().draw();
+                            }
+                        });
+                    }
+                })
+
+            }
 
             // Delete Partner
             function deletePartner(data) {
@@ -144,7 +163,7 @@
                 //                 _token: '{{ csrf_token() }}'
                 //             },
                 //             success: function(data) {
-                //                 $('#sharedTable').DataTable().draw();
+                //                 $('#sharedUserTable').DataTable().draw();
                 //             }
                 //         });
                 //     }

@@ -212,7 +212,7 @@ class RegisterController extends Controller
         }
 
         $state = State::find($request->state_id);
-        $city = City::find($request->city_id);
+        $city = SuperCity::find($request->city_id);
 
         $new_state = new State();
         $new_state->fill([
@@ -230,6 +230,7 @@ class RegisterController extends Controller
         $allarea = SuperAreas::where('super_city_id',$request->city_id)
             ->where('state_id',$request->state_id)
             ->get();
+            
             
         foreach ($allarea as $area_obj)
         {
@@ -265,7 +266,7 @@ class RegisterController extends Controller
         // Session::put('user_id', $user->id);
 
         if($user->exists) {
-            return redirect('admin/otp-form');
+            return redirect('admin/login');
         }
     }
 }

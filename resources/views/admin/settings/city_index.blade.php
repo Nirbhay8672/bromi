@@ -119,14 +119,14 @@
                             <template x-if="city_array.length > 0">
                                 <div class="row p-2">
                                     <div class="row mb-3">
-                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-6 m-b-20">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-6 m-b-10">
                                             <input class="project_amenity form-check-input filled" id="check_all" x-model="check_all" type="checkbox" value="" @click="selectCheckbox($event)">
                                             <label class="form-check-label" for="check_all">Select All City</label>
                                         </div>
                                         <span class="text-danger" id="city_error"></span>
                                     </div>
                                     <template x-for="(city, index) in city_array">
-                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-10">
                                             <input class="project_amenity form-check-input filled" :id="`city_${city.id}`" type="checkbox" :value="city.id" x-model="selected_city">
                                             <label class="form-check-label" :for="`city_${city.id}`" x-text="city.name"></label>
                                         </div>

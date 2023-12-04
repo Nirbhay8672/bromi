@@ -241,7 +241,6 @@
                                         title="">
                                     <label class="form-check-label" for="permission_id_22">Bulk Enquiry Transfer</label>
                                 </div>
-
                                 <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/project.png" style="width: 20px;" alt=""> Projects</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_5"

@@ -59,10 +59,10 @@ class LoginController extends Controller
 	 */
 	protected function authenticated(Request $request, $user)
 	{
-		// if ($user->role_id == 1) {
-		// 	Auth::logout();
-		// 	return redirect()->back()->with('warning', trans('auth.sufficient_permissions'));
-		// }
+// 		if ($user->role_id == 1) {
+// 			Auth::logout();
+// 			return redirect()->back()->with('warning', trans('auth.sufficient_permissions'));
+// 		}
 	}
 
 	/**

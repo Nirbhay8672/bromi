@@ -24,7 +24,6 @@ use App\Http\Controllers\Superadmin\UserController;
 // });
 
 Route::get('/login-as-user/{id}', [UserController::class ,'loginAsUser'])->name('login_as_user');
-
 Route::get('logs', [LogViewerController::class, 'index']);
 
 Route::group(['middleware' => 'revalidate'], function () {

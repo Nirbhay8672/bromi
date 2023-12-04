@@ -86,6 +86,13 @@
                                         </li>
                                         @php $is_active = ''; @endphp
                                     @endif
+                                                                        <div class="col-md-1 ms-auto text-end">
+                                        <a href="{{ route('admin.enquiries.calendar') }}" data-bs-original-title=""
+                                            title="">
+                                            <button class="nav-link mx-1 active" id="v-view-summary-tab"
+                                                data-bs-original-title="" title="">Back</button>
+                                        </a>
+                                    </div>
                                 </ul>
                             </div>
                             <div class="tab-content" id="v-pills-tabContent">

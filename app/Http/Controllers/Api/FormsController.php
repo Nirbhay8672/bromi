@@ -186,62 +186,68 @@ class FormsController extends Controller
         
     }
 
-    public function getformdata(Request $request)
+     public function getformdata(Request $request)
     {
-        $getForm =Form::where('form_name',$request->input('form_name'))->first();
-       
-        $data =FormFields::where('form_id',$getForm->id)->get();
-        $formField=[];
-        $formattedData=[];
-        foreach ($data as $key => $value) {
-            $formField = DB::table('form_types')
-                ->whereNotNull('group_name')
-                ->select('group_name', DB::raw('MAX(field_name) as field_name'), DB::raw('MAX(option_type) as option_type')) // Replace column1, column2, etc. with your actual column names
-                ->groupBy('group_name')
-                ->get();
-                
-        }
-        foreach ($formField as $key => $value) {
-         
-             $groupExists=$value->group_name;
-             if (!empty($groupExists)) {
-                 $fields= DB::table('form_types')
-                 ->where('group_name',$groupExists)
-                 ->get();
-                
-                 $fetchFileds=[];
-                 foreach ($fields as $key => $field) {
-                    $fetchFileds[]=[
-                        "id"=>(int)$field->id,
-                        "field_type"=>$field->field_type,
-                        "option_type"=>$field->option_type,
-                        "field_name"=>$field->field_name,
-                        "label_name"=>Str::title(str_replace('_', ' ', $field->field_name)),
-                        "parent_id"=>$field->parent_id,
-                        "group_name"=>$field->group_name,
-                        "created_at"=>$field->created_at,
-                        "updated_at"=>$field->updated_at
-                    ];
-                 }
-                 $formattedData[] = [
-                     "group_name" => $groupExists,
-                     "fields" =>$fetchFileds
-                 ];
-             }
-         }
-        if(!empty($formattedData)){
+        $getForm = Form::where('form_name', $request->input('form_name'))->first();
+        
+        if (!$getForm) {
             return response()->json([
-                "message" => $request->input('form_name')." fields have been fetched successfully.",
-                "data" => $formattedData,
-            ]);
-        }else{
-            return response()->json([
-                "message" => $request->input('form_name')." fields No data found",
+                "message" => "Form not found",
                 "data" => [],
             ]);
         }
         
-         
+        $data = FormFields::where('form_id', $getForm->id)->get();
+        $formattedData = [];
+    
+        foreach ($data as $key => $value) {
+            $formField = DB::table('form_types')
+                ->whereNotNull('group_name')
+                ->where('id', $value->field_type_id)
+                ->select('group_name', DB::raw('MAX(field_name) as field_name'), DB::raw('MAX(option_type) as option_type'))
+                ->groupBy('group_name')
+                ->first();
+    
+            if (!empty($formField)) {
+                $groupExists = $formField->group_name;
+                $fields = DB::table('form_types')
+                    ->where('group_name', $groupExists)
+                    ->get();
+    
+                $fetchFields = [];
+    
+                foreach ($fields as $key => $field) {
+                    $fetchFields[] = [
+                        "id" => $field->id,
+                        "field_type" => $field->field_type,
+                        "option_type" => $field->option_type,
+                        "field_name" => $field->field_name,
+                        "label_name" => Str::title(str_replace('_', ' ', $field->field_name)),
+                        "parent_id" => $field->parent_id,
+                        "group_name" => $field->group_name,
+                        "created_at" => $field->created_at,
+                        "updated_at" => $field->updated_at
+                    ];
+                }
+    
+                $formattedData[] = [
+                    "group_name" => $groupExists,
+                    "fields" => $fetchFields
+                ];
+            }
+        }
+    
+        if (!empty($formattedData)) {
+            return response()->json([
+                "message" => $request->input('form_name') . " fields have been fetched successfully.",
+                "data" => $formattedData,
+            ]);
+        } else {
+            return response()->json([
+                "message" => $request->input('form_name') . " fields No data found",
+                "data" => [],
+            ]);
+        }
     }
 
     public function getformdataProject(Request $request)

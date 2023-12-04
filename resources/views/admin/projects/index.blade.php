@@ -16,7 +16,7 @@
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Projects</h5>
 							<a class="btn btn-primary btn-air-primary"  href="{{route('admin.project.add')}}">Add New Project</a>
-								<a href="{{route('admin.project.unit')}}"><button class="btn btn-primary btn-air-primary " type="button" >List Of Units</button></a>
+							<a href="{{route('admin.project.unit')}}"><button class="btn btn-primary btn-air-primary " type="button" >List Of Units</button></a>
 							<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()" type="button">Delete</button>
                         </div>
                         <div class="card-body">

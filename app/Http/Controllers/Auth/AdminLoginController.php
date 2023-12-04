@@ -144,10 +144,11 @@ class AdminLoginController extends Controller
 		LoggedIn::withoutGlobalScopes()->where('employee_id',$user->id)->OrderBy('id','DESC')->first()->update(['succeed' => 1]);
 
 		Session::put('plan_id', User::where('id', Session::get('parent_id'))->first()->plan_id);
-		// if ($user->role_id != 1 || $user->status == 0) {
-		// 	Auth::logout();
-		// 	return redirect()->back()->with('warning', trans('auth.sufficient_permissions'));
-		// }
+		
+// 		if ($user->role_id != 1 || $user->status == 0) {
+// 			Auth::logout();
+// 			return redirect()->back()->with('warning', trans('auth.sufficient_permissions'));
+// 		}
 	}
 
 	/**

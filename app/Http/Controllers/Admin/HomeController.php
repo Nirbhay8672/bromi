@@ -499,7 +499,7 @@ class HomeController extends Controller
 
 	public function search(Request $request)
 	{
-		if($request->ajax() && !empty($request->search)) {
+		if ($request->ajax() && !empty($request->search)) {
 			$enquiries  = Enquiries::where('client_name', 'LIKE', "%{$request->search}%")->get()->toArray();
 			$projects  = Projects::where('project_name', 'LIKE', "%{$request->search}%")->get()->toArray();
 			$users  = User::where('parent_id',Session::get('parent_id'))  ->where(function($query) use ($request){

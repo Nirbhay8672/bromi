@@ -20,6 +20,7 @@ use App\Models\DropdownSettings;
 use App\Models\Projects;
 use App\Models\State;
 use App\Models\SuperAreas;
+use App\Models\SuperCity;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
@@ -164,7 +165,7 @@ class UserController extends Controller
             'state_id' => $new_state->id,
         ])->save();
 
-        $allarea = SuperAreas::where('super_city_id',$request->city_id)
+        $allarea = Areas::where('city_id',$request->city_id)
             ->where('state_id',$request->state_id)
             ->get();
             

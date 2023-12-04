@@ -33,6 +33,7 @@
                                     <thead>
                                         <tr>
                                             <th>Project</th>
+                                            <th>Property For </th>
                                             <th>Wing </th>
                                             <th>Unit</th>
                                             <th>Price</th>
@@ -70,7 +71,12 @@
                     columns: [{
                             data: 'project',
                             name: 'project',
-                        }, {
+                        },
+						 {
+                            data: 'property_for',
+                            name: 'property_for',
+                        },
+						{
                             data: 'wing',
                             name: 'wing',
                         },

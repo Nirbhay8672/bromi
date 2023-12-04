@@ -52,7 +52,7 @@ public function index(Request $request)
 		
 				$propertyData[] = [
 					// You should replace these sample data with your actual property data
-					[
+					
 						'id' => $value->id,
 						'Project_name' => $project,
 						'locality' => $value->locality,
@@ -61,7 +61,7 @@ public function index(Request $request)
 						],// $value->property_info,
 						'price' =>  $value->price,
 						'is_liked' => true,
-					],
+					
 					
 				];
 			}

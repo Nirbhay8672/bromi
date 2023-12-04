@@ -359,7 +359,7 @@ function gotoUrl(url) {
 }
 
 function search() {
-	$("#result_container").html(" ");
+	$("#result_container").html("");
 	var quer = $("#search_input").val();
 	$.ajax({
 		type: "POST",

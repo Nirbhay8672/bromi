@@ -474,9 +474,9 @@
                                         </select>
                                     </div>
 
-                                    <div class="form-group col-md-2 m-b-4 mb-3">
-                                        <select class="form-select" id="filter_building_id">
-                                            <option value=""> Project</option>
+									<div class="form-group col-md-2 m-b-4 mb-3">
+										<label class="select2_label" for="Select Project"> Project</label>
+                                        <select class="form-select" id="filter_building_id" multiple>
                                             @foreach ($projects as $building)
                                                 <option value="{{ $building->id }}">{{ $building->project_name }}
                                                 </option>
@@ -484,8 +484,8 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2 m-b-4 mb-3">
-                                        <select class="form-select" id="filter_area_id">
-                                            <option value=""> Locality</option>
+										<label class="select2_label" for="Select Area"> Locality</label>
+                                        <select class="form-select" id="filter_area_id" multiple>
                                             @foreach ($areas as $area)
                                                 <option value="{{ $area->id }}">{{ $area->name }}</option>
                                             @endforeach
@@ -506,15 +506,6 @@
                                         </select>
                                     </div>
                                      --}}
-                                    {{-- <div class="form-group col-md-2 m-b-4 mb-3">
-                                        <select class="form-select" id="filter_building_quality">
-                                            <option value="">Quality Of Building</option>
-                                            <option value="1">Average</option>
-                                            <option value="2">Excellent</option>
-                                            <option value="3">Good</option>
-                                            <option value="4">Poor</option>
-                                        </select>
-                                    </div> --}}
                                     <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_availability_status">
                                             <option value="">Availability Status</option>
@@ -566,21 +557,20 @@
                                                 id="filter_from_price" type="text" autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-3 mb-3">
-                                        {{-- <label>&nbsp;</label> --}}
+                                    {{-- <div class="form-group col-md-3 mb-3">
                                         <div>
                                             <label for="To Price">To Price</label>
                                             <input class="form-control indian_currency_amount" name="filter_to_price"
                                                 id="filter_to_price" type="text" autocomplete="off">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group col-md-3 m-b-20">
                                         <label for="From Area">From Area</label>
                                         <input class="form-control" name="filter_from_area" id="filter_from_area"
                                             type="text" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-3 m-b-20">
-                                        <label for="To Area">Locality</label>
+                                        <label for="To Area">To Area</label>
                                         <input class="form-control" name="filter_to_area" id="filter_to_area"
                                             type="text" autocomplete="off">
                                     </div>
@@ -598,7 +588,6 @@
                                                 data-language="en">
                                         </div>
                                     </div>
-
                                     <hr class="color-hr">
                                     <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_is_preleased" type="checkbox">
@@ -609,10 +598,9 @@
                                         <label class="form-check-label" for="filter_is_hot">Hot</label>
                                     </div>
                                     <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="filter_is_prime" type="checkbox">
-                                        <label class="form-check-label" for="filter_is_prime">Prime</label>
+                                        <input class="form-check-input" id="filter_is_terraced" type="checkbox">
+                                        <label class="form-check-label" for="filter_is_terraced">Terrace</label>
                                     </div>
-
                                 </div>
                             </div>
                             <button class="btn btn-secondary" id="filtersearch">Filter</button>
@@ -1109,7 +1097,6 @@
                             d.filter_configuration = $('#filter_configuration').val();
                             d.filter_building_id = $('#filter_building_id').val();
                             d.filter_area_id = $('#filter_area_id').val();
-                            d.filter_building_quality = $('#filter_building_quality').val();
                             d.filter_availability_status = $('#filter_availability_status').val();
                             d.filter_owner_is = $('#filter_owner_is').val();
                             d.filter_Property_priority = $('#filter_Property_priority').val();
@@ -1123,7 +1110,7 @@
                             d.filter_measurement = $('#filter_measurement').val();
                             d.filter_is_preleased = Number($('#filter_is_preleased').prop('checked'));
                             d.filter_is_hot = Number($('#filter_is_hot').prop('checked'));
-                            d.filter_is_prime = Number($('#filter_is_prime').prop('checked'));
+                            d.filter_is_terraced = Number($('#filter_is_terraced').prop('checked'));
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
@@ -1134,8 +1121,8 @@
                             d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
                             // d.match_building = Number($('#match_building').prop('checked'));
                             d.filter_by = filter_by;
-
                             d.location = window.location.href;
+
                         },
                     },
                     columns: [{
@@ -1197,6 +1184,12 @@
                             "targets": 6
                         },
                     ],
+                    //#B To Change Background when prop_status = 0. 
+                    "createdRow": function(row, data, dataIndex) {
+                        if (data['prop_status'] == 0) {
+                            $(row).addClass('important-row');
+                        }
+                    },
                     "drawCallback": function(settings, json) {
                         setTimeout(() => {
                             $('.color-code-popover').popover({
