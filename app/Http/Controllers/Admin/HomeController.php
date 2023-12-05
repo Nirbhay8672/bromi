@@ -419,7 +419,6 @@ class HomeController extends Controller
 			foreach ($allcity as $key => $value) {
 				$exist = City::where('name',$value->name)->where('state_id',$value->state_id)->first();
 				if (empty($exist->id)) {
-
 					$state = State::find($value->state_id);
 					$current_user_state = State::where('user_id',Auth::user()->id)->where('name', $state->name)->first();
 
@@ -438,7 +437,7 @@ class HomeController extends Controller
 					}
 					
 					$city = new City();
-					$city->user_id =  Session::get('parent_id');
+					$city->user_id = Auth::user()->id;
 					$city->name = $value->name;
 					$city->state_id = $new_state_id;
 					$city->save();

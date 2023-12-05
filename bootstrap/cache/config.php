@@ -21,7 +21,7 @@
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:YsMJ4MSJKX+SI8dnfesoPVkYpcXaoQXXFvY+wKo8+F8=',
+    'key' => 'base64:zGiOe/h/YVKH6aOe7FJTLS5d5efz+DJGCibgABdjiVs=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (
@@ -200,7 +200,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/framework/cache/data',
+        'path' => 'C:\\laragon\\www\\bromi\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -329,11 +329,11 @@
       array (
         'driver' => 'mysql',
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'localhost',
         'port' => '3306',
         'database' => 'mrwebcoi_bromi',
-        'username' => 'mrwebcoi_bromi',
-        'password' => '3BMVpLZhtkXr',
+        'username' => 'root',
+        'password' => '',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -349,11 +349,11 @@
       array (
         'driver' => 'pgsql',
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'localhost',
         'port' => '3306',
         'database' => 'mrwebcoi_bromi',
-        'username' => 'mrwebcoi_bromi',
-        'password' => '3BMVpLZhtkXr',
+        'username' => 'root',
+        'password' => '',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -364,11 +364,11 @@
       array (
         'driver' => 'sqlsrv',
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'localhost',
         'port' => '3306',
         'database' => 'mrwebcoi_bromi',
-        'username' => 'mrwebcoi_bromi',
-        'password' => '3BMVpLZhtkXr',
+        'username' => 'root',
+        'password' => '',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -409,12 +409,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/app',
+        'root' => 'C:\\laragon\\www\\bromi\\storage\\app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/app/public',
+        'root' => 'C:\\laragon\\www\\bromi\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
       ),
@@ -432,7 +432,7 @@
     ),
     'links' => 
     array (
-      '/home/mrwebcoi/updates.mrweb.co.in/bromi/public/storage' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/app/public',
+      'C:\\laragon\\www\\bromi\\public\\storage' => 'C:\\laragon\\www\\bromi\\storage\\app/public',
     ),
   ),
   'hashing' => 
@@ -467,13 +467,13 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/logs/laravel.log',
+        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/logs/laravel.log',
+        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
@@ -524,7 +524,7 @@
       ),
       'emergency' => 
       array (
-        'path' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/logs/laravel.log',
+        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -590,7 +590,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => '/home/mrwebcoi/updates.mrweb.co.in/bromi/resources/views/vendor/mail',
+        0 => 'C:\\laragon\\www\\bromi\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -745,7 +745,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/framework/sessions',
+    'files' => 'C:\\laragon\\www\\bromi\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -765,9 +765,9 @@
   array (
     'paths' => 
     array (
-      0 => '/home/mrwebcoi/updates.mrweb.co.in/bromi/resources/views',
+      0 => 'C:\\laragon\\www\\bromi\\resources\\views',
     ),
-    'compiled' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/framework/views',
+    'compiled' => 'C:\\laragon\\www\\bromi\\storage\\framework\\views',
   ),
   'dompdf' => 
   array (
@@ -776,10 +776,10 @@
     'convert_entities' => true,
     'options' => 
     array (
-      'font_dir' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/fonts',
-      'font_cache' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/fonts',
-      'temp_dir' => '/tmp',
-      'chroot' => '/home/mrwebcoi/updates.mrweb.co.in/bromi',
+      'font_dir' => 'C:\\laragon\\www\\bromi\\storage\\fonts',
+      'font_cache' => 'C:\\laragon\\www\\bromi\\storage\\fonts',
+      'temp_dir' => 'C:\\Users\\Dell\\AppData\\Local\\Temp',
+      'chroot' => 'C:\\laragon\\www\\bromi',
       'allowed_protocols' => 
       array (
         'file://' => 
@@ -962,7 +962,7 @@
     ),
     'temporary_files' => 
     array (
-      'local_path' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/storage/framework/cache/laravel-excel',
+      'local_path' => 'C:\\laragon\\www\\bromi\\storage\\framework/cache/laravel-excel',
       'remote_disk' => NULL,
       'remote_prefix' => NULL,
       'force_resync_remote' => NULL,
@@ -1043,7 +1043,7 @@
       'local' => 
       array (
         'type' => 'city',
-        'path' => '/home/mrwebcoi/updates.mrweb.co.in/bromi/database/maxmind/GeoLite2-City.mmdb',
+        'path' => 'C:\\laragon\\www\\bromi\\database\\maxmind/GeoLite2-City.mmdb',
       ),
     ),
     'ip_api' => 

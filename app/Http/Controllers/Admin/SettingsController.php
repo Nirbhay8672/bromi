@@ -41,6 +41,7 @@ class SettingsController extends Controller
     	            'state.name AS state_name'
     	        ])
     	        ->where('city.user_id',Auth::user()->id)
+				->where('city.deleted_at','=',null)
     	        ->join('state', 'city.state_id', 'state.id')
     	        ->get();
 	        
@@ -95,7 +96,7 @@ class SettingsController extends Controller
 	public function get_city(Request $request)
 	{
 		if (!empty($request->id)) {
-			$data =  City::where('id', $request->id)->first()->toArray();
+			$data = FacadesDB::table('city')->where('id', intval($request->id))->get()->first();
 			return json_encode($data);
 		}
 	}
@@ -124,6 +125,11 @@ class SettingsController extends Controller
 					$data->state_id = $request->state_id;
 					$data->save();
 				}
+			} else {
+				$data->fill([
+					'name' => $request->name,
+					'state_id' => $request->state_id,
+				])->save();
 			}
 		} else {
 			$city = City::where('name',$request->name)->where('user_id',Auth::user()->id)->first();
@@ -244,6 +250,9 @@ class SettingsController extends Controller
 					$data->name = $request->name;
 					$data->save();
 				}
+			} else  {
+				$data->name = $request->name;
+				$data->save();
 			}
 		} else {
 			$state = State::where('name',$request->name)->where('user_id',Auth::user()->id)->first();

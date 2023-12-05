@@ -11,6 +11,7 @@ use App\Models\SuperAreas;
 use App\Models\SuperCity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
@@ -28,21 +29,15 @@ class AreaController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = Areas::with('City', 'State')->when($request->go_data_id, function ($query) use ($request) {
-				return $query->where('id', $request->go_data_id);
-			})->orderBy('id','desc')->get();
-			$newarr = [];
-			$twoarr = [];
-			if (!empty(Auth::User()->city_id)) {
-				foreach ($data as $key => $value) {
-					if ($value->city_id == Auth::User()->city_id) {
-						array_push($newarr,$value);
-					}else{
-						array_push($twoarr,$value);
-					}
-				}
-				$data = array_merge($newarr,$twoarr);
-			}
+			$data = DB::table('areas')
+				->select([
+					'areas.*',
+					'city.name as city_name',
+					'state.name as state_name',
+				])
+				->join('city','areas.city_id','city.id')
+				->join('state','areas.state_id','state.id')
+				->where('areas.user_id',Auth::user()->id)->get();
 
 			return DataTables::of($data)
 			->editColumn('select_checkbox', function ($row) {
@@ -53,14 +48,14 @@ class AreaController extends Controller
 				return $abc;
 			})
 				->editColumn('city', function ($row) {
-					if (isset($row->City->name)) {
-						return $row->City->name;
+					if (isset($row->city_name)) {
+						return $row->city_name;
 					}
 					return '';
 				})
 				->editColumn('state', function ($row) {
-					if (isset($row->State->name)) {
-						return $row->State->name;
+					if (isset($row->state_name)) {
+						return $row->state_name;
 					}
 					return '';
 				})
@@ -90,30 +85,27 @@ class AreaController extends Controller
 
 	public function saveArea(Request $request)
 	{
-		if (!empty($request->id) && $request->id != '') {
-	
-			$data = Areas::find($request->id);
-			if (empty($data)) {
-				$exist = Areas::where('name',$request->name)->where('city_id',$request->city_id)->first();
-				if (!empty($exist)) {
-					return;
-				}
-				$data =  new Areas();
-			}
+		$existingRecord = DB::table('areas')->where('id', $request->id)->first();
+
+		if ($existingRecord) {
+			DB::table('areas')->where('id', $request->id)->update([
+				'user_id' => Auth::user()->id,
+				'name' => $request->name,
+				'city_id' => $request->city_id,
+				'pincode' => $request->pincode,
+				'state_id' => $request->state_id,
+				'status' => $request->status,
+			]);
 		} else {
-			$exist = Areas::where('name',$request->name)->where('city_id',$request->city_id)->first();
-			if (!empty($exist)) {
-				return;
-			}
-			$data =  new Areas();
+			DB::table('areas')->insert([
+				'user_id' => Auth::user()->id,
+				'name' => $request->name,
+				'city_id' => $request->city_id,
+				'pincode' => $request->pincode,
+				'state_id' => $request->state_id,
+				'status' => $request->status,
+			]);
 		}
-		$data->user_id = Session::get('parent_id');
-		$data->name = $request->name;
-		$data->city_id = $request->city_id;
-		$data->pincode = $request->pincode;
-		$data->state_id = $request->state_id;
-		$data->status = $request->status;
-		$data->save();
 	}
 
 	public function importArea(Request $request)
@@ -185,7 +177,7 @@ class AreaController extends Controller
 	public function getSpecificArea(Request $request)
 	{
 		if (!empty($request->id)) {
-			$data = Areas::where('id', $request->id)->first()->toArray();
+			$data = DB::table('areas')->where('id',$request->id)->first();
 			return json_encode($data);
 		}
 	}

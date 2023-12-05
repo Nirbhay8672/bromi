@@ -96,9 +96,10 @@ class ProjectsController extends Controller
 				->make(true);
 		}
 
-		$cities = City::orderBy('name')->get();
-		$states = State::orderBy('name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$areas = Areas::orderBy('name')->where('user_id',Auth::user()->id)->get();
+
 		$builders = Builders::orderBy('name')->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
 
