@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -156,6 +157,7 @@ class ProjectsController extends Controller
 		$project->parkings = json_decode($project->parkings_decode['parking_details'], true);
 
 		$project->amenity_array = json_decode($project->amenities, true);
+		$project->other_documents = json_decode($project->other_documents, true);
 
 		return view('admin.projects.view_project')->with(['project' => $project]);
 	}
@@ -204,7 +206,7 @@ class ProjectsController extends Controller
 	public function storeFile(UploadedFile $file)
     {
         $path = "file_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
-        $file->storeAs("public/file_image/", $path);
+		$file->storeAs("public/file_image/", $path);
         return $path;
     }
 	
@@ -366,6 +368,17 @@ class ProjectsController extends Controller
 			$catlot_file = $request->catlog_file;
 			$data->catlog_file = $this->storeFile($catlot_file);
 		}
+
+		$other_documents = json_decode($request->other_documents);
+
+		if(count($other_documents) > 0) {
+			foreach($other_documents as $index => $document) {
+				if($request['other_doc_'.$index]) {
+					$other_documents[$index]->file = $this->storeFile($request['other_doc_'.$index]);
+				}
+			}
+			$data->other_documents = $other_documents;
+ 		}
 		
 		$data->is_indirectly_store = 0;
 		$data->remark = $request->remark;
@@ -592,9 +605,9 @@ class ProjectsController extends Controller
 
 
 	public function editproject(Projects $id){
-		$cities = City::orderBy('name')->get();
+		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$areas = Areas::orderBy('name')->get();
+		$areas = Areas::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$builders = Builders::orderBy('name')->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
 
@@ -631,4 +644,14 @@ class ProjectsController extends Controller
 			$data = Projects::whereIn('id', json_decode($request->allids))->delete();
 		}
 	}
+
+	public function viewProjectDocument($filename)
+    {
+        $filePath = storage_path("app/public/file_image/{$filename}");
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+        $mimeType = mime_content_type($filePath);
+        return response()->file($filePath, ['Content-Type' => $mimeType]);
+    }
 }

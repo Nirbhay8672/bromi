@@ -3349,8 +3349,41 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group col-md-1 m-b-4 mb-3">
+                                                                <button class="btn btn-danger" type="button" @click="addOtherImageOrDoc()" title="">+</button>
+                                                            </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="row">
+                                                    <template x-for="(other_doc, index) in other_documents">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-4 m-b-4 mt-1">
+                                                                <select class="form-select" :id="`other_doc_${index}`" x-model="other_doc.document_type">
+                                                                    <option value=""> Category</option>
+                                                                    <option value="1">Building Elevation</option>
+                                                                    <option value="2">Common Amenities Photos</option>
+                                                                    <option value="3">Master Layout Of Building
+                                                                    </option>
+                                                                    <option value="4">Brochure</option>
+                                                                    <option value="5">Cost Sheet</option>
+                                                                    <option value="6">Other</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-6 m-b-4 mb-3">
+                                                                <div class="fname">
+                                                                    <div class="fvalue">
+                                                                        <input class="form-control" accept="image/*,.pdf" type="file" :id="`document_image_${index}`" name="document_image">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-1 m-b-4 mb-3">
+                                                                <button class="btn btn-danger" type="button" @click="removeOtherImageOrDoc(index)" title="">-</button>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                    </div>
+                                                    
 
                                                     <div class="row mt-3">
                                                         <div>
@@ -3858,6 +3891,13 @@
 
                         $('#image_category').val(project_data['document_category']).trigger('change');
 
+                        this.other_documents = JSON.parse(project_data['other_documents']);
+                        let _this_doc = this;
+
+                        this.$nextTick(function () {
+                            _this_doc.setSelect2ForOtherDoc();
+                        });
+                        
                         this.remark = project_data['remark'] ?? "";
                     }
                 },
@@ -4768,6 +4808,33 @@
                 document_category : '',
                 remark : '',
 
+                other_documents : [
+
+                ],
+
+                setSelect2ForOtherDoc() {
+                    let _this = this;
+                    this.$nextTick(function () {
+                        _this.other_documents.forEach((element, index) => {
+                            $(`#other_doc_${index}`).select2();
+                        });
+                    });
+                },
+
+                addOtherImageOrDoc() {
+                    let _this = this;
+                    this.other_documents.push({
+                        'document_type' : '',
+                        'file' : ''
+                    });
+
+                    this.setSelect2ForOtherDoc();
+                },
+
+                removeOtherImageOrDoc(index) {
+                    this.other_documents.splice(index, 1);
+                },
+
                 // submit section
                 submitHandle() {
 
@@ -4966,6 +5033,20 @@
                     }
 
                     form_data.set('remark', this.remark);
+
+                    this.other_documents.forEach((other_document_detail, index) => {
+                        let selected_value = $(`#other_doc_${index}`).val();
+                        this.other_documents[index]['document_type'] = selected_value;
+
+                        let other_doc = document.getElementById(`document_image_${index}`);
+                        if(other_doc && other_doc.files.length > 0)
+                        {
+                            let file = other_doc.files[0];
+                            form_data.set(`other_doc_${index}`, file, file.name);
+                        }
+                    });
+
+                    form_data.set('other_documents', JSON.stringify(this.other_documents));
 
                     let url = "{{ route('admin.saveProject') }}";
                     
