@@ -50,20 +50,26 @@ class ReportsController extends Controller
 
 	public function assignedViseEnquiry()
 	{
-		$groupedData = Enquiries::groupBy('employee_id')
-		    ->select([
-				'employee_id',
-				DB::raw("COUNT(*) as total_inquiries"),
-				DB::raw("CONCAT(first_name,last_name) as user_name"),
-			])
-			->join('users', 'enquiries.employee_id','users.id')
-			->where('employee_id', '!=', null)
-			->where('parent_id', Session::get('parent_id'))
-			->get();
-			
-		dd($groupedData->toArray());
+		$inquiryCounts = Enquiries::select(
+			'enquiries.employee_id',
+			DB::raw("CONCAT(users.first_name,  users.last_name) as person_name"),
+		)
+		->join('users', 'enquiries.employee_id','users.id')
+		->where('employee_id', '!=', null)
+		->get();
 
-        return DataTables::of($groupedData->toArray())
+		$new = $inquiryCounts->groupBy('person_name');
+
+		$new_array = [];
+
+		foreach($new->toArray() as $key => $data) {
+			array_push($new_array,[
+				'user_name' => $key,
+				'total_inquiries' => count($data), 
+			]);	
+		}
+
+        return DataTables::of($new_array)
             ->make(true);
 	}
 	

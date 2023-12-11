@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class QuickSiteVisit extends Model
 {
 	use HasFactory;
-use SoftDeletes;
-
-protected $table = 'quick_schedule_visit';
+    use SoftDeletes;
+    
+    protected $table = 'quick_schedule_visit';
 
 
 	protected $fillable = [
@@ -22,6 +22,8 @@ protected $table = 'quick_schedule_visit';
 		'assigned_to',
 		'assigned_by',
 		'status',
+		'email_reminder',
+		'sms_reminder',
 		'schedule_remind',
 		'property_list',
 	];

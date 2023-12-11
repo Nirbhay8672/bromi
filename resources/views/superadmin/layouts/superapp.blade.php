@@ -388,6 +388,22 @@ Helper::set_default_measuerement();
                                         class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.area') active @endif"
                                         href="{{ route('superadmin.settings.area') }}"><i
                                             class="fa fa-user"></i><span class="lan-3">Area</span></a>
+                                <li class="sidebar-list">
+                                    <a
+                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.taluka') active @endif"
+                                        href="{{ route('superadmin.settings.taluka') }}"
+                                    >
+                                    <i class="fa fa-user"></i>
+                                    <span class="lan-3">Taluka</span>
+                                </a>
+                                <li class="sidebar-list">
+                                    <a
+                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.village') active @endif"
+                                        href="{{ route('superadmin.settings.village') }}"
+                                    >
+                                        <i class="fa fa-user"></i>
+                                        <span class="lan-3">Village</span>
+                                    </a>
                                 <li class="sidebar-list"><a
                                         class="sidebar-link sidebar-title  @if ($route == 'superadmin.email.index') active @endif"
                                         href="{{ route('superadmin.email.index') }}"><i

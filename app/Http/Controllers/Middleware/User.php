@@ -16,26 +16,26 @@ class User
      */
     public function handle($request, Closure $next)
     {
-        $user = Auth::user();
-        if ($user) {
-            if (in_array($user->role_id, [2])) {
-                if ($user->is_active != 1) {
-                    Auth::logout();
-                    if ($request->ajax()) {
-                        return response()->json(
-                            [
-                                'status' => false,
-                                'message' => trans('auth.account_deactivate')
-                            ],
-                            401
-                        );
-                    }
-                    return redirect('/')->with('warning', trans('auth.account_deactivate'));
-                }
-                return $next($request);
-            }
-            return redirect('/')->with('warning', trans('auth.sufficient_permissions'));
-        }
-        return redirect('/')->with('warning', trans('auth.account_deleted'));
+        // $user = Auth::user();
+        // if ($user) {
+        //     if (in_array($user->role_id, [2])) {
+        //         if ($user->is_active != 1) {
+        //             Auth::logout();
+        //             if ($request->ajax()) {
+        //                 return response()->json(
+        //                     [
+        //                         'status' => false,
+        //                         'message' => trans('auth.account_deactivate')
+        //                     ],
+        //                     401
+        //                 );
+        //             }
+        //             return redirect('/')->with('warning', trans('auth.account_deactivate'));
+        //         }
+        //         return $next($request);
+        //     }
+        //     return redirect('/')->with('warning', trans('auth.sufficient_permissions'));
+        // }
+        // return redirect('/')->with('warning', trans('auth.account_deleted'));
     }
 }

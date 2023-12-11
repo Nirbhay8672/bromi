@@ -12,6 +12,7 @@ use App\Models\Builders;
 use App\Models\City;
 use App\Models\CompanyDetails;
 use App\Models\DashboardWidget;
+use App\Models\District;
 use App\Models\DropdownSettings;
 use App\Models\Enquiries;
 use App\Models\EnquiryProgress;
@@ -20,6 +21,8 @@ use App\Models\Properties;
 use App\Models\State;
 use App\Models\Subplans;
 use App\Models\SuperCity;
+use App\Models\Taluka;
+use App\Models\Village;
 use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
@@ -33,6 +36,7 @@ use Spatie\Activitylog\Models\Activity;
 use Throwable;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
+use Illuminate\Http\UploadedFile;
 
 class HomeController extends Controller
 {
@@ -303,9 +307,9 @@ class HomeController extends Controller
 				}
 				$totalSource = array_values($totalSource);
 				$enqlatest = Enquiries::with('Employee')->OrderBy('created_at', 'DESC')->limit(10)->get();
-
+				
 				$dashboard_widget_positions = [];
-
+				
 				$firstChartfromMonth = now()->subMonths(12)->startOfMonth();
         		$firstCharttoMonth = now()->addDay();
 
@@ -331,15 +335,15 @@ class HomeController extends Controller
 						$first_chart[$new_lead->month_year] = $new_lead->count;
 					}
 				}
-
+				
 				$second_chart = Enquiries::select([
-					DB::raw("(CASE WHEN enquiries.enquiry_source = '103' THEN 'Advertise' WHEN enquiries.enquiry_source = '104' THEN 'Refrence' WHEN enquiries.enquiry_source = '105' THEN '99 - Acres' ELSE 'Unknown' END) AS enquiry_source_case"),
+					DB::raw("(CASE WHEN enquiries.enquiry_source = '103' THEN 'Advertise' WHEN enquiries.enquiry_source = '104' THEN 'Refrence' WHEN enquiries.enquiry_source = '105' THEN '99 - Acres' ELSE 'Unknown' END) AS enquiry_source_case"),	
 					DB::raw('count(*) as total_enquiry'),
 				])
 				->where('enquiry_source','!=',null)
 				->groupBy('enquiry_source')
 				->get();
-
+				
 				$inquiryCounts = Enquiries::select(
 					'enquiries.employee_id',
 					DB::raw("CONCAT(users.first_name,  users.last_name) as person_name"),
@@ -347,49 +351,49 @@ class HomeController extends Controller
 				->join('users', 'enquiries.employee_id','users.id')
 				->where('employee_id', '!=', null)
 				->get();
-
+		
 				$new = $inquiryCounts->groupBy('person_name');
-
+		
 				$third_chart = [];
-
+		
 				foreach($new->toArray() as $key => $data) {
 					array_push($third_chart,[
 						'user_name' => $key,
-						'total_inquiries' => count($data),
+						'total_inquiries' => count($data), 
 					]);
 				}
-
+				
 				$total_lost_leads = Enquiries::select([
 					'enquiries.enquiry_source',
 					DB::raw("(CASE WHEN enquiries.enquiry_source = '103' THEN 'Advertise' WHEN enquiries.enquiry_source = '104' THEN 'Refrence' WHEN enquiries.enquiry_source = '105' THEN '99 - Acres' ELSE 'Unknown' END) AS enquiry_source_case"),
 				])->withCount(['Progress' => function($query) {
 					$query->where('progress','Lost');
 				} ])->where('enquiry_source', '!=', null)->get();
-
+		
 				$fifth_chart = [];
-
+		
 				foreach($total_lost_leads->groupBy('enquiry_source_case')->toArray() as $element) {
 					$total = 0;
-
+					
 					foreach($element as $i) {
 						$total += $i['progress_count'];
 					}
-
+		
 					array_push($fifth_chart,[
 						'source_type' => $element[0]['enquiry_source_case'],
 						'total_enquiry' => $total,
 					]);
 				};
-
+				
 				$seventh_chart = EnquiryProgress::select([
-					'progress',
+					'progress',	
 					DB::raw('count(*) as total_enquiry'),
 				])
 				->where('progress','!=',null)
 				->groupBy('progress')
 				->get();
-
-
+				
+				
 				return view('admin.dashboard', compact('total_property', 'total_enquiry','first_chart', 'second_chart' , 'third_chart', 'fifth_chart', 'seventh_chart', 'properties_tyeps_enquries', 'enqs', 'props', 'progess', 'todayEnquiry', 'disschedule', 'sitevisit', 'recentproperty', 'enqchart', 'chart1data', 'dropdownsarr', 'enqlatest', 'prop_added_for_rent', 'prop_added_for_sell', 'prop_rented', 'prop_sold','totalSource','total_project','total_win','total_lost','total_active_leads','totalsales','dashboard_widget_positions'));
 			}
 			return redirect()->route('admin.login');
@@ -410,36 +414,33 @@ class HomeController extends Controller
 
 	public function importCity(Request $request)
 	{
-		if ($request->ajax()) {
-			if(!empty($request->state_id)){
-				$allcity = SuperCity::where('state_id',$request->state_id)->get();
-				foreach ($allcity as $key => $value) {
-					$exist = City::where('name',$value->name)->where('user_id',Auth::user()->id)->first();
-					if (empty($exist->id)) {
+		if(!empty($request->state_id)){
+			$allcity = SuperCity::whereIn('id',$request->city_array)->get();
+			foreach ($allcity as $key => $value) {
+				$exist = City::where('name',$value->name)->where('state_id',$value->state_id)->first();
+				if (empty($exist->id)) {
+					$state = State::find($value->state_id);
+					$current_user_state = State::where('user_id',Auth::user()->id)->where('name', $state->name)->first();
 
-					    $state = State::find($value->state_id);
-					    $current_user_state = State::where('user_id',Auth::user()->id)->where('name', $state->name)->first();
-
-					    $new_state_id = $state->id;
-
-					    if(!$current_user_state) {
-					       $new_state = new State();
-					       $new_state->fill([
-					           'name' => $state->name,
-					           'user_id' => Auth::user()->id,
-					       ])->save();
-
-					       $new_state_id = $new_state->id;
-					    } else {
-							$new_state_id = $current_user_state->id;
-						}
-
-						$city = new City();
-						$city->user_id =  Session::get('parent_id');
-						$city->name = $value->name;
-						$city->state_id = $new_state_id;
-						$city->save();
+					$new_state_id = $state->id;
+					    
+					if(!$current_user_state) {
+						$new_state = new State();
+						$new_state->fill([
+							'name' => $state->name,
+							'user_id' => Auth::user()->id,
+						])->save();
+						
+						$new_state_id = $new_state->id;
+					} else {
+						$new_state_id = $current_user_state->id;
 					}
+					
+					$city = new City();
+					$city->user_id = Auth::user()->id;
+					$city->name = $value->name;
+					$city->state_id = $new_state_id;
+					$city->save();
 				}
 			}
 		}
@@ -506,11 +507,14 @@ class HomeController extends Controller
 			$builders  = Builders::where('name', 'LIKE', "%{$request->search}%")->get()->toArray();
 			$areas  = Areas::where('name', 'LIKE', "%{$request->search}%")->get()->toArray();
 
+			$properties = Properties::where('owner_name', 'LIKE', "%{$request->search}%")->get()->toArray();
 
 			$data['enquiries'] = $enquiries;
 			$data['projects'] = $projects;
 			$data['users'] = $users;
 			$data['areas'] = $areas;
+			$data['properties'] = $properties;
+			
 			return json_encode($data);
 		}
 	}
@@ -522,7 +526,7 @@ class HomeController extends Controller
 		Session::put('plan_id', $request->plan_id);
 		return redirect()->route('admin');
 	}
-
+    
 	public function ProfileDetails(){
 		$user =  Auth::user()->id;
 		$plans = Subplans::get();
@@ -536,18 +540,22 @@ class HomeController extends Controller
 	public function Settings(Request $request){
 		$city =  City::get()->where('user_id',Auth::user()->id)->count();
 		$state =  State::get()->where('user_id',Auth::user()->id)->count();
+		$area =  Areas::get()->where('user_id',Auth::user()->id)->count();
+		$total_district = District::get()->where('user_id',Auth::user()->id)->count();
+		$total_taluka = Taluka::get()->where('user_id',Auth::user()->id)->count();
+		$total_village = Village::get()->where('user_id',Auth::user()->id)->count();
+
 		$builder =  Builders::get()->count();
 		$branch =  Branches::get()->count();
-		$area =  Areas::get()->where('user_id',Auth::user()->id)->count();
 		$user =  User::where('parent_id',Auth::User()->id)->orWhere('id',Auth::User()->id)->get()->count();
 		$role = Role::where('user_id', Session::get('parent_id'))->get()->count();
 		$enquiry = DropdownSettings::where('dropdown_for', 'LIKE', "%enquiry_%")->get()->count();
 		$building = DropdownSettings::where('dropdown_for', 'LIKE', "%building_%")->get()->count();
 		$property = DropdownSettings::where('dropdown_for', 'LIKE', "%property_%")->get()->count();
 
-		return view('admin.settings.settings_page',compact('city','state','builder','branch','area','user','role','enquiry','building','property'));
+		return view('admin.settings.settings_page',compact('city','state','builder','branch','area','user','role','enquiry','building','property','total_district','total_taluka','total_village'));
 	}
-
+    
 	public function chnagePassword(Request $request)
 	{
 		$params = $request->all();
@@ -565,7 +573,15 @@ class HomeController extends Controller
 		return response(['success' => true,'message' => 'Password change successfully!!'], 200);
 	}
 
+	public function storeFile(UploadedFile $file)
+    {
+        $path = "company_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
+        $file->storeAs("public/file_image/",$path);
+        return $path;
+    }
+    
 	public function chnageProfile(Request $request){
+
 		$params = $request->all();
 		$user_id =  Auth::user()->id;
 		$user = User::select('id','email','password')->where('id',$user_id)->first();
@@ -575,17 +591,23 @@ class HomeController extends Controller
 
 		}
 		$profile_details = array(
-			                          'first_name'    =>  $params['firstname'],
-			                          'last_name'     =>  $params['lastname'],
-			                          'mobile_number' =>  $params['mobile_number'],
-			                          'company_name'  =>  $params['company_name']
-		                         );
+			'first_name'    =>  $params['firstname'],   
+			'last_name'     =>  $params['lastname'],   
+			'mobile_number' =>  $params['mobile_number'],   
+			'company_name'  =>  $params['company_name'],
+			'address'  =>  $params['address'],
+		);
+
+		if($request->profile_image) {
+			$profile_details['company_logo'] = $this->storeFile($request->profile_image); 
+		}
+		
 	    $user->update($profile_details);
 		return response(['success' => true,'message' => 'Profile change successfully!!'], 200);
 	}
 
 	/* Visiting
-	 Card
+	 Card 
 	 Function
 	*/
 	public function VisitingCard(){

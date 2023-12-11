@@ -24,6 +24,9 @@ use SoftDeletes;
 		'nfd',
 		'status',
 		'remarks',
+		'time_before',
+		'email_reminder',
+		'sms_reminder',
 	];
 
 

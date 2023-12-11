@@ -17,7 +17,7 @@ class PartnerController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth');
-        // 		$this->middleware('permission:property-list', ['only' => ['index']]);
+		// 		$this->middleware('permission:property-list', ['only' => ['index']]);
 	}
 
 	/**
@@ -53,7 +53,7 @@ class PartnerController extends Controller
 			return DataTables::of($partner)->addIndexColumn()
 				->addColumn('partner_name', function (Partner $partner) {
 					if (!empty($partner->user->first_name) || !empty($partner->user->last_name)) {
-						return $partner->user->first_name.' '.$partner->user->last_name;
+						return $partner->user->first_name . ' ' . $partner->user->last_name;
 					} else {
 						return 'N/A';
 					}
@@ -105,7 +105,7 @@ class PartnerController extends Controller
 	 */
 	public function addPartner(Request $request)
 	{
-			// dd("Add Partner");
+		// dd("Add Partner");
 		if (Auth::check()) {
 			$Partner_Check = Partner::where('partner_id', $request->user_id)->first();
 			if (empty($Partner_Check)) {
@@ -134,64 +134,80 @@ class PartnerController extends Controller
 	 * @return \Illuminate\Http\Response JSON
 	 *
 	 */
-    public function partnerRequest(Request $request)
+	public function partnerRequest(Request $request)
 	{
 		// dd("request-partner");
 		if ($request->ajax()) {
-			$sharedproperty = SharedProperty::with('Property', 'User')->where('user_id', Auth::user()->id)->withTrashed()->get();
-			// $sharedproperty = SharedProperty::with('Property', 'User')->where('partner_id', Auth::user()->id)->withTrashed()->get();
- 			// dd("shared",$sharedproperty);
-			return DataTables::of($sharedproperty)->addIndexColumn()
-				->addColumn('partner_name', function (SharedProperty $sharedproperty) {
-					if (!empty($sharedproperty->User->first_name)) {
-						return $sharedproperty->User->first_name;
+			$sharedproperty = SharedProperty::with('Property_details', 'User')->where('user_id', Auth::user()->id)->withTrashed()->get();
+			// $sharedproperty2 = SharedProperty::with('Property_details', 'User')->where('partner_id', Auth::user()->id)->withTrashed()->get();
+
+			// $mergedData = $sharedproperty->concat($sharedproperty2);
+			// dd(Auth::user()->id,"shared",$mergedData);
+			return DataTables::of($sharedproperty)
+				->editColumn('project_name', function ($sharedproperty) use ($request) {
+					// dd($row->Property_details,"prj");
+					$first =  '<td style="vertical-align:top">
+					<font size="3"><a href="#" style="font-weight: bold;">' . ((isset($sharedproperty->Property_details->Projects->project_name)) ? $sharedproperty->Property_details->Projects->project_name : '') . '</a>';
+					$first_middle = '';
+					
+					$first_end = '</font>';
+					$last =     '</td>';
+
+					'</td>';
+					return $first . $first_middle . $first_end . $last;
+
+					return '';
+				})
+				->addColumn('partner_name', function ($SharedProperty) {
+					if (!empty($SharedProperty->User->first_name)) {
+						return $SharedProperty->User->first_name;
 					} else {
 						return 'N/A';
 					}
 				})
-				->addColumn('partner_email', function (SharedProperty $sharedproperty) {
-					if (!empty($sharedproperty->User->email)) {
-						return $sharedproperty->User->email;
+				->addColumn('partner_email', function ($SharedProperty) {
+					if (!empty($SharedProperty->User->email)) {
+						return $SharedProperty->User->email;
 					} else {
 						return 'N/A';
 					}
 				})
-				->addColumn('company_name', function (SharedProperty $sharedproperty) {
-					if (!empty($sharedproperty->User->company_name)) {
-						return $sharedproperty->User->company_name;
+				->addColumn('company_name', function ($SharedProperty) {
+					if (!empty($SharedProperty->User->company_name)) {
+						return $SharedProperty->User->company_name;
 					} else {
 						return 'N/A';
 					}
 				})
-				// ->addColumn('partner_number', function (SharedProperty $sharedproperty) {
-				// 	if (!empty($sharedproperty->User->mobile_number)) {
-				// 		return $sharedproperty->User->mobile_number;
+				// ->addColumn('partner_number', function ($SharedProperty) {
+				// 	if (!empty($SharedProperty->User->mobile_number)) {
+				// 		return $SharedProperty->User->mobile_number;
 				// 	} else {
 				// 		return 'N/A';
 				// 	}
 				// })
-				// ->addColumn('user_number', function (SharedProperty $sharedproperty) {
+				// ->addColumn('user_number', function ($SharedProperty) {
 				// 	if (!empty(Auth::user()->mobile_number)) {
 				// 		return Auth::user()->mobile_number;
 				// 	} else {
 				// 		return 'N/A';
 				// 	}
 				// })
-				->addColumn('status', function (SharedProperty $sharedproperty) {
-					if ($sharedproperty->accepted == 1) {
-						return 'Active';
-					} else if ($sharedproperty->accepted == 2) {
-						return 'Cancel';
+				->addColumn('status', function ($SharedProperty) {
+					if ($SharedProperty->accepted == 1) {
+						return '<center><span class="badge badge-success">Active</span></center>';
+					} else if ($SharedProperty->accepted == 2) {
+						return '<center><span class="badge badge-danger">Cancel</span></center>';
 					} else {
-						return 'Pending';
+						return '<center><span class="badge badge-info">Pending</span></center>';
 					}
 				})
-				// ->addColumn('action', function (SharedProperty $sharedproperty) {
+				// ->addColumn('action', function ($SharedProperty) {
 				// 	$action  = '';
-				// 	$action .= '<i role="button" title="Delete" data-id=' . $sharedproperty->id . ' onclick="deletePartner(this)" class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
+				// 	$action .= '<i role="button" title="Delete" data-id=' . $SharedProperty->id . ' onclick="deletePartner(this)" class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
 				// 	return $action;
 				// })
-				->rawColumns(['partner_name', 'company_name', 'partner_email',   'status'])
+				->rawColumns(['partner_name','project_name', 'company_name', 'partner_email',   'status'])
 				->make(true);
 		}
 		return view('admin.partner.partner_req');
@@ -224,7 +240,7 @@ class PartnerController extends Controller
 	 */
 	public function users()
 	{
-		$users = Partner::with('user')->get();
+		$users = Partner::with('user')->where('status', '=', 'Active')->get();
 		return response()->json($users);
 	}
 
@@ -238,6 +254,58 @@ class PartnerController extends Controller
 		if (!empty($request->id)) {
 			$dlt_partner = Partner::where('id', $request->id)->delete();
 			return json_encode($dlt_partner);
+		}
+	}
+
+	public function userRequest(Request $request)
+	{
+		if ($request->ajax()) {
+			// $sharedproperty = SharedProperty::with('Property_details', 'User')->where('user_id', Auth::user()->id)->withTrashed()->get();
+
+			$sharedUsersReq = Partner::with('User')->where('partner_id', Auth::user()->id)->get();
+			// dd("user REqs :",$sharedUsersReq);
+			return DataTables::of($sharedUsersReq)->addIndexColumn()
+				->addColumn('partner_name', function (Partner $sharedUser) {
+					if (!empty($sharedUser->User->first_name || $sharedUser->User->last_name)) {
+						return $sharedUser->User->first_name . ' ' . $sharedUser->User->last_name;
+					} else {
+						return 'N/A';
+					}
+				})
+				->addColumn('company_name', function (Partner $sharedUser) {
+					if (!empty($sharedUser->User->company_name)) {
+						return $sharedUser->User->company_name;
+					} else {
+						return 'N/A';
+					}
+				})
+				->addColumn('partner_email', function (Partner $sharedUser) {
+					if (!empty($sharedUser->User->email)) {
+						return $sharedUser->User->email;
+					} else {
+						return 'N/A';
+					}
+				})
+				->addColumn('action', function (Partner $sharedUser) {
+					$buttons = '';
+					if (!$sharedUser->accepted) {
+						$buttons .=   ' <button data-id="' . $sharedUser->id . '" onclick=acceptUsersRequest(this) class="btn btn-pill btn-danger" type="button">Accept</button>';
+					}
+					$buttons .=   ' <button data-id="' . $sharedUser->id . '" onclick=cancelRequest(this) class="btn btn-pill btn-primary" type="button">Cancel</button>';
+					return $buttons;
+				})
+				->rawColumns(['partner_name', 'company_name', 'partner_email',   'action'])
+				->make(true);
+		}
+		return view('admin.properties.user_shared_req');
+	}
+
+	public function acceptUserRequest(Request $request)
+	{
+		if ($request->ajax()) {
+			if (!empty($request->id)) {
+				Partner::find($request->id)->update(['status' => 'Active']);
+			}
 		}
 	}
 }

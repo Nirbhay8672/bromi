@@ -379,7 +379,7 @@ class IndustrialPropertyController extends Controller
 		}
 		return view('admin.properties.industrial_index', compact('projects', 'property_configuration_settings', 'areas', 'cities', 'states', 'prop_type'));
 	}
-
+	
 	public function generateAreaDetails($row, $type, $dropdowns)
 	{
 		$area = '';
@@ -413,10 +413,11 @@ class IndustrialPropertyController extends Controller
 		}
 	}
 
+
 	public function saveProperty(Request $request)
 	{
 		if (!empty($request->id) && $request->id != '') {
-
+	
 			$data = IndustrialProperty::find($request->id);
 			if (empty($data)) {
 				$data =  new IndustrialProperty();
@@ -771,7 +772,7 @@ class IndustrialPropertyController extends Controller
 			return json_encode($data);
 		}
 
-		if (!empty($request->allids) && isset(json_decode($request->allids)[0])) {
+		if (!empty($request->allids) && isset(json_decode($request->allids)[0]) ) {
 			$data = IndustrialProperty::whereIn('id', json_decode($request->allids))->delete();
 		}
 	}

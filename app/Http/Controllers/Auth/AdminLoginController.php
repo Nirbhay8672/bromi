@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
+use App\Models\Subplans;
+
 
 class AdminLoginController extends Controller
 {
@@ -66,6 +68,12 @@ class AdminLoginController extends Controller
 		if ($this->attemptLogin($request)) {
 			if ($request->hasSession()) {
 				$request->session()->put('auth.password_confirmed_at', time());
+			}
+
+			if(Auth::user()->plan_id == null) {
+			    Session::put('user_id', Auth::user()->id);
+			    $this->guard()->logout();
+			    return redirect()->route('subscription');
 			}
 
 			$role = Role::find(Auth::user()->role_id);
@@ -136,10 +144,11 @@ class AdminLoginController extends Controller
 		LoggedIn::withoutGlobalScopes()->where('employee_id',$user->id)->OrderBy('id','DESC')->first()->update(['succeed' => 1]);
 
 		Session::put('plan_id', User::where('id', Session::get('parent_id'))->first()->plan_id);
-		if ($user->role_id != 1 || $user->status == 0) {
-			Auth::logout();
-			return redirect()->back()->with('warning', trans('auth.sufficient_permissions'));
-		}
+		
+// 		if ($user->role_id != 1 || $user->status == 0) {
+// 			Auth::logout();
+// 			return redirect()->back()->with('warning', trans('auth.sufficient_permissions'));
+// 		}
 	}
 
 	/**
@@ -156,5 +165,23 @@ class AdminLoginController extends Controller
 		$this->guard()->logout();
 		$request->session()->invalidate();
 		return $this->loggedOut($request) ?: redirect($this->redirectTo);
+	}
+	
+		public function subscription()
+	{
+		return view('guest.plan')->with([
+			'plans' =>  Subplans::all(),
+		]);
+	}
+
+	public function savePlan(Request $request)
+	{
+		$user  = User::find($request->user_id);
+
+		$user->fill([
+			'plan_id' => $request->plan_id,
+		])->save();
+
+		return redirect('admin/login')->with('success','Plan Selected successfully.!');
 	}
 }

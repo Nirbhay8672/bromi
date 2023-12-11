@@ -330,7 +330,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($project->contacts as $contact)
+                                                        @foreach ($project->contacts ?? [] as $contact)
                                                             <tr>
                                                                 <td>{{$contact['name']}}</td>
                                                                 <td>{{$contact['mobile']}}</td>
@@ -670,55 +670,6 @@
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_2">
                                                         <div>: {{ $project->land_plot['plot_size_from'] }} - {{ $project->land_plot['plot_size_to'] }} {{ $map_unit[$project->land_plot['plot_size_from_map_unit']] }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="row">
-                                                    <div class="form-group col-md-12">
-                                                        <h5 class="border-style">Other Size Details</h5>
-                                                    </div>
-                                                    <div class="form-group col-6 m-b-20 data_conent_4">
-                                                        <h6><b>Constructed Saleable Area</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_4">
-                                                        <div>: {{ $project->land_plot['constructed_saleable_area'] }} {{ $map_unit[$project->land_plot['constructed_saleable_area_map_unit']] }}</div>
-                                                    </div>
-                                                    <div class="form-group col-6 m-b-20 data_conent_4">
-                                                        <h6><b>No. of room</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_4">
-                                                        <div>: {{ $project->land_plot['number_of_room'] }} </div>
-                                                    </div>
-                                                    <div class="form-group col-6 m-b-20 data_conent_4">
-                                                        <h6><b>No. of bathroom</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_4">
-                                                        <div>: {{ $project->land_plot['number_of_bathroom'] }} </div>
-                                                    </div>
-                                                    <div class="form-group col-6 m-b-20 data_conent_4">
-                                                        <h6><b>No. of balcony</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_4">
-                                                        <div>: {{ $project->land_plot['number_of_balcony'] }} </div>
-                                                    </div>
-                                                    <div class="form-group col-6 m-b-20 data_conent_4">
-                                                        <h6><b>No. of open side</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_4">
-                                                        <div>: {{ $project->land_plot['number_of_open_side'] }} </div>
-                                                    </div>
-                                                    <div class="form-group col-6 m-b-20 data_conent_4">
-                                                        <h6><b>No. of car park</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_4">
-                                                        <div>: {{ $project->land_plot['number_of_car_park'] }} </div>
-                                                    </div>
-                                                    <div class="form-group col-6 m-b-20 data_conent_4">
-                                                        <h6><b>Servant Room</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-20 data_conent_4">
-                                                        <div>: {{ $project->land_plot['servant_room'] != false ? 'Yes' : 'No' }} </div>
                                                     </div>
                                                 </div>
                                             </div>

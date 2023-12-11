@@ -11,6 +11,7 @@ use App\Models\DropdownSettings;
 use App\Models\Enquiries;
 use App\Models\LandImages;
 use App\Models\Projects;
+use App\Models\PropertyConstructionDocs;
 use App\Models\Properties;
 use App\Models\PropertyReport;
 use App\Models\PropertyViewer;
@@ -254,10 +255,24 @@ class PropertyController extends Controller
                 ->orderByRaw('CASE
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
-				END,  properties.id DESC')
-                // END, properties.prop_status DESC, properties.id DESC')
-                ->get();
-            foreach ($data as $key => $value) {
+				END,  properties.id DESC');
+				
+				
+				$parts = explode('?', $request->location);
+
+				if (count($parts) > 1) {
+					$value = $parts[1];
+					$value = trim($value);
+
+					if (strpos($value, 'data_id') !== false) {
+						$value_part = explode('=', $value);
+						if($value_part[1] > 0) {
+							$data->where('properties.id', $value_part[1]);
+						}
+					}
+				}
+				
+            foreach ($data->get() as $key => $value) {
                 $theArea = 0;
                 if (!empty($value->salable_area)) {
                     $theArea = explode('_-||-_', $value->salable_area)[0];
@@ -1958,12 +1973,16 @@ class PropertyController extends Controller
         $areas = Areas::all();
 
         $multiple_image = LandImages::where('pro_id', $property->id)->get();
+        $construction_docs_list = LandImages::where('pro_id', $property->id)
+            ->whereNotNull('construction_documents')
+            ->get();
+
         if (request()->has('download_zip')) {
             $selectedImages = request('selectedImages', []);
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property', 'multiple_image', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property', 'multiple_image','construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
 
     public function downloadZip($type, $prop)
@@ -2128,6 +2147,7 @@ class PropertyController extends Controller
         $data['prop_type'] = $prop_type;
         $edit_configuration = Properties::where('id', $request->id)->pluck('configuration');
         $edit_category = Properties::where('id', $request->id)->pluck('property_category');
+        $data['property_const_docs'] = PropertyConstructionDocs::all();
         return view('admin.properties.add_property', $data, compact('edit_category', 'edit_configuration'));
     }
 
@@ -2179,6 +2199,7 @@ class PropertyController extends Controller
         }
         $data['prop_type'] = $prop_type;
         $data['amenities'] = $amenities;
+        $data['property_const_docs'] = PropertyConstructionDocs::all();
         return view('admin.properties.add_property', $data);
     }
 

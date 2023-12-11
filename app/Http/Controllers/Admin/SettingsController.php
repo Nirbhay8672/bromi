@@ -9,6 +9,8 @@ use App\Models\City;
 use App\Models\DropdownSettings;
 use App\Models\Subcategory;
 use App\Models\State;
+use App\Models\SuperAreas;
+use App\Models\SuperCity;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +20,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use Rap2hpoutre\FastExcel\FastExcel;
+use App\Models\PropertyConstructionDocs;
 use DB;
+use Illuminate\Support\Facades\DB as FacadesDB;
 
 
 class SettingsController extends Controller
@@ -31,7 +35,16 @@ class SettingsController extends Controller
 	public function cities_index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = City::with('State')->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+			$data = FacadesDB::table('city')
+    	        ->select([
+    	            'city.*',
+    	            'state.name AS state_name'
+    	        ])
+    	        ->where('city.user_id',Auth::user()->id)
+				->where('city.deleted_at','=',null)
+    	        ->join('state', 'city.state_id', 'state.id')
+    	        ->get();
+	        
 			return DataTables::of($data)
 				->editColumn('select_checkbox', function ($row) {
 					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
@@ -41,8 +54,8 @@ class SettingsController extends Controller
 					return $abc;
 				})
 				->editColumn('state_id', function ($row) {
-					if (!empty($row->State->name)) {
-						return $row->State->name;
+					if (!empty($row->state_name)) {
+						return $row->state_name;
 					}
 					return '';
 				})
@@ -59,10 +72,31 @@ class SettingsController extends Controller
 		return view('admin.settings.city_index', compact('states'));
 	}
 
+	public function getCityForImport(Request $request)
+	{
+		return response()->json([
+			'message' => 'Detail fetch',
+			'data' => [
+				'city_data' => SuperCity::where('state_id',$request->state_id)->get()	
+			]
+		]);
+	}
+
+
+	public function getAreaForImport(Request $request)
+	{
+		return response()->json([
+			'message' => 'Detail fetch',
+			'data' => [
+				'area_data' => SuperAreas::where('super_city_id',$request->city_id)->get()	
+			]
+		]);
+	}
+
 	public function get_city(Request $request)
 	{
 		if (!empty($request->id)) {
-			$data =  City::where('id', $request->id)->first()->toArray();
+			$data = FacadesDB::table('city')->where('id', intval($request->id))->get()->first();
 			return json_encode($data);
 		}
 	}
@@ -91,6 +125,11 @@ class SettingsController extends Controller
 					$data->state_id = $request->state_id;
 					$data->save();
 				}
+			} else {
+				$data->fill([
+					'name' => $request->name,
+					'state_id' => $request->state_id,
+				])->save();
 			}
 		} else {
 			$city = City::where('name',$request->name)->where('user_id',Auth::user()->id)->first();
@@ -211,6 +250,9 @@ class SettingsController extends Controller
 					$data->name = $request->name;
 					$data->save();
 				}
+			} else  {
+				$data->name = $request->name;
+				$data->save();
 			}
 		} else {
 			$state = State::where('name',$request->name)->where('user_id',Auth::user()->id)->first();
@@ -223,7 +265,26 @@ class SettingsController extends Controller
 			}
 		}
 	}
+    
+    public function save_const_docs(Request $request)
+	{
+		if (!empty($request->name)) {
+			$data = new PropertyConstructionDocs();
+			$data->name = $request->name;
+			$data->user_id = Session::get('parent_id');
+			$data->save();
+		}
+	}
 
+	public function get_const_docs()
+	{
+		$const_docs_list = PropertyConstructionDocs::get();
+		if (!empty($const_docs_list)) {
+			return response()->json($const_docs_list);
+		}
+		return response()->json([]); // Return an empty JSON array if the list is empty
+	}
+	
 	public function builder_index(Request $request)
 	{
 		if ($request->ajax()) {

@@ -13,7 +13,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Employee Performance</h5>
+                            <h5 class="mb-3">Assigned Leads</h5>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -41,18 +41,18 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ route('admin.employee.performance') }}",
+                        url: "{{ route('admin.report.assigned.enquiry') }}",
                         data: function(d) {
 
                         },
                     },
                     columns: [{
-                            data: 'full_name',
-                            name: 'full_name'
+                            data: 'user_name',
+                            name: 'user_name'
                         },
                         {
-                            data: 'total_enquiry',
-                            name: 'total_enquiry'
+                            data: 'total_inquiries',
+                            name: 'total_inquiries'
                         }
                     ]
                 });

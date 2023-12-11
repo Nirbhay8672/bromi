@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Helpers\Helper;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\Areas;
 use App\Models\Branches;
 use App\Models\City;
 use App\Models\State;
@@ -18,6 +19,9 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Mail;
 use Session;
 use App\Models\Otp;
+use App\Models\SuperAreas;
+use App\Models\SuperCity;
+use Illuminate\Http\UploadedFile;
 
 class RegisterController extends Controller
 {
@@ -53,8 +57,18 @@ class RegisterController extends Controller
 
 	public function showRegistrationForm()
     {
-		$cities = City::orderBy('name')->get()->toArray();
-		$states = State::orderBy('name')->get()->toArray();
+		$states = State::where('user_id','=', 6)
+            ->orderBy('name')
+            ->get();
+
+        $state_id = [];
+
+        foreach($states as $state) {
+            $state_id[] = intval($state['id']); 
+        }
+
+		$cities = SuperCity::whereIn('state_id',$state_id)->orderBy('name')->get();
+        
 		$roles = Role::all();
         return view('admin.auth.register',compact('cities','states','roles'));
     }
@@ -134,6 +148,14 @@ class RegisterController extends Controller
         return redirect('admin/login');
         //     ->with('success', 'We sent you an activation link. Check your email and click on the link to verify.');
     }
+
+    
+	public function storeFile(UploadedFile $file)
+    {
+        $path = "company_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
+        $file->storeAs("public/file_image/",$path);
+        return $path;
+    }
     
     public function storeUser(Request $request)
     {
@@ -150,6 +172,8 @@ class RegisterController extends Controller
             "password_confirmation" => 'required|same:password',
         ]);
 
+        $all_user_count = count(User::all());
+
         $user = User::create(
             [   
                 'first_name' => $request->first_name,
@@ -157,22 +181,19 @@ class RegisterController extends Controller
                 'mobile_number' => $request->mobile_number,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role_id' => $request->role_id,
+                'role_id' => $all_user_count > 0 ? $request->role_id : 1,
 				'city_id' =>  $request->city_id,
 				'state_id' =>  $request->state_id,
 				'company_name' =>  $request->company_name,
+                'address' => $request->address,
                 'vendor_id' => Str::random(10),
-                'plan_id' =>  4,
-                'is_active' => 1,
+                'is_active' => 0,
             ]
         );
 
         $role_name = '';
 
-        if($request->role_id == 1) {
-            
-        } else {
-
+        if($user->role_id != 1) {
             $role_name = 'Builder_---_' . $user->id;
 
             $role =  new Role();
@@ -188,6 +209,40 @@ class RegisterController extends Controller
             $user->syncRoles([]);
             $user->assignRole($role->name);
             Helper::setDroddownConfigurations($user->id);
+        }
+
+        $state = State::find($request->state_id);
+        $city = SuperCity::find($request->city_id);
+
+        $new_state = new State();
+        $new_state->fill([
+            'name' => $state->name,
+            'user_id' => $user->id,
+        ])->save();
+
+        $new_city = new City();
+        $new_city->fill([
+            'name' => $city->name,
+            'user_id' => $user->id,
+            'state_id' => $new_state->id,
+        ])->save();
+
+        $allarea = SuperAreas::where('super_city_id',$request->city_id)
+            ->where('state_id',$request->state_id)
+            ->get();
+            
+            
+        foreach ($allarea as $area_obj)
+        {
+            $area = new Areas();
+
+            $area->fill([
+                'user_id' => $user->id,
+                'name' => $area_obj->name,
+                'city_id' => $new_city->id,
+                'pincode' => $area_obj->pincode,
+                'state_id' => $new_state->id,
+            ])->save();
         }
     
         // $otp = new Otp();
@@ -209,10 +264,6 @@ class RegisterController extends Controller
         // });
         
         // Session::put('user_id', $user->id);
-
-        // if($user->exists) {
-        //     return redirect('admin/otp-form');
-        // }
 
         if($user->exists) {
             return redirect('admin/login');

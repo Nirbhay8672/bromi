@@ -206,13 +206,13 @@
                                                             <div>: {{ $prop_type }}</div>
                                                         </div>
                                                         @if (!@empty($configuration_name))
-                                                        <div class="form-group col-4 m-b-10 data_conent_10">
-                                                            <h6><b>Sub category</b></h6>
-                                                        </div>
+                                                            <div class="form-group col-4 m-b-10 data_conent_10">
+                                                                <h6><b>Sub category</b></h6>
+                                                            </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_10">
                                                                 <div>:
                                                                     @foreach ($configuration_name as $configuration)
-                                                                    {{ $configuration }},
+                                                                        {{ $configuration }},
                                                                     @endforeach
                                                                 </div>
                                                             </div>
@@ -252,7 +252,8 @@
 
                                                         <div class="form-group col-8 m-b-10 data_conent_14">
                                                             <div>: {{ $data->budget_from ? $data->budget_from : '0' }} to
-                                                                {{ $data->budget_to }}</div>
+                                                                {{ $data->budget_to }}
+                                                            </div>
                                                         </div>
 
                                                         <div class="form-group col-4 m-b-10 data_conent_15">
@@ -346,11 +347,7 @@
                                                             @endphp
                                                             @forelse ($data->AssignHistory as $value)
                                                                 @if ($ii < 5)
-                                                                    @php
-                                                                        $ii++;
-                                                                    @endphp
-                                                                    {{-- @dd("val",$value->created_at); --}}
-                                                                    <tr>
+                                                                    @php $ii++; @endphp {{-- @dd("val",$value->created_at); --}} <tr>
                                                                         <td>{{ $value->user->first_name }}</td>
                                                                         <td>{{ !empty($value->assign_user->first_name) ? $value->assign_user->first_name : '' }}
                                                                         </td>
@@ -391,10 +388,7 @@
                                                             @endphp
                                                             @forelse ($data->Progress as $value)
                                                                 @if ($ii < 5)
-                                                                    @php
-                                                                        $ii++;
-                                                                    @endphp
-                                                                    <tr>
+                                                                    @php $ii++; @endphp <tr>
                                                                         <td>{{ \Carbon\Carbon::parse($value->created_at)->format('d-m-Y') }}
                                                                         </td>
                                                                         <td>{{ $value->progress }}</td>
@@ -440,10 +434,7 @@
                                                             @endphp
                                                             @forelse ($data->Visits as $value)
                                                                 @if ($ii < 5)
-                                                                    @php
-                                                                        $ii++;
-                                                                    @endphp
-                                                                    <tr>
+                                                                    @php $ii++; @endphp <tr>
                                                                         <td>{{ \Carbon\Carbon::parse($value->created_at)->format('d-m-Y') }}
                                                                         </td>
                                                                         <td>{{ $value->visit_status }}</td>
@@ -639,13 +630,13 @@
                                                             <div>: {{ $prop_type }}</div>
                                                         </div>
                                                         @if (!@empty($configuration_name))
-                                                        <div class="form-group col-4 m-b-10 data_conent_30">
-                                                            <h6><b>Sub category</b></h6>
-                                                        </div>
+                                                            <div class="form-group col-4 m-b-10 data_conent_30">
+                                                                <h6><b>Sub category</b></h6>
+                                                            </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_10">
                                                                 <div>:
                                                                     @foreach ($configuration_name as $configuration)
-                                                                    {{ $configuration }},
+                                                                        {{ $configuration }},
                                                                     @endforeach
                                                                 </div>
                                                             </div>
@@ -682,7 +673,8 @@
 
                                                         <div class="form-group col-8 m-b-10 data_conent_34">
                                                             <div>: {{ $data->budget_from ? $data->budget_from : '0' }} to
-                                                                {{ $data->budget_to }}</div>
+                                                                {{ $data->budget_to }}
+                                                            </div>
                                                         </div>
 
                                                         <div class="form-group col-4 m-b-10 data_conent_35">
@@ -961,6 +953,7 @@
                 </div>
             </div>
         </div>
+        <!-- schedule visit modal -->
         <div class="modal fade" id="schedulemodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -969,7 +962,7 @@
                         <h5 class="modal-title">Add Schedule Visit</h5>
                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
-                    {{-- <div class="modal-body">
+                    <!-- {{-- <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="schedule_form"
                             novalidate="">
                             <input type="hidden" name="schedule_visit_id" value="{{ $data->id }}"
@@ -1033,7 +1026,7 @@
                             <button class="btn btn-secondary" id="saveSchedule">Save</button>
                             <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
-                    </div> --}}
+                    </div> --}} -->
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="schedule_form"
                             novalidate="">
@@ -1064,7 +1057,8 @@
                                         <option value=""> Assigned To</option>
                                         @foreach ($employees as $employee)
                                             <option value="{{ $employee->id }}">
-                                                {{ $employee->first_name . ' ' . $employee->last_name }}</option>
+                                                {{ $employee->first_name . ' ' . $employee->last_name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -1135,6 +1129,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- progress modal -->
         <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -1143,85 +1139,6 @@
                         <h5 class="modal-title">Add Progress</h5>
                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
-                    {{-- <div class="modal-body">
-                        <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form"
-                            novalidate="">
-                            <div class="row">
-                                <div class="form-group col-md-6 m-b-10">
-                                    <label class="mb-0">Enquiry Progress:</label>
-                                    <select class="form-select" id="progress_enquiry_progress">
-                                        <option value="">Enquiry Progress </option>
-                                        <option value="New Lead">New Lead</option>
-                                        <option value="Lead Confirmed"> Lead Confirmed</option>
-                                        <option value="Discussion"> Discussion</option>
-                                        <option value="Booked"> Booked</option>
-                                        <option value="Lost"> Lost</option>
-                                        @forelse ($configuration_settings as $progs)
-                                            @if ($progs['dropdown_for'] == 'enquiry_progress')
-                                                @php
-                                                    $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
-                                                @endphp
-                                                <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
-                                            @endif
-                                        @empty
-                                        @endforelse
-
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6 m-b-10">
-                                    <div class="col-12">
-                                        <div class="m-checkbox-inline custom-radio-ml">
-                                            <div class="form-check form-check-inline radio radio-primary">
-                                                <input class="form-check-input" id="progress_lead_type_1" type="radio"
-                                                    name="progress_lead_type" value="Hot Lead">
-                                                <label class="form-check-label mb-0" for="progress_lead_type_1">Hot
-                                                    Lead</label>
-                                            </div>
-                                            <div class="form-check form-check-inline radio radio-primary">
-                                                <input class="form-check-input" type="radio" id="progress_lead_type_2"
-                                                    name="progress_lead_type" value="Warm Lead">
-                                                <label class="form-check-label mb-0" for="progress_lead_type_2"> Warm
-                                                    Lead</label>
-                                            </div>
-                                            <div class="form-check form-check-inline radio radio-primary">
-                                                <input class="form-check-input" id="progress_lead_type_3" type="radio"
-                                                    name="progress_lead_type" value="Cold Lead">
-                                                <label class="form-check-label mb-0" for="progress_lead_type_3">Cold
-                                                    Lead</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6 m-b-4 mb-3">
-                                    <label class="mb-0">Comments:</label>
-                                    <select class="form-select" id="progress_sales_comment">
-                                        <option value="">Sales Comments</option>
-                                        @forelse ($configuration_settings as $props)
-                                            @if ($props['dropdown_for'] == 'enquiry_sales_comment')
-                                                <option data-parent_id="{{ $props['parent_id'] }}"
-                                                    value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                </option>
-                                            @endif
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6 m-b-10">
-                                    <label for="nfd" class="mb-0">NFD:</label>
-                                    <input class="form-control " id="nfdDateTime" name="nfdDateTime"
-                                        type="datetime-local">
-                                </div>
-
-                                <div class="form-group col-md-12 m-b-10">
-                                    <label for="remarks" class="mb-0">Remarks:</label>
-                                    <input class="form-control" name="progress_remarks" id="progress_remarks"
-                                        type="remarks" autocomplete="off">
-                                </div>
-                            </div>
-                            <button class="btn btn-secondary" id="saveProgress">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                        </form>
-                    </div> --}}
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form"
                             novalidate="">
@@ -1231,7 +1148,8 @@
                                     @php
                                         $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
                                     @endphp
-                                    <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
+                                    <!-- Testing disaplyed -->
+                                    <!-- <option value="{{ $progs['id'] }}"> {{ $namee }}</option> -->
                                 @endif
                             @empty
                             @endforelse
@@ -1328,15 +1246,17 @@
                                         type="remarks" autocomplete="off">
                                 </div>
                                 <div class="row">
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="email_reminder" type="checkbox"
+                                    <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                        <input class="form-check-input" id="email_reminder_progress" type="checkbox"
                                             value="">
-                                        <label class="form-check-label" for="email_reminder">Email Reminder</label>
+                                        <label class="form-check-label" for="email_reminder_progress">Email
+                                            Reminder</label>
                                     </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="sms_reminder" type="checkbox"
+
+                                    <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                        <input class="form-check-input" id="sms_reminder_progress" type="checkbox"
                                             value="">
-                                        <label class="form-check-label" for="sms_reminder">SMS Reminder</label>
+                                        <label class="form-check-label" for="sms_reminder_progress">SMS Reminder</label>
                                     </div>
                                 </div>
                             </div>
@@ -1634,7 +1554,13 @@
                 });
             })
 
+            // save progress
             $(document).on('click', '#saveProgress', function(e) {
+                var email_reminder = document.getElementById("email_reminder_progress");
+                var sms_reminder = document.getElementById("sms_reminder_progress");
+
+                var email = email_reminder.checked == true ? 1 : 0;
+                var sms = sms_reminder.checked == true ? 1 : 0;
                 e.preventDefault();
                 $(this).prop('disabled', true);
                 $.ajax({
@@ -1647,6 +1573,8 @@
                         sales_comment_id: $('#progress_sales_comment').val(),
                         nfd: $('#site_visit_date').val() + ' ' + $('#site_visit_time').val(),
                         remarks: $('#progress_remarks').val(),
+                        email_reminder: email,
+                        sms_reminder: sms,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
@@ -1750,7 +1678,11 @@
                 });
             }
 
+            // save schedule
             $(document).on('click', '#saveSchedule', function(e) {
+                console.log("reminider_before_minute clicked 00777 ==");
+                var email = email_reminder.checked == true ? 1 : 0;
+                var sms = sms_reminder.checked == true ? 1 : 0;
                 e.preventDefault();
                 $(this).prop('disabled', true);
                 $.ajax({
@@ -1764,17 +1696,19 @@
                         assigned_to: $('#schedule_assigned_to').val(),
                         schedule_remind: $('#schedule_remind').val(),
                         property_list: JSON.stringify($('#property_list').val()),
-                        time_before: JSON.stringify(reminder_time_before),
+                        time_before: JSON.stringify($('#reminider_before_minute').val()),
                         email_reminder: email,
                         sms_reminder: sms,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
+                        console.log("Success schedule visit  ==", data);
                         $('#schedulemodal').modal('hide');
                         $('#saveSchedule').prop('disabled', false);
                         showScheduleVisit()
                     },
                     error: function(data) {
+                        console.log("Error schedule visit  ==", data);
                         $('#schedulemodal').modal('hide');
                         $('#saveSchedule').prop('disabled', false);
                         showScheduleVisit()

@@ -21,17 +21,18 @@
                                 <table class="display" id="sharedTable">
                                     <thead>
                                         <tr>
-                                            <th>
+                                            <th class="text-center">
                                                 <div class="form-check form-check-inline checkbox checkbox-dark mb-0 me-0">
                                                     <input class="form-check-input" id="select_all_checkbox"
                                                         name="selectrows" type="checkbox">
                                                     <label class="form-check-label" for="select_all_checkbox"></label>
                                                 </div>
                                             </th>
-                                            <th>Name</th>
-                                            <th>Company Name</th>
-                                            <th>Email</th>
-                                            <th>Status</th>
+                                            <th class="text-center">Project Name</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Company Name</th>
+                                            <th class="text-center">Email</th>
+                                            <th class="text-center">Status</th>
                                             {{-- <th>Actions</th> --}}
                                         </tr>
                                     </thead>
@@ -62,21 +63,27 @@
                     },
                 },
                 columns: [{
-                    data: 'id',
-                    name: 'id'
-                }, {
-                    data: 'partner_name',
-                    name: 'partner_id'
-                }, {
-                    data: 'company_name',
-                    name: 'company_name'
-                }, {
-                    data: 'partner_email',
-                    name: 'email'
-                }, {
-                    data: 'status',
-                    name: 'status'
-                }],
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'project_name',
+                        name: 'project_name'
+                    },
+                    {
+                        data: 'partner_name',
+                        name: 'partner_id'
+                    }, {
+                        data: 'company_name',
+                        name: 'company_name'
+                    }, {
+                        data: 'partner_email',
+                        name: 'email'
+                    }, {
+                        data: 'status',
+                        name: 'status'
+                    }
+                ],
                 columnDefs: [{
                         "width": "2%",
                         "targets": 0
@@ -90,12 +97,16 @@
                         "targets": 2
                     },
                     {
-                        "width": "15%",
+                        "width": "12%",
                         "targets": 3
                     },
                     {
-                        "width": "10%",
+                        "width": "15%",
                         "targets": 4
+                    },
+                    {
+                        "width": "10%",
+                        "targets": 5
                     },
 
                 ],

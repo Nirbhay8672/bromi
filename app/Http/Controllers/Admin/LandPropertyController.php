@@ -30,7 +30,7 @@ class LandPropertyController extends Controller
 		$this->middleware('auth');
 	}
 
-	public function index(Request $request)
+public function index(Request $request)
 	{
 		if ($request->ajax()) {
 			$dropdowns = DropdownSettings::get()->toArray();
@@ -359,6 +359,7 @@ class LandPropertyController extends Controller
 		return view('admin.properties.land_index', compact('property_configuration_settings', 'areas', 'cities', 'states', 'districts', 'talukas', 'villages', 'prop_type'));
 	}
 
+
 	public function saveProperty(Request $request)
 	{
 		if (!empty($request->id) && $request->id != '') {
@@ -445,7 +446,7 @@ class LandPropertyController extends Controller
 		}
 	}
 
-	public function saveLandImages(Request $request)
+public function saveLandImages(Request $request)
 	{
 		$landId = $request->input('land_id');
 		$proId = $request->input('pro_id');
@@ -464,48 +465,50 @@ class LandPropertyController extends Controller
 
 				if ($moved) {
 					$land_image = new LandImages();
-					$land_image->land_id = '0';
+					$land_image->land_id = $landId;
 					$land_image->construction_documents = $fileName;
 					$land_image->user_id = Auth::user()->id;
-					$land_image->pro_id = '0';
+					$land_image->pro_id = $proId;
 					$land_image->save();
 				}
 			}
 		}
-
-		if (!empty($images) || !empty($documents)) {
-			foreach ($images as $key => $image) {
-				$ext = $image->getClientOriginalExtension();
-				$fileName = str_replace('.' . $ext, '', $image->getClientOriginalName()) . "-" . time() . '.' . $ext;
-				$fileName = str_replace('#', '', $fileName);
-				$path = public_path() . config('constant.land_images_url');
-				File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
-				$moved = $image->move($path, $fileName);
-				if ($moved) {
-					$land_image = new LandImages();
-					$land_image->land_id = $landId;
-					$land_image->image = $fileName;
-					$land_image->user_id = Auth::user()->id;
-					$land_image->pro_id = $proId;
-					$land_image->save();
+		if ((!empty($images) && is_array($images)) || (!empty($documents) && is_array($documents))) {
+			if (!empty($images)) {
+				foreach ($images as $key => $image) {
+					$ext = $image->getClientOriginalExtension();
+					$fileName = str_replace('.' . $ext, '', $image->getClientOriginalName()) . "-" . time() . '.' . $ext;
+					$fileName = str_replace('#', '', $fileName);
+					$path = public_path() . config('constant.land_images_url');
+					File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
+					$moved = $image->move($path, $fileName);
+					if ($moved) {
+						$land_image = new LandImages();
+						$land_image->land_id = $landId;
+						$land_image->image = $fileName;
+						$land_image->user_id = Auth::user()->id;
+						$land_image->pro_id = $proId;
+						$land_image->save();
+					}
 				}
 			}
-
-			foreach ($documents as $key => $document) {
-				// Process document files
-				$ext = $document->getClientOriginalExtension();
-				$fileName = str_replace('.' . $ext, '', $document->getClientOriginalName()) . "-" . time() . '.' . $ext;
-				$fileName = str_replace('#', '', $fileName);
-				$path = public_path() . config('constant.land_images_url'); // Use the same path as images
-				File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
-				$moved = $document->move($path, $fileName);
-				if ($moved) {
-					$land_image = new LandImages();
-					$land_image->land_id = $landId;
-					$land_image->image = $fileName;
-					$land_image->user_id = Auth::user()->id;
-					$land_image->pro_id = $proId;
-					$land_image->save();
+			if (!empty($documents)) {
+				foreach ($documents as $key => $document) {
+					// Process document files
+					$ext = $document->getClientOriginalExtension();
+					$fileName = str_replace('.' . $ext, '', $document->getClientOriginalName()) . "-" . time() . '.' . $ext;
+					$fileName = str_replace('#', '', $fileName);
+					$path = public_path() . config('constant.land_images_url'); // Use the same path as images
+					File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
+					$moved = $document->move($path, $fileName);
+					if ($moved) {
+						$land_image = new LandImages();
+						$land_image->land_id = $landId;
+						$land_image->image = $fileName;
+						$land_image->user_id = Auth::user()->id;
+						$land_image->pro_id = $proId;
+						$land_image->save();
+					}
 				}
 			}
 		}

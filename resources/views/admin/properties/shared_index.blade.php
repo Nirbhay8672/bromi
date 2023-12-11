@@ -86,8 +86,8 @@
                             name: 'remarks'
                         },
                         {
-                            data: 'owner_details',
-                            name: 'owner_details'
+                            data: 'contact_name',
+                            name: 'contact_name'
                         }
                     ],
                     columnDefs: [{

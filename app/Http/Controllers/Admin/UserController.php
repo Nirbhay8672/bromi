@@ -13,11 +13,14 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Controllers\Controller;
+use App\Models\Areas;
 use App\Models\Branches;
 use App\Models\City;
 use App\Models\DropdownSettings;
 use App\Models\Projects;
 use App\Models\State;
+use App\Models\SuperAreas;
+use App\Models\SuperCity;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
@@ -87,8 +90,8 @@ class UserController extends Controller
 				->rawColumns(['Actions','status','email'])
 				->make(true);
 		}
-		$cities = City::orderBy('name')->get();
-		$states = State::orderBy('name')->get();
+		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$projects = Projects::get();
 		$property_configuration_settings = DropdownSettings::get()->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
@@ -129,7 +132,7 @@ class UserController extends Controller
 		$data->mobile_number = $request->mobile_number;
 		$data->office_number = $request->office_no;
 		$data->email = $request->email;
-		$data->role_id = 1;
+		$data->role_id = $request->role_id;
 		$data->home_number = $request->home_phone_no;
 		$data->position = $request->position;
 		$data->branch_id = $request->branch_id;
@@ -145,6 +148,39 @@ class UserController extends Controller
 		if (!empty($request->role_id)) {
 			$data->assignRole($request->input('role_id'));
 		}
+
+		$state = State::find($request->state_id);
+        $city = City::find($request->city_id);
+
+        $new_state = new State();
+        $new_state->fill([
+            'name' => $state->name,
+            'user_id' => $data->id,
+        ])->save();
+
+        $new_city = new City();
+        $new_city->fill([
+            'name' => $city->name,
+            'user_id' => $data->id,
+            'state_id' => $new_state->id,
+        ])->save();
+
+        $allarea = Areas::where('city_id',$request->city_id)
+            ->where('state_id',$request->state_id)
+            ->get();
+            
+        foreach ($allarea as $area_obj)
+        {
+            $area = new Areas();
+
+            $area->fill([
+                'user_id' => $data->id,
+                'name' => $area_obj->name,
+                'city_id' => $new_city->id,
+                'pincode' => $area_obj->pincode,
+                'state_id' => $new_state->id,
+            ])->save();
+        }
 
 		return response()->json();
 	}
@@ -165,8 +201,8 @@ class UserController extends Controller
 	public function addUser(Request $request){
 
 
-		$cities = City::orderBy('name')->get();
-		$states = State::orderBy('name')->get();
+		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$projects = Projects::get();
 		$property_configuration_settings = DropdownSettings::get()->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
@@ -176,11 +212,10 @@ class UserController extends Controller
 		return view('admin.users.add_user', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches'));
 	}
 
-	public function editUser(Request $request){
-
-
-		$cities = City::orderBy('name')->get();
-		$states = State::orderBy('name')->get();
+	public function editUser(Request $request)
+	{
+		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$projects = Projects::get();
 		$property_configuration_settings = DropdownSettings::get()->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();

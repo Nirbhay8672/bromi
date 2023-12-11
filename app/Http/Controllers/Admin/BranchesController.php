@@ -56,9 +56,9 @@ class BranchesController extends Controller
 				->rawColumns(['Actions','select_checkbox'])
 				->make(true);
 		}
-		$states = State::orderBy('name')->get();
-		$cities = City::orderBy('name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$areas = Areas::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		return view('admin.branches.index', compact('cities','areas','states'));
 	}
 
