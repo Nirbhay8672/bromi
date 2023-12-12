@@ -48,7 +48,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="login-card h-auto">
-                    <form class="theme-form login-form p-4" method="post" action="{{ route('admin.storeUser') }}">
+                    <form
+                        class="theme-form login-form p-4"
+                        action="{{ route('admin.storeUser') }}"
+                        method="POST"
+                        enctype="multipart/form-data"
+                    >
                         <img height="150" width="150" class="mainLogo"
                             src="{{ asset('admins/assets/images/logo/Bromi-Logo.png') }}" alt="">
                         @csrf
@@ -69,6 +74,7 @@
                                         type="text"
                                         placeholder="First Name"
                                         autofocus
+                                        autocomplete="off"
                                     >
                                     @error('first_name')
                                         <span class="invalid-feedback" role="alert">
@@ -85,6 +91,7 @@
                                         name="last_name"
                                         type="text"
                                         placeholder="Last Name"
+                                        autocomplete="off"
                                     >
                                     @error('last_name')
                                         <span class="invalid-feedback" role="alert">
@@ -103,6 +110,7 @@
                                         name="email"
                                         type="email"
                                         placeholder="E-mail Address"
+                                        autocomplete="off"
                                     >
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -120,6 +128,7 @@
                                         name="mobile_number"
                                         type="text"
                                         placeholder="Contact Number"
+                                        autocomplete="off"
                                     >
                                     @error('mobile_number')
                                         <span class="invalid-feedback" role="alert">
@@ -138,6 +147,7 @@
                                         name="company_name"
                                         type="text"
                                         placeholder="Company Name"
+                                        autocomplete="off"
                                     >
                                     @error('company_name')
                                         <span class="invalid-feedback" role="alert">
@@ -152,8 +162,8 @@
                                     name="role_id"
                                     id="role_id"
                                 >   
-                                    <option value="">Role</option>
-                                    <option value="1" {{ old('role_id') == 1 ? 'selected' : '' }}>Aagent</option>
+                                    <option value="">Account Created For</option>
+                                    <option value="1" {{ old('role_id') == 1 ? 'selected' : '' }}>Agent</option>
                                     <option value="4" {{ old('role_id') == 4 ? 'selected' : '' }}>Builder</option>
                                 </select>
                                 @error('role_id')
@@ -170,12 +180,14 @@
                                     name="state_id"
                                     id="state_id"
                                 >
-                                    <option value="">State</option>
+                                    <option value="" disabled selected>Select State</option>
                                     @foreach ($states as $state)
-                                        <option
-                                            value="{{ $state['id'] }}"
-                                            {{ old('state_id') == $state['id'] ? 'selected' : ''}}
-                                        >{{ $state['name']  }}</option>
+                                        @if ($state['user_id'] == 6)
+                                            <option
+                                                value="{{ $state['id'] }}"
+                                                {{ old('state_id') == $state['id'] ? 'selected' : ''}}
+                                            >{{ $state['name']  }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                                 @error('state_id')
@@ -190,13 +202,7 @@
                                     name="city_id"
                                     id="city_id"
                                 >
-                                    <option value="">Cities</option>
-                                    @foreach ($cities as $city)
-                                        <option
-                                            value="{{ $city['id'] }}"
-                                            {{ old('city_id') == $city['id'] ? 'selected' : ''}}
-                                        >{{ $city['name'] }}</option>
-                                    @endforeach
+                                    <option value="" disabled selected>Select City</option>
                                 </select>
                                 @error('city_id')
                                     <span class="invalid-feedback" role="alert">
@@ -214,6 +220,7 @@
                                         name="password"
                                         value=""
                                         placeholder="Password"
+                                        autocomplete="off"
                                     >
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
@@ -230,6 +237,7 @@
                                         value=""
                                         name="password_confirmation"
                                         placeholder="Confirm Password"
+                                        autocomplete="off"
                                     >
                                     @error('password_confirmation')
                                         <span class="invalid-feedback" role="alert">
@@ -281,10 +289,23 @@
         $(document).on('change', '#state_id', function(e) {
             $('#city_id').select2('destroy');
             citiesar = JSON.parse(cities);
+
+            let new_array = [];
+
+            citiesar.forEach(element => {
+                let result = new_array.filter(city => city.name == element.name);
+
+                if(result.length == 0) {
+                    new_array.push(element);
+                }
+            });
+
             $('#city_id').html('');
-            for (let i = 0; i < citiesar.length; i++) {
-                if (citiesar[i]['state_id'] == $("#state_id").val()) {
-                    $('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
+            $('#city_id').append('<option value="" disabled selected>Select City</option>');
+
+            for (let i = 0; i < new_array.length; i++) {
+                if (new_array[i]['state_id'] == $("#state_id").val()) {
+                    $('#city_id').append('<option value="' + new_array[i]['id'] + '">' + new_array[i][
                         'name'
                     ] + '</option>')
                 }

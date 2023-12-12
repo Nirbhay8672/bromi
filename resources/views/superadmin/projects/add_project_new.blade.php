@@ -3412,6 +3412,14 @@
                                                             <label class="form-check-label" for="amenity_gym">Gym</label>
                                                         </div>
                                                     </div>
+                                                    
+                                                    <div>
+                                                        <input type="hidden" :class="errors.hasOwnProperty('amenities') ? 'is-invalid' : ''">
+                                                        <div class="invalid-feedback">
+                                                            <span x-text="errors.amenities"></span>
+                                                        </div>
+                                                    </div>
+
 
                                                     <div class="row">
                                                         <hr>
@@ -3510,9 +3518,9 @@
                         // first section
                         this.id = project_data['id'];
                         $("#builder_id").val(project_data['builder_id']).trigger('change');
-                        this.website = project_data['website'];
+                        this.website = project_data['website'] ?? '';
 
-                        this.other_contact_details = JSON.parse(project_data['contact_details']);
+                        this.other_contact_details = JSON.parse(project_data['contact_details']) ?? [{'name' : '','mobile' : '','email' : '','designation' : ''}];
 
                         this.project_name = project_data['project_name'];
                         this.address = project_data['address'];
@@ -3521,15 +3529,15 @@
                         $("#state_id").val(project_data['state_id']).trigger('change');
                         $("#city_id").val(project_data['city_id']).trigger('change');
                         
-                        this.location_link = project_data['location_link'];
-                        this.pincode = project_data['pincode'];
-                        this.land_size = project_data['land_area'];
+                        this.location_link = project_data['location_link'] ?? '';
+                        this.pincode = project_data['pincode'] ?? '';
+                        this.land_size = project_data['land_area'] ?? '';
 
                         this.$nextTick(function () {
                             $("#land_size_select").val(project_data['land_size_unit']).trigger('change');
                         });
 
-                        this.rera_no = project_data['rera_number'];
+                        this.rera_no = project_data['rera_number'] ?? '';
                         this.number_of_unit_in_project = project_data['number_of_units_in_project'];
 
                         $("#project_status").val(project_data['project_status']).trigger('change');
@@ -3541,8 +3549,15 @@
                         if(project_data['project_status'] == 143) {
                             this.project_status_question = project_data['project_status_question'];
                         }
+                        
+                        let restri_data = [];
+                        JSON.parse(project_data['restrictions']).forEach((restriction) => {
+                            if(restriction != '') {
+                                restri_data.push(restriction);
+                            } 
+                        });
                     
-                        $("#restrictions").val(JSON.parse(project_data['restrictions'])).trigger('change');
+                        $("#restrictions").val(restri_data).trigger('change');
                         $("#restrictions").closest('.fname').addClass('focused');
                     
                         // second section
@@ -4893,7 +4908,8 @@
                     }
 
                     form_data.set('parking_details', JSON.stringify(this.parking_details));
-                    form_data.set('amenities', JSON.stringify(this.amenities));
+                    
+                    form_data.set('amenities', this.amenities.length > 0 ? JSON.stringify(this.amenities) : '' );
                     
                     form_data.set('document_category', $('#image_category').val() ?? '');
                     let document_image = document.getElementById('document_image');
@@ -4993,19 +5009,19 @@
 			var states = @Json($state_encoded);
 
 			$(document).on('change', '#state_id', function(e) {
-				// if (shouldchangecity) {
-				// 	$('#city_id').select2('destroy');
-				// 	citiesar = JSON.parse(cities);
-				// 	$('#city_id').html('');
-				// 	for (let i = 0; i < citiesar.length; i++) {
-				// 		if (citiesar[i]['state_id'] == $("#state_id").val()) {
-				// 			$('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
-				// 				'name'
-				// 			] + '</option>')
-				// 		}
-				// 	}
-				// 	$('#city_id').select2();
-				// }
+				if (shouldchangecity) {
+					$('#city_id').select2('destroy');
+					citiesar = JSON.parse(cities);
+					$('#city_id').html('');
+					for (let i = 0; i < citiesar.length; i++) {
+						if (citiesar[i]['state_id'] == $("#state_id").val()) {
+							$('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
+								'name'
+							] + '</option>')
+						}
+					}
+					$('#city_id').select2();
+				}
 			})
 
 			$('#projectTable').DataTable({
@@ -5360,15 +5376,15 @@
 
 		$(document).on('change', '#area_id', function(e) {
 
-			// if ($(this).find(":selected").attr('data-state_id') !== undefined && $(this).find(":selected").attr(
-			// 		'data-state_id') != '') {
-			// 	$('#state_id').val($(this).find(":selected").attr('data-state_id')).trigger('change')
-			// }
-			// if ($(this).find(":selected").attr('data-city_id') !== undefined && $(this).find(":selected").attr(
-			// 		'data-city_id') != '') {
-			// 	$('#city_id').val($(this).find(":selected").attr('data-city_id')).trigger('change')
-			// 	$('#pincode').val($(this).find(":selected").attr('data-pincode')).trigger('change')
-			// }
+			if ($(this).find(":selected").attr('data-state_id') !== undefined && $(this).find(":selected").attr(
+					'data-state_id') != '') {
+				$('#state_id').val($(this).find(":selected").attr('data-state_id')).trigger('change')
+			}
+			if ($(this).find(":selected").attr('data-city_id') !== undefined && $(this).find(":selected").attr(
+					'data-city_id') != '') {
+				$('#city_id').val($(this).find(":selected").attr('data-city_id')).trigger('change')
+				$('#pincode').val($(this).find(":selected").attr('data-pincode')).trigger('change')
+			}
 		})
 
 		function generate_tower_detail(id) {

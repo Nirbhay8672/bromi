@@ -13,7 +13,7 @@ use Spatie\Activitylog\Models\Activity;
 class Areas extends Model
 {
 	use HasFactory;
-	use SoftDeletes;
+    use SoftDeletes;
 	use LogsActivity;
 
 	protected static $recordEvents = ['created', 'updated', 'deleted'];
@@ -24,12 +24,11 @@ class Areas extends Model
 		'status',
 	];
 
-
-	protected static function boot()
-	{
-		parent::boot();
-		static::addGlobalScope(new VendorScope);
-	}
+	// protected static function boot()
+	// {
+	// 	parent::boot();
+	// 	static::addGlobalScope(new VendorScope);
+	// }
 
 	protected $fillable = [
 		'user_id',
@@ -49,4 +48,5 @@ class Areas extends Model
 	{
 		return $this->belongsTo(State::class, 'state_id', 'id')->withTrashed();
 	}
+
 }

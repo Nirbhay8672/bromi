@@ -188,8 +188,7 @@
                                                                 @forelse ($configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_specific_type')
                                                                         <div class="btn-group bromi-checkbox-btn me-1 enquiry-type-element"
-                                                                            role="group"
-                                                                            data-enquiry-id="{{ $props['id'] }}"
+                                                                            role="group"  data-enquiry-id="{{ $props['id'] }}"
                                                                             aria-label="Basic radio toggle button group">
                                                                             <input type="radio"
                                                                                 data-parent_id="{{ $props['parent_id'] }}"
@@ -1907,7 +1906,6 @@
 
             $.validator.addMethod("checkBudget", function(value, element) {
                 val2 = $('#budget_from').val()
-
                 if (value != '' && val2 != '') {
                     if (convertToNumber(value) < convertToNumber(val2)) {
                         return false;
@@ -1916,12 +1914,6 @@
                     }
                 }
             }, 'Budget To greater than Budget From');
-
-            $.validator.addMethod("checkClientName", function(value, element) {
-                return value !== "";
-                alert("Client Name is required")
-            }, 'Client Name is required.');
-
 
 
 
@@ -1940,7 +1932,6 @@
                 rules: {
                     client_name: {
                         required: true,
-                        checkClientName: true, // Use the custom validation method
                     },
                     client_email: {
                         email: true,
@@ -1965,6 +1956,7 @@
 
 
             $(document).on('click', '#saveEnquiry', function(e) {
+                console.log("test submit");
                 e.preventDefault();
                 $("#modal_form").validate();
                 if (!$("#modal_form").valid()) {
@@ -2171,7 +2163,7 @@
 
                 //Hide Plot/land while click on rent or both 
                 var theFor = $('input[name=enquiry_for]:checked').val();
-                console.log("The Forr Enq ==", theFor);
+                console.log("The Forr Enq ==",theFor);
                 if (theFor == 'Buy' && parent_val == '87') {
                     $('.enquiry-type-element[data-enquiry-id="256"]').show();
                 } else {

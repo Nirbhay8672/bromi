@@ -13,6 +13,25 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
+                            <a href="{{ route('admin.settings.state') }}">
+                                <div class="media pb-3">
+                                    <div class="media-body">
+                                        <div class="coin-logo-img bg-primary">
+                                            <i data-feather="map"></i>
+                                        </div>
+                                        <h5 class="font-primary">States</h5>
+                                    </div>
+                                    <div class="media-end">
+                                        <h4 class="mb-0 counter">{{ $state }}</h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card crypto-chart overflow-hidden">
+                        <div class="card-header card-no-border">
                             <a href="{{ route('admin.settings.city') }}">
                                 <div class="media pb-3">
                                     <div class="media-body">
@@ -32,16 +51,73 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
-                            <a href="{{ route('admin.settings.state') }}">
+                            <a href="{{ route('admin.areas') }}">
                                 <div class="media pb-3">
                                     <div class="media-body">
                                         <div class="coin-logo-img bg-primary">
-                                            <i data-feather="map"></i>
+                                            <i data-feather="map-pin"></i>
                                         </div>
-                                        <h5 class="font-primary">States</h5>
+                                        <h5 class="font-primary">Locality</h5>
                                     </div>
                                     <div class="media-end">
-                                        <h4 class="mb-0 counter">{{ $state }}</h4>
+                                        <h4 class="mb-0 counter">{{ $area }}</h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card crypto-chart overflow-hidden">
+                        <div class="card-header card-no-border">
+                            <a href="{{ route('admin.districts') }}">
+                                <div class="media pb-3">
+                                    <div class="media-body">
+                                        <div class="coin-logo-img bg-primary">
+                                            <i data-feather="map-pin"></i>
+                                        </div>
+                                        <h5 class="font-primary">Districts</h5>
+                                    </div>
+                                    <div class="media-end">
+                                        <h4 class="mb-0 counter">{{ $total_district }}</h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card crypto-chart overflow-hidden">
+                        <div class="card-header card-no-border">
+                            <a href="{{ route('admin.talukas') }}">
+                                <div class="media pb-3">
+                                    <div class="media-body">
+                                        <div class="coin-logo-img bg-primary">
+                                            <i data-feather="map-pin"></i>
+                                        </div>
+                                        <h5 class="font-primary">Talukas</h5>
+                                    </div>
+                                    <div class="media-end">
+                                        <h4 class="mb-0 counter">{{ $total_taluka }}</h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card crypto-chart overflow-hidden">
+                        <div class="card-header card-no-border">
+                            <a href="{{ route('admin.villages') }}">
+                                <div class="media pb-3">
+                                    <div class="media-body">
+                                        <div class="coin-logo-img bg-primary">
+                                            <i data-feather="map-pin"></i>
+                                        </div>
+                                        <h5 class="font-primary">Villages</h5>
+                                    </div>
+                                    <div class="media-end">
+                                        <h4 class="mb-0 counter">{{ $total_village }}</h4>
                                     </div>
                                 </div>
                             </a>
@@ -80,25 +156,6 @@
                                     </div>
                                     <div class="media-end">
                                         <h4 class="mb-0 counter">{{ $branch }}</h4>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
-                        <div class="card-header card-no-border">
-                            <a href="{{ route('admin.areas') }}">
-                                <div class="media pb-3">
-                                    <div class="media-body">
-                                        <div class="coin-logo-img bg-primary">
-                                            <i data-feather="map-pin"></i>
-                                        </div>
-                                        <h5 class="font-primary">Locality</h5>
-                                    </div>
-                                    <div class="media-end">
-                                        <h4 class="mb-0 counter">{{ $area }}</h4>
                                     </div>
                                 </div>
                             </a>

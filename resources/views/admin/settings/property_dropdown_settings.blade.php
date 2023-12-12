@@ -154,6 +154,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-xxl-6 box-col-6 col-lg-6">
+                                <div class="project-box"><span id="openAddFieldMOdal2" data-dropdown_for="property_construction"
+                                        class="badge btn btn-primary badge-primary">Add</span>
+                                    <h6>Property Construction Documents</h6>
+                                    <div class="row details mt-5">
+                                        <ul class="drop_list_container" id="property_construction_ul">
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -224,11 +235,37 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="addmodal2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Const Docs</h5>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-bookmark needs-validation " method="post" id="add_edit_form" novalidate="">
+                    @csrf
+                    <!-- <input type="hidden" name="dropdown_for" id="dropdown_for1"> -->
+                    <input type="hidden" name="this_data_id2" id="this_data_id1">
+                    <div class="form-row row">
+                        <div class="form-group col-md-7 m-b-20 d-inline-block">
+                            <label for="name">Construction Name:</label>
+                            <input class="form-control" type="text" name="const_doc_name" id="const_doc_name">
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" id="const_save">Save</button>
+                    <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @push('scripts')
 <script>
 $(document).ready(function() {
     getList()
+    getListConst()
 });
 $(document).on('click', '#openAddFieldMOdal', function(e) {
     hideshowadditionalfield($(this).attr('data-dropdown_for'))
@@ -247,6 +284,16 @@ $(document).on('click', '#openAddFieldMOdal1', function(e) {
     $('#this_data_id1').val('')
     $('#field_name1').val('');
     $('#addmodal1').modal('show');
+    triggerChangeinput()
+})
+
+$(document).on('click', '#openAddFieldMOdal2', function(e) {
+    hideshowadditionalfield($(this).attr('data-dropdown_for'))
+    $('#parent_id1').val('');
+    $('#dropdown_for1').val($(this).attr('data-dropdown_for'))
+    $('#this_data_id1').val('')
+    $('#field_name1').val('');
+    $('#addmodal2').modal('show');
     triggerChangeinput()
 })
 
@@ -329,6 +376,7 @@ $(document).on('click', '.deleteField1', function(e) {
     })
 
 });
+
 function getList() {
     $.ajax({
         type: "POST",
@@ -365,7 +413,6 @@ function getList() {
         }
     });
 }
-
 
 function getSubcategory() {
     $.ajax({
@@ -416,7 +463,7 @@ function generateListHtml(params) {
             '"  role="button" class="openEditFieldMOdal pointer  fa-pencil fa"></i>' + '<i data-id="' + params['id'] +
             '"  role="button" class="deleteField fa pointer m-l-5  fa-trash"></i>';
     }
-    myvar += '         </div>' +
+    myvar += '</div>' +
         '' +
         '     </div>' +
         ' </div>';
@@ -465,6 +512,54 @@ $(document).on('click', '#saveField1', function(e) {
             getSubcategory();
             $('#addmodal1').modal('hide');
             $('#saveField1').prop('disabled', false);
+        }
+    });
+})
+
+function getListConst() {
+    var id = $('#this_data_id2').val();
+    $.ajax({
+        type: "get",
+        url: "{{ route('admin.settings.get_const_docs') }}",
+        data: {
+            id: id,
+            name: $('#const_doc_name').val(),
+        },
+        success: function(data) {
+            console.log("const docs =", data);
+            $('#addmodal2').modal('hide');
+            $('#const_save').prop('disabled', false);
+            var listContainer = $('#property_construction_ul');
+            listContainer.empty(); 
+            if (data.length > 0) {
+                data.forEach(function(item) {
+                    listContainer.append('<li>' + item.name + '</li>');
+                });
+            } else {
+                listContainer.append('<li>No documents found</li>');
+            }
+        }
+    });
+}
+
+
+$(document).on('click', '#const_save', function(e) {
+    console.log("const save clicked ==");
+    e.preventDefault();
+    $(this).prop('disabled', true);
+    var id = $('#this_data_id2').val();
+    $.ajax({
+        type: "POST",
+        url: "{{ route('admin.settings.save_const_docs') }}",
+        data: {
+            id: id,
+            name: $('#const_doc_name').val(),
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(data) {
+            getListConst();
+            $('#addmodal2').modal('hide');
+            $('#const_save').prop('disabled', false);
         }
     });
 })

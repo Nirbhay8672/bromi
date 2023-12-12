@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-    <div class="page-body">
+    <div class="page-body" x-data="area_form">
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
@@ -15,12 +15,23 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Locality</h5>
-                                <button class="btn btn-primary btn-air-primary open_modal_with_this" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#areaModal">Add New Locality</button>
-									<button class="btn btn-primary btn-air-primary" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#importmodal"> Import Locality</button>
-									<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()"
-									type="button">Delete</button>
+                            <button
+                                class="btn btn-primary btn-air-primary open_modal_with_this"
+                                type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#areaModal"
+                            >Add New Locality</button>
+                            <button
+                                class="btn btn-primary btn-air-primary"
+                                type="button"
+                                data-bs-toggle="modal" data-bs-target="#importmodal"
+                            >Import Locality</button>
+                            <button
+                                class="btn btn-primary btn-air-primary delete_table_row"
+                                style="display: none"
+                                onclick="deleteTableRow()"
+                                type="button"
+                            >Delete</button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -70,40 +81,54 @@
                                     <select id="state_id" required>
                                         <option value=""> State</option>
                                         @foreach ($states as $state)
-                                            <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
+                                            @if($state['user_id'] == auth()->user()->id)
+                                                <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
-
                                 <div class="form-group col-md-5 d-inline-block m-b-20">
                                     <label class="mb-0">City</label>
                                     <select id="city_id" required>
                                         <option value=""> City</option>
                                         @foreach ($cities as $city)
-                                            <option value="{{ $city['id'] }}">{{ $city['name'] }}</option>
+                                            @if($city['user_id'] == auth()->user()->id)
+                                                <option value="{{ $city['id'] }}">{{ $city['name'] }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                                 <div class="form-group col-md-5 d-inline-block m-b-20">
-                                    <label for="area_name">Locality Name</label>
-                                    <input class="form-control" name="test_name" id="area_name" type="text"
-                                        required="" autocomplete="off" required>
+                                    <div>
+                                        <label for="area_name">Locality Name</label>
+                                        <input
+                                            class="form-control"
+                                            name="test_name"
+                                            id="area_name"
+                                            type="text"
+                                            required=""
+                                            autocomplete="off"
+                                            required
+                                        >
+                                    </div>
+                                    <label id="area_name-error" class="error" for="area_name"></label>
                                 </div>
                                 <div class="form-group col-md-3 d-inline-block m-b-20">
-                                    <label for="pincode">Pincode</label>
-                                    <input class="form-control" name="pincode" id="pincode" type="text"
+                                    <div>
+                                        <label for="pincode">Pincode</label>
+                                        <input class="form-control" name="pincode" id="pincode" type="text"
                                         autocomplete="off" required>
+                                    </div>
+                                    <label id="pincode-error" class="error" for="pincode"></label>
                                 </div>
-
-
                                 <div class="d-flex align-items-center mb-3 col-md-2">
                                     <div class="form-group me-2">
                                         <label for="area_active" class="mb-1">Active</label>
                                     </div>
                                     <div class="media-body text-end icon-state">
                                         <label class="switch mb-0">
-                                            <input type="checkbox" id="area_active">
+                                            <input type="checkbox" id="area_active" checked>
                                             <span class="switch-state"></span>
                                         </label>
                                     </div>
@@ -125,26 +150,43 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
-							<div class="form-row">
-							<div class="form-group col-md-5 d-inline-block m-b-20">
-								<select id="import_state_id">
-									<option value=""> State</option>
-									@foreach ($states as $state)
-										<option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
-									@endforeach
-								</select>
+                            <div class="row g-3 mt-2 mb-4">
+                                <div class="col">
+                                    <select id="import_state_id">
+                                        <option value=""> State</option>
+                                        @foreach ($states as $state)
+                                            @if($state['user_id'] == 6)
+                                                <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger" id="state_error"></span>
                                 </div>
-
-							<div class="form-group col-md-5 d-inline-block m-b-20">
-								<select id="import_city_id">
-									<option value=""> City</option>
-									@foreach ($supercities as $city)
-										<option value="{{ $city['id'] }}">{{ $city['name'] }}</option>
-									@endforeach
-								</select>
+                                <div class="col">
+                                    <select id="import_city_id">
+                                        <option value="">-- Select City --</option>
+                                    </select>
+                                    <span class="text-danger" id="city_error"></span>
+                                </div>
                             </div>
-							</div>
-                            <button class="btn btn-secondary" type="button" id="importArea">Import</button>
+                            <template x-if="area_array.length > 0">
+                                <div class="row p-2">
+                                    <div class="row mb-3">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-6 m-b-10">
+                                            <input class="project_amenity form-check-input filled" id="check_all" x-model="check_all" type="checkbox" value="" @click="selectCheckbox($event)">
+                                            <label class="form-check-label" for="check_all">Select All Area</label>
+                                        </div>
+                                        <span class="text-danger" id="area_error"></span>
+                                    </div>
+                                    <template x-for="(area, index) in area_array">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-10">
+                                            <input class="project_amenity form-check-input filled" :id="`area_${area.id}`" type="checkbox" :value="area.id" x-model="selected_area">
+                                            <label class="form-check-label" :for="`area_${area.id}`" x-text="area.name"></label>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                            <button class="btn btn-secondary" type="button" @click="importArea">Import</button>
                             <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
                     </div>
@@ -154,9 +196,100 @@
         @php
             $city_encoded = json_encode($cities);
             $state_encoded = json_encode($states);
+            $supercities = json_encode($supercities);
         @endphp
     @endsection
     @push('scripts')
+
+        <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+        <script type="text/javascript">
+
+            document.addEventListener('alpine:init', () => {
+    
+                Alpine.data('area_form', () => ({
+
+                    init() {
+                        let _this = this;
+                        $('#import_city_id').on('change', function() {
+                            _this.setArea();
+                        });
+                    },
+
+                    area_array : [],
+                    selected_area : [],
+                    check_all : false,
+
+                    selectCheckbox(event) {
+                        _this = this;
+                        if(event.target.checked) {
+                            _this.area_array.forEach((city) => {
+                                _this.selected_area.push(city.id);   
+                            });
+                        } else {
+                            _this.selected_area = [];
+                        }
+                    },
+
+                    setArea() {
+                        let _this = this;
+                        if($('#import_city_id').val() != '') {
+                            _this.selected_area = [];
+                            let url = "{{ route('admin.settings.getAreaForImport') }}";
+                            axios.post(url , { 'city_id' : $('#import_city_id').val()}).then((response) => {
+                                _this.area_array = response.data.data.area_data;
+                            });
+                        } else {
+                            _this.area_array = [];
+                        }
+                    },
+
+                    importArea() {
+                        let _this = this;
+                        document.getElementById('city_error').innerHTML = '';
+                        document.getElementById('state_error').innerHTML = '';
+
+                        let city_id = $('#import_city_id').val();
+                        let state_id = $('#import_state_id').val();
+
+                        if(city_id == '' || this.selected_area.length == 0 || state_id == '') {
+                            if(city_id == '') {
+                                document.getElementById('city_error').innerHTML = 'City field is required.';
+                            }
+                            if(state_id == '') {
+                                document.getElementById('state_error').innerHTML = 'State field is required.';
+                            }
+
+                            if(this.selected_area.length == 0) {
+                                let area_error =  document.getElementById('area_error');
+
+                                if(area_error) {
+                                    area_error.innerHTML = 'Please select at least one area.';
+                                }
+                            }
+
+                            return;
+                        }
+
+                        let url = "{{ route('admin.importarea') }}";
+                    
+                        axios.post(url, {
+                            'area_array' : _this.selected_area,
+                            'city_id' : city_id,
+                            'state_id' : state_id,
+                        })
+                        .then((res) => {
+                            $('#areaTable').DataTable().draw();
+                            $('#importmodal').modal('hide');
+                            $('#import_form')[0].reset();
+                        });
+                    }
+                }));
+            });
+
+        </script>
+
         <script>
             var shouldchangecity = 1;
 
@@ -164,12 +297,14 @@
 
                 var cities = @Json($city_encoded);
                 var states = @Json($state_encoded);
+                var supercities = @Json($supercities);
 
                 $(document).on('change', '#state_id', function(e) {
                     if (shouldchangecity) {
                         $('#city_id').select2('destroy');
                         citiesar = JSON.parse(cities);
                         $('#city_id').html('');
+                        $('#city_id').html('<option value="" disabled>Select City</option>');
                         for (let i = 0; i < citiesar.length; i++) {
                             if (citiesar[i]['state_id'] == $("#state_id").val()) {
                                 $('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
@@ -179,6 +314,21 @@
                         }
                         $('#city_id').select2();
                     }
+                })
+
+                $(document).on('change', '#import_state_id', function(e) {
+                    $('#import_city_id').select2('destroy');
+                    supercitiess = JSON.parse(supercities);
+                    $('#import_city_id').html('');
+                    $('#import_city_id').append('<option value="">-- Select City --</option>');
+                    for (let i = 0; i < supercitiess.length; i++) {
+                        if (supercitiess[i]['state_id'] == $("#import_state_id").val()) {
+                            $('#import_city_id').append('<option value="' + supercitiess[i]['id'] + '">' + supercitiess[i][
+                                'name'
+                            ] + '</option>')
+                        }
+                    }
+                    $('#import_city_id').select2();
                 })
 
                 var queryString = window.location.search;
@@ -196,6 +346,7 @@
                             d.go_data_id = go_data_id;
                         },
                     },
+                    "order":  [[ 1, "asc"]],
                     columns: [
 						{
                             data: 'select_checkbox',
@@ -372,24 +523,5 @@
                     }
                 });
             })
-			$(document).on('click', '#importArea', function(e) {
-                e.preventDefault();
-				$.ajax({
-                    type: "POST",
-                    url: "{{ route('admin.importarea') }}",
-                    data: {
-                        city_id: $('#import_city_id').val(),
-                        state_id: $('#import_state_id').val(),
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        $('#areaTable').DataTable().draw();
-                        $('#importmodal').modal('hide');
-						$('#import_form')[0].reset();
-                    }
-                });
-			})
-
-
         </script>
     @endpush

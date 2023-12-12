@@ -229,7 +229,8 @@
                 },
                 columns: [{
                         data: 'id',
-                        name: 'id'
+                        name: 'id',
+                        orderable: false
                     }, {
                         data: 'partner_name',
                         name: 'partner_id'
@@ -256,6 +257,7 @@
                         orderable: false
                     },
                 ],
+                "order":  [[ 1, "asc"]],
                 columnDefs: [{
                         "width": "2%",
                         "targets": 0

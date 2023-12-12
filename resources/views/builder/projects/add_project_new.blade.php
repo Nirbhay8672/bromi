@@ -49,10 +49,10 @@
                                             <div class="col-xs-12">
                                                 <div class="col-md-12">
                                                     <div class="row">
-														<input type="hidden" name="this_data_id" id="this_data_id">
-														<div>
-															<label><b>Builder Information</b></label>
-														</div>
+                                                        <input type="hidden" name="this_data_id" id="this_data_id">
+                                                        <div>
+                                                            <label><b>Builder Information</b></label>
+                                                        </div>
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
                                                             <select class="form-select" id="builder_id" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                 <option value=""> Builder Name</option>
@@ -65,7 +65,7 @@
                                                                 <span x-text="errors.builder_id"></span>
                                                             </div>
                                                         </div>
-														<div class="form-group col-md-6 m-b-4 mb-3">
+                                                        <div class="form-group col-md-6 m-b-4 mb-3">
                                                             <div class="fname" :class="website == '' ? '' : 'focused' ">
                                                                 <label for="Project Name">Website</label>
                                                                 <div class="fvalue">
@@ -84,9 +84,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>                    
-														<div>
-															<label><b>Project Information</b></label>
-														</div>
+                                                        <div>
+                                                            <label><b>Project Information</b></label>
+                                                        </div>
                                                         <div class="form-group col-md-6 m-b-20">
                                                             <div class="fname" :class="project_name == '' ? '' : 'focused' ">
                                                                 <label for="Project Name">Project Name</label>
@@ -121,7 +121,7 @@
                                                                 <select class="form-select" id="area_id" :class="errors.hasOwnProperty('locality') ? 'is-invalid' : ''">
                                                                     <option value="">Locality</option>
                                                                     @foreach ($areas as $area)
-                                                                        <option data-pincode="{{ $area->pincode }}"
+                                                                    <option data-pincode="{{ $area->pincode }}"
                                                                             data-city_id="{{ $area->city_id }}"
                                                                             data-state_id="{{ $area->state_id }}"
                                                                             value="{{ $area->id }}">
@@ -240,7 +240,7 @@
                                                             </div>
                                                         </div>
 
-														<div
+                                                        <div
                                                             class="form-group col-md-4 m-b-20"
                                                             style="margin-top:3px;"
                                                             id="project_status_input">
@@ -342,7 +342,7 @@
                                         <div class="setup-content" id="contact-wing">
                                             <div class="col-xs-12">
                                                 <div class="col-md-12">
-													<div class="row">
+                                                    <div class="row">
                                                         <div class="col-md-12 mb-3">
                                                             <div>
                                                                 <label><b>Property Type</b></label>
@@ -1491,7 +1491,7 @@
                                                         </div>
                                                     </div>
 
-													<div class="row mb-3" x-show="property_category == 254 || property_category == 257">
+                                                    <div class="row mb-3" x-show="property_category == 254 || property_category == 257">
                                                         <div class="col-md-12 mb-3">
                                                             <div>
                                                                 <label><b>Sub category</b></label>
@@ -3229,14 +3229,14 @@
                                                     </div>
                                             </div>
                                         </div>
-										
+                                        
                                         <div class="setup-content" id="amenities">
                                             <div class="col-xs-12">
                                                 <div class="col-md-12">
                                                     <div class="row">
-														<div>
-															<label><b>Parking Details</b></label>
-														</div>
+                                                        <div>
+                                                            <label><b>Parking Details</b></label>
+                                                        </div>
                                                         <div class="form-check checkbox checkbox-solid-success mb-0 col-md-4 m-b-20">
                                                             <input
                                                                 class="project_amenity form-check-input"
@@ -3280,8 +3280,8 @@
                                                     <div class="row">
                                                         <hr>
                                                         <div>
-															<label><b>Basement Parking</b></label>
-														</div>
+                                                            <label><b>Basement Parking</b></label>
+                                                        </div>
                                                         
                                                         <div class="form-group col-md-3 m-b-20">
                                                             <div class="fname" :class="total_floor_for_parking == '' ? '' : 'focused' ">
@@ -3301,7 +3301,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
+                                                        
                                                         <template x-for="(parking , index) in parking_details">
                                                             <div class="row mt-3">
                                                                 <div class="form-group col-md-2 m-b-20">
@@ -3355,8 +3355,8 @@
                                                     <div class="row">
                                                         <hr>
                                                         <div>
-															<label><b>Amenities</b></label>
-														</div>
+                                                            <label><b>Amenities</b></label>
+                                                        </div>
                                                         <div
                                                             class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                                             <input class="project_amenity form-check-input"
@@ -3412,13 +3412,20 @@
                                                             <label class="form-check-label" for="amenity_gym">Gym</label>
                                                         </div>
                                                     </div>
+                                                    
+                                                    <div>
+                                                        <input type="hidden" :class="errors.hasOwnProperty('amenities') ? 'is-invalid' : ''">
+                                                        <div class="invalid-feedback">
+                                                            <span x-text="errors.amenities"></span>
+                                                        </div>
+                                                    </div>
 
                                                     <div class="row">
                                                         <hr>
                                                         <div>
-															<label><b>Images/Documents</b></label>
-														</div>
-														<div id="uploadImageBox" class="row">
+                                                            <label><b>Images/Documents</b></label>
+                                                        </div>
+                                                        <div id="uploadImageBox" class="row">
                                                             <div class="form-group col-md-4 m-b-4 mt-1">
                                                                 <select class="form-select" id="image_category" :class="errors.hasOwnProperty('document_category') ? 'is-invalid' : ''">
                                                                     <option value=""> Category</option>
@@ -3449,8 +3456,8 @@
 
                                                     <div class="row mt-3">
                                                         <div>
-															<label><b>Catlog File</b></label>
-														</div>
+                                                            <label><b>Catlog File</b></label>
+                                                        </div>
                                                         <div class="form-group col-md-6 m-b-4 mb-3">
                                                             <div class="fname">
                                                                 <div class="fvalue">
@@ -3462,8 +3469,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-													<button @click="submitHandle()" class="btn btn-secondary pull-right"
-													type="button">Finish!</button>
+                                                    <button @click="submitHandle()" class="btn btn-secondary pull-right"
+                                                    type="button">Finish!</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -3510,9 +3517,9 @@
                         // first section
                         this.id = project_data['id'];
                         $("#builder_id").val(project_data['builder_id']).trigger('change');
-                        this.website = project_data['website'];
+                        this.website = project_data['website'] ?? '';
 
-                        this.other_contact_details = JSON.parse(project_data['contact_details']);
+                        this.other_contact_details = JSON.parse(project_data['contact_details']) ?? [{'name' : '','mobile' : '','email' : '','designation' : ''}];
 
                         this.project_name = project_data['project_name'];
                         this.address = project_data['address'];
@@ -3521,15 +3528,15 @@
                         $("#state_id").val(project_data['state_id']).trigger('change');
                         $("#city_id").val(project_data['city_id']).trigger('change');
                         
-                        this.location_link = project_data['location_link'];
-                        this.pincode = project_data['pincode'];
-                        this.land_size = project_data['land_area'];
+                        this.location_link = project_data['location_link'] ?? '';
+                        this.pincode = project_data['pincode'] ?? '';
+                        this.land_size = project_data['land_area'] ?? '';
 
                         this.$nextTick(function () {
                             $("#land_size_select").val(project_data['land_size_unit']).trigger('change');
                         });
 
-                        this.rera_no = project_data['rera_number'];
+                        this.rera_no = project_data['rera_number'] ?? '';
                         this.number_of_unit_in_project = project_data['number_of_units_in_project'];
 
                         $("#project_status").val(project_data['project_status']).trigger('change');
@@ -3541,8 +3548,15 @@
                         if(project_data['project_status'] == 143) {
                             this.project_status_question = project_data['project_status_question'];
                         }
+                        
+                        let restri_data = [];
+                        JSON.parse(project_data['restrictions']).forEach((restriction) => {
+                            if(restriction != '') {
+                                restri_data.push(restriction);
+                            } 
+                        });
                     
-                        $("#restrictions").val(JSON.parse(project_data['restrictions'])).trigger('change');
+                        $("#restrictions").val(restri_data).trigger('change');
                         $("#restrictions").closest('.fname').addClass('focused');
                     
                         // second section
@@ -4848,8 +4862,8 @@
 
                     // second section
 
-                    form_data.set('propery_type', this.property_type);
-                    form_data.set('property_category', this.property_category);
+                    form_data.set('propery_type', this.property_type > 0 ? this.property_type : '');
+                    form_data.set('property_category', this.property_category > 0 ? this.property_category : '');
                     form_data.set('sub_categories', JSON.stringify(this.sub_categories));
                     form_data.set('sub_category_single', this.sub_category_single);
 
@@ -4893,7 +4907,7 @@
                     }
 
                     form_data.set('parking_details', JSON.stringify(this.parking_details));
-                    form_data.set('amenities', JSON.stringify(this.amenities));
+                    form_data.set('amenities', this.amenities.length > 0 ? JSON.stringify(this.amenities) : '' );
                     
                     form_data.set('document_category', $('#image_category').val() ?? '');
                     let document_image = document.getElementById('document_image');
@@ -4910,7 +4924,7 @@
                         form_data.set('catlog_file', file, file.name);
                     }
 
-                    let url = "{{ route('builder.saveProject') }}";
+                    let url = "{{ route('admin.saveProject') }}";
                     
                     axios.post(url, form_data, {
                         headers: {
@@ -4918,7 +4932,7 @@
                         },
                     })
                     .then((res) => {
-                        var redirect_url = "{{route('builder.projects')}}";
+                        var redirect_url = "{{route('admin.projects')}}";
                         window.location.href = redirect_url;
                     })
                     .catch((err) => {
@@ -4993,19 +5007,19 @@
 			var states = @Json($state_encoded);
 
 			$(document).on('change', '#state_id', function(e) {
-				// if (shouldchangecity) {
-				// 	$('#city_id').select2('destroy');
-				// 	citiesar = JSON.parse(cities);
-				// 	$('#city_id').html('');
-				// 	for (let i = 0; i < citiesar.length; i++) {
-				// 		if (citiesar[i]['state_id'] == $("#state_id").val()) {
-				// 			$('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
-				// 				'name'
-				// 			] + '</option>')
-				// 		}
-				// 	}
-				// 	$('#city_id').select2();
-				// }
+				if (shouldchangecity) {
+					$('#city_id').select2('destroy');
+					citiesar = JSON.parse(cities);
+					$('#city_id').html('');
+					for (let i = 0; i < citiesar.length; i++) {
+						if (citiesar[i]['state_id'] == $("#state_id").val()) {
+							$('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
+								'name'
+							] + '</option>')
+						}
+					}
+					$('#city_id').select2();
+				}
 			})
 
 			$('#projectTable').DataTable({
@@ -5258,7 +5272,7 @@
 				if (isConfirm.isConfirmed) {
 					$.ajax({
 						type: "POST",
-						url: "{{ route('builder.deleteProject') }}",
+						url: "{{ route('admin.deleteProject') }}",
 						data: {
 							allids: JSON.stringify(rowss),
 							_token: '{{ csrf_token() }}'
@@ -5298,7 +5312,7 @@
 					var id = $(data).attr('data-id');
 					$.ajax({
 						type: "POST",
-						url: "{{ route('builder.deleteProject') }}",
+						url: "{{ route('admin.deleteProject') }}",
 						data: {
 							id: id,
 							_token: '{{ csrf_token() }}'
@@ -5360,15 +5374,15 @@
 
 		$(document).on('change', '#area_id', function(e) {
 
-			// if ($(this).find(":selected").attr('data-state_id') !== undefined && $(this).find(":selected").attr(
-			// 		'data-state_id') != '') {
-			// 	$('#state_id').val($(this).find(":selected").attr('data-state_id')).trigger('change')
-			// }
-			// if ($(this).find(":selected").attr('data-city_id') !== undefined && $(this).find(":selected").attr(
-			// 		'data-city_id') != '') {
-			// 	$('#city_id').val($(this).find(":selected").attr('data-city_id')).trigger('change')
-			// 	$('#pincode').val($(this).find(":selected").attr('data-pincode')).trigger('change')
-			// }
+			if ($(this).find(":selected").attr('data-state_id') !== undefined && $(this).find(":selected").attr(
+					'data-state_id') != '') {
+				$('#state_id').val($(this).find(":selected").attr('data-state_id')).trigger('change')
+			}
+			if ($(this).find(":selected").attr('data-city_id') !== undefined && $(this).find(":selected").attr(
+					'data-city_id') != '') {
+				$('#city_id').val($(this).find(":selected").attr('data-city_id')).trigger('change')
+				$('#pincode').val($(this).find(":selected").attr('data-pincode')).trigger('change')
+			}
 		})
 
 		function generate_tower_detail(id) {
@@ -5576,7 +5590,7 @@
 			var id = $('#this_data_id').val()
 			$.ajax({
 				type: "POST",
-				url: "{{ route('builder.saveProject') }}",
+				url: "{{ route('admin.saveProject') }}",
 				data: {
 					id: id,
 					project_name: $('#project_name').val(),
@@ -5605,7 +5619,7 @@
 					_token: '{{ csrf_token() }}'
 				},
 				success: function(data) {
-					var redirect_url = "{{route('builder.projects')}}";
+					var redirect_url = "{{route('admin.projects')}}";
                     window.location.href = redirect_url;
 				}
 			});

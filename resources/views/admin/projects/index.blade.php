@@ -16,7 +16,7 @@
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Projects</h5>
 							<a class="btn btn-primary btn-air-primary"  href="{{route('admin.project.add')}}">Add New Project</a>
-								<a href="{{route('admin.project.unit')}}"><button class="btn btn-primary btn-air-primary " type="button" >List Of Units</button></a>
+							<a href="{{route('admin.project.unit')}}"><button class="btn btn-primary btn-air-primary " type="button" >List Of Units</button></a>
 							<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()" type="button">Delete</button>
                         </div>
                         <div class="card-body">
@@ -583,6 +583,7 @@
                         url: "{{ route('admin.projects') }}",
                         data: function(d) {
                             d.go_data_id = go_data_id;
+                            d.location = window.location.href;
                         }
                     },
                     columns: [
@@ -596,14 +597,20 @@
                             name: 'project_name',
                             render : function ( data, type, row, meta ) {
                                 let project_data = row;
-                                var url = '{{ route("admin.viewProject", ":id") }}';
-                                url = url.replace(':id', project_data.id);
-                                return `<a href="${url}">${data}</a>`;
+                                
+                                if(project_data.is_indirectly_store > 0) {
+                                    return `<span style="cursor: pointer;" title="View after fill all data">${data}</span>`;
+                                } else {
+                                    var url = '{{ route("admin.viewProject", ":id") }}';
+                                    url = url.replace(':id', project_data.id);
+                                    return `<a href="${url}">${data}</a>`;    
+                                }
                             }
                         },
                         {
                             data: 'address',
                             name: 'address'
+                            
                         },
                         {
                             data: 'builder_id',
@@ -623,6 +630,7 @@
                             orderable: false
                         },
                     ],
+                    "order":  [[ 1, "asc"]],
                 });
             });
 

@@ -7,7 +7,7 @@
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
-
+                    
                 </div>
             </div>
         </div>
@@ -75,6 +75,7 @@
                                                                         x-model="website"
                                                                         id="website"
                                                                         type="text"
+                                                                        style="text-transform: none !important;"
                                                                         autocomplete="off"
                                                                         :class="errors.hasOwnProperty('website') ? 'is-invalid' : ''"
                                                                     >
@@ -83,7 +84,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div>                    
                                                         <div>
                                                             <label><b>Project Information</b></label>
                                                         </div>
@@ -117,11 +118,36 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="row mt-4">
                                                             <div class="form-group col-md-3">
-                                                                <select class="form-select" id="area_id" :class="errors.hasOwnProperty('locality') ? 'is-invalid' : ''">
-                                                                    <option value="">Locality</option>
+                                                                <select id="state_id" :class="errors.hasOwnProperty('state') ? 'is-invalid' : ''">
+                                                                    <option value="" disabled>Select State</option>
+                                                                    @foreach ($states as $state)
+                                                                        <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <div class="invalid-feedback">
+                                                                    <span x-text="errors.state"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <select id="city_id" class="form-select" :class="errors.hasOwnProperty('city') ? 'is-invalid' : ''" disabled=true>
+                                                                    <option value="" disabled>Select City</option>
+                                                                    @foreach ($cities as $city)
+                                                                        <option value="{{ $city['id'] }}">{{ $city['name'] }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <div class="invalid-feedback">
+                                                                    <span x-text="errors.city"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <select class="form-select" id="area_id" :class="errors.hasOwnProperty('locality') ? 'is-invalid' : ''" disabled=true>
+                                                                    <option value="" disabled>Select Locality</option>
                                                                     @foreach ($areas as $area)
-                                                                        <option data-pincode="{{ $area->pincode }}"
+                                                                    <option data-pincode="{{ $area->pincode }}"
                                                                             data-city_id="{{ $area->city_id }}"
                                                                             data-state_id="{{ $area->state_id }}"
                                                                             value="{{ $area->id }}">
@@ -132,34 +158,7 @@
                                                                     <span x-text="errors.locality"></span>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row mt-3">
                                                             <div class="form-group col-md-3">
-                                                                <label for="City">State</label>
-                                                                <select id="state_id" :class="errors.hasOwnProperty('state') ? 'is-invalid' : ''">
-                                                                    <option value="">State</option>
-                                                                    @foreach ($states as $state)
-                                                                        <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <div class="invalid-feedback">
-                                                                    <span x-text="errors.state"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label for="City">City</label>
-                                                                <select id="city_id" :class="errors.hasOwnProperty('city') ? 'is-invalid' : ''">
-                                                                    <option value="">City</option>
-                                                                    @foreach ($cities as $city)
-                                                                        <option value="{{ $city['id'] }}">{{ $city['name'] }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <div class="invalid-feedback">
-                                                                    <span x-text="errors.city"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-3" style="margin-top: 30px;">
                                                                 <div class="fname" :class="pincode == '' ? '' : 'focused' ">
                                                                     <label for="Pincode">Pincode</label>
                                                                     <div class="fvalue">
@@ -221,7 +220,7 @@
                                                             <div class="fname" :class="rera_no == '' ? '' : 'focused' ">
                                                                 <label for="Rarea No">Rera No</label>
                                                                 <div class="fvalue">
-                                                                    <input class="form-control" x-model="rera_no" type="text" autocomplete="off" :class="errors.hasOwnProperty('rera_number') ? 'is-invalid' : ''">
+                                                                    <input class="form-control" x-model="rera_no" type="text" autocomplete="off" :class="errors.hasOwnProperty('rera_number') ? 'is-invalid' : ''" style="text-transform: none !important;">
                                                                     <div class="invalid-feedback">
                                                                         <span x-text="errors.rera_number"></span>
                                                                     </div>
@@ -245,12 +244,12 @@
                                                             style="margin-top:3px;"
                                                             id="project_status_input">
                                                         </div>
-
+                                                        
                                                         <div class="row">
                                                             <div>
                                                                 <label><b>Contact Details</b></label>
                                                             </div>
-
+    
                                                             <template x-for="(other_contact, index) in other_contact_details">
                                                                 <div class="row">
                                                                     <div class="form-group col-md-2 m-b-20" id="other_contact_1">
@@ -258,7 +257,7 @@
                                                                             <label>Name</label>
                                                                             <div class="fvalue">
                                                                                 <input
-                                                                                    class="form-control"
+                                                                                    class="form-control" 
                                                                                     x-model="other_contact.name"
                                                                                     type="text"
                                                                                     :class="errors.hasOwnProperty(`other_contact_details.${index}.name`) ? 'is-invalid' : ''"
@@ -273,7 +272,7 @@
                                                                         <div class="fname" :class="other_contact.mobile == '' ? '' : 'focused' ">
                                                                             <label>Mobile</label>
                                                                             <div class="fvalue">
-                                                                                <input class="form-control"
+                                                                                <input class="form-control" 
                                                                                 x-model="other_contact.mobile"
                                                                                 name="other_contact_mobile" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
@@ -286,6 +285,7 @@
                                                                                 <input
                                                                                     class="form-control"
                                                                                     x-model="other_contact.email"
+                                                                                    style="text-transform: none !important;"
                                                                                     name="other_contact_email" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
                                                                         </div>
@@ -373,7 +373,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
+                                                    
                                                     <div class="row" x-show="property_type==85 || property_type==87">
                                                         <div class="col-md-12 mb-2">
                                                             <div>
@@ -381,9 +381,9 @@
                                                             </div>
                                                             <div class="m-checkbox-inline custom-radio-ml" :class="errors.hasOwnProperty('property_category') ? 'is-invalid' : ''">
                                                                 @forelse ($property_configuration_settings as $props)
-                                                                    @if ( ($props['dropdown_for'] == 'property_specific_type') && $props['id'] != '262')
+                                                                    @if ( ($props['dropdown_for'] == 'property_specific_type') && $props['id'] != '262') 
                                                                         <div class="btn-group bromi-checkbox-btn me-1"
-                                                                            role="group"
+                                                                            role="group" 
                                                                             aria-label="Basic radio toggle button group">
                                                                             <input type="radio"
                                                                                 data-parent_id="{{ $props['parent_id'] }}"
@@ -425,11 +425,6 @@
                                                                         <input type="radio" class="btn-check" value="35" id="extraofficeekind1" x-model="sub_category_single" name="sub_category_single" data-bs-original-title="" title="">
                                                                         <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraofficeekind1">office space</label>
                                                                     </div>
-
-                                                                    <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                                                                        <input type="radio" class="btn-check" value="36" id="extraofficekind2" x-model="sub_category_single" name="sub_category_single" data-bs-original-title="" title="">
-                                                                        <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraofficekind2">Co-working</label>
-                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div class="row mt-2" x-show="sub_category_single != ''">
@@ -459,16 +454,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group col-md-3 m-b-20">
-                                                                    <div class="fname" :class="if_office_or_retail.number_of_unit == '' ? '' : 'focused' ">
-                                                                        <label>Total Units </label>
-                                                                        <div class="fvalue">
-                                                                            <input class="form-control" x-model="if_office_or_retail.number_of_unit" name="first_total_units" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group col-md-3 m-b-20">
                                                                     <div class="fname" :class="if_office_or_retail.number_of_unit_each_block == '' ? '' : 'focused' ">
-                                                                        <label>No. of Unit each block </label>
+                                                                        <label>No. of Unit each tower </label>
                                                                         <div class="fvalue">
                                                                             <input class="form-control" name="first_number_of_unit_each_block" x-model="if_office_or_retail.number_of_unit_each_block" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                         </div>
@@ -482,7 +469,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
+    
                                                                 <div class="form-group col-md-5 m-b-5">
                                                                     <div class="input-group">
                                                                         <div class="form-group col-md-7 m-b-20">
@@ -558,14 +545,6 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group col-md-3 m-b-20">
-                                                                            <div class="fname" :class="tower_detail.total_floor == '' ? '' : 'focused' ">
-                                                                                <label>Total Floors</label>
-                                                                                <div class="fvalue">
-                                                                                    <input class="form-control" x-model="tower_detail.total_floor" name="total_floors" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group col-md-3 m-b-20">
                                                                             <div class="fname" :class="tower_detail.total_unit == '' ? '' : 'focused' ">
                                                                                 <label>Total Units</label>
                                                                                 <div class="fvalue">
@@ -573,7 +552,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+    
                                                                         <div class="row">
                                                                             <div class="form-group col-md-4 m-b-5">
                                                                                 <span>Saleable Area</span>
@@ -615,7 +594,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+    
                                                                         <div class="row">
                                                                             <div class="form-group col-md-auto mb-3">
                                                                                 <a
@@ -631,7 +610,7 @@
                                                                                 </a>
                                                                             </div>
                                                                         </div>
-
+    
                                                                         <div class="row" x-show="tower_detail.is_carpet">
                                                                             <div class="form-group col-md-4 m-b-5">
                                                                                 <span>Carpet Area</span>
@@ -673,7 +652,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                        
                                                                         <div class="row" x-show="tower_detail.is_built_up">
                                                                             <div class="form-group col-md-4 m-b-5">
                                                                                 <span>Builtup Area</span>
@@ -717,7 +696,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </template>
-
+    
                                                                 <div class="row" x-show="if_office_or_retail.number_of_tower > 1">
                                                                     <div class="form-check checkbox  checkbox-solid-success col-md-6 m-b-20">
                                                                         <input
@@ -732,8 +711,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-
-
+                                    
+                                                            
                                                         </div>
                                                     </div>
 
@@ -858,7 +837,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </template>
-
+                                                                
                                                                 <div class="row">
                                                                     <hr>
                                                                     <div>
@@ -908,7 +887,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                        
                                                                         <div class="row">
                                                                             <div class="form-group col-md-auto mb-3">
                                                                                 <a style="color:#0078DB!important" @click="unit.has_built_up = !unit.has_built_up" href="javascript:void(0)" data-bs-original-title="" title=""> + Add Built Up Area
@@ -919,7 +898,7 @@
                                                                                 </a>
                                                                             </div>
                                                                         </div>
-
+    
                                                                         <div class="row mt-2" x-show="unit.has_built_up">
                                                                             <div class="input-group mb-3">
                                                                                 <div class="form-group col-md-3 m-b-10">
@@ -947,7 +926,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+    
                                                                         <div class="row mt-2" x-show="unit.has_carpet">
                                                                             <div class="input-group mb-3">
                                                                                 <div class="form-group col-md-3 m-b-10">
@@ -1031,7 +1010,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                        
                                                                         <div class="col-md-4">
                                                                             <div class="input-group">
                                                                                 <div class="form-group col-md-7 m-b-20">
@@ -1050,7 +1029,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                
                                                                         <div class="row">
                                                                             <div class="form-check checkbox  checkbox-solid-success col-md-3 m-b-20">
                                                                                 <input
@@ -1059,7 +1038,7 @@
                                                                                     :name="`terrace_and_penthouse_checkbox_${index}`" type="checkbox">
                                                                                 <label class="form-check-label" :for="`second_terrace_and_penthouse_checkbox_${index}`">Terrace & Penthouse</label>
                                                                             </div>
-
+        
                                                                             <div class="form-check checkbox  checkbox-solid-success col-md-3 m-b-20">
                                                                                 <input
                                                                                     class="project_amenity form-check-input" :id="`second_servant_room_checkbox_${index}`"
@@ -1068,7 +1047,7 @@
                                                                                 <label class="form-check-label" :for="`second_servant_room_checkbox_${index}`">Servant Room</label>
                                                                             </div>
                                                                         </div>
-
+        
                                                                         <div class="row">
                                                                             <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
                                                                                 <div class="input-group">
@@ -1091,7 +1070,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-
+                                                                    
                                                                             <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
                                                                                 <div class="input-group">
                                                                                     <div class="form-group col-md-7 m-b-20">
@@ -1211,7 +1190,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+        
                                                                         <div class="form-group col-md-3 m-b-20">
                                                                             <select class="form-select" name="tower_sub_category" :id="`extra_floor_category_${index}`">
                                                                                 <option value="">Sub Category</option>
@@ -1259,14 +1238,14 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                        
                                                                         <div class="row">
                                                                             <div class="form-group col-md-3 m-b-5">
                                                                                 <div class="input-group">
                                                                                     <div class="form-group col-md-7 m-b-20">
                                                                                         <div class="fname" :class="tower.front_opening == '' ? '' : 'focused' ">
                                                                                             <label class="mb-0">Front Opening</label>
-                                                                                            <input class="form-control" name="ceiling_height" type="text"
+                                                                                            <input class="form-control" name="ceiling_height" type="text" 
                                                                                             x-model="tower.front_opening" autocomplete="off"
                                                                                             data-bs-original-title="" title="">
                                                                                         </div>
@@ -1294,7 +1273,7 @@
                                                                                     <div class="form-group col-md-7 m-b-20">
                                                                                         <div class="fname" :class="tower.ceiling_height == '' ? '' : 'focused' ">
                                                                                             <label class="mb-0">Ceiling Height</label>
-                                                                                            <input class="form-control" name="ceiling_height" type="text"
+                                                                                            <input class="form-control" name="ceiling_height" type="text" 
                                                                                             x-model="tower.ceiling_height" autocomplete="off" data-bs-original-title="" title="">
                                                                                         </div>
                                                                                     </div>
@@ -1345,20 +1324,6 @@
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
                                                                         for="officeekind1"
                                                                     >office space</label>
-                                                                </div>
-
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input
-                                                                        type="radio"
-                                                                        class="btn-check"
-                                                                        value="2"
-                                                                        id="officekind2"
-                                                                        x-model="sub_category_single"
-                                                                        name="sub_category_single"
-                                                                    >
-                                                                    <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="officekind2">Co-working</label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1599,7 +1564,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row mb-3" x-show="property_category == 262 || property_category == 256">
+                                                    <div class="row mb-3" x-show="property_category == 262">
                                                         <div class="col-md-12 mb-2">
                                                             <div>
                                                                 <label><b>Sub category</b></label>
@@ -1609,7 +1574,7 @@
                                                                     role="group"
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input
-                                                                        type="radio"
+                                                                        type="radio" 
                                                                         class="btn-check"
                                                                         value="10"
                                                                         id="plotkind1"
@@ -1623,8 +1588,8 @@
                                                                 <div class="btn-group bromi-checkbox-btn me-1"
                                                                     role="group"
                                                                     aria-label="Basic radio toggle button group">
-                                                                    <input
-                                                                        type="radio"
+                                                                    <input 
+                                                                        type="radio" 
                                                                         class="btn-check"
                                                                         value="11"
                                                                         id="plotkind2"
@@ -1792,7 +1757,7 @@
                                                                                     <div class="form-group col-md-7 m-b-20">
                                                                                         <div class="fname" :class="types.ceiling_height == '' ? '' : 'focused' ">
                                                                                             <label class="mb-0">Ceiling Height</label>
-                                                                                            <input class="form-control" type="text"
+                                                                                            <input class="form-control" type="text" 
                                                                                             x-model="types.ceiling_height">
                                                                                         </div>
                                                                                     </div>
@@ -1803,6 +1768,18 @@
                                                                                                 <option value="122">Meter</option>
                                                                                             </select>
                                                                                         </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-3 m-b-20">
+                                                                                <div class="fname" :class="types.number_of_units == '' ? '' : 'focused' ">
+                                                                                    <label>Total No. Of Units</label>
+                                                                                    <div class="fvalue">
+                                                                                        <input
+                                                                                            class="form-control"
+                                                                                            x-model="types.number_of_units"
+                                                                                            type="text"
+                                                                                        >
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -1829,7 +1806,7 @@
                                                                     </div>
                                                                 </template>
                                                             </div>
-
+        
                                                             <div class="row mt-2 mb-2 col-md-11" x-show="property_category == 261 && sub_category_single != ''">
                                                                 <hr class="mb-4">
                                                                 <div>
@@ -1921,7 +1898,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
+        
                                                                 <div class="form-check checkbox mb-3 checkbox-solid-success mb-0 col-md-3 pe-0 m-b-20">
                                                                     <input
                                                                         class="form-check-input extra_industrial_field"
@@ -1947,7 +1924,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
+        
                                                                 <div class="form-check checkbox mb-3 checkbox-solid-success mb-0 col-md-3 pe-0 m-b-20">
                                                                     <input
                                                                         class="form-check-input extra_industrial_field"
@@ -1973,7 +1950,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
+        
                                                                 <div class="form-check checkbox mb-3 checkbox-solid-success mb-0 col-md-3 pe-0">
                                                                     <input
                                                                         class="form-check-input extra_industrial_field"
@@ -1996,7 +1973,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
+                                                                
                                                                 <div class="form-check checkbox mb-3 checkbox-solid-success mb-0 col-md-3 pe-0">
                                                                     <input
                                                                         class="form-check-input"
@@ -2020,7 +1997,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-
+                                                            
                                                             <template x-if="property_category == '254' || property_category == '257'">
                                                                 <div class="row mb-2">
                                                                     <div class="col-md-2 mb-3">
@@ -2058,7 +2035,7 @@
                                                                     </div>
                                                                 </div>
                                                             </template>
-
+        
                                                             <template x-if="property_category == '259' || property_category == '260'">
                                                                 <div class="row mt-2">
                                                                     <div>
@@ -2096,7 +2073,7 @@
                                                                     </div>
                                                                     <div class="form-group col-md-3 m-b-20">
                                                                         <div class="fname" :class="if_office_or_retail.number_of_unit_each_block == '' ? '' : 'focused' ">
-                                                                            <label>No. of Unit each block </label>
+                                                                            <label>No. of Unit each tower </label>
                                                                             <div class="fvalue">
                                                                                 <input class="form-control" name="first_number_of_unit_each_block" x-model="if_office_or_retail.number_of_unit_each_block" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
@@ -2110,7 +2087,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-
+        
                                                                     <div class="form-group col-md-5 m-b-5">
                                                                         <div class="input-group">
                                                                             <div class="form-group col-md-7 m-b-20">
@@ -2170,7 +2147,7 @@
                                                                     </div>
                                                                 </div>
                                                             </template>
-
+        
                                                             <template x-if="property_category == '259'">
                                                                 <template x-for="(tower_detail, index) in if_office_tower_details">
                                                                     <div class="row">
@@ -2186,23 +2163,6 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-3 m-b-20">
-                                                                            <div class="fname" :class="tower_detail.total_floor == '' ? '' : 'focused' ">
-                                                                                <label>Total Floors</label>
-                                                                                <div class="fvalue">
-                                                                                    <input class="form-control" x-model="tower_detail.total_floor" name="total_floors" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group col-md-3 m-b-20">
-                                                                            <div class="fname" :class="tower_detail.total_unit == '' ? '' : 'focused' ">
-                                                                                <label>Total Units</label>
-                                                                                <div class="fvalue">
-                                                                                    <input class="form-control" x-model="tower_detail.total_unit" name="total_units" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
                                                                         <div class="row">
                                                                             <div class="form-group col-md-4 m-b-5">
                                                                                 <span>Saleable Area</span>
@@ -2245,6 +2205,35 @@
                                                                             </div>
                                                                         </div>
 
+                                                                        <div class="form-group col-md-5 m-b-5">
+                                                                            <div class="input-group">
+                                                                                <div class="form-group col-md-7 m-b-20">
+                                                                                    <div class="fname" :class="if_office_or_retail.ceiling_height == '' ? '' : 'focused' ">
+                                                                                        <label class="mb-0">Ceiling Height</label>
+                                                                                        <div class="fvalue">
+                                                                                            <input
+                                                                                                class="form-control"
+                                                                                                name="road_width"
+                                                                                                type="text"
+                                                                                                x-model="if_office_or_retail.ceiling_height"
+                                                                                                autocomplete="off"
+                                                                                                data-bs-original-title=""
+                                                                                                title=""
+                                                                                            >
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                                    <div class="form-group form_measurement">
+                                                                                        <select class="form-select form_measurement measure_select" name="road_width_select" :id="`first_ceiling_height_map_unit_select_${index}`">
+                                                                                            <option selected="selected" value="121">Ft.</option>
+                                                                                            <option value="122">Meter</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        
                                                                         <div class="row">
                                                                             <div class="form-group col-md-auto mb-3">
                                                                                 <a
@@ -2346,7 +2335,7 @@
                                                                     </div>
                                                                 </template>
                                                             </template>
-
+        
                                                             <template x-if="property_category == '259'">
                                                                 <div class="row" x-show="if_office_or_retail.number_of_tower > 1">
                                                                     <div class="form-check checkbox  checkbox-solid-success col-md-6 m-b-20">
@@ -2362,7 +2351,7 @@
                                                                     </div>
                                                                 </div>
                                                             </template>
-
+        
                                                             <div class="row" x-show="property_category == '260'">
                                                                 <div><hr></div>
                                                                 <label><b>Unit Details</b></label>
@@ -2382,7 +2371,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+        
                                                                         <div class="form-group col-md-3 m-b-20">
                                                                             <select class="form-select" name="tower_sub_category" aria-hidden="true" :id="`floor_category_${index}`">
                                                                                 <option value="">Sub Category</option>
@@ -2430,14 +2419,14 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                        
                                                                         <div class="row">
                                                                             <div class="form-group col-md-3 m-b-5">
                                                                                 <div class="input-group">
                                                                                     <div class="form-group col-md-7 m-b-20">
                                                                                         <div class="fname" :class="tower.front_opening == '' ? '' : 'focused' ">
                                                                                             <label class="mb-0">Front Opening</label>
-                                                                                            <input class="form-control" name="ceiling_height" type="text"
+                                                                                            <input class="form-control" name="ceiling_height" type="text" 
                                                                                             x-model="tower.front_opening" autocomplete="off"
                                                                                             data-bs-original-title="" title="">
                                                                                         </div>
@@ -2465,7 +2454,7 @@
                                                                                     <div class="form-group col-md-7 m-b-20">
                                                                                         <div class="fname" :class="tower.ceiling_height == '' ? '' : 'focused' ">
                                                                                             <label class="mb-0">Ceiling Height</label>
-                                                                                            <input class="form-control" name="ceiling_height" type="text"
+                                                                                            <input class="form-control" name="ceiling_height" type="text" 
                                                                                             x-model="tower.ceiling_height" autocomplete="off" data-bs-original-title="" title="">
                                                                                         </div>
                                                                                     </div>
@@ -2492,22 +2481,22 @@
                                                                     </div>
                                                                 </template>
                                                             </template>
-
+        
                                                             <template x-if="property_type == 87 && (property_category != '256') &&  (property_category != '258')">
                                                                 <div class="row">
                                                                     <div>
-                                                                        <label><b>Wing Details</b></label>
+                                                                        <label><b>Tower Details</b></label>
                                                                         <span x-text="nextTickForIfResidentialWings()"></span>
                                                                     </div>
                                                                 </div>
                                                             </template>
-
+        
                                                             <div x-show="property_type == 87 && (property_category != '256') &&  (property_category != '258')">
                                                                 <template x-for="(wing , index) in if_residential_only_wings.wing_details">
                                                                     <div class="row">
                                                                         <div class="form-group col-md-3 m-b-20">
                                                                             <div class="fname" :class="wing.wing_name == '' ? '' : 'focused' ">
-                                                                                <label>Wing Name</label>
+                                                                                <label>Tower Name</label>
                                                                                 <input
                                                                                     class="form-control"
                                                                                     x-model="wing.wing_name"
@@ -2549,7 +2538,7 @@
                                                                     </div>
                                                                 </template>
                                                             </div>
-
+        
                                                             <template x-if="property_type == 87 && (property_category != '256') && (property_category != '258')">
                                                                 <div class="row">
                                                                     <hr>
@@ -2560,7 +2549,7 @@
                                                                     </div>
                                                                 </div>
                                                             </template>
-
+        
                                                             <div x-show="property_type == 87 && (property_category != '256') && (property_category != '258')">
                                                                 <template x-for="(unit , index) in if_residential_only_units.unit_details">
                                                                     <div class="row">
@@ -2603,10 +2592,10 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+                                                                        
                                                                         <div class="row">
                                                                             <div class="form-group col-md-auto mb-3">
-                                                                                <a style="color:#0078DB!important" @click="unit.has_built_up = !unit.has_built_up" href="javascript:void(0)" data-bs-original-title="" title=""> + Add Built Up Area
+                                                                                <a style="color:#0078DB!important" @click="unit.has_built_up = !unit.has_built_up" href="javascript:void(0)" data-bs-original-title="" title="">+ Add Built Up Area
                                                                                 </a>
                                                                             </div>
                                                                             <div class="form-group col-md-auto mb-3">
@@ -2614,10 +2603,10 @@
                                                                                 </a>
                                                                             </div>
                                                                         </div>
-
+    
                                                                         <div class="row mt-2" x-show="unit.has_built_up">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <div class="fname" :class="unit.built_up == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Built up Area</label>
                                                                                         <input class="form-control" x-model="unit.built_up" name="built_up_areass" type="text" autocomplete="off">
@@ -2626,13 +2615,13 @@
                                                                                 <div class="form-group">
                                                                                     <span class="input-group-text" style="min-height:41px;">To</span>
                                                                                 </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <div class="fname" :class="unit.built_up_to == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Built up Area</label>
                                                                                         <input class="form-control" x-model="unit.built_up_to" name="built_up_areass" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`built_up_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2642,10 +2631,10 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
+    
                                                                         <div class="row mt-2" x-show="unit.has_carpet">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <div class="fname" :class="unit.carpet_area == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Carpet Area</label>
                                                                                         <input class="form-control" x-model="unit.carpet_area" name="carpet_area" type="text" autocomplete="off">
@@ -2654,13 +2643,13 @@
                                                                                 <div class="form-group">
                                                                                     <span class="input-group-text" style="min-height:41px;">To</span>
                                                                                 </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <div class="fname" :class="unit.carpet_area_to == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Carpet Area</label>
                                                                                         <input class="form-control" x-model="unit.carpet_area_to" name="carpet_area" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-2 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`carpet_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2671,24 +2660,15 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="row mt-2">
+                                                                        <div class="col-md-4">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-7 m-b-10">
                                                                                     <div class="fname" :class="unit.wash_area == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Wash Area</label>
                                                                                         <input class="form-control" x-model="unit.wash_area" name="wash_area" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group">
-                                                                                    <span class="input-group-text" style="min-height:41px;">To</span>
-                                                                                </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
-                                                                                    <div class="fname" :class="unit.wash_area_to == '' ? '' : 'focused' ">
-                                                                                        <label class="mb-0">Wash Area</label>
-                                                                                        <input class="form-control" x-model="unit.wash_area_to" name="wash_area" type="text" autocomplete="off">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-5 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`wash_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2699,24 +2679,15 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="row mt-2">
+                                                                        <div class="col-md-4">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-7 m-b-10">
                                                                                     <div class="fname" :class="unit.balcony == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Balcony Area</label>
                                                                                         <input class="form-control" x-model="unit.balcony" name="balcony_area" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group">
-                                                                                    <span class="input-group-text" style="min-height:41px;">To</span>
-                                                                                </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
-                                                                                    <div class="fname" :class="unit.balcony_to == '' ? '' : 'focused' ">
-                                                                                        <label class="mb-0">Balcony Area</label>
-                                                                                        <input class="form-control" x-model="unit.balcony_to" name="balcony_area" type="text" autocomplete="off">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                <div class="form-group col-md-5 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`balcony_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2746,15 +2717,26 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="row">
-                                                                            <div class="form-check checkbox  checkbox-solid-success col-md-3 m-b-20">
-                                                                                <input
-                                                                                    class="project_amenity form-check-input" :id="`terrace_and_penthouse_checkbox_${index}`"
-                                                                                    x-model="unit.has_terrace_and_carpet"
-                                                                                    :name="`terrace_and_penthouse_checkbox_${index}`" type="checkbox">
-                                                                                <label class="form-check-label" :for="`terrace_and_penthouse_checkbox_${index}`">Terrace & Penthouse</label>
+                                                                        <div class="col-md-4">
+                                                                            <div class="input-group">
+                                                                                <div class="form-group col-md-7 m-b-20">
+                                                                                    <div class="fname" :class="unit.ceiling_height == '' ? '' : 'focused' ">
+                                                                                        <label class="mb-0">Ceiling Height</label>
+                                                                                        <input class="form-control" x-model="unit.ceiling_height" name="floor_height" type="text" autocomplete="off">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                                    <div class="form-group form_measurement">
+                                                                                        <select class="form-select form_measurement measure_select" :id="`second_ceiling_height_select_${index}`">
+                                                                                            <option selected="selected" value="121">Ft.</option>
+                                                                                            <option value="122">Meter</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
-
+                                                                        </div>
+                                                                
+                                                                        <div class="row">
                                                                             <div class="form-check checkbox  checkbox-solid-success col-md-3 m-b-20">
                                                                                 <input
                                                                                     class="project_amenity form-check-input" :id="`servant_room_checkbox_${index}`"
@@ -2763,30 +2745,8 @@
                                                                                 <label class="form-check-label" :for="`servant_room_checkbox_${index}`">Servant Room</label>
                                                                             </div>
                                                                         </div>
-
+        
                                                                         <div class="row">
-                                                                            <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
-                                                                                <div class="input-group">
-                                                                                    <div class="form-group col-md-7 m-b-20">
-                                                                                        <div class="fname" :class="unit.terrace_carpet_area == '' ? '' : 'focused' ">
-                                                                                            <label class="mb-0">Terrace carpet</label>
-                                                                                            <input class="form-control" x-model="unit.terrace_carpet_area" name="terrace_carpet_area" type="text" autocomplete="off">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="input-group-append col-md-5 m-b-20">
-                                                                                        <div class="form-group form_measurement">
-                                                                                            <select class="form-select form_measurement measure_select" :id="`terrace_carpet_select_${index}`"
-                                                                                                name="terrace_carpet_area_measurement">
-                                                                                                <option value="117" selected>Sq.Ft.</option>
-                                                                                                <option value="118">Sq.Yard</option>
-                                                                                                <option value="119">Sq.Meter</option>
-                                                                                                <option value="120">VIGHA</option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
                                                                             <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
                                                                                 <div class="input-group">
                                                                                     <div class="form-group col-md-7 m-b-20">
@@ -2814,6 +2774,27 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
+                                                                            <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
+                                                                                <div class="input-group">
+                                                                                    <div class="form-group col-md-7 m-b-20">
+                                                                                        <div class="fname" :class="unit.terrace_carpet_area == '' ? '' : 'focused' ">
+                                                                                            <label class="mb-0">Terrace carpet</label>
+                                                                                            <input class="form-control" x-model="unit.terrace_carpet_area" name="terrace_carpet_area" type="text" autocomplete="off">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="input-group-append col-md-5 m-b-20">
+                                                                                        <div class="form-group form_measurement">
+                                                                                            <select class="form-select form_measurement measure_select" :id="`terrace_carpet_select_${index}`"
+                                                                                                name="terrace_carpet_area_measurement">
+                                                                                                <option value="117" selected>Sq.Ft.</option>
+                                                                                                <option value="118">Sq.Yard</option>
+                                                                                                <option value="119">Sq.Meter</option>
+                                                                                                <option value="120">VIGHA</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
@@ -2832,106 +2813,36 @@
 
                                                     <template x-if="property_category == '262' || property_category == '256' || property_category == '258'">
                                                         <div class="row mt-4">
+                                                            <span x-text="nexttickForFarm()"></span>
                                                             <div class="row mt-2">
-                                                                <div class="input-group mb-3">
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.total_land_area == '' ? '' : 'focused' ">
-                                                                            <span x-text="nexttickForFarm()"></span>
-                                                                            <label class="mb-0">Total Land Area</label>
-                                                                            <div class="fvalue">
-                                                                                <input class="form-control" name="total_land_area" type="text" x-model="if_farm_plot_land.total_land_area" autocomplete="off" data-bs-original-title="" title="">
+                                                                <div class="col-md-4">
+                                                                    <div class="input-group mb-3">
+                                                                        <div class="form-group col-md-6 m-b-10">
+                                                                            <div class="fname" :class="if_farm_plot_land.total_open_area == '' ? '' : 'focused' ">
+                                                                                <label class="mb-0">Total Open Area</label>
+                                                                                <div class="fvalue">
+                                                                                    <input class="form-control" x-model="if_farm_plot_land.total_open_area" name="total_open_area" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <span class="input-group-text" style="min-height:41px;">To</span>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.total_land_area_to == '' ? '' : 'focused' ">
-                                                                            <span x-text="nexttickForFarm()"></span>
-                                                                            <label class="mb-0">Total Land Area</label>
-                                                                            <div class="fvalue">
-                                                                                <input class="form-control" name="total_land_area" type="text" x-model="if_farm_plot_land.total_land_area_to" autocomplete="off" data-bs-original-title="" title="">
-                                                                            </div>
+                                                                        <div class="form-group col-md-6 m-b-10">
+                                                                            <select class="form-select form_measurement measure_select" name="open_area_map_select" id="open_area_select">
+                                                                                <option value="117" selected>Sq.Ft.</option>
+                                                                                <option value="118">Sq.Yard</option>
+                                                                                <option value="119">Sq.Meter</option>
+                                                                                <option value="120">VIGHA</option>
+                                                                            </select>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <select class="form-select form_measurement measure_select" name="land_area_map_select" id="land_area_select">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
-                                                                        </select>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="row mt-2">
-                                                                <div class="input-group mb-3">
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.total_open_area == '' ? '' : 'focused' ">
-                                                                            <label class="mb-0">Total Open Area</label>
+                                                                <div class="col-md-6">
+                                                                    <div class="col-md-6 m-b-20">
+                                                                        <div class="fname" :class="if_farm_plot_land.total_number_of_plot == '' ? '' : 'focused' ">
+                                                                            <label>Total No. of Plots</label>
                                                                             <div class="fvalue">
-                                                                                <input class="form-control" x-model="if_farm_plot_land.total_open_area" name="total_open_area" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                                <input class="form-control" x-model="if_farm_plot_land.total_number_of_plot" name="total_no_of_plots" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <span class="input-group-text" style="min-height:41px;">To</span>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.total_open_area_to == '' ? '' : 'focused' ">
-                                                                            <label class="mb-0">Total Open Area</label>
-                                                                            <div class="fvalue">
-                                                                                <input class="form-control" x-model="if_farm_plot_land.total_open_area_to" name="total_open_area" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <select class="form-select form_measurement measure_select" name="open_area_map_select" id="open_area_select">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-3 m-b-20">
-                                                                <div class="fname" :class="if_farm_plot_land.total_number_of_plot == '' ? '' : 'focused' ">
-                                                                    <label>Total No. of Plots</label>
-                                                                    <div class="fvalue">
-                                                                        <input class="form-control" x-model="if_farm_plot_land.total_number_of_plot" name="total_no_of_plots" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row mt-2">
-                                                                <div class="input-group mb-3">
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.common_area == '' ? '' : 'focused' ">
-                                                                            <label class="mb-0">Common Area</label>
-                                                                            <div class="fvalue">
-                                                                                <input class="form-control" name="common_area" type="text" x-model="if_farm_plot_land.common_area" autocomplete="off" data-bs-original-title="" title="">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <span class="input-group-text" style="min-height:41px;">To</span>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <div class="fname" :class="if_farm_plot_land.common_area_to == '' ? '' : 'focused' ">
-                                                                            <label class="mb-0">Common Area</label>
-                                                                            <div class="fvalue">
-                                                                                <input class="form-control" name="common_area" type="text" x-model="if_farm_plot_land.common_area_to" autocomplete="off" data-bs-original-title="" title="">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
-                                                                        <select class="form-select form_measurement measure_select" name="common_area_map_select" id="common_area_select">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
-                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -2971,7 +2882,7 @@
                                                             </div>
                                                             <div class="row mt-2">
                                                                 <div class="input-group mb-3">
-                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                    <div class="form-group col-md-2 m-b-10">
                                                                         <div class="fname" :class="if_farm_plot_land.plot_size_from == '' ? '' : 'focused' ">
                                                                             <label class="mb-0">Saleable Plot from</label>
                                                                             <div class="fvalue">
@@ -2982,7 +2893,7 @@
                                                                     <div class="form-group">
                                                                         <span class="input-group-text" style="min-height:41px;">To</span>
                                                                     </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                    <div class="form-group col-md-2 m-b-10">
                                                                         <div class="fname" :class="if_farm_plot_land.plot_size_to == '' ? '' : 'focused' ">
                                                                             <label class="mb-0">Saleable Plot to</label>
                                                                             <div class="fvalue">
@@ -2990,7 +2901,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                    <div class="form-group col-md-2 m-b-10">
                                                                         <select class="form-select form_measurement measure_select" name="common_area_map_select" id="plot_size_from_select">
                                                                             <option value="117" selected>Sq.Ft.</option>
                                                                             <option value="118">Sq.Yard</option>
@@ -3015,7 +2926,7 @@
                                                     <template x-if="if_farm_plot_land.add_carpet_plot_size">
                                                         <div class="row mt-2">
                                                             <div class="input-group mb-3">
-                                                                <div class="form-group col-md-3 m-b-10">
+                                                                <div class="form-group col-md-2 m-b-10">
                                                                     <div class="fname" :class="if_farm_plot_land.carpet_plot_size == '' ? '' : 'focused' ">
                                                                         <span x-text="selectOnCarpetPlot()" class="d-none"></span>
                                                                         <label class="mb-0">Carpet Plot Size</label>
@@ -3027,7 +2938,7 @@
                                                                 <div class="form-group">
                                                                     <span class="input-group-text" style="min-height:41px;">To</span>
                                                                 </div>
-                                                                <div class="form-group col-md-3 m-b-10">
+                                                                <div class="form-group col-md-2 m-b-10">
                                                                     <div class="fname" :class="if_farm_plot_land.carpet_plot_size_to == '' ? '' : 'focused' ">
                                                                         <span x-text="selectOnCarpetPlot()" class="d-none"></span>
                                                                         <label class="mb-0">Carpet Plot Size</label>
@@ -3036,7 +2947,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-md-3 m-b-10">
+                                                                <div class="form-group col-md-2 m-b-10">
                                                                     <select class="form-select" name="carpet_plot_size_select" tabindex="-1" aria-hidden="true" id="carpet_plot_size_select">
                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                         <option value="118">Sq.Yard</option>
@@ -3056,7 +2967,7 @@
                                                                         <span x-text="selectOnConstSaleableArea()" class="d-none"></span>
                                                                         <label class="mb-0">Constructed Saleable Area</label>
                                                                         <div class="fvalue">
-                                                                            <input class="form-control"
+                                                                            <input class="form-control" 
                                                                             x-model="if_farm_plot_land.constructed_saleable_area" name="constructed_saleable_area" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                         </div>
                                                                     </div>
@@ -3069,12 +2980,12 @@
                                                                         <span x-text="selectOnConstSaleableArea()" class="d-none"></span>
                                                                         <label class="mb-0">Constructed Saleable Area</label>
                                                                         <div class="fvalue">
-                                                                            <input class="form-control"
+                                                                            <input class="form-control" 
                                                                             x-model="if_farm_plot_land.constructed_saleable_area_to" name="constructed_saleable_area" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-md-3 m-b-10">
+                                                                <div class="form-group col-md-2 m-b-10">
                                                                     <select class="form-select" name="constructed_saleable_area_select" tabindex="-1" aria-hidden="true" id="constructed_saleable_area_select">
                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                         <option value="118">Sq.Yard</option>
@@ -3159,7 +3070,7 @@
                                                                     <div class="fname" :class="if_farm_plot_land.constructed_carpet_area == '' ? '' : 'focused' ">
                                                                         <label class="mb-0">Constructed Carpet Area</label>
                                                                         <div class="fvalue">
-                                                                            <input class="form-control"
+                                                                            <input class="form-control" 
                                                                             x-model="if_farm_plot_land.constructed_carpet_area" name="constructed_carpet_area" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                         </div>
                                                                     </div>
@@ -3171,7 +3082,7 @@
                                                                     <div class="fname" :class="if_farm_plot_land.constructed_carpet_area_to == '' ? '' : 'focused' ">
                                                                         <label class="mb-0">Constructed Carpet Area</label>
                                                                         <div class="fvalue">
-                                                                            <input class="form-control"
+                                                                            <input class="form-control" 
                                                                             x-model="if_farm_plot_land.constructed_carpet_area_to" name="constructed_carpet_area" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                         </div>
                                                                     </div>
@@ -3229,7 +3140,7 @@
                                                     </div>
                                             </div>
                                         </div>
-
+                                        
                                         <div class="setup-content" id="amenities">
                                             <div class="col-xs-12">
                                                 <div class="col-md-12">
@@ -3282,7 +3193,7 @@
                                                         <div>
                                                             <label><b>Basement Parking</b></label>
                                                         </div>
-
+                                                        
                                                         <div class="form-group col-md-3 m-b-20">
                                                             <div class="fname" :class="total_floor_for_parking == '' ? '' : 'focused' ">
                                                                 <label>Total floor for parking</label>
@@ -3301,7 +3212,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
+                                                        
                                                         <template x-for="(parking , index) in parking_details">
                                                             <div class="row mt-3">
                                                                 <div class="form-group col-md-2 m-b-20">
@@ -3360,13 +3271,6 @@
                                                         <div
                                                             class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                                             <input class="project_amenity form-check-input"
-                                                                id="amenity_pool" x-model="amenities" type="checkbox" value="swimming_pool">
-                                                            <label class="form-check-label" for="amenity_pool">Swimming
-                                                                Pool</label>
-                                                        </div>
-                                                        <div
-                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                                            <input class="project_amenity form-check-input"
                                                                 id="amenity_club_house" type="checkbox" x-model="amenities" value="club_house">
                                                             <label class="form-check-label" for="amenity_club_house">Club
                                                                 house</label>
@@ -3377,12 +3281,6 @@
                                                                 id="amenity_passenger_lift" type="checkbox" x-model="amenities" value="passenger_lift">
                                                             <label class="form-check-label"
                                                                 for="amenity_passenger_lift">Passenger Lift</label>
-                                                        </div>
-                                                        <div
-                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                                            <input class="project_amenity form-check-input"
-                                                                id="amenity_garden" type="checkbox" x-model="amenities" value="garden_and_children_area">
-                                                            <label class="form-check-label" for="amenity_garden">Garden & Children Play Area</label>
                                                         </div>
                                                         <div
                                                             class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
@@ -3412,6 +3310,13 @@
                                                             <label class="form-check-label" for="amenity_gym">Gym</label>
                                                         </div>
                                                     </div>
+                                                    
+                                                    <div>
+                                                        <input type="hidden" :class="errors.hasOwnProperty('amenities') ? 'is-invalid' : ''">
+                                                        <div class="invalid-feedback">
+                                                            <span x-text="errors.amenities"></span>
+                                                        </div>
+                                                    </div>
 
                                                     <div class="row">
                                                         <hr>
@@ -3437,15 +3342,48 @@
                                                             <div class="form-group col-md-6 m-b-4 mb-3">
                                                                 <div class="fname">
                                                                     <div class="fvalue">
-                                                                        <input class="form-control" :class="errors.hasOwnProperty('document_image') ? 'is-invalid' : ''" accept="image/*" type="file" id="document_image" name="document_image">
+                                                                        <input class="form-control" :class="errors.hasOwnProperty('document_image') ? 'is-invalid' : ''" accept="image/*,.pdf" type="file" id="document_image" name="document_image">
                                                                         <div class="invalid-feedback">
                                                                             <span x-text="errors.document_image"></span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group col-md-1 m-b-4 mb-3">
+                                                                <button class="btn btn-danger" type="button" @click="addOtherImageOrDoc()" title="">+</button>
+                                                            </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="row">
+                                                    <template x-for="(other_doc, index) in other_documents">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-4 m-b-4 mt-1">
+                                                                <select class="form-select" :id="`other_doc_${index}`" x-model="other_doc.document_type">
+                                                                    <option value=""> Category</option>
+                                                                    <option value="1">Building Elevation</option>
+                                                                    <option value="2">Common Amenities Photos</option>
+                                                                    <option value="3">Master Layout Of Building
+                                                                    </option>
+                                                                    <option value="4">Brochure</option>
+                                                                    <option value="5">Cost Sheet</option>
+                                                                    <option value="6">Other</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-6 m-b-4 mb-3">
+                                                                <div class="fname">
+                                                                    <div class="fvalue">
+                                                                        <input class="form-control" accept="image/*,.pdf" type="file" :id="`document_image_${index}`" name="document_image">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-1 m-b-4 mb-3">
+                                                                <button class="btn btn-danger" type="button" @click="removeOtherImageOrDoc(index)" title="">-</button>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                    </div>
+                                                    
 
                                                     <div class="row mt-3">
                                                         <div>
@@ -3462,6 +3400,28 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <hr>
+
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6 m-b-4 mb-3">
+                                                            <div class="fname">
+                                                                <div class="fvalue">
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        placeholder="Enter remark"
+                                                                        x-model="remark"
+                                                                        :class="errors.hasOwnProperty('remark') ? 'is-invalid' : ''"
+                                                                    >
+                                                                    <div class="invalid-feedback">
+                                                                        <span x-text="errors.remark"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
                                                     <button @click="submitHandle()" class="btn btn-secondary pull-right"
                                                     type="button">Finish!</button>
                                                 </div>
@@ -3478,7 +3438,11 @@
         @php
             $city_encoded = json_encode($cities);
             $state_encoded = json_encode($states);
+            $area_encoded = json_encode($areas);
             $project_data = isset($id) ? json_encode($id) : null;
+            
+            $first_state = json_encode($first_state);
+            $first_city = json_encode($first_city);
         @endphp
     </div>
 @endsection
@@ -3497,38 +3461,115 @@
             }
         });
 
+        var cities = @Json($city_encoded);
+        var states = @Json($state_encoded);
+        var areas = @Json($area_encoded);
+
+        citiesar = JSON.parse(cities);
+    	areass = JSON.parse(areas);
+
         document.addEventListener('alpine:init', () => {
 
             let data = @json($project_data);
-            Alpine.data('add_project_form', () => ({
-                init() {
-                    if(data) {
-                        let project_data = JSON.parse(data);
 
+            Alpine.data('add_project_form', () => ({
+
+                init() {
+                    
+                    let state_id = JSON.parse(@Json($first_state));
+                    let city_id = JSON.parse(@Json($first_city));
+                    
+                    $("#state_id").val(state_id['id']).trigger('change');
+                    document.getElementById('city_id').disabled = false;
+
+                    $('#city_id').html('');
+                    $('#city_id').append(`<option value="" selected disabled>City</option>`);
+                    for (let i = 0; i < citiesar.length; i++) {
+                        if (citiesar[i]['state_id'] == $("#state_id").val()) {
+                            $('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
+                                'name'
+                            ] + '</option>')
+                        }
+                    }
+                    $('#city_id').select2();
+                    
+                    $("#city_id").val(city_id['id']).trigger('change');
+                    document.getElementById('area_id').disabled = false;
+
+                    $('#area_id').html('');
+                    $('#area_id').append(`<option value="" selected disabled>Locality</option>`);
+                    for (let i = 0; i < areass.length; i++) {
+                        if (areass[i]['state_id'] == $("#state_id").val()) {
+                            $('#area_id').append(`<option value="${areass[i]['id']}"
+                                data-pincode="${areass[i]['pincode']}"
+                                data-city_id="${areass[i]['city_id']}"
+                                data-state_id="${areass[i]['state_id']}">
+                                ${areass[i]['name']}
+                            </option>`);
+                        }
+                    }
+                    $('#area_id').select2();
+                    
+                    if(data) {
+
+                        let project_data = JSON.parse(data);
+                        
+                        document.getElementById('state_id').disabled = false;
+                        document.getElementById('city_id').disabled = false;
+                        document.getElementById('area_id').disabled = false;
+
+                        $('#city_id').select2('destroy');
+    					$('#area_id').select2('destroy');
+    					
+    					$("#state_id").val(project_data['state_id']).trigger('change');
+    
+    					$('#city_id').html('');
+                        for (let i = 0; i < citiesar.length; i++) {
+    						if (citiesar[i]['state_id'] == $("#state_id").val()) {
+    							$('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
+    								'name'
+    							] + '</option>')
+    						}
+    					}
+    					$('#city_id').select2();
+
+                        $("#city_id").val(project_data['city_id']).trigger('change');
+
+                        $('#area_id').html('');
+                        $('#area_id').append(`<option value="" selected disabled>Locality</option>`);
+                        for (let i = 0; i < areass.length; i++) {
+    						if (areass[i]['state_id'] == $("#state_id").val()) {
+    							$('#area_id').append(`<option value="${areass[i]['id']}"
+                                    data-pincode="${areass[i]['pincode']}"
+                                    data-city_id="${areass[i]['city_id']}"
+                                    data-state_id="${areass[i]['state_id']}">
+                                    ${areass[i]['name']}
+                                </option>`);
+    						}
+    					}
+    					$('#area_id').select2();
+					
                         // first section
                         this.id = project_data['id'];
-						//nirbhay
                         $("#builder_id").val(project_data['builder_id']).trigger('change');
-                        this.website = project_data['website'];
+                        this.website = project_data['website'] ?? '';
 
-                        this.other_contact_details = JSON.parse(project_data['contact_details']);
+                        this.other_contact_details = JSON.parse(project_data['contact_details']) ?? [{'name' : '','mobile' : '','email' : '','designation' : ''}];
 
                         this.project_name = project_data['project_name'];
                         this.address = project_data['address'];
 
                         $("#area_id").val(project_data['area_id']).trigger('change');
-                        $("#state_id").val(project_data['state_id']).trigger('change');
-                        $("#city_id").val(project_data['city_id']).trigger('change');
-
-                        this.location_link = project_data['location_link'];
-                        this.pincode = project_data['pincode'];
-                        this.land_size = project_data['land_area'];
+                        
+                        this.location_link = project_data['location_link'] ?? '';
+                        this.pincode = project_data['pincode'] ?? '';
+                        this.land_size = project_data['land_area'] ?? '';
 
                         this.$nextTick(function () {
                             $("#land_size_select").val(project_data['land_size_unit']).trigger('change');
                         });
 
-                        this.rera_no = project_data['rera_number'];
+                        this.rera_no = project_data['rera_number'] ?? '';
                         this.number_of_unit_in_project = project_data['number_of_units_in_project'];
 
                         $("#project_status").val(project_data['project_status']).trigger('change');
@@ -3540,10 +3581,17 @@
                         if(project_data['project_status'] == 143) {
                             this.project_status_question = project_data['project_status_question'];
                         }
-
-                        $("#restrictions").val(JSON.parse(project_data['restrictions'])).trigger('change');
+                        
+                        let restri_data = [];
+                        JSON.parse(project_data['restrictions']).forEach((restriction) => {
+                            if(restriction != '') {
+                                restri_data.push(restriction);
+                            } 
+                        });
+                    
+                        $("#restrictions").val(restri_data).trigger('change');
                         $("#restrictions").closest('.fname').addClass('focused');
-
+                    
                         // second section
                         this.sub_categories = [];
                         this.sub_category_single = '';
@@ -3582,7 +3630,7 @@
                             });
 
                             let _this = this;
-
+                            
                             this.if_office_or_retail = JSON.parse(tower_details_object['if_office_or_retail']);
                             this.$nextTick(function () {
                                 $("#second_front_road_map_unit_select").val(parseInt(_this.if_office_or_retail.front_road_width_map_unit)).trigger('change');
@@ -3597,6 +3645,7 @@
                                     $(`#second_tower_detail_carpet_from_to_select_${index}`).val(tower_detail.carpet_from_to_map_unit).trigger('change');
                                     $(`#second_tower_detail_built_from_to_select_${index}`).val(tower_detail.built_from_to_map_unit).trigger('change');
                                     $(`#second_tower_detail_saleable_from_to_select_${index}`).val(tower_detail.saleable_from_to_map_unit).trigger('change');
+                                    $(`#second_ceiling_height_map_unit_select_${index}`).val(tower_detail.ceiling_height_map_unit).trigger('change');
                                 });
                             });
 
@@ -3635,6 +3684,7 @@
                                     $(`#wash_area_select_${index}`).val(parseInt(unit_details.wash_area_map_unit)).trigger('change');
                                     $(`#balcony_area_select_${index}`).val(parseInt(unit_details.balcony_area_map_unit)).trigger('change');
                                     $(`#floor_height_select_${index}`).val(parseInt(unit_details.floor_height_map_unit)).trigger('change');
+                                    $(`#ceiling_height_select_${index}`).val(parseInt(unit_details.ceiling_height_map_unit)).trigger('change');
                                     $(`#terrace_carpet_select_${index}`).val(parseInt(unit_details.terrace_carpet_area_map_unit)).trigger('change');
                                     $(`#terrace_saleable_select_${index}`).val(parseInt(unit_details.terrace_saleable_area_map_unit)).trigger('change');
 
@@ -3645,6 +3695,7 @@
                                     $(`#second_wash_area_select_${index}`).val(parseInt(unit_details.wash_area_map_unit)).trigger('change');
                                     $(`#second_balcony_area_select_${index}`).val(parseInt(unit_details.balcony_area_map_unit)).trigger('change');
                                     $(`#second_floor_height_select_${index}`).val(parseInt(unit_details.floor_height_map_unit)).trigger('change');
+                                    $(`#second_ceiling_height_select_${index}`).val(parseInt(unit_details.ceiling_height_map_unit)).trigger('change');
                                     $(`#second_terrace_carpet_select_${index}`).val(parseInt(unit_details.terrace_carpet_area_map_unit)).trigger('change');
                                     $(`#second_terrace_saleable_select_${index}`).val(parseInt(unit_details.terrace_saleable_area_map_unit)).trigger('change');
                                 });
@@ -3680,7 +3731,7 @@
                             });
 
                             tower_details_object = JSON.parse(project_data['tower_details']);
-
+                            
                             if(this.property_category == 254 || this.property_category == 257) {
                                 this.is_flat_or_penthouse = JSON.parse(tower_details_object['if_flat_or_penthouse']);
                             }
@@ -3699,6 +3750,7 @@
                                         $(`#wash_area_select_${index}`).val(parseInt(unit_details.wash_area_map_unit)).trigger('change');
                                         $(`#balcony_area_select_${index}`).val(parseInt(unit_details.balcony_area_map_unit)).trigger('change');
                                         $(`#floor_height_select_${index}`).val(parseInt(unit_details.floor_height_map_unit)).trigger('change');
+                                        $(`#ceiling_height_select_${index}`).val(parseInt(unit_details.ceiling_height_map_unit)).trigger('change');
                                         $(`#terrace_carpet_select_${index}`).val(parseInt(unit_details.terrace_carpet_area_map_unit)).trigger('change');
                                         $(`#terrace_saleable_select_${index}`).val(parseInt(unit_details.terrace_saleable_area_map_unit)).trigger('change');
 
@@ -3709,6 +3761,7 @@
                                         $(`#second_wash_area_select_${index}`).val(parseInt(unit_details.wash_area_map_unit)).trigger('change');
                                         $(`#second_balcony_area_select_${index}`).val(parseInt(unit_details.balcony_area_map_unit)).trigger('change');
                                         $(`#second_floor_height_select_${index}`).val(parseInt(unit_details.floor_height_map_unit)).trigger('change');
+                                        $(`#second_ceiling_height_select_${index}`).val(parseInt(unit_details.ceiling_height_map_unit)).trigger('change');
                                         $(`#second_terrace_carpet_select_${index}`).val(parseInt(unit_details.terrace_carpet_area_map_unit)).trigger('change');
                                         $(`#second_terrace_saleable_select_${index}`).val(parseInt(unit_details.terrace_saleable_area_map_unit)).trigger('change');
                                     });
@@ -3733,6 +3786,7 @@
                                         $(`#tower_detail_carpet_from_to_select_${index}`).val(tower_detail.carpet_from_to_map_unit).trigger('change');
                                         $(`#tower_detail_built_from_to_select_${index}`).val(tower_detail.built_from_to_map_unit).trigger('change');
                                         $(`#tower_detail_saleable_from_to_select_${index}`).val(tower_detail.saleable_from_to_map_unit).trigger('change');
+                                        $(`#first_ceiling_height_map_unit_select_${index}`).val(tower_detail.ceiling_height_map_unit).trigger('change');
                                     });
                                 });
                             }
@@ -3772,14 +3826,14 @@
                                     $(`#land_area_select`).val(parseInt(_this.if_farm_plot_land.land_area_map_unit)).trigger('change');
                                     $(`#open_area_select`).val(_this.if_farm_plot_land.open_area_map_unit).trigger('change');
                                     $(`#common_area_select`).val(_this.if_farm_plot_land.common_area_map_unit).trigger('change');
-
+                                    
                                     $(`#plot_size_from_select`).val(_this.if_farm_plot_land.plot_size_from_map_unit).trigger('change');
                                     $(`#plot_size_to_select`).val(_this.if_farm_plot_land.plot_size_to_map_unit).trigger('change');
 
                                     $(`#carpet_plot_size_select`).val(_this.if_farm_plot_land.carpet_plot_size_map_unit).trigger('change');
 
                                     $(`#constructed_saleable_area_select`).val(_this.if_farm_plot_land.constructed_saleable_area_map_unit).trigger('change');
-
+                                    
                                     $(`#constructed_carpet_area_select`).val(_this.if_farm_plot_land.constructed_carpet_area_map_unit).trigger('change');
 
                                     $(`#constructed_built_up_from_area_select`).val(_this.if_farm_plot_land.constructed_built_up_from_map_unit).trigger('change');
@@ -3811,15 +3865,15 @@
                                 this.extra_facilities = JSON.parse(project_data['extra_facilities']);
                             }
                         }
-
+ 
                         // third section
 
                         let parking_data = JSON.parse(project_data['parking_details']);
-
+                        
                         this.free_alloted_for_four_wheeler = parking_data['free_alloted_for_four_wheeler'] == 'true' ? true : false;
                         this.free_alloted_for_two_wheeler = parking_data['free_alloted_for_two_wheeler'] == 'true' ? true : false;
                         this.available_for_purchase = parking_data['available_for_purchase'] == 'true' ? true : false;
-
+                        
                         this.total_number_of_parking = parking_data['total_number_of_parking'];
                         this.total_floor_for_parking = parking_data['total_floor_for_parking'];
 
@@ -3836,6 +3890,15 @@
                         this.amenities = JSON.parse(project_data['amenities']);
 
                         $('#image_category').val(project_data['document_category']).trigger('change');
+
+                        this.other_documents = JSON.parse(project_data['other_documents']);
+                        let _this_doc = this;
+
+                        this.$nextTick(function () {
+                            _this_doc.setSelect2ForOtherDoc();
+                        });
+                        
+                        this.remark = project_data['remark'] ?? "";
                     }
                 },
 
@@ -3857,7 +3920,7 @@
                 pincode : '',
                 land_size : '',
                 rera_no : '',
-                number_of_unit_in_project : '',
+                number_of_unit_in_project : '',  
 
                 project_status_question : '',
 
@@ -3873,7 +3936,7 @@
                 removeOtherContact(index = null) {
                     this.other_contact_details.splice(index , 1);
                 },
-
+                
                 // second section
 
                 property_type : 85,
@@ -3923,6 +3986,7 @@
                     terrace_carpet_area : '',
                     terrace_saleable_area : '',
                     floor_height : '',
+                    ceiling_height : '',
                     servant_room : false,
                     service_lift : false,
 
@@ -3936,6 +4000,7 @@
                     terrace_carpet_area_map_unit : '',
                     terrace_saleable_area_map_unit : '',
                     floor_height_map_unit : '',
+                    ceiling_height_map_unit : '',
 
                     unit_details : [
                         {
@@ -3998,6 +4063,7 @@
                         built_up_to : '',
                         saleable : '',
                         saleable_to : '',
+                        ceiling_height : '',
 
                         is_carpet : false,
                         is_built_up : false,
@@ -4077,6 +4143,7 @@
                 },
 
                 if_ware_cold_ind_plot : {
+                    number_of_unit : '',
                     types : [
                         {
                             plot_area_from : '',
@@ -4110,7 +4177,7 @@
                 resetData() {
 
                     this.wings_name_array = [];
-
+                    
                     this.is_flat_or_penthouse = {
                         number_of_towers : '',
                         number_of_floors : '',
@@ -4146,6 +4213,7 @@
                         terrace_carpet_area : '',
                         terrace_saleable_area : '',
                         floor_height : '',
+                        ceiling_height : '',
                         servant_room : false,
                         service_lift : false,
 
@@ -4159,6 +4227,7 @@
                         terrace_carpet_area_map_unit : '',
                         terrace_saleable_area_map_unit : '',
                         floor_height_map_unit : '',
+                        ceiling_height_map_unit : '',
 
                         unit_details : [
                             {
@@ -4220,6 +4289,7 @@
                             built_up_to : '',
                             saleable : '',
                             saleable_to : '',
+                            ceiling_height : '',
 
                             is_carpet : false,
                             is_built_up : false,
@@ -4294,6 +4364,7 @@
                     };
 
                     this.if_ware_cold_ind_plot = {
+                        number_of_unit : '',
                         types : [
                             {
                                 plot_area_from : '',
@@ -4322,7 +4393,7 @@
 
                         power : false,
                         power_detail : '',
-
+                        
                         water : false,
                         water_detail : '',
                     };
@@ -4347,14 +4418,23 @@
                 },
 
                 addWingSubCategory(event, value) {
+                    let newArray = [];
                     if(event.target.checked) {
                         this.sub_category_array.push(value);
+                        newArray = this.sub_category_array;
                     } else {
-                        const index = this.sub_category_array.indexOf(value);
-                        if (index > -1) {
-                            this.sub_category_array.splice(index, 1);
-                        }
+                        let originalArray = this.sub_category_array;
+                        const valueToRemove = value;
+                        newArray = originalArray.filter(item => item !== valueToRemove);
                     }
+
+                    console.log(newArray);
+
+                    this.sub_category_array = [];
+
+                    newArray.forEach((element, index) => {
+                        this.sub_category_array.push(element);
+                    });
                 },
 
                 manageWingNameArray() {
@@ -4381,6 +4461,7 @@
                                     built_up_to : '',
                                     saleable : '',
                                     saleable_to : '',
+                                    ceiling_height : '',
 
                                     is_carpet : false,
                                     is_built_up : false,
@@ -4400,21 +4481,22 @@
                         built_up_to : '',
                         saleable : '',
                         saleable_to : '',
+                        ceiling_height : '',
 
                         is_carpet_built_up : false,
                     });
                 },
 
                 addCarpetPlotSize() {
-                    this.if_farm_plot_land.add_carpet_plot_size = !this.if_farm_plot_land.add_carpet_plot_size;
+                    this.if_farm_plot_land.add_carpet_plot_size = !this.if_farm_plot_land.add_carpet_plot_size; 
                 },
 
                 addConstCarpetArea() {
-                    this.if_farm_plot_land.add_constructed_carpet_area = !this.if_farm_plot_land.add_constructed_carpet_area;
+                    this.if_farm_plot_land.add_constructed_carpet_area = !this.if_farm_plot_land.add_constructed_carpet_area; 
                 },
 
                 addConstBuiltUpArea() {
-                    this.if_farm_plot_land.add_constructed_built_up_area = !this.if_farm_plot_land.add_constructed_built_up_area;
+                    this.if_farm_plot_land.add_constructed_built_up_area = !this.if_farm_plot_land.add_constructed_built_up_area; 
                 },
 
                 nexttickForFirstCondition() {
@@ -4432,10 +4514,12 @@
                             $(`#tower_detail_carpet_from_to_select_${index}`).select2();
                             $(`#tower_detail_built_from_to_select_${index}`).select2();
                             $(`#tower_detail_saleable_from_to_select_${index}`).select2();
+                            $(`#first_ceiling_height_map_unit_select_${index}`).select2();
 
                             $(`#second_tower_detail_carpet_from_to_select_${index}`).select2();
                             $(`#second_tower_detail_built_from_to_select_${index}`).select2();
                             $(`#second_tower_detail_saleable_from_to_select_${index}`).select2();
+                            $(`#second_ceiling_height_map_unit_select_${index}`).select2();
                         });
                     });
                 },
@@ -4449,7 +4533,7 @@
                         this.$nextTick(function () {
                             $(`#sub_category_of_wings_${index}`).select2({ placeholder: 'Sub Category' });
                             $(`#extra_sub_category_of_wings_${index}`).select2({ placeholder: 'Sub Category' });
-                        });
+                        }); 
                     });
                     return;
                 },
@@ -4530,6 +4614,7 @@
                             $(`#terrace_carpet_select_${index}`).select2();
                             $(`#terrace_saleable_select_${index}`).select2();
                             $(`#floor_height_select_${index}`).select2();
+                            $(`#ceiling_height_select_${index}`).select2();
 
                             $(`#second_wing_array_${index}`).select2();
                             $(`#second_saleable_area_select_${index}`).select2();
@@ -4540,7 +4625,8 @@
                             $(`#second_terrace_carpet_select_${index}`).select2();
                             $(`#second_terrace_saleable_select_${index}`).select2();
                             $(`#second_floor_height_select_${index}`).select2();
-                        });
+                            $(`#second_ceiling_height_select_${index}`).select2();
+                        });    
                     });
                     return;
                 },
@@ -4581,7 +4667,7 @@
                 },
 
                 addUnitDetail() {
-                    this.if_residential_only_units.unit_details.push({
+                    this.if_residential_only_units.unit_details.push({                
                         wing : '',
                         saleable : '',
                         saleable_to : '',
@@ -4598,6 +4684,7 @@
                         terrace_carpet_area_to : '',
                         terrace_saleable_area_to : '',
                         floor_height : '',
+                        ceiling_height : '',
                         servant_room : false,
                         service_lift : false,
 
@@ -4613,6 +4700,7 @@
                         terrace_carpet_area_map_unit : '',
                         terrace_saleable_area_map_unit : '',
                         floor_height_map_unit : '',
+                        ceiling_height_map_unit : '',
                     });
                 },
 
@@ -4699,7 +4787,7 @@
                     let exist = this.extra_facilities.findIndex(facility => facility.name == this.new_facility_input);
 
                     if(exist >= 0) {
-                        this.new_facility_input = '';
+                        this.new_facility_input = '';    
                         return;
                     }
 
@@ -4718,6 +4806,34 @@
                 amenities : [],
 
                 document_category : '',
+                remark : '',
+
+                other_documents : [
+
+                ],
+
+                setSelect2ForOtherDoc() {
+                    let _this = this;
+                    this.$nextTick(function () {
+                        _this.other_documents.forEach((element, index) => {
+                            $(`#other_doc_${index}`).select2();
+                        });
+                    });
+                },
+
+                addOtherImageOrDoc() {
+                    let _this = this;
+                    this.other_documents.push({
+                        'document_type' : '',
+                        'file' : ''
+                    });
+
+                    this.setSelect2ForOtherDoc();
+                },
+
+                removeOtherImageOrDoc(index) {
+                    this.other_documents.splice(index, 1);
+                },
 
                 // submit section
                 submitHandle() {
@@ -4740,10 +4856,12 @@
                             element.carpet_from_to_map_unit = $(`#second_tower_detail_carpet_from_to_select_${index}`).val();
                             element.built_from_to_map_unit = $(`#second_tower_detail_built_from_to_select_${index}`).val();
                             element.saleable_from_to_map_unit = $(`#second_tower_detail_saleable_from_to_select_${index}`).val();
+                            element.ceiling_height_map_unit = $(`#second_ceiling_height_map_unit_select_${index}`).val();
                         } else {
                             element.carpet_from_to_map_unit = $(`#tower_detail_carpet_from_to_select_${index}`).val();
                             element.built_from_to_map_unit = $(`#tower_detail_built_from_to_select_${index}`).val();
                             element.saleable_from_to_map_unit = $(`#tower_detail_saleable_from_to_select_${index}`).val();
+                            element.ceiling_height_map_unit = $(`#first_ceiling_height_map_unit_select_${index}`).val();
                         }
                     });
 
@@ -4759,6 +4877,7 @@
                             element.terrace_carpet_area_map_unit = $(`#second_terrace_carpet_select_${index}`).val();
                             element.terrace_saleable_area_map_unit = $(`#second_terrace_saleable_select_${index}`).val();
                             element.floor_height_map_unit = $(`#second_floor_height_select_${index}`).val();
+                            element.ceiling_height_map_unit = $(`#second_ceiling_height_select_${index}`).val();
                         } else {
                             element.wing = $(`#wing_array_${index}`).val();
                             element.saleable_map_unit = $(`#saleable_area_select_${index}`).val();
@@ -4769,6 +4888,8 @@
                             element.terrace_carpet_area_map_unit = $(`#terrace_carpet_select_${index}`).val();
                             element.terrace_saleable_area_map_unit = $(`#terrace_saleable_select_${index}`).val();
                             element.floor_height_map_unit = $(`#floor_height_select_${index}`).val();
+                            element.ceiling_height_map_unit = $(`#ceiling_height_select_${index}`).val();
+                            element.ceiling_height_map_unit = $(`#second_ceiling_height_select_${index}`).val();
                         }
                     });
 
@@ -4804,14 +4925,13 @@
 
                     this.if_farm_plot_land.constructed_saleable_area_map_unit = $('#constructed_saleable_area_select').val() ?? '';
                     this.if_farm_plot_land.constructed_carpet_area_map_unit = $('#constructed_carpet_area_select').val() ?? '';
-
+                    
                     this.if_farm_plot_land.constructed_built_up_from_map_unit = $('#constructed_built_up_from_area_select').val() ?? '';
                     this.if_farm_plot_land.constructed_built_up_to_map_unit = $('#constructed_built_up_to_area_select').val() ?? '';
 
                     let form_data = new FormData();
 
                     form_data.set('id', this.id);
-					//nirbhay
                     form_data.set('builder_id', $('#builder_id').val());
                     form_data.set('website', this.website);
 
@@ -4825,7 +4945,9 @@
                     form_data.set('city', $('#city_id').val() ?? '' );
 
                     form_data.set('location_link', this.location_link);
-                    form_data.set('pincode', this.pincode);
+                    
+                    let pincode = document.getElementById('pincode').value;
+                    form_data.set('pincode', pincode);
                     form_data.set('land_area',  this.land_size);
                     form_data.set('land_size_unit', $('#land_size_select').val() ?? '');
 
@@ -4893,8 +5015,8 @@
                     }
 
                     form_data.set('parking_details', JSON.stringify(this.parking_details));
-                    form_data.set('amenities', JSON.stringify(this.amenities));
-
+                    form_data.set('amenities', this.amenities.length > 0 ? JSON.stringify(this.amenities) : '' );
+                    
                     form_data.set('document_category', $('#image_category').val() ?? '');
                     let document_image = document.getElementById('document_image');
                     if(document_image && document_image.files.length > 0)
@@ -4910,8 +5032,24 @@
                         form_data.set('catlog_file', file, file.name);
                     }
 
-                    let url = "{{ route('admin.saveProject') }}";
+                    form_data.set('remark', this.remark);
 
+                    this.other_documents.forEach((other_document_detail, index) => {
+                        let selected_value = $(`#other_doc_${index}`).val();
+                        this.other_documents[index]['document_type'] = selected_value;
+
+                        let other_doc = document.getElementById(`document_image_${index}`);
+                        if(other_doc && other_doc.files.length > 0)
+                        {
+                            let file = other_doc.files[0];
+                            form_data.set(`other_doc_${index}`, file, file.name);
+                        }
+                    });
+
+                    form_data.set('other_documents', JSON.stringify(this.other_documents));
+
+                    let url = "{{ route('admin.saveProject') }}";
+                    
                     axios.post(url, form_data, {
                         headers: {
                             "Content-Type": "multipart/form-data",
@@ -4933,7 +5071,7 @@
     </script>
 
     <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
-
+    
     <script>
 
 		var shouldchangecity = 1;
@@ -4987,26 +5125,54 @@
 
 			var queryString = window.location.search;
 			var urlParams = new URLSearchParams(queryString);
-			var go_data_id = urlParams.get('data_id')
+			var go_data_id = urlParams.get('data_id');
 
 			var cities = @Json($city_encoded);
 			var states = @Json($state_encoded);
+			var areas = @Json($area_encoded);
 
 			$(document).on('change', '#state_id', function(e) {
-				// if (shouldchangecity) {
-				// 	$('#city_id').select2('destroy');
-				// 	citiesar = JSON.parse(cities);
-				// 	$('#city_id').html('');
-				// 	for (let i = 0; i < citiesar.length; i++) {
-				// 		if (citiesar[i]['state_id'] == $("#state_id").val()) {
-				// 			$('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
-				// 				'name'
-				// 			] + '</option>')
-				// 		}
-				// 	}
-				// 	$('#city_id').select2();
-				// }
-			})
+
+                document.getElementById('city_id').disabled = $("#state_id").val() > 0 ? false : true;
+
+				if (shouldchangecity) {
+					$('#city_id').select2('destroy');
+
+					citiesar = JSON.parse(cities);
+					areass = JSON.parse(areas);
+
+					$('#city_id').html('');
+                    $('#city_id').append('<option value="" selected disabled>Select City</option>');
+                    for (let i = 0; i < citiesar.length; i++) {
+						if (citiesar[i]['state_id'] == $("#state_id").val()) {
+							$('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
+								'name'
+							] + '</option>')
+						}
+					}
+					$('#city_id').select2();
+				}
+			});
+
+            $('#city_id').on('change', function() {
+                $(document).on('change', '#city_id', function(e) {
+                    $('#area_id').html('');
+                    areass = JSON.parse(areas);
+                    $('#area_id').append('<option value="" selected disabled>Locality</option>');
+                    for (let i = 0; i < areass.length; i++) {
+                        if (areass[i]['city_id'] == $("#city_id").val()) {
+                            $('#area_id').append(`<option value="${areass[i]['id']}"
+                                data-pincode="${areass[i]['pincode']}"
+                                data-city_id="${areass[i]['city_id']}"
+                                data-state_id="${areass[i]['state_id']}">
+                                ${areass[i]['name']}
+                            </option>`);
+                        }
+                    }
+                    $('#area_id').select2();
+                    document.getElementById('area_id').disabled = $("#city_id").val() > 0 ? false : true;
+                })
+            });
 
 			$('#projectTable').DataTable({
 				processing: true,
@@ -5359,16 +5525,10 @@
 		})
 
 		$(document).on('change', '#area_id', function(e) {
-
-			// if ($(this).find(":selected").attr('data-state_id') !== undefined && $(this).find(":selected").attr(
-			// 		'data-state_id') != '') {
-			// 	$('#state_id').val($(this).find(":selected").attr('data-state_id')).trigger('change')
-			// }
-			// if ($(this).find(":selected").attr('data-city_id') !== undefined && $(this).find(":selected").attr(
-			// 		'data-city_id') != '') {
-			// 	$('#city_id').val($(this).find(":selected").attr('data-city_id')).trigger('change')
-			// 	$('#pincode').val($(this).find(":selected").attr('data-pincode')).trigger('change')
-			// }
+			if ($(this).find(":selected").attr('data-city_id') !== undefined && $(this).find(":selected").attr(
+					'data-city_id') != '') {
+				$('#pincode').val($(this).find(":selected").attr('data-pincode')).trigger('change');
+			}
 		})
 
 		function generate_tower_detail(id) {
@@ -5808,7 +5968,7 @@
                 '</div>';
                 return myvar;
             }
-
+		
 			function generate_furnished_detail(id) {
                 var currentFurnished = $('input[name=property_category]:checked').attr('data-val')
                 if ($('input[name=property_category]:checked').attr('data-val') == 'Office') {
@@ -5844,7 +6004,7 @@
                 }
                 return str;
             }
-
+		
 			function setFurnishedStatus(TheStatus, id) {
                 $('.div_retail_furnished[data-unit_id="' + id + '"]').hide()
                 $('.div_office_furnished[data-unit_id="' + id + '"]').hide()

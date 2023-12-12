@@ -64,6 +64,7 @@ class RoleController extends Controller
 
 	public function saveRole(Request $request)
 	{
+	   // dd($request);
 		if (!empty($request->id) && $request->id != '') {
 		
 			$data = Role::find($request->id);

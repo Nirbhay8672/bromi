@@ -4,8 +4,9 @@
 @extends('admin.layouts.app')
 {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
 {{-- <script src="https://ajax.googleapis.com/ajax/libs//3.5.1/jquery.min.js"></script> --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
+<!-- Add this to your HTML file -->
 
 @section('content')
     <div class="page-body">
@@ -1266,10 +1267,22 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <h5 class="border-style">Property Image/document</h5>
-                                                    <img src="{{ asset('gallary_image.jpeg') }}" alt=""
-                                                        onclick="image()" style="height: 23%;">
+                                                <div class="col-md-6 d-flex" style="height: 300px">
+                                                    <!-- First Image Section -->
+                                                    <div class="flex-fill text-center">
+                                                        <h5 class="border-style">Property Image</h5>
+                                                        <img src="{{ asset('gallary_image.jpeg') }}" alt="" onclick="image()" style="height: 90px;">
+                                                    </div>
+                                                    <!-- Second Image Section -->
+                                                    <div class="flex-fill text-center" style="margin-left: 20px;">
+                                                        <h5 class="border-style">Constrution Image</h5>
+                                                        <img src="{{ asset('imgIcon.png') }}" alt="" onclick="image1()" style="height: 90px;">
+                                                    </div>
+                                                    <!-- Third Image Section -->
+                                                    <div class="flex-fill text-center" style="margin-left: 20px;">
+                                                        <h5 class="border-style">Property Documents</h5>
+                                                        <img src="{{ asset('docIcon.png') }}" alt="" onclick="image2()" style="height: 90px;">
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <h5 class="border-style">Matching Enquiry</h5>
@@ -2443,49 +2456,18 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                {{-- @if ($type !== 'Land/Plot' && $type !== 'Plot/Land' && $type !== 'Storage/industrial')
-                                                    <div class="form-group col-md-12">
-                                                        <h5 class="border-style">Care Taker Information</h5>
-                                                    </div>
-
-                                                    <div class="form-group col-4 m-b-10 data_conent_155">
-                                                        <h6><b>Care Taker Name</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-8 m-b-10 data_conent_155">
-                                                        <div>
-                                                            {{ $property->care_taker_name ? $property->care_taker_name : '-' }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-10 data_conent_156">
-                                                        <h6><b>Care Taker Number</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-8 m-b-10 data_conent_156">
-                                                        <div>
-                                                            {{ $property->care_taker_contact ? $property->care_taker_contact : '-' }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-4 m-b-10 data_conent_157">
-                                                        <h6><b>Key Available At</b></h6>
-                                                    </div>
-                                                    <div class="form-group col-8 m-b-10 data_conent_157">
-                                                        <div>
-                                                            {{ $property->key_available_at ? $property->key_available_at : '-' }}
-                                                        </div>
-                                                    </div>
-                                                @endif --}}
-
                                             </div>
                                         </div>
                                         <div class="modal fade" id="imageModel" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Image Section -->
-                                                {{-- <div class="modal-content">
+                                                <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="imageLabel">Property Images</h5>
                                                         <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <div id="imageBanner" class="clearfix">
+                                                        <div id="imageSlider" class="image-slider">
                                                             @php
                                                                 $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'];
                                                                 $hasImage = false;
@@ -2495,8 +2477,8 @@
                                                                     $path = pathinfo($image->image, PATHINFO_EXTENSION);
                                                                 @endphp
                                                                 @if (in_array($path, $imageExtensions))
-                                                                    <div class="">
-                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="" width="300" height="300" style="margin-left: 15%;">
+                                                                    <div class="slide">
+                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="">
                                                                     </div>
                                                                     @php
                                                                         $hasImage = true; 
@@ -2507,217 +2489,172 @@
                                                     </div>
                                                     @if ($hasImage)
                                                         <div class="modal-footer">
-                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'images', 'prop' => $property->id]) }}">Download Images</a>
+                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'images', 'prop' => $property->id]) }}">Download Zip</a>
                                                         </div>
                                                     @else
                                                         <center><h4>No Images Found</h4></center>
                                                     @endif
                                                 </div>
-                                         --}}
-                                        
-                                         <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="imageLabel">Property Images</h5>
-                                                <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                                             </div>
-                                            {{-- <div class="modal-body">
-                                                <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
-                                                    <div class="carousel-inner">
-                                                        @php
-                                                            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'];
-                                                            $hasImage = false;
-                                                        @endphp
-                                                        @foreach ($multiple_image as $index => $image)
-                                                            @php
-                                                                $path = pathinfo($image->image, PATHINFO_EXTENSION);
-                                                            @endphp
-                                                            @if (in_array($path, $imageExtensions))
-                                                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                                                    <img src="{{ asset('/upload/land_images/' . $image->image) }}" class="d-block w-100" alt="Image">
-                                                                </div>
-                                                                @php
-                                                                    $hasImage = true;
-                                                                @endphp
-                                                            @endif
-                                                        @endforeach
+                                        </div>
+                                        <div class="modal fade" id="imageModel2" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <!-- Construction Docs Section -->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="documentLabel">Property Construction Documents</h5>
                                                     </div>
-                                                    @if ($hasImage)
-                                                        <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
-                                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                            <span class="visually-hidden">Previous</span>
-                                                        </button>
-                                                        <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
-                                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                            <span class="visually-hidden">Next</span>
-                                                        </button>
+                                                    <div class="modal-body">
+                                                        <div id="documentBanner" class="image-slider">
+                                                            @php
+                                                                $documentExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff','docs', 'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx', 'ppt', 'pptx'];
+                                                                $hasConstDocuments = false;
+                                                            @endphp
+
+                                                            @foreach ($construction_docs_list as $index => $const_image)
+                                                                @php
+                                                                    $path = pathinfo($const_image->construction_documents, PATHINFO_EXTENSION);
+                                                                @endphp
+                                                                @if (in_array($path, $documentExtensions))
+                                                                    <div class="slide">
+                                                                        <img src="{{ asset('/upload/land_images/' . $const_image->construction_documents) }}" class="d-block"  alt="Image">
+                                                                    </div>
+                                                                    @php
+                                                                        $hasConstDocuments = true;
+                                                                    @endphp
+                                                                @endif
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                    @if ($hasConstDocuments)
+                                                        <div class="modal-footer">
+                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'construction_documents', 'prop' => $property->id]) }}">Download Zip</a>
+                                                        </div>
+                                                    @else
+                                                        <center><h4>No Construction Documents Found</h4></center>
                                                     @endif
                                                 </div>
-                                            </div> --}}
-                                            <div class="modal-body">
-                                                <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
-                                                    <div class="carousel-inner">
-                                                        @php
-                                                            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'];
-                                                            $hasImage = false;
-                                                        @endphp
-                                                        @foreach ($multiple_image as $index => $image)
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="imageModel3" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <!-- Document Section -->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="documentLabel">Property Documents</h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div id="documentBanner">
                                                             @php
-                                                                $path = pathinfo($image->image, PATHINFO_EXTENSION);
+                                                                $documentExtensions = ['docs', 'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx', 'ppt', 'pptx'];
+                                                                $hasDocuments = false;
                                                             @endphp
-                                                            @if (in_array($path, $imageExtensions))
-                                                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                                                    <img src="{{ asset('/upload/land_images/' . $image->image) }}" class="d-block" style="width: 765px !important;
-                                                                    height: 250px;" alt="Image">
-                                                                </div>
+
+                                                            @foreach ($multiple_image as $image)
                                                                 @php
-                                                                    $hasImage = true;
+                                                                    $path = pathinfo($image->image, PATHINFO_EXTENSION);
                                                                 @endphp
-                                                            @endif
-                                                        @endforeach
+                                                                @if (in_array($path, $documentExtensions))
+                                                                    <div class="zoom">
+                                                                        <a href="{{ asset('/upload/land_images/' . $image->image) }}">{{ $image->image }}</a>
+                                                                    </div>
+                                                                    @php $hasDocuments = true; @endphp
+                                                                @endif
+                                                            @endforeach
+
+                                                        </div>
                                                     </div>
-                                                    @if ($hasImage)
-                                                        <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
-                                                            <span class="carousel-control-prev-icon p-0" aria-hidden="true" style="font-size: 50%;"></span>
-                                                            <span class="visually-hidden">Previous</span>
-                                                        </button>
-                                                        <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
-                                                            <span class="carousel-control-next-icon p-0" aria-hidden="true" style="font-size: 50%;"></span>
-                                                            <span class="visually-hidden">Next</span>
-                                                        </button>
+                                                    @if ($hasDocuments)
+                                                        <div class="modal-footer">
+                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'documents', 'prop' => $property->id]) }}">Download Zip</a>
+                                                        </div>
+                                                    @else
+                                                        <center><h4>No Documents Found</h4></center>
                                                     @endif
-                                                    @push('page-css')
-                                                    <style>
-                                                    .carousel-control-next{
-                                                        width: 10%
-                                                    }
-                                                    .carousel-control-prev{
-                                                        width: 10%
-
-                                                    }
-                                                    </style>
-                                                    @endpush
                                                 </div>
                                             </div>
-                                            
-                                            @if ($hasImage)
-                                                <div class="modal-footer">
-                                                    <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'images', 'prop' => $property->id]) }}">Download Images</a>
-                                                </div>
-                                            @else
-                                                <center><h4>No Images Found</h4></center>
-                                            @endif
-                                        
-                                            <script>
-                                                document.addEventListener('DOMContentLoaded', function () {
-                                                    var myCarousel = new bootstrap.Carousel(document.getElementById('imageCarousel'), {
-                                                        interval: false, // Disable auto-slide
-                                                    });
-                                                });
-                                            </script>
                                         </div>
-                                            <!-- Document Section -->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="documentLabel">Property Documents</h5>
-                                                    {{-- <button class="btn-close" type="button" data-bs-dismiss="modal"></button> --}}
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="documentBanner">
-                                                        @php
-                                                            $documentExtensions = ['docs', 'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx', 'ppt', 'pptx'];
-                                                            $hasDocuments = false;
-                                                        @endphp
+                                       
+                                        <style>
+                                        .image-slider {
+                                        display: flex;
+                                        overflow-x: auto; /* Enable horizontal scrolling */
+                                        }
 
-                                                        @foreach ($multiple_image as $image)
-                                                            @php
-                                                                $path = pathinfo($image->image, PATHINFO_EXTENSION);
-                                                            @endphp
-                                                            @if (in_array($path, $documentExtensions))
-                                                                <div class="zoom">
-                                                                    <a href="{{ asset('/upload/land_images/' . $image->image) }}">{{ $image->image }}</a>
-                                                                </div>
-                                                                @php $hasDocuments = true; @endphp
-                                                            @endif
-                                                        @endforeach
+                                        .slide {
+                                        flex: 0 0 auto; /* Prevent shrinking and growing of the slides */
+                                        margin-right: 10px; /* Adjust margin as needed */
+                                        }
 
-                                                    </div>
-                                                </div>
-                                                @if ($hasDocuments)
-                                                    <div class="modal-footer">
-                                                        <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'documents', 'prop' => $property->id]) }}">Download Documents</a>
-                                                    </div>
-                                                @else
-                                                    <center><h4>No Documents Found</h4></center>
-                                                @endif
-                                            </div>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="v-enquiry-matching" role="tabpanel"
-                                            aria-labelledby="v-enquiry-matching-tab">
-                                            <h5 class="border-style">Matching Enquiry</h5>
-                                            <br>
-                                            <div class="form-group">
-                                                <table class="table table-responsive custom-table-design mb-3">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Client Name</th>
-                                                            <th scope="col">Mobile</th>
-                                                            <th scope="col">For</th>
-                                                            <th scope="col">Budget</th>
+                                        .image-slider img {
+                                        width: 300px; /* Set a fixed width for the images */
+                                        height: 200px; /* Set a fixed height for the images */
+                                        }
+                                        </style>
+                                <div class="tab-pane fade" id="v-enquiry-matching" role="tabpanel"
+                                    aria-labelledby="v-enquiry-matching-tab">
+                                    <h5 class="border-style">Matching Enquiry</h5>
+                                    <br>
+                                    <div class="form-group">
+                                        <table class="table table-responsive custom-table-design mb-3">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Client Name</th>
+                                                    <th scope="col">Mobile</th>
+                                                    <th scope="col">For</th>
+                                                    <th scope="col">Budget</th>
 
-                                                        </tr>
-                                                    </thead>
+                                                </tr>
+                                            </thead>
 
-                                                    <tbody id="matching_container">
+                                            <tbody id="matching_container">
 
-                                                        @forelse ($enquiries as $value)
-                                                            <tr>
-                                                                <td>{{ $value->client_name }}</td>
-                                                                <td>{{ $value->client_mobile }}</td>
-                                                                <td>{{ $value->enquiry_for }}</td>
-                                                                <td>{{ $value->budget_to }}</td>
-                                                            </tr>
-                                                        @empty
-                                                        @endforelse
+                                                @forelse ($enquiries as $value)
+                                                    <tr>
+                                                        <td>{{ $value->client_name }}</td>
+                                                        <td>{{ $value->client_mobile }}</td>
+                                                        <td>{{ $value->enquiry_for }}</td>
+                                                        <td>{{ $value->budget_to }}</td>
+                                                    </tr>
+                                                @empty
+                                                @endforelse
 
 
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="v-property-viewer" role="tabpanel"
-                                            aria-labelledby="v-property-viewer-tab">
-                                            <h5 class="border-style">Property Viewer</h5>
-                                            <br>
-                                            <div class="form-group">
-                                                <table class="table table-responsive custom-table-design mb-3">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">Client Name</th>
-                                                            <th scope="col">Activity</th>
-                                                            <th scope="col">Date</th>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="v-property-viewer" role="tabpanel"
+                                    aria-labelledby="v-property-viewer-tab">
+                                    <h5 class="border-style">Property Viewer</h5>
+                                    <br>
+                                    <div class="form-group">
+                                        <table class="table table-responsive custom-table-design mb-3">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Client Name</th>
+                                                    <th scope="col">Activity</th>
+                                                    <th scope="col">Date</th>
 
-                                                        </tr>
-                                                    </thead>
+                                                </tr>
+                                            </thead>
 
-                                                    <tbody>
+                                            <tbody>
 
-                                                        @forelse ($visits as $value)
-                                                            <tr>
-                                                                <td>{{ $value->Enquiry->client_name ? $value->Enquiry->client_name : '-' }}
-                                                                </td>
-                                                                <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
-                                                                </td>
-                                                                <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
-                                                            </tr>
-                                                        @empty
-                                                        @endforelse
+                                                @forelse ($visits as $value)
+                                                    <tr>
+                                                        <td>{{ $value->Enquiry->client_name ? $value->Enquiry->client_name : '-' }}
+                                                        </td>
+                                                        <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
+                                                        </td>
+                                                        <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
+                                                    </tr>
+                                                @empty
+                                                @endforelse
 
 
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -2726,6 +2663,8 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
         <div class="modal fade" id="propertyModal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -3237,6 +3176,12 @@
 
         function image() {
             $('#imageModel').modal('show');
+        }
+        function image1(){
+            $('#imageModel2').modal('show');
+        }
+        function image2(){
+            $('#imageModel3').modal('show');
 
         }
 

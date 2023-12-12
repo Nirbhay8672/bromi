@@ -14,78 +14,129 @@
                 <div class="col-sm-12">
                     <div class="card h-100">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Enquiry Details</h5>
+                            <div class="d-flex">
+                                <h5 class="mb-3">Enquiry Details</h5>
+                                <div class="mb-3 ms-auto">
+                                    @php
+                                        $date = request()->query('date');
+                                        $formattedDate = \Carbon\Carbon::parse($date)->format('F j, Y');
+                                    @endphp
+                                    <p style="font-size: 18px; font-weight: bold;">Date:
+                                        {{ $formattedDate ?? 'Default Date' }}</p>
+                                </div>
+                            </div>
                             <div>
                                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                     @php $is_active = 'active'; @endphp
                                     @if (isset($new_enquiry))
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item position-relative" role="presentation">
                                             <button class="nav-link mx-1 {{ $is_active }}" id="v-new-enquiry-tab"
                                                 data-bs-toggle="pill" data-bs-target="#v-new-enquiry" type="button"
                                                 role="tab" aria-controls="v-new-enquiry" aria-selected="true">New
-                                                Enquiry</button>
+                                                Enquiry
+                                                <span
+                                                    class="position-absolute top-0 end-1 translate-middle badge rounded-pill bg-primary">
+                                                    {{ count($new_enquiry) ?? 0 }}
+                                                </span>
+                                            </button>
                                         </li>
                                         @php $is_active = ''; @endphp
                                     @endif
                                     @if (isset($leadConf))
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item position-relative" role="presentation">
                                             <button class="nav-link mx-1 {{ $is_active }}" id="v-lead-confirm-tab"
                                                 data-bs-toggle="pill" data-bs-target="#v-lead-confirm" type="button"
                                                 role="tab" aria-controls="v-lead-confirm" aria-selected="true">Lead
-                                                Confirm</button>
+                                                Confirm
+                                                <span
+                                                    class="position-absolute top-0 end-1 translate-middle badge rounded-pill bg-primary">
+                                                    {{ count($leadConf) ?? 0 }}
+                                                </span>
+                                            </button>
                                         </li>
                                         @php $is_active = ''; @endphp
                                     @endif
+                                    {{-- @dd($site_visit_scheduled); --}}
                                     @if (isset($site_visit_scheduled))
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item position-relative" role="presentation">
                                             <button class="nav-link mx-1 {{ $is_active }}"
                                                 id="v-site_visit_scheduled-tab" data-bs-toggle="pill"
                                                 data-bs-target="#v-site_visit_scheduled" type="button" role="tab"
                                                 aria-controls="v-site_visit_scheduled" aria-selected="true">Site Visit
-                                                Scheduled</button>
+                                                Scheduled
+                                                <span
+                                                    class="position-absolute top-0 end-1 translate-middle badge rounded-pill bg-primary">
+                                                    {{ count($site_visit_scheduled) ?? 0 }}
+                                                </span>
+                                            </button>
                                         </li>
                                         @php $is_active = ''; @endphp
                                     @endif
-                                    {{-- @dd($discussion_schedule, $sitecomp); --}}
                                     {{-- site completed --}}
                                     @if (isset($site_visit_completed))
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item position-relative" role="presentation">
                                             <button class="nav-link mx-1 {{ $is_active }}"
                                                 id="v-site_visit_completed-tab" data-bs-toggle="pill"
                                                 data-bs-target="#v-site_visit_completed" type="button" role="tab"
                                                 aria-controls="v-site_visit_completed" aria-selected="true">Site
                                                 Visit
-                                                Completed</button>
+                                                Completed
+                                                <span
+                                                    class="position-absolute top-0 end-1 translate-middle badge rounded-pill bg-primary">
+                                                    {{ count($site_visit_completed) ?? 0 }}
+                                                </span>
+                                            </button>
                                         </li>
                                         @php $is_active = ''; @endphp
                                     @endif
 
                                     @if (isset($discussion_schedule))
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item position-relative" role="presentation">
                                             <button class="nav-link mx-1 {{ $is_active }}" id="v-discussion_schedule-tab"
                                                 data-bs-toggle="pill" data-bs-target="#v-discussion_schedule" type="button"
                                                 role="tab" aria-controls="v-discussion_schedule"
-                                                aria-selected="false">Discussion Schedule</button>
+                                                aria-selected="false">Discussion Schedule
+                                                <span
+                                                    class="position-absolute top-0 end-1 translate-middle badge rounded-pill bg-primary">
+                                                    {{ count($discussion_schedule) ?? 0 }}
+                                                </span>
+                                            </button>
                                         </li>
                                         @php $is_active = ''; @endphp
                                     @endif
                                     @if (isset($booked))
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item position-relative" role="presentation">
                                             <button class="nav-link mx-1 {{ $is_active }}" id="v-booked-tab"
                                                 data-bs-toggle="pill" data-bs-target="#v-booked" type="button"
-                                                role="tab" aria-controls="v-booked"
-                                                aria-selected="false">Booked</button>
+                                                role="tab" aria-controls="v-booked" aria-selected="false">Booked
+                                                <span
+                                                    class="position-absolute top-0 end-1 translate-middle badge rounded-pill bg-primary">
+                                                    {{ count($booked) ?? 0 }}
+                                                </span>
+                                            </button>
                                         </li>
                                         @php $is_active = ''; @endphp
                                     @endif
                                     @if (isset($lost))
-                                        <li class="nav-item" role="presentation">
+                                        <li class="nav-item position-relative" role="presentation">
                                             <button class="nav-link mx-1 {{ $is_active }}" id="v-lost-tab"
                                                 data-bs-toggle="pill" data-bs-target="#v-lost" type="button" role="tab"
-                                                aria-controls="v-lost" aria-selected="false">Lost</button>
+                                                aria-controls="v-lost" aria-selected="false">Lost
+                                                <span
+                                                    class="position-absolute top-0 end-1 translate-middle badge rounded-pill bg-primary">
+                                                    {{ count($lost) ?? 0 }}
+                                                </span>
+                                            </button>
                                         </li>
                                         @php $is_active = ''; @endphp
                                     @endif
+                                    <div class="col-md-1 ms-auto text-end">
+                                        <a href="{{ route('admin.enquiries.calendar') }}" data-bs-original-title=""
+                                            title="">
+                                            <button class="nav-link mx-1 active" id="v-view-summary-tab"
+                                                data-bs-original-title="" title="">Back</button>
+                                        </a>
+                                    </div>
                                 </ul>
                             </div>
                             <div class="tab-content" id="v-pills-tabContent">
@@ -172,7 +223,8 @@
                                                         <div class="row">
                                                             <div class="form-group col-12 m-b-5 text-end">
                                                                 <i role="button" title="Edit"
-                                                                    data-id="{{ $data->id }}" onclick=showProgress(this)
+                                                                    data-id="{{ $data->id }}"
+                                                                    onclick=showProgress(this)
                                                                     class="fs-22 py-2 mx-2 fa-pencil pointer fa "
                                                                     type="button"></i>
                                                             </div>
@@ -313,6 +365,12 @@
                                             <div class="col-md-4 mb-3">
                                                 <div class="card-body h-100">
                                                     <div class="row">
+                                                        <div class="form-group col-12 m-b-5 text-end">
+                                                            <i role="button" title="Edit"
+                                                                data-id="{{ $data->id }}" onclick=showProgress(this)
+                                                                class="fs-22 py-2 mx-2 fa-pencil pointer fa "
+                                                                type="button"></i>
+                                                        </div>
                                                         <div class="form-group col-6 m-b-5">
                                                             <h6><b>Added On</b></h6>
                                                         </div>
@@ -371,6 +429,12 @@
                                             <div class="col-md-4 mb-3">
                                                 <div class="card-body h-100">
                                                     <div class="row">
+                                                        <div class="form-group col-12 m-b-5 text-end">
+                                                            <i role="button" title="Edit"
+                                                                data-id="{{ $data->id }}" onclick=showProgress(this)
+                                                                class="fs-22 py-2 mx-2 fa-pencil pointer fa "
+                                                                type="button"></i>
+                                                        </div>
                                                         <div class="form-group col-6 m-b-5">
                                                             <h6><b>Added On</b></h6>
                                                         </div>
@@ -430,6 +494,13 @@
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card-body h-100">
                                                         <div class="row">
+                                                            <div class="form-group col-12 m-b-5 text-end">
+                                                                <i role="button" title="Edit"
+                                                                    data-id="{{ $data->id }}"
+                                                                    onclick=showProgress(this)
+                                                                    class="fs-22 py-2 mx-2 fa-pencil pointer fa "
+                                                                    type="button"></i>
+                                                            </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Added On</b></h6>
                                                             </div>
@@ -492,6 +563,13 @@
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card-body h-100">
                                                         <div class="row">
+                                                            <div class="form-group col-12 m-b-5 text-end">
+                                                                <i role="button" title="Edit"
+                                                                    data-id="{{ $data->id }}"
+                                                                    onclick=showProgress(this)
+                                                                    class="fs-22 py-2 mx-2 fa-pencil pointer fa "
+                                                                    type="button"></i>
+                                                            </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Added On</b></h6>
                                                             </div>
@@ -554,6 +632,13 @@
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card-body h-100">
                                                         <div class="row">
+                                                            <div class="form-group col-12 m-b-5 text-end">
+                                                                <i role="button" title="Edit"
+                                                                    data-id="{{ $data->id }}"
+                                                                    onclick=showProgress(this)
+                                                                    class="fs-22 py-2 mx-2 fa-pencil pointer fa "
+                                                                    type="button"></i>
+                                                            </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Added On</b></h6>
                                                             </div>
@@ -616,6 +701,13 @@
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card-body h-100">
                                                         <div class="row">
+                                                            <div class="form-group col-12 m-b-5 text-end">
+                                                                <i role="button" title="Edit"
+                                                                    data-id="{{ $data->id }}"
+                                                                    onclick=showProgress(this)
+                                                                    class="fs-22 py-2 mx-2 fa-pencil pointer fa "
+                                                                    type="button"></i>
+                                                            </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Added On</b></h6>
                                                             </div>
@@ -809,6 +901,7 @@
             $('#showprogressmodal').modal('hide');
             $('#progressmodal').modal('show');
             $('#progress_enquiry_id').val($(data).attr('data-id'));
+            console.log("id modal prog ==", $('#progress_enquiry_id').val());
         }
 
         function showProgress(data) {
@@ -878,6 +971,7 @@
         }
 
         $(document).on('click', '#saveProgress', function(e) {
+            console.log("edit modal data ==");
             e.preventDefault();
             $(this).prop('disabled', true);
             var id = $('#progress_enquiry_id').val()
@@ -896,9 +990,25 @@
                 success: function(data) {
                     $('#progressmodal').modal('hide');
                     $('#saveProgress').prop('disabled', false);
-                    location.reload();
+                    // deleteRecord(id);
+                    // location.reload();
                 }
             });
         });
+
+        function deleteRecord(id) {
+            
+            $.ajax({
+                type: "DELETE",
+                url: "{{ route('admin.enquiries.calendar.delete', ['id' => '__id__']) }}".replace('__id__', id),
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(res) {
+                    console.log("Record deleted successfully",res);
+                    window.location.href = "{{ route('admin.enquiries.calendar') }}";
+                }
+            });
+        }
     </script>
 @endpush
