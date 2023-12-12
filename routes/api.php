@@ -77,9 +77,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/list_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'index']);
     Route::post('/add_Inquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'saveEnquiry']);
     Route::post('/update_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'saveEnquiry']);
- Route::Post('/show_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'show']);
+    Route::get('/show_enquiry/{id}', [App\Http\Controllers\Api\EnquiriesController::class, 'show']);
     Route::post('/delete_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'destory']);
-     Route::post('/filter_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'filterEnquiry']);
+    Route::post('/filter_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'filterEnquiry']);
     Route::post('/import_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'importEnquiry']);
     Route::post('/export_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'exportEnquiry']);
     Route::post('/matching_enquiry', [App\Http\Controllers\Api\EnquiriesController::class, 'matchingEnquiry']);

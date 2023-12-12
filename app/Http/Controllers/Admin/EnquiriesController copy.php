@@ -33,6 +33,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Mail;
 
 
 class EnquiriesController extends Controller
@@ -62,9 +63,8 @@ class EnquiriesController extends Controller
 			if (!empty($request->search_enq)) {
 				$pro = Properties::find($request->search_enq);
 			}
-			//Get Data Enquiry
+			//bharat filter
 			$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
-				//Filter Enquiry
 				->when($request->filter_by, function ($query) use ($request) {
 					if ($request->filter_by == 'new') {
 						return $query->doesntHave('Progress');
@@ -190,7 +190,7 @@ class EnquiriesController extends Controller
 				->when($request->filter_prospect, function ($query) use ($request) {
 					return $query->whereDate('created_at', '<=', $request->filter_prospect);
 				})
-				//Matching Enquiry
+
 				->when(!empty($request->search_enq), function ($query) use ($request, $pro) {
 					if (!empty($pro)) {
 						// prop type = enq type req type
@@ -203,11 +203,6 @@ class EnquiriesController extends Controller
 						if ($request->match_specific_type) {
 							// dd("property_type", $request->match_specific_type, "..", $pro->property_category);
 							$query->where('property_type',   $pro->property_category);
-						}
-
-						if ($request->match_specific_sub_type) {
-							// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration);
-							$query->whereJsonContains('configuration', ($pro->configuration));
 						}
 
 						// Property For = Enquiry for
@@ -241,13 +236,13 @@ class EnquiriesController extends Controller
 
 						// size range = prop salable area
 						if ($request->match_enquiry_size) {
-							// dd("match_enquiry_size ==>", $request->match_enquiry_size, "..", $pro->salable_area, "..", $pro->constructed_salable_area);
+							dd("match_enquiry_size ==>", $request->match_enquiry_size, "..", $pro->salable_area, "..", $pro->constructed_salable_area);
 							$parts = explode("_-||-_", $pro->salable_area);
 							$result = $parts[0];
 							$area_size_from = str_replace(',', '', $result);
 							$area_size_to = str_replace(',', '', $result);
 
-							// dd($result);
+							dd($result);
 							$parts = explode("_-||-_", $pro->constructed_salable_area);
 							$result2 = $parts[0];
 							$area_from = str_replace(',', '', $result2);
@@ -269,23 +264,10 @@ class EnquiriesController extends Controller
 						// }
 					}
 				})
-				->orderBy('id', 'desc');
-
-				$parts = explode('?', $request->location);
-
-				if (count($parts) > 1) {
-					$value = $parts[1];
-					$value = trim($value);
-
-					if (strpos($value, 'data_id') !== false) {
-						$value_part = explode('=', $value);
-						if($value_part[1] > 0) {
-							$data->where('id', $value_part[1]);
-						}
-					}
-				}
-
-			foreach ($data->get() as $key => $value) {
+				->orderBy('id', 'desc')->get();
+			// ->orderBy('id', 'desc');
+			// dd(Helper::ORM_to_string($data));
+			foreach ($data as $key => $value) {
 				if (!empty($request->filter_from_budget)) {
 					if (empty($value->budget_from)) {
 						unset($data[$key]);
@@ -470,13 +452,12 @@ class EnquiriesController extends Controller
 					}
 					return $row->telephonic_discussion;
 				})
-				//transfer date
 				->editColumn('assigned_to', function ($row) {
-					if (!empty($row->Employee)) {
+ 					if (!empty($row->Employee)) {
 						return '<td align="center" style="vertical-align:top">
 					' . $row->Employee->first_name . ' ' . $row->Employee->last_name . ' <br>
 					' . Carbon::parse($row->transfer_date)->format('d-m-Y') .  '</td>';
-						// ' . Carbon::parse($row->created_at)->format('Y-m-d').  '</td>';
+					// ' . Carbon::parse($row->created_at)->format('Y-m-d').  '</td>';
 					};
 				})
 				->editColumn('status_change', function ($row) {
@@ -726,7 +707,6 @@ class EnquiriesController extends Controller
 
 	public function saveProgress(Request $request)
 	{
-		// dd("saveProgress", $request->all());
 		$previous = EnquiryProgress::where('enquiry_id', $request->enquiry_id)->where('status', 1)->first();
 		EnquiryProgress::where('enquiry_id', $request->enquiry_id)->where('status', 1)->update(['status' => 0]);
 		$data =  new EnquiryProgress();
@@ -747,11 +727,31 @@ class EnquiriesController extends Controller
 		}
 		$data->remarks = $request->remarks;
 		$data->save();
+		
+		$enq = Enquiries::find($request->enquiry_id);
+		
+	    if($enq->client_email) {
+			config(['mail.driver' => 'smtp']);
+            config(['mail.from_name' => 'Bromi']);
+            config(['mail.host' => 'smtp.gmail.com']);
+            config(['mail.port' => 587]);
+            config(['mail.username' => 'hathaliyank@gmail.com']);
+            config(['mail.password' => 'jzmk iqib mstp njln']);
+            config(['mail.encryption' => 'tls']);
+			
+			$datas = [
+				'name' => $enq->client_name,
+				'email' => $enq->client_email,
+			];
+
+			Mail::send('progress', $datas, function ($message) use ($enq) {
+				$message->to($enq->client_email)->subject('Progress Added successfully.');
+			});
+		}
 	}
 
 	public function saveSchedule(Request $request)
 	{
-		// bhrt
 		$previous = QuickSiteVisit::where('enquiry_id', $request->enquiry_id)->where('status', 1)->first();
 		QuickSiteVisit::where('enquiry_id', $request->enquiry_id)->where('status', 1)->update(['status' => 0]);
 		$data =  new QuickSiteVisit();
@@ -788,6 +788,27 @@ class EnquiriesController extends Controller
 			$data->nfd = $request->visit_date;
 
 			$data->save();
+		}
+		
+		$enq = Enquiries::find($request->enquiry_id);
+		
+	    if($enq->client_email) {
+			config(['mail.driver' => 'smtp']);
+            config(['mail.from_name' => 'Bromi']);
+            config(['mail.host' => 'smtp.gmail.com']);
+            config(['mail.port' => 587]);
+            config(['mail.username' => 'hathaliyank@gmail.com']);
+            config(['mail.password' => 'jzmk iqib mstp njln']);
+            config(['mail.encryption' => 'tls']);
+			
+			$datas = [
+				'name' => $enq->client_name,
+				'email' => $enq->client_email,
+			];
+
+			Mail::send('schedule', $datas, function ($message) use ($enq) {
+				$message->to($enq->client_email)->subject('Schedule Added successfully.');
+			});
 		}
 	}
 	public function enquiryCalendar(Request $request)
@@ -984,7 +1005,6 @@ class EnquiriesController extends Controller
 
 	public function saveEnquiry(Request $request)
 	{
-		// dd($request->all(),"res");
 		if (!empty($request->id) && $request->id != '') {
 			$data = Enquiries::find($request->id);
 			if (empty($data)) {
@@ -992,7 +1012,6 @@ class EnquiriesController extends Controller
 			}
 		} else {
 			$data =  new Enquiries();
-			$data->transfer_date = date('Y-m-d');
 		}
 
 		$data->added_by = Auth::user()->id;
@@ -1028,7 +1047,7 @@ class EnquiriesController extends Controller
 		$data->is_favourite = $request->is_favourite;
 		$data->district_id = $request->district_id;
 		$data->taluka_id = $request->taluka_id;
-		$data->village_id = json_encode($request->village_id);
+		$data->village_id = $request->village_id;
 		$data->zone_id    = isset($request->zone) ? $request->zone : NULL;
 		$data->save();
 		if (!empty($request->area_measurement)) {
@@ -1124,6 +1143,7 @@ class EnquiriesController extends Controller
 
 	public function transferNow(Request $request)
 	{
+		// dd("transferNow",$request->employee);
 		if (!empty($request->employee) && !empty($request->enquiry_id)) {
 			Enquiries::where('id', $request->enquiry_id)->update(['employee_id' => $request->employee], ['transfer_date' => Carbon::now()->format('Y-m-d H:i:s')]);
 			/* Stored Assign Enquiry History */
@@ -1492,16 +1512,5 @@ class EnquiriesController extends Controller
 			}
 		}
 		return response()->json($filteredConfig);
-	}
-	public function deleteRecord($id)
-	{
-		$record = EnquiryProgress::find($id);
-		// dd("recprd ==", $record->id);
-		if ($record) {
-			$record->delete();
-			return response()->json(['message' => 'Record deleted successfully']);
-		} else {
-			return response()->json(['message' => 'Record not found'], 404);
-		}
 	}
 }

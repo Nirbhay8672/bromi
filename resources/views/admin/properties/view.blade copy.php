@@ -2,11 +2,6 @@
     $type = isset($dropdowns[$property->property_category]['name']) ? $dropdowns[$property->property_category]['name'] : '';
 @endphp
 @extends('admin.layouts.app')
-{{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
-{{-- <script src="https://ajax.googleapis.com/ajax/libs//3.5.1/jquery.min.js"></script> --}}
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
-<!-- Add this to your HTML file -->
 
 @section('content')
     <div class="page-body">
@@ -903,8 +898,8 @@
                                                             <h6><b>Email</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_69">
-                                                            <div>:
-                                                                {{ $property->owner_email ? strtolower($property->owner_email) : '-' }}
+                                                            <div>: 
+                                                                {{ strtolower($property->owner_email) ? strtolower($property->owner_email) : '-' }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1233,7 +1228,7 @@
 
 
                                                     <div class="row">
-                                                        <div class="form-group col-md-12 mt-1">
+                                                        <div class="form-group col-md-12">
                                                             <h5 class="border-style">Other Conatct Details</h5>
                                                         </div>
                                                         <div class="col-md-12">
@@ -1267,24 +1262,13 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="col-md-6 d-flex" style="height: 300px">
-                                                    <!-- First Image Section -->
-                                                    <div class="flex-fill text-center">
-                                                        <h5 class="border-style">Property Image</h5>
-                                                        <img src="{{ asset('gallary_image.jpeg') }}" alt="" onclick="image()" style="height: 90px;">
-                                                    </div>
-                                                    <!-- Second Image Section -->
-                                                    <div class="flex-fill text-center" style="margin-left: 20px;">
-                                                        <h5 class="border-style">Constrution Image</h5>
-                                                        <img src="{{ asset('imgIcon.png') }}" alt="" onclick="image1()" style="height: 90px;">
-                                                    </div>
-                                                    <!-- Third Image Section -->
-                                                    <div class="flex-fill text-center" style="margin-left: 20px;">
-                                                        <h5 class="border-style">Property Documents</h5>
-                                                        <img src="{{ asset('docIcon.png') }}" alt="" onclick="image2()" style="height: 90px;">
-                                                    </div>
+                                                <div class="col-md-12">
+                                                    <h5 class="border-style">Property Image/document</h5>
+                                                    <img src="{{ asset('gallary_image.jpeg') }}" alt=""
+                                                        onclick="image()" style="height: 23%;">
                                                 </div>
-                                                <div class="col-md-6">
+
+                                                <div class="col-md-12" style="margin-top: -8%;">
                                                     <h5 class="border-style">Matching Enquiry</h5>
                                                     <br>
                                                     <div class="form-group">
@@ -2423,7 +2407,8 @@
                                                     <h6><b>Email</b></h6>
                                                 </div>
                                                 <div class="form-group col-8 m-b-10 data_conent_154">
-                                                    <div>:{{ $property->owner_email ? $property->owner_email : '-' }}
+                                                    <div>: 
+                                                    {{ $property->owner_email ? strtolower($property->owner_email) : '-' }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-12">
@@ -2456,8 +2441,99 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                {{-- @if ($type !== 'Land/Plot' && $type !== 'Plot/Land' && $type !== 'Storage/industrial')
+                                                    <div class="form-group col-md-12">
+                                                        <h5 class="border-style">Care Taker Information</h5>
+                                                    </div>
+
+                                                    <div class="form-group col-4 m-b-10 data_conent_155">
+                                                        <h6><b>Care Taker Name</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_155">
+                                                        <div>
+                                                            {{ $property->care_taker_name ? $property->care_taker_name : '-' }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-10 data_conent_156">
+                                                        <h6><b>Care Taker Number</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_156">
+                                                        <div>
+                                                            {{ $property->care_taker_contact ? $property->care_taker_contact : '-' }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-10 data_conent_157">
+                                                        <h6><b>Key Available At</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-10 data_conent_157">
+                                                        <div>
+                                                            {{ $property->key_available_at ? $property->key_available_at : '-' }}
+                                                        </div>
+                                                    </div>
+                                                @endif --}}
+
                                             </div>
                                         </div>
+                                        {{-- multiple image --}}
+                                        {{-- <div class="modal fade" id="imageModel" role="dialog"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Property Image</h5>
+                                                        <button class="btn-close" type="button" data-bs-dismiss="modal"
+                                                            aria-label="Close"> </button>
+                                                    </div>
+                                                    @foreach ($multiple_image as $image)
+                                                        <div class="modal-body">
+                                                            <div id="banner" class="clearfix">
+
+                                                                @php
+                                                                    $path = pathinfo($image->image, PATHINFO_EXTENSION);
+                                                                    $array = ['tif', 'tiff', 'bmp', 'jpg', 'jpeg', 'png', 'eps'];
+                                                                @endphp
+                                                                @if ($path == 'jpg' || $path == 'jpeg' || $path == 'png')
+                                                                    <div class="">
+                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}"
+                                                                            alt="" width="500" height="300"
+                                                                            style="margin-left: 15%;
+                                                                ">
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Property Documents
+                                                        </h5>
+                                                        <button class="btn-close" type="button" data-bs-dismiss="modal">
+                                                        </button>
+                                                    </div>
+                                                    @foreach ($multiple_image as $image)
+                                                        <div class="modal-body">
+                                                            <div id="banner">
+
+                                                                @php
+                                                                    $path = pathinfo($image->image, PATHINFO_EXTENSION);
+                                                                    $array = ['tif', 'tiff', 'bmp', 'jpg', 'jpeg', 'png', 'eps'];
+                                                                @endphp
+                                                                @if ($path == 'jpg' || $path == 'jpeg' || $path == 'png')
+                                                                @else
+                                                                    <div class="zoom">
+                                                                        <a
+                                                                            href="{{ asset('/upload/land_images/' . $image->image) }}">{{ $image->image }}</a>
+
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+
+                                                </div>
+                                            </div>
+                                        </div> --}}
                                         <div class="modal fade" id="imageModel" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Image Section -->
@@ -2467,194 +2543,120 @@
                                                         <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <div id="imageSlider" class="image-slider">
-                                                            @php
-                                                                $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'];
-                                                                $hasImage = false;
-                                                            @endphp
+                                                        <div id="imageBanner" class="clearfix">
                                                             @foreach ($multiple_image as $image)
                                                                 @php
                                                                     $path = pathinfo($image->image, PATHINFO_EXTENSION);
+                                                                    $imageExtensions = ['jpg', 'jpeg', 'png'];
                                                                 @endphp
                                                                 @if (in_array($path, $imageExtensions))
-                                                                    <div class="slide">
-                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="">
+                                                                    <div class="">
+                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="" width="500" height="300" style="margin-left: 15%;">
                                                                     </div>
-                                                                    @php
-                                                                        $hasImage = true; 
-                                                                    @endphp
                                                                 @endif
                                                             @endforeach
                                                         </div>
                                                     </div>
-                                                    @if ($hasImage)
-                                                        <div class="modal-footer">
-                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'images', 'prop' => $property->id]) }}">Download Zip</a>
-                                                        </div>
-                                                    @else
-                                                        <center><h4>No Images Found</h4></center>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal fade" id="imageModel2" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
-                                                <!-- Construction Docs Section -->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="documentLabel">Property Construction Documents</h5>
+                                                    <div class="modal-footer">
+                                                        <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'images', 'prop' => $property->id]) }}">Download Images</a>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <div id="documentBanner" class="image-slider">
-                                                            @php
-                                                                $documentExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff','docs', 'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx', 'ppt', 'pptx'];
-                                                                $hasConstDocuments = false;
-                                                            @endphp
-
-                                                            @foreach ($construction_docs_list as $index => $const_image)
-                                                                @php
-                                                                    $path = pathinfo($const_image->construction_documents, PATHINFO_EXTENSION);
-                                                                @endphp
-                                                                @if (in_array($path, $documentExtensions))
-                                                                    <div class="slide">
-                                                                        <img src="{{ asset('/upload/land_images/' . $const_image->construction_documents) }}" class="d-block"  alt="Image">
-                                                                    </div>
-                                                                    @php
-                                                                        $hasConstDocuments = true;
-                                                                    @endphp
-                                                                @endif
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                    @if ($hasConstDocuments)
-                                                        <div class="modal-footer">
-                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'construction_documents', 'prop' => $property->id]) }}">Download Zip</a>
-                                                        </div>
-                                                    @else
-                                                        <center><h4>No Construction Documents Found</h4></center>
-                                                    @endif
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal fade" id="imageModel3" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
+                                        
                                                 <!-- Document Section -->
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="documentLabel">Property Documents</h5>
+                                                        <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div id="documentBanner">
-                                                            @php
-                                                                $documentExtensions = ['docs', 'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx', 'ppt', 'pptx'];
-                                                                $hasDocuments = false;
-                                                            @endphp
-
                                                             @foreach ($multiple_image as $image)
                                                                 @php
                                                                     $path = pathinfo($image->image, PATHINFO_EXTENSION);
+                                                                    $documentExtensions = ['tif', 'tiff', 'bmp', 'eps'];
                                                                 @endphp
-                                                                @if (in_array($path, $documentExtensions))
+                                                                @if (!in_array($path, $documentExtensions))
                                                                     <div class="zoom">
                                                                         <a href="{{ asset('/upload/land_images/' . $image->image) }}">{{ $image->image }}</a>
                                                                     </div>
-                                                                    @php $hasDocuments = true; @endphp
                                                                 @endif
                                                             @endforeach
-
                                                         </div>
                                                     </div>
-                                                    @if ($hasDocuments)
-                                                        <div class="modal-footer">
-                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'documents', 'prop' => $property->id]) }}">Download Zip</a>
-                                                        </div>
-                                                    @else
-                                                        <center><h4>No Documents Found</h4></center>
-                                                    @endif
+                                                    <div class="modal-footer">
+                                                        <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'documents', 'prop' => $property->id]) }}">Download Documents</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                       
-                                        <style>
-                                        .image-slider {
-                                        display: flex;
-                                        overflow-x: auto; /* Enable horizontal scrolling */
-                                        }
+                                        
+                                        
+                                        <div class="tab-pane fade" id="v-enquiry-matching" role="tabpanel"
+                                            aria-labelledby="v-enquiry-matching-tab">
+                                            <h5 class="border-style">Matching Enquiry</h5>
+                                            <br>
+                                            <div class="form-group">
+                                                <table class="table table-responsive custom-table-design mb-3">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Client Name</th>
+                                                            <th scope="col">Mobile</th>
+                                                            <th scope="col">For</th>
+                                                            <th scope="col">Budget</th>
 
-                                        .slide {
-                                        flex: 0 0 auto; /* Prevent shrinking and growing of the slides */
-                                        margin-right: 10px; /* Adjust margin as needed */
-                                        }
+                                                        </tr>
+                                                    </thead>
 
-                                        .image-slider img {
-                                        width: 300px; /* Set a fixed width for the images */
-                                        height: 200px; /* Set a fixed height for the images */
-                                        }
-                                        </style>
-                                <div class="tab-pane fade" id="v-enquiry-matching" role="tabpanel"
-                                    aria-labelledby="v-enquiry-matching-tab">
-                                    <h5 class="border-style">Matching Enquiry</h5>
-                                    <br>
-                                    <div class="form-group">
-                                        <table class="table table-responsive custom-table-design mb-3">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Client Name</th>
-                                                    <th scope="col">Mobile</th>
-                                                    <th scope="col">For</th>
-                                                    <th scope="col">Budget</th>
+                                                    <tbody id="matching_container">
 
-                                                </tr>
-                                            </thead>
-
-                                            <tbody id="matching_container">
-
-                                                @forelse ($enquiries as $value)
-                                                    <tr>
-                                                        <td>{{ $value->client_name }}</td>
-                                                        <td>{{ $value->client_mobile }}</td>
-                                                        <td>{{ $value->enquiry_for }}</td>
-                                                        <td>{{ $value->budget_to }}</td>
-                                                    </tr>
-                                                @empty
-                                                @endforelse
+                                                        @forelse ($enquiries as $value)
+                                                            <tr>
+                                                                <td>{{ $value->client_name }}</td>
+                                                                <td>{{ $value->client_mobile }}</td>
+                                                                <td>{{ $value->enquiry_for }}</td>
+                                                                <td>{{ $value->budget_to }}</td>
+                                                            </tr>
+                                                        @empty
+                                                        @endforelse
 
 
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="v-property-viewer" role="tabpanel"
-                                    aria-labelledby="v-property-viewer-tab">
-                                    <h5 class="border-style">Property Viewer</h5>
-                                    <br>
-                                    <div class="form-group">
-                                        <table class="table table-responsive custom-table-design mb-3">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Client Name</th>
-                                                    <th scope="col">Activity</th>
-                                                    <th scope="col">Date</th>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="v-property-viewer" role="tabpanel"
+                                            aria-labelledby="v-property-viewer-tab">
+                                            <h5 class="border-style">Property Viewer</h5>
+                                            <br>
+                                            <div class="form-group">
+                                                <table class="table table-responsive custom-table-design mb-3">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Client Name</th>
+                                                            <th scope="col">Activity</th>
+                                                            <th scope="col">Date</th>
 
-                                                </tr>
-                                            </thead>
+                                                        </tr>
+                                                    </thead>
 
-                                            <tbody>
+                                                    <tbody>
 
-                                                @forelse ($visits as $value)
-                                                    <tr>
-                                                        <td>{{ $value->Enquiry->client_name ? $value->Enquiry->client_name : '-' }}
-                                                        </td>
-                                                        <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
-                                                        </td>
-                                                        <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
-                                                    </tr>
-                                                @empty
-                                                @endforelse
+                                                        @forelse ($visits as $value)
+                                                            <tr>
+                                                                <td>{{ $value->Enquiry->client_name ? $value->Enquiry->client_name : '-' }}
+                                                                </td>
+                                                                <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
+                                                                </td>
+                                                                <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
+                                                            </tr>
+                                                        @empty
+                                                        @endforelse
 
 
-                                            </tbody>
-                                        </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2663,8 +2665,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
         <div class="modal fade" id="propertyModal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -3048,235 +3048,227 @@
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection
     @push('scripts')
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.3/dist/js/bootstrap.bundle.min.js"></script> --}}
-    <script>
-        function showfile(event) {
-            event.preventDefault(); // Prevent the default behavior of the link
+        <script>
+            function showfile(event) {
+                event.preventDefault(); // Prevent the default behavior of the link
 
-            var link = event.target; // Get the clicked <a> tag
-            var href = link.getAttribute('value'); // Get the value of the 'href' attribute
+                var link = event.target; // Get the clicked <a> tag
+                var href = link.getAttribute('value'); // Get the value of the 'href' attribute
 
-            console.log(href); // Output the 'href' value in the browser console or perform further actions
+                console.log(href); // Output the 'href' value in the browser console or perform further actions
 
-            var newTab = window.open(href, '_blank');
-            newTab.opener = null;
+                var newTab = window.open(href, '_blank');
+                newTab.opener = null;
 
-        }
-        for (let i = 1; i < 159; i++) {
-            if ($('.data_conent_' + i).length > 1) {
-                var strr = $($('.data_conent_' + i)[1]).html()
-                strr = strr.replaceAll("<div>", "");
-                strr = strr.replaceAll("</div>", "");
-                strr = strr.replaceAll("-", "");
-                strr = strr.replaceAll(":", "");
-                strr = strr.replaceAll("No", "");
-                strr = strr.trim();
-                if (strr == '') {
-                    $('.data_conent_' + i).hide()
+            }
+            for (let i = 1; i < 159; i++) {
+                if ($('.data_conent_' + i).length > 1) {
+                    var strr = $($('.data_conent_' + i)[1]).html()
+                    strr = strr.replaceAll("<div>", "");
+                    strr = strr.replaceAll("</div>", "");
+                    strr = strr.replaceAll("-", "");
+                    strr = strr.replaceAll(":", "");
+                    strr = strr.replaceAll("No", "");
+                    strr = strr.trim();
+                    if (strr == '') {
+                        $('.data_conent_' + i).hide()
+                    }
                 }
             }
-        }
 
-        function getProperty() {
-            $('#modal_form').trigger("reset");
-            $.ajax({
-                type: "POST",
-                url: "{{ route('admin.getProperty') }}",
-                data: {
-                    id: '{{ $property->id }}',
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(data) {
-                    data = JSON.parse(data);
-                    $('#property_for').val(data.property_for).trigger('change');
-                    $('#property_type').val(data.property_type).trigger('change');
-                    $('#specific_type').val(data.specific_type).trigger('change');
-                    $('#building_id').val(data.building_id).trigger('change');
-                    $('#is_favourite').prop('checked', Number(data.is_favourite));
-                    $('#property_wing').val(data.property_wing);
-                    $('#property_unit_no').val(data.property_unit_no);
-                    $('#configuration').val(data.configuration).trigger('change');;
-                    $('#property_status').val(data.property_status).trigger('change');;
-                    $('#carpet_area').val(data.carpet_area);
-                    $('#carpet_measurement').val(data.carpet_measurement).trigger('change');;
-                    $('#super_builtup_area').val(data.super_builtup_area);
-                    $('#super_builtup_measurement').val(data.super_builtup_measurement).trigger('change');;
-                    $('#plot_area').val(data.plot_area);
-                    $('#plot_measurement').val(data.plot_measurement).trigger('change');;
-                    $('#terrace').val(data.terrace);
-                    $('#terrace_measuremnt').val(data.terrace_measuremnt).trigger('change');;
-                    $('#hot_property').prop('checked', Number(data.hot_property));
-                    $('#share_to_others').prop('checked', Number(data.share_to_others));
-                    $('#furnished_status').val(data.furnished_status).trigger('change');;
-                    $('#fourwheller_parking').val(data.fourwheller_parking);
-                    $('#property_link').val(data.property_link);
-                    $('#twowheeler_parking').val(data.twowheeler_parking);
-                    $('#source_of_property').val(data.source_of_property).trigger('change');;
-                    $('#if_any_refrence').val(data.if_any_refrence);
-                    $('#is_pre_leased').prop('checked', Number(data.is_pre_leased));
-                    $('#pre_leased_remarks').val(data.pre_leased_remarks);
-                    $('#price').val(data.price);
-                    $('#property_remarks').val(data.property_remarks);
-                    $('#owner_is').val(data.owner_is).trigger('change');;
-                    $('#property_email').val(data.property_email);
-                    $('#owner_info_name').val(data.owner_info_name);
-                    $('#owner_contact_specific_no').val(data.owner_contact_specific_no);
-                    $('#is_nri').prop('checked', Number(data.is_nri));
-                    $('#care_take_name').val(data.care_take_name);
-                    $('#care_take_contact_no').val(data.care_take_contact_no);
-                    $('#key_arrangement').val(data.key_arrangement).trigger('change');
-                    $('#Property_priority').val(data.Property_priority).trigger('change');
-                    $('#reminder').val(data.reminder)
-                    $('#propertyModal').modal('show');
-                    $('#all_owner_contacts').html('')
-                    $('#all_units').html('')
-                    if (data.owner_details != '') {
-                        details = JSON.parse(data.owner_details);
-                        if ((details != null) && (details.length > 0)) {
-                            for (let i = 0; i < details.length; i++) {
-                                id = makeid(10);
-                                $('#all_owner_contacts').append(generate_contact_detail(id))
-                                $("[data-contact_id=" + id + "] select[name=owner_status]").select2()
-                                $("[data-contact_id=" + id + "] input[name=owner_name]").val(details[i][0]);
-                                $("[data-contact_id=" + id + "] input[name=owner_contact_no]").val(details[i][
-                                    1
-                                ]);
-                                $("[data-contact_id=" + id + "] select[name=owner_status]").val(details[i][2])
-                                    .trigger('change');
+            function getProperty() {
+                $('#modal_form').trigger("reset");
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('admin.getProperty') }}",
+                    data: {
+                        id: '{{ $property->id }}',
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        $('#property_for').val(data.property_for).trigger('change');
+                        $('#property_type').val(data.property_type).trigger('change');
+                        $('#specific_type').val(data.specific_type).trigger('change');
+                        $('#building_id').val(data.building_id).trigger('change');
+                        $('#is_favourite').prop('checked', Number(data.is_favourite));
+                        $('#property_wing').val(data.property_wing);
+                        $('#property_unit_no').val(data.property_unit_no);
+                        $('#configuration').val(data.configuration).trigger('change');;
+                        $('#property_status').val(data.property_status).trigger('change');;
+                        $('#carpet_area').val(data.carpet_area);
+                        $('#carpet_measurement').val(data.carpet_measurement).trigger('change');;
+                        $('#super_builtup_area').val(data.super_builtup_area);
+                        $('#super_builtup_measurement').val(data.super_builtup_measurement).trigger('change');;
+                        $('#plot_area').val(data.plot_area);
+                        $('#plot_measurement').val(data.plot_measurement).trigger('change');;
+                        $('#terrace').val(data.terrace);
+                        $('#terrace_measuremnt').val(data.terrace_measuremnt).trigger('change');;
+                        $('#hot_property').prop('checked', Number(data.hot_property));
+                        $('#share_to_others').prop('checked', Number(data.share_to_others));
+                        $('#furnished_status').val(data.furnished_status).trigger('change');;
+                        $('#fourwheller_parking').val(data.fourwheller_parking);
+                        $('#property_link').val(data.property_link);
+                        $('#twowheeler_parking').val(data.twowheeler_parking);
+                        $('#source_of_property').val(data.source_of_property).trigger('change');;
+                        $('#if_any_refrence').val(data.if_any_refrence);
+                        $('#is_pre_leased').prop('checked', Number(data.is_pre_leased));
+                        $('#pre_leased_remarks').val(data.pre_leased_remarks);
+                        $('#price').val(data.price);
+                        $('#property_remarks').val(data.property_remarks);
+                        $('#owner_is').val(data.owner_is).trigger('change');;
+                        $('#property_email').val(data.property_email);
+                        $('#owner_info_name').val(data.owner_info_name);
+                        $('#owner_contact_specific_no').val(data.owner_contact_specific_no);
+                        $('#is_nri').prop('checked', Number(data.is_nri));
+                        $('#care_take_name').val(data.care_take_name);
+                        $('#care_take_contact_no').val(data.care_take_contact_no);
+                        $('#key_arrangement').val(data.key_arrangement).trigger('change');
+                        $('#Property_priority').val(data.Property_priority).trigger('change');
+                        $('#reminder').val(data.reminder)
+                        $('#propertyModal').modal('show');
+                        $('#all_owner_contacts').html('')
+                        $('#all_units').html('')
+                        if (data.owner_details != '') {
+                            details = JSON.parse(data.owner_details);
+                            if ((details != null) && (details.length > 0)) {
+                                for (let i = 0; i < details.length; i++) {
+                                    id = makeid(10);
+                                    $('#all_owner_contacts').append(generate_contact_detail(id))
+                                    $("[data-contact_id=" + id + "] select[name=owner_status]").select2()
+                                    $("[data-contact_id=" + id + "] input[name=owner_name]").val(details[i][0]);
+                                    $("[data-contact_id=" + id + "] input[name=owner_contact_no]").val(details[i][
+                                        1
+                                    ]);
+                                    $("[data-contact_id=" + id + "] select[name=owner_status]").val(details[i][2])
+                                        .trigger('change');
+                                }
                             }
                         }
-                    }
-                    if (data.unit_details != '') {
-                        details = JSON.parse(data.unit_details);
-                        if ((details != null) && (details.length > 0)) {
+                        if (data.unit_details != '') {
+                            details = JSON.parse(data.unit_details);
+                            if ((details != null) && (details.length > 0)) {
 
-                            for (let i = 0; i < details.length; i++) {
-                                id = makeid(10);
-                                $('#all_units').append(generate_unit_detail(id))
-                                $("[data-unit_id=" + id + "] select[name=unit_status]").select2()
-                                $("[data-unit_id=" + id + "] select[name=furnished_status]").select2()
-                                $("[data-unit_id=" + id + "] input[name=wing]").val(details[i][0]);
-                                $("[data-unit_id=" + id + "] input[name=unit_unit_no]").val(details[i][1]);
-                                $("[data-unit_id=" + id + "] select[name=unit_status]").val(details[i][2])
-                                    .trigger('change');
-                                $("[data-unit_id=" + id + "] input[name=price]").val(details[i][3]);
-                                $("[data-unit_id=" + id + "] select[name=furnished_status]").val(details[i][4])
-                                    .trigger('change');
+                                for (let i = 0; i < details.length; i++) {
+                                    id = makeid(10);
+                                    $('#all_units').append(generate_unit_detail(id))
+                                    $("[data-unit_id=" + id + "] select[name=unit_status]").select2()
+                                    $("[data-unit_id=" + id + "] select[name=furnished_status]").select2()
+                                    $("[data-unit_id=" + id + "] input[name=wing]").val(details[i][0]);
+                                    $("[data-unit_id=" + id + "] input[name=unit_unit_no]").val(details[i][1]);
+                                    $("[data-unit_id=" + id + "] select[name=unit_status]").val(details[i][2])
+                                        .trigger('change');
+                                    $("[data-unit_id=" + id + "] input[name=price]").val(details[i][3]);
+                                    $("[data-unit_id=" + id + "] select[name=furnished_status]").val(details[i][4])
+                                        .trigger('change');
+                                }
                             }
                         }
+                        $('#show_building_address').val($('#building_id').find(":selected").attr('data-addr'));
+                        triggerChangeinput()
                     }
-                    $('#show_building_address').val($('#building_id').find(":selected").attr('data-addr'));
-                    triggerChangeinput()
-                }
-            });
-        }
-
-        function image() {
-            $('#imageModel').modal('show');
-        }
-        function image1(){
-            $('#imageModel2').modal('show');
-        }
-        function image2(){
-            $('#imageModel3').modal('show');
-
-        }
-
-        function makeid(length) {
-            var result = '';
-            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            var charactersLength = characters.length;
-            for (var i = 0; i < length; i++) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                });
             }
-            return result;
-        }
 
-        function generate_contact_detail(id) {
-            var myvar = '<div data-contact_id= ' + id + ' class="form-group col-md-3 m-b-10">' +
-                '       <input class="form-control" name="owner_name" type="text"' +
-                '            autocomplete="off" placeholder="Name">' +
-                '     </div>' +
-                '     <div data-contact_id= ' + id +
-                ' class="form-group col-md-3 m-b-10">' +
-                '       <input class="form-control" name="owner_contact_no"' +
-                '           type="text"  autocomplete="off"' +
-                '           placeholder="Contact No.">' +
-                '   </div>' +
-                '       <div data-contact_id= ' + id +
-                ' class="form-group col-md-3 m-b-4 mb-3">' +
-                '    <select class="form-select" name="owner_status">' +
-                '     <option value="">Contact Status</option>' +
-                '    <option value="Contactable">Contactable</option>' +
-                '     <option value="Not Contactable">Not Contactable</option>' +
-                '  </select>  </div>' +
-                '<div data-contact_id= ' + id +
-                ' class="form-group col-md-3 m-b-4 mb-3"><button data-contact_id=' + id +
-                ' class="remove_owner_contacts btn btn-danger btn-air-danger" type="button">-</button>  </div>';
-            return myvar;
-        }
+            function image() {
+                $('#imageModel').modal('show');
 
-        function generate_unit_detail(id) {
-            var myvar = '<div class="row"><div  data-unit_id= ' + id + ' class="form-group col-md-1 m-b-10">' +
-                '            <input class="form-control" name="wing" ' +
-                '                type="text"  autocomplete="off" placeholder="Wing">' +
-                '        </div>' +
-                '<div  data-unit_id= ' + id + ' class="form-group col-md-1 m-b-10">' +
-                '            <input class="form-control" name="unit_unit_no" ' +
-                '                type="text"  autocomplete="off" placeholder="Unit No.">' +
-                '        </div>' +
-                '        <div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-4 mb-3">' +
-                '            <select class="form-select" name="unit_status">' +
-                '                <option value="">Unit Status</option>' +
-                '                <option value="Contactable">Available</option>' +
-                '                <option value="Rent Out">Rent Out</option>' +
-                '                <option value="Sold Out">Sold Out</option>' +
-                '            </select>' +
-                '        </div>' +
-                '<div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-10">' +
-                '            <input class="form-control" name="price indian_currency_amount " ' +
-                '                type="text"  autocomplete="off" placeholder="price">' +
-                '        </div>' +
-                '        <div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-4 mb-3">' +
-                '            <select class="form-select" name="furnished_status">' +
-                '                <option value="">Furnished Status</option>' +
-                '            </select>' +
-                '        </div>' +
-                '<div data-unit_id= ' + id +
-                ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
-                ' class="remove_units btn btn-danger btn-air-danger" type="button">-</button>  </div></div>';
-            return myvar;
-        }
+            }
 
-        $(document).on('click', '#add_owner_contacts', function(e) {
-            id = makeid(10);
-            $('#all_owner_contacts').append(generate_contact_detail(id));
-            $("#all_owner_contacts select").each(function(index) {
-                $(this).select2();
+            function makeid(length) {
+                var result = '';
+                var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                var charactersLength = characters.length;
+                for (var i = 0; i < length; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                }
+                return result;
+            }
+
+            function generate_contact_detail(id) {
+                var myvar = '<div data-contact_id= ' + id + ' class="form-group col-md-3 m-b-10">' +
+                    '       <input class="form-control" name="owner_name" type="text"' +
+                    '            autocomplete="off" placeholder="Name">' +
+                    '     </div>' +
+                    '     <div data-contact_id= ' + id +
+                    ' class="form-group col-md-3 m-b-10">' +
+                    '       <input class="form-control" name="owner_contact_no"' +
+                    '           type="text"  autocomplete="off"' +
+                    '           placeholder="Contact No.">' +
+                    '   </div>' +
+                    '       <div data-contact_id= ' + id +
+                    ' class="form-group col-md-3 m-b-4 mb-3">' +
+                    '    <select class="form-select" name="owner_status">' +
+                    '     <option value="">Contact Status</option>' +
+                    '    <option value="Contactable">Contactable</option>' +
+                    '     <option value="Not Contactable">Not Contactable</option>' +
+                    '  </select>  </div>' +
+                    '<div data-contact_id= ' + id +
+                    ' class="form-group col-md-3 m-b-4 mb-3"><button data-contact_id=' + id +
+                    ' class="remove_owner_contacts btn btn-danger btn-air-danger" type="button">-</button>  </div>';
+                return myvar;
+            }
+
+            function generate_unit_detail(id) {
+                var myvar = '<div class="row"><div  data-unit_id= ' + id + ' class="form-group col-md-1 m-b-10">' +
+                    '            <input class="form-control" name="wing" ' +
+                    '                type="text"  autocomplete="off" placeholder="Wing">' +
+                    '        </div>' +
+                    '<div  data-unit_id= ' + id + ' class="form-group col-md-1 m-b-10">' +
+                    '            <input class="form-control" name="unit_unit_no" ' +
+                    '                type="text"  autocomplete="off" placeholder="Unit No.">' +
+                    '        </div>' +
+                    '        <div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-4 mb-3">' +
+                    '            <select class="form-select" name="unit_status">' +
+                    '                <option value="">Unit Status</option>' +
+                    '                <option value="Contactable">Available</option>' +
+                    '                <option value="Rent Out">Rent Out</option>' +
+                    '                <option value="Sold Out">Sold Out</option>' +
+                    '            </select>' +
+                    '        </div>' +
+                    '<div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-10">' +
+                    '            <input class="form-control" name="price indian_currency_amount " ' +
+                    '                type="text"  autocomplete="off" placeholder="price">' +
+                    '        </div>' +
+                    '        <div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-4 mb-3">' +
+                    '            <select class="form-select" name="furnished_status">' +
+                    '                <option value="">Furnished Status</option>' +
+                    '            </select>' +
+                    '        </div>' +
+                    '<div data-unit_id= ' + id +
+                    ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
+                    ' class="remove_units btn btn-danger btn-air-danger" type="button">-</button>  </div></div>';
+                return myvar;
+            }
+
+            $(document).on('click', '#add_owner_contacts', function(e) {
+                id = makeid(10);
+                $('#all_owner_contacts').append(generate_contact_detail(id));
+                $("#all_owner_contacts select").each(function(index) {
+                    $(this).select2();
+                })
             })
-        })
-        $(document).on('click', '.remove_owner_contacts', function(e) {
-            id = $(this).attr('data-contact_id');
-            $("[data-contact_id=" + id + "]").each(function(index) {
-                $(this).remove();
-            });
-        })
-
-        $(document).on('click', '#add_units', function(e) {
-            id = makeid(10);
-            $('#all_units').append(generate_unit_detail(id));
-            $("#all_units select").each(function(index) {
-                $(this).select2();
+            $(document).on('click', '.remove_owner_contacts', function(e) {
+                id = $(this).attr('data-contact_id');
+                $("[data-contact_id=" + id + "]").each(function(index) {
+                    $(this).remove();
+                });
             })
-        })
-        $(document).on('click', '.remove_units', function(e) {
-            id = $(this).attr('data-unit_id');
-            $("[data-unit_id=" + id + "]").each(function(index) {
-                $(this).remove();
-            });
-        })
-    </script>
+
+            $(document).on('click', '#add_units', function(e) {
+                id = makeid(10);
+                $('#all_units').append(generate_unit_detail(id));
+                $("#all_units select").each(function(index) {
+                    $(this).select2();
+                })
+            })
+            $(document).on('click', '.remove_units', function(e) {
+                id = $(this).attr('data-unit_id');
+                $("[data-unit_id=" + id + "]").each(function(index) {
+                    $(this).remove();
+                });
+            })
+        </script>
     @endpush
