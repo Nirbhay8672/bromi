@@ -45,16 +45,14 @@ class propertyController extends Controller
 				}
 		
 				$propertyData[] = [
-					// You should replace these sample data with your actual property data
-					
-                    'id' => $value->id,
-                    'Project_name' => $project,
-                    'locality' => $value->locality,
-                    'property_info' =>[
-                        //$value->property_for
-                    ],// $value->property_info,
-                    'price' =>  $value->price,
-                    'is_liked' => true,
+          'id' => $value->id,
+          'Project_name' => $project,
+          'locality' => $value->locality,
+          'property_info' =>[
+              //$value->property_for
+          ],// $value->property_info,
+          'price' =>  $value->price,
+          'is_liked' => true,
 				];
 			}
 		

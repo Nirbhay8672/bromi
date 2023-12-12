@@ -177,11 +177,13 @@ class AdminLoginController extends Controller
 	public function savePlan(Request $request)
 	{
 		$user  = User::find($request->user_id);
+		Auth::login($user);
 
 		$user->fill([
 			'plan_id' => $request->plan_id,
 		])->save();
 
-		return redirect('admin/login')->with('success','Plan Selected successfully.!');
+		Session::put('plan_id', $request->plan_id);
+		return redirect('/admin');
 	}
 }

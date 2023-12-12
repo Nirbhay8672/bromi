@@ -841,7 +841,7 @@ public function stepThree(Request $request)
 
     return response()->json(['all_data' => $allData, 'message' => 'Step three completed']);
 }
-
+ 
 	public function show(Request $request, $id)
 	{
 		$Enquiries = Enquiries::where([['id',$id],['user_id',Auth::user()->id]])->first();
