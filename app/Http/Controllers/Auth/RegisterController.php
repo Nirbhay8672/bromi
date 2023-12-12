@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Helpers\Helper;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\Areas;
 use App\Models\Branches;
 use App\Models\City;
 use App\Models\State;
@@ -18,6 +19,8 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Mail;
 use Session;
 use App\Models\Otp;
+use App\Models\SuperAreas;
+use App\Models\SuperCity;
 use Illuminate\Http\UploadedFile;
 
 class RegisterController extends Controller
@@ -54,8 +57,18 @@ class RegisterController extends Controller
 
 	public function showRegistrationForm()
     {
-		$cities = City::orderBy('name')->get()->toArray();
-		$states = State::orderBy('name')->get()->toArray();
+		$states = State::where('user_id','=', 6)
+            ->orderBy('name')
+            ->get();
+
+        $state_id = [];
+
+        foreach($states as $state) {
+            $state_id[] = intval($state['id']); 
+        }
+
+		$cities = SuperCity::whereIn('state_id',$state_id)->orderBy('name')->get();
+        
 		$roles = Role::all();
         return view('admin.auth.register',compact('cities','states','roles'));
     }
@@ -153,7 +166,6 @@ class RegisterController extends Controller
             "mobile_number" => 'required',
             "company_name" => 'required',
             "role_id" => 'required',
-            "address" => 'required',
             "state_id" => 'required',
             "city_id" => 'required',
             "password" => 'required',
@@ -174,7 +186,6 @@ class RegisterController extends Controller
 				'state_id' =>  $request->state_id,
 				'company_name' =>  $request->company_name,
                 'address' => $request->address,
-                'company_logo' => $request->file ? $this->storeFile($request->file) : '',
                 'vendor_id' => Str::random(10),
                 'is_active' => 0,
             ]
@@ -201,7 +212,7 @@ class RegisterController extends Controller
         }
 
         $state = State::find($request->state_id);
-        $city = City::find($request->city_id);
+        $city = SuperCity::find($request->city_id);
 
         $new_state = new State();
         $new_state->fill([
@@ -215,29 +226,47 @@ class RegisterController extends Controller
             'user_id' => $user->id,
             'state_id' => $new_state->id,
         ])->save();
-    
-        $otp = new Otp();
-        $otp->fill([
-            'otp' => random_int(100000, 999999),
-            'user_id' => $user->id,
-        ])->save();
-        
-        $datas = [
-            'name' => $user->first_name.' '.$user->last_name,
-            'email' => $user->email,
-            'otp' => $otp->otp,
-        ];
 
-        Mail::send('success',$datas,function($msg) use ($datas)
+        $allarea = SuperAreas::where('super_city_id',$request->city_id)
+            ->where('state_id',$request->state_id)
+            ->get();
+            
+            
+        foreach ($allarea as $area_obj)
         {
-			$msg->to($datas['email'],'Bromi')->subject('Registration Successfully');
-			$msg->from('hathaliyank@gmail.com','Bromi');
-        });
+            $area = new Areas();
+
+            $area->fill([
+                'user_id' => $user->id,
+                'name' => $area_obj->name,
+                'city_id' => $new_city->id,
+                'pincode' => $area_obj->pincode,
+                'state_id' => $new_state->id,
+            ])->save();
+        }
+    
+        // $otp = new Otp();
+        // $otp->fill([
+        //     'otp' => random_int(100000, 999999),
+        //     'user_id' => $user->id,
+        // ])->save();
         
-        Session::put('user_id', $user->id);
+        // $datas = [
+        //     'name' => $user->first_name.' '.$user->last_name,
+        //     'email' => $user->email,
+        //     'otp' => $otp->otp,
+        // ];
+
+        // Mail::send('success',$datas,function($msg) use ($datas)
+        // {
+		// 	$msg->to($datas['email'],'Bromi')->subject('Registration Successfully');
+		// 	$msg->from('hathaliyank@gmail.com','Bromi');
+        // });
+        
+        // Session::put('user_id', $user->id);
 
         if($user->exists) {
-            return redirect('admin/otp-form');
+            return redirect('admin/login');
         }
     }
 }

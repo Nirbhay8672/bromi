@@ -269,11 +269,23 @@ class EnquiriesController extends Controller
 						// }
 					}
 				})
-				->orderBy('id', 'desc')->get();
-				// dd("query ==>",$data);
-			// ->orderBy('id', 'desc');
-			// dd(Helper::ORM_to_string($data));
-			foreach ($data as $key => $value) {
+				->orderBy('id', 'desc');
+
+				$parts = explode('?', $request->location);
+
+				if (count($parts) > 1) {
+					$value = $parts[1];
+					$value = trim($value);
+
+					if (strpos($value, 'data_id') !== false) {
+						$value_part = explode('=', $value);
+						if($value_part[1] > 0) {
+							$data->where('id', $value_part[1]);
+						}
+					}
+				}
+
+			foreach ($data->get() as $key => $value) {
 				if (!empty($request->filter_from_budget)) {
 					if (empty($value->budget_from)) {
 						unset($data[$key]);
@@ -972,6 +984,7 @@ class EnquiriesController extends Controller
 
 	public function saveEnquiry(Request $request)
 	{
+		// dd($request->all(),"res");
 		if (!empty($request->id) && $request->id != '') {
 			$data = Enquiries::find($request->id);
 			if (empty($data)) {
@@ -1015,7 +1028,7 @@ class EnquiriesController extends Controller
 		$data->is_favourite = $request->is_favourite;
 		$data->district_id = $request->district_id;
 		$data->taluka_id = $request->taluka_id;
-		$data->village_id = $request->village_id;
+		$data->village_id = json_encode($request->village_id);
 		$data->zone_id    = isset($request->zone) ? $request->zone : NULL;
 		$data->save();
 		if (!empty($request->area_measurement)) {
@@ -1479,5 +1492,16 @@ class EnquiriesController extends Controller
 			}
 		}
 		return response()->json($filteredConfig);
+	}
+	public function deleteRecord($id)
+	{
+		$record = EnquiryProgress::find($id);
+		// dd("recprd ==", $record->id);
+		if ($record) {
+			$record->delete();
+			return response()->json(['message' => 'Record deleted successfully']);
+		} else {
+			return response()->json(['message' => 'Record not found'], 404);
+		}
 	}
 }

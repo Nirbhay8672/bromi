@@ -414,36 +414,33 @@ class HomeController extends Controller
 
 	public function importCity(Request $request)
 	{
-		if ($request->ajax()) {
-			if(!empty($request->state_id)){
-				$allcity = SuperCity::where('state_id',$request->state_id)->get();
-				foreach ($allcity as $key => $value) {
-					$exist = City::where('name',$value->name)->where('user_id',Auth::user()->id)->first();
-					if (empty($exist->id)) {
+		if(!empty($request->state_id)){
+			$allcity = SuperCity::whereIn('id',$request->city_array)->get();
+			foreach ($allcity as $key => $value) {
+				$exist = City::where('name',$value->name)->where('state_id',$value->state_id)->first();
+				if (empty($exist->id)) {
+					$state = State::find($value->state_id);
+					$current_user_state = State::where('user_id',Auth::user()->id)->where('name', $state->name)->first();
+
+					$new_state_id = $state->id;
 					    
-					    $state = State::find($value->state_id);
-					    $current_user_state = State::where('user_id',Auth::user()->id)->where('name', $state->name)->first();
-					    
-					    $new_state_id = $state->id;
-					    
-					    if(!$current_user_state) {
-					       $new_state = new State();
-					       $new_state->fill([
-					           'name' => $state->name,
-					           'user_id' => Auth::user()->id,
-					       ])->save();
-					       
-					       $new_state_id = $new_state->id;
-					    } else {
-							$new_state_id = $current_user_state->id;
-						}
-					    
-						$city = new City();
-						$city->user_id =  Session::get('parent_id');
-						$city->name = $value->name;
-						$city->state_id = $new_state_id;
-						$city->save();
+					if(!$current_user_state) {
+						$new_state = new State();
+						$new_state->fill([
+							'name' => $state->name,
+							'user_id' => Auth::user()->id,
+						])->save();
+						
+						$new_state_id = $new_state->id;
+					} else {
+						$new_state_id = $current_user_state->id;
 					}
+					
+					$city = new City();
+					$city->user_id = Auth::user()->id;
+					$city->name = $value->name;
+					$city->state_id = $new_state_id;
+					$city->save();
 				}
 			}
 		}

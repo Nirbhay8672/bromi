@@ -6,16 +6,15 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Imports\ImportCity;
 use App\Models\Api\Areas;
-use App\Models\Api\CompanyDetails;
 use App\Models\Builders;
 use App\Models\City;
+use App\Models\Api\CompanyDetails;
 use App\Models\District;
 use App\Models\DropdownSettings;
 use App\Models\Subcategory;
 use App\Models\State;
 use App\Models\Taluka;
 use App\Models\User;
-use App\Models\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -24,7 +23,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use Rap2hpoutre\FastExcel\FastExcel;
-use Illuminate\Support\Facades\DB;
+use DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SettingsController extends Controller
@@ -33,6 +32,8 @@ class SettingsController extends Controller
 	{
 		$this->middleware('auth');
 	}
+
+
 	public function getstate()
     {
         try {
@@ -49,6 +50,7 @@ class SettingsController extends Controller
         }
        
     }
+
     public function getcity(Request $request)
     {
          $state_id = $request->input('126');
@@ -68,6 +70,7 @@ class SettingsController extends Controller
             ], 500);
         }
     }
+    
 	public function addState(Request $request)
     {
 		
@@ -75,16 +78,18 @@ class SettingsController extends Controller
 			if(!empty($request->input('id'))){
 				$id = $request->input('id');
 				$state=State::find($id);
+				$message="State Updated successfully";
 			}else{
 
 				$state=new State();
+				$message="State added successfully";
 			}
 			$state->name=$request->input('124');
 			$state->user_id=Auth::user()->id;
 			$state->save();
             return response()->json([
                 "status" => 200,
-                "message" => "State added successfully"
+                "message" => $message
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -100,9 +105,11 @@ class SettingsController extends Controller
 			if(!empty($request->input('id'))){
 				$id = $request->input('id');
 				$city=City::find($id);
+				$message="City Update successfully";
 			}else{
 
 				$city=new City();
+				$message="City added successfully";
 			}
 			$city->name=$request->input('125');
 			$city->state_id=$request->input('126');
@@ -110,7 +117,7 @@ class SettingsController extends Controller
 			$city->save();
             return response()->json([
                 "status" => 200,
-                "message" => "City added successfully"
+                "message" => $message
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -171,6 +178,7 @@ class SettingsController extends Controller
             ], 500);
         }
     }
+
 	public function cities_import(Request $request)
 	{
         $request->validate([
@@ -203,11 +211,13 @@ class SettingsController extends Controller
 	public function areaAdd(Request $request)
 	{
 		try {
-			if(!empty($request->input('152'))){
-				$id=$request->input('152');
+			if(!empty($request->input('151'))){
+				$id=$request->input('151');
 				$area=Areas::find($id);
+				$message="Area Updated successfully";
 			}else{
 				$area=new Areas();
+				$message="Area added successfully";
 			}
 			$area->state_id=$request->input('127');
 			$area->city_id=$request->input('128');
@@ -215,7 +225,7 @@ class SettingsController extends Controller
 			$area->pincode=$request->input('130');
 			$area->user_id=Auth::user()->id;
 			$area->save();
-			return response()->json(['message' => 'areas Added successfully']);
+			return response()->json(['message' => $message]);
 
 
 		} catch (\Exception $e) {
@@ -229,7 +239,7 @@ class SettingsController extends Controller
 	public function areaDestroy(Request $request)
 	{
         try {
-			$id=$request->input('152');
+			$id=$request->input('151');
 			$Areas=Areas::find($id);
 			if(!empty($Areas)){
 				Areas::destroy($id);
@@ -251,6 +261,7 @@ class SettingsController extends Controller
             ], 500);
         }
     }
+
 	public function districtList(Request $request)
 	{
 		try {
@@ -271,16 +282,18 @@ class SettingsController extends Controller
 	public function districtAdd(Request $request)
 	{
 		try {
-			if(!empty($request->input('153'))){
-				$id=$request->input('153');
+			if(!empty($request->input('152'))){
+				$id=$request->input('152');
 				$District=District::find($id);
+				$message="District updated successfully";
 			}else{
 				$District=new District();
+				$message="District added successfully";
 			}
 			$District->name=$request->input('131');
 			$District->user_id=Auth::user()->id;
 			$District->save();
-			return response()->json(['message' => 'District Added successfully']);
+			return response()->json(['message' => $message]);
 
 
 		} catch (\Exception $e) {
@@ -295,7 +308,7 @@ class SettingsController extends Controller
 	public function districtDestroy(Request $request)
 	{
         try {
-			$id=$request->input('153');
+			$id=$request->input('152');
 			$District=District::find($id);
 			if(!empty($District)){
 				District::destroy($id);
@@ -341,14 +354,16 @@ class SettingsController extends Controller
 			if(!empty($request->input('153'))){
 				$id=$request->input('153');
 				$Taluka=Taluka::find($id);
+				$message="Taluka updated successfully";
 			}else{
 				$Taluka=new Taluka();
+				$message="Taluka added successfully";
 			}
 			$Taluka->district_id=$request->input('133');
 			$Taluka->name=$request->input('132');
 			$Taluka->user_id=Auth::user()->id;
 			$Taluka->save();
-			return response()->json(['message' => 'Talukas Added successfully']);
+			return response()->json(['message' => $message]);
 
 
 		} catch (\Exception $e) {
@@ -387,10 +402,10 @@ class SettingsController extends Controller
 	public function villageList(Request $request)
 	{
 		try {
-			$District = Village::where('user_id', Auth::user()->id)->get();
+			$District = District::where('user_id', Auth::user()->id)->get();
             return response()->json([
                 "status" => 200,
-                "message" => "Village List",
+                "message" => "District List",
                 "data" => $District
             ]);
 		} catch (\Exception $e) {
@@ -404,19 +419,18 @@ class SettingsController extends Controller
 	public function villageAdd(Request $request)
 	{
 		try {
-			if(!empty($request->input('219'))){
-				$id=$request->input('219');
-				$village=Village::find($id);
+			if(!empty($request->input('153'))){
+				$id=$request->input('153');
+				$area=Areas::find($id);
 			}else{
-				$village=new Village();
+				$area=new Areas();
 			}
-			$village->user_id=Auth::user()->id;
-			$village->district_id=$request->input('134');
-			$village->taluka_id=$request->input('135');
-			$village->name=$request->input('136');
-			$village->status=$request->input('137');
-			$village->save();
-			return response()->json(['message' => 'Village Added successfully']);
+			$area->state_id=$request->input('127');
+			$area->city_id=$request->input('128');
+			$area->name=$request->input('129');
+			$area->pincode=$request->input('130');
+			$area->save();
+			return response()->json(['message' => 'areas Added successfully']);
 
 
 		} catch (\Exception $e) {
@@ -430,10 +444,10 @@ class SettingsController extends Controller
 	public function villageDestroy(Request $request)
 	{
         try {
-			$id=$request->input('219');
-			$District=Village::find($id);
+			$id=$request->input('154');
+			$District=District::find($id);
 			if(!empty($District)){
-				Village::destroy($id);
+				District::destroy($id);
 			}else{
 				return response()->json([
 					"status" => 200,
@@ -442,7 +456,7 @@ class SettingsController extends Controller
 			}
             return response()->json([
                 "status" => 200,
-                "message" => "Village Deleted successfully"
+                "message" => "District Deleted successfully"
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -452,6 +466,8 @@ class SettingsController extends Controller
             ], 500);
         }
     }
+	
+
 	public function builder_import(Request $request)
 	{
 		$file = $request->file('csv_file');
@@ -471,59 +487,7 @@ class SettingsController extends Controller
 			}
 		}
 	}
-	public function builder_index(Request $request)
-	{
-			$data = Builders::orderBy('id', 'desc')->get();
-			$perPage = $request->input('per_page', 10);
-			$response = [
-				'message' => 'Enquiry list has been fetched successfully.',
-				'current_page' => 0, // Set the current page number here
-				'total_records' => $data->count(), // Set the total number of records here
-				'limit' => $perPage, // Set the limit per page here
-				'data' => $data,
-			];
-			return response()->json($response, 200);
-	
-			
-	}
-	public function builder_destroy(Request $request)
-	{
-		if($request->input('155') != null){
-			$data = Builders::where('id', $request->input('155'))->delete();
-		
-		if($data){
-			return response()->json([
-				"status" => 200,
-				"message" => "Builder Deleted successfully"
-			]);
-		}
-		}else{
-			return response()->json([
-				"status" => 200,
-				"message" => "provider Id not found"
-			]);
-		}
-			
-	}
 
-	public function builder_store(Request $request)
-	{
-		if (!empty($request->input('155')) && $request->input('155') != '') {
-			$data = Builders::find($request->input('155'));
-			if (empty($data)) {
-				$data =  new Builders();
-			}
-		} else {
-			$data =  new Builders();
-		}
-		$data->user_id = Auth::user()->id;
-		$data->name = $request->input('138');
-		$data->save();
-		return response()->json([
-			"status" => 200,
-			"message" => "Builder Added successfully"
-		]);
-	}
 	public function state_import(Request $request)
 	{
 		$file = $request->file('csv_file');
@@ -590,7 +554,7 @@ class SettingsController extends Controller
 		$data->name = $request->name;
 		$data->save();
 	}
-	
+
 	public function enquiry_configuration(Request $request)
 	{
 		

@@ -557,21 +557,20 @@
                                                 id="filter_from_price" type="text" autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-3 mb-3">
-                                        {{-- <label>&nbsp;</label> --}}
+                                    {{-- <div class="form-group col-md-3 mb-3">
                                         <div>
                                             <label for="To Price">To Price</label>
                                             <input class="form-control indian_currency_amount" name="filter_to_price"
                                                 id="filter_to_price" type="text" autocomplete="off">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group col-md-3 m-b-20">
                                         <label for="From Area">From Area</label>
                                         <input class="form-control" name="filter_from_area" id="filter_from_area"
                                             type="text" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-3 m-b-20">
-                                        <label for="To Area">Locality</label>
+                                        <label for="To Area">To Area</label>
                                         <input class="form-control" name="filter_to_area" id="filter_to_area"
                                             type="text" autocomplete="off">
                                     </div>
@@ -812,7 +811,7 @@
 
             });
 
-            //Start Shared Partner Property
+            //Start Shared Partner Property #B
             function shareUserModal(clickedElement) {
                 $('#users_list').val("");
                 $('#sharedModelId').modal('show');
@@ -820,7 +819,7 @@
                 const dataId = $(clickedElement).data("id");
                 $('#shareData').data('data-id', dataId);
             }
-            // Get record Users
+            // Get record Shared Property Users #B
             $(document).ready(function() {
                 try {
                     axios.get("{{ route('admin.partnerUsers') }}")
@@ -840,7 +839,7 @@
                     console.log("err", error)
                 }
             });
-            // Add User Partner
+            // Add User Partner #B
             $('#shareData').on('click', function() {
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 const selectedUserId = $('#users_list').val();
@@ -872,7 +871,7 @@
                     });
                 });
             });
-            //End Shared Partner Property
+            //End Shared Partner Property #B
 
             // category to sub category on change filter
             $('#filter_specific_type').on('change', function() {

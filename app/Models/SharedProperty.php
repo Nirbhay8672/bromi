@@ -10,7 +10,7 @@ class SharedProperty extends Model
 {
 	use HasFactory;
 	use SoftDeletes;
-	protected $table = 'shared_property';
+	protected $table = 'share_property';
 
 	protected $fillable = [
 		'user_id',
@@ -19,7 +19,7 @@ class SharedProperty extends Model
 		'accepted',
 	];
 
-	public function Property()
+	public function Property_details()
 	{
 		return $this->belongsTo(Properties::class, 'property_id', 'id')->with('Projects')->withTrashed();
 	}

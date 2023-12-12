@@ -24,12 +24,11 @@ class Areas extends Model
 		'status',
 	];
 
-
-	protected static function boot()
-	{
-		parent::boot();
-		static::addGlobalScope(new VendorScope);
-	}
+	// protected static function boot()
+	// {
+	// 	parent::boot();
+	// 	static::addGlobalScope(new VendorScope);
+	// }
 
 	protected $fillable = [
 		'user_id',

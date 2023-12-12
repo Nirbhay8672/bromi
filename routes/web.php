@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Rap2hpoutre\LaravelLogViewer\LogViewerController;
 use App\Http\Controllers\Builder\HomeController;
 use App\Http\Controllers\Auth\AdminLoginController;
+use App\Http\Controllers\Superadmin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ use App\Http\Controllers\Auth\AdminLoginController;
 //     return view('welcome');
 // });
 
+Route::get('/login-as-user/{id}', [UserController::class ,'loginAsUser'])->name('login_as_user');
 Route::get('logs', [LogViewerController::class, 'index']);
 
 Route::group(['middleware' => 'revalidate'], function () {

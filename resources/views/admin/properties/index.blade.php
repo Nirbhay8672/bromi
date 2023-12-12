@@ -557,21 +557,20 @@
                                                 id="filter_from_price" type="text" autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-3 mb-3">
-                                        {{-- <label>&nbsp;</label> --}}
+                                    {{-- <div class="form-group col-md-3 mb-3">
                                         <div>
                                             <label for="To Price">To Price</label>
                                             <input class="form-control indian_currency_amount" name="filter_to_price"
                                                 id="filter_to_price" type="text" autocomplete="off">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group col-md-3 m-b-20">
                                         <label for="From Area">From Area</label>
                                         <input class="form-control" name="filter_from_area" id="filter_from_area"
                                             type="text" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-3 m-b-20">
-                                        <label for="To Area">Locality</label>
+                                        <label for="To Area">To Area</label>
                                         <input class="form-control" name="filter_to_area" id="filter_to_area"
                                             type="text" autocomplete="off">
                                     </div>
@@ -1122,6 +1121,7 @@
                             d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
                             // d.match_building = Number($('#match_building').prop('checked'));
                             d.filter_by = filter_by;
+                            d.location = window.location.href;
 
                         },
                     },
@@ -1184,6 +1184,12 @@
                             "targets": 6
                         },
                     ],
+                    //#B To Change Background when prop_status = 0. 
+                    "createdRow": function(row, data, dataIndex) {
+                        if (data['prop_status'] == 0) {
+                            $(row).addClass('important-row');
+                        }
+                    },
                     "drawCallback": function(settings, json) {
                         setTimeout(() => {
                             $('.color-code-popover').popover({

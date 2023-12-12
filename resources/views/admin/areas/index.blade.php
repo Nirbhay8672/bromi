@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-    <div class="page-body">
+    <div class="page-body" x-data="area_form">
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
@@ -150,28 +150,43 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
-							<div class="form-row">
-							<div class="form-group col-md-5 d-inline-block m-b-20">
-								<select id="import_state_id">
-									<option value=""> State</option>
-									@foreach ($states as $state)
-									    @if($state['user_id'] == 6)
-										    <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
-										@endif
-									@endforeach
-								</select>
+                            <div class="row g-3 mt-2 mb-4">
+                                <div class="col">
+                                    <select id="import_state_id">
+                                        <option value=""> State</option>
+                                        @foreach ($states as $state)
+                                            @if($state['user_id'] == 6)
+                                                <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger" id="state_error"></span>
                                 </div>
-
-							<div class="form-group col-md-5 d-inline-block m-b-20">
-								<select id="import_city_id">
-									<option value=""> City</option>
-									@foreach ($supercities as $city)
-										<option value="{{ $city['id'] }}">{{ $city['name'] }}</option>
-									@endforeach
-								</select>
+                                <div class="col">
+                                    <select id="import_city_id">
+                                        <option value="">-- Select City --</option>
+                                    </select>
+                                    <span class="text-danger" id="city_error"></span>
+                                </div>
                             </div>
-							</div>
-                            <button class="btn btn-secondary" type="button" id="importArea">Import</button>
+                            <template x-if="area_array.length > 0">
+                                <div class="row p-2">
+                                    <div class="row mb-3">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-6 m-b-10">
+                                            <input class="project_amenity form-check-input filled" id="check_all" x-model="check_all" type="checkbox" value="" @click="selectCheckbox($event)">
+                                            <label class="form-check-label" for="check_all">Select All Area</label>
+                                        </div>
+                                        <span class="text-danger" id="area_error"></span>
+                                    </div>
+                                    <template x-for="(area, index) in area_array">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-10">
+                                            <input class="project_amenity form-check-input filled" :id="`area_${area.id}`" type="checkbox" :value="area.id" x-model="selected_area">
+                                            <label class="form-check-label" :for="`area_${area.id}`" x-text="area.name"></label>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                            <button class="btn btn-secondary" type="button" @click="importArea">Import</button>
                             <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
                     </div>
@@ -185,6 +200,96 @@
         @endphp
     @endsection
     @push('scripts')
+
+        <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+        <script type="text/javascript">
+
+            document.addEventListener('alpine:init', () => {
+    
+                Alpine.data('area_form', () => ({
+
+                    init() {
+                        let _this = this;
+                        $('#import_city_id').on('change', function() {
+                            _this.setArea();
+                        });
+                    },
+
+                    area_array : [],
+                    selected_area : [],
+                    check_all : false,
+
+                    selectCheckbox(event) {
+                        _this = this;
+                        if(event.target.checked) {
+                            _this.area_array.forEach((city) => {
+                                _this.selected_area.push(city.id);   
+                            });
+                        } else {
+                            _this.selected_area = [];
+                        }
+                    },
+
+                    setArea() {
+                        let _this = this;
+                        if($('#import_city_id').val() != '') {
+                            _this.selected_area = [];
+                            let url = "{{ route('admin.settings.getAreaForImport') }}";
+                            axios.post(url , { 'city_id' : $('#import_city_id').val()}).then((response) => {
+                                _this.area_array = response.data.data.area_data;
+                            });
+                        } else {
+                            _this.area_array = [];
+                        }
+                    },
+
+                    importArea() {
+                        let _this = this;
+                        document.getElementById('city_error').innerHTML = '';
+                        document.getElementById('state_error').innerHTML = '';
+
+                        let city_id = $('#import_city_id').val();
+                        let state_id = $('#import_state_id').val();
+
+                        if(city_id == '' || this.selected_area.length == 0 || state_id == '') {
+                            if(city_id == '') {
+                                document.getElementById('city_error').innerHTML = 'City field is required.';
+                            }
+                            if(state_id == '') {
+                                document.getElementById('state_error').innerHTML = 'State field is required.';
+                            }
+
+                            if(this.selected_area.length == 0) {
+                                let area_error =  document.getElementById('area_error');
+
+                                if(area_error) {
+                                    area_error.innerHTML = 'Please select at least one area.';
+                                }
+                            }
+
+                            return;
+                        }
+
+                        let url = "{{ route('admin.importarea') }}";
+                    
+                        axios.post(url, {
+                            'area_array' : _this.selected_area,
+                            'city_id' : city_id,
+                            'state_id' : state_id,
+                        })
+                        .then((res) => {
+                            $('#areaTable').DataTable().draw();
+                            $('#importmodal').modal('hide');
+                            $('#import_form')[0].reset();
+                        });
+                    }
+                }));
+            });
+
+        </script>
+
         <script>
             var shouldchangecity = 1;
 
@@ -215,6 +320,7 @@
                     $('#import_city_id').select2('destroy');
                     supercitiess = JSON.parse(supercities);
                     $('#import_city_id').html('');
+                    $('#import_city_id').append('<option value="">-- Select City --</option>');
                     for (let i = 0; i < supercitiess.length; i++) {
                         if (supercitiess[i]['state_id'] == $("#import_state_id").val()) {
                             $('#import_city_id').append('<option value="' + supercitiess[i]['id'] + '">' + supercitiess[i][
@@ -417,24 +523,5 @@
                     }
                 });
             })
-			$(document).on('click', '#importArea', function(e) {
-                e.preventDefault();
-				$.ajax({
-                    type: "POST",
-                    url: "{{ route('admin.importarea') }}",
-                    data: {
-                        city_id: $('#import_city_id').val(),
-                        state_id: $('#import_state_id').val(),
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        $('#areaTable').DataTable().draw();
-                        $('#importmodal').modal('hide');
-						$('#import_form')[0].reset();
-                    }
-                });
-			})
-
-
         </script>
     @endpush

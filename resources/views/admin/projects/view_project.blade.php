@@ -769,6 +769,24 @@
                                                 </table>
                                             </div>
                                         </div>
+                                        <div class="row mt-3">
+                                            <div class="form-group col-md-12">
+                                                <h5 class="border-style mb-1">Documents</h5>
+                                            </div>
+                                            <div class="row gy-2">
+                                                <div class="col mt-2">
+                                                    File : <span class="text-primary cursor-pointer" onclick="openDocument('{{ $project->document_image }}')">{{ $project->document_image }}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            @foreach($project->other_documents as $other_doc)
+                                                <div class="row gy-2">
+                                                    <div class="col mt-2">
+                                                        File : <span class="text-primary cursor-pointer" onclick="openDocument('{{ $other_doc['file'] }}')">{{ $other_doc['file'] }}</span>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
 
                                     <div id="office_and_retail" class="mt-4">
@@ -1026,6 +1044,15 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <script type="text/javascript">
+
+        function openDocument(file_name) {
+            let filename = file_name;
+            let url = '{{ route("admin.project.document", ["filename" => ":filename"]) }}';
+            url = url.replace(':filename', filename);
+
+            // Open the document in a new window
+            window.open(url, '_blank');
+        }
 
         document.addEventListener('alpine:init', () => {
 

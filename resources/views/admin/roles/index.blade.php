@@ -59,7 +59,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <h5 class="border-style">Dashboard</h5>
+                                <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/dashboard.png" style="width: 20px;" alt=""> Dashboard</h5>
                                 </div>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-5 m-b-20">
                                     <input class="form-check-input permission_checkbox" id="permission_id_1"
@@ -68,7 +68,7 @@
                                     <label class="form-check-label" for="permission_id_1">View Dashboard</label>
                                 </div>
 
-                                <h5 class="border-style">Area</h5>
+                                <h5 class="border-style"><i class="fa fa-map-o fs-6"></i> Locality</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_1"
                                         type="checkbox" data-bs-original-title="" title="">
@@ -78,28 +78,28 @@
                                     <input class="form-check-input permission_checkbox select_all_1" id="permission_id_2"
                                         name="permission[]" data-id="2" type="checkbox" data-bs-original-title=""
                                         title="">
-                                    <label class="form-check-label" for="permission_id_2">Area List</label>
+                                    <label class="form-check-label" for="permission_id_2">Locality List</label>
                                 </div>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all_1" id="permission_id_3"
                                         name="permission[]" data-id="3" type="checkbox" data-bs-original-title=""
                                         title="">
-                                    <label class="form-check-label" for="permission_id_3">Area Create</label>
+                                    <label class="form-check-label" for="permission_id_3">Locality Create</label>
                                 </div>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all_1" id="permission_id_4"
                                         name="permission[]" data-id="4" type="checkbox" data-bs-original-title=""
                                         title="">
-                                    <label class="form-check-label" for="permission_id_4">Area Edit</label>
+                                    <label class="form-check-label" for="permission_id_4">Locality Edit</label>
                                 </div>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all_1" id="permission_id_5"
                                         name="permission[]" data-id="5" type="checkbox" data-bs-original-title=""
                                         title="">
-                                    <label class="form-check-label" for="permission_id_5">Area Delete</label>
+                                    <label class="form-check-label" for="permission_id_5">Locality Delete</label>
                                 </div>
 
-                                <h5 class="border-style">Property</h5>
+                                <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/property.png" style="width: 20px;" alt=""> Property</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_2"
                                         type="checkbox" data-bs-original-title="" title="">
@@ -187,7 +187,7 @@
 									</div>
 								</div>
 
-                                <h5 class="border-style">Enquiry</h5>
+                                <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/enquiry.png" style="width: 20px;" alt=""> Enquiry</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_4"
                                         type="checkbox" data-bs-original-title="" title="">
@@ -224,13 +224,24 @@
                                     <label class="form-check-label" for="permission_id_21">Delete Enquiry Progress</label>
                                 </div>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    <input class="form-check-input permission_checkbox select_all_4" id="permission_id_76"
+                                        name="permission[]" data-id="76" type="checkbox" data-bs-original-title=""
+                                        title="">
+                                    <label class="form-check-label" for="permission_id_76">Only Assigned</label>
+                                </div>
+                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    <input class="form-check-input permission_checkbox select_all_4" id="permission_id_77"
+                                        name="permission[]" data-id="77" type="checkbox" data-bs-original-title=""
+                                        title="">
+                                    <label class="form-check-label" for="permission_id_77">Export Enquiry</label>
+                                </div>
+                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all_4" id="permission_id_22"
                                         name="permission[]" data-id="22" type="checkbox" data-bs-original-title=""
                                         title="">
                                     <label class="form-check-label" for="permission_id_22">Bulk Enquiry Transfer</label>
                                 </div>
-
-                                <h5 class="border-style">Projects</h5>
+                                <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/project.png" style="width: 20px;" alt=""> Projects</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_5"
                                         type="checkbox" data-bs-original-title="" title="">
@@ -286,7 +297,7 @@
                                     <label class="form-check-label" for="permission_id_30">Unit Delete</label>
                                 </div>
 
-                                <h5 class="border-style">User</h5>
+                                <h5 class="border-style"><i class="fa fa-users"></i> User</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_6"
                                         type="checkbox" data-bs-original-title="" title="">
@@ -317,7 +328,7 @@
                                     <label class="form-check-label" for="permission_id_34">User Delete</label>
                                 </div>
 
-                                <h5 class="border-style">Land Property</h5>
+                                <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/property.png" style="width: 20px;" alt=""> Land Property</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_7"
                                         type="checkbox" data-bs-original-title="" title="">
@@ -366,7 +377,7 @@
                                     <label class="form-check-label" for="permission_id_41">Import Land Property</label>
                                 </div>
 
-                                <h5 class="border-style">Industrial Property</h5>
+                                <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/property.png" style="width: 20px;" alt=""> Industrial Property</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_8"
                                         type="checkbox" data-bs-original-title="" title="">
@@ -478,7 +489,7 @@
                                     <label class="form-check-label" for="permission_id_56">Mask Phone No</label>
                                 </div>  --}}
 
-                                <h5 class="border-style">Reports</h5>
+                                <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/report.png" style="width: 20px;" alt=""> Reports</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_10"
                                         type="checkbox" data-bs-original-title="" title="">
@@ -529,7 +540,7 @@
                                         data-bs-original-title="" title="">
                                     <label class="form-check-label" for="permission_id_63">Report Property Viewer</label>
                                 </div>
-                                <h5 class="border-style">Settings</h5>
+                                <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/settings.png" style="width: 20px;" alt=""> Settings</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_11"
                                         type="checkbox" data-bs-original-title="" title="">
@@ -580,7 +591,7 @@
                                     <label class="form-check-label" for="permission_id_71">Settings Enquiry
                                         Configuration</label>
                                 </div>
-                                <h5 class="border-style">Roles</h5>
+                                <h5 class="border-style"><i class="fa fa-unlock-alt fs-5"></i> Roles</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_12"
                                         type="checkbox" data-bs-original-title="" title="">

@@ -71,7 +71,8 @@
                                                         <div class="form-group col-md-4 m-b-20">
                                                             <label for="Email">Email</label>
                                                             <input class="form-control" name="client_email"
-                                                                id="client_email" type="email" autocomplete="off">
+                                                                id="client_email" type="email" autocomplete="off"
+                                                                required>
                                                         </div>
                                                         <div class="col-md-1 m-b-20 ps-0">
                                                             <div class="form-check checkbox checkbox-solid-success mb-0">
@@ -104,7 +105,6 @@
                                                                 <label><b>Customer Requirement</b></label>
                                                             </div>
                                                             <input type="hidden" name="this_data_id" id="this_data_id">
-
                                                             <div class="btn-group me-2" role="group"
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Rent" class="btn-check"
@@ -132,23 +132,38 @@
                                                         </div>
 
                                                     </div>
-                                                   <div class="row">
+                                                    <div class="row">
                                                         <div class="form-group col-md-12 m-b-20">
                                                             <div>
                                                                 <label><b>Requirement Type</b></label>
                                                             </div>
 
-
                                                             <div class="m-checkbox-inline custom-radio-ml">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                                                                            <input type="radio" data-parent_id="" class="btn-check" value="85" data-val="Commercial" name="property_type" id="propertytype-85" autocomplete="off" data-bs-original-title="" title="">
-                                                                            <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="propertytype-85">Commercial</label>
-                                                                        </div>
-                                                                                                                                                                                                                                                                                <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                                                                            <input type="radio" data-parent_id="" class="btn-check" value="87" data-val="Residential" name="property_type" id="propertytype-87" autocomplete="off" data-bs-original-title="" title="">
-                                                                            <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="propertytype-87">Residential</label>
-                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                <div class="btn-group bromi-checkbox-btn me-1"
+                                                                    role="group"
+                                                                    aria-label="Basic radio toggle button group">
+                                                                    <input type="radio" data-parent_id=""
+                                                                        class="btn-check" value="85"
+                                                                        data-val="Commercial" name="property_type"
+                                                                        id="propertytype-85" autocomplete="off"
+                                                                        data-bs-original-title="" title="">
+                                                                    <label
+                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                        for="propertytype-85">Commercial</label>
+                                                                </div>
+                                                                <div class="btn-group bromi-checkbox-btn me-1"
+                                                                    role="group"
+                                                                    aria-label="Basic radio toggle button group">
+                                                                    <input type="radio" data-parent_id=""
+                                                                        class="btn-check" value="87"
+                                                                        data-val="Residential" name="property_type"
+                                                                        id="propertytype-87" autocomplete="off"
+                                                                        data-bs-original-title="" title="">
+                                                                    <label
+                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                        for="propertytype-87">Residential</label>
+                                                                </div>
+                                                            </div>
 
                                                         </div>
                                                     </div>
@@ -172,8 +187,8 @@
                                                             <div class="m-checkbox-inline custom-radio-ml">
                                                                 @forelse ($configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_specific_type')
-                                                                        <div class="btn-group bromi-checkbox-btn me-1"
-                                                                            role="group"
+                                                                        <div class="btn-group bromi-checkbox-btn me-1 enquiry-type-element"
+                                                                            role="group"  data-enquiry-id="{{ $props['id'] }}"
                                                                             aria-label="Basic radio toggle button group">
                                                                             <input type="radio"
                                                                                 data-parent_id="{{ $props['parent_id'] }}"
@@ -416,7 +431,7 @@
                                                         </div>
                                                     </div>
 
-													{{-- 1bed 2bed --}}
+                                                    {{-- 1bed 2bed --}}
                                                     {{-- <div class="row mb-3 div_vila_type" id="vila_type">
                                                         <div class="col-md-12 mb-3">
                                                             <div>
@@ -621,7 +636,7 @@
                                                                         value="12" id="plotkind3"
                                                                         data-val="industrial" name="plot_type[]"
                                                                         data-error="#plot_type_error"
-                                                                        autocomplete="off"<?php
+                                                                        autocomplete="off"
                                                                         // echo !empty($edit_category) && !empty($edit_configuration) && $edit_category == '262' && in_array('12', $edit_configuration) ? 'checked' : '';
                                                                         ?>>
                                                                     <label
@@ -943,7 +958,7 @@
                                                         <div>
                                                             <label><b>Enquiry Allocation</b></label>
                                                         </div>
-                                                        <div class="form-group col-md-4 m-b-4 mb-3">
+                                                        {{-- <div class="form-group col-md-4 m-b-4 mb-3">
                                                             <select class="form-select" id="enquiry_city_id">
                                                                 <option value="">Select City</option>
                                                                 @foreach ($cities as $city)
@@ -951,7 +966,7 @@
                                                                         {{ $city->name }}</option>
                                                                 @endforeach
                                                             </select>
-                                                        </div>
+                                                        </div> --}}
 
                                                         <div class="form-group col-md-4 m-b-4 mb-3">
                                                             <select class="form-select" id="enquiry_branch_id">
@@ -993,34 +1008,33 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
         <script>
+            //Default Selected display on add Enquiry City- locality
+            let id = '{{ isset($current_id) ? $current_id : 'null' }}';
+            if (id === 'null') {
+                function updateStateSelect() {
+                    let auth = '{{ Auth::user() }}';
+                    // let authStateId = '{{ Auth::user()->state_id }}';
+                    let authCityId = '{{ Auth::user()->city_id }}';
+                    console.log("==> authCityId", authCityId);
 
-			//Default Selected display on add Enquiry City- locality
-			let id = '{{ isset($current_id) ? $current_id : 'null' }}';
-                if (id === 'null') {
-					function updateStateSelect() {
-						let auth = '{{ Auth::user() }}';
-                        // let authStateId = '{{ Auth::user()->state_id }}';
-                        let authCityId = '{{ Auth::user()->city_id }}';
-						console.log("==> authCityId",authCityId);
+                    // $('#state_id').val(authStateId).trigger('change');
+                    $('#enquiry_city_id').val(authCityId).trigger('change');
 
-                        // $('#state_id').val(authStateId).trigger('change');
-                        $('#enquiry_city_id').val(authCityId).trigger('change');
-
-                        // $('#area_ids').html('');
-                        // for (let i = 0; i < areass.length; i++) {
-                        //     if (areass[i]['city_id'] == $("#state-dropdown").val()) {
-                        //         $('#area_id').append(`<option value="${areass[i]['id']}"
-                        //     data-pincode="${areass[i]['pincode']}"
-                        //     data-city_id="${areass[i]['city_id']}"
-                        //     data-state_id="${areass[i]['state_id']}">
-                        //     ${areass[i]['name']}
-                        // 	</option>`);
-                        //     }
-                        // }
-                        // $('#area_ids').select2();
-                    }
-                    updateStateSelect();
-				}
+                    // $('#area_ids').html('');
+                    // for (let i = 0; i < areass.length; i++) {
+                    //     if (areass[i]['city_id'] == $("#state-dropdown").val()) {
+                    //         $('#area_id').append(`<option value="${areass[i]['id']}"
+            //     data-pincode="${areass[i]['pincode']}"
+            //     data-city_id="${areass[i]['city_id']}"
+            //     data-state_id="${areass[i]['state_id']}">
+            //     ${areass[i]['name']}
+            // 	</option>`);
+                    //     }
+                    // }
+                    // $('#area_ids').select2();
+                }
+                updateStateSelect();
+            }
 
             var search_enq = '';
             var queryString = window.location.search;
@@ -1049,7 +1063,7 @@
 
             function showReleventCategory() {
                 var parent_val = $('input[name=property_type]:checked').val();
-                //console.log(parent_val);
+                console.log("Parent Val ==", parent_val);
                 $("[name='property_category']").each(function(i, e) {
                     if ($(this).attr('data-Parent_id') == parent_val) {
                         $(this).parent().show();
@@ -1087,10 +1101,11 @@
                 } else if (category_type == 'Retail') {
                     $('.div_retail_type').show()
                 } else if (category_type == 'Storage/industrial') {
+                    $(".f-status").hide();
                     $('.div_storage_type').show()
                 } else if (category_type == 'Plot/Land') {
                     $('.div_plot_type').show()
-					$(".f-status").hide();
+                    $(".f-status").hide();
                 } else if (category_type == 'Farmhouse') {
                     $('.div_farm_house').show()
                 } else if (category_type == 'Land/Plot') {
@@ -1852,7 +1867,7 @@
                     // '    <option value="Contactable">Contactable</option>' +
                     // '     <option value="Not Contactable">Not Contactable</option>' +
                     // '  </select>'
-					// ' </div>' +
+                    // ' </div>' +
                     '<div data-contact_id= ' + id +
                     ' class="form-check custom-checkbox   checkbox-solid-success mb-0 col-md-1 m-b-20">' +
                     ' <input class="form-check-input" name="contact_nri" type="checkbox">' +
@@ -1898,7 +1913,9 @@
                         return true;
                     }
                 }
-            }, 'Budget To Must be greater than budget from');
+            }, 'Budget To greater than Budget From');
+
+
 
             $.validator.addMethod("checkArea", function(value, element) {
                 val2 = $('#area_size_from').val()
@@ -2135,7 +2152,7 @@
 
             function showReleventCategory(params) {
                 var parent_val = $('input[name=property_type]:checked').val();
-                //console.log(parent_val);
+                console.log("Sub ==", parent_val);
                 $("[name='property_category']").each(function(i, e) {
                     if ($(this).attr('data-Parent_id') == parent_val) {
                         $(this).parent().show();
@@ -2143,6 +2160,15 @@
                         $(this).parent().hide();
                     }
                 });
+
+                //Hide Plot/land while click on rent or both 
+                var theFor = $('input[name=enquiry_for]:checked').val();
+                console.log("The Forr Enq ==",theFor);
+                if (theFor == 'Buy' && parent_val == '87') {
+                    $('.enquiry-type-element[data-enquiry-id="256"]').show();
+                } else {
+                    $('.enquiry-type-element[data-enquiry-id="256"]').hide();
+                }
             }
             $(document).on('click', '.previousBtn1', function() {
                 $("#customer-requirement").hide();
@@ -2174,15 +2200,15 @@
                 }
 
                 if (attr_name == "plotkind1") {
-					$(".f-status").hide();
+                    $(".f-status").hide();
                     $(".cat-project").hide();
                     $(".cat-project-status").hide();
                 }
 
-				if (attr_name == "storagekind4") {
-					$(".f-status").hide();
+                if (attr_name == "storagekind4") {
+                    $(".f-status").hide();
                 }
-				//
+                //
             });
         </script>
     @endpush

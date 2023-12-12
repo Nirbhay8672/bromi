@@ -64,6 +64,7 @@ class Projects extends Model
 		'document_category',
 		'document_image',
 		'catlog_file',
+		'other_documents',
 		
 		'is_indirectly_store',
 		'remark',

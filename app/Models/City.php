@@ -13,7 +13,7 @@ use Spatie\Activitylog\Models\Activity;
 class City extends Model
 {
 	use HasFactory;
-use SoftDeletes;
+	use SoftDeletes;
 	use LogsActivity;
 
 	protected static $recordEvents = ['created','updated','deleted'];
@@ -27,11 +27,11 @@ use SoftDeletes;
 		'state_id',
 	];
 
-	protected static function boot()
-	{
-		parent::boot();
-		static::addGlobalScope(new VendorScope);
-	}
+	// protected static function boot()
+	// {
+	// 	parent::boot();
+	// 	static::addGlobalScope(new VendorScope);
+	// }
 
 	public function State()
 	{

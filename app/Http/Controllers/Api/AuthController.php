@@ -27,7 +27,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            // Validate the request data
+              // Validate the request data
             $validator = Validator::make($request->all(), [
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
@@ -75,29 +75,52 @@ class AuthController extends Controller
             //     'token' => $verifitoken,
             //     'user_id' => $user->id,
             // ]);
-            Mail::raw("Dear User,\n\nYour verification token is: $verifitoken\n\nPlease use this token for verification purposes.", function ($message) use ($user) {
-                $message->from('rjnbutani@gmail.com')
-                ->to($user->email)
+            // Mail::raw("Dear User,\n\nYour verification token is: $verifitoken\n\nPlease use this token for verification purposes.", function ($message) use ($user) {
+            //     $message->from('rjnbutani@gmail.com')
+            //     ->to($user->email)
+            //             ->subject('Verification Token');
+            // });         
+            //sending mail for token
+            config(['mail.driver' => 'smtp']);
+            config(['mail.from_name' => 'Bromi']);
+            config(['mail.host' => 'smtp.gmail.com']);
+            config(['mail.port' => 587]);
+            config(['mail.username' => 'hathaliyank@gmail.com']);
+            config(['mail.password' => 'jzmk iqib mstp njln']);
+            config(['mail.encryption' => 'tls']);
+
+            
+
+       
+            Mail::raw("Dear User,\n\nYour verification token is: $verifitoken\n\nPlease use this token for verification purposes.", function ($message) use ($request) {
+                $message
+                ->to($request->email)
                         ->subject('Verification Token');
             });
     
-            return response()->json([
-                "status" => 200,
-                "message" =>"Registration successful. Please verify your email.",
-                "data" => $user
-            ]);
-
+                   
+                       
+                        return response()->json(["status"=> 200,
+                        "message"=>"Registration successful. Please verify your email.",
+                        "data"=> $user]);
+                    // return response()
+                    //     ->json(['data' => $user,'access_token' => $token, 'token_type' => 'Bearer', ]);
         } catch (\exception $e) {
+            // dd($e);
             return response()->json([
-                'status' => 500,
-                'message' => 'Something went wrong',
-                'error' => $e->getMessage(),
-                'data' => null,
+                'status' => 'error',
+                'message' => 'An error occurred',
+                'data' => $e,
             ], 500);
+            //throw $th;
         }
+        
+
+        
     }
 
-    public function verifyToken(Request $request)
+
+     public function verifyToken(Request $request)
     {
         $request->validate([
             'id' => 'required',
@@ -116,6 +139,44 @@ class AuthController extends Controller
         return response()->json(['message' => 'User successfully verified.'], 200);
     }
 
+    public function login1(Request $request)
+    {
+
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['message' => 'Invalid Login credential'], 401);
+        } else {
+            $user = User::where('email', $request['email'])->firstOrFail();
+    
+            if (!empty($user->is_verified)) {
+                $token = $user->createToken('auth_token')->plainTextToken;
+                $data = [
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                    'mobile_number' => $user->mobile_number,
+                    'company_name' => $user->company_name,
+                    'company_logo' => $user->company_logo,
+                    'role_id' => $user->role_id,
+                    'state_id' => (int) $user->state_id,
+                    'city_id' => (int) $user->city_id,
+                    'verification_token' => (int) $user->verification_token,
+                    'id' => $user->id,
+                    'token' => $token,
+                    'token_type' => 'Bearer',
+                ];
+    
+                // Set the session value
+                Session::put('parent_id', $user->parent_id);
+    
+                return response()->json([
+                    'status' => 200,
+                    'data' => $data,
+                ]);
+            } else {
+                return response()->json(['error' => 'Your email is not verified.'], 403);
+            }
+        }
+    }
     public function login(Request $request)
     {
         try {
@@ -174,9 +235,7 @@ class AuthController extends Controller
                 'error' => $th->getMessage(),
                 'data' => null,
             ], 500);
-        }
-    }
-    
+}}
     public function chnageProfile(Request $request){
 		$params = $request->all();
 		$user_id =  Auth::user()->id;

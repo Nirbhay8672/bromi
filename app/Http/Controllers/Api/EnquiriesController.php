@@ -40,9 +40,6 @@ class EnquiriesController extends Controller
 	{
 		$this->middleware('auth');
 	}
-
-	
-
 	public function index(Request $request)
 	{
 		$perPage = $request->input('per_page', 10);
@@ -423,7 +420,7 @@ class EnquiriesController extends Controller
 		];
 		return $response;
 	}
-
+	
 	public function saveContacts(Request $request)
 	{
 		$id=$request->input('154');
@@ -461,7 +458,7 @@ class EnquiriesController extends Controller
 			// dd($list);
 			$response = [
 				'code'=>'200',
-				'message' => 'Contact Enquiry Added Successfully.',
+				'message' => 'Contact Enquiry list Successfully.',
 				'data' => $list,
 			];
 			return $response;

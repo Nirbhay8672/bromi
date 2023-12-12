@@ -186,7 +186,7 @@ class FormsController extends Controller
         
     }
 
-    public function getformdata(Request $request)
+     public function getformdata(Request $request)
     {
         $getForm = Form::where('form_name', $request->input('form_name'))->first();
         

@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\TalukaController;
 use App\Http\Controllers\Admin\VillageController;
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\ShareController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -65,7 +66,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 
 	// });
 	Route::get('logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
-	Route::group(['middleware' => ['auth', 'admin']], function () {
+	Route::group(['middleware' => ['auth']], function () {
 		Route::get('/', [HomeController::class, 'index'])->name('admin');
 		
 		Route::any('/districts', [DistrictController::class, 'index'])->name('admin.districts');
@@ -98,6 +99,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/get-property', [PropertyController::class, 'getSpecificProperty'])->name('admin.getProperty');
 		Route::post('/delete-property', [PropertyController::class, 'destroy'])->name('admin.deleteProperty');
 		Route::post('/save-property', [PropertyController::class, 'saveProperty'])->name('admin.saveProperty');
+        Route::get('/download-zip/{type}/{prop}', [PropertyController::class,'downloadZip'])->name('download.zip');
+
 		Route::post('/import-property', [PropertyController::class, 'importProperty'])->name('admin.importproperty');
 		Route::post('/import-IndustrialProperty', [IndustrialPropertyController::class, 'importProperty'])->name('admin.importIndustrialproperty');
 		Route::get('/import-property-template', [PropertyController::class, 'importPropertyTemplate'])->name('admin.importpropertyTemplate');
@@ -105,6 +108,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::get('/import-enquiry-template', [EnquiriesController::class, 'importEnquiryTemplate'])->name('admin.importenquiryTemplate');
 		Route::any('/Enquiries', [EnquiriesController::class, 'index'])->name('admin.enquiries');
 		Route::any('/Enquiries-Calendar', [EnquiriesController::class, 'enquiryCalendar'])->name('admin.enquiries.calendar');
+		Route::delete('/Enquiries-Calendar-delete/{id}', [EnquiriesController::class, 'deleteRecord'])->name('admin.enquiries.calendar.delete');
 		Route::post('/get-enquiry', [EnquiriesController::class, 'getSpecificEnquiry'])->name('admin.getEnquiry');
 		Route::post('/delete-enquiry', [EnquiriesController::class, 'destroy'])->name('admin.deleteEnquiry');
 		Route::post('/save-enquiry', [EnquiriesController::class, 'saveEnquiry'])->name('admin.saveEnquiry');
@@ -115,6 +119,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-projects', [ProjectsController::class, 'destroy'])->name('admin.deleteProject');
 		Route::post('/save-projects', [ProjectsController::class, 'saveProject'])->name('admin.saveProject');
 		Route::any('/project/view/{id}', [ProjectsController::class, 'viewProject'])->name('admin.viewProject');
+		Route::any('/project/view/{id}', [ProjectsController::class, 'viewProject'])->name('admin.viewProject');
+		Route::get('/view-document/{filename}', [ProjectsController::class, 'viewProjectDocument'])->name('admin.project.document');
 
 		Route::post('/import-projects', [ProjectsController::class, 'importProject'])->name('admin.importproject');
 		Route::any('/Users', [UserController::class, 'index'])->name('admin.users');
@@ -211,7 +217,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 
 		Route::post('/unit-save-property', [ProjectUnitController::class, 'storeProperty'])->name('admin.unit.saveproperty');
 		
-			// bharat state city
+		//state city
 		Route::post('/property/state', [PropertyController::class, 'state'])->name('admin.property.state');
         Route::get('/update-property-status', [PropertyController::class, 'updatePropertyStatus'])->name('admin.updatePropertyStatus');
 
@@ -221,13 +227,16 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/change-enquiry-status', [EnquiriesController::class, 'changeEnquiryStatus'])->name('admin.changeEnquiryStatus');
 		Route::get('/get-enquiry-configuration', [EnquiriesController::class, 'getEnquiryConfiguration'])->name('admin.getEnquiryConfiguration');
 
+        //Share Property
+		Route::any('/shared-properties', [ShareController::class, 'sharedPropertyIndex'])->name('admin.shared.properties');
+		Route::any('/shared-requests', [ShareController::class, 'sharedPropertyRequests'])->name('admin.shared.requests');
+		Route::any('/accept-shared-requests', [ShareController::class, 'acceptRequest'])->name('admin.shared.accept');
+		Route::any('/cancel-shared-requests', [ShareController::class, 'cancelRequest'])->name('admin.shared.cancel');
+		Route::get('/request-users', [PartnerController::class, 'userRequest'])->name('admin.userRequest');
+		Route::any('/accept-User-shared-requests', [PartnerController::class, 'acceptUserRequest'])->name('admin.userShared.accept');
 
-		Route::any('/shared-properties', [PropertyController::class, 'sharedPropertyIndex'])->name('admin.shared.properties');
-		Route::any('/shared-requests', [PropertyController::class, 'sharedPropertyRequests'])->name('admin.shared.requests');
-		Route::any('/accept-shared-requests', [PropertyController::class, 'acceptRequest'])->name('admin.shared.accept');
-		Route::any('/cancel-shared-requests', [PropertyController::class, 'cancelRequest'])->name('admin.shared.cancel');
+		
 		Route::post('/get-shared-property', [PropertyController::class, 'getSharedProperty'])->name('admin.get.sharedProperty');
-
 		Route::any('/insta-properties', [InstaPropertiesController::class, 'index'])->name('admin.insta.properties');
 		Route::post('/get-insta-property', [InstaPropertiesController::class, 'getSpecificProperty'])->name('admin.getinstaProperty');
 		Route::post('/delete-insta-property', [InstaPropertiesController::class, 'destroy'])->name('admin.deleteinstaProperty');
@@ -241,6 +250,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/settings-import-builder', [SettingsController::class, 'builder_import'])->name('admin.settings.importbuilder');
 		Route::post('/settings-import-state', [SettingsController::class, 'state_import'])->name('admin.settings.importstate');
 		Route::post('/settings-delete-city', [SettingsController::class, 'cities_destroy'])->name('admin.settings.destroycity');
+		Route::post('/settings-get-city-for-import', [SettingsController::class, 'getCityForImport'])->name('admin.settings.getCityForImport');
+		Route::post('/settings-get-area-for-import', [SettingsController::class, 'getAreaForImport'])->name('admin.settings.getAreaForImport');
 		Route::get('/settings-state', [SettingsController::class, 'states_index'])->name('admin.settings.state');
 		Route::post('/settings-get-state', [SettingsController::class, 'get_state'])->name('admin.settings.getstate');
 		Route::post('/settings-save-state', [SettingsController::class, 'states_store'])->name('admin.settings.savestate');
@@ -254,6 +265,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::get('/settings-enquiry-configuration', [SettingsController::class, 'enquiry_configuration'])->name('admin.settings.enquiry_configuration');
 		Route::post('/save-settings-configuration', [SettingsController::class, 'save_settings_configuration'])->name('admin.settings.save_settings_configuration');
 		Route::post('/save-settings-configuration1', [SettingsController::class, 'save_settings_configuration1'])->name('admin.settings.save_settings_configuration1');
+		Route::post('/save-settings-construction-docs', [SettingsController::class, 'save_const_docs'])->name('admin.settings.save_const_docs');
+        Route::get('/get-settings-construction-docs', [SettingsController::class, 'get_const_docs'])->name('admin.settings.get_const_docs');
 		Route::post('/get-settings-configuration', [SettingsController::class, 'get_settings_configuration'])->name('admin.settings.get_settings_configuration');
 		Route::post('/get-subcategory', [SettingsController::class, 'get_subcategory'])->name('admin.settings.get_subcategory'); 
 		Route::post('/delete-settings-configuration', [SettingsController::class, 'delete_settings_configuration'])->name('admin.settings.delete_settings_configuration');

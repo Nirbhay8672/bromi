@@ -17,6 +17,15 @@
                             <button class="btn btn-primary btn-air-primary open_modal_with_this" type="button" data-bs-toggle="modal" data-bs-target="#stateModal">Add New District</button>
                         </div>
                         <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-3">
+                                    <select name="" id="change_search_link" class="form-control">
+                                        <option value="{{ route('admin.districts') }}">Districts</option>
+                                        <option value="{{ route('admin.talukas') }}">Talukas</option>
+                                        <option value="{{ route('admin.villages') }}">Villages</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="display" id="stateTable">
                                     <thead>
@@ -66,6 +75,13 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+
+            $("#change_search_link").select2();
+                
+            $(document).on('change', '#change_search_link', function(e) {
+                window.location.href = $(this).val();
+            })
+
             $('#stateTable').DataTable({
                 processing: true,
                 serverSide: true,
