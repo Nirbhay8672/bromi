@@ -15,8 +15,11 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Users </h5>
-							<a class="btn btn-primary btn-air-primary"  href="{{route('admin.user.add')}}">Add New User</a>
-                         
+                            @if(intval($total_user) < intval($plan_details->user_limit))
+                                <a class="btn btn-primary btn-air-primary"  href="{{route('admin.user.add')}}">Add New User</a>
+                            @else
+                                <strong class="text-danger">You have exceeded your user limit</strong>
+                            @endif
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

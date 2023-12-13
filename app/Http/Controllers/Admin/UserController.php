@@ -19,6 +19,7 @@ use App\Models\City;
 use App\Models\DropdownSettings;
 use App\Models\Projects;
 use App\Models\State;
+use App\Models\Subplans;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
 use Carbon\Carbon;
@@ -37,7 +38,7 @@ class UserController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = User::where('parent_id', Session::get('parent_id'))->when($request->go_data_id, function ($query) use ($request) {
+			$data = User::where('parent_id', Auth::user()->id)->when($request->go_data_id, function ($query) use ($request) {
 				return $query->where('id', $request->go_data_id);
 			})->when(empty($request->go_data_id), function ($query) use ($request) {
 				return $query->orWhere('id',Session::get('parent_id'));
@@ -97,7 +98,9 @@ class UserController extends Controller
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
 		$roles =  Role::where('user_id', Session::get('parent_id'))->get();
 		$branches = Branches::orderBy('name')->get();
-		return view('admin.users.index', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches'));
+		$plan_details = Subplans::find(Auth::user()->plan_id);
+		$total_user = User::where('parent_id', Auth::user()->id)->count();
+		return view('admin.users.index', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches','plan_details','total_user'));
 	}
 
 	public function saveUser(Request $request)
