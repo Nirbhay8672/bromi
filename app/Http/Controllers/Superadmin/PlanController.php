@@ -44,7 +44,10 @@ class PlanController extends Controller
 		}
 		$data->name = $request->name;
 		$data->price = $request->price;
+<<<<<<< HEAD
 		$data->user_limit = $request->user_limit;
+=======
+>>>>>>> 9e5dc74 (Initial server setup)
 		$data->details = '';
 		if (isset($request->features) && !empty($request->features)) {
 			$data->details = json_encode(implode('_---_',$request->features));

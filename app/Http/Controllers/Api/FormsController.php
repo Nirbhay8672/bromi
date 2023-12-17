@@ -249,7 +249,10 @@ class FormsController extends Controller
             ]);
         }
     }
+<<<<<<< HEAD
     
+=======
+>>>>>>> 9e5dc74 (Initial server setup)
 
     public function getformdataProject(Request $request)
     {
