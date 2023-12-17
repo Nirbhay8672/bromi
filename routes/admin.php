@@ -119,7 +119,10 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-projects', [ProjectsController::class, 'destroy'])->name('admin.deleteProject');
 		Route::post('/save-projects', [ProjectsController::class, 'saveProject'])->name('admin.saveProject');
 		Route::any('/project/view/{id}', [ProjectsController::class, 'viewProject'])->name('admin.viewProject');
+<<<<<<< HEAD
 		Route::any('/project/view/{id}', [ProjectsController::class, 'viewProject'])->name('admin.viewProject');
+=======
+>>>>>>> 9e5dc74 (Initial server setup)
 		Route::get('/view-document/{filename}', [ProjectsController::class, 'viewProjectDocument'])->name('admin.project.document');
 
 		Route::post('/import-projects', [ProjectsController::class, 'importProject'])->name('admin.importproject');

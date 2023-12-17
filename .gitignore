@@ -1,6 +1,9 @@
 /node_modules
 /public/hot
+<<<<<<< HEAD
 /bootstrap
+=======
+>>>>>>> 9e5dc74 (Initial server setup)
 /public/storage
 /public/upload/*
 /storage/*.key
