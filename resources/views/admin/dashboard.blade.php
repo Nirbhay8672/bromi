@@ -15,7 +15,7 @@
                         <div class="input-group justify-content-end">
                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             <select class="form-control" id="choose_date_range" style="width: 150px;">
-                                <option value="">Select Date -</option>
+                                <option value="">Select Date</option>
                                 <option value="last_month" {{ request('date_range') == 'last_month' ? 'selected' : '' }}>
                                     Last Month</option>
                                 <option value="6month" {{ request('date_range') == '6month' ? 'selected' : '' }}>6 Month
