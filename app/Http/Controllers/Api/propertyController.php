@@ -26,12 +26,6 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class propertyController extends Controller
 {
-<<<<<<< HEAD
-
-    public function index(Request $request)
-	{
-				
-=======
    
 
 	
@@ -42,7 +36,6 @@ public function index(Request $request)
 	{
 				
 
->>>>>>> 9e5dc74 (Initial server setup)
 		$perPage = $request->input('per_page', 10);
 		
 		// // Fetch your property data here, or use your existing query
@@ -58,18 +51,6 @@ public function index(Request $request)
 				}
 		
 				$propertyData[] = [
-<<<<<<< HEAD
-          'id' => $value->id,
-          'Project_name' => $project,
-          'locality' => $value->locality,
-          'property_info' =>[
-              //$value->property_for
-          ],// $value->property_info,
-          'price' =>  $value->price,
-          'is_liked' => true,
-				];
-			}
-=======
 					// You should replace these sample data with your actual property data
 					
 						'id' => $value->id,
@@ -85,7 +66,6 @@ public function index(Request $request)
 				];
 			}
 			
->>>>>>> 9e5dc74 (Initial server setup)
 		
 			$response = [
 				'message' => 'Property list has been fetched successfully.',
@@ -94,11 +74,7 @@ public function index(Request $request)
 				'limit' => $perPage, // Set the limit per page here
 				'data' => $propertyData,
 			];
-<<<<<<< HEAD
-		} else {
-=======
 		}else {
->>>>>>> 9e5dc74 (Initial server setup)
 			$response = [
 				'message' => 'This user have no property',
 				'current_page' => 0, // Set the current page number here
@@ -108,13 +84,6 @@ public function index(Request $request)
 			];
 		}
 		
-<<<<<<< HEAD
-		return response()->json($response, 200);
-	}   
-    
-    public function IsFavorites(Request $request)
-	{
-=======
 
 		return response()->json($response, 200);
 	}   
@@ -122,7 +91,6 @@ public function IsFavorites(Request $request)
 	{
 			
 
->>>>>>> 9e5dc74 (Initial server setup)
 		$perPage = $request->input('per_page', 10);
 		
 		// // Fetch your property data here, or use your existing query
@@ -140,18 +108,6 @@ public function IsFavorites(Request $request)
 				$propertyData[] = [
 					// You should replace these sample data with your actual property data
 					
-<<<<<<< HEAD
-                    'id' => $value->id,
-                    'Project_name' => $project,
-                    'locality' => $value->locality,
-                    'property_info' =>[
-                        $value->id
-                    ],// $value->property_info,
-                    'price' =>  $value->price,
-                    'is_liked' => true,
-				];
-			}
-=======
 						'id' => $value->id,
 						'Project_name' => $project,
 						'locality' => $value->locality,
@@ -165,7 +121,6 @@ public function IsFavorites(Request $request)
 				];
 			}
 			
->>>>>>> 9e5dc74 (Initial server setup)
 		
 			$response = [
 				'message' => 'Favorite Property list has been fetched successfully.',
@@ -174,11 +129,7 @@ public function IsFavorites(Request $request)
 				'limit' => $perPage, // Set the limit per page here
 				'data' => $propertyData,
 			];
-<<<<<<< HEAD
-		} else {
-=======
 		}else {
->>>>>>> 9e5dc74 (Initial server setup)
 			$response = [
 				'message' => 'This user have no Favorite Property',
 				'current_page' => 0, // Set the current page number here
@@ -191,20 +142,6 @@ public function IsFavorites(Request $request)
 	
 		return response()->json($response, 200);
 	}
-<<<<<<< HEAD
-    
-	public function show($id)
-    {
-		$show = Properties::find($id);
-		$show->amenities = is_array($show->amenities) ? $show->amenities : json_decode($show->amenities);
-        $show->unit_details = is_array($show->unit_details) ? $show->unit_details : json_decode($show->unit_details);
-		$show->other_industrial_fields = is_array($show->other_industrial_fields) ? $show->other_industrial_fields : json_decode($show->other_industrial_fields);
-		$show->other_contact_details = is_array($show->other_contact_details) ? $show->other_contact_details : json_decode($show->other_contact_details);
-		return response()->json(['status' => '200', 'data' => $show]);
-
-	}
-
-=======
 	public function show($id)
     {
 		$show=Properties::find($id);
@@ -215,7 +152,6 @@ public function IsFavorites(Request $request)
 		return response()->json(['status' => '200', 'data' => $show]);
 
 	}
->>>>>>> 9e5dc74 (Initial server setup)
 	public function destory($id)
     {
 		$show=Properties::destory($id);
