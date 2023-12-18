@@ -15,16 +15,20 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Users </h5>
-<<<<<<< HEAD
                             @if(intval($total_user) < intval($plan_details->user_limit))
                                 <a class="btn btn-primary btn-air-primary"  href="{{route('admin.user.add')}}">Add New User</a>
                             @else
+                                <button
+                                    class="btn btn-primary btn-air-primary"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#planModal"
+                                    data-bs-original-title=""
+                                    title=""
+                                    onclick="reset()"
+                                >Upgrade Plan</button>
                                 <strong class="text-danger">You have exceeded your user limit</strong>
                             @endif
-=======
-							<a class="btn btn-primary btn-air-primary"  href="{{route('admin.user.add')}}">Add New User</a>
-                         
->>>>>>> 9e5dc74 (Initial server setup)
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -49,231 +53,103 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-    <div class="modal fade" id="userModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="planModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    <h5 class="modal-title" id="exampleModalLabel">Upgrade Plan</h5>
+                    <button class="btn-close text-white" onclick="reset" type="button" data-bs-dismiss="modal" aria-label="Close">X</button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
-                        <input type="hidden" name="this_data_id" id="this_data_id">
-                        <div class="row">
-                            <h5 class="border-style">Employee Information</h5>
-                            <div class="form-group col-md-4 m-b-20">
-                                <label for="First Name">First Name</label>
-                                <input class="form-control" name="first_name" id="first_name" type="text"
-                                    autocomplete="off" >
+                    <div class="row mt-3 mb-4">
+                        <div class="m-checkbox-inline custom-radio-ml">
+                            <div class="form-check form-check-inline radio radio-primary">
+                                <input
+                                    class="form-check-input filled"
+                                    id="user_limit"
+                                    type="radio"
+                                    name="plan_type"
+                                    onclick="changeType(1)"
+                                    value="1"
+                                    checked
+                                >
+                                <label class="form-check-label mb-0" for="user_limit">User Limit</label>
                             </div>
-                            <div class="form-group col-md-4 m-b-20">
-                                <label for="Middle Name">Middle Name</label>
-                                <input class="form-control" name="middle_name" id="middle_name" type="text"
-                                    autocomplete="off" >
-                            </div>
-                            <div class="form-group col-md-4 m-b-20">
-                                <label for="Last Name">Last Name</label>
-                                <input class="form-control" name="last_name" id="last_name" type="text"
-                                    autocomplete="off" >
-                            </div>
-							<div class="form-group col-md-2 m-b-4 mb-3">
-								<label for="Birth Date" class="label-center">Birth Date: </label>
-							</div>
-                            <div class="form-group col-md-4 m-b-4 mb-3">
-                                <div class="input-group">
-                                    <input class="form-control " name="birth_date" id="birth_date" type="date"
-                                        data-language="en">
-                                </div>
-                            </div>
-							<div class="form-group col-md-2 m-b-4 mb-3">
-								<label for="Hire Date" class="label-center">Hire Date: </label>
-							</div>
-                            <div class="form-group col-md-4 m-b-4 mb-3">
-                                <div class="input-group">
-                                    <input class="form-control " id="hire_date" name="hire_date" type="date"
-                                        data-language="en">
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3 m-b-20">
-                                <label for="Driving License">Driving License</label>
-                                <input class="form-control" name="driving_license" id="driving_license" type="text"
-                                    autocomplete="off" >
-                            </div>
-                            <div class="form-group col-md-3 m-b-4">
-                                <select class="form-select" id="status">
-                                    <option value="">Status</option>
-                                    <option value="1">Active</option>
-                                    <option value="0">In Active</option>
-                                </select>
-                            </div>
-                            <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                <input class="form-check-input" id="working" type="checkbox">
-                                <label class="form-check-label" for="working">Currently Working</label>
-                            </div>
-
-                            <h5 class="border-style">Employee Address</h5>
-                            <div class="form-group col-md-12 m-b-20">
-                                <label for="Address">Address</label>
-                                <input class="form-control" name="address" id="address" type="text"
-                                    autocomplete="off" >
-                            </div>
-
-							<div class="form-group col-md-4 m-b-4">
-                                <select class="form-select" id="state_id">
-                                    <option value=""> State</option>
-                                    @foreach ($states as $state)
-                                        <option value="{{ $state->id }}">{{ $state->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group col-md-4 m-b-4">
-                                <select class="form-select" id="city_id">
-                                    <option value=""> City</option>
-                                    @foreach ($cities as $city)
-                                        <option value="{{ $city->id }}">{{ $city->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-
-
-                            <div class="form-group col-md-4 m-b-20">
-                                <label for="Pincode">Pincode</label>
-                                <input class="form-control" name="pincode" id="pincode" type="text"
-                                    autocomplete="off" >
-                            </div>
-
-                            <h5 class="border-style">Employee Contact</h5>
-                            <div class="form-group col-md-3 m-b-20">
-                                <label for="Mobile Number">Mobile Number</label>
-                                <input class="form-control" name="mobile_number" id="mobile_number" type="text"
-                                    autocomplete="off" >
-                            </div>
-
-                            <div class="form-group col-md-3 m-b-20">
-                                <label for="Office No">Office No</label>
-                                <input class="form-control" name="office_no" id="office_no" type="text"
-                                    autocomplete="off" >
-                            </div>
-                            <div class="form-group col-md-2 m-b-20">
-                                <label for="Home Phone No">Home Phone No</label>
-                                <input class="form-control" name="home_phone_no" id="home_phone_no" type="text"
-                                    autocomplete="off" >
-                            </div>
-                            <div class="form-group col-md-4 m-b-20">
-                                <label for="Email">Email</label>
-                                <input class="form-control" name="email" id="email" type="text"
-                                    autocomplete="off" >
-                            </div>
-
-
-                            <h5 class="border-style">Employee Position and Branch Access</h5>
-                            <div class="form-group col-md-3 m-b-20">
-                                <select class="form-select" id="position">
-                                    <option value="">Position</option>
-                                    <option value="Branch Manager">Branch Manager</option>
-                                    <option value="Executive">Executive</option>
-                                    <option value="Owner">Owner</option>
-                                    <option value="Team Lead">Team Lead</option>
-                                    <option value="vertical Head">vertical Head</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4 m-b-20">
-								<label class="select2_label" for="Select Branch"> Branch</label>
-                                <select class="form-select" id="branch_id" multiple>
-                                    @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4 m-b-20">
-								<label class="select2_label" for="Reporting to person">Reporting to person</label>
-                                <select class="form-select" id="reporting_to" multiple>
-                                    @foreach ($employees as $employee)
-                                        <option value="{{ $employee->id }}">
-                                            {{ $employee->first_name . ' ' . $employee->last_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <h5 class="border-style">Employee Login Info</h5>
-
-                            <div class="form-group col-md-3 m-b-20">
-                                <label for="Password">Password</label>
-                                <input class="form-control" name="password" id="password" type="text"
-                                    autocomplete="off" >
-                            </div>
-
-                            <div class="form-group col-md-3 m-b-20">
-                                <select class="form-select" id="role_id">
-                                    <option value=""> Role</option>
-                                    @foreach ($roles as $role)
-                                        <option value="{{ explode('_---_', $role->name)[0] }}">
-                                            {{ explode('_---_', $role->name)[0] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-
-                            <h5 class="border-style">Property Access</h5>
-                            <div class="form-group col-md-3 m-b-20 mb-3">
-                                <select class="form-select" id="property_for_id">
-                                    <option value="">Property For</option>
-                                    <option value="Rent">Rent</option>
-                                    <option value="Sell">Sell</option>
-									<option value="Both">Both</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group col-md-3 m-b-20 mb-3">
-								<label class="select2_label" for="Property Type">Property Type</label>
-                                <select class="form-select" id="property_type_id" multiple>
-                                    @forelse ($property_configuration_settings as $props)
-                                        @if ($props['dropdown_for'] == 'property_construction_type')
-                                            <option data-parent_id="{{ $props['parent_id'] }}"
-                                                value="{{ $props['id'] }}">{{ $props['name'] }}
-                                            </option>
-                                            </option>
-                                        @endif
-                                    @empty
-                                    @endforelse
-                                </select>
-                            </div>
-
-                            <div class="form-group col-md-3 m-b-20 mb-3">
-								<label class="select2_label" for="Specific Type">Specific Type</label>
-                                <select class="form-select" id="specific_properties" multiple="multiple">
-                                    @forelse ($property_configuration_settings as $props)
-                                        @if ($props['dropdown_for'] == 'property_specific_type')
-                                            <option data-parent_id="{{ $props['parent_id'] }}"
-                                                value="{{ $props['id'] }}">{{ $props['name'] }}
-                                            </option>
-                                            </option>
-                                        @endif
-                                    @empty
-                                    @endforelse
-                                </select>
-                            </div>
-
-                            <div class="form-group col-md-3 m-b-20 mb-3">
-								<label class="select2_label" for="Building Access">Project Access</label>
-                                <select class="form-select" id="buildings" multiple="multiple">
-                                    @foreach ($projects as $project)
-                                        <option value="{{ $project->id }}">{{ $project->project_name }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="form-check form-check-inline radio radio-primary">
+                                <input
+                                    class="form-check-input filled"
+                                    id="update_plan"
+                                    type="radio"
+                                    name="plan_type"
+                                    onclick="changeType(2)"
+                                    value="2"
+                                >
+                                <label class="form-check-label mb-0" for="update_plan">Update Plan</label>
                             </div>
                         </div>
-
-                        @if (Auth::user()->can('user-edit') || Auth::user()->can('user-create'))
-                            <button class="btn btn-secondary" id="saveUser">Save</button>
-                        @endif
-                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                    </form>
+                    </div>
+                    <div class="row" id="user_limit_element">
+                        <div class="form-group col-md-3 mb-1">
+                            <div class="fname focused">
+                                <label for="State">User Limit</label>
+                                <div class="fvalue">
+                                    <input
+                                        class="form-control"
+                                        name="user_limit"
+                                        id="user_limit"
+                                        type="number"
+                                        autocomplete="off"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-4">
+                                <button class="btn btn-secondary" onclick="updateUserLimit">Save</button>
+                                <button class="btn btn-danger ms-2" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row d-none" id="plans_element">
+                        @foreach ($plans as $plan)
+                        <div class="col-xl-3 col-sm-6 xl-50 box-col-6">
+                            <div class="pricing-block card text-center">
+                                <div class="pricing-header">
+                                    <h4 class="mt-5">{{$plan->name}}</h4>
+                                    <div class="price-box">
+                                        <div>
+                                            <h3>{{$plan->price}}</h3>
+                                            <p>/ month</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pricing-list">
+                                    <ul class="pricing-inner">
+                                        <li>
+                                            <h6>User Limit : {{$plan->user_limit}}</h6>
+                                        </li>
+                                        @if (!empty($plan->details) && !empty(explode('_---_',json_decode($plan->details,true))))
+                                            @foreach (explode('_---_',json_decode($plan->details,true)) as $feature)
+                                                <li>
+                                                    <h6>{{$feature}}</h6>
+                                                </li>
+                                            @endforeach
+                                        @endif
+                                    </ul>
+                                    <form action="{{route('admin.upgradePlan')}}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="plan_id" value="{{$plan->id}}">
+                                        <button class="btn btn-primary btn-lg" type="submit"
+                                        data-original-title="btn btn-primary btn-lg"
+                                        title="">Subscribe</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
@@ -285,6 +161,50 @@
 @endsection
 @push('scripts')
     <script>
+
+        let user_limit_element = document.getElementById('user_limit_element');
+        let plan_element = document.getElementById('plans_element');
+        let radio_button = document.getElementById('user_limit');
+
+        function changeType(type) {
+            if(type == 1) {
+                user_limit_element.classList.remove('d-none');
+                plan_element.classList.add('d-none');
+            } else {
+                user_limit_element.classList.add('d-none');
+                plan_element.classList.remove('d-none');
+            }
+        }
+
+        function reset() {
+            radio_button.checked = true;
+            user_limit_element.classList.remove('d-none');
+            plan_element.classList.add('d-none');
+        }
+
+
+        function updateUserLimit() {
+
+            var user_limit = $('#user_limit').val();
+
+            let valid = true;
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.upgradeUserLimit') }}",
+                data: {
+                        user_limit : $('#user_limit').val(),
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(data) {
+                        $('#userTable').DataTable().draw();
+                        $('#userModal').modal('hide');
+						$('#saveUser').prop('disabled',false);
+                    }
+                });
+            })
+
+        }
 
 		var shouldchangecity = 1;
 
