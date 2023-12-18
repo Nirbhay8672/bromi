@@ -119,10 +119,6 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-projects', [ProjectsController::class, 'destroy'])->name('admin.deleteProject');
 		Route::post('/save-projects', [ProjectsController::class, 'saveProject'])->name('admin.saveProject');
 		Route::any('/project/view/{id}', [ProjectsController::class, 'viewProject'])->name('admin.viewProject');
-<<<<<<< HEAD
-		Route::any('/project/view/{id}', [ProjectsController::class, 'viewProject'])->name('admin.viewProject');
-=======
->>>>>>> 9e5dc74 (Initial server setup)
 		Route::get('/view-document/{filename}', [ProjectsController::class, 'viewProjectDocument'])->name('admin.project.document');
 
 		Route::post('/import-projects', [ProjectsController::class, 'importProject'])->name('admin.importproject');
@@ -149,6 +145,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::any('/Activity-Logs', [HomeController::class, 'getActivityLogs'])->name('admin.logs');
 		Route::any('/Plans', [HomeController::class, 'plan_index'])->name('admin.plans');
 		Route::post('/save-plan-user', [HomeController::class, 'plan_save'])->name('admin.savePlan');
+		Route::post('/upgrade-user-limit', [HomeController::class, 'upgrade_user_limit'])->name('admin.upgradeUserLimit');
+		Route::post('/upgrade-plan-user', [HomeController::class, 'upgrade_plan'])->name('admin.upgradePlan');
 		Route::post('/search', [HomeController::class, 'search'])->name('admin.search');
 		Route::post('/changepassword', [HomeController::class, 'chnagePassword'])->name('chnage-pwd');
 		Route::post('/changeprofile', [HomeController::class, 'chnageProfile'])->name('chnage-profile');
