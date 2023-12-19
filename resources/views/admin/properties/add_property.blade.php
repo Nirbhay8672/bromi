@@ -3394,7 +3394,7 @@
                     '                type="text"  autocomplete="off">' +
                     '        </div>' +
                     '<div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-20">' +
-                    '<label>Survey No</label>' +
+                    '<label>Unit No</label>' +
                     '            <input class="form-control" name="unit_unit_no" ' +
                     '                type="text"  autocomplete="off">' +
                     '        </div>' +

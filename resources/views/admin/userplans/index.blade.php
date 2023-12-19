@@ -23,7 +23,7 @@
 								<div class="col-xl-3 col-sm-6 xl-50 box-col-6">
                                     <div class="pricing-block card text-center">
                                         <div class="pricing-header">
-                                            <h2>{{$plan->name}}</h2>
+                                            <h4 class="mt-5">{{$plan->name}}</h4>
                                             <div class="price-box">
                                                 <div>
                                                     <h3>{{$plan->price}}</h3>
@@ -33,14 +33,16 @@
                                         </div>
                                         <div class="pricing-list">
                                             <ul class="pricing-inner">
-                                              @if (!empty($plan->details) && !empty(explode('_---_',json_decode($plan->details,true))))
-											  @foreach (explode('_---_',json_decode($plan->details,true)) as $feature)
-											  <li>
-												<h6>{{$feature}}</h6>
-											</li>
-											  @endforeach
-											  @endif
-
+                                                <li>
+                                                    <h6>User Limit : {{$plan->user_limit}}</h6>
+                                                </li>
+                                                @if (!empty($plan->details) && !empty(explode('_---_',json_decode($plan->details,true))))
+                                                @foreach (explode('_---_',json_decode($plan->details,true)) as $feature)
+                                                    <li>
+                                                        <h6>{{$feature}}</h6>
+                                                    </li>
+                                                @endforeach
+                                                @endif
                                             </ul>
 											<form action="{{route('admin.savePlan')}}" method="post">
 												@csrf

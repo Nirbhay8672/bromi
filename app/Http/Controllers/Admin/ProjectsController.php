@@ -157,7 +157,7 @@ class ProjectsController extends Controller
 		$project->parkings = json_decode($project->parkings_decode['parking_details'], true);
 
 		$project->amenity_array = json_decode($project->amenities, true);
-		$project->other_documents = json_decode($project->other_documents, true);
+		$project->other_documents = json_decode($project->other_documents, true) ?? [];
 
 		return view('admin.projects.view_project')->with(['project' => $project]);
 	}
@@ -377,7 +377,7 @@ class ProjectsController extends Controller
 					$other_documents[$index]->file = $this->storeFile($request['other_doc_'.$index]);
 				}
 			}
-			$data->other_documents = $other_documents;
+			$data->other_documents = json_encode($other_documents);
  		}
 		
 		$data->is_indirectly_store = 0;
@@ -619,6 +619,8 @@ class ProjectsController extends Controller
 			}
 		}
 		$data['prop_type'] = $prop_type;
+		
+		$id->other_documents = json_decode($id->other_documents, true) ?? [];
 
 		$first_state = State::where('user_id',Auth::user()->id)->first();
 		$first_city = City::where('user_id',Auth::user()->id)->first();

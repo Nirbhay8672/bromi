@@ -218,6 +218,13 @@
                                                         }
                                                     }
                                                 @endphp
+                                                <input type="hidden" id="enq_id_new" value="{{ $data->id }}">
+                                                {{-- <input type="hidden" id="enq_id_new" value="{{ $data->id }}"> --}}
+                                                <script>
+                                                    var idNewEnq = {{ $data->id }};
+                                                    localStorage.setItem('enq_id', idNewEnq);
+                                                </script>
+                                                {{-- @dd($data->id); --}}
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card-body h-100">
                                                         <div class="row">
@@ -362,6 +369,8 @@
                                             <h5 class="border-style">Site Visit Scheduled</h5>
                                         </div>
                                         @forelse ($site_visit_scheduled as $data)
+                                            {{-- @dd($data->id); --}}
+
                                             <div class="col-md-4 mb-3">
                                                 <div class="card-body h-100">
                                                     <div class="row">
@@ -901,12 +910,14 @@
             $('#showprogressmodal').modal('hide');
             $('#progressmodal').modal('show');
             $('#progress_enquiry_id').val($(data).attr('data-id'));
-            console.log("id modal prog ==", $('#progress_enquiry_id').val());
+            // console.log("id modal prog ==", $('#progress_enquiry_id').val());
         }
 
         function showProgress(data) {
             $('.progress_data').html('')
             var id = $(data).attr('data-id');
+            var retrievedId = localStorage.getItem('enq_id');
+            // console.log("id ahow progress ==", id, "retrievedId ==", retrievedId);
             $.ajax({
                 type: "POST",
                 url: "{{ route('admin.getProgress') }}",
@@ -971,15 +982,17 @@
         }
 
         $(document).on('click', '#saveProgress', function(e) {
-            console.log("edit modal data ==");
+            // console.log("edit modal data ==");
             e.preventDefault();
             $(this).prop('disabled', true);
             var id = $('#progress_enquiry_id').val()
+            var retrievedId = localStorage.getItem('enq_id');
+            // console.log("id  777 ahow progress ==", id, "retrievedId ==", retrievedId);
             $.ajax({
                 type: "POST",
                 url: "{{ route('admin.saveProgress') }}",
                 data: {
-                    enquiry_id: id,
+                    enquiry_id: retrievedId,
                     progress: $('#progress_enquiry_progress').val(),
                     lead_type: $('input[name="progress_lead_type"]:checked').val(),
                     sales_comment_id: $('#progress_sales_comment').val(),
@@ -988,16 +1001,18 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
+                    // console.log("data save progress bhrt ==", data, "==", id);
                     $('#progressmodal').modal('hide');
                     $('#saveProgress').prop('disabled', false);
-                    // deleteRecord(id);
-                    // location.reload();
+                    deleteRecord(id);
+                    location.reload();
                 }
             });
         });
 
         function deleteRecord(id) {
-            
+            console.log("delete modal called ==", id);
+            // alert("delere iod", id)
             $.ajax({
                 type: "DELETE",
                 url: "{{ route('admin.enquiries.calendar.delete', ['id' => '__id__']) }}".replace('__id__', id),
@@ -1005,8 +1020,8 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(res) {
-                    console.log("Record deleted successfully",res);
-                    window.location.href = "{{ route('admin.enquiries.calendar') }}";
+                    console.log("Record deleted successfully ==",res);
+                    // window.location.href = "{{ route('admin.enquiries.calendar') }}";
                 }
             });
         }

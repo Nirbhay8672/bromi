@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Form;
 use App\Models\FormFields;
 use App\Models\FormType;
+use Illuminate\Support\Facades\Hash;
+// use Auth;
+// use Validator;
 use Illuminate\Support\Str;
+use App\Models\User;
+// use App\Rules\ruleIdExist;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class FormsController extends Controller
 {
@@ -287,4 +296,7 @@ class FormsController extends Controller
         ]);
          
     }
+
+    
+    
 }

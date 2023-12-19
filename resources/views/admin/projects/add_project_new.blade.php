@@ -3514,6 +3514,7 @@
 
                         let project_data = JSON.parse(data);
                         
+                        
                         document.getElementById('state_id').disabled = false;
                         document.getElementById('city_id').disabled = false;
                         document.getElementById('area_id').disabled = false;
@@ -3891,7 +3892,7 @@
 
                         $('#image_category').val(project_data['document_category']).trigger('change');
 
-                        this.other_documents = JSON.parse(project_data['other_documents']);
+                        this.other_documents = project_data['other_documents'];
                         let _this_doc = this;
 
                         this.$nextTick(function () {
@@ -4428,7 +4429,6 @@
                         newArray = originalArray.filter(item => item !== valueToRemove);
                     }
 
-                    console.log(newArray);
 
                     this.sub_category_array = [];
 

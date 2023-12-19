@@ -202,8 +202,6 @@
 						$('#saveUser').prop('disabled',false);
                     }
                 });
-            })
-
         }
 
 		var shouldchangecity = 1;

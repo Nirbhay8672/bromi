@@ -231,7 +231,7 @@
                                                         <h6><b>Total Land Area</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_4">
-                                                        <div style="text-transform: none !important;">: {{ $project->land_area }} {{ $map_unit[ $project->land_size_unit]}}</div>
+                                                        <div style="text-transform: none !important;">: {{ $project->land_area }}</div>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Remark</b></h6>

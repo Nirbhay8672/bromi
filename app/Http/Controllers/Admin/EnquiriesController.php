@@ -52,7 +52,7 @@ class EnquiriesController extends Controller
 				$dropdownsarr[$value['id']] = $value;
 			}
 			$dropdowns = $dropdownsarr;
-			$areas = Areas::get()->toArray();
+			$areas = Areas::where('user_id',Auth::user()->id)->get()->toArray();
 			$areaarr = [];
 			foreach ($areas as $key => $value) {
 				$areaarr[$value['id']] = $value;
@@ -529,7 +529,7 @@ class EnquiriesController extends Controller
 
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 
 
@@ -670,7 +670,7 @@ class EnquiriesController extends Controller
 				$prop_type = $dropdowns[$value['property_type']]['name'];
 			}
 
-			$areas = Areas::get()->toArray();
+			$areas = Areas::where('user_id',Auth::user()->id)->get()->toArray();
 			$areaarr = [];
 			foreach ($areas as $key3 => $value2) {
 				$areaarr[$value2['id']] = $value2;
@@ -1201,7 +1201,7 @@ class EnquiriesController extends Controller
 		}
 		$dropdowns = $dropdownsarr;
 
-		$areas = Areas::get()->toArray();
+		$areas = Areas::where('user_id',Auth::user()->id)->get()->toArray();
 		$areaarr = [];
 		foreach ($areas as $key => $value) {
 			$areaarr[$value['id']] = $value;
@@ -1306,7 +1306,7 @@ class EnquiriesController extends Controller
 		$projects = Projects::orderBy('project_name')->get();
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
 		$prop_list = Helper::get_property_units_helper();
 		return view('admin.enquiries.view', compact('areas', 'employees', 'data', 'prop_type', 'configuration_name', 'requiretype_name', 'area_name', 'city', 'branches', 'cities', 'project_name', 'employee', 'dropdowns', 'furnished', 'configuration_settings', 'projects', 'properties', 'prop_list'));
 	}
@@ -1374,7 +1374,7 @@ class EnquiriesController extends Controller
 				->get();
 		}
 
-		$areas = Areas::get();
+		$areas = Areas::where('user_id',Auth::user()->id)->get();
 		$areaarr = [];
 		foreach ($areas as $key => $value) {
 			$areaarr[$value['id']] = $value;
@@ -1422,7 +1422,7 @@ class EnquiriesController extends Controller
 		}
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		$districts = District::orderBy('name')->get();
 		$talukas   = Taluka::orderBy('name')->get();
@@ -1446,7 +1446,7 @@ class EnquiriesController extends Controller
 
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		$current_id = $request->id;
 
