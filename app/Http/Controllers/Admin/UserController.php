@@ -3,15 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
-use App\Exports\UsersExport;
 use App\Helpers\Helper;
-use App\Imports\UsersImport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\Password;
 use App\Http\Controllers\Controller;
 use App\Models\Areas;
 use App\Models\Branches;
@@ -20,8 +14,6 @@ use App\Models\DropdownSettings;
 use App\Models\Projects;
 use App\Models\State;
 use App\Models\Subplans;
-use App\Models\SuperAreas;
-use App\Models\SuperCity;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
@@ -38,7 +30,8 @@ class UserController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = User::where('parent_id', Auth::user()->id)->when($request->go_data_id, function ($query) use ($request) {
+			$data = User::where('parent_id', Auth::user()->id)
+				->when($request->go_data_id, function ($query) use ($request) {
 				return $query->where('id', $request->go_data_id);
 			})->when(empty($request->go_data_id), function ($query) use ($request) {
 				return $query->orWhere('id',Session::get('parent_id'));
@@ -99,9 +92,9 @@ class UserController extends Controller
 		$roles =  Role::where('user_id', Session::get('parent_id'))->get();
 		$branches = Branches::orderBy('name')->get();
 		$plan_details = Subplans::find(Auth::user()->plan_id);
-		$total_user = User::where('parent_id', Auth::user()->id)->count();
 		$plans = Subplans::get();
-		return view('admin.users.index', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches','plan_details','total_user','plans'));
+		$total_user = User::where('parent_id', Auth::user()->id)->count();
+		return view('admin.users.index', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches','plan_details','plans','total_user'));
 	}
 
 	public function saveUser(Request $request)

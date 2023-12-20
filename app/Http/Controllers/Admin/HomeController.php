@@ -521,10 +521,51 @@ class HomeController extends Controller
 
 	public function plan_save(Request $request)
 	{
-		$plans = Subplans::get();
-		$user = User::where('id', Session::get('parent_id'))->update(['plan_id' => $request->plan_id,'subscribed_on' => Carbon::now()->format('Y-m-d')]);
+		Subplans::get();
+		
+		$plan_detail = Subplans::find(intval($request->plan_id));
+
+		User::where('id', Session::get('parent_id'))->update([
+			'plan_id' => $request->plan_id,
+			'total_user_limit' => $plan_detail->user_limit,
+			'subscribed_on' => Carbon::now()->format('Y-m-d')
+		]);
+
 		Session::put('plan_id', $request->plan_id);
+		
 		return redirect()->route('admin');
+	}
+
+	public function upgrade_plan(Request $request)
+	{
+		Subplans::get();
+		
+		$plan_detail = Subplans::find(intval($request->plan_id));
+
+		$user = User::find(Auth::user()->id);
+		$user_limit = intval($user->total_user_limit) + intval($plan_detail->user_limit);
+
+		$user->fill([
+			'plan_id' => $request->plan_id,
+			'total_user_limit' => $user_limit,
+			'subscribed_on' => Carbon::now()->format('Y-m-d'),
+		])->save();
+
+		Session::put('plan_id', $request->plan_id);
+		
+		return redirect()->back();
+	}
+
+	public function upgrade_user_limit(Request $request)
+	{
+		$user = User::find(Auth::user()->id);
+		$user_limit = intval($user->total_user_limit) + intval($request->user_limit); 
+		
+		$user->fill([
+			'total_user_limit' => $user_limit
+		])->save();
+
+		return response()->json('success');
 	}
     
 	public function ProfileDetails(){

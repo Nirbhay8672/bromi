@@ -65,6 +65,7 @@ class User extends Authenticatable
 		'address',
 		'status',
 		'plan_id',
+		'total_user_limit',
 		'driving_license',
 		'company_name',
 		'subscribed_on',

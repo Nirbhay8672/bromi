@@ -14,8 +14,8 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Users </h5>
-                            @if(intval($total_user) < intval($plan_details->user_limit))
+                            <h5 class="mb-3">Users</h5>
+                            @if(intval($total_user) < Auth::user()->total_user_limit)
                                 <a class="btn btn-primary btn-air-primary"  href="{{route('admin.user.add')}}">Add New User</a>
                             @else
                                 <button
@@ -91,23 +91,24 @@
                         </div>
                     </div>
                     <div class="row" id="user_limit_element">
-                        <div class="form-group col-md-3 mb-1">
+                        <div class="form-group col-12 col-md-3 col-lg-3 mb-1">
                             <div class="fname focused">
                                 <label for="State">User Limit</label>
                                 <div class="fvalue">
                                     <input
                                         class="form-control"
                                         name="user_limit"
-                                        id="user_limit"
+                                        id="user_limit_input"
                                         type="number"
                                         autocomplete="off"
                                     >
                                 </div>
+                                <span class="text-danger" id="user_limit_error"></span>
                             </div>
                         </div>
                         <div class="row mt-4">
-                            <div class="col-4">
-                                <button class="btn btn-secondary" onclick="updateUserLimit">Save</button>
+                            <div class="col">
+                                <button class="btn btn-secondary" onclick="updateUserLimit()">Save</button>
                                 <button class="btn btn-danger ms-2" type="button" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </div>
@@ -182,26 +183,36 @@
             plan_element.classList.add('d-none');
         }
 
-
         function updateUserLimit() {
 
-            var user_limit = $('#user_limit').val();
-
             let valid = true;
+            var user_limit = $('#user_limit_input').val();
+            var user_limit_error = $('#user_limit_error');
 
-            $.ajax({
+            user_limit_error.text('');
+
+            if(user_limit == '' || user_limit <= 0) {
+                valid = false;
+                user_limit_error.text('user limit is not valid.');
+            }
+
+            if(valid) {
+                $.ajax({
                 type: "POST",
                 url: "{{ route('admin.upgradeUserLimit') }}",
                 data: {
-                        user_limit : $('#user_limit').val(),
+                        user_limit : user_limit,
                         _token: '{{ csrf_token() }}',
                     },
                     success: function(data) {
                         $('#userTable').DataTable().draw();
-                        $('#userModal').modal('hide');
-						$('#saveUser').prop('disabled',false);
+                        $('#planModal').modal('hide');
+
+                        var redirect_url = "{{route('admin.users')}}";
+                        window.location.href = redirect_url;
                     }
                 });
+            }
         }
 
 		var shouldchangecity = 1;
