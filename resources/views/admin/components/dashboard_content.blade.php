@@ -19,7 +19,7 @@
     </div>
     <div class="col-md-2">
         <div class="card o-hidden">
-            <div class="card-body bg-light-orange ">
+            <div class="card-body bg-light-orange">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{ $total_active_leads }}</h1>
@@ -31,7 +31,7 @@
     </div>
     <div class="col-md-2">
         <div class="card o-hidden">
-            <div class="card-body bg-light-purpel">
+            <div class="card-body bg-light-green">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{$total_lost}}</h1>
@@ -43,11 +43,11 @@
     </div>
     <div class="col-md-3">
         <div class="card o-hidden">
-            <div class="card-body bg-light-green">
+            <div class="card-body bg-light-purpel">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
-                        <h1 class="font-roboto">5</h1>
-                        <h3 class="mb-0">Expected Revenue</h3>
+                        <h1 class="font-roboto">{{$total_win}}</h1>
+                        <h3 class="mb-0">Booked Leads</h3>
                     </div>
                 </div>
             </div>
@@ -58,8 +58,8 @@
             <div class="card-body bg-dark-blue">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
+                        <h1 class="font-roboto">{{$total_win}} : {{$total_lost}}</h1>
                         <h3 class="mb-0">Win Lose Ratio</h3>
-                        <h1 class="font-roboto">{{$total_win}}:{{$total_lost}}</h1>
                     </div>
                 </div>
             </div>

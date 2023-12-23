@@ -24,7 +24,7 @@ class VillageController extends Controller
 		if ($request->ajax()) {
 			$data = Village::with('Taluka', 'District')->when($request->go_data_id, function ($query) use ($request) {
 				return $query->where('id', $request->go_data_id);
-			})->orderBy('id','desc')->get();
+			})->where('user_id',Auth::user()->id)->orderBy('id','desc')->get();
 
 			return DataTables::of($data)
 			->editColumn('select_checkbox', function ($row) {

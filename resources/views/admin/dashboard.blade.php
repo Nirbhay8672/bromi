@@ -11,21 +11,17 @@
         <div class="container-fluid general-widget">
             <div class="card">
                 <div class="row card-body">
-                    <div class="offset-xl-9 col-xl-3 offset-md-12 col-md-10">
-                        <div class="input-group justify-content-end">
-                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                            <select class="form-control" id="choose_date_range" style="width: 150px;">
-                                <option value="">Select Date</option>
-                                <option value="last_month" {{ request('date_range') == 'last_month' ? 'selected' : '' }}>
-                                    Last Month</option>
-                                <option value="6month" {{ request('date_range') == '6month' ? 'selected' : '' }}>6 Month
-                                </option>
-                                <option value="yearly" {{ request('date_range') == 'yearly' ? 'selected' : '' }}>Yearly
-                                </option>
-                            </select>
+                    <div class="d-flex flex-row-reverse bd-highlight">
+                        <div class="p-2 bd-highlight">
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                                  Chart Selection
+                                <button
+                                    class="btn dropdown-toggle"
+                                    type="button"
+                                    data-toggle="dropdown"
+                                    aria-expanded="false"
+                                    style="height: 44px;"
+                                >
+                                    Chart Selection
                                 </button>
                                 <div class="dropdown-menu">
                                     <template x-for="(chart , index ) in chart_option" :key="index">
@@ -37,6 +33,20 @@
                                         </span>
                                     </template>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="p-2 bd-highlight">
+                            <div class="input-group border border-dark">
+                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                <select class="form-control border border-dark" id="choose_date_range" style="width: 150px;">
+                                    <option value="">Select Duration</option>
+                                    <option value="last_month" {{ request('date_range') == 'last_month' ? 'selected' : '' }}>
+                                        Last Month</option>
+                                    <option value="6month" {{ request('date_range') == '6month' ? 'selected' : '' }}>6 Month
+                                    </option>
+                                    <option value="yearly" {{ request('date_range') == 'yearly' ? 'selected' : '' }}>Yearly
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </div>
