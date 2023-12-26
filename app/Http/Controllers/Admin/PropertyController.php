@@ -90,11 +90,11 @@ class PropertyController extends Controller
                 ->where('properties.property_category', '!=', '262')
                 ->when($request->filter_by, function ($query) use ($request) {
                     if ($request->filter_by == 'reminder') {
-                        return $query->whereDate('reminder', '>=', Carbon::now()->subDays(7)->format('y-m-d'));
+                        return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(7)->format('Y-m-d'));
                     } elseif ($request->filter_by == 'favourite') {
                         return $query->where('is_favourite', 1);
                     } elseif ($request->filter_by == 'new') {
-                        return $query->whereDate('created_at', '>=', Carbon::now()->subDays(30)->format('y-m-d'));
+                        return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'));
                     }
                 })
                 ->when(!empty(Auth::user()->property_for_id), function ($query) use ($request) {

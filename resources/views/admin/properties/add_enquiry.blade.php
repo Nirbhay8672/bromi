@@ -188,7 +188,8 @@
                                                                 @forelse ($configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_specific_type')
                                                                         <div class="btn-group bromi-checkbox-btn me-1 enquiry-type-element"
-                                                                            role="group"  data-enquiry-id="{{ $props['id'] }}"
+                                                                            role="group"
+                                                                            data-enquiry-id="{{ $props['id'] }}"
                                                                             aria-label="Basic radio toggle button group">
                                                                             <input type="radio"
                                                                                 data-parent_id="{{ $props['parent_id'] }}"
@@ -2069,12 +2070,34 @@
                         village_id: $('#village_id').val(),
                     },
                     success: function(data) {
-                        console.log("data all :", data);
-                        // $('#enquiryTable').DataTable().draw();
-                        // $('#enquiryModal').modal('hide');
-                        // $('#saveEnquiry').prop('disabled', false);
-                        var redirect_url = "{{ route('admin.enquiries') }}";
-                        window.location.href = redirect_url;
+                        console.log("Enq data all : ==", data.enquiry);
+                        if (data.status === "success") {
+                            var id = data.enquiry
+                            .id; // Assuming your response includes the ID of the saved enquiry
+
+                            // Get the current date in the "YYYY-MM-DD" format
+                            var currentDate = new Date().toISOString().split('T')[0];
+
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ route('admin.saveProgress') }}",
+                                data: {
+                                    enquiry_id: id,
+                                    progress: 'New Lead', // Default progress value
+                                    lead_type: '', // Default lead type value
+                                    sales_comment_id: 1, // Default sales comment ID (modify as needed)
+                                    nfd: currentDate, // Set NFD to the current date
+                                    remarks: '', // Default remarks value (modify as needed)
+                                    _token: '{{ csrf_token() }}'
+                                },
+                                success: function(progressData) {
+                                    $('#enquiryTable').DataTable().draw();
+                                    var redirect_url = "{{ route('admin.enquiries') }}";
+                                    window.location.href = redirect_url;
+                                    // Add any additional logic for success
+                                }
+                            });
+                        }
                     }
                 });
             })
@@ -2163,7 +2186,7 @@
 
                 //Hide Plot/land while click on rent or both 
                 var theFor = $('input[name=enquiry_for]:checked').val();
-                console.log("The Forr Enq ==",theFor);
+                console.log("The Forr Enq ==", theFor);
                 if (theFor == 'Buy' && parent_val == '87') {
                     $('.enquiry-type-element[data-enquiry-id="256"]').show();
                 } else {

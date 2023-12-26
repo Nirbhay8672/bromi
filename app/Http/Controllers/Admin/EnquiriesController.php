@@ -70,23 +70,23 @@ class EnquiriesController extends Controller
 						return $query->doesntHave('Progress');
 					} elseif ($request->filter_by == 'today') {
 						return $query->whereHas('activeProgress', function ($query) {
-							$query->whereDate('nfd', '=', Carbon::now()->format('y-m-d'));
+							$query->whereDate('enquiries.created_at', '=', Carbon::now()->format('Y-m-d'));
 						});
 					} elseif ($request->filter_by == 'tomorrow') {
 						return $query->whereHas('activeProgress', function ($query) {
-							$query->whereDate('nfd', '=', Carbon::tomorrow()->format('y-m-d'));
+							$query->whereDate('created_at', '=', Carbon::tomorrow()->format('Y-m-d'));
 						});
 					} elseif ($request->filter_by == 'yesterday') {
 						return $query->whereHas('activeProgress', function ($query) {
-							$query->whereDate('nfd', '=', Carbon::yesterday()->format('y-m-d'));
+							$query->whereDate('created_at', '=', Carbon::yesterday()->format('Y-m-d'));
 						});
 					} elseif ($request->filter_by == 'due') {
 						return $query->whereHas('activeProgress', function ($query) {
-							$query->whereDate('nfd', '<=', Carbon::now()->format('y-m-d'));
+							$query->whereDate('created_at', '<=', Carbon::now()->format('Y-m-d'));
 						});
 					} elseif ($request->filter_by == 'weekend') {
 						return $query->whereHas('activeProgress', function ($query) {
-							$query->whereDate('nfd', '<=', Carbon::now()->endOfWeek())->whereDate('nfd', '>=', Carbon::now()->endOfWeek()->subDay());;
+							$query->whereDate('created_at', '<=', Carbon::now()->endOfWeek())->whereDate('created_at', '>=', Carbon::now()->endOfWeek()->subDay());;
 						});
 					}
 				})
@@ -95,7 +95,7 @@ class EnquiriesController extends Controller
 						return $query->whereDate('created_at', $request->calendar_date);
 					} else {
 						return $query->whereHas('activeProgress', function ($query) use ($request) {
-							$query->whereDate('nfd', '=', $request->calendar_date)->where('progress', $request->calendar_type);
+							$query->whereDate('created_at', '=', $request->calendar_date)->where('progress', $request->calendar_type);
 						});
 					}
 				})
@@ -1034,6 +1034,8 @@ class EnquiriesController extends Controller
 		if (!empty($request->area_measurement)) {
 			Helper::add_default_measuerement($request->area_measurement);
 		}
+		$getEnquiry=Enquiries::find($data->id);
+		return response()->json(['status' => "success", 'message' => "enquiry added successfully",'enquiry' => $getEnquiry]);
 	}
 
 	public function importEnquiry(Request $request)
