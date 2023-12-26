@@ -902,7 +902,7 @@
                                                         <div class="form-group col-4 m-b-10 data_conent_69">
                                                             <h6><b>Email</b></h6>
                                                         </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_69">
+                                                        <div class="form-group col-8 m-b-10 data_conent_69 text-reset" style="text-transform: none !important">
                                                             <div>:
                                                                 {{ $property->owner_email ? strtolower($property->owner_email) : '-' }}
                                                             </div>
@@ -2422,7 +2422,7 @@
                                                 <div class="form-group col-4 m-b-10 data_conent_154">
                                                     <h6><b>Email</b></h6>
                                                 </div>
-                                                <div class="form-group col-8 m-b-10 data_conent_154">
+                                                <div class="form-group col-8 m-b-10 data_conent_154" style="text-transform: none !important">
                                                     <div>:{{ $property->owner_email ? $property->owner_email : '-' }}
                                                     </div>
                                                 </div>
@@ -2497,6 +2497,59 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        {{-- <div class="modal fade" id="imageModel" tabindex="-1" aria-labelledby="imageLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-fullscreen">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="imageLabel">Property Images</h5>
+                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div id="imageSlider" class="image-slider">
+                                                            @php
+                                                                $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'];
+                                                                $hasImage = false;
+                                                            @endphp
+                                                            @foreach ($multiple_image as $image)
+                                                                @php
+                                                                    $path = pathinfo($image->image, PATHINFO_EXTENSION);
+                                                                @endphp
+                                                                @if (in_array($path, $imageExtensions))
+                                                                    <div class="slide">
+                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="" class="img-fluid" data-bs-toggle="modal" data-bs-target="#fullScreenImage">
+                                                                    </div>
+                                                                    @php
+                                                                        $hasImage = true; 
+                                                                    @endphp
+                                                                @endif
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                    @if ($hasImage)
+                                                        <div class="modal-footer">
+                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'images', 'prop' => $property->id]) }}">Download Zip</a>
+                                                        </div>
+                                                    @else
+                                                        <center><h4>No Images Found</h4></center>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div> --}}
+                                        
+                                        <!-- Full-screen image modal -->
+                                        {{-- <div class="modal fade" id="fullScreenImage" tabindex="-1" aria-labelledby="fullScreenImageLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-fullscreen">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <img src="" alt="" id="fullScreenImageView" class="img-fluid">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> --}}
+                                        
                                         <div class="modal fade" id="imageModel2" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Construction Docs Section -->
@@ -2643,7 +2696,8 @@
 
                                                 @forelse ($visits as $value)
                                                     <tr>
-                                                        <td>{{ $value->Enquiry->client_name ? $value->Enquiry->client_name : '-' }}
+                                                        {{-- {{dd($value);}} --}}
+                                                        <td>{{ $value->Enquiry ? $value->Enquiry : '' }}
                                                         </td>
                                                         <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
                                                         </td>
@@ -3053,6 +3107,11 @@
     @push('scripts')
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.3/dist/js/bootstrap.bundle.min.js"></script> --}}
     <script>
+        $('#fullScreenImage').on('show.bs.modal', function (event) {
+            var imgSrc = $(event.relatedTarget).attr('src');
+            $('#fullScreenImageView').attr('src', imgSrc);
+        });
+        
         function showfile(event) {
             event.preventDefault(); // Prevent the default behavior of the link
 
