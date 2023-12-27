@@ -66,6 +66,18 @@
     <link href="{{ asset('admins/assets/css/fullcalendar.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admins/assets/css/custom.css?v=' . time()) }}" rel="stylesheet" type="text/css" />
     <style>
+          /* Added Custom Style For Property Status */
+          table.dataTable.stripe tbody tr.odd.important-row,
+        table.dataTable.display tbody tr.odd.important-row {
+            background-color: #c2c5ce !important;
+        }
+
+        /* table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd */
+        input:not([type]),
+        input[type="text"] {
+            text-transform: capitalize;
+        }
+
         input:not([type]),
         input[type="text"] {
             text-transform: capitalize;
