@@ -93,7 +93,8 @@ class UserController extends Controller
 		$branches = Branches::orderBy('name')->get();
 		$plan_details = Subplans::find(Auth::user()->plan_id);
 		$plans = Subplans::get();
-		return view('admin.users.index', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches','plan_details','plans'));
+		$total_user = User::where('parent_id', Auth::user()->id)->count();
+		return view('admin.users.index', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches','plan_details','plans','total_user'));
 	}
 
 	public function saveUser(Request $request)
