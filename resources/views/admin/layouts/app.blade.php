@@ -66,17 +66,24 @@
     <link href="{{ asset('admins/assets/css/fullcalendar.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admins/assets/css/custom.css?v=' . time()) }}" rel="stylesheet" type="text/css" />
     <style>
-          /* Added Custom Style For Property Status */
-          table.dataTable.stripe tbody tr.odd.important-row,
-        table.dataTable.display tbody tr.odd.important-row {
+        /* #B-27-DEC Added Custom Style For Property Status - Odd Rows */
+        #propertyTable.dataTable tbody tr.odd.important-row {
             background-color: #c2c5ce !important;
+            color: #000000 !important;
         }
 
-        /* table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd */
+        #propertyTable.dataTable tbody tr.even.important-row {
+            background-color: #c2c5ce !important;
+            color: #000000 !important;
+        }
+        /* End  */
+
+        /* Additional Styles */
         input:not([type]),
         input[type="text"] {
             text-transform: capitalize;
         }
+
 
         input:not([type]),
         input[type="text"] {

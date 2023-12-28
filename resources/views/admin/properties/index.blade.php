@@ -474,8 +474,8 @@
                                         </select>
                                     </div>
 
-									<div class="form-group col-md-2 m-b-4 mb-3">
-										<label class="select2_label" for="Select Project"> Project</label>
+                                    <div class="form-group col-md-2 m-b-4 mb-3">
+                                        <label class="select2_label" for="Select Project"> Project</label>
                                         <select class="form-select" id="filter_building_id" multiple>
                                             @foreach ($projects as $building)
                                                 <option value="{{ $building->id }}">{{ $building->project_name }}
@@ -484,7 +484,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2 m-b-4 mb-3">
-										<label class="select2_label" for="Select Area"> Locality</label>
+                                        <label class="select2_label" for="Select Area"> Locality</label>
                                         <select class="form-select" id="filter_area_id" multiple>
                                             @foreach ($areas as $area)
                                                 <option value="{{ $area->id }}">{{ $area->name }}</option>
@@ -683,10 +683,11 @@
                                         <label class="form-check-label" for="match_specific_type">Property
                                             Category</label>
                                     </div>
-									<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
-                                        <input class="form-check-input" checked id="match_specific_sub_type" type="checkbox">
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
+                                        <input class="form-check-input" checked id="match_specific_sub_type"
+                                            type="checkbox">
                                         <label class="form-check-label" for="match_specific_sub_type">Property
-                                          Sub Category</label>
+                                            Sub Category</label>
                                     </div>
                                     {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
                                         <input class="form-check-input" id="match_building" type="checkbox">
@@ -805,7 +806,7 @@
                 $('#match_property_type').prop('checked', <?= $matchPropertyType === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_type').prop('checked', <?= $matchSpecificType === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_sub_type').prop('checked', <?= $matchSpecificSubType === '1' ? 'true' : 'false' ?>);
-				$('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
+                $('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
                 $('#match_enquiry_size').prop('checked', <?= $matchEnqSize === '1' ? 'true' : 'false' ?>);
                 $('#match_inquiry_source').prop('checked', <?= $matchEnqSource === '1' ? 'true' : 'false' ?>);
 
@@ -1114,8 +1115,9 @@
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
-                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop('checked'));
-							d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
+                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop(
+                                'checked'));
+                            d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
                             d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
                             d.match_enquiry_size = Number($('#match_enquiry_size').prop('checked'));
                             d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
@@ -1184,23 +1186,11 @@
                             "targets": 6
                         },
                     ],
-                    //#B To Change Background when prop_status = 0. 
+                    //#B-27-DEC To Change Background when prop_status = 0. 
                     "createdRow": function(row, data, dataIndex) {
                         if (data['prop_status'] == 0) {
                             $(row).addClass('important-row');
                         }
-                    },
-                    "drawCallback": function(settings, json) {
-                        setTimeout(() => {
-                            $('.color-code-popover').popover({
-                                html: true,
-                            });
-                        }, 500);
-                        var popoverTriggerList = [].slice.call(document.querySelectorAll(
-                            '[data-bs-toggle="popover"]'))
-                        var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
-                            return new bootstrap.Popover(popoverTriggerEl)
-                        });
                     }
                 });
                 table.order([1, 'desc']).draw();
