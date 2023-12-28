@@ -12,7 +12,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 use App\Models\Subplans;
-
+use Carbon\Carbon;
 
 class AdminLoginController extends Controller
 {
@@ -176,14 +176,25 @@ class AdminLoginController extends Controller
 
 	public function savePlan(Request $request)
 	{
-		$user  = User::find($request->user_id);
+		$user = User::find($request->user_id);
 		Auth::login($user);
+
+		$plan_details = Subplans::find($request->plan_id);
 
 		$user->fill([
 			'plan_id' => $request->plan_id,
+			'subscribed_on' => Carbon::now()->format('Y-m-d'),
+			'total_user_limit' => $plan_details->user_limit,
 		])->save();
 
 		Session::put('plan_id', $request->plan_id);
+
+		$role = Role::find($user->role_id);
+
+		if(strpos($role->name, 'Builder') !== false){
+			return redirect()->route('builder.home');
+		}
+
 		return redirect('/admin');
 	}
 }
