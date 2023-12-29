@@ -16,9 +16,6 @@ use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Mail;
-use Session;
-use App\Models\Otp;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
 use Illuminate\Http\UploadedFile;
@@ -198,11 +195,12 @@ class RegisterController extends Controller
 
             $role =  new Role();
             $role->name = $role_name;
-            $role->user_id = 32;
+            $role->user_id = $user->id;
             $role->save();
 
             $user->fill([
                 'role_id' => $role->id,
+                'plan_id' => 1,
             ])->save();
 
             $role->syncPermissions(Permission::where('guard_name','web')->get()->pluck('id')->all());
