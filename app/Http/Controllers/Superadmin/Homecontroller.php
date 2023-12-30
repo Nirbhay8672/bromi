@@ -10,12 +10,12 @@ use App\Models\User;
 use App\Models\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Throwable;
 use Yajra\DataTables\Facades\DataTables;
 
-class Homecontroller extends Controller
+class HomeController extends Controller
 {
 	public function __construct()
 	{
@@ -104,30 +104,20 @@ class Homecontroller extends Controller
 		$data->save();
 	}
 
-	// public function saveTpImages(Request $request)
-	// {
-	// 	if (!empty($request->tp_id) && !empty($request->images)) {
+	public function builders(Request $request)
+	{
+		if ($request->ajax()) {
+			$data = User::select([
+				'users.id',
+				'roles.name as role_name',
+				'users.mobile_number',
+				'users.email',
+				DB::raw("CONCAT(users.first_name,' ',users.last_name) as builder_name")
+			])->withCount('projects')->join('roles','roles.id','users.role_id')->where('roles.name','like', '%' . "Builder" . '%')->get();
 
-	// 		foreach ($request->file('images') as $key => $value) {
-
-	// 			$ext = $value->getClientOriginalExtension();
-	// 			$fileName = str_replace('.' . $ext, '', $value->getClientOriginalName()) . "-" . time() . '.' . $ext;
-	// 			$fileName = str_replace('#', '', $fileName);
-	// 			$path = public_path() . config('constant.tp_images_url');
-	// 			File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
-	// 			$moved = $value->move($path, $fileName);
-	// 			if ($moved) {
-	// 				$land_images = new LandImages();
-	// 				$land_images->land_id = $request->land_id;
-	// 				$land_images->image = $fileName;
-	// 				$land_images->user_id = Auth::User()->id;
-	// 				$land_images->save();
-	// 			}
-	// 		}
-	// 		$all =  LandImages::where('land_id', $request->land_id)->pluck('image')->toArray();
-	// 		if (!empty($all)) {
-	// 			return json_encode($all);
-	// 		}
-	// 	}
-	// }
+			return DataTables::of($data)->make(true);
+		}
+		
+		return view('superadmin.builder.index');
+	}
 }
