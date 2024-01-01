@@ -143,16 +143,28 @@
 																{{ $configuration_name != null ? $configuration_name : '' }}
 															</div>
 														</div>
-
 														@endif
                                                         <div class="form-group col-4 m-b-10 data_conent_4">
                                                             <h6><b>Project</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_4">
                                                             <div>:
-                                                                {{ $property->Projects != null ? ucfirst(strtolower($property->Projects->project_name)) : '' }}
+                                                                @if ($property->Projects != null)
+                                                                    <a href="{{ route('admin.projects', ['id' => $property->Projects->id]) }}">
+                                                                        {{ ucfirst(strtolower($property->Projects->project_name)) }}
+                                                                    </a>
+                                                                @endif
                                                             </div>
                                                         </div>
+                                                        
+                                                        {{-- <div class="form-group col-4 m-b-10 data_conent_4">
+                                                            <h6><b>Project</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_4">
+                                                            <div>:
+                                                                {{ $property->Projects != null ? ucfirst(strtolower($property->Projects->project_name)) : '' }}
+                                                            </div>
+                                                        </div> --}}
 														{{-- <div class="form-group col-4 m-b-10 data_conent_5">
                                                             <h6><b>Property Address</b></h6>
                                                         </div>
@@ -161,14 +173,37 @@
                                                                 {{ isset($property->address) ? ucfirst(strtolower($property->address)) : '-' }}
                                                             </div>
                                                         </div> --}}
-                                                        <div class="form-group col-4 m-b-10 data_conent_5">
-                                                            <h6><b>Projects Address</b></h6>
+                                                        @if (!empty($property->projects->area->city->name))
+                                                        <div class="form-group col-4 m-b-10 data_conent_6">
+                                                            <h6><b>City</b></h6>
                                                         </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_5">
+                                                        <div class="form-group col-8 m-b-10 data_conent_6">
                                                             <div>:
-                                                                {{ isset($property->Projects->address) ? ucfirst(strtolower($property->Projects->address)) : '-' }}
+                                                                {{ isset($property->projects->area->city->name) ? ucfirst(strtolower($property->projects->area->city->name)) : '-' }}
                                                             </div>
                                                         </div>
+                                                        @endif
+                                                        @if (!empty($property->projects->area->name))
+                                                            <div class="form-group col-4 m-b-10 data_conent_6">
+                                                                <h6><b>Locality</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_6">
+                                                                <div>:
+                                                                    {{ isset($property->projects->area->name) ? ucfirst(strtolower($property->projects->area->name)) : '-' }}
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        @if (!empty($property->Projects->address))
+                                                            <div class="form-group col-4 m-b-10 data_conent_5">
+                                                                <h6><b>Projects Address</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_5">
+                                                                <div>:
+                                                                    {{ isset($property->Projects->address) ? ucfirst(strtolower($property->Projects->address)) : '-' }}
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
 														@if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse')
                                                             <div class="form-group col-4 m-b-10 data_conent_53">
                                                                 <h6><b>Carpet Area</b></h6>
@@ -337,26 +372,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if (!empty($property->projects->area->city->name))
-                                                            <div class="form-group col-4 m-b-10 data_conent_6">
-                                                                <h6><b>City</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_6">
-                                                                <div>:
-                                                                    {{ isset($property->projects->area->city->name) ? ucfirst(strtolower($property->projects->area->city->name)) : '-' }}
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        @if (!empty($property->projects->area->name))
-                                                            <div class="form-group col-4 m-b-10 data_conent_6">
-                                                                <h6><b>Locality</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_6">
-                                                                <div>:
-                                                                    {{ isset($property->projects->area->name) ? ucfirst(strtolower($property->projects->area->name)) : '-' }}
-                                                                </div>
-                                                            </div>
-                                                        @endif
+                                                       
                                                        
                                                         @if ($type == 'Storage/industrial')
                                                             <div class="form-group col-4 m-b-10 data_conent_10">
@@ -971,17 +987,18 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group col-4 m-b-10 data_conent_79">
-                                                            <h6><b>Location Link</b></h6>
-                                                        </div>
-														<div class="form-group col-8 m-b-10 data_conent_79">
-															<div>:
-																{{-- {{ $property->location_link ? $property->location_link : '-' }} --}}
-																<a href="{{ $property->location_link ? $property->location_link : '#' }}" target="_blank">
-																	<i class="cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i>
-																</a>
-															</div>
-														</div>
+                                                        @if (!empty($property->location_link))
+                                                            <div class="form-group col-4 m-b-10 data_conent_79">
+                                                                <h6><b>Location Link</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_79">
+                                                                <div>:
+                                                                    <a href="{{ $property->location_link ? $property->location_link : '#' }}" target="_blank">
+                                                                        <i class="cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        @endif
 
 														@if ($type == 'Flat' || $type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse')
 															<?php
@@ -1361,7 +1378,11 @@
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_4">
                                                             <div>:
-                                                                {{ $property->Projects != null ? ucfirst(strtolower($property->Projects->project_name)) : '' }}
+                                                                @if ($property->Projects != null)
+                                                                    <a href="{{ route('admin.projects', ['id' => $property->Projects->id]) }}">
+                                                                        {{ ucfirst(strtolower($property->Projects->project_name)) }}
+                                                                    </a>
+                                                                @endif
                                                             </div>
                                                         </div>
 														{{-- <div class="form-group col-4 m-b-10 data_conent_5">
@@ -1372,14 +1393,36 @@
                                                                 {{ isset($property->address) ? ucfirst(strtolower($property->address)) : '-' }}
                                                             </div>
                                                         </div> --}}
-                                                        <div class="form-group col-4 m-b-10 data_conent_5">
-                                                            <h6><b>Projects Address</b></h6>
+                                                        @if (!empty($property->projects->area->city->name))
+                                                        <div class="form-group col-4 m-b-10 data_conent_6">
+                                                            <h6><b>City</b></h6>
                                                         </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_5">
+                                                        <div class="form-group col-8 m-b-10 data_conent_6">
                                                             <div>:
-                                                                {{ isset($property->Projects->address) ? ucfirst(strtolower($property->Projects->address)) : '-' }}
+                                                                {{ isset($property->projects->area->city->name) ? ucfirst(strtolower($property->projects->area->city->name)) : '-' }}
                                                             </div>
                                                         </div>
+                                                        @endif
+                                                        @if (!empty($property->projects->area->name))
+                                                            <div class="form-group col-4 m-b-10 data_conent_6">
+                                                                <h6><b>Locality</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_6">
+                                                                <div>:
+                                                                    {{ isset($property->projects->area->name) ? ucfirst(strtolower($property->projects->area->name)) : '-' }}
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        @if (!empty($property->Projects->address))
+                                                            <div class="form-group col-4 m-b-10 data_conent_5">
+                                                                <h6><b>Projects Address</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_5">
+                                                                <div>:
+                                                                    {{ isset($property->Projects->address) ? ucfirst(strtolower($property->Projects->address)) : '-' }}
+                                                                </div>
+                                                            </div>
+                                                        @endif
 														@if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse')
                                                             <div class="form-group col-4 m-b-10 data_conent_53">
                                                                 <h6><b>Carpet Area</b></h6>
@@ -1866,26 +1909,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-														@if (!empty($property->projects->area->city->name))
-                                                            <div class="form-group col-4 m-b-10 data_conent_6">
-                                                                <h6><b>City</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_6">
-                                                                <div>:
-                                                                    {{ isset($property->projects->area->city->name) ? ucfirst(strtolower($property->projects->area->city->name)) : '-' }}
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        @if (!empty($property->projects->area->name))
-                                                            <div class="form-group col-4 m-b-10 data_conent_6">
-                                                                <h6><b>Locality</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_6">
-                                                                <div>:
-                                                                    {{ isset($property->projects->area->name) ? ucfirst(strtolower($property->projects->area->name)) : '-' }}
-                                                                </div>
-                                                            </div>
-                                                        @endif
+													
 
                                                         @if ($type == 'Storage/industrial' && empty($property->other_industrial_fields) && !empty(json_decode($property->other_industrial_fields)[3]))
                                                             @foreach (json_decode($property->other_industrial_fields)[3] as $key => $value)
@@ -2119,17 +2143,18 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group col-4 m-b-10 data_conent_79">
-                                                            <h6><b>Location Link</b></h6>
-                                                        </div>
-														<div class="form-group col-8 m-b-10 data_conent_79">
-															<div>:
-																{{-- {{ $property->location_link ? $property->location_link : '-' }} --}}
-																<a href="{{ $property->location_link ? $property->location_link : '#' }}" target="_blank">
-																	<i class="cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i>
-																</a>
-															</div>
-														</div>
+                                                        @if (!empty($property->location_link))
+                                                            <div class="form-group col-4 m-b-10 data_conent_79">
+                                                                <h6><b>Location Link</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-8 m-b-10 data_conent_79">
+                                                                <div>:
+                                                                    <a href="{{ $property->location_link ? $property->location_link : '#' }}" target="_blank">
+                                                                        <i class="cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        @endif
 
 														@if ($type == 'Flat' || $type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse')
 															<?php
@@ -2458,7 +2483,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="modal fade" id="imageModel" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
+                                        {{-- <div class="modal fade" id="imageModel" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Image Section -->
                                                 <div class="modal-content">
@@ -2496,7 +2521,60 @@
                                                     @endif
                                                 </div>
                                             </div>
+                                        </div> --}}
+                                        <div class="modal fade" id="imageModel" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <!-- Image Section -->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="imageLabel">Property Images</h5>
+                                                        <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div id="imageSlider" class="image-slider">
+                                                            @php
+                                                                $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'];
+                                                                $hasImage = false;
+                                                            @endphp
+                                                            @foreach ($multiple_image as $image)
+                                                                @php
+                                                                    $path = pathinfo($image->image, PATHINFO_EXTENSION);
+                                                                @endphp
+                                                                @if (in_array($path, $imageExtensions))
+                                                                    <div class="slide">
+                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="">
+                                                                        <span class="remove-icon" data-image-id="{{ $image->id }}" onclick="removeImage(this)">
+                                                                            <i class="fa fa-trash"></i> Remove
+                                                                        </span>
+                                                                    </div>
+                                                                    @php
+                                                                        $hasImage = true; 
+                                                                    @endphp
+                                                                @endif
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    @if ($hasImage)
+                                                        <div class="modal-footer">
+                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'images', 'prop' => $property->id]) }}">Download Zip</a>
+                                                        </div>
+                                                    @else
+                                                        <center><h4>No Images Found</h4></center>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
+                                        
+                                        <script>
+                                            function removeImage(element) {
+                                                var imageId = element.getAttribute('data-image-id');
+                                                var slideElement = element.closest('.slide');
+                                                slideElement.remove();
+                                            }
+                                        </script>
+
+
                                         {{-- <div class="modal fade" id="imageModel" tabindex="-1" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-fullscreen">
                                                 <div class="modal-content">

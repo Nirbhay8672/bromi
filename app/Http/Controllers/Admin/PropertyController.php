@@ -1371,8 +1371,6 @@ class PropertyController extends Controller
     }
     public function saveProperty(Request $request)
     {
-        // dd(json_decode($request->construction_allowed_for));
-        // dd("reqs:",($request->all()));
         if (!empty($request->id) && $request->id != '') {
             $data = Properties::find($request->id);
             if (empty($data)) {

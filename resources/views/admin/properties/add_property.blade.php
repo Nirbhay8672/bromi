@@ -464,7 +464,8 @@
                                                         {{-- Project Dropdown  --}}
                                                         <div class="col-md-2 m-b-4 mb-4" id="project_hide">
                                                             <!-- <button id="openDropdownButton">Add Prop</button> -->
-                                                            <select class="form-select" name="project_id" data-error="#project_id_error" id="project_id">
+                                                            <select class="form-select" name="project_id"
+                                                                data-error="#project_id_error" id="project_id">
                                                                 <option value="">Project</option>
                                                                 @foreach ($projects as $building)
                                                                     <option data-addr="{{ $building->address }}"
@@ -482,7 +483,7 @@
                                                         @php
                                                             $authStateId = Auth::user()->state_id;
                                                         @endphp
-                                                        <div class="form-group col-md-3 m-b-4 mb-3">
+                                                        {{-- <div class="form-group col-md-3 m-b-4 mb-3">
                                                             <select class="form-select" id="state_id">
                                                                 <option value="">Select States</option>
                                                                 @foreach ($states as $state)
@@ -493,7 +494,7 @@
                                                                     @endif
                                                                 @endforeach
                                                             </select>
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
                                                             <select id="state-dropdown" class="form-control">
                                                                 <option value="">Select City</option>
@@ -1358,7 +1359,8 @@
                                                             <select class="form-select" id="construction_documents"
                                                                 multiple>
                                                                 @foreach ($property_const_docs as $document)
-                                                                    <option value="{{ $document->id }}">{{ $document->name }}</option>
+                                                                    <option value="{{ $document->id }}">
+                                                                        {{ $document->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -2494,25 +2496,29 @@
             citiesar = JSON.parse(cities);
             areass = JSON.parse(areas);
             $(document).ready(function() {
-            //#B Project default Open on add Prop first - time
-            $('#project_id').select2().select2('open');
-            $('#nextButton').click(function () {
-                $('#project_id').select2('toggleDropdown');
-            });
-            //#B This function used for in input textbox only numeric value enter not string 
-            function restrictToNumeric(inputSelectors) {
-                $(inputSelectors.join(',')).on('input', function () {
-                    // Get the current value of the input
-                    let inputValue = $(this).val();
-
-                    // Remove any non-numeric characters using a regular expression
-                    let numericValue = inputValue.replace(/[^0-9]/g, '');
-
-                    // Update the input value with the numeric-only value
-                    $(this).val(numericValue);
+                //#B Project default Open on add Prop first - time
+                $('#project_id').select2().select2('open');
+                $('#nextButton').click(function() {
+                    $('#project_id').select2('toggleDropdown');
                 });
-            }
-            restrictToNumeric(['#terrace_salable_area','#salable_area', '#another_area','#length_of_plot','#width_of_plot','#carpet_area','#entrance_width','#ceiling_height','#storage_centre_height','#carpet_plot_area','#constructed_builtup_area','#constructed_salable_area','#salable_plot_area','#constructed_carpet_area']);
+                //#B This function used for in input textbox only numeric value enter not string 
+                function restrictToNumeric(inputSelectors) {
+                    $(inputSelectors.join(',')).on('input', function() {
+                        // Get the current value of the input
+                        let inputValue = $(this).val();
+
+                        // Remove any non-numeric characters using a regular expression
+                        let numericValue = inputValue.replace(/[^0-9]/g, '');
+
+                        // Update the input value with the numeric-only value
+                        $(this).val(numericValue);
+                    });
+                }
+                restrictToNumeric(['#terrace_salable_area', '#salable_area', '#another_area', '#length_of_plot',
+                    '#width_of_plot', '#carpet_area', '#entrance_width', '#ceiling_height',
+                    '#storage_centre_height', '#carpet_plot_area', '#constructed_builtup_area',
+                    '#constructed_salable_area', '#salable_plot_area', '#constructed_carpet_area'
+                ]);
 
                 //Add multiple Constructin Docs 
                 $(".add-docs").click(function() {
@@ -3034,7 +3040,7 @@
                     'div_checkboxes1', 'div_extra_retail_details', 'div_property_source', 'div_office_furnished',
                     'div_care_taker', 'div_furnished_items', 'div_furnished_items_2', 'the_furnished_status',
                     'div_construction_allowed_for', 'div_retail_furnished', 'div_amenities', 'div_amenities_checks',
-                    'div_construction_documents','div_construction_docs_allowed_for',
+                    'div_construction_documents', 'div_construction_docs_allowed_for',
                 ]
                 for (let i = 0; i < hidefields.length; i++) {
                     $('.' + hidefields[i]).hide();
@@ -3170,7 +3176,7 @@
                         'the_salable_plot_area', 'the_constructed_salable_area',
                         'the_centre_height', 'div_flat_details', 'div_flat_details_5', 'div_flat_details_4',
                         'div_property_source', 'div_checkboxes1', 'div_flat_details_7',
-                        'div_flat_details_8', 'div_other_details',
+                        'div_flat_details_8', 'div_other_details', 'the_total_units_in_project',
                         'div_availability_status',
                         'the_furnished_status', 'the_two_wheller_Parking', 'div_road_width', 'cl-locality',
                         'div_care_taker', 'div_document_section',
@@ -3182,7 +3188,7 @@
                     showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
                         'div_area_size_details', 'div_borewell',
                         'the_length_of_plot', 'the_width_of_plot',
-                        'the_no_of_floors_allowed','div_construction_documents',
+                        'the_no_of_floors_allowed', 'div_construction_documents',
                         // 'div_care_taker','div_flat_details_5','div_flat_details_7'
                         'div_property_source', 'div_checkboxes1', 'div_construction_allowed_for', 'div_tp_details',
                         'div_flat_details_8', 'div_plot_ind_common', 'div_document_section', 'div_survey_details',
@@ -4262,8 +4268,7 @@
 
             var maxImageCount = 10;
             var maxImageSize = 2097152;
-            var maxDocumentSize = 2097152;
-
+            var maxDocumentSize = 10 * 1024 * 1024;
             uploadImageField.onchange = function() {
                 if (this.files.length > maxImageCount) {
                     this.value = '';
@@ -4275,21 +4280,22 @@
             };
 
             uploadDocumentField.onchange = function() {
-                if (this.files.length > 1) {
-                    this.value = '';
-                    Swal.fire({
-                        title: "Only one document is allowed at a time.",
-                        icon: "warning",
-                    });
-                    return;
+                // if (this.files.length > 1) {
+                //     this.value = '';
+                //     Swal.fire({
+                //         title: "Only one document is allowed at a time.",
+                //         icon: "warning",
+                //     });
+                //     return;
+                // }
+                var totalSize = 0;
+                for (var i = 0; i < this.files.length; i++) {
+                    totalSize += this.files[i].size;
                 }
-
-                var documentFile = this.files[0];
-
-                if (documentFile.size > maxDocumentSize) {
+                if (totalSize >= maxDocumentSize) {
                     this.value = '';
                     Swal.fire({
-                        title: "Maximum document size limit is 2MB",
+                        title: "Total size of all documents exceeds the maximum limit of 10 MB",
                         icon: "warning",
                     });
                 }

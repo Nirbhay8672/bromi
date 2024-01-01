@@ -21,6 +21,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class LandPropertyController extends Controller
@@ -30,7 +31,7 @@ class LandPropertyController extends Controller
 		$this->middleware('auth');
 	}
 
-public function index(Request $request)
+	public function index(Request $request)
 	{
 		if ($request->ajax()) {
 			$dropdowns = DropdownSettings::get()->toArray();
@@ -446,7 +447,7 @@ public function index(Request $request)
 		}
 	}
 
-public function saveLandImages(Request $request)
+	public function saveLandImages(Request $request)
 	{
 		$landId = $request->input('land_id');
 		$proId = $request->input('pro_id');
@@ -531,5 +532,25 @@ public function saveLandImages(Request $request)
 		if (!empty($request->allids) && isset(json_decode($request->allids)[0])) {
 			$data = LandProperty::whereIn('id', json_decode($request->allids))->delete();
 		}
+	}
+
+	public function removeImage(Request $request)
+	{
+		dd($request->all());
+		$imageId = $request->input('imageId');
+
+		// Find the image by ID
+		$image = LandProperty::find($imageId);
+
+		if ($image) {
+			Storage::delete('land_images/' . $image->image);
+
+			// Delete the image record from the database
+			$image->delete();
+
+			return response()->json(['success' => true]);
+		}
+
+		return response()->json(['success' => false]);
 	}
 }

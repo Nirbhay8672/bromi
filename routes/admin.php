@@ -278,6 +278,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/save-ContactList', [EnquiriesController::class, 'saveContacts'])->name('admin.saveContactList');
 		Route::post('/save-buildingImages', [ProjectsController::class, 'saveBuildingImages'])->name('admin.saveBuildingImages');
 		Route::post('/save-landImages', [LandPropertyController::class, 'saveLandImages'])->name('admin.saveLandImages');
+		Route::post('/delete-image', [LandPropertyController::class, 'removeImage'])->name('delete.image');
+
 		Route::post('/get-Progress', [EnquiriesController::class, 'getProgress'])->name('admin.getProgress');
 		Route::post('/get-Schedule', [EnquiriesController::class, 'getSchedule'])->name('admin.getSchedule');
 		Route::post('/delete-Progress', [EnquiriesController::class, 'Progress'])->name('admin.deleteProgress');

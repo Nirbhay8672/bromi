@@ -21,7 +21,7 @@
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:7Hu7pwamenC26wtbFN3ID6e3hV+pvp36hONW4/bFKIk=',
+    'key' => 'base64:oJpy3jU6GcnshpRt8SAhQ5tKfChrdGuBXW16didJlJI=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (
@@ -200,7 +200,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\laragon\\www\\bromi\\storage\\framework/cache/data',
+        'path' => 'F:\\bromi\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -321,7 +321,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'mrwebcoi_bromi_live',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
@@ -329,9 +329,9 @@
       array (
         'driver' => 'mysql',
         'url' => NULL,
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'mrwebcoi_bromi_live',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -349,9 +349,9 @@
       array (
         'driver' => 'pgsql',
         'url' => NULL,
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'mrwebcoi_bromi_live',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -364,9 +364,9 @@
       array (
         'driver' => 'sqlsrv',
         'url' => NULL,
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'mrwebcoi_bromi_live',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -409,12 +409,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\laragon\\www\\bromi\\storage\\app',
+        'root' => 'F:\\bromi\\storage\\app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\laragon\\www\\bromi\\storage\\app/public',
+        'root' => 'F:\\bromi\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
       ),
@@ -432,7 +432,7 @@
     ),
     'links' => 
     array (
-      'C:\\laragon\\www\\bromi\\public\\storage' => 'C:\\laragon\\www\\bromi\\storage\\app/public',
+      'F:\\bromi\\public\\storage' => 'F:\\bromi\\storage\\app/public',
     ),
   ),
   'hashing' => 
@@ -467,13 +467,13 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
+        'path' => 'F:\\bromi\\storage\\logs/laravel.log',
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
+        'path' => 'F:\\bromi\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
@@ -524,7 +524,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
+        'path' => 'F:\\bromi\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -536,11 +536,11 @@
       'smtp' => 
       array (
         'transport' => 'smtp',
-        'host' => 'smtp.example.com',
-        'port' => '587',
-        'encryption' => 'tls',
-        'username' => 'user@example.com',
-        'password' => 'your_password',
+        'host' => 'mailhog',
+        'port' => '1025',
+        'encryption' => NULL,
+        'username' => NULL,
+        'password' => NULL,
         'timeout' => NULL,
         'auth_mode' => NULL,
       ),
@@ -582,15 +582,15 @@
     ),
     'from' => 
     array (
-      'address' => 'hello@example.com',
-      'name' => 'example',
+      'address' => NULL,
+      'name' => 'Laravel',
     ),
     'markdown' => 
     array (
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\laragon\\www\\bromi\\resources\\views/vendor/mail',
+        0 => 'F:\\bromi\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -745,7 +745,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\laragon\\www\\bromi\\storage\\framework/sessions',
+    'files' => 'F:\\bromi\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -765,9 +765,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\laragon\\www\\bromi\\resources\\views',
+      0 => 'F:\\bromi\\resources\\views',
     ),
-    'compiled' => 'C:\\laragon\\www\\bromi\\storage\\framework\\views',
+    'compiled' => 'F:\\bromi\\storage\\framework\\views',
   ),
   'dompdf' => 
   array (
@@ -776,10 +776,10 @@
     'convert_entities' => true,
     'options' => 
     array (
-      'font_dir' => 'C:\\laragon\\www\\bromi\\storage\\fonts',
-      'font_cache' => 'C:\\laragon\\www\\bromi\\storage\\fonts',
-      'temp_dir' => 'C:\\Users\\Dell\\AppData\\Local\\Temp',
-      'chroot' => 'C:\\laragon\\www\\bromi',
+      'font_dir' => 'F:\\bromi\\storage\\fonts',
+      'font_cache' => 'F:\\bromi\\storage\\fonts',
+      'temp_dir' => 'C:\\Users\\makva\\AppData\\Local\\Temp',
+      'chroot' => 'F:\\bromi',
       'allowed_protocols' => 
       array (
         'file://' => 
@@ -962,7 +962,7 @@
     ),
     'temporary_files' => 
     array (
-      'local_path' => 'C:\\laragon\\www\\bromi\\storage\\framework/cache/laravel-excel',
+      'local_path' => 'F:\\bromi\\storage\\framework/cache/laravel-excel',
       'remote_disk' => NULL,
       'remote_prefix' => NULL,
       'force_resync_remote' => NULL,
@@ -1043,7 +1043,7 @@
       'local' => 
       array (
         'type' => 'city',
-        'path' => 'C:\\laragon\\www\\bromi\\database\\maxmind/GeoLite2-City.mmdb',
+        'path' => 'F:\\bromi\\database\\maxmind/GeoLite2-City.mmdb',
       ),
     ),
     'ip_api' => 
