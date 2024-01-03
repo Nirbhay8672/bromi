@@ -197,4 +197,10 @@ class AdminLoginController extends Controller
 
 		return redirect('/admin');
 	}
+
+	public function customLogout()
+	{
+		auth()->logout();
+    	return response()->json(['message' => 'Logged out on tab close']);
+	}	
 }

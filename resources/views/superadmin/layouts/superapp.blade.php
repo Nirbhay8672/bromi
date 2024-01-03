@@ -960,6 +960,14 @@ Helper::set_default_measuerement();
         </script>
         <!-- login js-->
         <!-- Plugin used-->
+
+        <script>
+            window.addEventListener('beforeunload', function (event) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/logout-on-close', false);
+                xhr.send();
+            });
+        </script>
 </body>
 
 </html>

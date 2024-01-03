@@ -743,7 +743,7 @@
   array (
     'driver' => 'file',
     'lifetime' => '120',
-    'expire_on_close' => false,
+    'expire_on_close' => true,
     'encrypt' => false,
     'files' => 'C:\\laragon\\www\\bromi\\storage\\framework/sessions',
     'connection' => NULL,
