@@ -56,9 +56,6 @@ class HomeController extends Controller
 	{
 		try {
 			if (Auth::check()) {
-				if (empty(Session::get('plan_id'))) {
-					return redirect()->route('admin.plans');
-				}
 				$start_date = null;
 				$end_date = Carbon::now()->format('Y-m-d 23:59:59');
 				if($request->filled('date_range')){
