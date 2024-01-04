@@ -111,8 +111,7 @@ class PropertyController extends Controller
                 ->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
                     return $query->where(function ($query) use ($request) {
                         $query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
-                    }); 
-                    98
+                    });
                 })
                 ->when($request->filter_property_type && empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {;
                     return $query->where('properties.property_type', $request->filter_property_type);
