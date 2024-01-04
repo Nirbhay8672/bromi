@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Scopes\VendorScope;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,7 +12,6 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Session;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable
 {
@@ -126,5 +123,10 @@ class User extends Authenticatable
 	public function Branch()
 	{
 		return $this->belongsTo(Branches::class, 'branch_id', 'id')->withTrashed();
+	}
+
+	public function projects()
+	{
+		return $this->hasMany(Projects::class);
 	}
 }

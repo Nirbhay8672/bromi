@@ -38,8 +38,8 @@
                                             </th>
                                             <th>Project</th>
                                             <th>Address</th>
-                                            <th>Builder Name</th>
                                             <th>Property Type</th>
+                                            <th>Remark</th>
                                             <th>Modified On</th>
                                             <th>Actions</th>
                                         </tr>
@@ -611,12 +611,12 @@
                             name: 'address'
                         },
                         {
-                            data: 'builder_id',
-                            name: 'builder_id'
-                        },
-                        {
                             data: 'property_type',
                             name: 'property_type'
+                        },
+                        {
+                            data: 'remark',
+                            name: 'remark'
                         },
                         {
                             data: 'modified_at',
