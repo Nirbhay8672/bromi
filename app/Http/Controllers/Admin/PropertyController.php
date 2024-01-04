@@ -88,6 +88,7 @@ class PropertyController extends Controller
                 ->where('properties.property_category', '!=', '256')
                 ->where('properties.property_category', '!=', '261')
                 ->where('properties.property_category', '!=', '262')
+                ->where('properties.added_by', Auth::user()->id)
                 ->when($request->filter_by, function ($query) use ($request) {
                     if ($request->filter_by == 'reminder') {
                         return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(7)->format('Y-m-d'));
@@ -107,14 +108,11 @@ class PropertyController extends Controller
                     // dd("345",(Auth::user()->property_type_id));
                     return $query->whereIn('properties.property_type', json_decode(Auth::user()->property_type_id));
                 })
-                ->when(!empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {
-                    // dd("123",(Auth::user()->property_type_id));
-                    return $query->whereIn('properties.property_category', json_decode(Auth::user()->specific_properties));
-                })
                 ->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
                     return $query->where(function ($query) use ($request) {
                         $query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
-                    });
+                    }); 
+                    98
                 })
                 ->when($request->filter_property_type && empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {;
                     return $query->where('properties.property_type', $request->filter_property_type);
