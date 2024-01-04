@@ -32,7 +32,10 @@
                                         onclick="deleteTableRow()" type="button">Delete</button>
                                 </div>
                             </div>
-                            <div class="card-body">
+                            
+                        </div>
+
+                        <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="display" id="propertyTable">
                                         <thead>
@@ -56,12 +59,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
+                                            
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>
 
                     </div>
                 </div>

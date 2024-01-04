@@ -45,8 +45,9 @@ class IndustrialPropertyController extends Controller
 					$indId = $key;
 				}
 			}
-			$data = Properties::with('Projects', 'Locality')->where('property_category', $indId)
-			->when($request->filter_building_id, function ($query) use ($request) {
+			$data = Properties::with('Projects', 'Locality')
+				->where('property_category', $indId)->where('user_id', Auth::user()->id)
+				->when($request->filter_building_id, function ($query) use ($request) {
 				return $query->whereIn('properties.project_id', ($request->filter_building_id));
 			})
 			->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {

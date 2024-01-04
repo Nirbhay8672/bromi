@@ -48,7 +48,7 @@ public function index(Request $request)
 			}
 			$data = Properties::with('Projects', 'Locality', 'Village')
 				->where('property_category', $indId[0])
-				->orWhere('property_category', $indId[1])
+				->where('user_id', Auth::user()->id)
 				// Filter Section
 				->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
 					return $query->where(function ($query) use ($request) {
