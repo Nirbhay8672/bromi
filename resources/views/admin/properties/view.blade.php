@@ -2,12 +2,6 @@
     $type = isset($dropdowns[$property->property_category]['name']) ? $dropdowns[$property->property_category]['name'] : '';
 @endphp
 @extends('admin.layouts.app')
-{{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
-{{-- <script src="https://ajax.googleapis.com/ajax/libs//3.5.1/jquery.min.js"></script> --}}
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
-<!-- Add this to your HTML file -->
-
 @section('content')
     <div class="page-body">
         <div class="container-fluid">
@@ -2522,13 +2516,12 @@
                                                 </div>
                                             </div>
                                         </div> --}}
-                                        <div class="modal fade" id="imageModel" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
-                                                <!-- Image Section -->
-                                                <div class="modal-content">
+                                        <div class="modal fade" id="imageModel" tabindex="-1" aria-labelledby="imageLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-fullscreen" style="position: relative;text-align: -webkit-center;">
+                                                <div class="modal-content" style="height: 60%;width: 50%;">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="imageLabel">Property Images</h5>
-                                                        <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div id="imageSlider" class="image-slider">
@@ -2542,9 +2535,10 @@
                                                                 @endphp
                                                                 @if (in_array($path, $imageExtensions))
                                                                     <div class="slide">
-                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="">
+                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="" class="img-fluid" data-bs-toggle="modal" data-bs-target="#fullScreenImage" style="width: 456px;height: 332px">
+                                                                        {{-- <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt=""> --}}
                                                                         <span class="remove-icon" data-image-id="{{ $image->id }}" onclick="removeImage(this)">
-                                                                            <i class="fa fa-trash"></i> Remove
+                                                                            <i class="fa fa-trash"></i>
                                                                         </span>
                                                                     </div>
                                                                     @php
@@ -2554,7 +2548,6 @@
                                                             @endforeach
                                                         </div>
                                                     </div>
-                                                    
                                                     @if ($hasImage)
                                                         <div class="modal-footer">
                                                             <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'images', 'prop' => $property->id]) }}">Download Zip</a>
@@ -2566,15 +2559,20 @@
                                             </div>
                                         </div>
                                         
-                                        <script>
-                                            function removeImage(element) {
-                                                var imageId = element.getAttribute('data-image-id');
-                                                var slideElement = element.closest('.slide');
-                                                slideElement.remove();
-                                            }
-                                        </script>
-
-
+                                        <!-- Full-screen image modal -->
+                                        <div class="modal fade" id="fullScreenImage" tabindex="-1" aria-labelledby="fullScreenImageLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-fullscreen">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <img src="" alt="" id="fullScreenImageView" class="" height="100%" width="100%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
                                         {{-- <div class="modal fade" id="imageModel" tabindex="-1" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-fullscreen">
                                                 <div class="modal-content">
@@ -3185,6 +3183,12 @@
     @push('scripts')
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.3/dist/js/bootstrap.bundle.min.js"></script> --}}
     <script>
+         function removeImage(element) {
+            var imageId = element.getAttribute('data-image-id');
+            var slideElement = element.closest('.slide');
+            slideElement.remove();
+        }
+        
         $('#fullScreenImage').on('show.bs.modal', function (event) {
             var imgSrc = $(event.relatedTarget).attr('src');
             $('#fullScreenImageView').attr('src', imgSrc);

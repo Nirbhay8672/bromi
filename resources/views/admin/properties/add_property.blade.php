@@ -483,7 +483,7 @@
                                                         @php
                                                             $authStateId = Auth::user()->state_id;
                                                         @endphp
-                                                        {{-- <div class="form-group col-md-3 m-b-4 mb-3">
+                                                        <div class="form-group col-md-3 m-b-4 mb-3">
                                                             <select class="form-select" id="state_id">
                                                                 <option value="">Select States</option>
                                                                 @foreach ($states as $state)
@@ -494,7 +494,7 @@
                                                                     @endif
                                                                 @endforeach
                                                             </select>
-                                                        </div> --}}
+                                                        </div>
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
                                                             <select id="state-dropdown" class="form-control">
                                                                 <option value="">Select City</option>

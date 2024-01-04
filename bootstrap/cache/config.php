@@ -21,7 +21,7 @@
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:oJpy3jU6GcnshpRt8SAhQ5tKfChrdGuBXW16didJlJI=',
+    'key' => 'base64:cLD7a/no7nMUBXbkPMzCbDtwfdsbl0oSgnHveEo6eyw=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (

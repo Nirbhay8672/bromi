@@ -252,6 +252,7 @@ class PropertyController extends Controller
                         }
                     }
                 })
+                // ->whereIn('user_id',[Auth::user()->id, Auth::user()->parent_id ?? '' ])
                 ->orderByRaw('CASE
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
