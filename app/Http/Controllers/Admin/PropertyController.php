@@ -2153,12 +2153,9 @@ class PropertyController extends Controller
 
     public function addProperty(Request $request)
     {
-        $data['projects'] = Projects::whereNotNull('project_name')->get();
-        // $data['areas']         = Areas::all();
+        $data['projects'] = Projects::whereNotNull('project_name')->where('user_id', Auth::user()->id)->get();
         $conatcts_numbers = [];
-        $data['contacts'] = Enquiries::get();
-        // $data['cities'] = City::orderBy('name')->get();
-        // $data['states'] = State::orderBy('name')->get();
+        $data['contacts'] = Enquiries::where('user_id', Auth::user()->id)->get();
 
         $data['cities'] = City::orderBy('name')->where('user_id', Auth::user()->id)->get();
         $data['states'] = State::orderBy('name')->where('user_id', Auth::user()->id)->get();
@@ -2166,10 +2163,13 @@ class PropertyController extends Controller
             ->where('user_id', Auth::user()->id)
             ->where('status', 1)
             ->get();
-        $data['districts'] = District::orderBy('name')->get();
-        $data['talukas'] = Taluka::orderBy('name')->get();
-        $data['villages'] = Village::orderBy('name')->get();
+
+        $data['districts'] = District::orderBy('name')->where('user_id', Auth::user()->id)->get();
+        $data['talukas'] = Taluka::orderBy('name')->where('user_id', Auth::user()->id)->get();
+        $data['villages'] = Village::orderBy('name')->where('user_id', Auth::user()->id)->get();
+
         $parent_id = Session::get('parent_id');
+
         $amenities = DropdownSettings::where('user_id', $parent_id)->where('dropdown_for', 'property_amenities')->get()->toArray();
         foreach ($data['contacts'] as $key => $value) {
             if (!empty($value->client_mobile) && !empty($value->client_name)) {

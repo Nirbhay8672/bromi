@@ -237,7 +237,7 @@ class ProjectsController extends Controller
 		}
 
 		if($request->id == '' || $request->id == null) {
-			$data->user_id = Session::get('parent_id');
+			$data->user_id = Auth::user()->id;
 			$data->added_by = Auth::user()->id;
 		}
 
