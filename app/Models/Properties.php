@@ -116,23 +116,23 @@ class Properties extends Model
 		parent::boot();
 		static::addGlobalScope(new VendorScope);
 
-		self::created(function ($model) {
-			$data = [];
-			$data['user_id'] = Session::get('parent_id');
-			$data['action_by'] = Auth::User()->id;
-			$data['action_on'] = $model->id;
-			$data['action'] = 'created';
-			PropertyReport::create($data);
-		});
+		// self::created(function ($model) {
+		// 	$data = [];
+		// 	$data['user_id'] = Session::get('parent_id');
+		// 	$data['action_by'] = Auth::User()->id;
+		// 	$data['action_on'] = $model->id;
+		// 	$data['action'] = 'created';
+		// 	PropertyReport::create($data);
+		// });
 
-		self::updated(function ($model) {
-			$data = [];
-			$data['user_id'] = Session::get('parent_id');
-			$data['action_by'] = Auth::User()->id;
-			$data['action_on'] = $model->id;
-			$data['action'] = 'updated';
-			PropertyReport::firstOrCreate($data);
-		});
+		// self::updated(function ($model) {
+		// 	$data = [];
+		// 	$data['user_id'] = Session::get('parent_id');
+		// 	$data['action_by'] = Auth::User()->id;
+		// 	$data['action_on'] = $model->id;
+		// 	$data['action'] = 'updated';
+		// 	PropertyReport::firstOrCreate($data);
+		// });
 	}
 
 	public function Projects()
