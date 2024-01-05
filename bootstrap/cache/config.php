@@ -21,7 +21,7 @@
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:cLD7a/no7nMUBXbkPMzCbDtwfdsbl0oSgnHveEo6eyw=',
+    'key' => 'base64:HmE5VPJ4D9u8LZcdd1GnCQMmXjshiMu+t1O1FxC+j5U=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (
@@ -743,7 +743,7 @@
   array (
     'driver' => 'file',
     'lifetime' => '120',
-    'expire_on_close' => false,
+    'expire_on_close' => true,
     'encrypt' => false,
     'files' => 'F:\\bromi\\storage\\framework/sessions',
     'connection' => NULL,

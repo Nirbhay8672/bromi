@@ -2665,7 +2665,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="modal fade" id="imageModel3" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
+                                        {{-- <div class="modal fade" id="imageModel3" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Document Section -->
                                                 <div class="modal-content">
@@ -2691,6 +2691,43 @@
                                                                 @endif
                                                             @endforeach
 
+                                                        </div>
+                                                    </div>
+                                                    @if ($hasDocuments)
+                                                        <div class="modal-footer">
+                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'documents', 'prop' => $property->id]) }}">Download Zip</a>
+                                                        </div>
+                                                    @else
+                                                        <center><h4>No Documents Found</h4></center>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div> --}}
+                                        <div class="modal fade" id="imageModel3" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <!-- Document Section -->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="documentLabel">Property Documents</h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div id="documentBanner">
+                                                            @php
+                                                                $documentExtensions = ['docs', 'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx', 'ppt', 'pptx'];
+                                                                $hasDocuments = false;
+                                                            @endphp
+                                        
+                                                            @foreach ($multiple_image as $image)
+                                                                @php
+                                                                    $path = pathinfo($image->image, PATHINFO_EXTENSION);
+                                                                @endphp
+                                                                @if (in_array($path, $documentExtensions))
+                                                                    <div class="zoom">
+                                                                        <a href="{{ asset('/upload/land_images/' . $image->image) }}" target="_blank">{{ $image->image }}</a>
+                                                                    </div>
+                                                                    @php $hasDocuments = true; @endphp
+                                                                @endif
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                     @if ($hasDocuments)
@@ -3321,10 +3358,10 @@
         function image1(){
             $('#imageModel2').modal('show');
         }
-        function image2(){
-            $('#imageModel3').modal('show');
+            function image2(){
+                $('#imageModel3').modal('show');
 
-        }
+            }
 
         function makeid(length) {
             var result = '';
