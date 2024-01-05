@@ -585,7 +585,7 @@ class ProjectsController extends Controller
 			->where('status',1)
 			->get();
 
-		$builders = Builders::orderBy('name')->get();
+		$builders = Builders::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
 
 		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
