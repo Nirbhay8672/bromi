@@ -70,6 +70,12 @@ class Projects extends Model
 		'remark',
 	];
 
+	protected static function boot()
+	{
+		parent::boot();
+		static::addGlobalScope(new VendorScope);
+	}
+
 	public function City()
 	{
 		return $this->belongsTo(City::class, 'city_id', 'id')->withTrashed();

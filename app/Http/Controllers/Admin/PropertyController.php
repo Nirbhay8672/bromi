@@ -88,7 +88,6 @@ class PropertyController extends Controller
                 ->where('properties.property_category', '!=', '256')
                 ->where('properties.property_category', '!=', '261')
                 ->where('properties.property_category', '!=', '262')
-                ->where('properties.added_by', Auth::user()->id)
                 ->when($request->filter_by, function ($query) use ($request) {
                     if ($request->filter_by == 'reminder') {
                         return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(7)->format('Y-m-d'));
@@ -107,6 +106,10 @@ class PropertyController extends Controller
                 ->when(!empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
                     // dd("345",(Auth::user()->property_type_id));
                     return $query->whereIn('properties.property_type', json_decode(Auth::user()->property_type_id));
+                })
+                ->when(!empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {
+                    // dd("123",(Auth::user()->property_type_id));
+                    return $query->whereIn('properties.property_category', json_decode(Auth::user()->specific_properties));
                 })
                 ->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
                     return $query->where(function ($query) use ($request) {
@@ -2150,9 +2153,12 @@ class PropertyController extends Controller
 
     public function addProperty(Request $request)
     {
-        $data['projects'] = Projects::whereNotNull('project_name')->where('user_id', Auth::user()->id)->get();
+        $data['projects'] = Projects::whereNotNull('project_name')->get();
+        // $data['areas']         = Areas::all();
         $conatcts_numbers = [];
-        $data['contacts'] = Enquiries::where('user_id', Auth::user()->id)->get();
+        $data['contacts'] = Enquiries::get();
+        // $data['cities'] = City::orderBy('name')->get();
+        // $data['states'] = State::orderBy('name')->get();
 
         $data['cities'] = City::orderBy('name')->where('user_id', Auth::user()->id)->get();
         $data['states'] = State::orderBy('name')->where('user_id', Auth::user()->id)->get();
@@ -2160,13 +2166,10 @@ class PropertyController extends Controller
             ->where('user_id', Auth::user()->id)
             ->where('status', 1)
             ->get();
-
-        $data['districts'] = District::orderBy('name')->where('user_id', Auth::user()->id)->get();
-        $data['talukas'] = Taluka::orderBy('name')->where('user_id', Auth::user()->id)->get();
-        $data['villages'] = Village::orderBy('name')->where('user_id', Auth::user()->id)->get();
-
+        $data['districts'] = District::orderBy('name')->get();
+        $data['talukas'] = Taluka::orderBy('name')->get();
+        $data['villages'] = Village::orderBy('name')->get();
         $parent_id = Session::get('parent_id');
-
         $amenities = DropdownSettings::where('user_id', $parent_id)->where('dropdown_for', 'property_amenities')->get()->toArray();
         foreach ($data['contacts'] as $key => $value) {
             if (!empty($value->client_mobile) && !empty($value->client_name)) {

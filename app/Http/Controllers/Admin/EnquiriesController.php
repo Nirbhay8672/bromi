@@ -64,7 +64,6 @@ class EnquiriesController extends Controller
 			}
 			//Get Data Enquiry
 			$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
-				->where('added_by', Auth::user()->id)
 				//Filter Enquiry
 				->when($request->filter_by, function ($query) use ($request) {
 					if ($request->filter_by == 'new') {
@@ -517,7 +516,7 @@ class EnquiriesController extends Controller
 				->make(true);
 		}
 		$prop_list = Helper::get_property_units_helper();
-		$projects = Projects::orderBy('project_name')->where('user_id',Auth::user()->id)->get();
+		$projects = Projects::orderBy('project_name')->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
 
 		$prop_type = [];
@@ -1035,8 +1034,6 @@ class EnquiriesController extends Controller
 		if (!empty($request->area_measurement)) {
 			Helper::add_default_measuerement($request->area_measurement);
 		}
-		$getEnquiry=Enquiries::find($data->id);
-		return response()->json(['status' => "success", 'message' => "enquiry added successfully",'enquiry' => $getEnquiry]);
 	}
 
 	public function importEnquiry(Request $request)
@@ -1414,7 +1411,7 @@ class EnquiriesController extends Controller
 	public function addEnquiry(Request $request)
 	{
 		$prop_list = Helper::get_property_units_helper();
-		$projects = Projects::orderBy('project_name')->where('user_id',Auth::user()->id)->get();
+		$projects = Projects::orderBy('project_name')->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
 		$enquiry_list = ['Commercial', 'Office'];
 		$prop_type = [];
@@ -1437,7 +1434,7 @@ class EnquiriesController extends Controller
 	{
 
 		$prop_list = Helper::get_property_units_helper();
-		$projects = Projects::orderBy('project_name')->where('user_id',Auth::user()->id)->get();
+		$projects = Projects::orderBy('project_name')->get();
 		$enquiry_list = Enquiries::where('id', $request->id)->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
 		$prop_type = [];

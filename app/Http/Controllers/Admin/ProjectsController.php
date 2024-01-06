@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -36,7 +37,6 @@ class ProjectsController extends Controller
 		if ($request->ajax()) {
 
 			$data = Projects::with('Area', 'Builder', 'City', 'State')
-				->where('user_id', Auth::user()->id)
 				->orderBy('id','desc');
 
 			$parts = explode('?', $request->location);
@@ -237,7 +237,7 @@ class ProjectsController extends Controller
 		}
 
 		if($request->id == '' || $request->id == null) {
-			$data->user_id = Auth::user()->id;
+			$data->user_id = Session::get('parent_id');
 			$data->added_by = Auth::user()->id;
 		}
 
@@ -585,7 +585,7 @@ class ProjectsController extends Controller
 			->where('status',1)
 			->get();
 
-		$builders = Builders::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$builders = Builders::orderBy('name')->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
 
 		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();

@@ -26,8 +26,6 @@ use App\Http\Controllers\Superadmin\UserController;
 Route::get('/login-as-user/{id}', [UserController::class ,'loginAsUser'])->name('login_as_user');
 Route::get('logs', [LogViewerController::class, 'index']);
 
-Route::get('logout-on-close', [AdminLoginController::class, 'customLogout']);
-
 Route::group(['middleware' => 'revalidate'], function () {
 	Route::get('/home', function () {
 		return redirect()->route('admin');

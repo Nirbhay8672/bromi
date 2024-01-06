@@ -21,7 +21,7 @@
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:7Hu7pwamenC26wtbFN3ID6e3hV+pvp36hONW4/bFKIk=',
+    'key' => 'base64:UlTbJM2Gl4oz+Z15emEzil9cBn2v6eAeVQpiG0p3ZDw=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (
@@ -200,7 +200,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\laragon\\www\\bromi\\storage\\framework/cache/data',
+        'path' => 'C:\\laragon\\www\\new_bromi\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -409,12 +409,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\laragon\\www\\bromi\\storage\\app',
+        'root' => 'C:\\laragon\\www\\new_bromi\\storage\\app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\laragon\\www\\bromi\\storage\\app/public',
+        'root' => 'C:\\laragon\\www\\new_bromi\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
       ),
@@ -432,7 +432,7 @@
     ),
     'links' => 
     array (
-      'C:\\laragon\\www\\bromi\\public\\storage' => 'C:\\laragon\\www\\bromi\\storage\\app/public',
+      'C:\\laragon\\www\\new_bromi\\public\\storage' => 'C:\\laragon\\www\\new_bromi\\storage\\app/public',
     ),
   ),
   'hashing' => 
@@ -467,13 +467,13 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
+        'path' => 'C:\\laragon\\www\\new_bromi\\storage\\logs/laravel.log',
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
+        'path' => 'C:\\laragon\\www\\new_bromi\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
@@ -524,7 +524,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
+        'path' => 'C:\\laragon\\www\\new_bromi\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -590,7 +590,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\laragon\\www\\bromi\\resources\\views/vendor/mail',
+        0 => 'C:\\laragon\\www\\new_bromi\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -743,9 +743,9 @@
   array (
     'driver' => 'file',
     'lifetime' => '120',
-    'expire_on_close' => true,
+    'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\laragon\\www\\bromi\\storage\\framework/sessions',
+    'files' => 'C:\\laragon\\www\\new_bromi\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -765,9 +765,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\laragon\\www\\bromi\\resources\\views',
+      0 => 'C:\\laragon\\www\\new_bromi\\resources\\views',
     ),
-    'compiled' => 'C:\\laragon\\www\\bromi\\storage\\framework\\views',
+    'compiled' => 'C:\\laragon\\www\\new_bromi\\storage\\framework\\views',
   ),
   'dompdf' => 
   array (
@@ -776,10 +776,10 @@
     'convert_entities' => true,
     'options' => 
     array (
-      'font_dir' => 'C:\\laragon\\www\\bromi\\storage\\fonts',
-      'font_cache' => 'C:\\laragon\\www\\bromi\\storage\\fonts',
+      'font_dir' => 'C:\\laragon\\www\\new_bromi\\storage\\fonts',
+      'font_cache' => 'C:\\laragon\\www\\new_bromi\\storage\\fonts',
       'temp_dir' => 'C:\\Users\\Dell\\AppData\\Local\\Temp',
-      'chroot' => 'C:\\laragon\\www\\bromi',
+      'chroot' => 'C:\\laragon\\www\\new_bromi',
       'allowed_protocols' => 
       array (
         'file://' => 
@@ -962,7 +962,7 @@
     ),
     'temporary_files' => 
     array (
-      'local_path' => 'C:\\laragon\\www\\bromi\\storage\\framework/cache/laravel-excel',
+      'local_path' => 'C:\\laragon\\www\\new_bromi\\storage\\framework/cache/laravel-excel',
       'remote_disk' => NULL,
       'remote_prefix' => NULL,
       'force_resync_remote' => NULL,
@@ -1043,7 +1043,7 @@
       'local' => 
       array (
         'type' => 'city',
-        'path' => 'C:\\laragon\\www\\bromi\\database\\maxmind/GeoLite2-City.mmdb',
+        'path' => 'C:\\laragon\\www\\new_bromi\\database\\maxmind/GeoLite2-City.mmdb',
       ),
     ),
     'ip_api' => 

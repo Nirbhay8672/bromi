@@ -17,7 +17,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Project Information</h5>
+                            <h5 class="mb-3">Project & Builder Information</h5>
                             <template x-if="id != ''"><strong>Update Project</strong></template>
                             <template x-if="id == ''"><strong>Create Project</strong></template>
                         </div>
@@ -28,7 +28,7 @@
                                         <div class="stepwizard-row setup-panel">
                                             <div class="stepwizard-step mb-5" :class="Object.keys(errors).length == 0 ? '' : 'text-danger'" style="text-align:initial"><a
                                                     class="btn btn-primary" href="#project-info">1</a>
-                                                <p class="ms-2">Project Information</p>
+                                                <p class="ms-2">Project & Builder Information</p>
                                             </div>
                                             <div
                                                 class="stepwizard-step mb-5"
@@ -49,7 +49,41 @@
                                             <div class="col-xs-12">
                                                 <div class="col-md-12">
                                                     <div class="row">
-                                                        <input type="hidden" name="this_data_id" id="this_data_id">                  
+                                                        <input type="hidden" name="this_data_id" id="this_data_id">
+                                                        <div>
+                                                            <label><b>Builder Information</b></label>
+                                                        </div>
+                                                        <div class="form-group col-md-3 m-b-4 mb-3">
+                                                            <select class="form-select" id="builder_id" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
+                                                                <option value=""> Builder Name</option>
+                                                                @foreach ($builders as $builder)
+                                                                    <option value="{{ $builder->id }}">{{ $builder->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <div class="invalid-feedback">
+                                                                <span x-text="errors.builder_id"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-md-6 m-b-4 mb-3">
+                                                            <div class="fname" :class="website == '' ? '' : 'focused' ">
+                                                                <label for="Project Name">Website</label>
+                                                                <div class="fvalue">
+                                                                    <input
+                                                                        class="form-control"
+                                                                        name="website"
+                                                                        x-model="website"
+                                                                        id="website"
+                                                                        type="text"
+                                                                        autocomplete="off"
+                                                                        :class="errors.hasOwnProperty('website') ? 'is-invalid' : ''"
+                                                                    >
+                                                                    <div class="invalid-feedback">
+                                                                        <span x-text="errors.website"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>                    
                                                         <div>
                                                             <label><b>Project Information</b></label>
                                                         </div>
@@ -83,34 +117,9 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row mt-4">
                                                             <div class="form-group col-md-3">
-                                                                <select id="state_id" :class="errors.hasOwnProperty('state') ? 'is-invalid' : ''">
-                                                                    <option value="" disabled>Select State</option>
-                                                                    @foreach ($states as $state)
-                                                                        <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <div class="invalid-feedback">
-                                                                    <span x-text="errors.state"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <select id="city_id" class="form-select" :class="errors.hasOwnProperty('city') ? 'is-invalid' : ''" disabled=true>
-                                                                    <option value="" disabled>Select City</option>
-                                                                    @foreach ($cities as $city)
-                                                                        <option value="{{ $city['id'] }}">{{ $city['name'] }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <div class="invalid-feedback">
-                                                                    <span x-text="errors.city"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <select class="form-select" id="area_id" :class="errors.hasOwnProperty('locality') ? 'is-invalid' : ''" disabled=true>
-                                                                    <option value="" disabled>Select Locality</option>
+                                                                <select class="form-select" id="area_id" :class="errors.hasOwnProperty('locality') ? 'is-invalid' : ''">
+                                                                    <option value="">Locality</option>
                                                                     @foreach ($areas as $area)
                                                                     <option data-pincode="{{ $area->pincode }}"
                                                                             data-city_id="{{ $area->city_id }}"
@@ -123,7 +132,34 @@
                                                                     <span x-text="errors.locality"></span>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="row mt-3">
                                                             <div class="form-group col-md-3">
+                                                                <label for="City">State</label>
+                                                                <select id="state_id" :class="errors.hasOwnProperty('state') ? 'is-invalid' : ''">
+                                                                    <option value="">State</option>
+                                                                    @foreach ($states as $state)
+                                                                        <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <div class="invalid-feedback">
+                                                                    <span x-text="errors.state"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label for="City">City</label>
+                                                                <select id="city_id" :class="errors.hasOwnProperty('city') ? 'is-invalid' : ''">
+                                                                    <option value="">City</option>
+                                                                    @foreach ($cities as $city)
+                                                                        <option value="{{ $city['id'] }}">{{ $city['name'] }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <div class="invalid-feedback">
+                                                                    <span x-text="errors.city"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-3" style="margin-top: 30px;">
                                                                 <div class="fname" :class="pincode == '' ? '' : 'focused' ">
                                                                     <label for="Pincode">Pincode</label>
                                                                     <div class="fvalue">
@@ -185,7 +221,7 @@
                                                             <div class="fname" :class="rera_no == '' ? '' : 'focused' ">
                                                                 <label for="Rarea No">Rera No</label>
                                                                 <div class="fvalue">
-                                                                    <input class="form-control" x-model="rera_no" type="text" autocomplete="off" :class="errors.hasOwnProperty('rera_number') ? 'is-invalid' : ''" style="text-transform: none !important;">
+                                                                    <input class="form-control" x-model="rera_no" type="text" autocomplete="off" :class="errors.hasOwnProperty('rera_number') ? 'is-invalid' : ''">
                                                                     <div class="invalid-feedback">
                                                                         <span x-text="errors.rera_number"></span>
                                                                     </div>
@@ -250,7 +286,6 @@
                                                                                 <input
                                                                                     class="form-control"
                                                                                     x-model="other_contact.email"
-                                                                                    style="text-transform: none !important;"
                                                                                     name="other_contact_email" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
                                                                         </div>
@@ -390,6 +425,11 @@
                                                                         <input type="radio" class="btn-check" value="35" id="extraofficeekind1" x-model="sub_category_single" name="sub_category_single" data-bs-original-title="" title="">
                                                                         <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraofficeekind1">office space</label>
                                                                     </div>
+    
+                                                                    <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
+                                                                        <input type="radio" class="btn-check" value="36" id="extraofficekind2" x-model="sub_category_single" name="sub_category_single" data-bs-original-title="" title="">
+                                                                        <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraofficekind2">Co-working</label>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div class="row mt-2" x-show="sub_category_single != ''">
@@ -419,8 +459,16 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group col-md-3 m-b-20">
+                                                                    <div class="fname" :class="if_office_or_retail.number_of_unit == '' ? '' : 'focused' ">
+                                                                        <label>Total Units </label>
+                                                                        <div class="fvalue">
+                                                                            <input class="form-control" x-model="if_office_or_retail.number_of_unit" name="first_total_units" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group col-md-3 m-b-20">
                                                                     <div class="fname" :class="if_office_or_retail.number_of_unit_each_block == '' ? '' : 'focused' ">
-                                                                        <label>No. of Unit each tower </label>
+                                                                        <label>No. of Unit each block </label>
                                                                         <div class="fvalue">
                                                                             <input class="form-control" name="first_number_of_unit_each_block" x-model="if_office_or_retail.number_of_unit_each_block" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                         </div>
@@ -510,6 +558,14 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group col-md-3 m-b-20">
+                                                                            <div class="fname" :class="tower_detail.total_floor == '' ? '' : 'focused' ">
+                                                                                <label>Total Floors</label>
+                                                                                <div class="fvalue">
+                                                                                    <input class="form-control" x-model="tower_detail.total_floor" name="total_floors" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group col-md-3 m-b-20">
                                                                             <div class="fname" :class="tower_detail.total_unit == '' ? '' : 'focused' ">
                                                                                 <label>Total Units</label>
                                                                                 <div class="fvalue">
@@ -550,7 +606,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`second_tower_detail_saleable_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`second_tower_detail_saleable_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -608,7 +664,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`second_tower_detail_carpet_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`second_tower_detail_carpet_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -650,7 +706,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`second_tower_detail_built_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`second_tower_detail_built_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -1194,7 +1250,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`extra_tower_size_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`extra_tower_size_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -1289,6 +1345,20 @@
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
                                                                         for="officeekind1"
                                                                     >office space</label>
+                                                                </div>
+
+                                                                <div class="btn-group bromi-checkbox-btn me-1"
+                                                                    role="group"
+                                                                    aria-label="Basic radio toggle button group">
+                                                                    <input
+                                                                        type="radio"
+                                                                        class="btn-check"
+                                                                        value="2"
+                                                                        id="officekind2"
+                                                                        x-model="sub_category_single"
+                                                                        name="sub_category_single"
+                                                                    >
+                                                                    <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="officekind2">Co-working</label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1529,7 +1599,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row mb-3" x-show="property_category == 262">
+                                                    <div class="row mb-3" x-show="property_category == 262 || property_category == 256">
                                                         <div class="col-md-12 mb-2">
                                                             <div>
                                                                 <label><b>Sub category</b></label>
@@ -1623,7 +1693,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`carpet_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`carpet_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -1665,7 +1735,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`constructed_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`constructed_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -1707,7 +1777,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`road_width_of_front_side_area_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`road_width_of_front_side_area_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -1733,18 +1803,6 @@
                                                                                                 <option value="122">Meter</option>
                                                                                             </select>
                                                                                         </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group col-md-3 m-b-20">
-                                                                                <div class="fname" :class="types.number_of_units == '' ? '' : 'focused' ">
-                                                                                    <label>Total No. Of Units</label>
-                                                                                    <div class="fvalue">
-                                                                                        <input
-                                                                                            class="form-control"
-                                                                                            x-model="types.number_of_units"
-                                                                                            type="text"
-                                                                                        >
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -2038,7 +2096,7 @@
                                                                     </div>
                                                                     <div class="form-group col-md-3 m-b-20">
                                                                         <div class="fname" :class="if_office_or_retail.number_of_unit_each_block == '' ? '' : 'focused' ">
-                                                                            <label>No. of Unit each tower </label>
+                                                                            <label>No. of Unit each block </label>
                                                                             <div class="fvalue">
                                                                                 <input class="form-control" name="first_number_of_unit_each_block" x-model="if_office_or_retail.number_of_unit_each_block" type="text" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
@@ -2128,6 +2186,23 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                        <div class="form-group col-md-3 m-b-20">
+                                                                            <div class="fname" :class="tower_detail.total_floor == '' ? '' : 'focused' ">
+                                                                                <label>Total Floors</label>
+                                                                                <div class="fvalue">
+                                                                                    <input class="form-control" x-model="tower_detail.total_floor" name="total_floors" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group col-md-3 m-b-20">
+                                                                            <div class="fname" :class="tower_detail.total_unit == '' ? '' : 'focused' ">
+                                                                                <label>Total Units</label>
+                                                                                <div class="fvalue">
+                                                                                    <input class="form-control" x-model="tower_detail.total_unit" name="total_units" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
                                                                         <div class="row">
                                                                             <div class="form-group col-md-4 m-b-5">
                                                                                 <span>Saleable Area</span>
@@ -2160,41 +2235,12 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`tower_detail_saleable_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`tower_detail_saleable_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
                                                                                         <option value="120">VIGHA</option>
                                                                                     </select>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="form-group col-md-5 m-b-5">
-                                                                            <div class="input-group">
-                                                                                <div class="form-group col-md-7 m-b-20">
-                                                                                    <div class="fname" :class="if_office_or_retail.ceiling_height == '' ? '' : 'focused' ">
-                                                                                        <label class="mb-0">Ceiling Height</label>
-                                                                                        <div class="fvalue">
-                                                                                            <input
-                                                                                                class="form-control"
-                                                                                                name="road_width"
-                                                                                                type="text"
-                                                                                                x-model="if_office_or_retail.ceiling_height"
-                                                                                                autocomplete="off"
-                                                                                                data-bs-original-title=""
-                                                                                                title=""
-                                                                                            >
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="input-group-append col-md-5 m-b-20">
-                                                                                    <div class="form-group form_measurement">
-                                                                                        <select class="form-select form_measurement measure_select" name="road_width_select" :id="`first_ceiling_height_map_unit_select_${index}`">
-                                                                                            <option selected="selected" value="121">Ft.</option>
-                                                                                            <option value="122">Meter</option>
-                                                                                        </select>
-                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -2247,7 +2293,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`tower_detail_carpet_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`tower_detail_carpet_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -2288,7 +2334,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`tower_detail_built_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`tower_detail_built_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -2375,7 +2421,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`tower_size_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`tower_size_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -2450,7 +2496,7 @@
                                                             <template x-if="property_type == 87 && (property_category != '256') &&  (property_category != '258')">
                                                                 <div class="row">
                                                                     <div>
-                                                                        <label><b>Tower Details</b></label>
+                                                                        <label><b>Wing Details</b></label>
                                                                         <span x-text="nextTickForIfResidentialWings()"></span>
                                                                     </div>
                                                                 </div>
@@ -2461,7 +2507,7 @@
                                                                     <div class="row">
                                                                         <div class="form-group col-md-3 m-b-20">
                                                                             <div class="fname" :class="wing.wing_name == '' ? '' : 'focused' ">
-                                                                                <label>Tower Name</label>
+                                                                                <label>Wing Name</label>
                                                                                 <input
                                                                                     class="form-control"
                                                                                     x-model="wing.wing_name"
@@ -2560,7 +2606,7 @@
                                                                         
                                                                         <div class="row">
                                                                             <div class="form-group col-md-auto mb-3">
-                                                                                <a style="color:#0078DB!important" @click="unit.has_built_up = !unit.has_built_up" href="javascript:void(0)" data-bs-original-title="" title="">+ Add Built Up Area
+                                                                                <a style="color:#0078DB!important" @click="unit.has_built_up = !unit.has_built_up" href="javascript:void(0)" data-bs-original-title="" title=""> + Add Built Up Area
                                                                                 </a>
                                                                             </div>
                                                                             <div class="form-group col-md-auto mb-3">
@@ -2571,7 +2617,7 @@
     
                                                                         <div class="row mt-2" x-show="unit.has_built_up">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-2 m-b-10">
+                                                                                <div class="form-group col-md-3 m-b-10">
                                                                                     <div class="fname" :class="unit.built_up == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Built up Area</label>
                                                                                         <input class="form-control" x-model="unit.built_up" name="built_up_areass" type="text" autocomplete="off">
@@ -2580,13 +2626,13 @@
                                                                                 <div class="form-group">
                                                                                     <span class="input-group-text" style="min-height:41px;">To</span>
                                                                                 </div>
-                                                                                <div class="form-group col-md-2 m-b-10">
+                                                                                <div class="form-group col-md-3 m-b-10">
                                                                                     <div class="fname" :class="unit.built_up_to == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Built up Area</label>
                                                                                         <input class="form-control" x-model="unit.built_up_to" name="built_up_areass" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group col-md-2 m-b-10">
+                                                                                <div class="form-group col-md-3 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`built_up_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2599,7 +2645,7 @@
     
                                                                         <div class="row mt-2" x-show="unit.has_carpet">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-2 m-b-10">
+                                                                                <div class="form-group col-md-3 m-b-10">
                                                                                     <div class="fname" :class="unit.carpet_area == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Carpet Area</label>
                                                                                         <input class="form-control" x-model="unit.carpet_area" name="carpet_area" type="text" autocomplete="off">
@@ -2608,13 +2654,13 @@
                                                                                 <div class="form-group">
                                                                                     <span class="input-group-text" style="min-height:41px;">To</span>
                                                                                 </div>
-                                                                                <div class="form-group col-md-2 m-b-10">
+                                                                                <div class="form-group col-md-3 m-b-10">
                                                                                     <div class="fname" :class="unit.carpet_area_to == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Carpet Area</label>
                                                                                         <input class="form-control" x-model="unit.carpet_area_to" name="carpet_area" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group col-md-2 m-b-10">
+                                                                                <div class="form-group col-md-3 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`carpet_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2625,15 +2671,24 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="col-md-4">
+                                                                        <div class="row mt-2">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-7 m-b-10">
+                                                                                <div class="form-group col-md-3 m-b-10">
                                                                                     <div class="fname" :class="unit.wash_area == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Wash Area</label>
                                                                                         <input class="form-control" x-model="unit.wash_area" name="wash_area" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group col-md-5 m-b-10">
+                                                                                <div class="form-group">
+                                                                                    <span class="input-group-text" style="min-height:41px;">To</span>
+                                                                                </div>
+                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                    <div class="fname" :class="unit.wash_area_to == '' ? '' : 'focused' ">
+                                                                                        <label class="mb-0">Wash Area</label>
+                                                                                        <input class="form-control" x-model="unit.wash_area_to" name="wash_area" type="text" autocomplete="off">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group col-md-3 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`wash_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2644,15 +2699,24 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="col-md-4">
+                                                                        <div class="row mt-2">
                                                                             <div class="input-group mb-3">
-                                                                                <div class="form-group col-md-7 m-b-10">
+                                                                                <div class="form-group col-md-3 m-b-10">
                                                                                     <div class="fname" :class="unit.balcony == '' ? '' : 'focused' ">
                                                                                         <label class="mb-0">Balcony Area</label>
                                                                                         <input class="form-control" x-model="unit.balcony" name="balcony_area" type="text" autocomplete="off">
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-group col-md-5 m-b-10">
+                                                                                <div class="form-group">
+                                                                                    <span class="input-group-text" style="min-height:41px;">To</span>
+                                                                                </div>
+                                                                                <div class="form-group col-md-3 m-b-10">
+                                                                                    <div class="fname" :class="unit.balcony_to == '' ? '' : 'focused' ">
+                                                                                        <label class="mb-0">Balcony Area</label>
+                                                                                        <input class="form-control" x-model="unit.balcony_to" name="balcony_area" type="text" autocomplete="off">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group col-md-3 m-b-10">
                                                                                     <select class="form-select form_measurement measure_select" :id="`balcony_area_select_${index}`">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
@@ -2681,27 +2745,16 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
-                                                                        <div class="col-md-4">
-                                                                            <div class="input-group">
-                                                                                <div class="form-group col-md-7 m-b-20">
-                                                                                    <div class="fname" :class="unit.ceiling_height == '' ? '' : 'focused' ">
-                                                                                        <label class="mb-0">Ceiling Height</label>
-                                                                                        <input class="form-control" x-model="unit.ceiling_height" name="floor_height" type="text" autocomplete="off">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="input-group-append col-md-5 m-b-20">
-                                                                                    <div class="form-group form_measurement">
-                                                                                        <select class="form-select form_measurement measure_select" :id="`second_ceiling_height_select_${index}`">
-                                                                                            <option selected="selected" value="121">Ft.</option>
-                                                                                            <option value="122">Meter</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
                                                                 
                                                                         <div class="row">
+                                                                            <div class="form-check checkbox  checkbox-solid-success col-md-3 m-b-20">
+                                                                                <input
+                                                                                    class="project_amenity form-check-input" :id="`terrace_and_penthouse_checkbox_${index}`"
+                                                                                    x-model="unit.has_terrace_and_carpet"
+                                                                                    :name="`terrace_and_penthouse_checkbox_${index}`" type="checkbox">
+                                                                                <label class="form-check-label" :for="`terrace_and_penthouse_checkbox_${index}`">Terrace & Penthouse</label>
+                                                                            </div>
+        
                                                                             <div class="form-check checkbox  checkbox-solid-success col-md-3 m-b-20">
                                                                                 <input
                                                                                     class="project_amenity form-check-input" :id="`servant_room_checkbox_${index}`"
@@ -2712,6 +2765,28 @@
                                                                         </div>
         
                                                                         <div class="row">
+                                                                            <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
+                                                                                <div class="input-group">
+                                                                                    <div class="form-group col-md-7 m-b-20">
+                                                                                        <div class="fname" :class="unit.terrace_carpet_area == '' ? '' : 'focused' ">
+                                                                                            <label class="mb-0">Terrace carpet</label>
+                                                                                            <input class="form-control" x-model="unit.terrace_carpet_area" name="terrace_carpet_area" type="text" autocomplete="off">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="input-group-append col-md-5 m-b-20">
+                                                                                        <div class="form-group form_measurement">
+                                                                                            <select class="form-select form_measurement measure_select" :id="`terrace_carpet_select_${index}`"
+                                                                                                name="terrace_carpet_area_measurement">
+                                                                                                <option value="117" selected>Sq.Ft.</option>
+                                                                                                <option value="118">Sq.Yard</option>
+                                                                                                <option value="119">Sq.Meter</option>
+                                                                                                <option value="120">VIGHA</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                    
                                                                             <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
                                                                                 <div class="input-group">
                                                                                     <div class="form-group col-md-7 m-b-20">
@@ -2739,27 +2814,6 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-md-4" x-show="unit.has_terrace_and_carpet">
-                                                                                <div class="input-group">
-                                                                                    <div class="form-group col-md-7 m-b-20">
-                                                                                        <div class="fname" :class="unit.terrace_carpet_area == '' ? '' : 'focused' ">
-                                                                                            <label class="mb-0">Terrace carpet</label>
-                                                                                            <input class="form-control" x-model="unit.terrace_carpet_area" name="terrace_carpet_area" type="text" autocomplete="off">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="input-group-append col-md-5 m-b-20">
-                                                                                        <div class="form-group form_measurement">
-                                                                                            <select class="form-select form_measurement measure_select" :id="`terrace_carpet_select_${index}`"
-                                                                                                name="terrace_carpet_area_measurement">
-                                                                                                <option value="117" selected>Sq.Ft.</option>
-                                                                                                <option value="118">Sq.Yard</option>
-                                                                                                <option value="119">Sq.Meter</option>
-                                                                                                <option value="120">VIGHA</option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
@@ -2778,36 +2832,106 @@
 
                                                     <template x-if="property_category == '262' || property_category == '256' || property_category == '258'">
                                                         <div class="row mt-4">
-                                                            <span x-text="nexttickForFarm()"></span>
                                                             <div class="row mt-2">
-                                                                <div class="col-md-4">
-                                                                    <div class="input-group mb-3">
-                                                                        <div class="form-group col-md-6 m-b-10">
-                                                                            <div class="fname" :class="if_farm_plot_land.total_open_area == '' ? '' : 'focused' ">
-                                                                                <label class="mb-0">Total Open Area</label>
-                                                                                <div class="fvalue">
-                                                                                    <input class="form-control" x-model="if_farm_plot_land.total_open_area" name="total_open_area" type="text" autocomplete="off" data-bs-original-title="" title="">
-                                                                                </div>
+                                                                <div class="input-group mb-3">
+                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                        <div class="fname" :class="if_farm_plot_land.total_land_area == '' ? '' : 'focused' ">
+                                                                            <span x-text="nexttickForFarm()"></span>
+                                                                            <label class="mb-0">Total Land Area</label>
+                                                                            <div class="fvalue">
+                                                                                <input class="form-control" name="total_land_area" type="text" x-model="if_farm_plot_land.total_land_area" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="form-group col-md-6 m-b-10">
-                                                                            <select class="form-select form_measurement measure_select" name="open_area_map_select" id="open_area_select">
-                                                                                <option value="117" selected>Sq.Ft.</option>
-                                                                                <option value="118">Sq.Yard</option>
-                                                                                <option value="119">Sq.Meter</option>
-                                                                                <option value="120">VIGHA</option>
-                                                                            </select>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="col-md-6 m-b-20">
-                                                                        <div class="fname" :class="if_farm_plot_land.total_number_of_plot == '' ? '' : 'focused' ">
-                                                                            <label>Total No. of Plots</label>
+                                                                    <div class="form-group">
+                                                                        <span class="input-group-text" style="min-height:41px;">To</span>
+                                                                    </div>
+                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                        <div class="fname" :class="if_farm_plot_land.total_land_area_to == '' ? '' : 'focused' ">
+                                                                            <span x-text="nexttickForFarm()"></span>
+                                                                            <label class="mb-0">Total Land Area</label>
                                                                             <div class="fvalue">
-                                                                                <input class="form-control" x-model="if_farm_plot_land.total_number_of_plot" name="total_no_of_plots" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                                <input class="form-control" name="total_land_area" type="text" x-model="if_farm_plot_land.total_land_area_to" autocomplete="off" data-bs-original-title="" title="">
                                                                             </div>
                                                                         </div>
+                                                                    </div>
+                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                        <select class="form-select form_measurement measure_select" name="land_area_map_select" id="land_area_select">
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-2">
+                                                                <div class="input-group mb-3">
+                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                        <div class="fname" :class="if_farm_plot_land.total_open_area == '' ? '' : 'focused' ">
+                                                                            <label class="mb-0">Total Open Area</label>
+                                                                            <div class="fvalue">
+                                                                                <input class="form-control" x-model="if_farm_plot_land.total_open_area" name="total_open_area" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <span class="input-group-text" style="min-height:41px;">To</span>
+                                                                    </div>
+                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                        <div class="fname" :class="if_farm_plot_land.total_open_area_to == '' ? '' : 'focused' ">
+                                                                            <label class="mb-0">Total Open Area</label>
+                                                                            <div class="fvalue">
+                                                                                <input class="form-control" x-model="if_farm_plot_land.total_open_area_to" name="total_open_area" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                        <select class="form-select form_measurement measure_select" name="open_area_map_select" id="open_area_select">
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-3 m-b-20">
+                                                                <div class="fname" :class="if_farm_plot_land.total_number_of_plot == '' ? '' : 'focused' ">
+                                                                    <label>Total No. of Plots</label>
+                                                                    <div class="fvalue">
+                                                                        <input class="form-control" x-model="if_farm_plot_land.total_number_of_plot" name="total_no_of_plots" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-2">
+                                                                <div class="input-group mb-3">
+                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                        <div class="fname" :class="if_farm_plot_land.common_area == '' ? '' : 'focused' ">
+                                                                            <label class="mb-0">Common Area</label>
+                                                                            <div class="fvalue">
+                                                                                <input class="form-control" name="common_area" type="text" x-model="if_farm_plot_land.common_area" autocomplete="off" data-bs-original-title="" title="">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <span class="input-group-text" style="min-height:41px;">To</span>
+                                                                    </div>
+                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                        <div class="fname" :class="if_farm_plot_land.common_area_to == '' ? '' : 'focused' ">
+                                                                            <label class="mb-0">Common Area</label>
+                                                                            <div class="fvalue">
+                                                                                <input class="form-control" name="common_area" type="text" x-model="if_farm_plot_land.common_area_to" autocomplete="off" data-bs-original-title="" title="">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group col-md-3 m-b-10">
+                                                                        <select class="form-select form_measurement measure_select" name="common_area_map_select" id="common_area_select">
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
+                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -2847,7 +2971,7 @@
                                                             </div>
                                                             <div class="row mt-2">
                                                                 <div class="input-group mb-3">
-                                                                    <div class="form-group col-md-2 m-b-10">
+                                                                    <div class="form-group col-md-3 m-b-10">
                                                                         <div class="fname" :class="if_farm_plot_land.plot_size_from == '' ? '' : 'focused' ">
                                                                             <label class="mb-0">Saleable Plot from</label>
                                                                             <div class="fvalue">
@@ -2858,7 +2982,7 @@
                                                                     <div class="form-group">
                                                                         <span class="input-group-text" style="min-height:41px;">To</span>
                                                                     </div>
-                                                                    <div class="form-group col-md-2 m-b-10">
+                                                                    <div class="form-group col-md-3 m-b-10">
                                                                         <div class="fname" :class="if_farm_plot_land.plot_size_to == '' ? '' : 'focused' ">
                                                                             <label class="mb-0">Saleable Plot to</label>
                                                                             <div class="fvalue">
@@ -2866,7 +2990,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group col-md-2 m-b-10">
+                                                                    <div class="form-group col-md-3 m-b-10">
                                                                         <select class="form-select form_measurement measure_select" name="common_area_map_select" id="plot_size_from_select">
                                                                             <option value="117" selected>Sq.Ft.</option>
                                                                             <option value="118">Sq.Yard</option>
@@ -2891,7 +3015,7 @@
                                                     <template x-if="if_farm_plot_land.add_carpet_plot_size">
                                                         <div class="row mt-2">
                                                             <div class="input-group mb-3">
-                                                                <div class="form-group col-md-2 m-b-10">
+                                                                <div class="form-group col-md-3 m-b-10">
                                                                     <div class="fname" :class="if_farm_plot_land.carpet_plot_size == '' ? '' : 'focused' ">
                                                                         <span x-text="selectOnCarpetPlot()" class="d-none"></span>
                                                                         <label class="mb-0">Carpet Plot Size</label>
@@ -2903,7 +3027,7 @@
                                                                 <div class="form-group">
                                                                     <span class="input-group-text" style="min-height:41px;">To</span>
                                                                 </div>
-                                                                <div class="form-group col-md-2 m-b-10">
+                                                                <div class="form-group col-md-3 m-b-10">
                                                                     <div class="fname" :class="if_farm_plot_land.carpet_plot_size_to == '' ? '' : 'focused' ">
                                                                         <span x-text="selectOnCarpetPlot()" class="d-none"></span>
                                                                         <label class="mb-0">Carpet Plot Size</label>
@@ -2912,7 +3036,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-md-2 m-b-10">
+                                                                <div class="form-group col-md-3 m-b-10">
                                                                     <select class="form-select" name="carpet_plot_size_select" tabindex="-1" aria-hidden="true" id="carpet_plot_size_select">
                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                         <option value="118">Sq.Yard</option>
@@ -2950,7 +3074,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-md-2 m-b-10">
+                                                                <div class="form-group col-md-3 m-b-10">
                                                                     <select class="form-select" name="constructed_saleable_area_select" tabindex="-1" aria-hidden="true" id="constructed_saleable_area_select">
                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                         <option value="118">Sq.Yard</option>
@@ -3236,6 +3360,13 @@
                                                         <div
                                                             class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                                             <input class="project_amenity form-check-input"
+                                                                id="amenity_pool" x-model="amenities" type="checkbox" value="swimming_pool">
+                                                            <label class="form-check-label" for="amenity_pool">Swimming
+                                                                Pool</label>
+                                                        </div>
+                                                        <div
+                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                                            <input class="project_amenity form-check-input"
                                                                 id="amenity_club_house" type="checkbox" x-model="amenities" value="club_house">
                                                             <label class="form-check-label" for="amenity_club_house">Club
                                                                 house</label>
@@ -3246,6 +3377,12 @@
                                                                 id="amenity_passenger_lift" type="checkbox" x-model="amenities" value="passenger_lift">
                                                             <label class="form-check-label"
                                                                 for="amenity_passenger_lift">Passenger Lift</label>
+                                                        </div>
+                                                        <div
+                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                                            <input class="project_amenity form-check-input"
+                                                                id="amenity_garden" type="checkbox" x-model="amenities" value="garden_and_children_area">
+                                                            <label class="form-check-label" for="amenity_garden">Garden & Children Play Area</label>
                                                         </div>
                                                         <div
                                                             class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
@@ -3307,48 +3444,15 @@
                                                             <div class="form-group col-md-6 m-b-4 mb-3">
                                                                 <div class="fname">
                                                                     <div class="fvalue">
-                                                                        <input class="form-control" :class="errors.hasOwnProperty('document_image') ? 'is-invalid' : ''" accept="image/*,.pdf" type="file" id="document_image" name="document_image">
+                                                                        <input class="form-control" :class="errors.hasOwnProperty('document_image') ? 'is-invalid' : ''" accept="image/*" type="file" id="document_image" name="document_image">
                                                                         <div class="invalid-feedback">
                                                                             <span x-text="errors.document_image"></span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group col-md-1 m-b-4 mb-3">
-                                                                <button class="btn btn-danger" type="button" @click="addOtherImageOrDoc()" title="">+</button>
-                                                            </div>
                                                         </div>
                                                     </div>
-
-                                                    <div class="row">
-                                                    <template x-for="(other_doc, index) in other_documents">
-                                                        <div class="row">
-                                                            <div class="form-group col-md-4 m-b-4 mt-1">
-                                                                <select class="form-select" :id="`other_doc_${index}`" x-model="other_doc.document_type">
-                                                                    <option value=""> Category</option>
-                                                                    <option value="1">Building Elevation</option>
-                                                                    <option value="2">Common Amenities Photos</option>
-                                                                    <option value="3">Master Layout Of Building
-                                                                    </option>
-                                                                    <option value="4">Brochure</option>
-                                                                    <option value="5">Cost Sheet</option>
-                                                                    <option value="6">Other</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group col-md-6 m-b-4 mb-3">
-                                                                <div class="fname">
-                                                                    <div class="fvalue">
-                                                                        <input class="form-control" accept="image/*,.pdf" type="file" :id="`document_image_${index}`" name="document_image">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-1 m-b-4 mb-3">
-                                                                <button class="btn btn-danger" type="button" @click="removeOtherImageOrDoc(index)" title="">-</button>
-                                                            </div>
-                                                        </div>
-                                                    </template>
-                                                    </div>
-                                                    
 
                                                     <div class="row mt-3">
                                                         <div>
@@ -3365,28 +3469,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <hr>
-
-                                                    <div class="row">
-                                                        <div class="form-group col-md-6 m-b-4 mb-3">
-                                                            <div class="fname">
-                                                                <div class="fvalue">
-                                                                    <input
-                                                                        type="text"
-                                                                        class="form-control"
-                                                                        placeholder="Enter remark"
-                                                                        x-model="remark"
-                                                                        :class="errors.hasOwnProperty('remark') ? 'is-invalid' : ''"
-                                                                    >
-                                                                    <div class="invalid-feedback">
-                                                                        <span x-text="errors.remark"></span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
                                                     <button @click="submitHandle()" class="btn btn-secondary pull-right"
                                                     type="button">Finish!</button>
                                                 </div>
@@ -3403,11 +3485,7 @@
         @php
             $city_encoded = json_encode($cities);
             $state_encoded = json_encode($states);
-            $area_encoded = json_encode($areas);
             $project_data = isset($id) ? json_encode($id) : null;
-            
-            $first_state = json_encode($first_state);
-            $first_city = json_encode($first_city);
         @endphp
     </div>
 @endsection
@@ -3426,13 +3504,6 @@
             }
         });
 
-        var cities = @Json($city_encoded);
-        var states = @Json($state_encoded);
-        var areas = @Json($area_encoded);
-
-        citiesar = JSON.parse(cities);
-    	areass = JSON.parse(areas);
-
         document.addEventListener('alpine:init', () => {
 
             let data = @json($project_data);
@@ -3440,82 +3511,13 @@
             Alpine.data('add_project_form', () => ({
 
                 init() {
-                    
-                    let state_id = JSON.parse(@Json($first_state));
-                    let city_id = JSON.parse(@Json($first_city));
-                    
-                    $("#state_id").val(state_id['id']).trigger('change');
-                    document.getElementById('city_id').disabled = false;
-
-                    $('#city_id').html('');
-                    $('#city_id').append(`<option value="" selected disabled>City</option>`);
-                    for (let i = 0; i < citiesar.length; i++) {
-                        if (citiesar[i]['state_id'] == $("#state_id").val()) {
-                            $('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
-                                'name'
-                            ] + '</option>')
-                        }
-                    }
-                    $('#city_id').select2();
-                    
-                    $("#city_id").val(city_id['id']).trigger('change');
-                    document.getElementById('area_id').disabled = false;
-
-                    $('#area_id').html('');
-                    $('#area_id').append(`<option value="" selected disabled>Locality</option>`);
-                    for (let i = 0; i < areass.length; i++) {
-                        if (areass[i]['state_id'] == $("#state_id").val()) {
-                            $('#area_id').append(`<option value="${areass[i]['id']}"
-                                data-pincode="${areass[i]['pincode']}"
-                                data-city_id="${areass[i]['city_id']}"
-                                data-state_id="${areass[i]['state_id']}">
-                                ${areass[i]['name']}
-                            </option>`);
-                        }
-                    }
-                    $('#area_id').select2();
-                    
                     if(data) {
-
                         let project_data = JSON.parse(data);
-                        
-                        document.getElementById('state_id').disabled = false;
-                        document.getElementById('city_id').disabled = false;
-                        document.getElementById('area_id').disabled = false;
 
-                        $('#city_id').select2('destroy');
-    					$('#area_id').select2('destroy');
-    					
-    					$("#state_id").val(project_data['state_id']).trigger('change');
-    
-    					$('#city_id').html('');
-                        for (let i = 0; i < citiesar.length; i++) {
-    						if (citiesar[i]['state_id'] == $("#state_id").val()) {
-    							$('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
-    								'name'
-    							] + '</option>')
-    						}
-    					}
-    					$('#city_id').select2();
-
-                        $("#city_id").val(project_data['city_id']).trigger('change');
-
-                        $('#area_id').html('');
-                        $('#area_id').append(`<option value="" selected disabled>Locality</option>`);
-                        for (let i = 0; i < areass.length; i++) {
-    						if (areass[i]['state_id'] == $("#state_id").val()) {
-    							$('#area_id').append(`<option value="${areass[i]['id']}"
-                                    data-pincode="${areass[i]['pincode']}"
-                                    data-city_id="${areass[i]['city_id']}"
-                                    data-state_id="${areass[i]['state_id']}">
-                                    ${areass[i]['name']}
-                                </option>`);
-    						}
-    					}
-    					$('#area_id').select2();
-					
                         // first section
                         this.id = project_data['id'];
+                        $("#builder_id").val(project_data['builder_id']).trigger('change');
+                        this.website = project_data['website'] ?? '';
 
                         this.other_contact_details = JSON.parse(project_data['contact_details']) ?? [{'name' : '','mobile' : '','email' : '','designation' : ''}];
 
@@ -3523,6 +3525,8 @@
                         this.address = project_data['address'];
 
                         $("#area_id").val(project_data['area_id']).trigger('change');
+                        $("#state_id").val(project_data['state_id']).trigger('change');
+                        $("#city_id").val(project_data['city_id']).trigger('change');
                         
                         this.location_link = project_data['location_link'] ?? '';
                         this.pincode = project_data['pincode'] ?? '';
@@ -3608,7 +3612,6 @@
                                     $(`#second_tower_detail_carpet_from_to_select_${index}`).val(tower_detail.carpet_from_to_map_unit).trigger('change');
                                     $(`#second_tower_detail_built_from_to_select_${index}`).val(tower_detail.built_from_to_map_unit).trigger('change');
                                     $(`#second_tower_detail_saleable_from_to_select_${index}`).val(tower_detail.saleable_from_to_map_unit).trigger('change');
-                                    $(`#second_ceiling_height_map_unit_select_${index}`).val(tower_detail.ceiling_height_map_unit).trigger('change');
                                 });
                             });
 
@@ -3647,7 +3650,6 @@
                                     $(`#wash_area_select_${index}`).val(parseInt(unit_details.wash_area_map_unit)).trigger('change');
                                     $(`#balcony_area_select_${index}`).val(parseInt(unit_details.balcony_area_map_unit)).trigger('change');
                                     $(`#floor_height_select_${index}`).val(parseInt(unit_details.floor_height_map_unit)).trigger('change');
-                                    $(`#ceiling_height_select_${index}`).val(parseInt(unit_details.ceiling_height_map_unit)).trigger('change');
                                     $(`#terrace_carpet_select_${index}`).val(parseInt(unit_details.terrace_carpet_area_map_unit)).trigger('change');
                                     $(`#terrace_saleable_select_${index}`).val(parseInt(unit_details.terrace_saleable_area_map_unit)).trigger('change');
 
@@ -3658,7 +3660,6 @@
                                     $(`#second_wash_area_select_${index}`).val(parseInt(unit_details.wash_area_map_unit)).trigger('change');
                                     $(`#second_balcony_area_select_${index}`).val(parseInt(unit_details.balcony_area_map_unit)).trigger('change');
                                     $(`#second_floor_height_select_${index}`).val(parseInt(unit_details.floor_height_map_unit)).trigger('change');
-                                    $(`#second_ceiling_height_select_${index}`).val(parseInt(unit_details.ceiling_height_map_unit)).trigger('change');
                                     $(`#second_terrace_carpet_select_${index}`).val(parseInt(unit_details.terrace_carpet_area_map_unit)).trigger('change');
                                     $(`#second_terrace_saleable_select_${index}`).val(parseInt(unit_details.terrace_saleable_area_map_unit)).trigger('change');
                                 });
@@ -3713,7 +3714,6 @@
                                         $(`#wash_area_select_${index}`).val(parseInt(unit_details.wash_area_map_unit)).trigger('change');
                                         $(`#balcony_area_select_${index}`).val(parseInt(unit_details.balcony_area_map_unit)).trigger('change');
                                         $(`#floor_height_select_${index}`).val(parseInt(unit_details.floor_height_map_unit)).trigger('change');
-                                        $(`#ceiling_height_select_${index}`).val(parseInt(unit_details.ceiling_height_map_unit)).trigger('change');
                                         $(`#terrace_carpet_select_${index}`).val(parseInt(unit_details.terrace_carpet_area_map_unit)).trigger('change');
                                         $(`#terrace_saleable_select_${index}`).val(parseInt(unit_details.terrace_saleable_area_map_unit)).trigger('change');
 
@@ -3724,7 +3724,6 @@
                                         $(`#second_wash_area_select_${index}`).val(parseInt(unit_details.wash_area_map_unit)).trigger('change');
                                         $(`#second_balcony_area_select_${index}`).val(parseInt(unit_details.balcony_area_map_unit)).trigger('change');
                                         $(`#second_floor_height_select_${index}`).val(parseInt(unit_details.floor_height_map_unit)).trigger('change');
-                                        $(`#second_ceiling_height_select_${index}`).val(parseInt(unit_details.ceiling_height_map_unit)).trigger('change');
                                         $(`#second_terrace_carpet_select_${index}`).val(parseInt(unit_details.terrace_carpet_area_map_unit)).trigger('change');
                                         $(`#second_terrace_saleable_select_${index}`).val(parseInt(unit_details.terrace_saleable_area_map_unit)).trigger('change');
                                     });
@@ -3749,7 +3748,6 @@
                                         $(`#tower_detail_carpet_from_to_select_${index}`).val(tower_detail.carpet_from_to_map_unit).trigger('change');
                                         $(`#tower_detail_built_from_to_select_${index}`).val(tower_detail.built_from_to_map_unit).trigger('change');
                                         $(`#tower_detail_saleable_from_to_select_${index}`).val(tower_detail.saleable_from_to_map_unit).trigger('change');
-                                        $(`#first_ceiling_height_map_unit_select_${index}`).val(tower_detail.ceiling_height_map_unit).trigger('change');
                                     });
                                 });
                             }
@@ -3853,15 +3851,6 @@
                         this.amenities = JSON.parse(project_data['amenities']);
 
                         $('#image_category').val(project_data['document_category']).trigger('change');
-
-                        this.other_documents = project_data['other_documents'];
-                        let _this_doc = this;
-
-                        this.$nextTick(function () {
-                            _this_doc.setSelect2ForOtherDoc();
-                        });
-                        
-                        this.remark = project_data['remark'];
                     }
                 },
 
@@ -3870,6 +3859,7 @@
                 // first_sections
 
                 id : '',
+                website : '',
                 other_contact_details : [{
                     'name' : '',
                     'mobile' : '',
@@ -3948,7 +3938,6 @@
                     terrace_carpet_area : '',
                     terrace_saleable_area : '',
                     floor_height : '',
-                    ceiling_height : '',
                     servant_room : false,
                     service_lift : false,
 
@@ -3962,7 +3951,6 @@
                     terrace_carpet_area_map_unit : '',
                     terrace_saleable_area_map_unit : '',
                     floor_height_map_unit : '',
-                    ceiling_height_map_unit : '',
 
                     unit_details : [
                         {
@@ -4025,7 +4013,6 @@
                         built_up_to : '',
                         saleable : '',
                         saleable_to : '',
-                        ceiling_height : '',
 
                         is_carpet : false,
                         is_built_up : false,
@@ -4105,7 +4092,6 @@
                 },
 
                 if_ware_cold_ind_plot : {
-                    number_of_unit : '',
                     types : [
                         {
                             plot_area_from : '',
@@ -4175,7 +4161,6 @@
                         terrace_carpet_area : '',
                         terrace_saleable_area : '',
                         floor_height : '',
-                        ceiling_height : '',
                         servant_room : false,
                         service_lift : false,
 
@@ -4189,7 +4174,6 @@
                         terrace_carpet_area_map_unit : '',
                         terrace_saleable_area_map_unit : '',
                         floor_height_map_unit : '',
-                        ceiling_height_map_unit : '',
 
                         unit_details : [
                             {
@@ -4251,7 +4235,6 @@
                             built_up_to : '',
                             saleable : '',
                             saleable_to : '',
-                            ceiling_height : '',
 
                             is_carpet : false,
                             is_built_up : false,
@@ -4326,7 +4309,6 @@
                     };
 
                     this.if_ware_cold_ind_plot = {
-                        number_of_unit : '',
                         types : [
                             {
                                 plot_area_from : '',
@@ -4380,22 +4362,14 @@
                 },
 
                 addWingSubCategory(event, value) {
-                    let newArray = [];
                     if(event.target.checked) {
                         this.sub_category_array.push(value);
-                        newArray = this.sub_category_array;
                     } else {
-                        let originalArray = this.sub_category_array;
-                        const valueToRemove = value;
-                        newArray = originalArray.filter(item => item !== valueToRemove);
+                        const index = this.sub_category_array.indexOf(value);
+                        if (index > -1) {
+                            this.sub_category_array.splice(index, 1);
+                        }
                     }
-
-
-                    this.sub_category_array = [];
-
-                    newArray.forEach((element, index) => {
-                        this.sub_category_array.push(element);
-                    });
                 },
 
                 manageWingNameArray() {
@@ -4422,7 +4396,6 @@
                                     built_up_to : '',
                                     saleable : '',
                                     saleable_to : '',
-                                    ceiling_height : '',
 
                                     is_carpet : false,
                                     is_built_up : false,
@@ -4442,7 +4415,6 @@
                         built_up_to : '',
                         saleable : '',
                         saleable_to : '',
-                        ceiling_height : '',
 
                         is_carpet_built_up : false,
                     });
@@ -4475,12 +4447,10 @@
                             $(`#tower_detail_carpet_from_to_select_${index}`).select2();
                             $(`#tower_detail_built_from_to_select_${index}`).select2();
                             $(`#tower_detail_saleable_from_to_select_${index}`).select2();
-                            $(`#first_ceiling_height_map_unit_select_${index}`).select2();
 
                             $(`#second_tower_detail_carpet_from_to_select_${index}`).select2();
                             $(`#second_tower_detail_built_from_to_select_${index}`).select2();
                             $(`#second_tower_detail_saleable_from_to_select_${index}`).select2();
-                            $(`#second_ceiling_height_map_unit_select_${index}`).select2();
                         });
                     });
                 },
@@ -4575,7 +4545,6 @@
                             $(`#terrace_carpet_select_${index}`).select2();
                             $(`#terrace_saleable_select_${index}`).select2();
                             $(`#floor_height_select_${index}`).select2();
-                            $(`#ceiling_height_select_${index}`).select2();
 
                             $(`#second_wing_array_${index}`).select2();
                             $(`#second_saleable_area_select_${index}`).select2();
@@ -4586,7 +4555,6 @@
                             $(`#second_terrace_carpet_select_${index}`).select2();
                             $(`#second_terrace_saleable_select_${index}`).select2();
                             $(`#second_floor_height_select_${index}`).select2();
-                            $(`#second_ceiling_height_select_${index}`).select2();
                         });    
                     });
                     return;
@@ -4645,7 +4613,6 @@
                         terrace_carpet_area_to : '',
                         terrace_saleable_area_to : '',
                         floor_height : '',
-                        ceiling_height : '',
                         servant_room : false,
                         service_lift : false,
 
@@ -4661,7 +4628,6 @@
                         terrace_carpet_area_map_unit : '',
                         terrace_saleable_area_map_unit : '',
                         floor_height_map_unit : '',
-                        ceiling_height_map_unit : '',
                     });
                 },
 
@@ -4767,34 +4733,6 @@
                 amenities : [],
 
                 document_category : '',
-                remark : '',
-
-                other_documents : [
-
-                ],
-
-                setSelect2ForOtherDoc() {
-                    let _this = this;
-                    this.$nextTick(function () {
-                        _this.other_documents.forEach((element, index) => {
-                            $(`#other_doc_${index}`).select2();
-                        });
-                    });
-                },
-
-                addOtherImageOrDoc() {
-                    let _this = this;
-                    this.other_documents.push({
-                        'document_type' : '',
-                        'file' : ''
-                    });
-
-                    this.setSelect2ForOtherDoc();
-                },
-
-                removeOtherImageOrDoc(index) {
-                    this.other_documents.splice(index, 1);
-                },
 
                 // submit section
                 submitHandle() {
@@ -4817,12 +4755,10 @@
                             element.carpet_from_to_map_unit = $(`#second_tower_detail_carpet_from_to_select_${index}`).val();
                             element.built_from_to_map_unit = $(`#second_tower_detail_built_from_to_select_${index}`).val();
                             element.saleable_from_to_map_unit = $(`#second_tower_detail_saleable_from_to_select_${index}`).val();
-                            element.ceiling_height_map_unit = $(`#second_ceiling_height_map_unit_select_${index}`).val();
                         } else {
                             element.carpet_from_to_map_unit = $(`#tower_detail_carpet_from_to_select_${index}`).val();
                             element.built_from_to_map_unit = $(`#tower_detail_built_from_to_select_${index}`).val();
                             element.saleable_from_to_map_unit = $(`#tower_detail_saleable_from_to_select_${index}`).val();
-                            element.ceiling_height_map_unit = $(`#first_ceiling_height_map_unit_select_${index}`).val();
                         }
                     });
 
@@ -4838,7 +4774,6 @@
                             element.terrace_carpet_area_map_unit = $(`#second_terrace_carpet_select_${index}`).val();
                             element.terrace_saleable_area_map_unit = $(`#second_terrace_saleable_select_${index}`).val();
                             element.floor_height_map_unit = $(`#second_floor_height_select_${index}`).val();
-                            element.ceiling_height_map_unit = $(`#second_ceiling_height_select_${index}`).val();
                         } else {
                             element.wing = $(`#wing_array_${index}`).val();
                             element.saleable_map_unit = $(`#saleable_area_select_${index}`).val();
@@ -4849,8 +4784,6 @@
                             element.terrace_carpet_area_map_unit = $(`#terrace_carpet_select_${index}`).val();
                             element.terrace_saleable_area_map_unit = $(`#terrace_saleable_select_${index}`).val();
                             element.floor_height_map_unit = $(`#floor_height_select_${index}`).val();
-                            element.ceiling_height_map_unit = $(`#ceiling_height_select_${index}`).val();
-                            element.ceiling_height_map_unit = $(`#second_ceiling_height_select_${index}`).val();
                         }
                     });
 
@@ -4893,6 +4826,9 @@
                     let form_data = new FormData();
 
                     form_data.set('id', this.id);
+                    form_data.set('builder_id', $('#builder_id').val());
+                    form_data.set('website', this.website);
+
                     form_data.set('other_contact_details', JSON.stringify(this.other_contact_details));
 
                     form_data.set('project_name', this.project_name);
@@ -4901,10 +4837,9 @@
                     form_data.set('locality', $('#area_id').val() ?? '');
                     form_data.set('state', $('#state_id').val() ?? '');
                     form_data.set('city', $('#city_id').val() ?? '' );
+
                     form_data.set('location_link', this.location_link);
-                    
-                    let pincode = document.getElementById('pincode').value;
-                    form_data.set('pincode', pincode);
+                    form_data.set('pincode', this.pincode);
                     form_data.set('land_area',  this.land_size);
                     form_data.set('land_size_unit', $('#land_size_select').val() ?? '');
 
@@ -4989,23 +4924,7 @@
                         form_data.set('catlog_file', file, file.name);
                     }
 
-                    form_data.set('remark', this.remark);
-
-                    this.other_documents.forEach((other_document_detail, index) => {
-                        let selected_value = $(`#other_doc_${index}`).val();
-                        this.other_documents[index]['document_type'] = selected_value;
-
-                        let other_doc = document.getElementById(`document_image_${index}`);
-                        if(other_doc && other_doc.files.length > 0)
-                        {
-                            let file = other_doc.files[0];
-                            form_data.set(`other_doc_${index}`, file, file.name);
-                        }
-                    });
-
-                    form_data.set('other_documents', JSON.stringify(this.other_documents));
-
-                    let url = "{{ route('builder.saveProject') }}";
+                    let url = "{{ route('admin.saveProject') }}";
                     
                     axios.post(url, form_data, {
                         headers: {
@@ -5013,7 +4932,7 @@
                         },
                     })
                     .then((res) => {
-                        var redirect_url = "{{route('builder.projects')}}";
+                        var redirect_url = "{{route('admin.projects')}}";
                         window.location.href = redirect_url;
                     })
                     .catch((err) => {
@@ -5082,25 +5001,17 @@
 
 			var queryString = window.location.search;
 			var urlParams = new URLSearchParams(queryString);
-			var go_data_id = urlParams.get('data_id');
+			var go_data_id = urlParams.get('data_id')
 
 			var cities = @Json($city_encoded);
 			var states = @Json($state_encoded);
-			var areas = @Json($area_encoded);
 
 			$(document).on('change', '#state_id', function(e) {
-
-                document.getElementById('city_id').disabled = $("#state_id").val() > 0 ? false : true;
-
 				if (shouldchangecity) {
 					$('#city_id').select2('destroy');
-
 					citiesar = JSON.parse(cities);
-					areass = JSON.parse(areas);
-
 					$('#city_id').html('');
-                    $('#city_id').append('<option value="" selected disabled>Select City</option>');
-                    for (let i = 0; i < citiesar.length; i++) {
+					for (let i = 0; i < citiesar.length; i++) {
 						if (citiesar[i]['state_id'] == $("#state_id").val()) {
 							$('#city_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
 								'name'
@@ -5109,33 +5020,13 @@
 					}
 					$('#city_id').select2();
 				}
-			});
-
-            $('#city_id').on('change', function() {
-                $(document).on('change', '#city_id', function(e) {
-                    $('#area_id').html('');
-                    areass = JSON.parse(areas);
-                    $('#area_id').append('<option value="" selected disabled>Locality</option>');
-                    for (let i = 0; i < areass.length; i++) {
-                        if (areass[i]['city_id'] == $("#city_id").val()) {
-                            $('#area_id').append(`<option value="${areass[i]['id']}"
-                                data-pincode="${areass[i]['pincode']}"
-                                data-city_id="${areass[i]['city_id']}"
-                                data-state_id="${areass[i]['state_id']}">
-                                ${areass[i]['name']}
-                            </option>`);
-                        }
-                    }
-                    $('#area_id').select2();
-                    document.getElementById('area_id').disabled = $("#city_id").val() > 0 ? false : true;
-                })
-            });
+			})
 
 			$('#projectTable').DataTable({
 				processing: true,
 				serverSide: true,
 				ajax: {
-					url: "{{ route('builder.projects') }}",
+					url: "{{ route('admin.projects') }}",
 					data: function(d) {
 						d.go_data_id = go_data_id;
 					}
@@ -5153,6 +5044,10 @@
 					{
 						data: 'address',
 						name: 'address'
+					},
+					{
+						data: 'builder_id',
+						name: 'builder_id'
 					},
 					{
 						data: 'property_type',
@@ -5188,6 +5083,25 @@
 			floatingField()
 		})
 
+		$(document).on('change', '.changeTheStatus', function(e) {
+			stat = 0;
+			if ($(this).prop('checked')) {
+				stat = 1;
+			}
+			$.ajax({
+				type: "POST",
+				url: "{{ route('admin.changeProjectStatus') }}",
+				data: {
+					id: $(this).attr('data-id'),
+					status: stat,
+					_token: '{{ csrf_token() }}'
+				},
+				success: function(data) {
+
+				}
+			});
+		})
+
 		$(document).on('change', '[name=penthouse]', function(e) {
 
 			if ($(this).prop('checked')) {
@@ -5210,6 +5124,48 @@
 			}
 		})
 
+		var allowedselect2s = ['builder_id'];
+		$(document).on('keydown', '.select2-search__field', function(e) {
+			setTimeout(() => {
+				var par = $(this).closest('.select2-dropdown')
+				var tar = $(par).find('.select2-results')
+				var kar = $(tar).find('.select2-results__options')
+				var opt = $(kar).find('li')
+				if (opt.length == 1 && $(opt[0]).text() == 'No results found') {
+					var idd = $(kar).attr('id')
+					idd = idd.replace("select2-", "");
+					idd = idd.replace("-results", "");
+					if (allowedselect2s.includes(idd)) {
+						$("#" + idd + " option[last_added='" + true + "']").each(function(i, e) {
+							$('#' + idd + ' option[value="' + $(this).val() + '"]').detach();
+						});
+						if ($("#" + idd + " option[value='" + $(this).val() + "']").length == 0) {
+							var newState = new Option($(this).val(), $(this).val(), true, true);
+
+							vvvv = $.parseHTML('<option last_added="true" value="' + $(this).val() +
+								'" selected="">' + $(this).val() + '</option>');
+							$("#" + idd).append(vvvv).trigger('change');
+						}
+					}
+				}else if ($(this).val() != '' && $(opt[0])[0] !== undefined && $($(opt[0])[0]).attr('id') != ''){
+				var idd = $(kar).attr('id')
+				idd = idd.replace("select2-", "");
+				idd = idd.replace("-results", "");
+				if (allowedselect2s.includes(idd)) {
+					$("#"+idd+ " option[last_added='"+true+"']").each(function(i,e){
+						$('#'+idd+' option[value="' + $(this).val() + '"]').detach();
+					});
+					if ($("#"+idd+ " option[value='"+$(this).val()+"']").length == 0) {
+						var newState = new Option($(this).val(), $(this).val(), true, true);
+
+						vvvv = $.parseHTML('<option last_added="true" value="'+$(this).val()+'" selected="">'+$(this).val()+'</option>');
+						$("#"+idd).append(vvvv).trigger('change');
+					}
+				}
+			}
+			}, 50);
+		})
+
 		$(document).on('click', '#add_document_image', function(e) {
 			var fd = new FormData();
 			var files = $('#document_image')[0].files;
@@ -5221,6 +5177,53 @@
 			for (let i = 0; i < files.length; i++) {
 				fd.append('images[]', files[i]);
 			}
+
+
+			fd.append('_token', '{{ csrf_token() }}');
+			$.ajax({
+				url: "{{ route('admin.saveBuildingImages') }}",
+				type: 'post',
+				data: fd,
+				contentType: false,
+				processData: false,
+				success: function(response) {
+					$('#all_images').html('');
+					$('#document_image').val('');
+					if (response != '') {
+						images = JSON.parse(response);
+						for (let i = 0; i < images.length; i++) {
+							var category = '';
+							if (images[i].category == 1) {
+								category = 'Building Elevation';
+							} else if (images[i].category == 2) {
+								category = 'Common Amenities Photos';
+							} else if (images[i].category == 3) {
+								category = 'Master Layout Of Building';
+							} else if (images[i].category == 4) {
+								category = 'Brochure';
+							} else if (images[i].category == 5) {
+								category = 'Cost Sheet';
+							} else if (images[i].category == 6) {
+								category = 'Other';
+							}
+
+							var src = building_image_show_url + '/' + images[i].image;
+							if (src.includes('.pdf')) {
+								$('#all_images').append(
+									'<div class="col-md-4 m-b-4 mb-3"><a target="_blank" href="' +
+									src +
+									'"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a><p>' +
+									category + '</p></div>')
+							} else {
+								$('#all_images').append('<div class="col-md-4 m-b-4 mb-3"><img src="' +
+									src +
+									'" alt="" height="200" width="200"><p>' + category +
+									'</p></div>')
+							}
+						}
+					}
+				},
+			});
 		})
 
 		$(document).on('change', '#select_all_checkbox', function(e) {
@@ -5269,7 +5272,7 @@
 				if (isConfirm.isConfirmed) {
 					$.ajax({
 						type: "POST",
-						url: "{{ route('builder.deleteProject') }}",
+						url: "{{ route('admin.deleteProject') }}",
 						data: {
 							allids: JSON.stringify(rowss),
 							_token: '{{ csrf_token() }}'
@@ -5309,7 +5312,7 @@
 					var id = $(data).attr('data-id');
 					$.ajax({
 						type: "POST",
-						url: "{{ route('builder.deleteProject') }}",
+						url: "{{ route('admin.deleteProject') }}",
 						data: {
 							id: id,
 							_token: '{{ csrf_token() }}'
@@ -5370,9 +5373,15 @@
 		})
 
 		$(document).on('change', '#area_id', function(e) {
+
+			if ($(this).find(":selected").attr('data-state_id') !== undefined && $(this).find(":selected").attr(
+					'data-state_id') != '') {
+				$('#state_id').val($(this).find(":selected").attr('data-state_id')).trigger('change')
+			}
 			if ($(this).find(":selected").attr('data-city_id') !== undefined && $(this).find(":selected").attr(
 					'data-city_id') != '') {
-				$('#pincode').val($(this).find(":selected").attr('data-pincode')).trigger('change');
+				$('#city_id').val($(this).find(":selected").attr('data-city_id')).trigger('change')
+				$('#pincode').val($(this).find(":selected").attr('data-pincode')).trigger('change')
 			}
 		})
 
@@ -5581,10 +5590,11 @@
 			var id = $('#this_data_id').val()
 			$.ajax({
 				type: "POST",
-				url: "{{ route('builder.saveProject') }}",
+				url: "{{ route('admin.saveProject') }}",
 				data: {
 					id: id,
 					project_name: $('#project_name').val(),
+					builder_id: $('#builder_id').val(),
 					area_id: $('#area_id').val(),
 					state_id: $('#state_id').val(),
 					city_id: $('#city_id').val(),
@@ -5609,7 +5619,7 @@
 					_token: '{{ csrf_token() }}'
 				},
 				success: function(data) {
-					var redirect_url = "{{route('builder.projects')}}";
+					var redirect_url = "{{route('admin.projects')}}";
                     window.location.href = redirect_url;
 				}
 			});

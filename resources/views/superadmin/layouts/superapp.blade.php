@@ -342,12 +342,6 @@ Helper::set_default_measuerement();
                                         href="{{ route('superadmin.users') }}"><i class="fa fa-user"></i><span
                                             class="lan-3">Users</span></a>
                                 </li>
-
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.builders') active @endif"
-                                        href="{{ route('superadmin.builders') }}"><i class="fa fa-user"></i><span
-                                            class="lan-3">Builders</span></a>
-                                </li>
                                 <li class="sidebar-list"><a
                                     class="sidebar-link sidebar-title  @if ($route == 'superadmin.projects') active @endif"
                                     href="{{ route('superadmin.projects') }}"><i class="fa fa-user"></i><span
@@ -960,14 +954,6 @@ Helper::set_default_measuerement();
         </script>
         <!-- login js-->
         <!-- Plugin used-->
-
-        <script>
-            window.addEventListener('beforeunload', function (event) {
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', '/logout-on-close', false);
-                xhr.send();
-            });
-        </script>
 </body>
 
 </html>
