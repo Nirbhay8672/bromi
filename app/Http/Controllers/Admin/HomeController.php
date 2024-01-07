@@ -4,14 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Rules\MatchOldPassword;
 use App\Http\Controllers\Controller;
 use App\Models\Areas;
 use App\Models\Branches;
 use App\Models\Builders;
 use App\Models\City;
 use App\Models\CompanyDetails;
-use App\Models\DashboardWidget;
 use App\Models\District;
 use App\Models\DropdownSettings;
 use App\Models\Enquiries;
@@ -30,7 +28,6 @@ use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Spatie\Activitylog\Models\Activity;
 use Throwable;
@@ -56,9 +53,6 @@ class HomeController extends Controller
 	{
 		try {
 			if (Auth::check()) {
-				if (empty(Session::get('plan_id'))) {
-					return redirect()->route('admin.plans');
-				}
 				$start_date = null;
 				$end_date = Carbon::now()->format('Y-m-d 23:59:59');
 				if($request->filled('date_range')){
@@ -647,15 +641,12 @@ class HomeController extends Controller
 		return response(['success' => true,'message' => 'Profile change successfully!!'], 200);
 	}
 
-	/* Visiting
-	 Card 
-	 Function
-	*/
 	public function VisitingCard(){
-		$user_id=Auth::user()->id;//Get Admin Data
+		$user_id=Auth::user()->id;
 		$company=CompanyDetails::where('user_id',$user_id)->first();
 		return view('admin.visitingcard.card',compact('company'));
 	}
+	
 	public function savecompany(Request $request)
 	{
 		$user_id=Auth::user()->id;
@@ -670,6 +661,5 @@ class HomeController extends Controller
 		$company->company_gst=$request->company_gst;
 		$company->save();
 		return response()->json(['status'=>'success']);
-		// return redirect('/VisitingCard');
 	}
 }
