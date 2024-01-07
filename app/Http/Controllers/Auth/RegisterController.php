@@ -16,9 +16,6 @@ use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Mail;
-use Session;
-use App\Models\Otp;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
 use Illuminate\Http\UploadedFile;
@@ -199,7 +196,7 @@ class RegisterController extends Controller
             $role =  new Role();
             $role->name = $role_name;
             $role->user_id = $user->id;
-            $role->save();                 
+            $role->save();
 
             $user->fill([
                 'role_id' => $role->id,
@@ -244,26 +241,6 @@ class RegisterController extends Controller
                 'state_id' => $new_state->id,
             ])->save();
         }
-    
-        // $otp = new Otp();
-        // $otp->fill([
-        //     'otp' => random_int(100000, 999999),
-        //     'user_id' => $user->id,
-        // ])->save();
-        
-        // $datas = [
-        //     'name' => $user->first_name.' '.$user->last_name,
-        //     'email' => $user->email,
-        //     'otp' => $otp->otp,
-        // ];
-
-        // Mail::send('success',$datas,function($msg) use ($datas)
-        // {
-		// 	$msg->to($datas['email'],'Bromi')->subject('Registration Successfully');
-		// 	$msg->from('hathaliyank@gmail.com','Bromi');
-        // });
-        
-        // Session::put('user_id', $user->id);
 
         if($user->exists) {
             return redirect('admin/login');
