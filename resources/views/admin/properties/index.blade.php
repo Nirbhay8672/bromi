@@ -557,13 +557,13 @@
                                                 id="filter_from_price" type="text" autocomplete="off">
                                         </div>
                                     </div>
-                                    {{-- <div class="form-group col-md-3 mb-3">
+                                    <div class="form-group col-md-3 mb-3">
                                         <div>
                                             <label for="To Price">To Price</label>
                                             <input class="form-control indian_currency_amount" name="filter_to_price"
                                                 id="filter_to_price" type="text" autocomplete="off">
                                         </div>
-                                    </div> --}}
+                                    </div>
                                     <div class="form-group col-md-3 m-b-20">
                                         <label for="From Area">From Area</label>
                                         <input class="form-control" name="filter_from_area" id="filter_from_area"

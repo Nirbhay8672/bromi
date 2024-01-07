@@ -1397,6 +1397,7 @@ class PropertyController extends Controller
                 'area_id' => $request->locality_id,
                 'state_id' => $request->state_id,
                 'city_id' => $request->city_id,
+                'location_link' => $request->property_link,
                 'is_indirectly_store' => 1,
             ])->save();
             $data->project_id = $new_project->id;
