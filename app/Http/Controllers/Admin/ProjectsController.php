@@ -37,6 +37,7 @@ class ProjectsController extends Controller
 		if ($request->ajax()) {
 
 			$data = Projects::with('Area', 'Builder', 'City', 'State')
+				->where('user_id',Auth::user()->id)
 				->orderBy('id','desc');
 
 			$parts = explode('?', $request->location);
