@@ -7,26 +7,15 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\LoggedIn;
 use App\Models\User;
-// use Illuminate\Support\Facades\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 use App\Models\Subplans;
+use Carbon\Carbon;
 
 
 class AdminLoginController extends Controller
 {
-	/*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
 	use AuthenticatesUsers;
 
 	/**
@@ -53,9 +42,6 @@ class AdminLoginController extends Controller
 			LoggedIn::create(['user_id' => $user_email->parent_id,'employee_id' => $user_email->id, 'ipaddress' => $ip]);
 		}
 
-		// If the class is using the ThrottlesLogins trait, we can automatically throttle
-		// the login attempts for this application. We'll key this by the username and
-		// the IP address of the client making these requests into this application.
 		if (
 			method_exists($this, 'hasTooManyLoginAttempts') &&
 			$this->hasTooManyLoginAttempts($request)
@@ -85,9 +71,6 @@ class AdminLoginController extends Controller
 			return $this->sendLoginResponse($request);
 		}
 
-		// If the login attempt was unsuccessful we will increment the number of attempts
-		// to login and redirect the user back to the login form. Of course, when this
-		// user surpasses their maximum number of attempts they will get locked out.
 		$this->incrementLoginAttempts($request);
 
 		return $this->sendFailedLoginResponse($request);
@@ -144,11 +127,6 @@ class AdminLoginController extends Controller
 		LoggedIn::withoutGlobalScopes()->where('employee_id',$user->id)->OrderBy('id','DESC')->first()->update(['succeed' => 1]);
 
 		Session::put('plan_id', User::where('id', Session::get('parent_id'))->first()->plan_id);
-		
-// 		if ($user->role_id != 1 || $user->status == 0) {
-// 			Auth::logout();
-// 			return redirect()->back()->with('warning', trans('auth.sufficient_permissions'));
-// 		}
 	}
 
 	/**
@@ -176,14 +154,23 @@ class AdminLoginController extends Controller
 
 	public function savePlan(Request $request)
 	{
-		$user  = User::find($request->user_id);
+		$user = User::find($request->user_id);
 		Auth::login($user);
 
+		$plan_details = Subplans::find($request->plan_id);
 		$user->fill([
 			'plan_id' => $request->plan_id,
+			'subscribed_on' => Carbon::now()->format('Y-m-d'),
+			'total_user_limit' => $plan_details->user_limit,
 		])->save();
 
 		Session::put('plan_id', $request->plan_id);
+		$role = Role::find($user->role_id);
+
+		if(strpos($role->name, 'Builder') !== false){
+			return redirect()->route('builder.home');
+		}
+
 		return redirect('/admin');
 	}
 }
