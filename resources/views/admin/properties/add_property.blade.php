@@ -484,7 +484,7 @@
                                                         @php
                                                             $authStateId = Auth::user()->state_id;
                                                         @endphp
-                                                        {{-- <div class="form-group col-md-3 m-b-4 mb-3">
+                                                        <div class="form-group col-md-3 m-b-4 mb-3 state-hide">
                                                             <select class="form-select" id="state_id">
                                                                 <option value="">Select States</option>
                                                                 @foreach ($states as $state)
@@ -495,7 +495,7 @@
                                                                     @endif
                                                                 @endforeach
                                                             </select>
-                                                        </div> --}}
+                                                        </div>
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
                                                             <select id="state-dropdown" class="form-control">
                                                                 <option value="">Select City</option>
@@ -2491,6 +2491,14 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/property_wizard.js') }}"></script>
         <script>
+            // Hide State dropdown
+            const numberOfOptions = $('#state_id').find('option').length;
+            if (numberOfOptions > 2) {
+                $('.state-hide').show();
+            } else {
+                $('.state-hide').hide();
+            }
+
             var cities = @Json($city_encoded);
             var states = @Json($state_encoded);
             var areas = @Json($area_encoded);
