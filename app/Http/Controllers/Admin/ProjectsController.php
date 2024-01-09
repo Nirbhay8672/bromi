@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -657,4 +656,56 @@ class ProjectsController extends Controller
         $mimeType = mime_content_type($filePath);
         return response()->file($filePath, ['Content-Type' => $mimeType]);
     }
+
+	public function allprojectList(Request $request)
+	{
+		if ($request->ajax()) {
+
+			$projects = DB::table('projects')
+			->select([
+				'projects.id',
+				'projects.property_type',
+				'projects.remark',
+				'projects.project_name',
+				'projects.address',
+				'areas.name as area_name',
+				'builders.name as builder_name',
+				'city.name as city_name',
+			])
+			->leftJoin('areas','projects.area_id','areas.id')
+			->leftJoin('builders','projects.builder_id','builders.id')
+			->leftJoin('city','projects.city_id','city.id')
+			->get();
+
+			return DataTables::of($projects)
+				->editColumn('address', function ($row) {
+					if (isset($row->address)) {
+						return $row->address;
+					}
+					return '';
+				})
+				->editColumn('city_name', function ($row) {
+					if (isset($row->city_name)) {
+						return $row->city_name;
+					}
+					return '';
+				})
+				->editColumn('builder_name', function ($row) {
+					if (isset($row->builder_name)) {
+						return $row->builder_name;
+					}
+					return '';
+				})
+				->editColumn('property_type', function ($row) {
+					if (!empty($row->property_type)) {
+						$drops = DropdownSettings::where('id', $row->property_type)->pluck('name')->toArray();
+						return implode(',', $drops);
+					}
+					return '';
+				})
+				->make(true);
+		}
+
+		return view('admin.projects.all_project_list');
+	}
 }
