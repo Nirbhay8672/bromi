@@ -671,17 +671,6 @@ Helper::set_default_measuerement();
                                         <span class="lan-6">Location</span>
                                     </a>
                                 </li>
-
-                                @if(auth()->user()->parent_id == null && auth()->user()->company_name && auth()->user()->birth_date == null)
-
-                                <li class="sidebar-list"><a class="sidebar-link " href="{{ route('admin.all-projects') }}">
-                                        <img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/project.png" style="width: 20px;" alt="">
-                                        {{-- <i class="fa fa-users"></i> --}}
-                                        <span class="lan-6">All Projects</span></a>
-                                </li>
-
-                                @endif
-
                             </ul>
                             @endif
                         </div>

@@ -19,6 +19,22 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">All Projects</h5>
+                            <div class="row">
+                                <div class="col-2">
+                                    <select
+                                        name="area"
+                                        id="area"
+                                        class="form-control"
+                                        style="border: 2px solid black;"
+                                        onchange="changeArea()"
+                                    >
+                                        <option value="">All Area</option>
+                                        @foreach($all_areas as $area)
+                                            <option value="{{ $area['id'] }}">{{ $area['name'] }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -46,12 +62,20 @@
     @endsection
     @push('scripts')
         <script>
+
+            function changeArea() {
+                $('#projectTable').DataTable().draw();
+            }
+            
             $(document).ready(function() {
                 $('#projectTable').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
                         url: "{{ route('admin.all-projects') }}",
+                        data: function(d) {
+                            d.filter_area = $('#area').val();
+                        },
                     },
                     columns: [
                         { 

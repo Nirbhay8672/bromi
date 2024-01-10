@@ -661,6 +661,9 @@ class ProjectsController extends Controller
 	{
 		if ($request->ajax()) {
 
+			$auth = Auth::user();
+			$city = City::find($auth->city_id);
+
 			$projects = DB::table('projects')
 			->select([
 				'projects.id',
@@ -675,9 +678,16 @@ class ProjectsController extends Controller
 			->leftJoin('areas','projects.area_id','areas.id')
 			->leftJoin('builders','projects.builder_id','builders.id')
 			->leftJoin('city','projects.city_id','city.id')
-			->get();
+			->where('city.name', '=', $city->name);
 
-			return DataTables::of($projects)
+			if($request->filter_area) {
+				$area = Areas::find($request->filter_area);
+				if($area) {
+					$projects->where('areas.name',$area['name']);
+				}
+			}
+
+			return DataTables::of($projects->get())
 				->editColumn('address', function ($row) {
 					if (isset($row->address)) {
 						return $row->address;
@@ -706,6 +716,10 @@ class ProjectsController extends Controller
 				->make(true);
 		}
 
-		return view('admin.projects.all_project_list');
+		$all_areas = Areas::where('user_id',Auth::user()->id)->get();
+
+		return view('admin.projects.all_project_list')->with([
+			'all_areas' => $all_areas
+		]);
 	}
 }
