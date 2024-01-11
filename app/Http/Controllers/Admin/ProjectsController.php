@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -657,4 +656,70 @@ class ProjectsController extends Controller
         $mimeType = mime_content_type($filePath);
         return response()->file($filePath, ['Content-Type' => $mimeType]);
     }
+
+	public function allprojectList(Request $request)
+	{
+		if ($request->ajax()) {
+
+			$auth = Auth::user();
+			$city = City::find($auth->city_id);
+
+			$projects = DB::table('projects')
+			->select([
+				'projects.id',
+				'projects.property_type',
+				'projects.remark',
+				'projects.project_name',
+				'projects.address',
+				'areas.name as area_name',
+				'builders.name as builder_name',
+				'city.name as city_name',
+			])
+			->leftJoin('areas','projects.area_id','areas.id')
+			->leftJoin('builders','projects.builder_id','builders.id')
+			->leftJoin('city','projects.city_id','city.id')
+			->where('city.name', '=', $city->name);
+
+			if($request->filter_area) {
+				$area = Areas::find($request->filter_area);
+				if($area) {
+					$projects->where('areas.name',$area['name']);
+				}
+			}
+
+			return DataTables::of($projects->get())
+				->editColumn('address', function ($row) {
+					if (isset($row->address)) {
+						return $row->address;
+					}
+					return '';
+				})
+				->editColumn('city_name', function ($row) {
+					if (isset($row->city_name)) {
+						return $row->city_name;
+					}
+					return '';
+				})
+				->editColumn('builder_name', function ($row) {
+					if (isset($row->builder_name)) {
+						return $row->builder_name;
+					}
+					return '';
+				})
+				->editColumn('property_type', function ($row) {
+					if (!empty($row->property_type)) {
+						$drops = DropdownSettings::where('id', $row->property_type)->pluck('name')->toArray();
+						return implode(',', $drops);
+					}
+					return '';
+				})
+				->make(true);
+		}
+
+		$all_areas = Areas::where('user_id',Auth::user()->id)->get();
+
+		return view('admin.projects.all_project_list')->with([
+			'all_areas' => $all_areas
+		]);
+	}
 }

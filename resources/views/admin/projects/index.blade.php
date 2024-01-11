@@ -4,11 +4,9 @@
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
-
                 </div>
             </div>
         </div>
-        <!-- Container-fluid starts-->
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
@@ -16,17 +14,18 @@
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Projects</h5>
 							<a class="btn btn-primary btn-air-primary"  href="{{route('admin.project.add')}}">Add New Project</a>
-							<a href="{{route('admin.project.unit')}}"><button class="btn btn-primary btn-air-primary " type="button" >List Of Units</button></a>
-							<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()" type="button">Delete</button>
+							<a href="{{route('admin.project.unit')}}" class="ms-2"><button class="btn btn-primary btn-air-primary " type="button" >List Of Units</button></a>
+                            @if(auth()->user()->parent_id == null && auth()->user()->company_name && auth()->user()->birth_date == null)
+                                <a href="{{route('admin.all-projects')}}" class="ms-2"><button class="btn btn-primary btn-air-primary " type="button" >All Projects</button></a>
+                            @endif
+							<button class="btn btn-primary btn-air-primary delete_table_row ms-2" style="display: none" onclick="deleteTableRow()" type="button">Delete</button>
                         </div>
                         <div class="card-body">
-
                             @if(Session::has('message'))
                                 <div class="alert alert-success" role="alert">
                                     {{ Session::get('message') }}
                                 </div>
                             @endif
-
                             <div class="table-responsive">
                                 <table class="display" id="projectTable">
                                     <thead>
@@ -46,281 +45,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-        </div>
-        <div class="modal fade" id="projectModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add New Project</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
-                            novalidate="">
-                            <input type="hidden" name="this_data_id" id="this_data_id">
-                            <div class="row">
-                                <h5 class="border-style">Information</h5>
-                                <div class="form-group col-md-6 m-b-20">
-                                    <label for="Project Name"> Name</label>
-                                    <input class="form-control" name="project_name" id="project_name" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-3 m-b-4 mb-3">
-                                    <select class="form-select" id="builder_id">
-                                        <option value=""> Builder</option>
-                                        @foreach ($builders as $builder)
-                                            <option value="{{ $builder->id }}">{{ $builder->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3 m-b-4 mb-3">
-                                    <select class="form-select" id="area_id">
-                                        <option value="">Area</option>
-                                        @foreach ($areas as $area)
-                                            <option data-pincode="{{ $area->pincode }}" data-city_id="{{ $area->city_id }}"
-                                                data-state_id="{{ $area->state_id }}" value="{{ $area->id }}">
-                                                {{ $area->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6 m-b-20">
-                                    <label for="Address">Address</label>
-                                    <input class="form-control mt-3" name="address" id="address" type="text"
-                                        autocomplete="off">
-                                </div>
-
-                                <div class="form-group col-md-3 m-b-4 mb-3">
-                                    <label for="City" class="mb-0">State</label>
-                                    <select class="form-select" id="state_id">
-                                        <option value="">State</option>
-                                        @foreach ($states as $state)
-                                            <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3 m-b-4 mb-3">
-                                    <label for="City" class="mb-0">City</label>
-                                    <select class="form-select" id="city_id">
-                                        <option value="">City</option>
-                                        @foreach ($cities as $city)
-                                            <option value="{{ $city['id'] }}">{{ $city['name'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3 m-b-20">
-                                    <label for="Pincode">Pincode</label>
-                                    <input class="form-control" name="pincode" id="pincode" type="text"
-                                        autocomplete="off">
-                                </div>
-                                {{-- <div class="d-flex align-items-center mb-3 col-md-2">
-                                    <div class="form-group">
-                                        <label class="switch mb-0">
-                                            <input type="checkbox" id="status" ><span class="switch-state"></span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group ms-2">
-                                        <label for="status" class="mb-1">Active</label>
-                                    </div>
-                                </div> --}}
-                                <div class="form-group col-md-7 m-b-20">
-                                    <label for="Email">Email</label>
-                                    <input class="form-control" name="email" id="email" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input" id="prime_project" type="checkbox">
-                                    <label class="form-check-label" for="prime_project">Prime </label>
-                                </div>
-
-                                <h5 class="border-style"> Other Information</h5>
-                                <div class="form-group col-md-4 m-b-20">
-                                    <label for="No Of Floor">No of Floor</label>
-                                    <input class="form-control" name="floor_count" id="floor_count" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-4 m-b-20">
-                                    <label for="No. of unit">No of Unit</label>
-                                    <input class="form-control" name="unit_no" id="unit_no" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-4 m-b-20">
-                                    <label for="No of Lift each block">No of Lift Each Block</label>
-                                    <input class="form-control" name="lift_count" id="lift_count" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-8 m-b-4 mb-3">
-                                    <label class="select2_label" for="Property Type">Property Type</label>
-                                    <select class="form-select" id="property_type" multiple="multiple">
-                                        @forelse ($project_configuration_settings as $props)
-                                            @if ($props['dropdown_for'] == 'property_construction_type')
-                                                <option data-parent_id="{{ $props['parent_id'] }}"
-                                                    value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                </option>
-                                            @endif
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                </div>
-
-
-                                <h5 class="border-style"> Description</h5>
-
-
-                                <div class="form-group col-md-2 m-b-20">
-                                    <label for="Building Posession"> Posession(Year)</label>
-                                    <input class="form-control" name="building_posession" id="building_posession"
-                                        type="text" autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-2 m-b-20 mt-1">
-                                    <select class="form-select form-design" id="building_status">
-                                        <option value=""> Project Status</option>
-                                        @forelse ($project_configuration_settings as $props)
-                                            @if ($props['dropdown_for'] == 'building_progress')
-                                                <option data-parent_id="{{ $props['parent_id'] }}"
-                                                    value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                </option>
-                                            @endif
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-2 m-b-20 mt-1">
-                                    <select class="form-select" id="building_quality">
-                                        <option value="">Quality </option>
-                                        <option value="1">Average</option>
-                                        <option value="2">Excellent</option>
-                                        <option value="3">Good</option>
-                                        <option value="4">Poor</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-3 m-b-20">
-                                    <label class="select2_label" for="Restricted User">Restricted User</label>
-                                    <select class="form-select" id="restrictions" multiple="multiple">
-                                        @forelse ($project_configuration_settings as $props)
-                                            @if ($props['dropdown_for'] == 'building_restriction')
-                                                <option data-parent_id="{{ $props['parent_id'] }}"
-                                                    value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                </option>
-                                            @endif
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-12 m-b-20">
-                                    <label for=" Description"> Description</label>
-                                    <input class="form-control" name="project_description" id="project_description"
-                                        type="text" autocomplete="off">
-                                </div>
-
-
-                                <h5 class="border-style"> Amenities</h5>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_pool" type="checkbox">
-                                    <label class="form-check-label" for="amenity_pool">Swimming Pool</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_club_house"
-                                        type="checkbox">
-                                    <label class="form-check-label" for="amenity_club_house">Club house</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_passenger_lift"
-                                        type="checkbox">
-                                    <label class="form-check-label" for="amenity_passenger_lift">Passenger Lift</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_garden" type="checkbox">
-                                    <label class="form-check-label" for="amenity_garden">Garden & Children Play
-                                        Area</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_service_lift"
-                                        type="checkbox">
-                                    <label class="form-check-label" for="amenity_service_lift">Service Lift</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_streature_lift"
-                                        type="checkbox">
-                                    <label class="form-check-label" for="amenity_streature_lift">Streature Lift</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_ac" type="checkbox">
-                                    <label class="form-check-label" for="amenity_ac">Central AC</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_gym" type="checkbox">
-                                    <label class="form-check-label" for="amenity_gym">Gym</label>
-                                </div>
-
-                                <h5 class="border-style">Contact Details</h5>
-                                <div><button type="button" class="btn mb-3 btn-primary btn-air-primary"
-                                        id="add_contacts">Add Contact</button></div>
-                                <div class="row" id="all_contacts">
-
-                                </div>
-
-
-                                <h5 class="border-style">Wing Details</h5>
-
-                                <div><button type="button" class="btn mb-3 btn-primary btn-air-primary"
-                                        id="add_towers">Add Wing</button></div>
-                                <div class="row" id="all_towers">
-
-                                </div>
-
-                                <h5 class="border-style">Unit Types</h5>
-                                <div><button type="button" class="btn mb-3 btn-primary btn-air-primary"
-                                        id="add_unit_types">Add Unit Type</button></div>
-                                <div class="row" id="all_unit_types">
-
-                                </div>
-
-
-                                <h5 class="border-style">Images/Documents</h5>
-                                <div id="uploadImageBox" class="row">
-                                    <div class="form-group col-md-4 m-b-4 mt-1">
-                                        <select class="form-select" id="image_category">
-                                            <option value=""> Category</option>
-                                            <option value="1">Building Elevation</option>
-                                            <option value="2">Common Amenities Photos</option>
-                                            <option value="3">Master Layout Of Building</option>
-                                            <option value="4">Brochure</option>
-                                            <option value="5">Cost Sheet</option>
-                                            <option value="6">Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6 m-b-4 mb-3"><input class="form-control"
-                                            type="file" id="building_images" name="building_images" multiple></div>
-                                    <div class="form-group col-md-2 m-b-4 mb-3"><button type="button"
-                                            class="btn mb-2 btn-primary btn-air-primary" id="add_images">Upload</button>
-                                    </div>
-                                </div>
-                                <div class="row" id="all_images">
-
-                                </div>
-
-
-                            </div>
-
-                            @if (Auth::user()->can('project-edit') || Auth::user()->can('project-create'))
-                                <button class="btn btn-secondary" id="saveProject">Save</button>
-                            @endif
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                        </form>
                     </div>
                 </div>
             </div>
