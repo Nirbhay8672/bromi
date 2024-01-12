@@ -625,13 +625,21 @@ Helper::set_default_measuerement();
                                         <span class="lan-6">Settings</span></a>
                                 </li>
 
-                                <li class="sidebar-list"><a class="sidebar-link  @if (
-                                                    $route == 'admin.enquiries' ||
-                                                        $route == 'admin.settings.enquiry_configuration') active @endif" href="{{route('admin.enquiries')}}">
-                                        <img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/enquiry.png" style="width: 20px;" alt="">
-                                        {{-- <i class="fa fa-users"></i> --}}
-                                        <span class="lan-6">Enquiries</span></a>
+                                @can('enquiry-list')
+                                <li class="sidebar-list">
+                                    <a  class="sidebar-link
+                                            @if ( $route == 'admin.enquiries' || $route == 'admin.settings.enquiry_configuration')
+                                                active
+                                            @endif"
+                                        href="{{route('admin.enquiries')}}">
+                                        <img
+                                            src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/enquiry.png"
+                                            style="width: 20px;"
+                                        >
+                                        <span class="lan-6">Enquiries</span>
+                                    </a>
                                 </li>
+                                @endcan
 
                                 <li class="sidebar-list"><a class="sidebar-link @if ($route == 'admin.enquiries.calendar') active @endif" href="{{route('admin.enquiries.calendar')}}">
                                         <img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/enquiry.png" style="width: 20px;" alt="">
