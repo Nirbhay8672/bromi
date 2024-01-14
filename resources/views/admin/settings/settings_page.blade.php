@@ -48,6 +48,8 @@
                         </div>
                     </div>
                 </div>
+
+                @can('area-list')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -67,6 +69,8 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">

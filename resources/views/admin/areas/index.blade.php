@@ -15,12 +15,14 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Locality</h5>
+                            @can('area-create')
                             <button
                                 class="btn btn-primary btn-air-primary open_modal_with_this"
                                 type="button"
                                 data-bs-toggle="modal"
                                 data-bs-target="#areaModal"
                             >Add New Locality</button>
+                            @endcan
                             <button
                                 class="btn btn-primary btn-air-primary"
                                 type="button"
