@@ -597,6 +597,8 @@ Helper::set_default_measuerement();
                                     <div class="mobile-back text-end"><span>Back</span><i class="ps-2" aria-hidden="true"> </i></div>
                                 </li>
 
+                                @can('view-dashboard')
+
                                 <li class="sidebar-list">
                                     <a class="sidebar-link  @if ($route == 'admin') active @endif" href="{{ route('admin') }}">
                                         <img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/dashboard.png" style="width: 20px;" alt="">
@@ -604,6 +606,10 @@ Helper::set_default_measuerement();
                                         <span class="lan-6">Dashboard</span>
                                     </a>
                                 </li>
+
+                                @endcan
+
+                                @can('property-list')
 
                                 <li class="sidebar-list">
                                     <a class="sidebar-link @if (
@@ -618,6 +624,8 @@ Helper::set_default_measuerement();
                                         <span class="lan-6">Properties</span>
                                     </a>
                                 </li>
+
+                                @endcan
 
                                 <li class="sidebar-list"><a class="sidebar-link @if (str_contains($route, 'admin.settings')) active @endif" href="{{ route('admin.settings') }}">
                                         <img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/settings.png" style="width: 20px;" alt="">
@@ -647,11 +655,16 @@ Helper::set_default_measuerement();
                                         <span class="lan-6">Enquiry Calendar</span></a>
                                 </li>
 
+                                @can('project-list')
+
                                 <li class="sidebar-list"><a class="sidebar-link " href="{{ route('admin.projects') }}">
                                         <img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/project.png" style="width: 20px;" alt="">
                                         {{-- <i class="fa fa-users"></i> --}}
                                         <span class="lan-6">Projects</span></a>
                                 </li>
+
+                                @endcan
+
                                 <li class="sidebar-list"><a class="sidebar-link " href="{{ route('admin.partner.index') }}">
                                         <i class="fa fa-users"></i>
                                         <span class="lan-6">Partners</span></a>
