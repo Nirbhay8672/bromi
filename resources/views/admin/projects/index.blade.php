@@ -16,7 +16,9 @@
                             @can('project-create')
 							<a class="btn btn-primary btn-air-primary"  href="{{route('admin.project.add')}}">Add New Project</a>
                             @endcan
+                            @can('unit-list')
 							<a href="{{route('admin.project.unit')}}" class="ms-2"><button class="btn btn-primary btn-air-primary " type="button" >List Of Units</button></a>
+                            @endcan
                             @if(auth()->user()->parent_id == null && auth()->user()->company_name && auth()->user()->birth_date == null)
                                 <a href="{{route('admin.all-projects')}}" class="ms-2"><button class="btn btn-primary btn-air-primary " type="button" >All Projects</button></a>
                             @endif

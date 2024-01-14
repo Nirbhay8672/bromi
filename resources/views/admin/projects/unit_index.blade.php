@@ -15,7 +15,9 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Units</h5>
+                            @can('unit-create')
 							<a class="btn btn-primary btn-air-primary"  href="{{route('admin.unit.add')}}">Add New Unit</a>
+                            @endcan
                             <button class="btn btn-primary btn-air-primary" type="button" data-bs-toggle="modal"
                                 data-bs-target="#filtermodal">Filter</button>
 								<button style="display:none" class="btn btn-danger" id="resetfilter">Clear Filter</button>
