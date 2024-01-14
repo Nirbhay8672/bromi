@@ -10,6 +10,8 @@
         </div>
         <div class="container-fluid general-widget">
             <div class="row">
+
+                @can('settings-states')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -29,6 +31,9 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+                @can('settings-city')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -48,6 +53,7 @@
                         </div>
                     </div>
                 </div>
+                @endcan
 
                 @can('area-list')
                 <div class="col-xl-3 col-md-6">
@@ -128,6 +134,8 @@
                         </div>
                     </div>
                 </div>
+
+                @can('settings-builders')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -147,6 +155,10 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+
+                @can('settings-branches')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -166,6 +178,10 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+
+                @can('user-list')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -185,6 +201,9 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+                @can('role-list')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -204,6 +223,9 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+                @can('settings-property-configuration')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -223,6 +245,10 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+
+                @can('settings-building-configuration')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -242,6 +268,9 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+                @can('settings-enquiry-configuration')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -261,6 +290,9 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+                
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
