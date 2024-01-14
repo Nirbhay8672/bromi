@@ -15,20 +15,22 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Users</h5>
-                            @if(intval($total_user) < Auth::user()->total_user_limit)
-                                <a class="btn btn-primary btn-air-primary"  href="{{route('admin.user.add')}}">Add New User</a>
-                            @else
-                                <button
-                                    class="btn btn-primary btn-air-primary"
-                                    type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#planModal"
-                                    data-bs-original-title=""
-                                    title=""
-                                    onclick="reset()"
-                                >Upgrade Plan</button>
-                                <strong class="text-danger">You have exceeded your user limit</strong>
-                            @endif
+                            @can('user-create')
+                                @if(intval($total_user) < Auth::user()->total_user_limit)
+                                    <a class="btn btn-primary btn-air-primary"  href="{{route('admin.user.add')}}">Add New User</a>
+                                @else
+                                    <button
+                                        class="btn btn-primary btn-air-primary"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#planModal"
+                                        data-bs-original-title=""
+                                        title=""
+                                        onclick="reset()"
+                                    >Upgrade Plan</button>
+                                    <strong class="text-danger">You have exceeded your user limit</strong>
+                                @endif
+                            @endcan
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
