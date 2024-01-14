@@ -15,8 +15,10 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Roles</h5>
+                            @can('role-create')
                                 <button class="btn btn-primary btn-air-primary open_modal_with_this" type="button"
                                     data-bs-toggle="modal" data-bs-target="#roleModal">Add New Role</button>
+                            @endcan
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

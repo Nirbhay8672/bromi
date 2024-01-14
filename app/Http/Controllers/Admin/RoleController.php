@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
@@ -49,9 +50,24 @@ class RoleController extends Controller
 					}
 
 					$buttons = '';
+
+					$user = User::with(['roles', 'roles.permissions'])->where('id',Auth::user()->id)->first();
+
+					$edit_permission = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
+						return ($var['name'] == 'role-edit');
+					});
+
+					$delete_permission = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
+						return ($var['name'] == 'role-delete');
+					});
+
+					if(count($edit_permission) > 0) {
 						$buttons =  $buttons . '<i role="button" title="Edit" data-id="' . $row->id . '" onclick=getRole(this) class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
-			
+					}
+
+					if(count($delete_permission) > 0) {
 						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteRole(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+					}
 					
 					return $buttons;
 				})
