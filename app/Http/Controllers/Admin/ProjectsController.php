@@ -13,6 +13,7 @@ use App\Models\DropdownSettings;
 use App\Models\Projects;
 use App\Models\Properties;
 use App\Models\State;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
@@ -87,8 +88,24 @@ class ProjectsController extends Controller
 				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$buttons =  $buttons . '<a href="'.route('admin.project.edit',$row->id).'"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
-					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProject(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+
+					$user = User::with(['roles', 'roles.permissions'])->where('id',Auth::user()->id)->first();
+
+					$edit_permission = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
+						return ($var['name'] == 'project-edit');
+					});
+
+					$delete_permission = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
+						return ($var['name'] == 'project-delete');
+					});
+
+					if(count($edit_permission) > 0) {
+						$buttons =  $buttons . '<a href="'.route('admin.project.edit',$row->id).'"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+					}
+
+					if(count($delete_permission) > 0) {
+						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProject(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+					}
 
 					return $buttons;
 				})
