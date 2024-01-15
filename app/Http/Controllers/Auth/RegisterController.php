@@ -206,6 +206,8 @@ class RegisterController extends Controller
             $role->syncPermissions(Permission::where('guard_name','web')->get()->pluck('id')->all());
             $user->syncRoles([]);
             $user->assignRole($role->name);
+        } else  {
+            $user->assignRole(1);
         }
 
         $state = State::find($request->state_id);
