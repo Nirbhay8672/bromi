@@ -52,7 +52,7 @@ class EnquiriesController extends Controller
 				$dropdownsarr[$value['id']] = $value;
 			}
 			$dropdowns = $dropdownsarr;
-			$areas = Areas::where('user_id',Auth::user()->id)->get()->toArray();
+			$areas = Areas::where('user_id', Auth::user()->id)->get()->toArray();
 			$areaarr = [];
 			foreach ($areas as $key => $value) {
 				$areaarr[$value['id']] = $value;
@@ -62,214 +62,226 @@ class EnquiriesController extends Controller
 			if (!empty($request->search_enq)) {
 				$pro = Properties::find($request->search_enq);
 			}
-			//Get Data Enquiry
-			$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
-				//Filter Enquiry
-				->when($request->filter_by, function ($query) use ($request) {
-					if ($request->filter_by == 'new') {
-						return $query->doesntHave('Progress');
-					} elseif ($request->filter_by == 'today') {
-						return $query->whereHas('activeProgress', function ($query) {
-							$query->whereDate('enquiries.created_at', '=', Carbon::now()->format('Y-m-d'));
+			$user = User::with(['roles', 'roles.permissions'])->where('id', Auth::user()->id)->first();
+			$new = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
+				return ($var['name'] == 'only-assigned');
+			});
+			if (count($new) > 0) {
+				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
+					->whereHas('AssignHistory', function ($query) {
+						$query->where('assign_id', '=', Auth::user()->id);
+					})
+					->orderBy('id', 'desc')
+					->get();
+			} else {
+				//Get Data Enquiry
+				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
+					//Filter Enquiry
+					->when($request->filter_by, function ($query) use ($request) {
+						if ($request->filter_by == 'new') {
+							return $query->doesntHave('Progress');
+						} elseif ($request->filter_by == 'today') {
+							return $query->whereHas('activeProgress', function ($query) {
+								$query->whereDate('enquiries.created_at', '=', Carbon::now()->format('Y-m-d'));
+							});
+						} elseif ($request->filter_by == 'tomorrow') {
+							return $query->whereHas('activeProgress', function ($query) {
+								$query->whereDate('created_at', '=', Carbon::tomorrow()->format('Y-m-d'));
+							});
+						} elseif ($request->filter_by == 'yesterday') {
+							return $query->whereHas('activeProgress', function ($query) {
+								$query->whereDate('created_at', '=', Carbon::yesterday()->format('Y-m-d'));
+							});
+						} elseif ($request->filter_by == 'due') {
+							return $query->whereHas('activeProgress', function ($query) {
+								$query->whereDate('created_at', '<=', Carbon::now()->format('Y-m-d'));
+							});
+						} elseif ($request->filter_by == 'weekend') {
+							return $query->whereHas('activeProgress', function ($query) {
+								$query->whereDate('created_at', '<=', Carbon::now()->endOfWeek())->whereDate('created_at', '>=', Carbon::now()->endOfWeek()->subDay());;
+							});
+						}
+					})
+					->when($request->calendar_date && $request->calendar_type, function ($query) use ($request) {
+						if ($request->calendar_type == 'New Enquiry') {
+							return $query->whereDate('created_at', $request->calendar_date);
+						} else {
+							return $query->whereHas('activeProgress', function ($query) use ($request) {
+								$query->whereDate('created_at', '=', $request->calendar_date)->where('progress', $request->calendar_type);
+							});
+						}
+					})
+					->when($request->filter_city_id, function ($query) use ($request) {
+						return $query->where('enquiry_city_id', $request->filter_city_id);
+					})
+					->when($request->filter_enquiry_branch_id, function ($query) use ($request) {
+						return $query->where('enquiry_branch_id', $request->filter_enquiry_branch_id);
+					})
+					->when($request->filter_employee_id, function ($query) use ($request) {
+						return $query->where('employee_id', $request->filter_employee_id);
+					})
+					->when($request->filter_property_type, function ($query) use ($request) {
+						// return $query->where('requirement_type', 'like', '%"' . $request->filter_property_type . '"%');
+						return $query->where('requirement_type', $request->filter_property_type);
+					})
+					->when($request->filter_specific_type, function ($query) use ($request) {
+						$query->where(function ($query) use ($request) {
+							$types = json_decode($request->filter_specific_type);
+							if (isset($types[0])) {
+								foreach ($types as $key => $value) {
+									$query->orWhere('property_type', 'like', '%' . $value . '%');
+								}
+							}
 						});
-					} elseif ($request->filter_by == 'tomorrow') {
-						return $query->whereHas('activeProgress', function ($query) {
-							$query->whereDate('created_at', '=', Carbon::tomorrow()->format('Y-m-d'));
+					})
+					->when($request->filter_configuration, function ($query) use ($request) {
+						return  $query->where('configuration', 'like', '%"' . $request->filter_configuration . '"%');
+					})
+					->when($request->filter_area_id, function ($query) use ($request) {
+						$query->where(function ($query) use ($request) {
+							$types = json_decode($request->filter_area_id);
+							if (isset($types[0])) {
+								foreach ($types as $key => $value) {
+									$query->orWhere('area_ids', 'like', '%' . $value . '%');
+								}
+							}
 						});
-					} elseif ($request->filter_by == 'yesterday') {
-						return $query->whereHas('activeProgress', function ($query) {
-							$query->whereDate('created_at', '=', Carbon::yesterday()->format('Y-m-d'));
-						});
-					} elseif ($request->filter_by == 'due') {
-						return $query->whereHas('activeProgress', function ($query) {
-							$query->whereDate('created_at', '<=', Carbon::now()->format('Y-m-d'));
-						});
-					} elseif ($request->filter_by == 'weekend') {
-						return $query->whereHas('activeProgress', function ($query) {
-							$query->whereDate('created_at', '<=', Carbon::now()->endOfWeek())->whereDate('created_at', '>=', Carbon::now()->endOfWeek()->subDay());;
-						});
-					}
-				})
-				->when($request->calendar_date && $request->calendar_type, function ($query) use ($request) {
-					if ($request->calendar_type == 'New Enquiry') {
-						return $query->whereDate('created_at', $request->calendar_date);
-					} else {
+					})
+					->when($request->filter_enquiry_for, function ($query) use ($request) {
+						return $query->where('enquiry_for', $request->filter_enquiry_for);
+					})
+					->when($request->filter_enquiry_source, function ($query) use ($request) {
+						return $query->where('enquiry_source', $request->filter_enquiry_source);
+					})
+					->when($request->filter_enquiry_progress, function ($query) use ($request) {
 						return $query->whereHas('activeProgress', function ($query) use ($request) {
-							$query->whereDate('created_at', '=', $request->calendar_date)->where('progress', $request->calendar_type);
+							$query->where('progress', $request->filter_enquiry_progress);
 						});
-					}
-				})
-				->when($request->filter_city_id, function ($query) use ($request) {
-					return $query->where('enquiry_city_id', $request->filter_city_id);
-				})
-				->when($request->filter_enquiry_branch_id, function ($query) use ($request) {
-					return $query->where('enquiry_branch_id', $request->filter_enquiry_branch_id);
-				})
-				->when($request->filter_employee_id, function ($query) use ($request) {
-					return $query->where('employee_id', $request->filter_employee_id);
-				})
-				->when($request->filter_property_type, function ($query) use ($request) {
-					// return $query->where('requirement_type', 'like', '%"' . $request->filter_property_type . '"%');
-					return $query->where('requirement_type', $request->filter_property_type);
-				})
-				->when($request->filter_specific_type, function ($query) use ($request) {
-					$query->where(function ($query) use ($request) {
-						$types = json_decode($request->filter_specific_type);
-						if (isset($types[0])) {
-							foreach ($types as $key => $value) {
-								$query->orWhere('property_type', 'like', '%' . $value . '%');
+					})
+					->when($request->filter_enquiry_status, function ($query) use ($request) {
+						return $query->where('enquiry_status', $request->filter_enquiry_status);
+					})
+					->when($request->filter_sales_comment, function ($query) use ($request) {
+						return $query->whereHas('activeProgress', function ($query) use ($request) {
+							$query->where('sales_comment_id', $request->filter_sales_comment);
+						});
+					})
+					->when($request->filter_lead_type, function ($query) use ($request) {
+						return $query->whereHas('activeProgress', function ($query) use ($request) {
+							$query->where('lead_type', $request->filter_lead_type);
+						});
+					})
+					->when($request->filter_purpose, function ($query) use ($request) {
+						return $query->where('purpose', $request->filter_purpose);
+					})
+					->when($request->filter_nfd_from, function ($query) use ($request) {
+						return $query->whereHas('activeProgress', function ($query) use ($request) {
+							$query->whereDate('nfd', '>=', $request->filter_nfd_from);
+						});
+					})
+					->when($request->filter_nfd_to, function ($query) use ($request) {
+						return $query->whereHas('activeProgress', function ($query) use ($request) {
+							$query->whereDate('nfd', '>=', $request->filter_nfd_to);
+						});
+					})
+					->when($request->filter_from_date, function ($query) use ($request) {
+						return $query->whereDate('created_at', '>=', $request->filter_from_date);
+					})
+					->when($request->filter_to_date, function ($query) use ($request) {
+						return $query->whereDate('created_at', '<=', $request->filter_to_date);
+					})
+					->when($request->filter_favourite, function ($query) use ($request) {
+						return $query->where('is_favourite', $request->filter_favourite);
+					})
+					->when($request->filter_new_enquiry, function ($query) use ($request) {
+						return $query->doesntHave('activeProgress');
+					})
+					->when($request->filter_draft, function ($query) use ($request) {
+						return $query->whereDate('created_at', '<=', $request->filter_draft);
+					})
+					->when($request->filter_prospect, function ($query) use ($request) {
+						return $query->whereDate('created_at', '<=', $request->filter_prospect);
+					})
+					//Matching Enquiry
+					->when(!empty($request->search_enq), function ($query) use ($request, $pro) {
+						if (!empty($pro)) {
+							// prop type = enq type req type
+							if ($request->match_property_type) {
+								// dd("requirement_type", $pro->property_type, "..", $request->match_property_type);
+								$query->where('requirement_type',   $pro->property_type);
 							}
-						}
-					});
-				})
-				->when($request->filter_configuration, function ($query) use ($request) {
-					return  $query->where('configuration', 'like', '%"' . $request->filter_configuration . '"%');
-				})
-				->when($request->filter_area_id, function ($query) use ($request) {
-					$query->where(function ($query) use ($request) {
-						$types = json_decode($request->filter_area_id);
-						if (isset($types[0])) {
-							foreach ($types as $key => $value) {
-								$query->orWhere('area_ids', 'like', '%' . $value . '%');
+
+							//prop category = enq category
+							if ($request->match_specific_type) {
+								// dd("property_type", $request->match_specific_type, "..", $pro->property_category);
+								$query->where('property_type',   $pro->property_category);
 							}
-						}
-					});
-				})
-				->when($request->filter_enquiry_for, function ($query) use ($request) {
-					return $query->where('enquiry_for', $request->filter_enquiry_for);
-				})
-				->when($request->filter_enquiry_source, function ($query) use ($request) {
-					return $query->where('enquiry_source', $request->filter_enquiry_source);
-				})
-				->when($request->filter_enquiry_progress, function ($query) use ($request) {
-					return $query->whereHas('activeProgress', function ($query) use ($request) {
-						$query->where('progress', $request->filter_enquiry_progress);
-					});
-				})
-				->when($request->filter_enquiry_status, function ($query) use ($request) {
-					return $query->where('enquiry_status', $request->filter_enquiry_status);
-				})
-				->when($request->filter_sales_comment, function ($query) use ($request) {
-					return $query->whereHas('activeProgress', function ($query) use ($request) {
-						$query->where('sales_comment_id', $request->filter_sales_comment);
-					});
-				})
-				->when($request->filter_lead_type, function ($query) use ($request) {
-					return $query->whereHas('activeProgress', function ($query) use ($request) {
-						$query->where('lead_type', $request->filter_lead_type);
-					});
-				})
-				->when($request->filter_purpose, function ($query) use ($request) {
-					return $query->where('purpose', $request->filter_purpose);
-				})
-				->when($request->filter_nfd_from, function ($query) use ($request) {
-					return $query->whereHas('activeProgress', function ($query) use ($request) {
-						$query->whereDate('nfd', '>=', $request->filter_nfd_from);
-					});
-				})
-				->when($request->filter_nfd_to, function ($query) use ($request) {
-					return $query->whereHas('activeProgress', function ($query) use ($request) {
-						$query->whereDate('nfd', '>=', $request->filter_nfd_to);
-					});
-				})
-				->when($request->filter_from_date, function ($query) use ($request) {
-					return $query->whereDate('created_at', '>=', $request->filter_from_date);
-				})
-				->when($request->filter_to_date, function ($query) use ($request) {
-					return $query->whereDate('created_at', '<=', $request->filter_to_date);
-				})
-				->when($request->filter_favourite, function ($query) use ($request) {
-					return $query->where('is_favourite', $request->filter_favourite);
-				})
-				->when($request->filter_new_enquiry, function ($query) use ($request) {
-					return $query->doesntHave('activeProgress');
-				})
-				->when($request->filter_draft, function ($query) use ($request) {
-					return $query->whereDate('created_at', '<=', $request->filter_draft);
-				})
-				->when($request->filter_prospect, function ($query) use ($request) {
-					return $query->whereDate('created_at', '<=', $request->filter_prospect);
-				})
-				//Matching Enquiry
-				->when(!empty($request->search_enq), function ($query) use ($request, $pro) {
-					if (!empty($pro)) {
-						// prop type = enq type req type
-						if ($request->match_property_type) {
-							// dd("requirement_type", $pro->property_type, "..", $request->match_property_type);
-							$query->where('requirement_type',   $pro->property_type);
-						}
 
-						//prop category = enq category
-						if ($request->match_specific_type) {
-							// dd("property_type", $request->match_specific_type, "..", $pro->property_category);
-							$query->where('property_type',   $pro->property_category);
-						}
-
-						if ($request->match_specific_sub_type) {
-							// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration);
-							$query->whereJsonContains('configuration', ($pro->configuration));
-						}
-
-						// Property For = Enquiry for
-						if ($request->match_enquiry_for) {
-							// dd("match_enquiry_for", $enquiry_for);
-							$enquiry_for = ($pro->property_for == 'Sell') ? 'Buy' : $pro->property_for;
-							$query->where('enquiry_for', $enquiry_for);
-						}
-
-						// budget from - budget to
-						if ($request->match_budget_from_type) {
-							// dd("match_budget_from_type", $request->match_budget_from_type, "..", $pro->survey_price, "...", $unit_price);
-							$value = $pro->survey_price; // Get the value from the request
-							$unitDetails = json_decode($pro->unit_details, true);
-							$unit_price = $unitDetails[0][7];
-							if ($value != '') {
-								$query->where('budget_from', '<=', $pro->survey_price)
-									->where('budget_to', '>=', $pro->survey_price);
-							} else if ($unit_price != '') {
-								$query->where('budget_from', '<=', $unit_price)
-									->where('budget_to', '>=', $unit_price);
+							if ($request->match_specific_sub_type) {
+								// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration);
+								$query->whereJsonContains('configuration', ($pro->configuration));
 							}
-						}
 
-						// Advertise Prop =  sorce enq
-						if ($request->match_inquiry_source) {
-							// dd("enquiry_source ALL", $request->all());
-							// dd("enquiry_source", $request->match_inquiry_source, "...", $pro->source_of_property);
-							$query->where('enquiry_source', $pro->source_of_property);
-						}
-
-						// size range = prop salable area
-						if ($request->match_enquiry_size) {
-							// dd("match_enquiry_size ==>", $request->match_enquiry_size, "..", $pro->salable_area, "..", $pro->constructed_salable_area);
-							$parts = explode("_-||-_", $pro->salable_area);
-							$result = $parts[0];
-							$area_size_from = str_replace(',', '', $result);
-							$area_size_to = str_replace(',', '', $result);
-
-							// dd($result);
-							$parts = explode("_-||-_", $pro->constructed_salable_area);
-							$result2 = $parts[0];
-							$area_from = str_replace(',', '', $result2);
-							$area_to = str_replace(',', '', $result2);
-
-							if ($area_size_from != '' && $area_size_to != '') {
-								$query->where('area_from', '<=', $area_size_from)
-									->where('area_to', '>=', $area_size_to);
-							} else if ($area_from != '' && $area_to != '') {
-								$query->where('area_from', '<=', $area_from)
-									->where('area_to', '>=', $area_to);
+							// Property For = Enquiry for
+							if ($request->match_enquiry_for) {
+								// dd("match_enquiry_for", $enquiry_for);
+								$enquiry_for = ($pro->property_for == 'Sell') ? 'Buy' : $pro->property_for;
+								$query->where('enquiry_for', $enquiry_for);
 							}
-						}
 
-						// prop building id == enq build id
-						// if ($request->match_building) {
-						// 	dd("building_id:", $request->match_building);
-						// 	return $query->where('building_id', 'like', '%"' . $pro->project_id . '"%');
-						// }
-					}
-				})
-				->orderBy('id', 'desc');
+							// budget from - budget to
+							if ($request->match_budget_from_type) {
+								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $pro->survey_price, "...", $unit_price);
+								$value = $pro->survey_price; // Get the value from the request
+								$unitDetails = json_decode($pro->unit_details, true);
+								$unit_price = $unitDetails[0][7];
+								if ($value != '') {
+									$query->where('budget_from', '<=', $pro->survey_price)
+										->where('budget_to', '>=', $pro->survey_price);
+								} else if ($unit_price != '') {
+									$query->where('budget_from', '<=', $unit_price)
+										->where('budget_to', '>=', $unit_price);
+								}
+							}
+
+							// Advertise Prop =  sorce enq
+							if ($request->match_inquiry_source) {
+								// dd("enquiry_source ALL", $request->all());
+								// dd("enquiry_source", $request->match_inquiry_source, "...", $pro->source_of_property);
+								$query->where('enquiry_source', $pro->source_of_property);
+							}
+
+							// size range = prop salable area
+							if ($request->match_enquiry_size) {
+								// dd("match_enquiry_size ==>", $request->match_enquiry_size, "..", $pro->salable_area, "..", $pro->constructed_salable_area);
+								$parts = explode("_-||-_", $pro->salable_area);
+								$result = $parts[0];
+								$area_size_from = str_replace(',', '', $result);
+								$area_size_to = str_replace(',', '', $result);
+
+								// dd($result);
+								$parts = explode("_-||-_", $pro->constructed_salable_area);
+								$result2 = $parts[0];
+								$area_from = str_replace(',', '', $result2);
+								$area_to = str_replace(',', '', $result2);
+
+								if ($area_size_from != '' && $area_size_to != '') {
+									$query->where('area_from', '<=', $area_size_from)
+										->where('area_to', '>=', $area_size_to);
+								} else if ($area_from != '' && $area_to != '') {
+									$query->where('area_from', '<=', $area_from)
+										->where('area_to', '>=', $area_to);
+								}
+							}
+
+							// prop building id == enq build id
+							// if ($request->match_building) {
+							// 	dd("building_id:", $request->match_building);
+							// 	return $query->where('building_id', 'like', '%"' . $pro->project_id . '"%');
+							// }
+						}
+					})
+					->orderBy('id', 'desc');
 
 				$parts = explode('?', $request->location);
 
@@ -279,31 +291,30 @@ class EnquiriesController extends Controller
 
 					if (strpos($value, 'data_id') !== false) {
 						$value_part = explode('=', $value);
-						if($value_part[1] > 0) {
+						if ($value_part[1] > 0) {
 							$data->where('id', $value_part[1]);
 						}
 					}
 				}
-
-			foreach ($data->get() as $key => $value) {
-				if (!empty($request->filter_from_budget)) {
-					if (empty($value->budget_from)) {
-						unset($data[$key]);
+				foreach ($data->get() as $key => $value) {
+					if (!empty($request->filter_from_budget)) {
+						if (empty($value->budget_from)) {
+							unset($data[$key]);
+						}
+						if (!(Helper::c_to_n($value->budget_from) >= Helper::c_to_n($request->filter_from_budget))) {
+							unset($data[$key]);
+						}
 					}
-					if (!(Helper::c_to_n($value->budget_from) >= Helper::c_to_n($request->filter_from_budget))) {
-						unset($data[$key]);
-					}
-				}
-				if (!empty($request->filter_to_budget)) {
-					if (empty($value->budget_to)) {
-						unset($data[$key]);
-					}
-					if (!(Helper::c_to_n($value->budget_to) <= Helper::c_to_n($request->filter_to_budget))) {
-						unset($data[$key]);
+					if (!empty($request->filter_to_budget)) {
+						if (empty($value->budget_to)) {
+							unset($data[$key]);
+						}
+						if (!(Helper::c_to_n($value->budget_to) <= Helper::c_to_n($request->filter_to_budget))) {
+							unset($data[$key]);
+						}
 					}
 				}
 			}
-
 			return DataTables::of($data)
 				->editColumn('client_name', function ($row) use ($dropdownsarr) {
 
@@ -500,14 +511,25 @@ class EnquiriesController extends Controller
 				})
 				->editColumn('Actions2', function ($row) {
 					$buttons = '';
-					$buttons =  $buttons . '<a href="' . route('admin.enquiry.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+					$user = User::with(['roles', 'roles.permissions'])
+						->where('id', Auth::user()->id)
+						->first();
 
-					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteEnquiry(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
+					$permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
 
+					if (in_array('enquiry-edit', $permissions)) {
+						$buttons =  $buttons . '<a href="' . route('admin.enquiry.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+					}
+					if (in_array('enquiry-delete', $permissions)) {
+						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteEnquiry(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
+					}
 					$buttons =  $buttons . '<i title="Matching Property" data-id="' . $row->id . '" onclick=matchingProperty(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
-					$buttons =  $buttons . '<i title="Progress" data-id="' . $row->id . '" onclick=showProgress(this) class="fa fs-22 py-2 mx-2 fa-bars text-warning"></i><br>';
-
-					$buttons =  $buttons . '<i  title="Transfer Enqiry" data-employee="' . $row->employee_id . '"  data-id="' . $row->id . '" onclick=transferEnquiry(this) class="pointer fa fs-22 py-2 mx-2 fa-long-arrow-right text-dark"></i>';
+					if (in_array('delete-enquiry-progress', $permissions)) {
+						$buttons =  $buttons . '<i title="Progress" data-id="' . $row->id . '" onclick=showProgress(this) class="fa fs-22 py-2 mx-2 fa-bars text-warning"></i><br>';
+					}
+					if (in_array('bulk-enquiry-transfer', $permissions)) {
+						$buttons =  $buttons . '<i  title="Transfer Enqiry" data-employee="' . $row->employee_id . '"  data-id="' . $row->id . '" onclick=transferEnquiry(this) class="pointer fa fs-22 py-2 mx-2 fa-long-arrow-right text-dark"></i>';
+					}
 					$buttons =  $buttons . '<i title="Contact List" data-id="' . $row->id . '" onclick=contactList(this) class="fa fs-22 py-2 mx-2 fa-database text-blue"></i>';
 					$buttons =  $buttons . '<i title="Schedule Visit" data-employee="' . $row->employee_id . '" data-id="' . $row->id . '" onclick=showScheduleVisit(this) class="fa fs-22 py-2 mx-2 fa-map text-success"></i>';
 					return $buttons;
@@ -529,7 +551,7 @@ class EnquiriesController extends Controller
 
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 
 
@@ -670,7 +692,7 @@ class EnquiriesController extends Controller
 				$prop_type = $dropdowns[$value['property_type']]['name'];
 			}
 
-			$areas = Areas::where('user_id',Auth::user()->id)->get()->toArray();
+			$areas = Areas::where('user_id', Auth::user()->id)->get()->toArray();
 			$areaarr = [];
 			foreach ($areas as $key3 => $value2) {
 				$areaarr[$value2['id']] = $value2;
@@ -1201,7 +1223,7 @@ class EnquiriesController extends Controller
 		}
 		$dropdowns = $dropdownsarr;
 
-		$areas = Areas::where('user_id',Auth::user()->id)->get()->toArray();
+		$areas = Areas::where('user_id', Auth::user()->id)->get()->toArray();
 		$areaarr = [];
 		foreach ($areas as $key => $value) {
 			$areaarr[$value['id']] = $value;
@@ -1306,7 +1328,7 @@ class EnquiriesController extends Controller
 		$projects = Projects::orderBy('project_name')->get();
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$prop_list = Helper::get_property_units_helper();
 		return view('admin.enquiries.view', compact('areas', 'employees', 'data', 'prop_type', 'configuration_name', 'requiretype_name', 'area_name', 'city', 'branches', 'cities', 'project_name', 'employee', 'dropdowns', 'furnished', 'configuration_settings', 'projects', 'properties', 'prop_list'));
 	}
@@ -1374,7 +1396,7 @@ class EnquiriesController extends Controller
 				->get();
 		}
 
-		$areas = Areas::where('user_id',Auth::user()->id)->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->get();
 		$areaarr = [];
 		foreach ($areas as $key => $value) {
 			$areaarr[$value['id']] = $value;
@@ -1422,7 +1444,7 @@ class EnquiriesController extends Controller
 		}
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		$districts = District::orderBy('name')->get();
 		$talukas   = Taluka::orderBy('name')->get();
@@ -1446,7 +1468,7 @@ class EnquiriesController extends Controller
 
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		$current_id = $request->id;
 
