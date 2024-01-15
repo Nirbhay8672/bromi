@@ -9,6 +9,7 @@ use App\Models\City;
 use App\Models\State;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -68,10 +69,24 @@ class AreaController extends Controller
 				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
+
+					$user = User::with(['roles', 'roles.permissions'])->where('id',Auth::user()->id)->first();
+
+					$edit_permission = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
+						return ($var['name'] == 'area-edit');
+					});
+
+					$delete_permission = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
+						return ($var['name'] == 'area-delete');
+					});
+
+					if(count($edit_permission) > 0) {
 						$buttons =  $buttons . '<i role="button" title="Edit" data-id="' . $row->id . '" onclick=getArea(this) class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
-				
+					}
+
+					if(count($delete_permission) > 0) {
 						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteArea(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
-					
+					}
 					return $buttons;
 				})
 				->rawColumns(['Actions','select_checkbox'])

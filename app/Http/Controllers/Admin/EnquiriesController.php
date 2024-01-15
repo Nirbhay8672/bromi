@@ -511,14 +511,25 @@ class EnquiriesController extends Controller
 				})
 				->editColumn('Actions2', function ($row) {
 					$buttons = '';
+					$user = User::with(['roles', 'roles.permissions'])
+						->where('id', Auth::user()->id)
+						->first();
 
-					$buttons =  $buttons . '<a href="' . route('admin.enquiry.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
-					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteEnquiry(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
+					$permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
 
+					if (in_array('enquiry-edit', $permissions)) {
+						$buttons =  $buttons . '<a href="' . route('admin.enquiry.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+					}
+					if (in_array('enquiry-delete', $permissions)) {
+						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteEnquiry(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
+					}
 					$buttons =  $buttons . '<i title="Matching Property" data-id="' . $row->id . '" onclick=matchingProperty(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
-					$buttons =  $buttons . '<i title="Progress" data-id="' . $row->id . '" onclick=showProgress(this) class="fa fs-22 py-2 mx-2 fa-bars text-warning"></i><br>';
-
-					$buttons =  $buttons . '<i  title="Transfer Enqiry" data-employee="' . $row->employee_id . '"  data-id="' . $row->id . '" onclick=transferEnquiry(this) class="pointer fa fs-22 py-2 mx-2 fa-long-arrow-right text-dark"></i>';
+					if (in_array('delete-enquiry-progress', $permissions)) {
+						$buttons =  $buttons . '<i title="Progress" data-id="' . $row->id . '" onclick=showProgress(this) class="fa fs-22 py-2 mx-2 fa-bars text-warning"></i><br>';
+					}
+					if (in_array('bulk-enquiry-transfer', $permissions)) {
+						$buttons =  $buttons . '<i  title="Transfer Enqiry" data-employee="' . $row->employee_id . '"  data-id="' . $row->id . '" onclick=transferEnquiry(this) class="pointer fa fs-22 py-2 mx-2 fa-long-arrow-right text-dark"></i>';
+					}
 					$buttons =  $buttons . '<i title="Contact List" data-id="' . $row->id . '" onclick=contactList(this) class="fa fs-22 py-2 mx-2 fa-database text-blue"></i>';
 					$buttons =  $buttons . '<i title="Schedule Visit" data-employee="' . $row->employee_id . '" data-id="' . $row->id . '" onclick=showScheduleVisit(this) class="fa fs-22 py-2 mx-2 fa-map text-success"></i>';
 					return $buttons;

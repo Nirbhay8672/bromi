@@ -256,22 +256,22 @@ class PropertyController extends Controller
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
 				END,  properties.id DESC');
-				
-				
-				$parts = explode('?', $request->location);
 
-				if (count($parts) > 1) {
-					$value = $parts[1];
-					$value = trim($value);
 
-					if (strpos($value, 'data_id') !== false) {
-						$value_part = explode('=', $value);
-						if($value_part[1] > 0) {
-							$data->where('properties.id', $value_part[1]);
-						}
-					}
-				}
-				
+            $parts = explode('?', $request->location);
+
+            if (count($parts) > 1) {
+                $value = $parts[1];
+                $value = trim($value);
+
+                if (strpos($value, 'data_id') !== false) {
+                    $value_part = explode('=', $value);
+                    if ($value_part[1] > 0) {
+                        $data->where('properties.id', $value_part[1]);
+                    }
+                }
+            }
+
             foreach ($data->get() as $key => $value) {
                 $theArea = 0;
                 if (!empty($value->salable_area)) {
@@ -614,10 +614,18 @@ class PropertyController extends Controller
                     $carpet_area = '';
                     $carpet_measure = '';
                     $furniture = '';
-                    // bharat edit
-                    $buttons = $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
 
-                    $buttons = $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
+                    $user = User::with(['roles', 'roles.permissions'])
+                        ->where('id', Auth::user()->id)
+                        ->first();
+                    $permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
+                    // bharat edit
+                    if (in_array('property-edit', $permissions)) {
+                        $buttons = $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+                    }
+                    if (in_array('property-delete', $permissions)) {
+                        $buttons = $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
+                    }
 
                     if (isset($row->Projects->project_name)) {
                         $building_name = $row->Projects->project_name;
@@ -653,8 +661,9 @@ class PropertyController extends Controller
 
                     $buttons = $buttons . '<i title="Matching Enquiry" data-id="' . $row->id . '" onclick=matchingEnquiry(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
                     //     $buttons =  $buttons . '<a  href="javascript:void(0)" onclick="ShareLink(this)" data-link="' . route('admin.properties') . '?shareproperty=' . encrypt($row->id) . '"><i title="Share" data-id="' . $row->id . '"  class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
-                    $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
-
+                    if (in_array('shared-property', $permissions)) {
+                        $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
+                    }
                     $vvv = '';
                     if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
                         $cd = json_decode($row->other_contact_details);
@@ -1983,7 +1992,7 @@ class PropertyController extends Controller
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property', 'multiple_image','construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property', 'multiple_image', 'construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
 
     public function downloadZip($type, $prop)
