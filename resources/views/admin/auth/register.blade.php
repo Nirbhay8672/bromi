@@ -75,6 +75,7 @@
                                         placeholder="First Name"
                                         autofocus
                                         autocomplete="off"
+                                        style="text-transform: capitalize;"
                                     >
                                     @error('first_name')
                                         <span class="invalid-feedback" role="alert">
@@ -92,6 +93,7 @@
                                         type="text"
                                         placeholder="Last Name"
                                         autocomplete="off"
+                                        style="text-transform: capitalize;"
                                     >
                                     @error('last_name')
                                         <span class="invalid-feedback" role="alert">
@@ -148,6 +150,7 @@
                                         type="text"
                                         placeholder="Company Name"
                                         autocomplete="off"
+                                        style="text-transform: capitalize;"
                                     >
                                     @error('company_name')
                                         <span class="invalid-feedback" role="alert">
