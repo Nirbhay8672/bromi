@@ -182,8 +182,9 @@ class AdminLoginController extends Controller
 		$user->fill([
 			'plan_id' => $request->plan_id,
 		])->save();
-
+		
 		Session::put('plan_id', $request->plan_id);
+		Session::put('parent_id', $user->id);
 		return redirect('/admin');
 	}
 }
