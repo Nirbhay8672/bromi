@@ -15,6 +15,7 @@ use App\Models\Projects;
 use App\Models\State;
 use App\Models\Subplans;
 use Carbon\Carbon;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Session;
@@ -111,6 +112,13 @@ class UserController extends Controller
 		$total_user = User::where('parent_id', Auth::user()->id)->count();
 		return view('admin.users.index', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches','plan_details','plans','total_user'));
 	}
+	
+	public function storeFile(UploadedFile $file)
+    {
+        $path = "file_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
+		$file->storeAs("public/file_image/", $path);
+        return $path;
+    }
 
 	public function saveUser(Request $request)
 	{
@@ -154,6 +162,13 @@ class UserController extends Controller
 		$data->specific_properties = $request->specific_properties;
 		$data->buildings = $request->buildings;
 		$data->working = $request->working;
+		$data->id_type = $request->id_type;
+
+		if($request->id_type_file) {
+			$id_type_file = $request->id_type_file;
+			$data->id_file = $this->storeFile($id_type_file);
+		}
+
 		$data->save();
 		$data->syncRoles([]);
 

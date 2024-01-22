@@ -215,11 +215,38 @@
                                                                     id="home_phone_no" type="text" autocomplete="off">
                                                             </div>
                                                             <div class="form-group col-md-4 m-b-20">
-                                                                <label for="Email">Email</label>
+                                                             <label for="Email">Email</label>
                                                                 <input class="form-control" name="email" id="email"
                                                                     type="text" autocomplete="off">
+                                                            </div>   
+
+                                                            <div>
+                                                                <label><b>Employee ID</b></label>
                                                             </div>
 
+                                                            <div class="form-group col-md-2 m-b-20">
+                                                                <select
+                                                                    name="id_type"
+                                                                    id="id_type"
+                                                                    class="form-control"
+                                                                >
+                                                                <option value="">Select Id Type</option>
+                                                                <option value="aadhaar_card">Aadhaar Card</option>
+                                                                <option value="election_card">Election Card</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="form-group col-md-4 m-b-20">
+                                                                <input
+                                                                    class="form-control"
+                                                                    name="file"
+                                                                    id="id_type_file"
+                                                                    type="file"
+                                                                    accept=".png,.jpg,.jpeg,.pdf"
+                                                                    style="border: 2px solid black;border-radius:5px;"
+                                                                >
+                                                            </div>
+                                                            
                                                             <div>
                                                                 <label><b>Employee Position and Branch Access</b></label>
                                                             </div>
@@ -366,6 +393,9 @@
                             $('#email').val(dataa.email);
                             $('#home_phone_no').val(dataa.home_number);
                             $('#office_no').val(dataa.office_number);
+                            $('#id_type').val(dataa.id_type).trigger('change');
+
+
                             $('#position').val(dataa.position).trigger('change');
                             $('#property_for_id').val(dataa.property_for_id).trigger('change')
                             $('#working').prop('checked', Number(dataa.working));
@@ -439,42 +469,60 @@
                         if (!$("#modal_form").valid()) {
                             return
                         }
-                        var id = $('#this_data_id').val()
-                        $.ajax({
-                            type: "POST",
-                            url: "{{ route('admin.saveUser') }}",
-                            data: {
-                                id: id,
-                                first_name: $('#first_name').val(),
-                                middle_name: $('#middle_name').val(),
-                                last_name: $('#last_name').val(),
-                                birth_date: $('#birth_date').val(),
-                                hire_date: $('#hire_date').val(),
-                                driving_license: $('#driving_license').val(),
-                                status: $('#status').val(),
-                                address: $('#address').val(),
-                                pincode: $('#pincode').val(),
-                                city_id: $('#city_id').val(),
-                                state_id: $('#state_id').val(),
-                                mobile_number: $('#mobile_number').val(),
-                                office_no: $('#office_no').val(),
-                                email: $('#email').val(),
-                                home_phone_no: $('#home_phone_no').val(),
-                                position: $('#position').val(),
-                                branch_id: JSON.stringify($('#branch_id').val()),
-                                reporting_to: JSON.stringify($('#reporting_to').val()),
-                                password: $('#password').val(),
-                                role_id: $('#role_id').val(),
-                                property_for_id: $('#property_for_id').val(),
-                                property_type_id: JSON.stringify($('#property_type_id').val()),
-                                specific_properties: JSON.stringify($('#specific_properties').val()),
-                                buildings: JSON.stringify($('#buildings').val()),
-                                working: Number($('#working').prop('checked')),
-                                _token: '{{ csrf_token() }}',
+                        var id = $('#this_data_id').val();
+
+                        let form_data = new FormData();
+
+                        form_data.set('id', id);
+                        form_data.set('first_name', $('#first_name').val());
+                        form_data.set('middle_name', $('#middle_name').val());
+                        form_data.set('last_name', $('#last_name').val());
+                        form_data.set('birth_date', $('#birth_date').val());
+                        form_data.set('hire_date', $('#hire_date').val());
+                        form_data.set('driving_license', $('#driving_license').val());
+                        form_data.set('status', $('#status').val());
+                        form_data.set('address', $('#address').val());
+                        form_data.set('pincode', $('#pincode').val());
+                        form_data.set('city_id', $('#city_id').val());
+                        form_data.set('state_id', $('#state_id').val());
+                        form_data.set('mobile_number', $('#mobile_number').val());
+                        form_data.set('office_no', $('#office_no').val());
+                        form_data.set('email', $('#email').val());
+                        form_data.set('home_phone_no', $('#home_phone_no').val());
+                        form_data.set('position', $('#position').val());
+                        form_data.set('branch_id', JSON.stringify($('#branch_id').val()));
+                        form_data.set('reporting_to', JSON.stringify($('#reporting_to').val()));
+                        form_data.set('password', $('#password').val());
+                        form_data.set('role_id', $('#role_id').val());
+                        form_data.set('property_for_id', $('#property_for_id').val());
+                        form_data.set('property_type_id', JSON.stringify($('#property_type_id').val()));
+                        form_data.set('specific_properties', JSON.stringify($('#specific_properties').val()));
+                        form_data.set('buildings', JSON.stringify($('#buildings').val()));
+                        form_data.set('working', Number($('#working').prop('checked')));
+
+                        form_data.set('id_type', $('#id_type').val());
+                        let id_type_file = document.getElementById('id_type_file');
+
+                        if(id_type_file && id_type_file.files.length > 0)
+                        {
+                            let file = id_type_file.files[0];
+                            form_data.set('id_type_file', file, file.name);
+                        }
+
+                        let url =  "{{ route('admin.saveUser') }}";
+
+                        axios.post(url, form_data, {
+                            headers: {
+                                "Content-Type": "multipart/form-data",
                             },
-                            success: function(data) {
-                                var redirect_url = "{{route('admin.users')}}";
-                                window.location.href = redirect_url;
+                        })
+                        .then((res) => {
+                            var redirect_url = "{{route('admin.users')}}";
+                            window.location.href = redirect_url;
+                        })
+                        .catch((err) => {
+                            if(err.response.status != 500) {
+                                _this.errors = err.response.data.errors;
                             }
                         });
                     })
