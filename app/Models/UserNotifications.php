@@ -13,5 +13,11 @@ class UserNotifications extends Model
 		'user_id',
 		'notification',
 		'seen',
+        'notification_type',
+        'property_id',
+        'enquiry_id',
+        'by_user',
+        'new_user_id',
+        
 	];
 }

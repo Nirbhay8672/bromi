@@ -25,6 +25,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB as FacadesDB;
 use App\Http\Controllers\Controller;
+use App\Models\UserNotifications;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -66,7 +67,7 @@ class EnquiriesController extends Controller
 			$new = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
 				return ($var['name'] == 'only-assigned');
 			});
-			if (count($new) > 0) {
+			if (count($new) > 0 && $user->role_id !== "1") {
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
 						$query->where('assign_id', '=', Auth::user()->id);
@@ -75,6 +76,7 @@ class EnquiriesController extends Controller
 					->get();
 			} else {
 				//Get Data Enquiry
+				// dd("out");
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					//Filter Enquiry
 					->when($request->filter_by, function ($query) use ($request) {
@@ -549,7 +551,7 @@ class EnquiriesController extends Controller
 		}
 
 
-		$cities = City::orderBy('name')->get();
+		$cities = City::orderBy('name')->where('user_id','=',Auth::user()->id)->get();
 		$branches = Branches::orderBy('name')->get();
 		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
@@ -692,7 +694,7 @@ class EnquiriesController extends Controller
 				$prop_type = $dropdowns[$value['property_type']]['name'];
 			}
 
-			$areas = Areas::where('user_id', Auth::user()->id)->get()->toArray();
+			$areas = Areas::where('user_id',Auth::user()->id)->get()->toArray();
 			$areaarr = [];
 			foreach ($areas as $key3 => $value2) {
 				$areaarr[$value2['id']] = $value2;
@@ -769,6 +771,28 @@ class EnquiriesController extends Controller
 		}
 		$data->remarks = $request->remarks;
 		$data->save();
+
+        // create notification for new user
+        $notif = UserNotifications::where(['notification_type' => 'enquiry', 'enquiry_id' => $request->enquiry_id])
+                ->orderBy('id', 'desc')->first();
+        $userNotification = UserNotifications::create([
+            "user_id" => @$notif->by_user,
+            "notification" => Carbon::parse($request->nfd)->format('Y-m-d H:i:s') . " is the NFD for enquiry.",
+            "notification_type" => "enquiry",
+            'enquiry_id' => $request->enquiry_id,
+            'by_user' => (int) Auth::user()->id
+        ]);
+        // if notificaton creation failed.
+        if (!$userNotification) {
+            Log::error('Unable to create user notification');
+        }
+        UserNotifications::create([
+            "user_id" => (int) Auth::user()->id,
+            "notification" => Carbon::parse($request->nfd)->format('Y-m-d H:i:s') . " is the NFD for enquiry.",
+            "notification_type" => "enquiry",
+            'enquiry_id' => $request->enquiry_id,
+            'by_user' => @$notif->by_user
+        ]);
 	}
 
 	public function saveSchedule(Request $request)
@@ -1150,6 +1174,19 @@ class EnquiriesController extends Controller
 			Enquiries::where('id', $request->enquiry_id)->update(['employee_id' => $request->employee], ['transfer_date' => Carbon::now()->format('Y-m-d H:i:s')]);
 			/* Stored Assign Enquiry History */
 			AssignHistory::create(['enquiry_id' => $request->enquiry_id, 'user_id' => Auth::user()->id, 'assign_id' => $request->employee]);
+
+            // create notification for new user
+            $userNotification = UserNotifications::create([
+                "user_id" => (int) $request->employee,
+                "notification" => Auth::user()->first_name . " has assigned you enquiry.",
+                "notification_type" => "enquiry",
+                'enquiry_id' => $request->enquiry_id,
+                'by_user' => Auth::user()->id
+            ]);
+            // if notificaton creation failed.
+            if (!$userNotification) {
+                Log::error('Unable to create user notification');
+            }
 		}
 	}
 
@@ -1223,7 +1260,7 @@ class EnquiriesController extends Controller
 		}
 		$dropdowns = $dropdownsarr;
 
-		$areas = Areas::where('user_id', Auth::user()->id)->get()->toArray();
+		$areas = Areas::where('user_id',Auth::user()->id)->get()->toArray();
 		$areaarr = [];
 		foreach ($areas as $key => $value) {
 			$areaarr[$value['id']] = $value;
@@ -1328,7 +1365,7 @@ class EnquiriesController extends Controller
 		$projects = Projects::orderBy('project_name')->get();
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
 		$prop_list = Helper::get_property_units_helper();
 		return view('admin.enquiries.view', compact('areas', 'employees', 'data', 'prop_type', 'configuration_name', 'requiretype_name', 'area_name', 'city', 'branches', 'cities', 'project_name', 'employee', 'dropdowns', 'furnished', 'configuration_settings', 'projects', 'properties', 'prop_list'));
 	}
@@ -1396,7 +1433,7 @@ class EnquiriesController extends Controller
 				->get();
 		}
 
-		$areas = Areas::where('user_id', Auth::user()->id)->get();
+		$areas = Areas::where('user_id',Auth::user()->id)->get();
 		$areaarr = [];
 		foreach ($areas as $key => $value) {
 			$areaarr[$value['id']] = $value;
@@ -1444,7 +1481,7 @@ class EnquiriesController extends Controller
 		}
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		$districts = District::orderBy('name')->get();
 		$talukas   = Taluka::orderBy('name')->get();
@@ -1468,7 +1505,7 @@ class EnquiriesController extends Controller
 
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		$current_id = $request->id;
 

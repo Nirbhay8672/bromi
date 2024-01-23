@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\SharedProperty;
 use App\Models\User;
+use App\Models\UserNotifications;
 use App\Models\UserPartner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -219,7 +220,7 @@ class PartnerController extends Controller
 	 */
 	public function userPartner(Request $request)
 	{
-		// dd("user");
+		// dd($request->all());
 		foreach ($request->partner_id as $val) {
 			try {
 				SharedProperty::create([
@@ -227,6 +228,17 @@ class PartnerController extends Controller
 					'user_id' => Auth::user()->id,
 					'property_id' => $request->property_id,
 				]);
+                // create notification for new user
+                $userNotification = UserNotifications::create([
+                    "user_id" => (int) $val,
+                    "notification" => Auth::user()->first_name . " has shared property.",
+                    "notification_type" => "property_shared",
+                    "property_id" => $request->property_id
+                ]);
+                // if notificaton creation failed.
+                if (!$userNotification) {
+                    Log::error('Unable to create user notification, for user partner to share property.');
+                }
 			} catch (\Exception $e) {
 				dd("err", $e);
 			}

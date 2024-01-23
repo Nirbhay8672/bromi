@@ -9426,9 +9426,7 @@ table.dataTable.display tbody tr.odd > .sorting_1 {
   -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 11;
-  /* #B css chng */
-  left: -190px;   
-  /* left: 0; */
+  left: 0;
   top: 45px;
 }
 .dropdown-basic .dropdown .dropdown-content a {

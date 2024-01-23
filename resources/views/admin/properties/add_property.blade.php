@@ -2491,14 +2491,15 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/property_wizard.js') }}"></script>
         <script>
-            // Hide State dropdown
+        
+         // Hide State dropdown
             const numberOfOptions = $('#state_id').find('option').length;
             if (numberOfOptions > 2) {
                 $('.state-hide').show();
             } else {
                 $('.state-hide').hide();
             }
-
+            
             var cities = @Json($city_encoded);
             var states = @Json($state_encoded);
             var areas = @Json($area_encoded);

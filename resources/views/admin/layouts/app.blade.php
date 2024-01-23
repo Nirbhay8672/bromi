@@ -1217,6 +1217,28 @@ Helper::set_default_measuerement();
         </script>
         <!-- login js-->
         <!-- Plugin used-->
+        
+        <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async></script>
+        <script>
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            OneSignalDeferred.push(function(OneSignal) {
+                OneSignal.init({
+                appId: "e2fa0ffa-5375-41c7-b65a-d7379e575e06",
+                });
+                // ----------------------
+                OneSignalDeferred.on('subscriptionChange', function (isSubscribed) {
+                console.log('is subscribed', isSubscribed);
+                    OneSignalDeferred.push(function() { 
+                            console.log('attempt to get id'); // doesn't get this far
+                            OneSignalDeferred.getUserId(function(userId) {
+                            console.log('user id', userId); // doesn't get this far                
+                        });
+                    });
+                });
+            });
+            
+            
+        </script>
 </body>
 
 </html>

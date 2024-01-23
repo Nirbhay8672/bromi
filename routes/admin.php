@@ -114,7 +114,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/save-enquiry', [EnquiriesController::class, 'saveEnquiry'])->name('admin.saveEnquiry');
 		Route::post('/import-enquiry', [EnquiriesController::class, 'importEnquiry'])->name('admin.importenquiry');
 		Route::any('/Projects', [ProjectsController::class, 'index'])->name('admin.projects');
-		Route::any('/all-projects', [ProjectsController::class, 'allprojectList'])->name('admin.all-projects');
+	    Route::any('/all-projects', [ProjectsController::class, 'allprojectList'])->name('admin.all-projects');
 		Route::post('/get-projects', [ProjectsController::class, 'getSpecificProject'])->name('admin.getProject');
 		Route::get('/get-projects-by-unit', [ProjectsController::class, 'projectByUnit'])->name('admin.project.byunit');
 		Route::post('/delete-projects', [ProjectsController::class, 'destroy'])->name('admin.deleteProject');

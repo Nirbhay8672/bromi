@@ -256,78 +256,138 @@ class PropertyController extends Controller
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
 				END,  properties.id DESC');
+				
+				
+				$parts = explode('?', $request->location);
 
+				if (count($parts) > 1) {
+					$value = $parts[1];
+					$value = trim($value);
 
-            $parts = explode('?', $request->location);
-
-            if (count($parts) > 1) {
-                $value = $parts[1];
-                $value = trim($value);
-
-                if (strpos($value, 'data_id') !== false) {
-                    $value_part = explode('=', $value);
-                    if ($value_part[1] > 0) {
-                        $data->where('properties.id', $value_part[1]);
-                    }
-                }
-            }
-
-            foreach ($data->get() as $key => $value) {
+					if (strpos($value, 'data_id') !== false) {
+						$value_part = explode('=', $value);
+						if($value_part[1] > 0) {
+							$data->where('properties.id', $value_part[1]);
+						}
+					}
+				}
+				 $data = $data->get()->filter(function ($value) use ($request) {
                 $theArea = 0;
+
                 if (!empty($value->salable_area)) {
                     $theArea = explode('_-||-_', $value->salable_area)[0];
                 } elseif (!empty($value->salable_plot_area)) {
                     $theArea = explode('_-||-_', $value->salable_plot_area);
                 }
-                if ((!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area))) {
-                    unset($data[$key]);
-                    continue;
+
+                if (!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area)) {
+                    return false;
                 }
+
                 if (!empty($request->filter_to_area) && !($theArea <= $request->filter_to_area)) {
-                    unset($data[$key]);
-                    continue;
+                    return false;
                 }
+
                 $allPrices = [];
 
                 if (!empty($value->unit_details) && !empty(json_decode($value->unit_details)[0])) {
                     foreach (json_decode($value->unit_details) as $key3 => $value3) {
                         if (!empty($value3['7'])) {
-                            array_push($allPrices, $value3['7']);
+                            $allPrices[] = $value3['7'];
                         }
                         if (!empty($value3['4'])) {
-                            array_push($allPrices, $value3['4']);
+                            $allPrices[] = $value3['4'];
                         }
                         if (!empty($value3['3'])) {
-                            array_push($allPrices, $value3['3']);
+                            $allPrices[] = $value3['3'];
                         }
                     }
                 }
+
                 if (!empty($request->filter_from_price)) {
-                    $from_passed = 0;
+                    $from_passed = false;
                     foreach ($allPrices as $key5 => $value5) {
                         if ((Helper::c_to_n($value5) >= Helper::c_to_n($request->filter_from_price))) {
-                            $from_passed = 1;
+                            $from_passed = true;
                             break;
                         }
                     }
                     if (!$from_passed) {
-                        unset($data[$key]);
-                        continue;
+                        return false;
                     }
                 }
+
                 if (!empty($request->filter_to_price)) {
-                    $to_passed = 0;
+                    $to_passed = false;
                     foreach ($allPrices as $key6 => $value6) {
                         if ((Helper::c_to_n($value6) <= Helper::c_to_n($request->filter_to_price))) {
-                            $to_passed = 1;
+                            $to_passed = true;
                             break;
                         }
                     }
                     if (!$to_passed) {
-                        unset($data[$key]);
+                        return false;
                     }
                 }
-            }
+
+                return true;
+            });
+            // foreach ($data->get() as $key => $value) {
+            //     $theArea = 0;
+            //     if (!empty($value->salable_area)) {
+            //         $theArea = explode('_-||-_', $value->salable_area)[0];
+            //     } elseif (!empty($value->salable_plot_area)) {
+            //         $theArea = explode('_-||-_', $value->salable_plot_area);
+            //     }
+            //     if ((!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area))) {
+            //         unset($data[$key]);
+            //         continue;
+            //     }
+            //     if (!empty($request->filter_to_area) && !($theArea <= $request->filter_to_area)) {
+            //         unset($data[$key]);
+            //         continue;
+            //     }
+            //     $allPrices = [];
+
+            //     if (!empty($value->unit_details) && !empty(json_decode($value->unit_details)[0])) {
+            //         foreach (json_decode($value->unit_details) as $key3 => $value3) {
+            //             if (!empty($value3['7'])) {
+            //                 array_push($allPrices, $value3['7']);
+            //             }
+            //             if (!empty($value3['4'])) {
+            //                 array_push($allPrices, $value3['4']);
+            //             }
+            //             if (!empty($value3['3'])) {
+            //                 array_push($allPrices, $value3['3']);
+            //             }
+            //         }
+            //     }
+            //     if (!empty($request->filter_from_price)) {
+            //         $from_passed = 0;
+            //         foreach ($allPrices as $key5 => $value5) {
+            //             if ((Helper::c_to_n($value5) >= Helper::c_to_n($request->filter_from_price))) {
+            //                 $from_passed = 1;
+            //                 break;
+            //             }
+            //         }
+            //         if (!$from_passed) {
+            //             unset($data[$key]);
+            //             continue;
+            //         }
+            //     }
+            //     if (!empty($request->filter_to_price)) {
+            //         $to_passed = 0;
+            //         foreach ($allPrices as $key6 => $value6) {
+            //             if ((Helper::c_to_n($value6) <= Helper::c_to_n($request->filter_to_price))) {
+            //                 $to_passed = 1;
+            //                 break;
+            //             }
+            //         }
+            //         if (!$to_passed) {
+            //             unset($data[$key]);
+            //         }
+            //     }
+            // }
             // dd("dataaa",$data);
             return DataTables::of($data)
                 ->editColumn('project_id', function ($row) use ($request) {
@@ -614,7 +674,6 @@ class PropertyController extends Controller
                     $carpet_area = '';
                     $carpet_measure = '';
                     $furniture = '';
-
                     $user = User::with(['roles', 'roles.permissions'])
                         ->where('id', Auth::user()->id)
                         ->first();
@@ -626,7 +685,6 @@ class PropertyController extends Controller
                     if (in_array('property-delete', $permissions)) {
                         $buttons = $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
                     }
-
                     if (isset($row->Projects->project_name)) {
                         $building_name = $row->Projects->project_name;
                     }
@@ -1524,7 +1582,7 @@ class PropertyController extends Controller
     // shared 2
     public function sharedPropertyIndex(Request $request)
     {
-        // dd("shared-properties  ===>");
+        dd("shared-properties  ===>");
         if ($request->ajax()) {
             $dropdowns = DropdownSettings::get()->toArray();
             $dropdownsarr = [];
@@ -1992,7 +2050,7 @@ class PropertyController extends Controller
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property', 'multiple_image', 'construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property', 'multiple_image','construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
 
     public function downloadZip($type, $prop)

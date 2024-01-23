@@ -217,7 +217,7 @@
                                                             <div class="form-group col-md-4 m-b-20">
                                                              <label for="Email">Email</label>
                                                                 <input class="form-control" name="email" id="email"
-                                                                    type="text" autocomplete="off">
+                                                                    type="text" autocomplete="off" style="text-transform: none;">
                                                             </div>   
 
                                                             <div>

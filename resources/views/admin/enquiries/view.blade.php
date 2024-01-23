@@ -730,6 +730,7 @@
                                             </div>
                                         </div>
 
+
                                         <div class="tab-pane fade" id="v-enquiry-assigning" role="tabpanel"
                                             aria-labelledby="v-enquiry-assigning-tab">
                                             <h5 class="border-style">Assigning History</h5>
@@ -760,7 +761,9 @@
                                                             <th scope="col">Assigned At</th>
                                                         </tr>
                                                     </thead>
+
                                                     <tbody id="assign-container">
+
                                                         @forelse ($data->AssignHistory as $value)
                                                             <tr>
                                                                 <td>{{ $value->user->first_name }}</td>

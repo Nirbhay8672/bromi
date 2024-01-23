@@ -25,11 +25,7 @@ class ProjectFormRequest extends FormRequest
     public function rules()
     {
         $rules = [
-			'builder_id' => 'required',
-			'website' => 'required|max:255',
-
 			'project_name' => 'required',
-				
 			'address' => 'required',
 			'locality' => 'required',
 			'city' => 'required',

@@ -1285,10 +1285,12 @@
                                                         <img src="{{ asset('gallary_image.jpeg') }}" alt="" onclick="image()" style="height: 90px;">
                                                     </div>
                                                     <!-- Second Image Section -->
+                                                    @if ($type === 'Plot/Land')
                                                     <div class="flex-fill text-center" style="margin-left: 20px;">
                                                         <h5 class="border-style">Constrution Image</h5>
                                                         <img src="{{ asset('imgIcon.png') }}" alt="" onclick="image1()" style="height: 90px;">
                                                     </div>
+                                                    @endif   
                                                     <!-- Third Image Section -->
                                                     <div class="flex-fill text-center" style="margin-left: 20px;">
                                                         <h5 class="border-style">Property Documents</h5>
@@ -2601,7 +2603,7 @@
                                                 </div>
                                             </div>
                                         </div> --}}
-                                        
+                                        @if ($type === 'Plot/Land')  
                                         <div class="modal fade" id="imageModel2" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Construction Docs Section -->
@@ -2641,44 +2643,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- <div class="modal fade" id="imageModel3" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
-                                                <!-- Document Section -->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="documentLabel">Property Documents</h5>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div id="documentBanner">
-                                                            @php
-                                                                $documentExtensions = ['docs', 'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx', 'ppt', 'pptx'];
-                                                                $hasDocuments = false;
-                                                            @endphp
-
-                                                            @foreach ($multiple_image as $image)
-                                                                @php
-                                                                    $path = pathinfo($image->image, PATHINFO_EXTENSION);
-                                                                @endphp
-                                                                @if (in_array($path, $documentExtensions))
-                                                                    <div class="zoom">
-                                                                        <a href="{{ asset('/upload/land_images/' . $image->image) }}">{{ $image->image }}</a>
-                                                                    </div>
-                                                                    @php $hasDocuments = true; @endphp
-                                                                @endif
-                                                            @endforeach
-
-                                                        </div>
-                                                    </div>
-                                                    @if ($hasDocuments)
-                                                        <div class="modal-footer">
-                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'documents', 'prop' => $property->id]) }}">Download Zip</a>
-                                                        </div>
-                                                    @else
-                                                        <center><h4>No Documents Found</h4></center>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div> --}}
+                                       @endif
                                         <div class="modal fade" id="imageModel3" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Document Section -->

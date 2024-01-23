@@ -14,9 +14,11 @@ use App\Models\DropdownSettings;
 use App\Models\Projects;
 use App\Models\State;
 use App\Models\Subplans;
+use App\Models\UserNotifications;
 use Carbon\Carbon;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
@@ -32,12 +34,17 @@ class UserController extends Controller
 	{
 		if ($request->ajax()) {
 			$data = User::where('parent_id', Auth::user()->id)
+				->where('id','!=',Auth::user()->id)
 				->when($request->go_data_id, function ($query) use ($request) {
-				return $query->where('id', $request->go_data_id);
-			})->when(empty($request->go_data_id), function ($query) use ($request) {
-				return $query->orWhere('id',Session::get('parent_id'));
-			})->orderBy('id','desc')->get();
-			return DataTables::of($data)
+					return $query->where('id', $request->go_data_id);
+				})->when(empty($request->go_data_id), function ($query) use ($request) {
+					return $query->orWhere('id',Session::get('parent_id'));
+				})->orderBy('id','desc')
+				->get();
+
+			$new_data = $data->where('id','!=',Auth::user()->id);
+
+			return DataTables::of($new_data)
 				->editColumn('email', function ($row) {
 					return '<span class="text-lowercase">'.$row->email.'</span>';
 				})
@@ -112,13 +119,6 @@ class UserController extends Controller
 		$total_user = User::where('parent_id', Auth::user()->id)->count();
 		return view('admin.users.index', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches','plan_details','plans','total_user'));
 	}
-	
-	public function storeFile(UploadedFile $file)
-    {
-        $path = "file_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
-		$file->storeAs("public/file_image/", $path);
-        return $path;
-    }
 
 	public function saveUser(Request $request)
 	{
@@ -162,13 +162,6 @@ class UserController extends Controller
 		$data->specific_properties = $request->specific_properties;
 		$data->buildings = $request->buildings;
 		$data->working = $request->working;
-		$data->id_type = $request->id_type;
-
-		if($request->id_type_file) {
-			$id_type_file = $request->id_type_file;
-			$data->id_file = $this->storeFile($id_type_file);
-		}
-
 		$data->save();
 		$data->syncRoles([]);
 
@@ -181,13 +174,13 @@ class UserController extends Controller
 
         $new_state = new State();
         $new_state->fill([
-            'name' => $state->name,
+            'name' => @$state->name,
             'user_id' => $data->id,
         ])->save();
 
         $new_city = new City();
         $new_city->fill([
-            'name' => $city->name,
+            'name' => @$city->name,
             'user_id' => $data->id,
             'state_id' => $new_state->id,
         ])->save();
@@ -207,6 +200,18 @@ class UserController extends Controller
                 'pincode' => $area_obj->pincode,
                 'state_id' => $new_state->id,
             ])->save();
+        }
+
+        // create notification for new user
+        $userNotification = UserNotifications::create([
+            "user_id" => Auth::user()->id,
+            "notification" => "New user created.",
+            "notification_type" => "new_user",
+            "new_user_id" => $data->id
+        ]);
+        // if notificaton creation failed.
+        if (!$userNotification) {
+            Log::error('Unable to create user notification');
         }
 
 		return response()->json();
