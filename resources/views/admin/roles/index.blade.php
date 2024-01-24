@@ -435,62 +435,6 @@
                                         Property</label>
                                 </div>
 
-                                {{--  <h5 class="border-style">Insta Property</h5>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all" id="select_all_9"
-                                        type="checkbox" data-bs-original-title="" title="">
-                                    <label class="form-check-label" for="select_all_9"> Select All</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_49"
-                                        name="permission[]" data-id="49" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_49">Insta Property List</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_50"
-                                        name="permission[]" data-id="50" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_50">Insta Property Create</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_51"
-                                        name="permission[]" data-id="51" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_51">Insta Property Edit</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_52"
-                                        name="permission[]" data-id="52" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_52">Insta Property Delete</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_53"
-                                        name="permission[]" data-id="53" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_53">Export Insta Property</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_54"
-                                        name="permission[]" data-id="54" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_54">Import Insta Property</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_55"
-                                        name="permission[]" data-id="55" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_55">Search Insta Property</label>
-                                </div>
-
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_56"
-                                        name="permission[]" data-id="56" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_56">Mask Phone No</label>
-                                </div>  --}}
-
                                 <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/report.png" style="width: 20px;" alt=""> Reports</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_10"
@@ -712,19 +656,6 @@
 
             }
 
-            // $(document).on('change', '.select_all', function(e) {
-            // 	id = $(this).attr('id').replace('select_all_','')
-
-            // 	if ($(this).prop('checked')) {
-            // 		$('.select_all_'+id).each(function( index ) {
-            // 			$(this).prop('checked',true)
-            // 		});
-            // 	}else{
-            // 		$('.select_all_'+id).each(function( index ) {
-            // 			$(this).prop('checked',false)
-            // 		});
-            // 	}
-            // })
             const allEqual = arr => arr.every(v => v === arr[0])
             $(document).on('click', '.form-check', function(e) {
                 if (e.target.tagName == 'INPUT') {
