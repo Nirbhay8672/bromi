@@ -102,7 +102,7 @@
                                                                 <span>{{ Auth::user()->first_name ?? 'person name' }}</span>
                                                             </li>
                                                             <li class="mb-2">
-                                                                <span>{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
+                                                                <span style="text-transform: lowercase;">{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
                                                             </li>
                                                             <li class="mb-2">
                                                                 <span>{{ Auth::user()->mobile_number ?? '00000 00000' }}</span>
@@ -142,7 +142,7 @@
                                                         <span>{{ Auth::user()->first_name ?? 'person name' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span>{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
+                                                        <span style="text-transform: lowercase;">{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
                                                     </li>
                                                     <li class="mb-2">
                                                         <span>{{ Auth::user()->mobile_number ?? '00000 00000' }}</span>
@@ -177,7 +177,7 @@
                                                         <span>{{ Auth::user()->first_name ?? 'person name' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span>{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
+                                                        <span style="text-transform: lowercase;">{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
                                                     </li>
                                                     <li class="mb-2">
                                                         <span>{{ Auth::user()->mobile_number ?? '00000 00000' }}</span>
@@ -212,7 +212,7 @@
                                                         <span>{{ Auth::user()->first_name ?? 'person name' }}</span>
                                                     </li>
                                                     <li class="mb-2">
-                                                        <span>{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
+                                                        <span style="text-transform: lowercase;">{{ Auth::user()->email ?? 'xyz@gmail.com' }}</span>
                                                     </li>
                                                     <li class="mb-2">
                                                         <span>{{ Auth::user()->mobile_number ?? '00000 00000' }}</span>

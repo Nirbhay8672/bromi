@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AssignHistory extends Model
 {
-	use HasFactory;
-	use SoftDeletes;
-	protected $guarded = [];
+    use HasFactory;
+use SoftDeletes;
+    protected $guarded = [];
 
-	public function user()
+    public function user()
 	{
 		return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
 	}
 
-	public function assign_user()
+    public function assign_user()
 	{
 		return $this->belongsTo(User::class, 'assign_id', 'id')->withTrashed();
 	}

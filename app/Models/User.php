@@ -44,6 +44,8 @@ class User extends Authenticatable
 		'state_id',
 		'email',
 		'company_logo',
+		'id_type',
+		'id_file',
 		'mobile_number',
 		'office_number',
 		'home_number',

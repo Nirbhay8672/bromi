@@ -1290,7 +1290,7 @@
                                                         <h5 class="border-style">Constrution Image</h5>
                                                         <img src="{{ asset('imgIcon.png') }}" alt="" onclick="image1()" style="height: 90px;">
                                                     </div>
-                                                    @endif      
+                                                    @endif   
                                                     <!-- Third Image Section -->
                                                     <div class="flex-fill text-center" style="margin-left: 20px;">
                                                         <h5 class="border-style">Property Documents</h5>
@@ -2603,85 +2603,47 @@
                                                 </div>
                                             </div>
                                         </div> --}}
-                                        @if ($type === 'Plot/Land')
-                                            <div class="modal fade" id="imageModel2" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg" role="document">
-                                                    <!-- Construction Docs Section -->
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="documentLabel">Property Construction Documents</h5>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div id="documentBanner" class="image-slider">
-                                                                @php
-                                                                    $documentExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff','docs', 'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx', 'ppt', 'pptx'];
-                                                                    $hasConstDocuments = false;
-                                                                @endphp
-
-                                                                @foreach ($construction_docs_list as $index => $const_image)
-                                                                    @php
-                                                                        $path = pathinfo($const_image->construction_documents, PATHINFO_EXTENSION);
-                                                                    @endphp
-                                                                    @if (in_array($path, $documentExtensions))
-                                                                        <div class="slide">
-                                                                            <img src="{{ asset('/upload/land_images/' . $const_image->construction_documents) }}" class="d-block"  alt="Image">
-                                                                        </div>
-                                                                        @php
-                                                                            $hasConstDocuments = true;
-                                                                        @endphp
-                                                                    @endif
-                                                                @endforeach
-                                                            </div>
-                                                        </div>
-                                                        @if ($hasConstDocuments)
-                                                            <div class="modal-footer">
-                                                                <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'construction_documents', 'prop' => $property->id]) }}">Download Zip</a>
-                                                            </div>
-                                                        @else
-                                                            <center><h4>No Construction Documents Found</h4></center>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                        {{-- <div class="modal fade" id="imageModel3" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
+                                        @if ($type === 'Plot/Land')  
+                                        <div class="modal fade" id="imageModel2" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
-                                                <!-- Document Section -->
+                                                <!-- Construction Docs Section -->
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="documentLabel">Property Documents</h5>
+                                                        <h5 class="modal-title" id="documentLabel">Property Construction Documents</h5>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <div id="documentBanner">
+                                                        <div id="documentBanner" class="image-slider">
                                                             @php
-                                                                $documentExtensions = ['docs', 'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx', 'ppt', 'pptx'];
-                                                                $hasDocuments = false;
+                                                                $documentExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff','docs', 'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx', 'ppt', 'pptx'];
+                                                                $hasConstDocuments = false;
                                                             @endphp
 
-                                                            @foreach ($multiple_image as $image)
+                                                            @foreach ($construction_docs_list as $index => $const_image)
                                                                 @php
-                                                                    $path = pathinfo($image->image, PATHINFO_EXTENSION);
+                                                                    $path = pathinfo($const_image->construction_documents, PATHINFO_EXTENSION);
                                                                 @endphp
                                                                 @if (in_array($path, $documentExtensions))
-                                                                    <div class="zoom">
-                                                                        <a href="{{ asset('/upload/land_images/' . $image->image) }}">{{ $image->image }}</a>
+                                                                    <div class="slide">
+                                                                        <img src="{{ asset('/upload/land_images/' . $const_image->construction_documents) }}" class="d-block"  alt="Image">
                                                                     </div>
-                                                                    @php $hasDocuments = true; @endphp
+                                                                    @php
+                                                                        $hasConstDocuments = true;
+                                                                    @endphp
                                                                 @endif
                                                             @endforeach
-
                                                         </div>
                                                     </div>
-                                                    @if ($hasDocuments)
+                                                    @if ($hasConstDocuments)
                                                         <div class="modal-footer">
-                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'documents', 'prop' => $property->id]) }}">Download Zip</a>
+                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'construction_documents', 'prop' => $property->id]) }}">Download Zip</a>
                                                         </div>
                                                     @else
-                                                        <center><h4>No Documents Found</h4></center>
+                                                        <center><h4>No Construction Documents Found</h4></center>
                                                     @endif
                                                 </div>
                                             </div>
-                                        </div> --}}
+                                        </div>
+                                       @endif
                                         <div class="modal fade" id="imageModel3" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Document Section -->

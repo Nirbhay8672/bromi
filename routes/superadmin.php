@@ -96,7 +96,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/sms-template/update/{id}', [EmailTemplateController::class, 'smsupdate'])->name('superadmin.sms.update');
 		Route::post('/sms-template/delete/{id}', [EmailTemplateController::class, 'smsdestroy'])->name('superadmin.sms.delete');
 		Route::post('/sms-template/show/{id}', [EmailTemplateController::class, 'smsshow'])->name('superadmin.sms.show');
-
+        Route::any('/builders', [HomeController::class, 'builders'])->name('superadmin.builders');
 
 		Route::any('tickets', [TicketsController::class, 'index'])->name('superadmin.tickets');
 		Route::any('close_ticket/{ticket_id}', [TicketsController::class, 'close']);
@@ -112,7 +112,5 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/settings-get-village', [SuperVillageController::class, 'get_village'])->name('superadmin.settings.getvillage');
 		Route::post('/settings-save-village', [SuperVillageController::class, 'village_store'])->name('superadmin.settings.saveVillage');
 		Route::post('/settings-delete-village', [SuperVillageController::class, 'village_delete'])->name('superadmin.settings.deletevillage');
-
-		Route::any('/builders', [HomeController::class, 'builders'])->name('superadmin.builders');
 	});
 });
