@@ -96,6 +96,8 @@ class ShareController extends Controller
                  ->where('partner_id', Auth::user()->id)
                  ->Where('accepted', '1')
                  ->get();
+
+                 dd("Dataaaa",$data);
              $data2 = SharedProperty::
                  with('Property_details', 'User')->where('user_id', Auth::user()->id)->
                  get();

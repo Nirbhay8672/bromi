@@ -296,24 +296,38 @@ class EnquiriesController extends Controller
 						}
 					}
 				}
-				foreach ($data->get() as $key => $value) {
-					if (!empty($request->filter_from_budget)) {
-						if (empty($value->budget_from)) {
-							unset($data[$key]);
-						}
-						if (!(Helper::c_to_n($value->budget_from) >= Helper::c_to_n($request->filter_from_budget))) {
-							unset($data[$key]);
-						}
+				$data = $data->get(); // Execute the query and get the result
+
+				// Filtering the results based on budget_from and budget_to
+				$data = $data->filter(function ($value) use ($request) {
+					if (!empty($request->filter_from_budget) && !empty($value->budget_from) && !(Helper::c_to_n($value->budget_from) >= Helper::c_to_n($request->filter_from_budget))) {
+						return false;
 					}
-					if (!empty($request->filter_to_budget)) {
-						if (empty($value->budget_to)) {
-							unset($data[$key]);
-						}
-						if (!(Helper::c_to_n($value->budget_to) <= Helper::c_to_n($request->filter_to_budget))) {
-							unset($data[$key]);
-						}
+
+					if (!empty($request->filter_to_budget) && !empty($value->budget_to) && !(Helper::c_to_n($value->budget_to) <= Helper::c_to_n($request->filter_to_budget))) {
+						return false;
 					}
-				}
+
+					return true;
+				});
+				// foreach ($data->get() as $key => $value) {
+				// 	if (!empty($request->filter_from_budget)) {
+				// 		if (empty($value->budget_from)) {
+				// 			unset($data[$key]);
+				// 		}
+				// 		if (!(Helper::c_to_n($value->budget_from) >= Helper::c_to_n($request->filter_from_budget))) {
+				// 			unset($data[$key]);
+				// 		}
+				// 	}
+				// 	if (!empty($request->filter_to_budget)) {
+				// 		if (empty($value->budget_to)) {
+				// 			unset($data[$key]);
+				// 		}
+				// 		if (!(Helper::c_to_n($value->budget_to) <= Helper::c_to_n($request->filter_to_budget))) {
+				// 			unset($data[$key]);
+				// 		}
+				// 	}
+				// }
 			}
 			return DataTables::of($data)
 				->editColumn('client_name', function ($row) use ($dropdownsarr) {
@@ -549,7 +563,7 @@ class EnquiriesController extends Controller
 		}
 
 
-		$cities = City::orderBy('name')->get();
+		$cities = City::orderBy('name')->where('user_id', '=', Auth::user()->id)->get();
 		$branches = Branches::orderBy('name')->get();
 		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();

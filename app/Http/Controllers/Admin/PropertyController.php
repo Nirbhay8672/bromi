@@ -272,62 +272,124 @@ class PropertyController extends Controller
                 }
             }
 
-            foreach ($data->get() as $key => $value) {
+            // foreach ($data->get() as $key => $value) {
+            //     $theArea = 0;
+            //     if (!empty($value->salable_area)) {
+            //         $theArea = explode('_-||-_', $value->salable_area)[0];
+            //     } elseif (!empty($value->salable_plot_area)) {
+            //         $theArea = explode('_-||-_', $value->salable_plot_area);
+            //     }
+            //     if ((!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area))) {
+            //         unset($data[$key]);
+            //         continue;
+            //     }
+            //     if (!empty($request->filter_to_area) && !($theArea <= $request->filter_to_area)) {
+            //         unset($data[$key]);
+            //         continue;
+            //     }
+            //     $allPrices = [];
+
+            //     if (!empty($value->unit_details) && !empty(json_decode($value->unit_details)[0])) {
+            //         foreach (json_decode($value->unit_details) as $key3 => $value3) {
+            //             if (!empty($value3['7'])) {
+            //                 array_push($allPrices, $value3['7']);
+            //             }
+            //             if (!empty($value3['4'])) {
+            //                 array_push($allPrices, $value3['4']);
+            //             }
+            //             if (!empty($value3['3'])) {
+            //                 array_push($allPrices, $value3['3']);
+            //             }
+            //         }
+            //     }
+            //     if (!empty($request->filter_from_price)) {
+            //         $from_passed = 0;
+            //         foreach ($allPrices as $key5 => $value5) {
+            //             if ((Helper::c_to_n($value5) >= Helper::c_to_n($request->filter_from_price))) {
+            //                 $from_passed = 1;
+            //                 break;
+            //             }
+            //         }
+            //         if (!$from_passed) {
+            //             unset($data[$key]);
+            //             continue;
+            //         }
+            //     }
+            //     if (!empty($request->filter_to_price)) {
+            //         $to_passed = 0;
+            //         foreach ($allPrices as $key6 => $value6) {
+            //             if ((Helper::c_to_n($value6) <= Helper::c_to_n($request->filter_to_price))) {
+            //                 $to_passed = 1;
+            //                 break;
+            //             }
+            //         }
+            //         if (!$to_passed) {
+            //             unset($data[$key]);
+            //         }
+            //     }
+            // }
+            $data = $data->get()->filter(function ($value) use ($request) {
                 $theArea = 0;
+
                 if (!empty($value->salable_area)) {
                     $theArea = explode('_-||-_', $value->salable_area)[0];
                 } elseif (!empty($value->salable_plot_area)) {
                     $theArea = explode('_-||-_', $value->salable_plot_area);
                 }
-                if ((!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area))) {
-                    unset($data[$key]);
-                    continue;
+
+                if (!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area)) {
+                    return false;
                 }
+
                 if (!empty($request->filter_to_area) && !($theArea <= $request->filter_to_area)) {
-                    unset($data[$key]);
-                    continue;
+                    return false;
                 }
+
                 $allPrices = [];
 
                 if (!empty($value->unit_details) && !empty(json_decode($value->unit_details)[0])) {
                     foreach (json_decode($value->unit_details) as $key3 => $value3) {
                         if (!empty($value3['7'])) {
-                            array_push($allPrices, $value3['7']);
+                            $allPrices[] = $value3['7'];
                         }
                         if (!empty($value3['4'])) {
-                            array_push($allPrices, $value3['4']);
+                            $allPrices[] = $value3['4'];
                         }
                         if (!empty($value3['3'])) {
-                            array_push($allPrices, $value3['3']);
+                            $allPrices[] = $value3['3'];
                         }
                     }
                 }
+
                 if (!empty($request->filter_from_price)) {
-                    $from_passed = 0;
+                    $from_passed = false;
                     foreach ($allPrices as $key5 => $value5) {
                         if ((Helper::c_to_n($value5) >= Helper::c_to_n($request->filter_from_price))) {
-                            $from_passed = 1;
+                            $from_passed = true;
                             break;
                         }
                     }
                     if (!$from_passed) {
-                        unset($data[$key]);
-                        continue;
+                        return false;
                     }
                 }
+
                 if (!empty($request->filter_to_price)) {
-                    $to_passed = 0;
+                    $to_passed = false;
                     foreach ($allPrices as $key6 => $value6) {
                         if ((Helper::c_to_n($value6) <= Helper::c_to_n($request->filter_to_price))) {
-                            $to_passed = 1;
+                            $to_passed = true;
                             break;
                         }
                     }
                     if (!$to_passed) {
-                        unset($data[$key]);
+                        return false;
                     }
                 }
-            }
+
+                return true;
+            });
+
             // dd("dataaa",$data);
             return DataTables::of($data)
                 ->editColumn('project_id', function ($row) use ($request) {
