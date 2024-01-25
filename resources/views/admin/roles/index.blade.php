@@ -17,7 +17,7 @@
                             <h5 class="mb-3">List of Roles</h5>
                             @can('role-create')
                                 <button class="btn btn-primary btn-air-primary open_modal_with_this" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#roleModal">Add New Role</button>
+                                    data-bs-toggle="modal" data-bs-target="#roleModal" onclick="setDefault()">Add New Role</button>
                             @endcan
                         </div>
                         <div class="card-body">
@@ -36,11 +36,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
         </div>
         <div class="modal fade" id="roleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -435,62 +432,6 @@
                                         Property</label>
                                 </div>
 
-                                {{--  <h5 class="border-style">Insta Property</h5>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all" id="select_all_9"
-                                        type="checkbox" data-bs-original-title="" title="">
-                                    <label class="form-check-label" for="select_all_9"> Select All</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_49"
-                                        name="permission[]" data-id="49" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_49">Insta Property List</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_50"
-                                        name="permission[]" data-id="50" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_50">Insta Property Create</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_51"
-                                        name="permission[]" data-id="51" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_51">Insta Property Edit</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_52"
-                                        name="permission[]" data-id="52" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_52">Insta Property Delete</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_53"
-                                        name="permission[]" data-id="53" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_53">Export Insta Property</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_54"
-                                        name="permission[]" data-id="54" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_54">Import Insta Property</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_55"
-                                        name="permission[]" data-id="55" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_55">Search Insta Property</label>
-                                </div>
-
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input permission_checkbox select_all_9" id="permission_id_56"
-                                        name="permission[]" data-id="56" type="checkbox" data-bs-original-title=""
-                                        title="">
-                                    <label class="form-check-label" for="permission_id_56">Mask Phone No</label>
-                                </div>  --}}
-
                                 <h5 class="border-style"><img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/report.png" style="width: 20px;" alt=""> Reports</h5>
                                 <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                     <input class="form-check-input permission_checkbox select_all" id="select_all_10"
@@ -624,7 +565,7 @@
                                     <label class="form-check-label" for="permission_id_75">Role Delete</label>
                                 </div>
                             </div>
-                            <button class="btn btn-secondary" id="saveRole">Save</button>
+                            <button class="btn btn-secondary" type="button" id="saveRole">Save</button>
                             <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
                     </div>
@@ -635,11 +576,7 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
-
-
                 $(document).ready(function() {
-
-
                     $('#roleTable').DataTable({
                         processing: true,
                         serverSide: true,
@@ -657,8 +594,53 @@
                     });
                 });
             });
+            
+            function setSelectedValue() {
+                $('#permission_id_1').prop('checked', true);
+                $('#permission_id_2').prop('checked', true);
+                $('#permission_id_6').prop('checked', true);
+                $('#permission_id_17').prop('checked', true);
+                $('#permission_id_23').prop('checked', true);
+                $('#permission_id_31').prop('checked', true);
+                $('#permission_id_35').prop('checked', true);
+                $('#permission_id_42').prop('checked', true);
+                $('#permission_id_57').prop('checked', true);
+                $('#permission_id_65').prop('checked', true);
+                $('#permission_id_66').prop('checked', true);
+                $('#permission_id_67').prop('checked', true);
+                $('#permission_id_68').prop('checked', true);
+                $('#permission_id_69').prop('checked', true);
+                $('#permission_id_70').prop('checked', true);
+                $('#permission_id_71').prop('checked', true);
+                $('#permission_id_72').prop('checked', true);
+            }
+
+            function functionDisableAll() {
+                $('#permission_id_1').prop('checked', false);
+                $('#permission_id_2').prop('checked', false);
+                $('#permission_id_6').prop('checked', false);
+                $('#permission_id_17').prop('checked', false);
+                $('#permission_id_23').prop('checked', false);
+                $('#permission_id_31').prop('checked', false);
+                $('#permission_id_35').prop('checked', false);
+                $('#permission_id_42').prop('checked', false);
+                $('#permission_id_57').prop('checked', false);
+                $('#permission_id_65').prop('checked', false);
+                $('#permission_id_66').prop('checked', false);
+                $('#permission_id_67').prop('checked', false);
+                $('#permission_id_68').prop('checked', false);
+                $('#permission_id_69').prop('checked', false);
+                $('#permission_id_70').prop('checked', false);
+                $('#permission_id_71').prop('checked', false);
+                $('#permission_id_72').prop('checked', false);
+            }
+
+            function setDefault() {
+                setTimeout(setSelectedValue, 100);
+            }
 
             function getRole(data) {
+                functionDisableAll();
                 $('#modal_form').trigger("reset");
                 var id = $(data).attr('data-id');
                 $.ajax({
@@ -712,19 +694,6 @@
 
             }
 
-            // $(document).on('change', '.select_all', function(e) {
-            // 	id = $(this).attr('id').replace('select_all_','')
-
-            // 	if ($(this).prop('checked')) {
-            // 		$('.select_all_'+id).each(function( index ) {
-            // 			$(this).prop('checked',true)
-            // 		});
-            // 	}else{
-            // 		$('.select_all_'+id).each(function( index ) {
-            // 			$(this).prop('checked',false)
-            // 		});
-            // 	}
-            // })
             const allEqual = arr => arr.every(v => v === arr[0])
             $(document).on('click', '.form-check', function(e) {
                 if (e.target.tagName == 'INPUT') {
