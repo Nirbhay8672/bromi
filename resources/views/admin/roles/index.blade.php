@@ -17,7 +17,7 @@
                             <h5 class="mb-3">List of Roles</h5>
                             @can('role-create')
                                 <button class="btn btn-primary btn-air-primary open_modal_with_this" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#roleModal">Add New Role</button>
+                                    data-bs-toggle="modal" data-bs-target="#roleModal" onclick="setDefault()">Add New Role</button>
                             @endcan
                         </div>
                         <div class="card-body">
@@ -36,11 +36,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
         </div>
         <div class="modal fade" id="roleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -568,7 +565,7 @@
                                     <label class="form-check-label" for="permission_id_75">Role Delete</label>
                                 </div>
                             </div>
-                            <button class="btn btn-secondary" id="saveRole">Save</button>
+                            <button class="btn btn-secondary" type="button" id="saveRole">Save</button>
                             <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
                     </div>
@@ -579,11 +576,7 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
-
-
                 $(document).ready(function() {
-
-
                     $('#roleTable').DataTable({
                         processing: true,
                         serverSide: true,
@@ -601,8 +594,53 @@
                     });
                 });
             });
+            
+            function setSelectedValue() {
+                $('#permission_id_1').prop('checked', true);
+                $('#permission_id_2').prop('checked', true);
+                $('#permission_id_6').prop('checked', true);
+                $('#permission_id_17').prop('checked', true);
+                $('#permission_id_23').prop('checked', true);
+                $('#permission_id_31').prop('checked', true);
+                $('#permission_id_35').prop('checked', true);
+                $('#permission_id_42').prop('checked', true);
+                $('#permission_id_57').prop('checked', true);
+                $('#permission_id_65').prop('checked', true);
+                $('#permission_id_66').prop('checked', true);
+                $('#permission_id_67').prop('checked', true);
+                $('#permission_id_68').prop('checked', true);
+                $('#permission_id_69').prop('checked', true);
+                $('#permission_id_70').prop('checked', true);
+                $('#permission_id_71').prop('checked', true);
+                $('#permission_id_72').prop('checked', true);
+            }
+
+            function functionDisableAll() {
+                $('#permission_id_1').prop('checked', false);
+                $('#permission_id_2').prop('checked', false);
+                $('#permission_id_6').prop('checked', false);
+                $('#permission_id_17').prop('checked', false);
+                $('#permission_id_23').prop('checked', false);
+                $('#permission_id_31').prop('checked', false);
+                $('#permission_id_35').prop('checked', false);
+                $('#permission_id_42').prop('checked', false);
+                $('#permission_id_57').prop('checked', false);
+                $('#permission_id_65').prop('checked', false);
+                $('#permission_id_66').prop('checked', false);
+                $('#permission_id_67').prop('checked', false);
+                $('#permission_id_68').prop('checked', false);
+                $('#permission_id_69').prop('checked', false);
+                $('#permission_id_70').prop('checked', false);
+                $('#permission_id_71').prop('checked', false);
+                $('#permission_id_72').prop('checked', false);
+            }
+
+            function setDefault() {
+                setTimeout(setSelectedValue, 100);
+            }
 
             function getRole(data) {
+                functionDisableAll();
                 $('#modal_form').trigger("reset");
                 var id = $(data).attr('data-id');
                 $.ajax({
