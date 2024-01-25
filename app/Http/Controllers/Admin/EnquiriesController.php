@@ -67,7 +67,7 @@ class EnquiriesController extends Controller
 			$new = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
 				return ($var['name'] == 'only-assigned');
 			});
-			if (count($new) > 0 && $user->role_id !== "1") {
+			if (count($new) > 0 && $user->role_id !== 1) {
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
 						$query->where('assign_id', '=', Auth::user()->id);

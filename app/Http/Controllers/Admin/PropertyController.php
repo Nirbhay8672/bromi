@@ -256,13 +256,13 @@ class PropertyController extends Controller
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
 				END,  properties.id DESC');
-				
-				
-				$parts = explode('?', $request->location);
 
-				if (count($parts) > 1) {
-					$value = $parts[1];
-					$value = trim($value);
+
+            $parts = explode('?', $request->location);
+
+            if (count($parts) > 1) {
+                $value = $parts[1];
+                $value = trim($value);
 
                 if (strpos($value, 'data_id') !== false) {
                     $value_part = explode('=', $value);
@@ -1728,12 +1728,13 @@ class PropertyController extends Controller
 
         unlink(storage_path('app/' . $name));
         foreach ($collection as $key => $value) {
-
             $project_id = null;
             if (!empty($value['Project'])) {
-
                 $area_name = Areas::where('name', 'like', '%' . $value['Project'])->first();
-                $project = Projects::where('project_name', 'like', '%' . $value['Project'] . '%')->first();
+                // $project = Projects::where('project_name', 'like', '%' . $value['Project'] . '%')->first();
+                $projectParts = explode(" - ", $value['Project']);
+                $modifiedProjectName = $projectParts[0];
+                $project = Projects::where('project_name', 'LIKE', "%$modifiedProjectName%")->first();
                 // $project = Projects::where('project_name', 'like', '%' . $value['Project'] . '%')->when($value['Project'] && $area_name->name), function ($query) use ($area_name) {
                 //     $query->where('area_id', $area_name->id);
                 // })->first();
@@ -1756,7 +1757,10 @@ class PropertyController extends Controller
             }
 
             $Configuration_id = null;
-            $Configuration = DropdownSettings::where('name', 'like', '%' . $value['Subcategory'] . '%')->first();
+            $Configuration = DropdownSettings::where('name', 'like', "%{$value['Subcategory']}%")->first();
+
+            $project = Projects::where('project_name', 'LIKE', "%$modifiedProjectName%")->first();
+
             if (!empty($Configuration->id) && !empty($value['Subcategory'])) {
                 $Configuration_id = $Configuration->id;
             }
@@ -1822,6 +1826,7 @@ class PropertyController extends Controller
             array_push($arr, $value['Available Status 2']);
             array_push($arr, $value['Price Rent 2']);
             array_push($arr, $value['Price 2']);
+
             array_push($arr, $value['Furnished Status 2']);
             array_push($dataUnit, $arr);
             $arr = [];
@@ -1832,7 +1837,6 @@ class PropertyController extends Controller
             array_push($arr, $value['Price 3']);
             array_push($arr, $value['Furnished Status 3']);
             array_push($dataUnit, $arr);
-
             $dataUnit['array2'] = [$dataUnit[1]];
             $unit[] = array_merge($dataUnit[0], $dataUnit['array2'], $dataUnit['array2']);
 
@@ -1859,24 +1863,28 @@ class PropertyController extends Controller
             array_push($arr, $value['Contact']);
             array_push($arr, 'Other contact No.');
             array_push($contact_details, $arr);
-
+            // dd($carpet_measurement_id);
             if (!empty($project_id)) {
                 $data = new Properties();
-                Properties::create([
+                $pData =   Properties::create([
                     'added_by' => Auth::user()->id,
                     'user_id' => Session::get('parent_id'),
                     'building_id' => $project_id,
+                    'project_id' => $project_id,
                     'property_for' => $value['Property For'],
                     'property_type' => $property_type_id,
-                    'specific_type' => $specific_property_id,
+                    'property_category' => $specific_property_id,
+                    // 'Configuration' => $Configuration_id,
                     // 'property_wing' => $value['Wing'],
                     // 'property_unit_no' => $value['UnitNo'],
                     'unit_details' => json_encode($unit),
+                    'constructed_carpet_area' => '_-||-_117',
+                    'constructed_salable_area' => '_-||-_117',
                     'configuration' => $value['Subcategory'],
-                    'carpet_area' => $value['Carpet Area'],
-                    'carpet_measurement' => $carpet_measurement_id,
+                    'carpet_area' => $value['Carpet Area'].'_-||-_117',
+                    'carpet_measurement' => $carpet_measurement_id.'_-||-_117',
                     'super_builtup_area' => $value['Salable Area'],
-                    'super_builtup_measurement' => $super_measurement_id,
+                    'super_builtup_measurement' => $super_measurement_id.'_-||-_117',
                     'hot_property' => $hot_property,
                     'furnished_status' => $furnished_status_id,
                     // 'price' => $value['Price'] . ' ' . $value['Price Unit'],
@@ -1998,7 +2006,7 @@ class PropertyController extends Controller
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property', 'multiple_image','construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property', 'multiple_image', 'construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
 
     public function downloadZip($type, $prop)
