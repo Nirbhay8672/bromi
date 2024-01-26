@@ -1003,6 +1003,7 @@ Helper::set_default_measuerement();
             });
             //  let playerId = null;
             setTimeout(function(){
+                let playerId = OneSignal.User.PushSubscription._id;
                
                 // Construct the request headers
                 const headers = new Headers({
