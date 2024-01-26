@@ -375,15 +375,6 @@ Helper::set_default_measuerement();
                                                                 </h5>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.insta.properties') }}">
-                                                            <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="list"></i>
-                                                                </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Insta
-                                                                        List</a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
                                                         <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.shared.properties') }}">
                                                             <div class="bookmark-content">
                                                                 <div class="bookmark-icon"><i data-feather="list"></i>
