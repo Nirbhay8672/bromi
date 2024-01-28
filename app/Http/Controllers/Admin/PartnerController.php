@@ -61,7 +61,9 @@ class PartnerController extends Controller
 				})
 				->addColumn('partner_email', function (Partner $partner) {
 					if (!empty($partner->user->email)) {
-						return $partner->user->email;
+						$email  = '';
+						$email = '<span style="text-transform: lowercase !important;">'. strtolower($partner->user->email) .'</span>';
+						return $email;
 					} else {
 						return 'N/A';
 					}
