@@ -107,16 +107,14 @@
                                                                 <label class="select2_label" for="Property Type">Property
                                                                     Type</label>
                                                                 <select class="form-select" id="property_type_id" multiple>
-                                                                    @forelse ($property_configuration_settings as $props)
-                                                                        @if ($props['dropdown_for'] == 'property_construction_type')
-                                                                            <option data-parent_id="{{ $props['parent_id'] }}"
-                                                                                value="{{ $props['id'] }}">
-                                                                                {{ $props['name'] }}
-                                                                            </option>
-                                                                            </option>
-                                                                        @endif
-                                                                    @empty
-                                                                    @endforelse
+                                                                    <option
+                                                                        data-parent_id="null"
+                                                                        value="85"
+                                                                    >Commercial</option>
+                                                                    <option
+                                                                        data-parent_id="null"
+                                                                        value="87"
+                                                                    >Residential</option>
                                                                 </select>
                                                             </div>
 
