@@ -15,16 +15,19 @@ use App\Models\Projects;
 use App\Models\State;
 use App\Models\Subplans;
 use App\Models\UserNotifications;
+use App\Traits\HelperFn;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\DataTables;
+use Illuminate\Http\UploadedFile;
 
 class UserController extends Controller
 {
+    use HelperFn; 
+    
 	public function __construct()
 	{
 		$this->middleware('auth');
@@ -119,6 +122,13 @@ class UserController extends Controller
 		$total_user = User::where('parent_id', Auth::user()->id)->count();
 		return view('admin.users.index', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches','plan_details','plans','total_user'));
 	}
+	
+	public function storeFile(UploadedFile $file)
+    {
+        $path = "file_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
+		$file->storeAs("public/file_image/", $path);
+        return $path;
+    }
 
 	public function saveUser(Request $request)
 	{
@@ -162,6 +172,15 @@ class UserController extends Controller
 		$data->specific_properties = $request->specific_properties;
 		$data->buildings = $request->buildings;
 		$data->working = $request->working;
+		
+		$data->id_type = $request->id_type;
+
+		if($request->id_type_file) {
+			$id_type_file = $request->id_type_file;
+			$data->id_file = $this->storeFile($id_type_file);
+		}
+
+
 		$data->save();
 		$data->syncRoles([]);
 
@@ -202,10 +221,11 @@ class UserController extends Controller
             ])->save();
         }
 
+        $msg = "New user created.";
         // create notification for new user
         $userNotification = UserNotifications::create([
             "user_id" => Auth::user()->id,
-            "notification" => "New user created.",
+            "notification" => $msg,
             "notification_type" => "new_user",
             "new_user_id" => $data->id
         ]);
@@ -213,7 +233,11 @@ class UserController extends Controller
         if (!$userNotification) {
             Log::error('Unable to create user notification');
         }
-
+        $user = Auth::user();
+        // send if user has onesignal id
+        if (!empty($user->onesignal_token)) {
+            HelperFn::sendPushNotification($user->onesignal_token, $msg);
+        }
 		return response()->json();
 	}
 
@@ -236,7 +260,7 @@ class UserController extends Controller
 		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$projects = Projects::get();
-		$property_configuration_settings = DropdownSettings::get()->toArray();
+		$property_configuration_settings = DropdownSettings::all()->unique('name')->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
 		$roles =  Role::where('user_id', Session::get('parent_id'))->get();
 		$branches = Branches::orderBy('name')->get();
@@ -249,7 +273,7 @@ class UserController extends Controller
 		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$projects = Projects::get();
-		$property_configuration_settings = DropdownSettings::get()->toArray();
+		$property_configuration_settings = DropdownSettings::all()->unique('name')->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
 		$roles =  Role::where('user_id', Session::get('parent_id'))->get();
 		$branches = Branches::orderBy('name')->get();
