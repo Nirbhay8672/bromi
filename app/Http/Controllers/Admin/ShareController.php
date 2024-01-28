@@ -356,6 +356,7 @@ class ShareController extends Controller
             $measure = explode('_-||-_', $row->salable_plot_area)[1];
         }
 
+        
         if (!empty($area) && !empty($measure)) {
             $formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
             return $formattedArea;
