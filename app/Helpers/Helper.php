@@ -3,10 +3,8 @@
 namespace App\Helpers;
 
 use App\Models\Areas;
-use Throwable;
 use DOMDocument;
 use App\Models\User;
-use App\Models\Blog;
 use App\Models\Branches;
 use App\Models\Builders;
 use App\Models\City;
@@ -15,24 +13,17 @@ use App\Models\DefaultMeasurement;
 use App\Models\DropdownSettings;
 use App\Models\DropdownTemplate;
 use App\Models\Enquiries;
-use App\Models\Notification;
-use App\Models\SystemSetting;
-use App\Models\NotificationReciver;
-use App\Models\Notifications;
 use App\Models\Projects;
 use App\Models\Properties;
 use App\Models\State;
 use App\Models\UserNotifications;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 
 class Helper
 {
-
-	// Returm assets path (like http://localhost/project/public/css or js or static images)
 	public static function assets($path, $secure = null)
 	{
 		if (config('app.env') == "local") {
@@ -45,7 +36,6 @@ class Helper
 		return app('url')->asset("public/" . $path, $secure);
 	}
 
-	// return documents (like flag ) relative path (like http://localhost/project/public)
 	public static function images($path, $secure = null)
 	{
 		if (config('app.env') == "local") {
@@ -58,7 +48,6 @@ class Helper
 		return app('url')->asset("public/" . $path, $secure);
 	}
 
-	// return absolute path (Full path like - var/wwww/html/project/public) with filename
 	public static function uploadPDFFile($path, $filename)
 	{
 		if (config('app.env') == "local") {
@@ -71,7 +60,6 @@ class Helper
 		return public_path() . $path . $filename;
 	}
 
-	// Upload Images, Document
 	public static function uploadFile($fileData = Null, $path = Null, $filename = Null, $oldfilename = null)
 	{
 		if (!is_null($fileData)) {
@@ -316,9 +304,7 @@ class Helper
 	{
 
 		$arr['new_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->doesntHave('Progress')->count();
-		$arr['today_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->whereHas('activeProgress', function ($query) {
-			$query->whereDate('nfd', '=', Carbon::now()->format('y-m-d'));
-		})->count();
+		$arr['today_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->whereDate('created_at', '=', Carbon::now()->format('Y-m-d'))->count();
 
 		$arr['tomo_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->whereHas('activeProgress', function ($query) {
 			$query->whereDate('nfd', '=', Carbon::tomorrow()->format('y-m-d'));
@@ -333,7 +319,7 @@ class Helper
 		})->count();
 
 		$arr['week_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->whereHas('activeProgress', function ($query) {
-			$query->whereDate('nfd', '<=', Carbon::now()->endOfWeek())->whereDate('nfd', '>=', Carbon::now()->endOfWeek()->subDay());;
+			$query->whereDate('nfd', '<=', Carbon::now()->endOfWeek())->whereDate('nfd', '>=', Carbon::now()->endOfWeek()->subDay());
 		})->count();
 
 		return $arr;

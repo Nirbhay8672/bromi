@@ -727,8 +727,8 @@
                                                                         <label><b>Sub category</b></label>
                                                                     </div>
                                                                     <div class="m-checkbox-inline custom-radio-ml">
-                                                                        <div class="the_1rk btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group" style="">
-                                                                            <input type="checkbox" class="btn-check filled" x-model="sub_categories" @click="addWingSubCategory($event,'1 rk')" value="13" id="extraflatkind1" name="excat" data-error="#flat_type_error" autocomplete="off" data-bs-original-title="" title="">
+                                                                        <div class="the_1rk btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
+                                                                            <input type="checkbox" class="btn-check filled" value="13" x-model="sub_categories" @click="addWingSubCategory($event,'1 rk')" id="extraflatkind1" name="excat" data-error="#flat_type_error" autocomplete="off" data-bs-original-title="" title="">
                                                                             <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraflatkind1">1 rk</label>
                                                                         </div>
                                                                         <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
@@ -754,7 +754,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="row mb-2" x-show="sub_categories.length > 0">
+
+                                                            <div class="row mb-2" x-show="sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18')">
                                                                 <div class="col-md-2 mb-3">
                                                                     <div class="fname" :class="is_flat_or_penthouse.number_of_towers == '' ? '' : 'focused' ">
                                                                         <label for="Total Floor">No. Of Tower</label>
@@ -790,7 +791,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div x-show="sub_categories.length > 0">
+                                                            <div class="row mb-2" x-show="sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18')">
                                                                 <template x-for="(wing , index) in if_residential_only_wings.wing_details">
                                                                     <div class="row">
                                                                         <div class="form-group col-md-3 m-b-20">
@@ -1130,6 +1131,7 @@
                                                                         <input type="checkbox" class="btn-check"
                                                                             value="37" id="extraretailkind1"
                                                                             x-model="sub_categories"
+                                                                            @change="addNewUnitDetailsAccordingFloor('extraretailkind1')"
                                                                             data-error="#retail_type_error"
                                                                             autocomplete="off">
                                                                         <label
@@ -1140,8 +1142,11 @@
                                                                         role="group"
                                                                         aria-label="Basic radio toggle button group">
                                                                         <input type="checkbox" class="btn-check"
-                                                                            data-error="#retail_type_error" x-model="sub_categories" value="38"
+                                                                            data-error="#retail_type_error"
+                                                                            x-model="sub_categories"
+                                                                            value="38"
                                                                             id="extraretailkind2"
+                                                                            @change="addNewUnitDetailsAccordingFloor('extraretailkind2')"
                                                                             autocomplete="off">
                                                                         <label
                                                                             class="btn btn-outline-primary btn-pill btn-sm py-1"
@@ -1151,8 +1156,11 @@
                                                                         role="group"
                                                                         aria-label="Basic radio toggle button group">
                                                                         <input type="checkbox" class="btn-check"
-                                                                            data-error="#retail_type_error" value="39"
-                                                                            id="extraretailkind3" x-model="sub_categories"
+                                                                            data-error="#retail_type_error"
+                                                                            value="39"
+                                                                            id="extraretailkind3"
+                                                                            x-model="sub_categories"
+                                                                            @change="addNewUnitDetailsAccordingFloor('extraretailkind3')"
                                                                             autocomplete="off">
                                                                         <label
                                                                             class="btn btn-outline-primary btn-pill btn-sm py-1"
@@ -1163,6 +1171,7 @@
                                                                         aria-label="Basic radio toggle button group">
                                                                         <input type="checkbox" class="btn-check" x-model="sub_categories"
                                                                             data-error="#retail_type_error" value="40"
+                                                                            @change="addNewUnitDetailsAccordingFloor('extraretailkind4')"
                                                                             id="extraretailkind4"
                                                                             autocomplete="off">
                                                                         <label
@@ -1175,12 +1184,16 @@
 
                                                             <div x-show="sub_categories.length > 0">
                                                                 <label><b>Unit Details</b></label>
-
                                                                 <template x-for="(tower, index) in if_retail_tower_details">
                                                                     <div class="row mt-2">
                                                                         <div x-show="index > 0">
                                                                             <hr>
                                                                         </div>
+
+                                                                        <div class="col-12 m-b-20">
+                                                                            <span x-text="tower.floor_name" class="mb-3 text-primary"></span>
+                                                                        </div>
+
                                                                         <div class="form-group col-md-3 m-b-20">
                                                                             <div class="fname" :class="tower.tower_name == '' ? '' : 'focused' ">
                                                                                 <span class="d-none" x-text="nextTickForIfRetail()"></span>
@@ -1290,15 +1303,6 @@
                                                                         </div>
                                                                     </div>
                                                                 </template>
-                                                                <div class="row" x-show="if_office_or_retail.number_of_tower > 1">
-                                                                    <div class="form-group col-md-3">
-                                                                        <button
-                                                                            class="btn btn-primary btn-air-primary"
-                                                                            type="button"
-                                                                            @click="addRetailUnitDetails()"
-                                                                        >Add Floors</button>
-                                                                    </div>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -4075,6 +4079,7 @@
 
                 if_retail_tower_details : [
                     {
+                        floor_name : '',
                         tower_name : '',
                         sub_category : '',
                         size_from : '',
@@ -4301,6 +4306,7 @@
 
                     this.if_retail_tower_details = [
                         {
+                            floor_name : '',
                             tower_name : '',
                             sub_category : '',
                             size_from : '',
@@ -4650,6 +4656,7 @@
                         this.if_retail_tower_details = [];
                         for (let index = 0; index < this.if_office_or_retail.number_of_tower; index++) {
                             this.if_retail_tower_details.push({
+                                floor_name : '',
                                 tower_name : '',
                                 sub_category : '',
                                 size_from : '',
@@ -4744,6 +4751,45 @@
 
                         });
                     });
+                },
+
+                floor_slug : {
+                    37 : "Ground Floor Details",
+                    38 : "1st Floor Details",
+                    39 : "2nd Floor Details",
+                    40 : "3rd Floor Details",
+                },
+
+                addNewUnitDetailsAccordingFloor(element_id) {
+                    if(this.if_retail_tower_details[0].floor_name == "") 
+                    {
+                        this.if_retail_tower_details = [];
+                    }
+
+                    if(document.getElementById(element_id).checked) {
+                        let value = $(`#${element_id}`).val();
+
+                        this.if_retail_tower_details.push({
+                            floor_name : this.floor_slug[value],
+                            tower_name : '',
+                            sub_category : '',
+                            size_from : '',
+                            size_to : '',
+                            front_opening : '',
+                            number_of_each_floor : '',
+                            ceiling_height : '',
+
+                            size_from_map_unit  : '',
+                            size_to_map_unit  : '',
+                            tower_ceiling_map_unit  : '',
+                        });
+                    } else {
+                        let value = $(`#${element_id}`).val();
+                        let index = this.if_retail_tower_details.findIndex(tower => tower.floor_name == this.floor_slug[value]);
+                        if(index >=0 ) {
+                            this.if_retail_tower_details.splice(index, 1);
+                        }
+                    }
                 },
 
                 // third section

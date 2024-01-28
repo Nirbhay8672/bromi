@@ -375,15 +375,6 @@ Helper::set_default_measuerement();
                                                                 </h5>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.insta.properties') }}">
-                                                            <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="list"></i>
-                                                                </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Insta
-                                                                        List</a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
                                                         <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.shared.properties') }}">
                                                             <div class="bookmark-content">
                                                                 <div class="bookmark-icon"><i data-feather="list"></i>
@@ -994,6 +985,55 @@ Helper::set_default_measuerement();
         @include('admin.layouts.dropforms')
         <!-- latest jquery-->
         <script src="{{ asset('admins/assets/js/jquery-3.5.1.min.js') }}"></script>
+        <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+        <script>
+          window.OneSignalDeferred = window.OneSignalDeferred || [];
+          OneSignalDeferred.push(function(OneSignal) {
+            OneSignal.init({
+              appId: "{{config('app.onesignalId')}}",
+            });
+            //  let playerId = null;
+            setTimeout(function(){
+                let playerId = OneSignal.User.PushSubscription._id;
+               
+                // Construct the request headers
+                const headers = new Headers({
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': "{{csrf_token()}}", // Replace with your actual CSRF token
+                });
+                
+                // Construct the request options
+                const requestOptions = {
+                  method: 'POST',
+                  headers: headers,
+                  body: JSON.stringify({ playerId: playerId }),
+                };
+                
+                // Construct the URL
+                const url = "{{route('admin.saveOnesignal')}}"; // Replace with your actual endpoint
+                
+                // Send the fetch request
+                fetch(url, requestOptions)
+                  .then(response => {
+                    if (!response.ok) {
+                      throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                  })
+                  .then(data => {
+                    // console.log(data);
+                    console.log('User ID sent to server successfully');
+                  })
+                  .catch(error => {
+                    console.error('Error sending user ID to server:', error);
+                  });
+                
+                // console.log("OneSignal User ID:", OneSignal.User.PushSubscription._id);
+            }, 1000)
+
+          });
+        </script>
+        
         <!-- Bootstrap js-->
         <script src="{{ asset('admins/assets/js/jquery.ui.min.js') }}"></script>
 
@@ -1061,6 +1101,8 @@ Helper::set_default_measuerement();
         <!-- Theme js-->
 
         <script src="{{ asset('admins/assets/js/script.js') }}"></script>
+        
+        
 
         @stack('scripts')
         @push('scripts')
@@ -1218,27 +1260,6 @@ Helper::set_default_measuerement();
         <!-- login js-->
         <!-- Plugin used-->
         
-        <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async></script>
-        <script>
-            window.OneSignalDeferred = window.OneSignalDeferred || [];
-            OneSignalDeferred.push(function(OneSignal) {
-                OneSignal.init({
-                appId: "e2fa0ffa-5375-41c7-b65a-d7379e575e06",
-                });
-                // ----------------------
-                OneSignalDeferred.on('subscriptionChange', function (isSubscribed) {
-                console.log('is subscribed', isSubscribed);
-                    OneSignalDeferred.push(function() { 
-                            console.log('attempt to get id'); // doesn't get this far
-                            OneSignalDeferred.getUserId(function(userId) {
-                            console.log('user id', userId); // doesn't get this far                
-                        });
-                    });
-                });
-            });
-            
-            
-        </script>
 </body>
 
 </html>
