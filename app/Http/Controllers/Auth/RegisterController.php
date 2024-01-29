@@ -199,6 +199,12 @@ class RegisterController extends Controller
         }
         else 
         {
+            $user->fill([
+                'property_for_id' => 'Both',
+                'property_type_id' => ["85","87"],
+                'specific_properties' => ["254","255","256","257","258","259","260","261","262"],
+            ])->save();
+
             $user->assignRole(1);
         }
 
