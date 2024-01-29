@@ -193,13 +193,13 @@ class UserController extends Controller
 
         $new_state = new State();
         $new_state->fill([
-            'name' => @$state->name,
+            'name' => $state->name,
             'user_id' => $data->id,
         ])->save();
 
         $new_city = new City();
         $new_city->fill([
-            'name' => @$city->name,
+            'name' => $city->name,
             'user_id' => $data->id,
             'state_id' => $new_state->id,
         ])->save();
