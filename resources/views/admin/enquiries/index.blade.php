@@ -728,7 +728,7 @@ $class_namee = Helper::cleanString($class_namee);
                                 @endforelse
                             </select>
                         </div>
-                        <div class="form-group col-md-4 m-b-20">
+                        {{-- <div class="form-group col-md-4 m-b-20">
                             <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
                             <div class="form-group">
                                 <div class="fname">
@@ -743,7 +743,7 @@ $class_namee = Helper::cleanString($class_namee);
                                 </div>
                             </div>
                             <input class="form-control d-none" name="schedule_remind" id="schedule_remind" type="remarks" autocomplete="off">
-                        </div>
+                        </div> --}}
                         <div class="form-group col-md-6 m-b-20">
                             <div class="col-12">
                                 <div class="m-checkbox-inline custom-radio-ml">
@@ -785,7 +785,7 @@ $class_namee = Helper::cleanString($class_namee);
                             <label for="remarks" class="mb-0">Remarks:</label>
                             <input class="form-control" name="progress_remarks" id="progress_remarks" type="remarks" autocomplete="off">
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                 <input class="form-check-input" id="email_reminder" type="checkbox" value="">
                                 <label class="form-check-label" for="email_reminder">Email Reminder</label>
@@ -794,7 +794,7 @@ $class_namee = Helper::cleanString($class_namee);
                                 <input class="form-check-input" id="sms_reminder" type="checkbox" value="">
                                 <label class="form-check-label" for="sms_reminder">SMS Reminder</label>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <button class="btn btn-secondary" id="saveProgress">Save</button>
                     <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>

@@ -249,6 +249,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::any('/accept-shared-requests', [ShareController::class, 'acceptRequest'])->name('admin.shared.accept');
 		Route::any('/cancel-shared-requests', [ShareController::class, 'cancelRequest'])->name('admin.shared.cancel');
 		Route::get('/request-users', [PartnerController::class, 'userRequest'])->name('admin.userRequest');
+		Route::get('/exist-shared-property', [ShareController::class, 'checkProperty'])->name('admin.shared.exist');
 		Route::any('/accept-User-shared-requests', [PartnerController::class, 'acceptUserRequest'])->name('admin.userShared.accept');
 
 		

@@ -52,6 +52,17 @@ class ShareController extends Controller
     }
 
 
+    public function checkProperty(Request $request)
+    {
+        $partnerId = $request->input('partner_id');
+        $propertyId = $request->input('property_id');
+
+        $exists = ShareProperty::where('partner_id', $partnerId)
+            ->where('property_id', $propertyId)
+            ->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
     // shared 1
     public function sharedPropertyRequests(Request $request)
     {
@@ -70,7 +81,6 @@ class ShareController extends Controller
                 ->where('share_property.partner_id', Auth::user()->id)
                 ->get();
 
-            //  dd("data",$data,"user",Auth::user()->id);
             return DataTables::of($data)
                 ->addColumn('project_name', function ($shared) {
                     //  dd($shared->Property_details);
@@ -121,9 +131,9 @@ class ShareController extends Controller
             //     ->get();
 
             // $data2 = SharedProperty::with('Property_details', 'User')->where('user_id', Auth::user()->id)->get();
-            
+
             $data = DB::table('share_property')
-                ->select('share_property.*', 'properties.constructed_salable_area as constructed_salable_area','users.first_name as first_name','properties.salable_plot_area as salable_plot_area','properties.salable_area as salable_area','properties.configuration as property_configuration','properties.unit_details as unit_details','users.office_number as office_number','users.mobile_number as mobile_number', 'users.last_name as last_name', 'projects.project_name', 'properties.remarks as remarks', 'properties.property_category as property_category', 'properties.property_for as property_for', 'properties.location_link as property_link', 'areas.name as area_name')
+                ->select('share_property.*', 'properties.constructed_salable_area as constructed_salable_area', 'users.first_name as first_name', 'properties.salable_plot_area as salable_plot_area', 'properties.salable_area as salable_area', 'properties.configuration as property_configuration', 'properties.unit_details as unit_details', 'users.office_number as office_number', 'users.mobile_number as mobile_number', 'users.last_name as last_name', 'projects.project_name', 'properties.remarks as remarks', 'properties.property_category as property_category', 'properties.property_for as property_for', 'properties.location_link as property_link', 'areas.name as area_name')
                 ->leftJoin('properties', 'share_property.property_id', '=', 'properties.id')
                 ->leftJoin('projects', 'properties.project_id', '=', 'projects.id')
                 ->leftJoin('areas', 'projects.area_id', '=', 'areas.id')
@@ -133,7 +143,7 @@ class ShareController extends Controller
                 ->get();
 
             $data2 = DB::table('share_property')
-                ->select('share_property.*','properties.constructed_salable_area as constructed_salable_area', 'users.first_name as first_name','properties.salable_plot_area as salable_plot_area','properties.salable_area as salable_area','properties.unit_details as unit_details','properties.configuration as property_configuration','users.office_number as office_number','users.mobile_number as mobile_number', 'users.last_name as last_name', 'projects.project_name', 'properties.remarks as remarks', 'properties.property_category as property_category', 'properties.property_for as property_for', 'properties.location_link as property_link', 'areas.name as area_name')
+                ->select('share_property.*', 'properties.constructed_salable_area as constructed_salable_area', 'users.first_name as first_name', 'properties.salable_plot_area as salable_plot_area', 'properties.salable_area as salable_area', 'properties.unit_details as unit_details', 'properties.configuration as property_configuration', 'users.office_number as office_number', 'users.mobile_number as mobile_number', 'users.last_name as last_name', 'projects.project_name', 'properties.remarks as remarks', 'properties.property_category as property_category', 'properties.property_for as property_for', 'properties.location_link as property_link', 'areas.name as area_name')
                 ->leftJoin('properties', 'share_property.property_id', '=', 'properties.id')
                 ->leftJoin('projects', 'properties.project_id', '=', 'projects.id')
                 ->leftJoin('areas', 'projects.area_id', '=', 'areas.id')

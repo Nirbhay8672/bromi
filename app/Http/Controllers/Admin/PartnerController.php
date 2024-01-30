@@ -208,7 +208,7 @@ class PartnerController extends Controller
 				// 	$action .= '<i role="button" title="Delete" data-id=' . $SharedProperty->id . ' onclick="deletePartner(this)" class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
 				// 	return $action;
 				// })
-				->rawColumns(['partner_name','project_name', 'company_name', 'partner_email',   'status'])
+				->rawColumns(['partner_name', 'project_name', 'company_name', 'partner_email',   'status'])
 				->make(true);
 		}
 		return view('admin.partner.partner_req');
@@ -228,17 +228,17 @@ class PartnerController extends Controller
 					'user_id' => Auth::user()->id,
 					'property_id' => $request->property_id,
 				]);
-                // create notification for new user
-                $userNotification = UserNotifications::create([
-                    "user_id" => (int) $val,
-                    "notification" => Auth::user()->first_name . " has shared property.",
-                    "notification_type" => "property_shared",
-                    "property_id" => $request->property_id
-                ]);
-                // if notificaton creation failed.
-                if (!$userNotification) {
-                    Log::error('Unable to create user notification, for user partner to share property.');
-                }
+				// create notification for new user
+				$userNotification = UserNotifications::create([
+					"user_id" => (int) $val,
+					"notification" => Auth::user()->first_name . " has shared property.",
+					"notification_type" => "property_shared",
+					"property_id" => $request->property_id
+				]);
+				// if notificaton creation failed.
+				if (!$userNotification) {
+					Log::error('Unable to create user notification, for user partner to share property.');
+				}
 			} catch (\Exception $e) {
 				dd("err", $e);
 			}
@@ -252,7 +252,10 @@ class PartnerController extends Controller
 	 */
 	public function users()
 	{
-		$users = Partner::with('user')->where('status', '=', 'Active')->get();
+		$users = Partner::with('user')
+			->where('status', '=', 'Active')
+			->where('user_id', '=', Auth::user()->id)
+			->get();
 		return response()->json($users);
 	}
 
