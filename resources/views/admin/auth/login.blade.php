@@ -62,6 +62,11 @@
                                 <strong>{{ $message }}</strong>
                             </div>
                         @endif
+                        @if ($message = Session::get('registration_success'))  
+                            <div class="alert alert-success alert-block">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                        @endif
                         <div class="form-group">
                             <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
                                 <input class="form-control" value="{{ old('email') }}" name="email" type="email"

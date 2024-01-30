@@ -75,32 +75,27 @@ class EnquiriesController extends Controller
 					->orderBy('id', 'desc')
 					->get();
 			} else {
-				//Get Data Enquiry
-				// dd("out");
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
-					//Filter Enquiry
 					->when($request->filter_by, function ($query) use ($request) {
 						if ($request->filter_by == 'new') {
 							return $query->doesntHave('Progress');
 						} elseif ($request->filter_by == 'today') {
-							return $query->whereHas('activeProgress', function ($query) {
-								$query->whereDate('enquiries.created_at', '=', Carbon::now()->format('Y-m-d'));
-							});
+							return $query->whereDate('created_at', '=', Carbon::now()->format('Y-m-d'));
 						} elseif ($request->filter_by == 'tomorrow') {
 							return $query->whereHas('activeProgress', function ($query) {
-								$query->whereDate('created_at', '=', Carbon::tomorrow()->format('Y-m-d'));
+								$query->whereDate('nfd', '=', Carbon::tomorrow()->format('Y-m-d'));
 							});
 						} elseif ($request->filter_by == 'yesterday') {
 							return $query->whereHas('activeProgress', function ($query) {
-								$query->whereDate('created_at', '=', Carbon::yesterday()->format('Y-m-d'));
+								$query->whereDate('nfd', '=', Carbon::yesterday()->format('Y-m-d'));
 							});
 						} elseif ($request->filter_by == 'due') {
 							return $query->whereHas('activeProgress', function ($query) {
-								$query->whereDate('created_at', '<=', Carbon::now()->format('Y-m-d'));
+								$query->whereDate('nfd', '<=', Carbon::now()->format('Y-m-d'));
 							});
 						} elseif ($request->filter_by == 'weekend') {
 							return $query->whereHas('activeProgress', function ($query) {
-								$query->whereDate('created_at', '<=', Carbon::now()->endOfWeek())->whereDate('created_at', '>=', Carbon::now()->endOfWeek()->subDay());;
+								$query->whereDate('nfd', '<=', Carbon::now()->endOfWeek())->whereDate('nfd', '>=', Carbon::now()->endOfWeek()->subDay());
 							});
 						}
 					})

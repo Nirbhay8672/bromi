@@ -19,20 +19,10 @@ use Spatie\Permission\Models\Role;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Session;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
     /**
@@ -156,7 +146,7 @@ class RegisterController extends Controller
     
     public function storeUser(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             "first_name" => 'required',
             "last_name" => 'required',
             "email" => 'required|unique:users,email',
@@ -247,6 +237,7 @@ class RegisterController extends Controller
         }
 
         if($user->exists) {
+            Session::flash('registration_success',  'Your registration is successful. Kindly login to continue.');
             return redirect('admin/login');
         }
     }

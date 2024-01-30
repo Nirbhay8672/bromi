@@ -27,6 +27,8 @@ use App\Http\Controllers\Admin\TalukaController;
 use App\Http\Controllers\Admin\VillageController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\ShareController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 use Illuminate\Support\Facades\Route;
@@ -68,7 +70,19 @@ Route::group(['middleware' => 'revalidate'], function () {
 	Route::get('logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 	Route::group(['middleware' => ['auth']], function () {
 		Route::get('/', [HomeController::class, 'index'])->name('admin');
-		
+		Route::post('/save-onesignal-id', function(Request $request) {
+            try {
+                
+                $user = Auth::user();
+                if (empty($user->onesignal_token)) {
+                    $user->onesignal_token = $request->playerId;
+                    $user->save();
+                }
+                return response()->json(['error' => false, 'data' => $user->onesignal_token]);
+            } catch (\Throwable $th) {
+                return response()->json(['error' => true, 'data' => $th->getMessage()]);
+            }
+        })->name('admin.saveOnesignal');
 		Route::any('/districts', [DistrictController::class, 'index'])->name('admin.districts');
 		Route::post('/save-district', [DistrictController::class, 'saveDistrict'])->name('admin.save_district');
 		Route::post('/get-district', [DistrictController::class, 'getDistrict'])->name('admin.get_district');
