@@ -1072,40 +1072,40 @@
                                     <input class="form-control" id="site_visit_time" name="site_visit_time"
                                         type="time">
                                 </div>
-                                <div class="form-group col-md-4 m-b-20">
-                                    <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
-                                    <div class="form-group">
-                                        <div class="fname">
-                                            <select class="form-select" id="reminider_before_minute" multiple="multiple">
-                                                <option value="" disabled>Select Minutes </option>
-                                                <option value="30 mins">30 mins</option>
-                                                <option value="1 hour">1 hour</option>
-                                                <option value="90 mins">90 mins</option>
-                                                <option value="120 mins">120 mins</option>
-                                                <option value="24 hour">24 hour</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
-                                        type="remarks" autocomplete="off">
-                                </div>
+                                <!--<div class="form-group col-md-4 m-b-20">-->
+                                <!--    <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>-->
+                                <!--    <div class="form-group">-->
+                                <!--        <div class="fname">-->
+                                <!--            <select class="form-select" id="reminider_before_minute" multiple="multiple">-->
+                                <!--                <option value="" disabled>Select Minutes </option>-->
+                                <!--                <option value="30 mins">30 mins</option>-->
+                                <!--                <option value="1 hour">1 hour</option>-->
+                                <!--                <option value="90 mins">90 mins</option>-->
+                                <!--                <option value="120 mins">120 mins</option>-->
+                                <!--                <option value="24 hour">24 hour</option>-->
+                                <!--            </select>-->
+                                <!--        </div>-->
+                                <!--    </div>-->
+                                <!--    <input class="form-control d-none" name="schedule_remind" id="schedule_remind"-->
+                                <!--        type="remarks" autocomplete="off">-->
+                                <!--</div>-->
                                 <div class="form-group col-md-8 m-b-20">
                                     <label for="Site Visit Time" class="mb-0">Description:</label>
                                     <input class="form-control" name="schedule_description" id="schedule_description"
                                         type="remarks" autocomplete="off">
                                 </div>
-                                <div class="row">
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="email_reminder" type="checkbox"
-                                            value="">
-                                        <label class="form-check-label" for="email_reminder">Email Reminder</label>
-                                    </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="sms_reminder" type="checkbox"
-                                            value="">
-                                        <label class="form-check-label" for="sms_reminder">SMS Reminder</label>
-                                    </div>
-                                </div>
+                                <!--<div class="row">-->
+                                <!--    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">-->
+                                <!--        <input class="form-check-input" id="email_reminder" type="checkbox"-->
+                                <!--            value="">-->
+                                <!--        <label class="form-check-label" for="email_reminder">Email Reminder</label>-->
+                                <!--    </div>-->
+                                <!--    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">-->
+                                <!--        <input class="form-check-input" id="sms_reminder" type="checkbox"-->
+                                <!--            value="">-->
+                                <!--        <label class="form-check-label" for="sms_reminder">SMS Reminder</label>-->
+                                <!--    </div>-->
+                                <!--</div>-->
                             </div>
                         </form>
                         <button class="btn btn-secondary" id="saveSchedule" data-id="">Save</button>

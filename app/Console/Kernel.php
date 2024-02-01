@@ -17,6 +17,9 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('queue:work --tries=5')->withoutOverlapping();
+        
+         // Run the command at 30 min every day
+        $schedule->command('onesignal:notification')->everyMinute();
     }
 
     /**

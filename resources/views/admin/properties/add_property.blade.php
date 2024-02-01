@@ -54,8 +54,6 @@
                                                                 <label><b>Property For</b></label>
                                                             </div>
                                                             <input type="hidden" name="this_data_id" id="this_data_id">
-
-                                                            @if(auth()->user()->property_for_id == 'Rent' || auth()->user()->property_for_id == 'Both')
                                                             <div class="btn-group me-2" role="group"
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Rent" class="btn-check"
@@ -64,9 +62,6 @@
                                                                 <label class="btn btn-outline-info btn-pill btn-sm py-1"
                                                                     for="propertyfor1">Rent</label>
                                                             </div>
-                                                            @endif
-
-                                                            @if(auth()->user()->property_for_id == 'Sell' || auth()->user()->property_for_id == 'Both')
                                                             <div class="btn-group me-2" role="group"
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Sell" class="btn-check"
@@ -75,10 +70,6 @@
                                                                 <label class="btn btn-outline-info btn-pill btn-sm py-1"
                                                                     for="propertyfor2">Sell</label>
                                                             </div>
-                                                            @endif
-
-
-                                                            @if(auth()->user()->property_for_id == 'Both')
                                                             <div class="btn-group me-2" role="group"
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Both" class="btn-check"
@@ -87,34 +78,27 @@
                                                                 <label class="btn btn-outline-info btn-pill btn-sm py-1"
                                                                     for="propertyfor3">Both</label>
                                                             </div>
-                                                            @endif
-
                                                         </div>
+
+                        
 
                                                         <div class="col-md-12 mb-3">
                                                             <div>
                                                                 <label><b>Property Type</b></label>
                                                             </div>
                                                             <div class="m-checkbox-inline custom-radio-ml">
-                                                                
-                                                                @if(in_array(85, json_decode(auth()->user()->property_type_id)))
-                                                                    <input class="form-check-input" id="propertytype85"
-                                                                        type="radio" name="property_type"
-                                                                        data-val="Commercial" value="85" checked=""
-                                                                        data-bs-original-title="" title="">
-                                                                    <label class="form-check-label mb-0"
-                                                                        for="propertytype85">Commercial</label>
-                                                                @endif
-
-                                                                @if(in_array(87, json_decode(auth()->user()->property_type_id)))
-                                                                    <input class="form-check-input" id="propertytype87"
-                                                                        type="radio" name="property_type"
-                                                                        data-val="Residential" value="87"
-                                                                        data-bs-original-title="" title="">
-                                                                    <label class="form-check-label mb-0"
-                                                                        for="propertytype87">Residential</label>
-                                                                @endif
-
+                                                                <input class="form-check-input" id="propertytype85"
+                                                                    type="radio" name="property_type"
+                                                                    data-val="Commercial" value="85" checked=""
+                                                                    data-bs-original-title="" title="">
+                                                                <label class="form-check-label mb-0"
+                                                                    for="propertytype85">Commercial</label>
+                                                                <input class="form-check-input" id="propertytype87"
+                                                                    type="radio" name="property_type"
+                                                                    data-val="Residential" value="87"
+                                                                    data-bs-original-title="" title="">
+                                                                <label class="form-check-label mb-0"
+                                                                    for="propertytype87">Residential</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12 mb-3">
@@ -124,7 +108,7 @@
                                                             <div class="m-checkbox-inline custom-radio-ml">
                                                                 @forelse ($property_configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_specific_type')
-                                                                        @if(in_array($props['id'], json_decode(auth()->user()->specific_properties)))
+                                                                        
                                                                             <div class="btn-group bromi-checkbox-btn me-1 property-type-element"
                                                                                 role="group"
                                                                                 aria-label="Basic radio toggle button group"
@@ -142,7 +126,7 @@
                                                                                     class="btn btn-outline-primary btn-pill btn-sm py-1"
                                                                                     for="category-{{ $props['id'] }}">{{ $props['name'] }}</label>
                                                                             </div>
-                                                                        @endif
+                                                                        
                                                                     @endif
                                                                 @empty
                                                                 @endforelse

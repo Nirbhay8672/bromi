@@ -55,6 +55,9 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
+    
+    'onesignalId' => env('ONE_SIGNAL_APP_ID', 'e2fa0ffa-5375-41c7-b65a-d7379e575e06'),
+    'onesignalKey' => env('ONE_SIGNAL_AUTH_KEY', 'MDlhMGQ3N2YtZDJmZC00YmY2LWI4YTQtNTRmMmQ5YTEzODY2'),
 
     /*
     |--------------------------------------------------------------------------
@@ -67,7 +70,8 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    // 'timezone' => 'UTC',
+    'timezone' => 'Asia/Kolkata',
 
     /*
     |--------------------------------------------------------------------------

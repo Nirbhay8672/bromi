@@ -97,20 +97,20 @@ class PropertyController extends Controller
                         return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'));
                     }
                 })
-                ->when(!empty(Auth::user()->property_for_id), function ($query) use ($request) {
-                    // dd("testtt",(Auth::user()->property_type_id));
-                    return $query->where(function ($query) use ($request) {
-                        $query->where('properties.property_for', Auth::user()->property_for_id)->orWhere('properties.property_for', 'Both');
-                    });
-                })
-                ->when(!empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
-                    // dd("345",(Auth::user()->property_type_id));
-                    return $query->whereIn('properties.property_type', json_decode(Auth::user()->property_type_id));
-                })
-                ->when(!empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {
-                    // dd("123",(Auth::user()->property_type_id));
-                    return $query->whereIn('properties.property_category', json_decode(Auth::user()->specific_properties));
-                })
+                // ->when(!empty(Auth::user()->property_for_id), function ($query) use ($request) {
+                //     // dd("testtt",(Auth::user()->property_type_id));
+                //     return $query->where(function ($query) use ($request) {
+                //         $query->where('properties.property_for', Auth::user()->property_for_id)->orWhere('properties.property_for', 'Both');
+                //     });
+                // })
+                // ->when(!empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
+                //     // dd("345",(Auth::user()->property_type_id));
+                //     return $query->whereIn('properties.property_type', json_decode(Auth::user()->property_type_id));
+                // })
+                // ->when(!empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {
+                //     // dd("123",(Auth::user()->property_type_id));
+                //     return $query->whereIn('properties.property_category', json_decode(Auth::user()->specific_properties));
+                // })
                 ->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
                     return $query->where(function ($query) use ($request) {
                         $query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
@@ -256,25 +256,23 @@ class PropertyController extends Controller
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
 				END,  properties.id DESC');
+				
+				
+				$parts = explode('?', $request->location);
 
+				if (count($parts) > 1) {
+					$value = $parts[1];
+					$value = trim($value);
 
-            $parts = explode('?', $request->location);
-
-            if (count($parts) > 1) {
-                $value = $parts[1];
-                $value = trim($value);
-
-                if (strpos($value, 'data_id') !== false) {
-                    $value_part = explode('=', $value);
-                    if ($value_part[1] > 0) {
-                        $data->where('properties.id', $value_part[1]);
-                    }
-                }
-            }
-
-            foreach ($data->get() as $key => $value) {
+					if (strpos($value, 'data_id') !== false) {
+						$value_part = explode('=', $value);
+						if($value_part[1] > 0) {
+							$data->where('properties.id', $value_part[1]);
+						}
+					}
+				}
+				 $data = $data->get()->filter(function ($value) use ($request) {
                 $theArea = 0;
-
 
                 if (!empty($value->salable_area)) {
                     $theArea = explode('_-||-_', $value->salable_area)[0];
@@ -302,18 +300,14 @@ class PropertyController extends Controller
                         }
                         if (!empty($value3['3'])) {
                             $allPrices[] = $value3['3'];
-                            $allPrices[] = $value3['3'];
                         }
                     }
                 }
 
-
                 if (!empty($request->filter_from_price)) {
-                    $from_passed = false;
                     $from_passed = false;
                     foreach ($allPrices as $key5 => $value5) {
                         if ((Helper::c_to_n($value5) >= Helper::c_to_n($request->filter_from_price))) {
-                            $from_passed = true;
                             $from_passed = true;
                             break;
                         }
@@ -332,10 +326,68 @@ class PropertyController extends Controller
                         }
                     }
                     if (!$to_passed) {
-                        unset($data[$key]);
+                        return false;
                     }
                 }
-            }
+
+                return true;
+            });
+            // foreach ($data->get() as $key => $value) {
+            //     $theArea = 0;
+            //     if (!empty($value->salable_area)) {
+            //         $theArea = explode('_-||-_', $value->salable_area)[0];
+            //     } elseif (!empty($value->salable_plot_area)) {
+            //         $theArea = explode('_-||-_', $value->salable_plot_area);
+            //     }
+            //     if ((!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area))) {
+            //         unset($data[$key]);
+            //         continue;
+            //     }
+            //     if (!empty($request->filter_to_area) && !($theArea <= $request->filter_to_area)) {
+            //         unset($data[$key]);
+            //         continue;
+            //     }
+            //     $allPrices = [];
+
+            //     if (!empty($value->unit_details) && !empty(json_decode($value->unit_details)[0])) {
+            //         foreach (json_decode($value->unit_details) as $key3 => $value3) {
+            //             if (!empty($value3['7'])) {
+            //                 array_push($allPrices, $value3['7']);
+            //             }
+            //             if (!empty($value3['4'])) {
+            //                 array_push($allPrices, $value3['4']);
+            //             }
+            //             if (!empty($value3['3'])) {
+            //                 array_push($allPrices, $value3['3']);
+            //             }
+            //         }
+            //     }
+            //     if (!empty($request->filter_from_price)) {
+            //         $from_passed = 0;
+            //         foreach ($allPrices as $key5 => $value5) {
+            //             if ((Helper::c_to_n($value5) >= Helper::c_to_n($request->filter_from_price))) {
+            //                 $from_passed = 1;
+            //                 break;
+            //             }
+            //         }
+            //         if (!$from_passed) {
+            //             unset($data[$key]);
+            //             continue;
+            //         }
+            //     }
+            //     if (!empty($request->filter_to_price)) {
+            //         $to_passed = 0;
+            //         foreach ($allPrices as $key6 => $value6) {
+            //             if ((Helper::c_to_n($value6) <= Helper::c_to_n($request->filter_to_price))) {
+            //                 $to_passed = 1;
+            //                 break;
+            //             }
+            //         }
+            //         if (!$to_passed) {
+            //             unset($data[$key]);
+            //         }
+            //     }
+            // }
             // dd("dataaa",$data);
             return DataTables::of($data)
                 ->editColumn('project_id', function ($row) use ($request) {
@@ -1715,7 +1767,7 @@ class PropertyController extends Controller
 
         return view('admin.properties.shared_index');
     }
-    public function importProperty(Request $request)
+     public function importProperty(Request $request)
     {
         $file = $request->file('csv_file');
         $name = Str::random(10) . '.xlsx';
@@ -1895,7 +1947,6 @@ class PropertyController extends Controller
             }
         }
     }
-
     public function getSpecificProperty(Request $request)
     {
         // for edit selected
@@ -2006,7 +2057,7 @@ class PropertyController extends Controller
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property', 'multiple_image', 'construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property', 'multiple_image','construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
 
     public function downloadZip($type, $prop)

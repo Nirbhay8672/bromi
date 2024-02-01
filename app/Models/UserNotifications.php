@@ -18,6 +18,7 @@ class UserNotifications extends Model
         'enquiry_id',
         'by_user',
         'new_user_id',
+        'schedule_date',
         
 	];
 }

@@ -55,6 +55,7 @@ class HomeController extends Controller
 	public function index(Request $request)
 	{
 		try {
+		    
 			if (Auth::check()) {
 				if (empty(Session::get('plan_id'))) {
 					Session::put('plan_id', Auth::user()->id);

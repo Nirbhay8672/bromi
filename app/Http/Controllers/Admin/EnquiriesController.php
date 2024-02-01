@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
+use App\Constants\Constants;
 use App\Models\City;
 use App\Models\User;
 use App\Models\Areas;
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB as FacadesDB;
 use App\Http\Controllers\Controller;
 use App\Models\UserNotifications;
+use App\Traits\HelperFn;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -38,6 +40,8 @@ use Illuminate\Support\Arr;
 
 class EnquiriesController extends Controller
 {
+    use HelperFn;
+    
 	public function __construct()
 	{
 		$this->middleware('auth');
@@ -45,7 +49,7 @@ class EnquiriesController extends Controller
 
 	public function index(Request $request)
 	{
-
+	    
 		if ($request->ajax()) {
 			$dropdowns = DropdownSettings::get()->toArray();
 			$dropdownsarr = [];
@@ -67,7 +71,9 @@ class EnquiriesController extends Controller
 			$new = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
 				return ($var['name'] == 'only-assigned');
 			});
-			if (count($new) > 0 && $user->role_id !== 1) {
+			
+			if (count($new) > 0 &&  $user->role_id !== "1") {
+                
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
 						$query->where('assign_id', '=', Auth::user()->id);
@@ -75,6 +81,7 @@ class EnquiriesController extends Controller
 					->orderBy('id', 'desc')
 					->get();
 			} else {
+			    
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->when($request->filter_by, function ($query) use ($request) {
 						if ($request->filter_by == 'new') {
@@ -118,7 +125,7 @@ class EnquiriesController extends Controller
 						return $query->where('employee_id', $request->filter_employee_id);
 					})
 					->when($request->filter_property_type, function ($query) use ($request) {
-						// return $query->where('requirement_type', 'like', '%"' . $request->filter_property_type . '"%');
+					
 						return $query->where('requirement_type', $request->filter_property_type);
 					})
 					->when($request->filter_specific_type, function ($query) use ($request) {
@@ -131,9 +138,10 @@ class EnquiriesController extends Controller
 							}
 						});
 					})
-					->when($request->filter_configuration, function ($query) use ($request) {
-						return  $query->where('configuration', 'like', '%"' . $request->filter_configuration . '"%');
-					})
+				->when($request->filter_configuration, function ($query) use ($request) {
+                        return $query->where('configuration', 'like', '%"'.$request->filter_configuration.'"%');
+                    })
+
 					->when($request->filter_area_id, function ($query) use ($request) {
 						$query->where(function ($query) use ($request) {
 							$types = json_decode($request->filter_area_id);
@@ -781,27 +789,46 @@ class EnquiriesController extends Controller
 		$data->remarks = $request->remarks;
 		$data->save();
 
+       
         // create notification for new user
-        $notif = UserNotifications::where(['notification_type' => 'enquiry', 'enquiry_id' => $request->enquiry_id])
+        $enq = Enquiries::find($request->enquiry_id);
+        $notif = UserNotifications::where(['notification_type' => Constants::ENQUIRY_ASSIGNED, 'enquiry_id' => $request->enquiry_id])
                 ->orderBy('id', 'desc')->first();
+        $user = Auth::user();
+        $nfDate = Carbon::parse($request->nfd)->format('Y-m-d H:i:s');
+        $message = "There an update on enquiry for the client `$enq->client_name`: The next follow up date is " . $nfDate;
+
+        // notify user for next follow up date
         $userNotification = UserNotifications::create([
             "user_id" => @$notif->by_user,
-            "notification" => Carbon::parse($request->nfd)->format('Y-m-d H:i:s') . " is the NFD for enquiry.",
-            "notification_type" => "enquiry",
+            "notification" => $message,
+            "notification_type" => Constants::ENQUIRY_ASSIGNED,
             'enquiry_id' => $request->enquiry_id,
-            'by_user' => (int) Auth::user()->id
+            'schedule_date' => $nfDate,
+            'by_user' => (int) $user->id
         ]);
         // if notificaton creation failed.
         if (!$userNotification) {
             Log::error('Unable to create user notification');
         }
+        // send if user has onesignal id
+        if (!empty($user->onesignal_token)) {
+            HelperFn::sendPushNotification($user->onesignal_token, $message);
+        }
+
+        // notify logged in user for next follow up date
         UserNotifications::create([
-            "user_id" => (int) Auth::user()->id,
-            "notification" => Carbon::parse($request->nfd)->format('Y-m-d H:i:s') . " is the NFD for enquiry.",
+            "user_id" => (int) $user->id,
+            "notification" => $message,
             "notification_type" => "enquiry",
             'enquiry_id' => $request->enquiry_id,
             'by_user' => @$notif->by_user
         ]);
+        $otherUser = User::where('id', $notif->by_user)->first();
+        // send if user has onesignal id
+        if (!empty($otherUser->onesignal_token)) {
+            HelperFn::sendPushNotification($otherUser->onesignal_token, $message);
+        }
 	}
 
 	public function saveSchedule(Request $request)
@@ -833,6 +860,7 @@ class EnquiriesController extends Controller
 			} else {
 				$the_progress = 'Site Visit Completed';
 			}
+			$enq = Enquiries::find($request->enquiry_id);
 			$previous = EnquiryProgress::where('enquiry_id', $request->enquiry_id)->where('status', 1)->first();
 			EnquiryProgress::where('enquiry_id', $request->enquiry_id)->where('status', 1)->update(['status' => 0]);
 			$data =  new EnquiryProgress();
@@ -843,6 +871,24 @@ class EnquiriesController extends Controller
 			$data->nfd = $request->visit_date;
 
 			$data->save();
+			$notif = UserNotifications::where(['notification_type' => Constants::ENQUIRY_ASSIGNED, 'enquiry_id' => $request->enquiry_id])
+                ->orderBy('id', 'desc')->first();
+            $user = Auth::user();
+
+            // notify user for next schedule visit date
+            $message = $the_progress . ' for client '. $enq->client_name .' at '. $request->visit_date;
+            $userNotification = UserNotifications::create([
+                "user_id" => (int) $notif->user_id,
+                "notification" => $message,
+                "notification_type" => Constants::SCHEDULE_VISIT,
+                'enquiry_id' => $request->enquiry_id,
+                'by_user' => (int) $user->id,
+                'schedule_date' => $request->visit_date
+            ]);
+            // if notificaton creation failed.
+            if (!$userNotification) {
+                Log::error('Save Schedule Visit: Unable to create user notification');
+            }
 		}
 	}
 	public function enquiryCalendar(Request $request)
@@ -1185,9 +1231,11 @@ class EnquiriesController extends Controller
 			AssignHistory::create(['enquiry_id' => $request->enquiry_id, 'user_id' => Auth::user()->id, 'assign_id' => $request->employee]);
 
             // create notification for new user
+            $enq = Enquiries::find('id', $request->enquiry_id);
+            $msg = Auth::user()->first_name . " has assigned you enquiry. The client Name is: $enq->client_name";
             $userNotification = UserNotifications::create([
                 "user_id" => (int) $request->employee,
-                "notification" => Auth::user()->first_name . " has assigned you enquiry.",
+                "notification" => $msg,
                 "notification_type" => "enquiry",
                 'enquiry_id' => $request->enquiry_id,
                 'by_user' => Auth::user()->id
@@ -1195,6 +1243,11 @@ class EnquiriesController extends Controller
             // if notificaton creation failed.
             if (!$userNotification) {
                 Log::error('Unable to create user notification');
+            }
+            $user = User::where('id', $request->employee)->first();
+            // send if user has onesignal id
+            if (!empty($user->onesignal_token)) {
+                HelperFn::sendPushNotification($user->onesignal_token, $msg);
             }
 		}
 	}
