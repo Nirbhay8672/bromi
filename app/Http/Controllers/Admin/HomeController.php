@@ -57,18 +57,29 @@ class HomeController extends Controller
 		try {
 		    
 			if (Auth::check()) {
+				
 				if (empty(Session::get('plan_id'))) {
 					Session::put('plan_id', Auth::user()->id);
 				}
+
 				$start_date = null;
 				$end_date = Carbon::now()->format('Y-m-d 23:59:59');
+
 				if($request->filled('date_range')){
-					if($request->date_range == 'last_month'){
+					if($request->date_range == 'last_month' || $request->date_range == 'this_month'){
 						$start_date = Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00');
 					}elseif($request->date_range == '6month'){
 						$start_date = Carbon::now()->startOfMonth()->subMonth(6)->format('Y-m-d 00:00:00');
+					}elseif($request->date_range == '3month'){
+						$start_date = Carbon::now()->startOfMonth()->subMonth(3)->format('Y-m-d 00:00:00');
 					}elseif($request->date_range == 'yearly'){
 						$start_date = Carbon::now()->startOfMonth()->subMonth(12)->format('Y-m-d 00:00:00');
+					}elseif($request->date_range == 'today'){
+						$start_date = Carbon::now()->format('Y-m-d 00:00:00');
+					}elseif($request->date_range == 'yesterday'){
+						$start_date = Carbon::now()->subDay()->format('Y-m-d 00:00:00');
+					}elseif($request->date_range == 'this_week'){
+						$start_date = Carbon::now()->subDays(7)->format('Y-m-d 00:00:00');
 					}
 				}
 
@@ -88,6 +99,7 @@ class HomeController extends Controller
 				$total_win = Enquiries::select('id')->whereHas('Progress', function($q){
 					$q->where('progress','Booked');
 				})->where('user_id', Auth::user()->id);
+
 				if(!is_null($start_date)){
 					$total_project = $total_project->whereBetween('created_at',[$start_date,$end_date]);
 					$total_enquiry = $total_enquiry->whereBetween('created_at',[$start_date,$end_date]);
@@ -95,7 +107,15 @@ class HomeController extends Controller
 					$total_lost = $total_lost->whereBetween('created_at',[$start_date,$end_date]);
 					$total_win = $total_win->whereBetween('created_at',[$start_date,$end_date]);
 					$total_active_leads = $total_active_leads->whereBetween('created_at',[$start_date,$end_date]);
+				} else {
+					$total_project = $total_project->whereBetween('created_at',[Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date]);
+					$total_enquiry = $total_enquiry->whereBetween('created_at',[Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date]);
+					$total_property = $total_property->whereBetween('created_at',[Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date]);
+					$total_lost = $total_lost->whereBetween('created_at',[Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date]);
+					$total_win = $total_win->whereBetween('created_at',[Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date]);
+					$total_active_leads = $total_active_leads->whereBetween('created_at',[Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date]);
 				}
+
 				$total_property = $total_property->count('id');
 				$total_enquiry = $total_enquiry->count('id');
 				$total_project = $total_project->count('id');
@@ -152,7 +172,7 @@ class HomeController extends Controller
 					->select(DB::raw('count(*) as total,requirement_type,MONTH(created_at) month'))
 					->where('user_id', Auth::user()->id)
 					->groupBy('requirement_type', 'month')
-					->whereDate('created_at', '>=', Carbon::now()->subMonths(5)->startOfMonth())
+					->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 					->get()
 					->toArray();
 
@@ -318,9 +338,11 @@ class HomeController extends Controller
 				$firstChartfromMonth = now()->subMonths(12)->startOfMonth();
         		$firstCharttoMonth = now()->addDay();
 
+
+				// chart code start
+
 				$new_leads = Enquiries::select(DB::raw("(COUNT(*)) as count"),DB::raw("CONCAT(MONTHNAME(created_at), ' ', YEAR(created_at)) as month_year"))
-					->whereDate('created_at', '>=', $firstChartfromMonth)
-					->whereDate('created_at', '<=', $firstCharttoMonth)
+					->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 					->where('user_id', Auth::user()->id)
 					->groupBy('month_year')
 					->get();
@@ -335,7 +357,7 @@ class HomeController extends Controller
 				foreach ($firstChartperiod as $key => $value) {
 					$first_chart[$value->format('F')." ". $value->format('Y')] = 0;
 				}
-
+ 
 				foreach ($new_leads as $new_lead) {
 					if(array_key_exists($new_lead->month_year, $first_chart)) {
 						$first_chart[$new_lead->month_year] = $new_lead->count;
@@ -348,6 +370,7 @@ class HomeController extends Controller
 				])
 				->where('enquiry_source','!=',null)
 				->where('user_id', Auth::user()->id)
+				->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 				->groupBy('enquiry_source')
 				->get();
 				
@@ -357,6 +380,7 @@ class HomeController extends Controller
 				)
 				->join('users', 'enquiries.employee_id','users.id')
 				->where('employee_id', '!=', null)
+				->whereBetween('enquiries.created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 				->where('user_id', Auth::user()->id)
 				->get();
 		
@@ -376,7 +400,9 @@ class HomeController extends Controller
 					DB::raw("(CASE WHEN enquiries.enquiry_source = '103' THEN 'Advertise' WHEN enquiries.enquiry_source = '104' THEN 'Refrence' WHEN enquiries.enquiry_source = '105' THEN '99 - Acres' ELSE 'Unknown' END) AS enquiry_source_case"),
 				])->withCount(['Progress' => function($query) {
 					$query->where('progress','Lost');
-				}])->where('enquiry_source', '!=', null)->where('user_id', Auth::user()->id)->get();
+				}])->where('enquiry_source', '!=', null)->where('user_id', Auth::user()->id)
+				->whereBetween('enquiries.created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
+				->get();
 		
 				$fifth_chart = [];
 		
@@ -399,6 +425,7 @@ class HomeController extends Controller
 				])
 				->where('progress','!=',null)
 				->where('user_id', Auth::user()->id)
+				->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 				->groupBy('progress')
 				->get();
 				

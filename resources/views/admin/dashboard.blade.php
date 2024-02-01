@@ -39,13 +39,14 @@
                             <div class="input-group border border-dark">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 <select class="form-control border border-dark" id="choose_date_range" style="width: 150px;">
-                                    <option value="">Select Duration</option>
-                                    <option value="last_month" {{ request('date_range') == 'last_month' ? 'selected' : '' }}>
-                                        Last Month</option>
-                                    <option value="6month" {{ request('date_range') == '6month' ? 'selected' : '' }}>6 Month
-                                    </option>
-                                    <option value="yearly" {{ request('date_range') == 'yearly' ? 'selected' : '' }}>Yearly
-                                    </option>
+                                    <option value="this_month" selected>This Month</option>
+                                    <option value="today" {{ request('date_range') == 'today' ? 'selected' : '' }}>Today</option>
+                                    <option value="yesterday" {{ request('date_range') == 'yesterday' ? 'selected' : '' }}>Yesterday</option>
+                                    <option value="this_week" {{ request('date_range') == 'this_week' ? 'selected' : '' }}>This Week</option>
+                                    <option value="last_month" {{ request('date_range') == 'last_month' ? 'selected' : '' }}>Last Month</option>
+                                    <option value="3month" {{ request('date_range') == '3month' ? 'selected' : '' }}>Last 3 Month</option>
+                                    <option value="6month" {{ request('date_range') == '6month' ? 'selected' : '' }}>Last 6 Month</option>
+                                    <option value="yearly" {{ request('date_range') == 'yearly' ? 'selected' : '' }}>Last 1 Year</option>
                                 </select>
                             </div>
                         </div>
