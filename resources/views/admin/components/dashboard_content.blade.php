@@ -4,8 +4,9 @@
         return sprintf('#%06X', mt_rand(0, 0xffffff));
     }
 @endphp
-<div class="row">
-    <div class="col-md-2">
+
+<div class="row"> 
+    <div class="col"> 
         <div class="card o-hidden">
             <div class="card-body bg-light-green">
                 <div class="media static-widget my-3">
@@ -16,8 +17,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-2">
+    </div> 
+    <div class="col"> 
         <div class="card o-hidden">
             <div class="card-body bg-light-orange">
                 <div class="media static-widget my-3">
@@ -28,10 +29,10 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-2">
+    </div> 
+    <div class="col"> 
         <div class="card o-hidden">
-            <div class="card-body bg-light-green">
+            <div class="card-body bg-info">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{$total_lost}}</h1>
@@ -40,8 +41,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-3">
+    </div> 
+    <div class="col"> 
         <div class="card o-hidden">
             <div class="card-body bg-light-purpel">
                 <div class="media static-widget my-3">
@@ -52,10 +53,10 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-3">
+    </div> 
+    <div class="col"> 
         <div class="card o-hidden">
-            <div class="card-body bg-dark-blue">
+            <div class="card-body bg-secondary">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{$total_win}} : {{$total_lost}}</h1>
@@ -66,6 +67,70 @@
         </div>
     </div>
 </div>
+
+<div class="row"> 
+    <div class="col"> 
+        <div class="card o-hidden">
+            <div class="card-body bg-info">
+                <div class="media static-widget my-3">
+                    <div class="media-body text-center">
+                        <h1 class="font-roboto">{{ $total_prop_for_sell }}</h1>
+                        <h3 class="mb-0">Properties For Sale</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="col"> 
+        <div class="card o-hidden">
+            <div class="card-body bg-light-purpel">
+                <div class="media static-widget my-3">
+                    <div class="media-body text-center">
+                        <h1 class="font-roboto">{{ $total_prop_for_rent }}</h1>
+                        <h3 class="mb-0">Properties For Rent</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col"> 
+        <div class="card o-hidden">
+            <div class="card-body bg-success">
+                <div class="media static-widget my-3">
+                    <div class="media-body text-center">
+                        <h1 class="font-roboto">{{ $total_prop_for_rec }}</h1>
+                        <h3 class="mb-0">Residential</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="col"> 
+        <div class="card o-hidden">
+            <div class="card-body bg-light-orange">
+                <div class="media static-widget my-3">
+                    <div class="media-body text-center">
+                        <h1 class="font-roboto">{{ $total_prop_for_comm }}</h1>
+                        <h3 class="mb-0">Commercial</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="col"> 
+        <div class="card o-hidden">
+            <div class="card-body bg-light-green">
+                <div class="media static-widget my-3">
+                    <div class="media-body text-center">
+                        <h1 class="font-roboto">{{ $total_win }}</h1>
+                        <h3 class="mb-0">Industrial</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+
 <div class="row">
     <div class="col-md-12" x-show="isIncludes('New Leads')">
         <div class="card o-hidden">
