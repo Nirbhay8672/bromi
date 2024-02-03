@@ -68,10 +68,22 @@
     </div>
 </div>
 
-<div class="row"> 
+<div class="row">
     <div class="col"> 
         <div class="card o-hidden">
             <div class="card-body bg-info">
+                <div class="media static-widget my-3">
+                    <div class="media-body text-center">
+                        <h1 class="font-roboto">{{ $total_property }}</h1>
+                        <h3 class="mb-0">Total Property</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col"> 
+        <div class="card o-hidden">
+            <div class="card-body bg-light-green">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{ $total_prop_for_sell }}</h1>
@@ -95,7 +107,7 @@
     </div>
     <div class="col"> 
         <div class="card o-hidden">
-            <div class="card-body bg-success">
+            <div class="card-body bg-light-orange">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{ $total_prop_for_rec }}</h1>
@@ -107,23 +119,11 @@
     </div> 
     <div class="col"> 
         <div class="card o-hidden">
-            <div class="card-body bg-light-orange">
+            <div class="card-body bg-success">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{ $total_prop_for_comm }}</h1>
                         <h3 class="mb-0">Commercial</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> 
-    <div class="col"> 
-        <div class="card o-hidden">
-            <div class="card-body bg-light-green">
-                <div class="media static-widget my-3">
-                    <div class="media-body text-center">
-                        <h1 class="font-roboto">{{ $total_win }}</h1>
-                        <h3 class="mb-0">Industrial</h3>
                     </div>
                 </div>
             </div>
