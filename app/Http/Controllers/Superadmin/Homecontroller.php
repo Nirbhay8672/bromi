@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Builders;
 use App\Models\District;
+use App\Models\Projects;
 use App\Models\Taluka;
 use App\Models\TpScheme;
 use App\Models\User;
@@ -104,30 +106,33 @@ class Homecontroller extends Controller
 		$data->save();
 	}
 
-	// public function saveTpImages(Request $request)
-	// {
-	// 	if (!empty($request->tp_id) && !empty($request->images)) {
+	public function builders(Request $request)
+	{
+		if ($request->ajax()) {
 
-	// 		foreach ($request->file('images') as $key => $value) {
+			$data = User::join('roles','users.role_id','roles.id')
+				->select([
+					'users.id',
+					'users.email',
+					'users.mobile_number',
+					'users.first_name AS builder_name',
+					'roles.name AS role_name',
+				])
+				->where('roles.name', 'like', '%Builder%')
+				->get();
+			
+			$new_array = [];
 
-	// 			$ext = $value->getClientOriginalExtension();
-	// 			$fileName = str_replace('.' . $ext, '', $value->getClientOriginalName()) . "-" . time() . '.' . $ext;
-	// 			$fileName = str_replace('#', '', $fileName);
-	// 			$path = public_path() . config('constant.tp_images_url');
-	// 			File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
-	// 			$moved = $value->move($path, $fileName);
-	// 			if ($moved) {
-	// 				$land_images = new LandImages();
-	// 				$land_images->land_id = $request->land_id;
-	// 				$land_images->image = $fileName;
-	// 				$land_images->user_id = Auth::User()->id;
-	// 				$land_images->save();
-	// 			}
-	// 		}
-	// 		$all =  LandImages::where('land_id', $request->land_id)->pluck('image')->toArray();
-	// 		if (!empty($all)) {
-	// 			return json_encode($all);
-	// 		}
-	// 	}
-	// }
+			foreach ($data as $user) {
+				$project_count = Projects::where('user_id',$user['id'])->count();
+				$user['projects_count'] = $project_count;
+
+				array_push($new_array,$user);
+			}
+
+			return DataTables::of($new_array)->make(true);
+		}
+
+		return view('superadmin.builder.index');
+	}
 }
