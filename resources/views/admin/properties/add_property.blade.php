@@ -31,7 +31,7 @@
                                             <div class="stepwizard-step mb-5" style="text-align:initial">
                                                 <button class="btn btn-light" id="step1"
                                                     data-action="#profile-step">2</button>
-                                                <p class="ms-2">Profile Details</p>
+                                                <p class="ms-2">Property Details</p>
                                             </div>
 
                                             <div class="stepwizard-step" style="text-align:initial">
@@ -1157,25 +1157,25 @@
 
                                                         <div class="row ">
                                                             <div class="col-md-2 mb-3 the_total_units_in_project">
-                                                                <label for="Total Floor">Total Units in project</label>
+                                                                <label for="Total Floor">Units in project</label>
                                                                 <input class="form-control" name="total_units_in_project"
                                                                     id="total_units_in_project" type="text"
                                                                     autocomplete="off">
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_total_no_of_floor">
-                                                                <label for="Property on floor">Total no. of floor</label>
+                                                                <label for="Property on floor">no. of floor</label>
                                                                 <input class="form-control" name="total_no_of_floor"
                                                                     id="total_no_of_floor" type="text"
                                                                     autocomplete="off">
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_total_units_in_tower">
-                                                                <label for="Total Floor">Total Units in tower</label>
+                                                                <label for="Total Floor">Units in tower</label>
                                                                 <input class="form-control" name="total_units_in_tower"
                                                                     id="total_units_in_tower" type="text"
                                                                     autocomplete="off">
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_property_on_floors">
-                                                                <label for="Total Floor">Property On Floor</label>
+                                                                <label for="Total Floor">Units on Floor</label>
                                                                 <input class="form-control" name="property_on_floors"
                                                                     id="property_on_floors" type="text"
                                                                     autocomplete="off">

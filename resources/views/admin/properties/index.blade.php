@@ -683,7 +683,7 @@
                                         <label class="form-check-label" for="match_specific_type">Property
                                             Category</label>
                                     </div>
-									<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
+									<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
                                         <input class="form-check-input" checked id="match_specific_sub_type" type="checkbox">
                                         <label class="form-check-label" for="match_specific_sub_type">Property
                                           Sub Category</label>
@@ -708,10 +708,10 @@
                                         <label class="form-check-label" for="match_enquiry_size">Property Size</label>
                                     </div>
 
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
                                         <input class="form-check-input" id="match_inquiry_source" type="checkbox">
                                         <label class="form-check-label" for="match_inquiry_source">Enquiry Source</label>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                             <button class="btn btn-secondary" type="button" id="matchagain">Match</button>

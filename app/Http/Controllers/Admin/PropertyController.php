@@ -246,10 +246,9 @@ class PropertyController extends Controller
                         //     return $query->whereIn('properties.project_id', json_decode($enq->building_id));
                         // }
 
-                        if ($request->match_inquiry_source && !empty($enq->enquiry_source)) {
-                            // dd("match_inquiry_source", $enq->enquiry_source, "..", $request->match_inquiry_source);
-                            $query->where('properties.source_of_property', $enq->enquiry_source);
-                        }
+                        // if ($request->match_inquiry_source && !empty($enq->enquiry_source)) {
+                        //     $query->where('properties.source_of_property', $enq->enquiry_source);
+                        // }
                     }
                 })
                 ->orderByRaw('CASE

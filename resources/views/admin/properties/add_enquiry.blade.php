@@ -188,7 +188,8 @@
                                                                 @forelse ($configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_specific_type')
                                                                         <div class="btn-group bromi-checkbox-btn me-1 enquiry-type-element"
-                                                                            role="group"  data-enquiry-id="{{ $props['id'] }}"
+                                                                            role="group"
+                                                                            data-enquiry-id="{{ $props['id'] }}"
                                                                             aria-label="Basic radio toggle button group">
                                                                             <input type="radio"
                                                                                 data-parent_id="{{ $props['parent_id'] }}"
@@ -807,20 +808,7 @@
                                                                 </div>
                                                             </div>
                                                         </div> --}}
-                                                        <div class="form-group col-md-4 m-b-20">
-                                                            <select class="form-select" id="enquiry_source">
-                                                                <option value="">Enquiry Source</option>
-                                                                @forelse ($configuration_settings as $props)
-                                                                    @if ($props['dropdown_for'] == 'property_source')
-                                                                        <option data-parent_id="{{ $props['parent_id'] }}"
-                                                                            value="{{ $props['id'] }}">
-                                                                            {{ $props['name'] }}
-                                                                        </option>
-                                                                    @endif
-                                                                @empty
-                                                                @endforelse
-                                                            </select>
-                                                        </div>
+                                                        
                                                         <div class="form-group col-md-4 m-b-20 f-status">
                                                             <label class="select2_label" for="Furnished Status">Furnished
                                                                 Status</label>
@@ -883,6 +871,26 @@
                                                                 @empty
                                                                 @endforelse
                                                             </select>
+                                                        </div>
+                                                        <div class="form-group col-md-4 m-b-20">
+                                                            <select class="form-select" id="enquiry_source">
+                                                                <option value="">Enquiry Source</option>
+                                                                @forelse ($configuration_settings as $props)
+                                                                    @if ($props['dropdown_for'] == 'property_source')
+                                                                        <option data-parent_id="{{ $props['parent_id'] }}"
+                                                                            value="{{ $props['id'] }}" 
+                                                                            data-val="{{ $props['name'] }}">
+                                                                            {{ $props['name'] }}
+                                                                        </option>
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-3 m-b-20 the_source_refrence mb-3">
+                                                            <label for="Refrence">Refrence</label>
+                                                            <input class="form-control" name="refrence" id="refrence"
+                                                                type="text" autocomplete="off">
                                                         </div>
                                                         <div class="form-group col-md-3 m-b-4 mb-3 cat-zone">
                                                             <select class="form-select" id="zone" name="zone">
@@ -1059,6 +1067,17 @@
             $(document).on('change', '[name="property_type"]', function(e) {
                 $('input[name=property_category]:checked').prop('checked', false).trigger('change')
                 showReleventCategory()
+            })
+
+
+            $(document).on('change', '#enquiry_source', function(e) {
+                var TheStatus = $($(this).find(":selected")).attr('data-val');
+                console.log("the status ==", TheStatus);
+                if (TheStatus == 'Reference') {
+                    $('.the_source_refrence').show()
+                } else {
+                    $('.the_source_refrence').hide()
+                }
             })
 
             function showReleventCategory() {
@@ -1440,6 +1459,7 @@
                         $('#area_from_measurement').val(data.area_from_measurement).trigger('change');
                         $('#area_to_measurement').val(data.area_to_measurement).trigger('change');
                         $('#enquiry_source').val(data.enquiry_source).trigger('change');
+
                         $('#furnished_status').val(JSON.parse(data.furnished_status)).trigger('change');
                         $('#budget_from').val(data.budget_from);
                         $('#budget_to').val(data.budget_to);
@@ -1460,6 +1480,7 @@
                         $('#district_id').val(data.district_id);
                         $('#taluka_id').val(data.taluka_id);
                         $('#village_id').val(data.village_id);
+                        $('#refrence').val(data.enquiry_source_refrence);
 
                         if (data.other_contacts != '') {
                             details = JSON.parse(data.other_contacts);
@@ -1956,7 +1977,6 @@
 
 
             $(document).on('click', '#saveEnquiry', function(e) {
-                console.log("test submit");
                 e.preventDefault();
                 $("#modal_form").validate();
                 if (!$("#modal_form").valid()) {
@@ -2042,6 +2062,7 @@
                         property_type: $("[name=property_category]:checked").val(),
                         // configuration: $('[name=configuration]:checked').val(),
                         configuration: configuration,
+                        refrence: $('#refrence').val(),
                         area_from: $('#area_from').val(),
                         area_to: $('#area_to').val(),
                         area_from_measurement: $('#area_from_measurement').val(),
@@ -2130,7 +2151,7 @@
 
             function resetallfields() {
                 hidefields = ['div_office_type', 'div_retail_type', 'div_vila_type', 'div_flat_type', 'div_plot_type',
-                    'div_storage_type',
+                    'div_storage_type','the_source_refrence',
                     'div_property_address', 'div_flat_details', 'div_flat_details_2', 'div_flat_details_3',
                     'div_description_section', 'div_survey_details', 'div_tp_details',
                     'div_document_section', 'div_office_setup', 'div_road_width',
@@ -2163,7 +2184,7 @@
 
                 //Hide Plot/land while click on rent or both 
                 var theFor = $('input[name=enquiry_for]:checked').val();
-                console.log("The Forr Enq ==",theFor);
+                console.log("The Forr Enq ==", theFor);
                 if (theFor == 'Buy' && parent_val == '87') {
                     $('.enquiry-type-element[data-enquiry-id="256"]').show();
                 } else {
