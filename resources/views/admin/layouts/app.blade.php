@@ -423,15 +423,15 @@ Helper::set_default_measuerement();
                                             <ul class="bookmark-dropdown pb-0">
                                                 <li class="p-0">
                                                     <div class="row">
-
-                                                        <div class="col-4 text-center">
+                                                        <p>Enquiry / Property</p>
+                                                        <div class="col-4 text-center mb-3">
                                                             <div data-bs-toggle="modal" data-bs-target="#drop_enquiryModal" class="bookmark-content">
                                                                 <div class="bookmark-icon"><i data-feather="file-text"></i></div>
                                                                 <h5 class="mt-2"> <a href="javascript:void(0)">Add
                                                                         Enquiry</a></h5>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 text-center">
+                                                        <div class="col-4 text-center mb-3">
                                                             <div data-bs-toggle="modal" data-bs-target="#drop_instaModal" class="bookmark-content">
                                                                 <div class="bookmark-icon"><i data-feather="user"></i>
                                                                 </div>
@@ -439,6 +439,28 @@ Helper::set_default_measuerement();
                                                                         Insta property</a></h5>
                                                             </div>
                                                         </div>
+                                                        <div class="col-4 text-center mb-3 drop_list_url" data-url="{{ route('admin.project.add') }}">
+                                                            <div class="bookmark-content">
+                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
+                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add Project</a></h5>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-4 text-center mb-3 drop_list_url" data-url="{{ route('admin.property.add') }}">
+                                                            <div class="bookmark-content">
+                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
+                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add Propery</a></h5>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-4 text-center mb-3 drop_list_url" data-url="{{ route('admin.partner.index') }}">
+                                                            <div class="bookmark-content">
+                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
+                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add Partner</a></h5>
+                                                            </div>
+                                                        </div>
+
+                                                        <p>Tools</p>
 
                                                         <div class="col-4 text-center" data-bs-toggle="modal" data-bs-target="#drop_capital_gain_calculator">
                                                             <div class="bookmark-content">
