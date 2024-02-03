@@ -344,6 +344,12 @@ Helper::set_default_measuerement();
                                 </li>
 
                                 <li class="sidebar-list"><a
+                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.usersLoginActivity') active @endif"
+                                        href="{{ route('superadmin.usersLoginActivity') }}"><i class="fa fa-user"></i><span
+                                            class="lan-3">Login Activity</span></a>
+                                </li>
+
+                                <li class="sidebar-list"><a
                                         class="sidebar-link sidebar-title  @if ($route == 'superadmin.builders') active @endif"
                                         href="{{ route('superadmin.builders') }}"><i class="fa fa-user"></i><span
                                             class="lan-3">Builders</span></a>
@@ -358,10 +364,6 @@ Helper::set_default_measuerement();
                                         href="{{ route('superadmin.tickets') }}"><i class="fa fa-ticket"></i><span
                                             class="lan-3">Ticket System</span></a>
                                 </li>
-                                <!--<li class="sidebar-list"><a class="sidebar-link sidebar-title -->
-                                <!--        href="{{ route('superadmin.tickets') }}"><i class="fa fa-user"></i>-->
-                                <!--        <span="lan-3">Ticket System</span></a>-->
-                                <!--</li>-->
                                 <li class="sidebar-list"><a class="sidebar-link sidebar-title  @if ($route == 'superadmin.plans') active @endif"
                                         href="{{ route('superadmin.plans') }}"><i class="fa fa-user"></i><span
                                             class="lan-3">Plans</span></a>
