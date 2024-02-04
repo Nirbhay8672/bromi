@@ -828,7 +828,7 @@
                                                         <div class="form-group col-md-2 m-b-20">
                                                             <label for="Budget From">Budget From</label>
                                                             <input class="form-control indian_currency_amount"
-                                                                name="budget" id="budget_from" type="text"
+                                                                name="budget" value="0" id="budget_from" type="text"
                                                                 autocomplete="off">
                                                         </div>
 
