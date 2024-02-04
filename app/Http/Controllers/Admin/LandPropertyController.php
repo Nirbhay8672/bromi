@@ -43,7 +43,9 @@ public function index(Request $request)
 			$indId = [];
 			foreach ($dropdowns as $key => $value) {
 				if ($value['name'] ==  'Plot' || $value['name'] ==  'Land') {
-					$indId[] = $key;
+					if ($value['dropdown_for'] == 'property_specific_type') {
+						$indId[] = $key;
+					}
 				}
 			}
 			$data = Properties::with('Projects', 'Locality', 'Village')
