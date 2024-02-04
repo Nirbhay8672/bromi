@@ -51,20 +51,55 @@
                     <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
                         <input type="hidden" name="this_data_id" id="this_data_id">
                         <div class="row">
-                            <div class="form-group col-md-5 m-b-20">
-                                <input class="form-control" name="name" id="plan_name" type="text" placeholder="Name"
-                                    required="" autocomplete="off">
+
+                            <div class="form-group col-md-4 m-b-20">
+                                <div class="fname">
+                                    <input
+                                        class="form-control"
+                                        name="name"
+                                        id="plan_name"
+                                        type="text" 
+                                        placeholder="Name"
+                                        required=""
+                                        autocomplete="off"
+                                    >
+                                </div>
                             </div>
-                            <div class="form-group col-md-5 m-b-20">
-                                <input class="form-control" name="price" id="plan_price" type="text"
-                                    placeholder="Price" required="" autocomplete="off">
+
+                            <div class="form-group col-md-4 m-b-20">
+                                <div class="fname">
+                                    <input
+                                        class="form-control"
+                                        name="price"
+                                        id="plan_price"
+                                        type="text"
+                                        placeholder="Price"
+                                        required=""
+                                        autocomplete="off"
+                                    >
+                                </div>
                             </div>
+
+                            <div class="form-group col-md-4 m-b-20">
+                                <div class="fname">
+                                    <input
+                                        class="form-control"
+                                        name="user_limit"
+                                        id="user_limit"
+                                        type="text"
+                                        placeholder="User Limit"
+                                        required=""
+                                        autocomplete="off"
+                                    >
+                                </div>
+                            </div>
+
                             <div class="col-md-5 m-b-20">
                                 <button onclick=addFeature() class="btn btn-pill btn-primary" type="button">Add
                                     Feature</button>
                             </div>
-                            <div class="" id="feature-container">
 
+                            <div class="" id="feature-container">
                             </div>
                         </div>
                         <button class="btn btn-secondary" id="savePlan">Save</button>
@@ -96,15 +131,36 @@
                     $('#this_data_id').val(dataa.id);
                     $('#plan_name').val(dataa.name);
                     $('#plan_price').val(dataa.price);
+                    $('#user_limit').val(dataa.user_limit);
                     if (featurestring != '') {
                         features = featurestring.split('_---_')
                         $('#feature-container').html('');
                         features.forEach(element => {
-                            inp = '<div class="row"> <div class="col-md-6 m-b-20">' +
-                                '<input class="form-control" name="features[]" value="' + element +
-                                '" type="text"   placeholder="Feature" required=""  autocomplete="off">' +
-                                '<button  onclick=deletethis(this) class="btn-sm btn-pill btn-danger" type="button"><i class="fa fa-trash"></i></button>' +
-                                '</div> </div>';
+
+                            inp = `<div class="row">
+                                    <div class="form-group col-md-4 m-b-20">
+                                        <div class="fname">
+                                            <input
+                                                class="form-control"
+                                                name="features[]"
+                                                id="user_limit"
+                                                type="text"
+                                                placeholder="Feature"
+                                                required=""
+                                                value="${element}"
+                                                autocomplete="off"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <button
+                                            onclick="deletethis(this)"
+                                            class="btn btn-danger"
+                                            type="button"
+                                        ><i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>`;
                             $('#feature-container').append(inp)
                         });
                     }
@@ -114,14 +170,35 @@
         }
 
         function deletethis(params) {
-            $(params).parent().remove();
+            $(params).parent().parent().remove();
         }
 
         function addFeature() {
-            inp = '<div class="form-group col-md-6 m-b-20">' +
-                '<input class="form-control" name="features[]"  type="text" placeholder="Feature" required=""  autocomplete="off">' +
-                '<button  onclick=deletethis(this) class="btn btn-pill btn-danger" type="button">Delete</button>' +
-                '</div>';
+
+            inp = `<div class="row">
+                <div class="form-group col-md-4 m-b-20">
+                    <div class="fname">
+                        <input
+                            class="form-control"
+                            name="features[]"
+                            id="user_limit"
+                            type="text"
+                            placeholder="Feature"
+                            required=""
+                            autocomplete="off"
+                        >
+                    </div>
+                </div>
+                <div class="col-2">
+                    <button
+                        onclick="deletethis(this)"
+                        class="btn btn-danger"
+                        type="button"
+                    ><i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>`;
+            
             $('#feature-container').append(inp)
         }
 
@@ -174,6 +251,7 @@
                         id: id,
                         name: $('#plan_name').val(),
                         price: $('#plan_price').val(),
+                        user_limit: $('#user_limit').val(),
                         features: features,
                         _token: '{{ csrf_token() }}',
                     },

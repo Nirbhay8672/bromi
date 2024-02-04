@@ -32,19 +32,6 @@
                                         </div>
                                     </div>
                                 </div>
-								<div class="col-xxl-8 box-col-8 col-lg-8">
-                                    <div class="project-box"><span id="openAddFieldMOdal"
-                                            data-dropdown_for="enquiry_progress"
-                                            class="badge btn btn-primary badge-primary">Add</span>
-                                        <h6>Enquiry Progress</h6>
-                                        <div class="row details mt-5">
-                                            <ul class="drop_list_container" id="enquiry_progress_ul">
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>

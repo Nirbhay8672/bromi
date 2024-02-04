@@ -12,7 +12,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 use App\Models\Subplans;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminLoginController extends Controller
 {
@@ -69,6 +70,12 @@ class AdminLoginController extends Controller
 			if ($request->hasSession()) {
 				$request->session()->put('auth.password_confirmed_at', time());
 			}
+
+			DB::table('login_activities')->insert([
+				'user_id' => Auth::user()->id,
+				'ip_address' => $request->ip(),
+				'date_time' => Carbon::now(),
+			]);
 
 			if(Auth::user()->plan_id == null) {
 			    Session::put('user_id', Auth::user()->id);

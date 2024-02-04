@@ -10,6 +10,7 @@ use App\Models\Api\Properties;
 use App\Models\Enquiries;
 use App\Models\Projects;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Session;
@@ -150,5 +151,22 @@ class UserController extends Controller
 		if (!empty($request->id)) {
 			$data = User::where('id', $request->id)->delete();
 		}
+	}
+
+	public function loginActivity(Request $request)
+	{
+		if ($request->ajax()) {
+
+			$data = DB::table('login_activities')->join('users','login_activities.user_id','users.id')
+				->select([
+					'login_activities.ip_address',
+					'users.first_name AS username',
+					'login_activities.date_time'
+				])->where('user_id','!=',6)->get();
+
+			return DataTables::of($data)->make(true);
+		}
+
+		return view('superadmin.users.login_activity');
 	}
 }

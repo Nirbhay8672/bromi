@@ -112,5 +112,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/settings-get-village', [SuperVillageController::class, 'get_village'])->name('superadmin.settings.getvillage');
 		Route::post('/settings-save-village', [SuperVillageController::class, 'village_store'])->name('superadmin.settings.saveVillage');
 		Route::post('/settings-delete-village', [SuperVillageController::class, 'village_delete'])->name('superadmin.settings.deletevillage');
+
+		Route::any('/users-login-activity', [UserController::class, 'loginActivity'])->name('superadmin.usersLoginActivity');
 	});
 });
