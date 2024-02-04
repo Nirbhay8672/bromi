@@ -30,7 +30,7 @@ class LandPropertyController extends Controller
 		$this->middleware('auth');
 	}
 
-public function index(Request $request)
+	public function index(Request $request)
 	{
 		if ($request->ajax()) {
 			$dropdowns = DropdownSettings::get()->toArray();
@@ -43,7 +43,9 @@ public function index(Request $request)
 			$indId = [];
 			foreach ($dropdowns as $key => $value) {
 				if ($value['name'] ==  'Plot' || $value['name'] ==  'Land') {
-					$indId[] = $key;
+					if ($value['dropdown_for'] == 'property_specific_type') {
+						$indId[] = $key;
+					}
 				}
 			}
 			$data = Properties::with('Projects', 'Locality', 'Village')
@@ -446,7 +448,7 @@ public function index(Request $request)
 		}
 	}
 
-public function saveLandImages(Request $request)
+	public function saveLandImages(Request $request)
 	{
 		$landId = $request->input('land_id');
 		$proId = $request->input('pro_id');
