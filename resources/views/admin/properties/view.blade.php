@@ -331,7 +331,7 @@
                                                                 @endif
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Farmhouse' || $type == 'Plot/Land')
+                                                        @if ($type == 'Farmhouse' || $type == 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_6">
                                                                 <h6><b>District</b></h6>
                                                             </div>
@@ -383,7 +383,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Land/Plot' || $type == 'Plot/Land')
+                                                        @if ($type == 'Land/Plot' || $type == 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_11">
                                                                 <h6><b>Length of Plot</b></h6>
                                                             </div>
@@ -439,7 +439,7 @@
                                                                 $type == 'Office' ||
                                                                 $type == 'Retail' ||
                                                                 $type == 'Storage/industrial' ||
-                                                                $type == 'Plot/Land')
+                                                                $type == 'Land')
                                                             @if ($type == 'Flat' || $type == 'PenthHouse' || $type == 'Office' || $type == 'Retail')
                                                                 <div class="form-group col-4 m-b-10 data_conent_15">
                                                                     <h6><b>Total Units in project</b></h6>
@@ -540,7 +540,7 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
-                                                            @if ($type == 'Land/Plot' || $type == 'Plot/Land')
+                                                            @if ($type == 'Land/Plot' || $type == 'Land')
                                                                 <div class="form-group col-4 m-b-10 data_conent_24">
                                                                     <h6><b>No Of Floors Allowed</b></h6>
                                                                 </div>
@@ -580,7 +580,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Plot/Land' || $type == 'Storage/industrial')
+                                                        @if ($type == 'Land' || $type == 'Storage/industrial')
                                                             <div class="form-group col-4 m-b-10 data_conent_27">
                                                                 <h6><b>Road width of front side</b></h6>
                                                             </div>
@@ -595,7 +595,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Plot/Land')
+                                                        @if ($type == 'Land')
                                                             @if (!empty($property->construction_allowed_for))
                                                                 <div class="form-group col-4 m-b-10 data_conent_106">
                                                                     <h6><b>Construction Allowed For</b></h6>
@@ -731,7 +731,7 @@
                                                             </div>
                                                         @endif
 
-                                                        @if ($type == 'Plot/Land')
+                                                        @if ($type == 'Land')
                                                             {{-- <div class="form-group col-4 m-b-10 data_conent_44">
                                                                 <h6><b>Survey Number</b></h6>
                                                             </div>
@@ -840,7 +840,7 @@
                                                         </div> --}}
                                                     </div>
 
-                                                    {{-- @if ($type !== 'Land/Plot' && $type !== 'Plot/Land' && $type !== 'Storage/industrial')
+                                                    {{-- @if ($type !== 'Land/Plot' && $type !== 'Land' && $type !== 'Storage/industrial')
                                                         <div class="row mt-1">
                                                             <div class="form-group col-md-12">
                                                                 <h5 class="border-style">Care Taker Information</h5>
@@ -922,7 +922,7 @@
                                                         <div class="form-group col-md-12">
                                                             <h5 class="border-style">Other Details</h5>
                                                         </div>
-                                                        @if ($type != 'Land/Plot' && $type != 'Plot/Land')
+                                                        @if ($type != 'Land/Plot' && $type != 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_73">
                                                                 <h6><b>FourWheeler Parking</b></h6>
                                                             </div>
@@ -1029,7 +1029,7 @@
 														@endif
                                                     </div>
 
-													@if ($type === "Plot/Land")
+													@if ($type === "Land")
 														<div class="row mt-4">
 															<div class="form-group col-md-12">
 																<h5 class="border-style">Unit Details</h5>
@@ -1152,7 +1152,7 @@
 																								@endif
 																							</div>
 
-																							@elseif ($type !== 'Plot/Land' && $type !== 'Storage/industrial' && $type !== 'Land/Plot')
+																							@elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Land/Plot')
 																							<div class="dropdown-basic">
 																								<div class="dropdown">
 																									<i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
@@ -1287,7 +1287,7 @@
                                                         </div>
                                                     @endif
                                                     <!-- Second Image Section -->
-                                                    @if ($type === 'Plot/Land' && count($construction_docs_list > 0))  
+                                                    @if ($type === 'Land' && count($construction_docs_list > 0))  
                                                     <div class="flex-fill text-center" style="margin-left: 20px;">
                                                         <h5 class="border-style">Constrution Image</h5>
                                                         <img src="{{ asset('imgIcon.png') }}" alt="" onclick="image1()" style="height: 90px;">
@@ -1556,7 +1556,7 @@
                                                                 @endif
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Farmhouse' || $type == 'Plot/Land')
+                                                        @if ($type == 'Farmhouse' || $type == 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_6">
                                                                 <h6><b>District</b></h6>
                                                             </div>
@@ -1606,7 +1606,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Land/Plot' || $type == 'Plot/Land')
+                                                        @if ($type == 'Land/Plot' || $type == 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_11">
                                                                 <h6><b>Length of Plot</b></h6>
                                                             </div>
@@ -1662,7 +1662,7 @@
                                                                 $type == 'Office' ||
                                                                 $type == 'Retail' ||
                                                                 $type == 'Storage/industrial' ||
-                                                                $type == 'Plot/Land')
+                                                                $type == 'Land')
                                                             @if ($type == 'Flat' || $type == 'PenthHouse' || $type == 'Office' || $type == 'Retail')
                                                                 <div class="form-group col-4 m-b-10 data_conent_15">
                                                                     <h6><b>Total Units in project</b></h6>
@@ -1763,7 +1763,7 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
-                                                            @if ($type == 'Land/Plot' || $type == 'Plot/Land')
+                                                            @if ($type == 'Land/Plot' || $type == 'Land')
                                                                 <div class="form-group col-4 m-b-10 data_conent_24">
                                                                     <h6><b>No Of Floors Allowed</b></h6>
                                                                 </div>
@@ -1803,7 +1803,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Plot/Land' || $type == 'Storage/industrial')
+                                                        @if ($type == 'Land' || $type == 'Storage/industrial')
                                                             <div class="form-group col-4 m-b-10 data_conent_27">
                                                                 <h6><b>Road width of front side</b></h6>
                                                             </div>
@@ -1818,7 +1818,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Plot/Land')
+                                                        @if ($type == 'Land')
                                                             @if (!empty($property->construction_allowed_for))
                                                                 <div class="form-group col-4 m-b-10 data_conent_106">
                                                                     <h6><b>Construction Allowed For</b></h6>
@@ -1936,7 +1936,7 @@
                                                             </div>
                                                         @endif
 
-                                                        @if ($type == 'Plot/Land')
+                                                        @if ($type == 'Land')
                                                             {{-- <div class="form-group col-4 m-b-10 data_conent_44">
                                                                 <h6><b>Survey Number</b></h6>
                                                             </div>
@@ -2045,7 +2045,7 @@
                                                         </div> --}}
                                                     </div>
 
-                                                    {{-- @if ($type !== 'Land/Plot' && $type !== 'Plot/Land' && $type !== 'Storage/industrial')
+                                                    {{-- @if ($type !== 'Land/Plot' && $type !== 'Land' && $type !== 'Storage/industrial')
                                                         <div class="row mt-1">
                                                             <div class="form-group col-md-12">
                                                                 <h5 class="border-style">Care Taker Information</h5>
@@ -2084,7 +2084,7 @@
                                                         <div class="form-group col-md-12">
                                                             <h5 class="border-style">Other Details</h5>
                                                         </div>
-                                                        @if ($type != 'Land/Plot' && $type != 'Plot/Land')
+                                                        @if ($type != 'Land/Plot' && $type != 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_73">
                                                                 <h6><b>FourWheeler Parking</b></h6>
                                                             </div>
@@ -2196,7 +2196,7 @@
 
                                         <div class="tab-pane fade " id="v-property-price" role="tabpanel"
                                             aria-labelledby="v-property-price-tab">.
-											@if ($type === "Plot/Land")
+											@if ($type === "Land")
 												<div class="row">
                                                     <div class="form-group col-md-12">
                                                         <h5 class="border-style">Unit Details</h5>
@@ -2316,7 +2316,7 @@
 																					<div class="col-4 d-flex justify-content-between">
 																						<b>Remarks:</b> {{isset($value[9][0])? $value[9][0] : '' }}
 																					</div> --}}
-																					@elseif ($type !== 'Plot/Land' && $type !== 'Storage/industrial' && $type !== 'Land/Plot')
+																					@elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Land/Plot')
 																					<div class="dropdown-basic">
 																						<div class="dropdown">
 																							<i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
@@ -2596,7 +2596,7 @@
                                                 </div>
                                             </div>
                                         </div> --}}
-                                        @if ($type === 'Plot/Land' && count($construction_docs_list > 0))  
+                                        @if ($type === 'Land' && count($construction_docs_list > 0))  
                                         <div class="modal fade" id="imageModel2" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Construction Docs Section -->

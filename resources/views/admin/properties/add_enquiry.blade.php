@@ -1122,7 +1122,7 @@
                 } else if (category_type == 'Storage/industrial') {
                     $(".f-status").hide();
                     $('.div_storage_type').show()
-                } else if (category_type == 'Plot/Land') {
+                } else if (category_type == 'Land') {
                     $('.div_plot_type').show()
                     $(".f-status").hide();
                 } else if (category_type == 'Farmhouse') {
@@ -2007,7 +2007,7 @@
                     var configuration = $('input[name="office_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
-                } else if ($('input[name=property_category]:checked').attr('data-val') == 'Plot/Land') {
+                } else if ($('input[name=property_category]:checked').attr('data-val') == 'Land') {
                     var configuration = $('input[name="plot_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
@@ -2182,7 +2182,7 @@
                     }
                 });
 
-                //Hide Plot/land while click on rent or both 
+                //Hide Land while click on rent or both 
                 var theFor = $('input[name=enquiry_for]:checked').val();
                 console.log("The Forr Enq ==", theFor);
                 if (theFor == 'Buy' && parent_val == '87') {

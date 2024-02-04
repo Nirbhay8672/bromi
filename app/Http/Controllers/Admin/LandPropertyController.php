@@ -42,7 +42,7 @@ public function index(Request $request)
 			// Bharat land/plot filter
 			$indId = [];
 			foreach ($dropdowns as $key => $value) {
-				if ($value['name'] ==  'Land/Plot' || $value['name'] ==  'Plot/Land') {
+				if ($value['name'] ==  'Land/Plot' || $value['name'] ==  'Land') {
 					$indId[] = $key;
 				}
 			}
@@ -349,7 +349,7 @@ public function index(Request $request)
 		$property_configuration_settings = DropdownSettings::get()->toArray();
 		$prop_type = [];
 		foreach ($property_configuration_settings as $key => $value) {
-			// if (($value['name'] == 'Land/Plot' || $value['name'] ==  'Plot/Land') && str_contains($value['dropdown_for'], 'property_')) {
+			// if (($value['name'] == 'Land/Plot' || $value['name'] ==  'Land') && str_contains($value['dropdown_for'], 'property_')) {
 			// 	array_push($prop_type, $value['id']);
 			// }
 			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {

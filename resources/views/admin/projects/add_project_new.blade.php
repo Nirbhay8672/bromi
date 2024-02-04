@@ -6256,7 +6256,7 @@
                     addAddAreaButtons(['the_carpet_plot_area', 'the_constructed_carpet_area'], ['Add Carpet plot Area',
                         'Add Constructed Carpet Area'
                     ]);
-                } else if (category_type == 'Plot/Land') {
+                } else if (category_type == 'Land') {
                     showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
                         'div_area_size_details', 'div_borewell',
                         'the_length_of_plot', 'the_width_of_plot', 'div_flat_details_5',
@@ -6379,7 +6379,7 @@
                     addAddAreaButtons(['the_carpet_plot_area', 'the_constructed_carpet_area'], ['Add Carpet plot Area',
                         'Add Constructed Carpet Area'
                     ]);
-                } else if (category_type == 'Plot/Land') {
+                } else if (category_type == 'Land') {
                     showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
                         'div_area_size_details', 'div_borewell',
                         'the_length_of_plot', 'the_width_of_plot', 'div_flat_details_5',
