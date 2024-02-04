@@ -1016,10 +1016,10 @@ $class_namee = Helper::cleanString($class_namee);
                                 <label class="form-check-label" for="match_enquiry_size">Enquiry Size</label>
                             </div>
 
-                            <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                            {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
                                 <input class="form-check-input" id="match_inquiry_source" type="checkbox">
                                 <label class="form-check-label" for="match_inquiry_source">Enquiry Source</label>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <button class="btn btn-secondary" type="button" id="matchagain">Match</button>
@@ -1928,6 +1928,9 @@ $matchEnqSource = isset($_GET['match_inquiry_source']) ? $_GET['match_inquiry_so
         e.preventDefault();
         var id = $('#transfer_form_id').val()
         var employee = $('#transfer_employee_id').val()
+        if(employee){
+            $('#transfermodal').modal('hide');
+        }
         $.ajax({
             type: "POST",
             url: "{{ route('admin.transferEnquiry') }}",

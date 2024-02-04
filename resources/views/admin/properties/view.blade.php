@@ -1280,22 +1280,26 @@
                                                 </div>
                                                 <div class="col-md-6 d-flex" style="height: 300px">
                                                     <!-- First Image Section -->
-                                                    <div class="flex-fill text-center">
-                                                        <h5 class="border-style">Property Image</h5>
-                                                        <img src="{{ asset('gallary_image.jpeg') }}" alt="" onclick="image()" style="height: 90px;">
-                                                    </div>
+                                                    @if(count($multiple_image) > 0)
+                                                        <div class="flex-fill text-center">
+                                                            <h5 class="border-style">Property Image</h5>
+                                                            <img src="{{ asset('gallary_image.jpeg') }}" alt="" onclick="image()" style="height: 90px;">
+                                                        </div>
+                                                    @endif
                                                     <!-- Second Image Section -->
-                                                    @if ($type === 'Plot/Land')
+                                                    @if ($type === 'Plot/Land' && count($construction_docs_list > 0))  
                                                     <div class="flex-fill text-center" style="margin-left: 20px;">
                                                         <h5 class="border-style">Constrution Image</h5>
                                                         <img src="{{ asset('imgIcon.png') }}" alt="" onclick="image1()" style="height: 90px;">
                                                     </div>
                                                     @endif   
                                                     <!-- Third Image Section -->
-                                                    <div class="flex-fill text-center" style="margin-left: 20px;">
-                                                        <h5 class="border-style">Property Documents</h5>
-                                                        <img src="{{ asset('docIcon.png') }}" alt="" onclick="image2()" style="height: 90px;">
-                                                    </div>
+                                                    @if (count($multiple_image) > 0)
+                                                        <div class="flex-fill text-center" style="margin-left: 20px;">
+                                                            <h5 class="border-style">Property Documents</h5>
+                                                            <img src="{{ asset('docIcon.png') }}" alt="" onclick="image2()" style="height: 90px;">
+                                                        </div>
+                                                    @endif
                                                 </div>
                                                 <div class="col-md-6">
                                                     <h5 class="border-style">Matching Enquiry</h5>
@@ -2481,61 +2485,50 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="modal fade" id="imageModel" tabindex="-1" aria-labelledby="imageLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-fullscreen" style="position: relative;text-align: -webkit-center;">
-                                                <div class="modal-content" style="max-height: 80%; height: auto; width: 40%;">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="imageLabel">Property Images</h5>
-                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div id="imageSlider" class="image-slider">
-                                                            @php
-                                                                $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'];
-                                                                $hasImage = false;
-                                                            @endphp
-                                                            @foreach ($multiple_image as $image)
+                                        @if(count($multiple_image) > 0)
+                                            <div class="modal fade" id="imageModel" tabindex="-1" aria-labelledby="imageLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-fullscreen" style="position: relative;text-align: -webkit-center;">
+                                                    <div class="modal-content" style="max-height: 80%; height: auto; width: 40%;">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="imageLabel">Property Images</h5>
+                                                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div id="imageSlider" class="image-slider">
                                                                 @php
-                                                                    $path = pathinfo($image->image, PATHINFO_EXTENSION);
+                                                                    $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'];
+                                                                    $hasImage = false;
                                                                 @endphp
-                                                                {{-- @if (in_array($path, $imageExtensions))
-                                                                    <div class="slide">
-                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="" class="img-fluid" data-bs-toggle="modal" data-bs-target="#fullScreenImage" style="width: 500px;height: 348px">
-                                                                        
-                                                                        <span class="remove-icon" data-image-id="{{ $image->id }}" onclick="removeImage(this)">
-                                                                            <i class="fa fa-trash"></i>
-                                                                        </span>
-                                                                    </div>
+                                                                @foreach ($multiple_image as $image)
                                                                     @php
-                                                                        $hasImage = true; 
+                                                                        $path = pathinfo($image->image, PATHINFO_EXTENSION);
                                                                     @endphp
-                                                                @endif --}}
+                                                                    @if (in_array($path, $imageExtensions))
+                                                                        <div class="slide" style="position: relative;">
+                                                                            <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="" class="img-fluid" data-bs-toggle="modal" data-bs-target="#fullScreenImage" style="width: 500px;height: 348px">
+                                                                            <span class="remove-icon" data-image-id="{{ $image->id }}" onclick="removeImage(this)" style="position: absolute; top: 0; right: 0; cursor: pointer;">
+                                                                                <i class="fa fa-trash"></i>
+                                                                            </span>                                                                        
+                                                                        </div>
+                                                                        @php
+                                                                            $hasImage = true; 
+                                                                        @endphp
+                                                                    @endif
 
-                                                                @if (in_array($path, $imageExtensions))
-                                                                    <div class="slide" style="position: relative;">
-                                                                        <img src="{{ asset('/upload/land_images/' . $image->image) }}" alt="" class="img-fluid" data-bs-toggle="modal" data-bs-target="#fullScreenImage" style="width: 500px;height: 348px">
-                                                                        <span class="remove-icon" data-image-id="{{ $image->id }}" onclick="removeImage(this)" style="position: absolute; top: 0; right: 0; cursor: pointer;">
-                                                                            <i class="fa fa-trash"></i>
-                                                                        </span>                                                                        
-                                                                    </div>
-                                                                    @php
-                                                                        $hasImage = true; 
-                                                                    @endphp
-                                                                @endif
-
-                                                            @endforeach
+                                                                @endforeach
+                                                            </div>
                                                         </div>
+                                                        @if ($hasImage)
+                                                            <div class="modal-footer">
+                                                                <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'images', 'prop' => $property->id]) }}">Download Zip</a>
+                                                            </div>
+                                                        @else
+                                                            <center><h4>No Images Found</h4></center>
+                                                        @endif
                                                     </div>
-                                                    @if ($hasImage)
-                                                        <div class="modal-footer">
-                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'images', 'prop' => $property->id]) }}">Download Zip</a>
-                                                        </div>
-                                                    @else
-                                                        <center><h4>No Images Found</h4></center>
-                                                    @endif
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
                                         
                                         <!-- Full-screen image modal -->
                                         <div class="modal fade" id="fullScreenImage" tabindex="-1" aria-labelledby="fullScreenImageLabel" aria-hidden="true">
@@ -2603,7 +2596,7 @@
                                                 </div>
                                             </div>
                                         </div> --}}
-                                        @if ($type === 'Plot/Land')  
+                                        @if ($type === 'Plot/Land' && count($construction_docs_list > 0))  
                                         <div class="modal fade" id="imageModel2" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Construction Docs Section -->
@@ -2644,6 +2637,7 @@
                                             </div>
                                         </div>
                                        @endif
+                                       @if (count($multiple_image) > 0)
                                         <div class="modal fade" id="imageModel3" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Document Section -->
@@ -2681,6 +2675,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @endif
                                        
                                         <style>
                                         .image-slider {
@@ -3172,18 +3167,6 @@
             $('#fullScreenImageView').attr('src', imgSrc);
         });
         
-        function showfile(event) {
-            event.preventDefault(); // Prevent the default behavior of the link
-
-            var link = event.target; // Get the clicked <a> tag
-            var href = link.getAttribute('value'); // Get the value of the 'href' attribute
-
-            console.log(href); // Output the 'href' value in the browser console or perform further actions
-
-            var newTab = window.open(href, '_blank');
-            newTab.opener = null;
-
-        }
         for (let i = 1; i < 159; i++) {
             if ($('.data_conent_' + i).length > 1) {
                 var strr = $($('.data_conent_' + i)[1]).html()

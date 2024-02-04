@@ -72,7 +72,7 @@ class EnquiriesController extends Controller
 				return ($var['name'] == 'only-assigned');
 			});
 			
-			if (count($new) > 0 &&  $user->role_id !== "1") {
+			if (count($new) > 0 &&  $user->role_id !== 1) {
                 
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
@@ -250,11 +250,9 @@ class EnquiriesController extends Controller
 							}
 
 							// Advertise Prop =  sorce enq
-							if ($request->match_inquiry_source) {
-								// dd("enquiry_source ALL", $request->all());
-								// dd("enquiry_source", $request->match_inquiry_source, "...", $pro->source_of_property);
-								$query->where('enquiry_source', $pro->source_of_property);
-							}
+							// if ($request->match_inquiry_source) {
+							// 	$query->where('enquiry_source', $pro->source_of_property);
+							// }
 
 							// size range = prop salable area
 							if ($request->match_enquiry_size) {
@@ -1108,6 +1106,7 @@ class EnquiriesController extends Controller
 		$data->configuration = json_encode($request->configuration);
 		$data->area_from = $request->area_from;
 		$data->area_to = $request->area_to;
+		$data->enquiry_source_refrence = $request->refrence;
 		$data->area_from_measurement = $request->area_from_measurement;
 		$data->area_to_measurement = $request->area_to_measurement;
 		$data->enquiry_source = $request->enquiry_source;

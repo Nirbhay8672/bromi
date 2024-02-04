@@ -246,32 +246,31 @@ class PropertyController extends Controller
                         //     return $query->whereIn('properties.project_id', json_decode($enq->building_id));
                         // }
 
-                        if ($request->match_inquiry_source && !empty($enq->enquiry_source)) {
-                            // dd("match_inquiry_source", $enq->enquiry_source, "..", $request->match_inquiry_source);
-                            $query->where('properties.source_of_property', $enq->enquiry_source);
-                        }
+                        // if ($request->match_inquiry_source && !empty($enq->enquiry_source)) {
+                        //     $query->where('properties.source_of_property', $enq->enquiry_source);
+                        // }
                     }
                 })
                 ->orderByRaw('CASE
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
 				END,  properties.id DESC');
-				
-				
-				$parts = explode('?', $request->location);
 
-				if (count($parts) > 1) {
-					$value = $parts[1];
-					$value = trim($value);
 
-					if (strpos($value, 'data_id') !== false) {
-						$value_part = explode('=', $value);
-						if($value_part[1] > 0) {
-							$data->where('properties.id', $value_part[1]);
-						}
-					}
-				}
-				 $data = $data->get()->filter(function ($value) use ($request) {
+            $parts = explode('?', $request->location);
+
+            if (count($parts) > 1) {
+                $value = $parts[1];
+                $value = trim($value);
+
+                if (strpos($value, 'data_id') !== false) {
+                    $value_part = explode('=', $value);
+                    if ($value_part[1] > 0) {
+                        $data->where('properties.id', $value_part[1]);
+                    }
+                }
+            }
+            $data = $data->get()->filter(function ($value) use ($request) {
                 $theArea = 0;
 
                 if (!empty($value->salable_area)) {
@@ -439,12 +438,8 @@ class PropertyController extends Controller
 
                     if (!is_null($row->configuration)) {
                         $catId = (int) $row->configuration;
-                        // dd("cat id :",$catId);
                         //$getsub_category = Helper::getsubcategory($catId);
                         $getsub_category = $new_array[$catId];
-                        // dd($getsub_category);
-
-                        // dd($catId,$getsub_category);
                         if (!is_null($getsub_category)) {
                             $sub_cat = ' | ' . $getsub_category;
                             if ($sub_cat == " | Agricultural/Farm Land") {
@@ -455,7 +450,6 @@ class PropertyController extends Controller
                     //$category = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | '. $dropdowns[$row->property_category]['name'] : '');
                     $category = $sub_cat;
                     // BHARAT HIDE FURNISHED
-                    // dd($row->property_category,"fr");
                     if ($row->property_category == '256') {
                         $fstatus = '';
                     } else {
@@ -483,16 +477,24 @@ class PropertyController extends Controller
                         $salable_area_print = "Area Not Available";
                     }
 
+                    if ($row->Property_priority == "91") {
+                        // $row->image_path = asset('/upload/prop_images/bluestar.png');
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/blue512.png') . '" alt="">';
+                    } else if ($row->Property_priority == "90") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/yellownew512.png') . '" alt="">';
+                    } else if ($row->Property_priority == "17") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/red512.png') . '" alt="">';
+                    }
                     try {
                         return '
-						<td style="vertical-align:top">
-						' . ((!empty($forr)) ? $forr : '') . $category . '
-						<font size="2" style="font-style:italic">
-						<br>
-						' . $salable_area_print . '
-						</font>
-						<br>' . $fstatus . '
-						</td>';
+                        <td style="vertical-align:top">
+                            ' . ((!empty($forr)) ? $forr : '') . $category . '
+                            <font size="2" style="font-style:italic">
+                            <br>
+                            ' . $salable_area_print . '
+                            </font>
+                            <br>' . $fstatus . '.' . $row->image_path . '
+                        </td>';
                     } catch (\Throwable $th) {
                         dd($th);
                     }
@@ -1767,7 +1769,7 @@ class PropertyController extends Controller
 
         return view('admin.properties.shared_index');
     }
-     public function importProperty(Request $request)
+    public function importProperty(Request $request)
     {
         $file = $request->file('csv_file');
         $name = Str::random(10) . '.xlsx';
@@ -1933,10 +1935,10 @@ class PropertyController extends Controller
                     'constructed_carpet_area' => '_-||-_117',
                     'constructed_salable_area' => '_-||-_117',
                     'configuration' => $value['Subcategory'],
-                    'carpet_area' => $value['Carpet Area'].'_-||-_117',
-                    'carpet_measurement' => $carpet_measurement_id.'_-||-_117',
+                    'carpet_area' => $value['Carpet Area'] . '_-||-_117',
+                    'carpet_measurement' => $carpet_measurement_id . '_-||-_117',
                     'super_builtup_area' => $value['Salable Area'],
-                    'super_builtup_measurement' => $super_measurement_id.'_-||-_117',
+                    'super_builtup_measurement' => $super_measurement_id . '_-||-_117',
                     'hot_property' => $hot_property,
                     'furnished_status' => $furnished_status_id,
                     // 'price' => $value['Price'] . ' ' . $value['Price Unit'],
@@ -2057,38 +2059,114 @@ class PropertyController extends Controller
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property', 'multiple_image','construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property', 'multiple_image', 'construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
+
+    // public function downloadZip($type, $prop)
+    // {
+    //     $selectedFiles = $this->getSelectedFiles($type, $prop);
+
+    //     if (count($selectedFiles) === 1) {
+    //         $image = reset($selectedFiles); // Get the first element of the array
+    //         $path = public_path('upload/land_images/' . $image->image);
+
+    //         if (file_exists($path)) {
+    //             return response()->download($path)->deleteFileAfterSend(true);
+    //         } else {
+    //             return response('File not found', 404);
+    //         }
+    //     } else {
+    //         $zipFileName = 'bromi_' . $type . '_files.zip';
+    //         $zip = new ZipArchive();
+
+    //         if ($zip->open($zipFileName, ZipArchive::CREATE) !== true) {
+    //             return response('Error opening the ZIP file', 500);
+    //         }
+
+    //         foreach ($selectedFiles as $file) {
+    //             $path = public_path('upload/land_images/' . $file->image);
+    //             if (file_exists($path)) {
+    //                 $zip->addFile($path, $file->image);
+    //             } else {
+    //                 return response('File not found: ' . $path, 404);
+    //             }
+    //         }
+
+    //         $zip->close();
+
+    //         return response()->download($zipFileName)->deleteFileAfterSend(true);
+    //     }
+    // }
 
     public function downloadZip($type, $prop)
     {
-        // Construct the ZIP file name
-        $zipFileName = 'bromi_' . $type . '_files.zip';
-        // $zipFileName = storage_path('app/public/bromi_' . $type . '_files.zip');
-
-
-        $zip = new ZipArchive();
-
-        if ($zip->open($zipFileName, ZipArchive::CREATE) !== true) {
-            return response('Error opening the ZIP file', 500);
-        }
-
         $selectedFiles = $this->getSelectedFiles($type, $prop);
 
-        foreach ($selectedFiles as $file) {
+        if (count($selectedFiles) === 1) {
+            // If only one file, directly download the document
+            $file = reset($selectedFiles); // Get the first element of the array
             $path = public_path('upload/land_images/' . $file->image);
+
             if (file_exists($path)) {
-                $zip->addFile($path, $file->image);
+                return response()->download($path)->deleteFileAfterSend(true);
             } else {
-                return response('File not found: ' . $path, 404);
+                return response('File not found', 404);
             }
+        } else {
+            // If more than one file, create a zip
+            $zipFileName = 'bromi_' . $type . '_files.zip';
+            $zip = new ZipArchive();
+
+            if ($zip->open($zipFileName, ZipArchive::CREATE) !== true) {
+                return response('Error opening the ZIP file', 500);
+            }
+
+            foreach ($selectedFiles as $file) {
+                $path = public_path('upload/land_images/' . $file->image);
+                if (file_exists($path)) {
+                    $zip->addFile($path, $file->image);
+                } else {
+                    return response('File not found: ' . $path, 404);
+                }
+            }
+
+            $zip->close();
+
+            // Create a BinaryFileResponse to send the ZIP file.
+            return response()->download($zipFileName)->deleteFileAfterSend(true);
         }
-
-        $zip->close();
-
-        // Create a BinaryFileResponse to send the ZIP file.
-        return response()->download($zipFileName)->deleteFileAfterSend(true);
     }
+
+
+    // public function downloadZip($type, $prop)
+    // {
+    //     // Construct the ZIP file name
+    //     $zipFileName = 'bromi_' . $type . '_files.zip';
+    //     // $zipFileName = storage_path('app/public/bromi_' . $type . '_files.zip');
+
+
+    //     $zip = new ZipArchive();
+
+    //     if ($zip->open($zipFileName, ZipArchive::CREATE) !== true) {
+    //         return response('Error opening the ZIP file', 500);
+    //     }
+
+    //     $selectedFiles = $this->getSelectedFiles($type, $prop);
+
+    //     foreach ($selectedFiles as $file) {
+    //         $path = public_path('upload/land_images/' . $file->image);
+    //         if (file_exists($path)) {
+    //             $zip->addFile($path, $file->image);
+    //         } else {
+    //             return response('File not found: ' . $path, 404);
+    //         }
+    //     }
+
+    //     $zip->close();
+
+    //     // Create a BinaryFileResponse to send the ZIP file.
+    //     return response()->download($zipFileName)->deleteFileAfterSend(true);
+    // }
 
 
     private function getSelectedFiles($type, $prop)

@@ -32,20 +32,20 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Enquiries</h5>
-                                <a class="btn btn-primary btn-air-primary" href="{{ route('admin.enquiry.add') }}">Add New
-                                    Enquiry</a>
-                                <button class="btn btn-primary btn-air-primary" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#filtermodal">Filter</button>
-                                <button style="display:none" class="btn btn-primary btn-air-primary" id="resetfilter">Clear
-                                    Filter</button>
-                                <button class="btn btn-primary btn-air-primary matchbutton" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#matchModal">Matching</button>
-                                <button class="btn btn-primary btn-air-primary" onclick="exportEnquiry()"
-                                    type="button">Export</button>
-                                <button class="btn btn-primary btn-air-primary" onclick="importEnquiries()"
-                                    type="button">Import</button>
-                                <button class="btn btn-primary btn-air-primary delete_table_row" style="display: none"
-                                    onclick="deleteTableRow()" type="button">Delete</button>
+                            <a class="btn btn-primary btn-air-primary" href="{{ route('admin.enquiry.add') }}">Add New
+                                Enquiry</a>
+                            <button class="btn btn-primary btn-air-primary" type="button" data-bs-toggle="modal"
+                                data-bs-target="#filtermodal">Filter</button>
+                            <button style="display:none" class="btn btn-primary btn-air-primary" id="resetfilter">Clear
+                                Filter</button>
+                            <button class="btn btn-primary btn-air-primary matchbutton" type="button"
+                                data-bs-toggle="modal" data-bs-target="#matchModal">Matching</button>
+                            <button class="btn btn-primary btn-air-primary" onclick="exportEnquiry()"
+                                type="button">Export</button>
+                            <button class="btn btn-primary btn-air-primary" onclick="importEnquiries()"
+                                type="button">Import</button>
+                            <button class="btn btn-primary btn-air-primary delete_table_row" style="display: none"
+                                onclick="deleteTableRow()" type="button">Delete</button>
 
                         </div>
                         <div class="card-body">
@@ -688,7 +688,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <button class="btn btn-secondary" id="transferNow">Save</button>
+                            <button class="btn btn-secondary" id="transferNow">Savee</button>
                             <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
                     </div>
@@ -872,8 +872,8 @@
                                 </div>
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
-                                    <input class="form-control " id="site_visit_time" max='31-10-2050' name="site_visit_time"
-                                        type="datetime-local">
+                                    <input class="form-control " id="site_visit_time" max='31-10-2050'
+                                        name="site_visit_time" type="datetime-local">
                                 </div>
                                 <div class="form-group col-md-2 m-b-20">
                                     <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
@@ -1418,8 +1418,8 @@
             $.validator.addMethod("maxDate", function(value, element) {
                 var curDate = new Date("2050-12-31");
                 var inputDate = new Date(value);
-				if(value == '')
-					return true;
+                if (value == '')
+                    return true;
                 if (inputDate < curDate)
                     return true;
                 return false;
@@ -1436,7 +1436,7 @@
 
             $(document).on('click', '#saveProgress', function(e) {
                 e.preventDefault();
-				if (!$('#progress_form').valid()) {
+                if (!$('#progress_form').valid()) {
                     return;
                 }
                 $(this).prop('disabled', true);
@@ -1473,7 +1473,7 @@
 
             $(document).on('click', '#saveSchedule', function(e) {
                 e.preventDefault();
-				if (!$('#schedule_form').valid()) {
+                if (!$('#schedule_form').valid()) {
                     return;
                 }
                 $(this).prop('disabled', true);
@@ -1529,23 +1529,56 @@
                 });
             }
 
+            // $(document).on('click', '#transferNow', function(e) {
+            //     e.preventDefault();
+            //     var id = $('#transfer_form_id').val()
+            //     var employee = $('#transfer_employee_id').val()
+            //     $.ajax({
+            //         type: "POST",
+            //         url: "{{ route('admin.transferEnquiry') }}",
+            //         data: {
+            //             enquiry_id: id,
+            //             employee: employee,
+            //             _token: '{{ csrf_token() }}'
+            //         },
+            //         success: function(data) {
+            //             console.log("dataaa ==",data);
+            //             $('#enquiryTable').DataTable().draw();
+            //             $('#transfermodal').modal('hide');
+            //         }
+            //     });
+            // });
             $(document).on('click', '#transferNow', function(e) {
-                e.preventDefault();
-                var id = $('#transfer_form_id').val()
-                var employee = $('#transfer_employee_id').val()
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('admin.transferEnquiry') }}",
-                    data: {
-                        enquiry_id: id,
-                        employee: employee,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        $('#enquiryTable').DataTable().draw();
-                        $('#transfermodal').modal('hide');
-                    }
-                });
+                console.log("tetsttt transfer ==");
+                // e.preventDefault();
+                // var id = $('#transfer_form_id').val();
+                // var employee = $('#transfer_employee_id').val();
+                // console.log("emp ==",employee, id);
+                // var transferButton = $(this); // Store the button element
+
+                // // Disable the button to prevent multiple clicks
+                // transferButton.prop('disabled', true);
+
+                // $.ajax({
+                //     type: "POST",
+                //     url: "{{ route('admin.transferEnquiry') }}",
+                //     data: {
+                //         enquiry_id: id,
+                //         employee: employee,
+                //         _token: '{{ csrf_token() }}'
+                //     },
+                //     success: function(data) {
+                //         console.log("dataaa ==", data);
+                //         $('#enquiryTable').DataTable().draw();
+                //         $('#transfermodal').modal('hide');
+                //         transferButton.prop('disabled', false);
+                //     },
+                //     error: function(xhr, status, error) {
+                //         // In case of error, enable the button again
+                //         transferButton.prop('disabled', false);
+                //         console.error(xhr.responseText);
+                //     }
+                // });
             });
 
             $(document).on('click', '.showNumberNow', function(e) {
@@ -1676,7 +1709,8 @@
                             }
                             if (CheckIfarraykeyExists(data, i, 'user', 'first_name')) {
                                 str += '   <td>' + data[i]['user']['first_name'] + ' ' + data[i]['user'][
-                                        'last_name'] +
+                                        'last_name'
+                                    ] +
                                     '</td>';
                             } else {
                                 str += '<td></td>';
