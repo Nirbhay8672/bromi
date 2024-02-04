@@ -213,7 +213,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Land/Plot' || $type == 'Penthouse')
+                                                        @if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Plot' || $type == 'Penthouse')
                                                             <div class="form-group col-4 m-b-10 data_conent_54">
                                                                 <h6><b>Salable Area</b></h6>
                                                             </div>
@@ -226,7 +226,7 @@
                                                                 @endif
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Land/Plot' || $type == 'Farmhouse')
+                                                        @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Plot' || $type == 'Farmhouse')
                                                             <div class="form-group col-4 m-b-10 data_conent_55">
                                                                 <h6><b>Carpet Plot Area</b></h6>
                                                             </div>
@@ -383,7 +383,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Land/Plot' || $type == 'Land')
+                                                        @if ($type == 'Plot' || $type == 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_11">
                                                                 <h6><b>Length of Plot</b></h6>
                                                             </div>
@@ -433,7 +433,7 @@
                                                         @if (
                                                             $type == 'Flat' ||
                                                                 $type == 'Vila/Bunglow' ||
-                                                                $type == 'Land/Plot' ||
+                                                                $type == 'Plot' ||
                                                                 $type == 'Penthouse' ||
                                                                 $type == 'Farmhouse' ||
                                                                 $type == 'Office' ||
@@ -500,7 +500,7 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
-                                                            @if ($type == 'Vila/Bunglow' || $type == 'Land/Plot' || $type == 'Farmhouse')
+                                                            @if ($type == 'Vila/Bunglow' || $type == 'Plot' || $type == 'Farmhouse')
                                                                 <div class="form-group col-4 m-b-10 data_conent_21">
                                                                     <h6><b>Total No. of units</b></h6>
                                                                 </div>
@@ -540,7 +540,7 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
-                                                            @if ($type == 'Land/Plot' || $type == 'Land')
+                                                            @if ($type == 'Plot' || $type == 'Land')
                                                                 <div class="form-group col-4 m-b-10 data_conent_24">
                                                                     <h6><b>No Of Floors Allowed</b></h6>
                                                                 </div>
@@ -550,7 +550,7 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
-                                                            @if ($type == 'Farmhouse' || $type == 'Land/Plot' || $type == 'Vila/Bunglow')
+                                                            @if ($type == 'Farmhouse' || $type == 'Plot' || $type == 'Vila/Bunglow')
                                                                 <div class="form-group col-4 m-b-10 data_conent_25">
                                                                     <h6><b>No Of Side Open</b></h6>
                                                                 </div>
@@ -840,7 +840,7 @@
                                                         </div> --}}
                                                     </div>
 
-                                                    {{-- @if ($type !== 'Land/Plot' && $type !== 'Land' && $type !== 'Storage/industrial')
+                                                    {{-- @if ($type !== 'Plot' && $type !== 'Land' && $type !== 'Storage/industrial')
                                                         <div class="row mt-1">
                                                             <div class="form-group col-md-12">
                                                                 <h5 class="border-style">Care Taker Information</h5>
@@ -922,7 +922,7 @@
                                                         <div class="form-group col-md-12">
                                                             <h5 class="border-style">Other Details</h5>
                                                         </div>
-                                                        @if ($type != 'Land/Plot' && $type != 'Land')
+                                                        @if ($type != 'Plot' && $type != 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_73">
                                                                 <h6><b>FourWheeler Parking</b></h6>
                                                             </div>
@@ -1058,7 +1058,7 @@
 													@endif
 
 													@if ($type === "Vila/Bunglow" || $type === "Farmhouse" || $type === 'Penthouse' || $type === "Storage/industrial" ||
-														$type === "Retail" || $type === "Flat" || $type === "Farmhouse" || $type === "Office" || $type === "Land/Plot")
+														$type === "Retail" || $type === "Flat" || $type === "Farmhouse" || $type === "Office" || $type === "Plot")
 														<div class="row mt-4">
 															<div class="form-group col-md-12">
 																<h5 class="border-style">Unit Details</h5>
@@ -1067,7 +1067,7 @@
 																<table class="table custom-table-design">
 																	<thead>
 																		<tr>
-																			{{-- @if ($type !== 'Vila/Bunglow' && $type !== 'Land/Plot' && $type !== 'Farmhouse') --}}
+																			{{-- @if ($type !== 'Vila/Bunglow' && $type !== 'Plot' && $type !== 'Farmhouse') --}}
                                                                             @if ($type === 'Penthouse' || $type === "Retail" || $type === "Flat" || $type === "Office")
 																				<th scope="col">Wing</th>
 																			@endif
@@ -1152,7 +1152,7 @@
 																								@endif
 																							</div>
 
-																							@elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Land/Plot')
+																							@elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Plot')
 																							<div class="dropdown-basic">
 																								<div class="dropdown">
 																									<i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
@@ -1438,7 +1438,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Land/Plot' || $type == 'Penthouse')
+                                                        @if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Plot' || $type == 'Penthouse')
                                                             <div class="form-group col-4 m-b-10 data_conent_54">
                                                                 <h6><b>Salable Area</b></h6>
                                                             </div>
@@ -1451,7 +1451,7 @@
                                                                 @endif
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Land/Plot' || $type == 'Farmhouse')
+                                                        @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Plot' || $type == 'Farmhouse')
                                                             <div class="form-group col-4 m-b-10 data_conent_55">
                                                                 <h6><b>Carpet Plot Area</b></h6>
                                                             </div>
@@ -1606,7 +1606,7 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Land/Plot' || $type == 'Land')
+                                                        @if ($type == 'Plot' || $type == 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_11">
                                                                 <h6><b>Length of Plot</b></h6>
                                                             </div>
@@ -1656,7 +1656,7 @@
                                                         @if (
                                                             $type == 'Flat' ||
                                                                 $type == 'Vila/Bunglow' ||
-                                                                $type == 'Land/Plot' ||
+                                                                $type == 'Plot' ||
                                                                 $type == 'Penthouse' ||
                                                                 $type == 'Farmhouse' ||
                                                                 $type == 'Office' ||
@@ -1723,7 +1723,7 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
-                                                            @if ($type == 'Vila/Bunglow' || $type == 'Land/Plot' || $type == 'Farmhouse')
+                                                            @if ($type == 'Vila/Bunglow' || $type == 'Plot' || $type == 'Farmhouse')
                                                                 <div class="form-group col-4 m-b-10 data_conent_21">
                                                                     <h6><b>Total No. of units</b></h6>
                                                                 </div>
@@ -1763,7 +1763,7 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
-                                                            @if ($type == 'Land/Plot' || $type == 'Land')
+                                                            @if ($type == 'Plot' || $type == 'Land')
                                                                 <div class="form-group col-4 m-b-10 data_conent_24">
                                                                     <h6><b>No Of Floors Allowed</b></h6>
                                                                 </div>
@@ -1773,7 +1773,7 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
-                                                            @if ($type == 'Farmhouse' || $type == 'Land/Plot' || $type == 'Vila/Bunglow')
+                                                            @if ($type == 'Farmhouse' || $type == 'Plot' || $type == 'Vila/Bunglow')
                                                                 <div class="form-group col-4 m-b-10 data_conent_25">
                                                                     <h6><b>No Of Side Open</b></h6>
                                                                 </div>
@@ -2045,7 +2045,7 @@
                                                         </div> --}}
                                                     </div>
 
-                                                    {{-- @if ($type !== 'Land/Plot' && $type !== 'Land' && $type !== 'Storage/industrial')
+                                                    {{-- @if ($type !== 'Plot' && $type !== 'Land' && $type !== 'Storage/industrial')
                                                         <div class="row mt-1">
                                                             <div class="form-group col-md-12">
                                                                 <h5 class="border-style">Care Taker Information</h5>
@@ -2084,7 +2084,7 @@
                                                         <div class="form-group col-md-12">
                                                             <h5 class="border-style">Other Details</h5>
                                                         </div>
-                                                        @if ($type != 'Land/Plot' && $type != 'Land')
+                                                        @if ($type != 'Plot' && $type != 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_73">
                                                                 <h6><b>FourWheeler Parking</b></h6>
                                                             </div>
@@ -2223,7 +2223,7 @@
                                                     </div>
                                                 </div>
                                             @elseif (($type === "Vila/Bunglow" || $type === "Farmhouse" || $type === 'Penthouse' || $type === "Storage/industrial" ||
-											$type === "Retail" || $type === "Flat" || $type === "Farmhouse" || $type === "Land/Plot" || $type === "Office"))
+											$type === "Retail" || $type === "Flat" || $type === "Farmhouse" || $type === "Plot" || $type === "Office"))
 												<div class="row">
                                                     <div class="form-group col-md-12">
                                                         <h5 class="border-style">Unit Details</h5>
@@ -2316,7 +2316,7 @@
 																					<div class="col-4 d-flex justify-content-between">
 																						<b>Remarks:</b> {{isset($value[9][0])? $value[9][0] : '' }}
 																					</div> --}}
-																					@elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Land/Plot')
+																					@elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Plot')
 																					<div class="dropdown-basic">
 																						<div class="dropdown">
 																							<i class="dropbtn fa fa-info-circle p-0 text-dark"></i>

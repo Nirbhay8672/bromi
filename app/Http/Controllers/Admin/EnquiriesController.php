@@ -1590,7 +1590,7 @@ class EnquiriesController extends Controller
 			// $filteredKeys = ['21', '22', '23', '24', '25'];
 			$filteredKeys = ['14', '15', '16', '17', '18'];
 		}
-		if ($selectedCategory === 'Land/Plot' || $selectedCategory === 'Land') {
+		if ($selectedCategory === 'Plot' || $selectedCategory === 'Land') {
 			$filteredKeys = ['10', '11', '12'];
 		}
 		if ($selectedCategory === 'Farmhouse') {
