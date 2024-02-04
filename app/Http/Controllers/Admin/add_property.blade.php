@@ -2649,10 +2649,10 @@
                     $('.the_constructed_plot_price').show()
                     $('.the_price').hide()
                 }
-                if (theFor2 == 'Land/Plot' || theFor2 == 'Storage/industrial') {
+                if (theFor2 == 'Plot' || theFor2 == 'Storage/industrial') {
                     $('.the_furnished_status').hide();
                 }
-                if (theFor2 == 'Vila/Bunglow' || theFor2 == 'Land/Plot' || theFor2 == 'Farmhouse') {
+                if (theFor2 == 'Vila/Bunglow' || theFor2 == 'Plot' || theFor2 == 'Farmhouse') {
                     $('.the_wing').hide();
                 }
             }
@@ -2848,7 +2848,7 @@
                     addAddAreaButtons(['the_carpet_plot_area', 'the_constructed_carpet_area',
                         'the_constructed_builtup_area'
                     ], ['Add Carpet Plot Area', 'Add Constructed Carpet Area', 'Add Constructed Builtup Area']);
-                } else if (category_type == 'Land/Plot') {
+                } else if (category_type == 'Plot') {
                     showfields = ['div_flat_details_2', 'div_area_size_details', 'the_salable_area',
                         'div_flat_details', 'the_total_no_of_units', 'the_no_of_side_open', 'the_length_of_plot',
                         'the_width_of_plot', 'the_no_of_floors_allowed', 'div_flat_details_5', ,
@@ -3109,7 +3109,7 @@
                         function(index) {
                             $(this).attr('data-unit_id', '')
                         });
-                } else if (currentFurnished != 'Storage/industrial' && currentFurnished != 'Land/Plot') {
+                } else if (currentFurnished != 'Storage/industrial' && currentFurnished != 'Plot') {
                     $("#furnished_types_template div,#furnished_types_template button,#furnished_types_template input").each(
                         function(index) {
                             $(this).attr('data-unit_id', id)

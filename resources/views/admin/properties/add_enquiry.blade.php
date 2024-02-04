@@ -1127,7 +1127,7 @@
                     $(".f-status").hide();
                 } else if (category_type == 'Farmhouse') {
                     $('.div_farm_house').show()
-                } else if (category_type == 'Land/Plot') {
+                } else if (category_type == 'Plot') {
                     $('.div_land_plot').show()
                 } else if (category_type == 'Vila/Bunglow') {
                     $('.div_vila_type').show()
