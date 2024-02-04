@@ -39,10 +39,10 @@ public function index(Request $request)
 				$dropdownsarr[$value['id']] = $value;
 			}
 			$dropdowns = $dropdownsarr;
-			// Bharat land/plot filter
+			// Bharat Plot filter
 			$indId = [];
 			foreach ($dropdowns as $key => $value) {
-				if ($value['name'] ==  'Land/Plot' || $value['name'] ==  'Land') {
+				if ($value['name'] ==  'Plot' || $value['name'] ==  'Land') {
 					$indId[] = $key;
 				}
 			}
@@ -349,7 +349,7 @@ public function index(Request $request)
 		$property_configuration_settings = DropdownSettings::get()->toArray();
 		$prop_type = [];
 		foreach ($property_configuration_settings as $key => $value) {
-			// if (($value['name'] == 'Land/Plot' || $value['name'] ==  'Land') && str_contains($value['dropdown_for'], 'property_')) {
+			// if (($value['name'] == 'Plot' || $value['name'] ==  'Land') && str_contains($value['dropdown_for'], 'property_')) {
 			// 	array_push($prop_type, $value['id']);
 			// }
 			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
@@ -410,7 +410,7 @@ public function index(Request $request)
 		$area = '';
 		$measure = '';
 
-		if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Land/Plot') {
+		if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
 			$area = explode('_-||-_', $row->salable_area)[0];
 			$measure = explode('_-||-_', $row->salable_area)[1];
 		} elseif ($type == 'Storage/industrial') {

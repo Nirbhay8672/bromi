@@ -786,7 +786,7 @@ class PropertyController extends Controller
         $area = '';
         $measure = '';
 
-        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Land/Plot') {
+        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
             $area = explode('_-||-_', $row->salable_area)[0];
             $measure = explode('_-||-_', $row->salable_area)[1];
         } elseif ($type == 'Storage/industrial') {
@@ -2398,7 +2398,7 @@ class PropertyController extends Controller
             // $filteredKeys = ['21', '22', '23', '24', '25'];
             $filteredKeys = ['14', '15', '16', '17', '18'];
         }
-        if ($selectedCategory === 'Land/Plot' || $selectedCategory === 'Land') {
+        if ($selectedCategory === 'Plot' || $selectedCategory === 'Land') {
             $filteredKeys = ['10', '11', '12'];
         }
         if ($selectedCategory === 'Farmhouse') {

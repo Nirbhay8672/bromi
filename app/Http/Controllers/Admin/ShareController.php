@@ -336,7 +336,7 @@ class ShareController extends Controller
         $area = '';
         $measure = '';
 
-        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Land/Plot') {
+        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
             $area = explode('_-||-_', $row->salable_area)[0];
             $measure = explode('_-||-_', $row->salable_area)[1];
         } elseif ($type == 'Storage/industrial') {
