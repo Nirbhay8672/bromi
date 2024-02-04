@@ -2031,7 +2031,8 @@ class PropertyController extends Controller
             })
             ->get();
 
-        $prop_type = [];
+        
+            $prop_type = [];
         foreach ($dropdowns as $key => $value) {
             if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
                 array_push($prop_type, $value['id']);

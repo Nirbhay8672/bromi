@@ -1405,7 +1405,7 @@ class EnquiriesController extends Controller
 		$areaTo = $data->area_to;
 		$properties = Properties::where('properties.property_type', $data->requirement_type)
 			->where('properties.property_for', $property_for)
-			->where('properties.property_category', $data->property_type)
+			// ->where('properties.property_category', $data->property_type)
 			->where(function ($query) use ($budgetFrom, $budgetTo, $areaFrom, $areaTo) {
 				$query->where(function ($query) use ($budgetFrom, $budgetTo) {
 					$query->where('properties.survey_price', '>=', $budgetFrom)

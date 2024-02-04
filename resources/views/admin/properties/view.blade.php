@@ -1278,7 +1278,7 @@
                                                     </div>
 
                                                 </div>
-                                                <div class="col-md-6 d-flex" style="height: 300px">
+                                                <div class="col-md-6 d-flex" style="height: 185px;">
                                                     <!-- First Image Section -->
                                                     @if(count($multiple_image) > 0)
                                                         <div class="flex-fill text-center">
@@ -1302,6 +1302,40 @@
                                                     @endif
                                                 </div>
                                                 <div class="col-md-6">
+                                                    <h5 class="border-style">Property Viewer</h5>
+                                                    <br>
+                                                    <div class="form-group">
+                                                        <table class="table table-responsive custom-table-design mb-3">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Client Name</th>
+                                                                    <th scope="col">Activity</th>
+                                                                    <th scope="col">Date</th>
+        
+                                                                </tr>
+                                                            </thead>
+        
+                                                            <tbody>
+        
+                                                                @forelse ($visits as $value)
+                                                                    <tr>
+                                                                        @if ($value->visit_status == "Completed")
+                                                                            <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
+                                                                            </td>
+                                                                            <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
+                                                                            </td>
+                                                                            <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
+                                                                        @endif
+                                                                    </tr>
+                                                                @empty
+                                                                @endforelse
+        
+        
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
                                                     <h5 class="border-style">Matching Enquiry</h5>
                                                     <br>
                                                     <div class="form-group">
@@ -1311,18 +1345,26 @@
                                                                     <th scope="col">Client Name</th>
                                                                     <th scope="col">Mobile</th>
                                                                     <th scope="col">For</th>
-                                                                    <th scope="col">Budget</th>
+                                                                    <th scope="col">Category</th>
+                                                                    <th scope="col">Area From</th>
+                                                                    <th scope="col">Area To</th>
+                                                                    <th scope="col">Budget From</th>
+                                                                    <th scope="col">Budget To</th>
 
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="matching_container">
                                                                 @forelse ($enquiries as $value)
-                                                                    <tr>
-                                                                        <td>{{ $value->client_name }}</td>
-                                                                        <td>{{ $value->client_mobile }}</td>
-                                                                        <td>{{ $value->enquiry_for }}</td>
-                                                                        <td>{{ $value->budget_to }}</td>
-                                                                    </tr>
+                                                                <tr>
+                                                                    <td>{{ $value->client_name }}</td>
+                                                                    <td>{{ $value->client_mobile }}</td>
+                                                                    <td>{{ $value->enquiry_for }}</td>
+                                                                    <td>{{ $value->requirement_type == "87" ? "Resedential" : "Commercial" }}</td>
+                                                                    <td>{{ $value->area_from }}</td>
+                                                                    <td>{{ $value->area_to }}</td>
+                                                                    <td>{{ $value->budget_from }}</td>
+                                                                    <td>{{ $value->budget_to }}</td>
+                                                                </tr>
                                                                 @empty
                                                                 @endforelse
                                                             </tbody>
@@ -2693,74 +2735,74 @@
                                         height: 200px; /* Set a fixed height for the images */
                                         }
                                         </style>
-                                <div class="tab-pane fade" id="v-enquiry-matching" role="tabpanel"
-                                    aria-labelledby="v-enquiry-matching-tab">
-                                    <h5 class="border-style">Matching Enquiry</h5>
-                                    <br>
-                                    <div class="form-group">
-                                        <table class="table table-responsive custom-table-design mb-3">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Client Name</th>
-                                                    <th scope="col">Mobile</th>
-                                                    <th scope="col">For</th>
-                                                    <th scope="col">Budget</th>
+                                        <div class="tab-pane fade" id="v-enquiry-matching" role="tabpanel"
+                                            aria-labelledby="v-enquiry-matching-tab">
+                                            <h5 class="border-style">Matching Enquiry</h5>
+                                            <br>
+                                            <div class="form-group">
+                                                <table class="table table-responsive custom-table-design mb-3">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Client Name</th>
+                                                            <th scope="col">Mobile</th>
+                                                            <th scope="col">For</th>
+                                                            <th scope="col">Budget</th>
 
-                                                </tr>
-                                            </thead>
+                                                        </tr>
+                                                    </thead>
 
-                                            <tbody id="matching_container">
+                                                    <tbody id="matching_container">
 
-                                                @forelse ($enquiries as $value)
-                                                    <tr>
-                                                        <td>{{ $value->client_name }}</td>
-                                                        <td>{{ $value->client_mobile }}</td>
-                                                        <td>{{ $value->enquiry_for }}</td>
-                                                        <td>{{ $value->budget_to }}</td>
-                                                    </tr>
-                                                @empty
-                                                @endforelse
-
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="v-property-viewer" role="tabpanel"
-                                    aria-labelledby="v-property-viewer-tab">
-                                    <h5 class="border-style">Property Viewer</h5>
-                                    <br>
-                                    <div class="form-group">
-                                        <table class="table table-responsive custom-table-design mb-3">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Client Name</th>
-                                                    <th scope="col">Activity</th>
-                                                    <th scope="col">Date</th>
-
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-
-                                                @forelse ($visits as $value)
-                                                    <tr>
-                                                        @if ($value->visit_status == "Completed")
-                                                            <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
-                                                            </td>
-                                                            <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
-                                                            </td>
-                                                            <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
-                                                        @endif
-                                                    </tr>
-                                                @empty
-                                                @endforelse
+                                                        @forelse ($enquiries as $value)
+                                                            <tr>
+                                                                <td>{{ $value->client_name }}</td>
+                                                                <td>{{ $value->client_mobile }}</td>
+                                                                <td>{{ $value->enquiry_for }}</td>
+                                                                <td>{{ $value->budget_to }}</td>
+                                                            </tr>
+                                                        @empty
+                                                        @endforelse
 
 
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="v-property-viewer" role="tabpanel"
+                                            aria-labelledby="v-property-viewer-tab">
+                                            <h5 class="border-style">Property Viewer</h5>
+                                            <br>
+                                            <div class="form-group">
+                                                <table class="table table-responsive custom-table-design mb-3">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Client Name</th>
+                                                            <th scope="col">Activity</th>
+                                                            <th scope="col">Date</th>
+
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+
+                                                        @forelse ($visits as $value)
+                                                            <tr>
+                                                                @if ($value->visit_status == "Completed")
+                                                                    <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
+                                                                    </td>
+                                                                    <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
+                                                                    </td>
+                                                                    <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
+                                                                @endif
+                                                            </tr>
+                                                        @empty
+                                                        @endforelse
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                             </div>
                         </div>
                     </div>

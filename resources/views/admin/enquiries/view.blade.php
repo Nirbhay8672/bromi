@@ -499,21 +499,34 @@
                                                             <tr>
                                                                 <th scope="col">property Name</th>
                                                                 <th scope="col">Property For</th>
+                                                                <th scope="col">Property Area</th>
+                                                                <th scope="col">Property Status</th>
                                                                 <th scope="col">Property Price</th>
+                                                                <th scope="col">Property Priority</th>
                                                                 <th scope="col">Modified On</th>
 
                                                             </tr>
                                                         </thead>
 
                                                         <tbody id="matching_container">
-
                                                             @forelse ($properties as $value)
-                                                                <tr>
+                                                            {{-- @dd($value);     --}}
+                                                            <tr>
                                                                     <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '' }}
                                                                     </td>
                                                                     <td>{{ $value->property_for }}</td>
+                                                                    <td>{{ explode("_-||-_", $value->salable_area)[0] }}</td>
+                                                                    <td>{{ json_decode($value->unit_details)[0][2] }}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][4] }}</td>
-                                                                    <td>{{ \Carbon\Carbon::parse($value->updated_at)->format('d-m-Y') }}
+                                                                    <td>
+                                                                        @if ($value->Property_priority == "91")
+                                                                            High
+                                                                        @elseif ($value->Property_priority == "90")
+                                                                            Medium
+                                                                        @elseif ($value->Property_priority == "17")
+                                                                            Low
+                                                                        @endif
+                                                                    </td><td>{{ \Carbon\Carbon::parse($value->updated_at)->format('d-m-Y') }}
                                                                     </td>
                                                                 </tr>
                                                             @empty
