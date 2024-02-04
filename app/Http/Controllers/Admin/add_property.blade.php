@@ -2921,7 +2921,7 @@
                     addAddAreaButtons(['the_carpet_plot_area', 'the_constructed_carpet_area'], ['Add Carpet plot Area',
                         'Add Constructed Carpet Area'
                     ]);
-                } else if (category_type == 'Plot/Land') {
+                } else if (category_type == 'Land') {
                     showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
                         'div_area_size_details', 'div_borewell',
                         'the_length_of_plot', 'the_width_of_plot', 'div_flat_details_5',
@@ -3676,7 +3676,7 @@
 
                 if ($('input[name=property_category]:checked').attr('data-val') == 'Office') {
                     var configuration = $('input[name=office_type]:checked').val()
-                } else if ($('input[name=property_category]:checked').attr('data-val') == 'Plot/Land') {
+                } else if ($('input[name=property_category]:checked').attr('data-val') == 'Land') {
                     var configuration = $('input[name=plot_type]:checked').val()
                     //
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Flat') {

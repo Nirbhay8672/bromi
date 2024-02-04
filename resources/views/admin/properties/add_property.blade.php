@@ -2569,7 +2569,7 @@
                 }
             });
 
-            //Disable Price on Plot/Land
+            //Disable Price on Land
             var $price1 = $('#price');
             var $price2 = $('#price2');
             $price1.on('input', function() {
@@ -2860,7 +2860,7 @@
                     $('.the_constructed_plot_price').show()
                     $('.the_price').hide()
                 }
-                if (theFor2 == 'Land/Plot' || theFor2 == 'Storage/industrial' || theFor2 == 'Plot/Land') {
+                if (theFor2 == 'Land/Plot' || theFor2 == 'Storage/industrial' || theFor2 == 'Land') {
                     $('.the_furnished_status').hide();
                 }
                 if (theFor2 == 'Land/Plot') {
@@ -3194,7 +3194,7 @@
                     addAddAreaButtons(['the_carpet_plot_area', 'the_constructed_carpet_area'], ['Add Carpet plot Area',
                         'Add Constructed Carpet Area'
                     ]);
-                } else if (category_type == 'Plot/Land') {
+                } else if (category_type == 'Land') {
                     showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
                         'div_area_size_details', 'div_borewell',
                         'the_length_of_plot', 'the_width_of_plot',
@@ -3243,7 +3243,7 @@
                         $(this).parent().hide();
                     }
                 });
-                //Hide Plot/land while click on rent or both 
+                //Hide Land while click on rent or both 
                 var theFor = $('input[name=property_for]:checked').val();
                 if (theFor == 'Sell' && parent_val == '87') {
                     $('.property-type-element[data-property-id="256"]').show();
@@ -3594,7 +3594,7 @@
                             return
                         }
 
-                        //Disable Price on Plot/Land
+                        //Disable Price on Land
                         var $price1 = $('#price');
                         var $price2 = $('#price2');
 
@@ -4019,7 +4019,7 @@
 
                 if ($('input[name=property_category]:checked').attr('data-val') == 'Office') {
                     var configuration = $('input[name=office_type]:checked').val()
-                } else if ($('input[name=property_category]:checked').attr('data-val') == 'Plot/Land') {
+                } else if ($('input[name=property_category]:checked').attr('data-val') == 'Land') {
                     var configuration = $('input[name=plot_type]:checked').val()
                     //
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Flat') {

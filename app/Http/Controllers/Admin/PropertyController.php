@@ -191,7 +191,7 @@ class PropertyController extends Controller
                         if ($request->match_budget_from_type) {
                             // dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
 
-                            // surveyprice = commercial->plot/land matcehd
+                            // surveyprice = commercial->Land matcehd
                             // $query->where('properties.survey_price', '>=', $enq->budget_from)
                             //     ->where('properties.survey_price', '<=', $enq->budget_to);
 
@@ -2398,7 +2398,7 @@ class PropertyController extends Controller
             // $filteredKeys = ['21', '22', '23', '24', '25'];
             $filteredKeys = ['14', '15', '16', '17', '18'];
         }
-        if ($selectedCategory === 'Land/Plot' || $selectedCategory === 'Plot/Land') {
+        if ($selectedCategory === 'Land/Plot' || $selectedCategory === 'Land') {
             $filteredKeys = ['10', '11', '12'];
         }
         if ($selectedCategory === 'Farmhouse') {
