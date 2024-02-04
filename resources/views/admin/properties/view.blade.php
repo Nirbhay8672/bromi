@@ -2745,12 +2745,13 @@
 
                                                 @forelse ($visits as $value)
                                                     <tr>
-                                                        {{-- {{dd($value);}} --}}
-                                                        <td>{{ $value->Enquiry ? $value->Enquiry : '' }}
-                                                        </td>
-                                                        <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
-                                                        </td>
-                                                        <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
+                                                        @if ($value->visit_status == "Completed")
+                                                            <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
+                                                            </td>
+                                                            <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
+                                                            </td>
+                                                            <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
+                                                        @endif
                                                     </tr>
                                                 @empty
                                                 @endforelse

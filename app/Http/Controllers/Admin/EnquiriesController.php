@@ -555,7 +555,7 @@ class EnquiriesController extends Controller
 				->make(true);
 		}
 		$prop_list = Helper::get_property_units_helper();
-		$projects = Projects::orderBy('project_name')->get();
+		$projects = Properties::with('Projects')->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
 
 		$prop_type = [];

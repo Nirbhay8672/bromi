@@ -254,8 +254,13 @@ $class_namee = Helper::cleanString($class_namee);
                             <div class="form-group col-md-4 m-b-20 mb-3">
                                 <label class="select2_label" for="Select Project"> Project</label>
                                 <select class="form-select" id="building_id" multiple>
-                                    @foreach ($projects as $project)
+                                    {{-- @foreach ($projects as $project)
                                     <option value="{{ $project->id }}">{{ $project->project_name }}</option>
+                                    @endforeach --}}
+                                    @foreach ($projects as $property)
+                                        @if ($property->Projects && $property->Projects->project_name)
+                                            <option value="{{ $property->project_id }}">{{ $property->Projects->project_name }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -850,8 +855,10 @@ $class_namee = Helper::cleanString($class_namee);
                             <label class="mb-0">&nbsp;</label>
                             <label class="select2_label" for="Property list">Property</label>
                             <select class="form-select" id="property_list" multiple>
-                                @foreach ($projects as $project)
-                                <option value="{{ $project->id }}">{{ $project->project_name }}</option>
+                                @foreach ($projects as $property)
+                                    @if ($property->Projects && $property->Projects->project_name)
+                                        <option value="{{ $property->id}}">{{ $property->Projects->project_name }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -1865,9 +1872,6 @@ $matchEnqSource = isset($_GET['match_inquiry_source']) ? $_GET['match_inquiry_so
 
         console.log("Email reimnder ==", email_reminder)
         console.log("sms_reminder ==", sms_reminder)
-        console.log("email ==", email);
-        console.log("sms ==", sms);
-
         $.ajax({
             type: "POST",
             url: "{{ route('admin.saveSchedule') }}",
