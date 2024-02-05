@@ -478,7 +478,6 @@ class PropertyController extends Controller
                     }
 
                     if ($row->Property_priority == "91") {
-                        // $row->image_path = asset('/upload/prop_images/bluestar.png');
                         $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/blue512.png') . '" alt="">';
                     } else if ($row->Property_priority == "90") {
                         $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/yellownew512.png') . '" alt="">';
