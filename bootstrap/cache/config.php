@@ -23,7 +23,7 @@
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:RNpLJHmcKyt6rkQv78h4sA87fO6NcRamretJ/W2dgXs=',
+    'key' => 'base64:dEVA702oEdkjz3EEROPU8LsXBNKxea2Qup9DhDax20g=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (

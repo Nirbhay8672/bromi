@@ -10,12 +10,12 @@ use App\Models\Api\Properties;
 use App\Models\Enquiries;
 use App\Models\Projects;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -152,7 +152,7 @@ class UserController extends Controller
 			$data = User::where('id', $request->id)->delete();
 		}
 	}
-
+	
 	public function loginActivity(Request $request)
 	{
 		if ($request->ajax()) {
