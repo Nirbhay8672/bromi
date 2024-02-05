@@ -1480,6 +1480,12 @@ $matchEnqSource = isset($_GET['match_inquiry_source']) ? $_GET['match_inquiry_so
                     "targets": 6
                 }
             ],
+            //#B To Change Background when enquiry_status = 0. 
+            "createdRow": function(row, data, dataIndex) {
+                if (data['enq_status'] == 0) {
+                    $(row).addClass('important-row');
+                }
+            },
             "drawCallback": function(settings, json) {
                 $('.color-code-popover').attr('data-bs-content', $('#mypopover-content').html());
                 setTimeout(() => {

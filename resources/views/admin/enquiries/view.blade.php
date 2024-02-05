@@ -84,8 +84,26 @@
                                                         </a>
                                                     </div>
                                                 </div>
+                                                
                                             </ul>
+                                            <form action="{{route('admin.updateEnquiryStatus')}}" class="row row-cols g-1" method="get">
+                                                @csrf
+                                                @method('post')
+                                                <div class="col-lg-3 col-md-6 col-12">
+                                                    <input type="text" hidden value="{{$data['id']}}" name="id">
+                                                    <select class="form-select" id="enquiry_progress_status" name="status">
+                                                        <option value="">Enquiry Progress</option>
+                                                        <option value="1">Active</option>
+                                                        <option value="0">Inactive</option>
+                                                    </select>
+                                                </div>
+        
+                                                <div class="col-lg-3 col-md-6 col-12" style="margin-left: 10px;">
+                                                    <button class="btn btn-primary" type="submit">Update</button>
+                                                </div>
+                                            </form>
                                         </div>
+                                       
                                         <div class="col-md-2 align-self-center">
                                             <div class="input-group mb-3">
                                                 <select class="form-select form-control" id="enquiry_progress_status">
@@ -512,8 +530,8 @@
                                                             @forelse ($properties as $value)
                                                             {{-- @dd($value);     --}}
                                                             <tr>
-                                                                    <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '' }}
-                                                                    </td>
+                                                                    {{-- <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '' }}
+                                                                    </td> --}}
                                                                     <td>{{ $value->property_for }}</td>
                                                                     <td>{{ explode("_-||-_", $value->salable_area)[0] }}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][2] }}</td>
@@ -942,8 +960,8 @@
 
                                                         @forelse ($properties as $value)
                                                             <tr>
-                                                                <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '' }}
-                                                                </td>
+                                                                {{-- <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '' }}
+                                                                </td> --}}
                                                                 <td>{{ $value->property_for }}</td>
                                                                 <td>{{ json_decode($value->unit_details)[0][4] }}</td>
                                                                 <td>{{ $value->survey_price }}</td>

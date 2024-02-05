@@ -62,6 +62,7 @@ class Enquiries extends Model
 		'enquiry_for',
 		'requirement_type',
 		'property_type',
+		'enq_status',
 		// 'sub_category_type',
 		'configuration',
 		'area_size_from',

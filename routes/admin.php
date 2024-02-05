@@ -236,6 +236,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		//state city
 		Route::post('/property/state', [PropertyController::class, 'state'])->name('admin.property.state');
         Route::get('/update-property-status', [PropertyController::class, 'updatePropertyStatus'])->name('admin.updatePropertyStatus');
+        Route::get('/update-enquiry-status', [EnquiriesController::class, 'updateEnquiryStatus'])->name('admin.updateEnquiryStatus');
 
 
 		Route::post('/change-property-status', [PropertyController::class, 'changePropertyStatus'])->name('admin.changePropertyStatus');

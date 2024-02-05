@@ -284,7 +284,11 @@ class EnquiriesController extends Controller
 							// }
 						}
 					})
-					->orderBy('id', 'desc');
+					->orderByRaw('CASE
+					WHEN enquiries.enq_status = 1 THEN 1
+					ELSE 2
+					END,  enquiries.id DESC');
+					// ->orderBy('id', 'desc');
 
 				$parts = explode('?', $request->location);
 
@@ -908,7 +912,9 @@ class EnquiriesController extends Controller
 					return $query->whereMonth('created_at', '=', $request->month);
 				})->when($request->year, function ($query) use ($request) {
 					return $query->whereYear('created_at', '=', $request->year);
-				})->get();
+				})
+				->where('enq_status', 1)
+				->get();
 				foreach ($newenq as $key => $value) {
 					array_push($ar, Carbon::parse($value->created_at)->format('Y-m-d'));
 				}
@@ -922,7 +928,7 @@ class EnquiriesController extends Controller
 					return $query->whereMonth('created_at', '=', $request->month);
 				})->when($request->year, function ($query) use ($request) {
 					return $query->whereYear('created_at', '=', $request->year);
-				})->get();
+				})->where('enq_status', 1)->get();
 
 				foreach ($lead_conf as $key => $value) {
 					array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
@@ -933,7 +939,9 @@ class EnquiriesController extends Controller
 			// Site Visit
 			if ($request->sitecomp) {
 				$ar = [];
-				$sitevisit = EnquiryProgress::whereHas('Enquiry')->where('status', 1)->where('progress', '=', 'Site Visit Scheduled')->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
+				$sitevisit = EnquiryProgress::whereHas('enquiry', function ($query) {
+					$query->where('enq_status', 1);
+				})->where('status', 1)->where('progress', '=', 'Site Visit Scheduled')->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
 					return $query->whereMonth('nfd', '=', $request->month);
 				})->when($request->year, function ($query) use ($request) {
 					return $query->whereYear('nfd', '=', $request->year);
@@ -1083,7 +1091,6 @@ class EnquiriesController extends Controller
 
 	public function saveEnquiry(Request $request)
 	{
-		// dd($request->all(),"res");
 		if (!empty($request->id) && $request->id != '') {
 			$data = Enquiries::find($request->id);
 			if (empty($data)) {
@@ -1434,12 +1441,11 @@ class EnquiriesController extends Controller
 
 	public function calenderDetail(Request $request)
 	{
-		// dd($request->all());
+		// calendar 
 		// click to edit cal
 		$type = explode(',', $request->type);
-		// dd("type bhrt", $type);
 		if (in_array('new_enquiry', $type)) {
-			$data['new_enquiry'] = Enquiries::whereDate('created_at', $request->date)->get();
+			$data['new_enquiry'] = Enquiries::where('enq_status',1)->whereDate('created_at', $request->date)->get();
 		}
 		if (in_array('leadConf', $type)) {
 			$data['leadConf'] = EnquiryProgress::whereHas('Enquiry')
@@ -1613,15 +1619,24 @@ class EnquiriesController extends Controller
 		}
 		return response()->json($filteredConfig);
 	}
+
 	public function deleteRecord($id)
 	{
 		$record = EnquiryProgress::find($id);
-		// dd("recprd ==", $record->id);
+		
 		if ($record) {
 			$record->delete();
 			return response()->json(['message' => 'Record deleted successfully']);
 		} else {
 			return response()->json(['message' => 'Record not found'], 404);
 		}
+	}
+
+	
+	public function updateEnquiryStatus(Request $request)
+	{
+		$status = $request->status;
+        $vv = Enquiries::where('id', $request->id)->update(['enq_status' => $status]); 
+        return redirect('admin/Enquiries');
 	}
 }
