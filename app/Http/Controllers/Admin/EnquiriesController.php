@@ -928,7 +928,7 @@ class EnquiriesController extends Controller
 					return $query->whereMonth('created_at', '=', $request->month);
 				})->when($request->year, function ($query) use ($request) {
 					return $query->whereYear('created_at', '=', $request->year);
-				})->where('enq_status', 1)->get();
+				})->get();
 
 				foreach ($lead_conf as $key => $value) {
 					array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
@@ -939,9 +939,7 @@ class EnquiriesController extends Controller
 			// Site Visit
 			if ($request->sitecomp) {
 				$ar = [];
-				$sitevisit = EnquiryProgress::whereHas('enquiry', function ($query) {
-					$query->where('enq_status', 1);
-				})->where('status', 1)->where('progress', '=', 'Site Visit Scheduled')->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
+				$sitevisit = EnquiryProgress::whereHas('enquiry')->where('status', 1)->where('progress', '=', 'Site Visit Scheduled')->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
 					return $query->whereMonth('nfd', '=', $request->month);
 				})->when($request->year, function ($query) use ($request) {
 					return $query->whereYear('nfd', '=', $request->year);
@@ -1445,6 +1443,7 @@ class EnquiriesController extends Controller
 		// click to edit cal
 		$type = explode(',', $request->type);
 		if (in_array('new_enquiry', $type)) {
+			// $data['new_enquiry'] = Enquiries::whereDate('created_at', $request->date)->get();
 			$data['new_enquiry'] = Enquiries::where('enq_status',1)->whereDate('created_at', $request->date)->get();
 		}
 		if (in_array('leadConf', $type)) {

@@ -151,58 +151,54 @@
                                             @forelse($new_enquiry as $data)
                                                 @php
                                                     $prop_type = $configuration_name = $requiretype_name = $furnished = $project_name = $area_name = '';
-                                                    // if (!empty($data->property_type) && isset(json_decode($data->property_type)[0])) {
-                                                    //     foreach (json_decode($data->property_type) as $key => $value) {
-                                                    //         if (isset($dropdowns[$value]['name'])) {
-                                                    //             if ($key > 0) {
-                                                    //                 $prop_type .= ', ' . $dropdowns[$value]['name'];
-                                                    //             } else {
-                                                    //                 $prop_type .= $dropdowns[$value]['name'];
-                                                    //             }
-                                                    //         }
-                                                    //     }
-                                                    // }
-                                                    // if (!empty($data->configuration) && isset(json_decode($data->configuration)[0])) {
-                                                    //     foreach (json_decode($data->configuration) as $key => $value) {
-                                                    //         if (isset($dropdowns[$value]['name'])) {
-                                                    //             if ($key > 0) {
-                                                    //                 $configuration_name .= ', ' . $dropdowns[$value]['name'];
-                                                    //             } else {
-                                                    //                 $configuration_name .= $dropdowns[$value]['name'];
-                                                    //             }
-                                                    //         }
-                                                    //     }
-                                                    // }
-
-                                                    // $indId = array_filter($dropdowns, function ($value) {
-                                                    //     return $value['dropdown_for'] == 'property_specific_type';
-                                                    // });
-                                                    // // dd('indIdindId', $indId,$data);
-                                                    // $requiretype_name = null;
-                                                    // if (
-                                                    //     $dropdown = current(
-                                                    //         array_filter($indId, function ($value) use ($data) {
-                                                    //             return $value['parent_id'] == $data->requirement_type;
-                                                    //         }),
-                                                    //     )
-                                                    // ) {
-                                                    //     $requiretype_name = $dropdown['name'];
-                                                    // }
-
-                                                    $indId = [];
-                                                    foreach ($dropdowns as $key => $value) {
-                                                        if ($value['dropdown_for'] == 'property_specific_type') {
-                                                            $indId[] = $value;
+                                                    if (!empty($data->property_type) && isset(json_decode($data->property_type)[0])) {
+                                                        foreach (json_decode($data->property_type) as $key => $value) {
+                                                            if (isset($dropdowns[$value]['name'])) {
+                                                                if ($key > 0) {
+                                                                    $prop_type .= ', ' . $dropdowns[$value]['name'];
+                                                                } else {
+                                                                    $prop_type .= $dropdowns[$value]['name'];
+                                                                }
+                                                            }
                                                         }
                                                     }
-                                                    $requiretype_name=null;
-                                                    $prop_type=null;
-                                                    foreach ($indId as $dropdown) {
-                                                        if ($dropdown['parent_id'] == $data->requirement_type) {
-                                                            $requiretype_name = $dropdown['name'];
-                                                            $prop_type = $dropdown['parent_id'];
-                                                            break;
+                                                    if (!empty($data->configuration) && isset(json_decode($data->configuration)[0])) {
+                                                        foreach (json_decode($data->configuration) as $key => $value) {
+                                                            if (isset($dropdowns[$value]['name'])) {
+                                                                if ($key > 0) {
+                                                                    $configuration_name .= ', ' . $dropdowns[$value]['name'];
+                                                                } else {
+                                                                    $configuration_name .= $dropdowns[$value]['name'];
+                                                                }
+                                                            }
                                                         }
+                                                    }
+                                                    // $indId = [];
+                                                    // foreach ($dropdowns as $key => $value) {
+                                                    //     if ($value['dropdown_for'] == 'property_specific_type') {
+                                                    //         $indId[] = $value;
+                                                    //     }
+                                                    // }
+                                                    // $requiretype_name=null;
+                                                    // foreach ($indId as $dropdown) {
+                                                    //     if ($dropdown['parent_id'] == $data->requirement_type) {
+                                                    //         $requiretype_name = $dropdown['name'];
+                                                    //         break;
+                                                    //     }
+                                                    // }
+                                                    $indId = array_filter($dropdowns, function ($value) {
+                                                        return $value['dropdown_for'] == 'property_specific_type';
+                                                    });
+
+                                                    $requiretype_name = null;
+                                                    if (
+                                                        $dropdown = current(
+                                                            array_filter($indId, function ($value) use ($data) {
+                                                                return $value['parent_id'] == $data->requirement_type;
+                                                            }),
+                                                        )
+                                                    ) {
+                                                        $requiretype_name = $dropdown['name'];
                                                     }
 
                                                     // if (!empty($data->requirement_type) && isset(json_decode($data->requirement_type)[0])) {
@@ -294,13 +290,13 @@
                                                                 <div>: {{ $data->enquiry_for }}</div>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Requirement Type</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $prop_type }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Property Type</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <div>: {{ $prop_type === 85 ? "Commercial" : "Residential"  }}</div>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <h6><b>Property Category</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ $requiretype_name }}</div>
@@ -316,19 +312,10 @@
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>:
-                                                                    {{-- {{ $data->area_size_from . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] .'to': '') }} --}}
-                                                                    {{ $data->area_from  . ' To ' . $data->area_to }}
-                                                                    {{-- {{ $data->area_size_to . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] : '') }} --}}
+                                                                    {{ $data->area_size_from . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] : '') }}
+                                                                    to
+                                                                    {{ $data->area_size_to . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] : '') }}
                                                                 </div>
-                                                            </div>
-                                                            
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <h6><b>Budget</b></h6>
-                                                            </div>
-
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
-                                                                    to {{ $data->budget_to }}</div>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Enquiry Source</b></h6>
@@ -346,8 +333,16 @@
                                                                 <div>: {{ $furnished }}</div>
                                                             </div>
 
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Budget</b></h6>
+                                                            </div>
 
-                                                           {{-- <div class="form-group col-6 m-b-5">
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
+                                                                    to {{ $data->budget_to }}</div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Purpose</b></h6>
                                                             </div>
 
@@ -385,7 +380,7 @@
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ $area_name }}</div>
-                                                            </div> --}}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
