@@ -139,7 +139,8 @@
                     <h5>New Leads</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('New Leads')"
                         >X</button>
                     </div>
@@ -163,7 +164,8 @@
                     <h5>New Leads Source Wise</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('New Leads Source Wise')"
                         >X</button>
                     </div>
@@ -187,7 +189,8 @@
                     <h5>All Assign Leads</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('All Assign Leads')"
                         >X</button>
                     </div>
@@ -211,7 +214,8 @@
                     <h5>Active lead Source Wise</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('Active Lead Source Wise')"
                         >X</button>
                     </div>
@@ -235,7 +239,8 @@
                     <h5>Lost Leads Source Wise</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('Lost Leads Source Wise')"
                         >X</button>
                     </div>
@@ -261,7 +266,8 @@
                     <h5>Stage wise Leads</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('Stage Wise Leads')"
                         >X</button>
                     </div>
@@ -283,7 +289,8 @@
                     <h5>Person Wise Leads</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('Person Wise Leads')"
                         >X</button>
                     </div>
@@ -308,7 +315,8 @@
                     <h5>Stage and Person Wise Leads</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('Stage And Person Wise Leads')"
                         >X</button>
                     </div>
@@ -334,7 +342,8 @@
                     <h5>Person wise Activity Report</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('Person Wise Activity Report')"
                         >X</button>
                     </div>
@@ -359,7 +368,8 @@
                     <h5>Activity Not Planned in Lead</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('Activity Not Planned In Lead')"
                         >X</button>
                     </div>
@@ -384,7 +394,8 @@
                     <h5>Assign Leads to Person date wise</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('Assign Leads To Person Date Wise')"
                         >X</button>
                     </div>
@@ -409,7 +420,8 @@
                     <h5>Lead Lost Reason Person wise</h5>
                     <div class="p-2">
                         <button
-                            class="btn btn-danger"
+                            class="btn custom-theme-button btn-sm"
+                            style="border-radius: 5px;"
                             @click="removeChart('Lead Lost Reason Person Wise')"
                         >X</button>
                     </div>

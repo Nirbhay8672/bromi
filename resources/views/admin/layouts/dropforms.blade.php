@@ -3,7 +3,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="drop_exampleModalLabel">Add New Enquiry</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <div class="modal-body">
                     <form class="form-bookmark needs-validation modal_form" method="post" id="drop_modal_form"
@@ -175,8 +175,10 @@
                                     >
                             </div>
                         </div>
-                        <button class="btn btn-secondary" id="drop_saveEnquiry">Save</button>
-                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                        <div class="text-center mt-3">
+                            <button class="btn custom-theme-button" id="drop_saveEnquiry">Save</button>
+                            <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -188,7 +190,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="drop2_drop_exampleModalLabel">Add Insta property</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <div class="modal-body">
                     <form class="form-bookmark needs-validation modal_form" method="post" id="drop2_modal_form"
@@ -419,13 +421,12 @@
                                         type="text" required="" autocomplete="off"
                                         >
                                 </div>
-
-
-
                             </div>
                         </div>
-                        <button class="btn btn-secondary" id="drop2_saveProperty">Save</button>
-                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                        <div class="text-center mt-3">
+                            <button class="btn custom-theme-button" id="drop2_saveProperty">Save</button>
+                            <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>

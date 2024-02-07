@@ -757,8 +757,7 @@ Helper::set_default_measuerement();
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabels">Capital Gain Calculator</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         @csrf
@@ -801,7 +800,7 @@ Helper::set_default_measuerement();
                                 <input class="form-control" name="drop_capital_sale_price" id="drop_capital_sale_price" type="text" required="" autocomplete="off">
                             </div>
 
-                            <div class="form-group col-md-4 m-b-20 d-inline-block">
+                            <div class="form-group col-md-4 m-b-20 d-inline-block mt-3">
                                 <div class="fname focused">
                                     <label for="Capital Gain">Aquisition index</label>
                                     <div class="fvalue">
@@ -810,7 +809,7 @@ Helper::set_default_measuerement();
                                 </div>
                             </div>
 
-                            <div class="form-group col-md-4 m-b-20 d-inline-block">
+                            <div class="form-group col-md-4 m-b-20 d-inline-block mt-3">
                                 <div class="fname focused">
                                     <label for="Capital Gain">Capital Gain</label>
                                     <div class="fvalue">
@@ -829,8 +828,7 @@ Helper::set_default_measuerement();
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabels">Whole Unit Calculator</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="drop3_modal_form" novalidate="">
@@ -940,8 +938,7 @@ Helper::set_default_measuerement();
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabels">Emi Calculator</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="drop4_modal_form" novalidate="">
@@ -1001,14 +998,9 @@ Helper::set_default_measuerement();
                                     <div class="form-group col-md-4 m-b-20">
                                         <p> Total Interest Cost: <span id="interest_cost"></span></p>
                                     </div>
-
-                                    @dump(Auth::user())
-
-
                                 </div>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
