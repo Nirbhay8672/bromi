@@ -25817,8 +25817,8 @@ ul.pro-services li:nth-child(n + 2) {
   height: 40px;
   border-radius: 100%;
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 70px;
+  right: 20px;
   z-index: 5;
   color: #fff;
   background-color:blue;
