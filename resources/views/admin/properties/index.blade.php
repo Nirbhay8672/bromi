@@ -20,25 +20,81 @@
                             <h5 class="mb-3">List of Properties</h5>
                             <div class="row">
                                 @include('admin.properties.change_menu')
-                                <div class="col-md-8">
-                                    <a class="btn btn-primary btn-air-primary" href="{{ route('admin.property.add') }}">Add
-                                        Property</a>
-                                    <button class="btn btn-primary btn-air-primary" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#filtermodal">Filter</button>
-                                    <button style="display:none" class="btn btn-primary btn-air-primary"
-                                        id="resetfilter">Clear Filter</button>
-                                    <button class="btn btn-primary btn-air-primary matchbutton" type="button"
-                                        data-bs-toggle="modal" data-bs-target="#matchModal">Matching</button>
-                                    <button class="btn btn-primary btn-air-primary" onclick="exportProperties()"
-                                        type="button">Export</button>
-                                    <button class="btn btn-primary btn-air-primary" onclick="importProperties()"
-                                        type="button">Import</button>
-                                    <button class="btn btn-primary btn-air-primary delete_table_row" style="display: none"
-                                        onclick="deleteTableRow()" type="button">Delete</button>
-                                    <button class="btn btn-primary btn-air-primary share_table_row" style="display: none"
-                                        onclick="shareTableRow()" type="button">Whatsapp</button>
-                                    <a class="btn btn-primary btn-air-primary float-end"
-                                        href="{{ route('admin.project.byunit') }}">Project vise unit</a>
+                                <div class="col">
+                                    <a  
+                                        class="btn btn-success"
+                                        style="border-radius: 5px;"
+                                        href="{{ route('admin.property.add') }}"
+                                        title="Add Property"
+                                    >
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+
+                                    <button
+                                        class="btn btn-primary ms-3"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#filtermodal"
+                                        style="border-radius: 5px;"
+                                        title="Filter"
+                                    ><i class="fa fa-filter"></i></button>
+
+                                    <button
+                                        class="btn btn-warning ms-3"
+                                        type="button"
+                                        title="Clear Filter"
+                                        id="resetfilter"
+                                        style="display: none;border-radius: 5px;"
+                                    ><i class="fa fa-refresh"></i></button>
+
+                                    <button 
+                                        class="btn btn-primary matchbutton ms-3"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#matchModal"
+                                        title="Matching"
+                                        style="border-radius: 5px;"
+                                    ><i class="fa fa-random"></i></button>
+
+                                    <button
+                                        class="btn btn-info ms-3"
+                                        onclick="exportProperties()"
+                                        style="border-radius: 5px;"
+                                        type="button"
+                                        title="Export"
+                                    ><i class="fa fa-download"></i></button>
+
+                                    <button
+                                        class="btn btn-info ms-3"
+                                        onclick="importProperties()"
+                                        style="border-radius: 5px;"
+                                        type="button"
+                                        title="Import"
+                                    ><i class="fa fa-upload"></i></button>
+
+                                    <button
+                                        class="btn text-white delete_table_row ms-3"
+                                        style="border-radius: 5px;display: none;background-color:red"
+                                        onclick="deleteTableRow()"
+                                        type="button"
+                                        title="Delete"
+                                    ><i class="fa fa-trash"></i></button>
+
+                                    <button
+                                        class="btn btn-success share_table_row ms-3"
+                                        style="border-radius: 5px;display: none;"
+                                        onclick="shareTableRow()"
+                                        type="button"
+                                        title="Share"
+                                    ><i class="fa fa-whatsapp"></i></button>
+
+                                    <a
+                                        class="btn btn-info float-end"
+                                        style="border-radius: 5px;"
+                                        title="Project Vise Unit"
+                                        href="{{ route('admin.project.byunit') }}"
+                                    ><i class="fa fa-list"></i></a>
+                                    
                                 </div>
                             </div>
                         </div>
