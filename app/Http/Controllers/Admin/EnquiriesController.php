@@ -1447,7 +1447,7 @@ class EnquiriesController extends Controller
 			$data['new_enquiry'] = Enquiries::where('enq_status',1)->whereDate('created_at', $request->date)->get();
 		}
 		if (in_array('leadConf', $type)) {
-			$data['leadConf'] = EnquiryProgress::whereHas('Enquiry')
+			$data['leadConf'] = EnquiryProgress::with('Enquiry')
 				->where('status', 1)
 				->where('progress', '=', 'Lead Confirmed')
 				->whereNotNull('nfd')
@@ -1455,7 +1455,7 @@ class EnquiriesController extends Controller
 				->get();
 		}
 		if (in_array('site_visit_scheduled', $type)) {
-			$data['site_visit_scheduled'] = EnquiryProgress::whereHas('Enquiry')
+			$data['site_visit_scheduled'] = EnquiryProgress::with('Enquiry')
 				->where('status', 1)
 				->where('progress', '=', 'Site Visit Scheduled')
 				->whereNotNull('nfd')
@@ -1464,7 +1464,7 @@ class EnquiriesController extends Controller
 		}
 		// site_visit_completed
 		if (in_array('site_visit_completed', $type)) {
-			$data['site_visit_completed'] = EnquiryProgress::whereHas('Enquiry')
+			$data['site_visit_completed'] = EnquiryProgress::with('Enquiry')
 				->where('status', 1)
 				->where(
 					'progress',
@@ -1477,7 +1477,7 @@ class EnquiriesController extends Controller
 			// dd($data['site_visit_completed'], "site_visit_completedsite_visit_completed");
 		}
 		if (in_array('discussion_schedule', $type)) {
-			$data['discussion_schedule'] = EnquiryProgress::whereHas('Enquiry')
+			$data['discussion_schedule'] = EnquiryProgress::with('Enquiry')
 				->where('status', 1)
 				->where('progress', '=', 'Discussion')
 				->whereNotNull('nfd')
@@ -1485,14 +1485,14 @@ class EnquiriesController extends Controller
 				->get();
 		}
 		if (in_array('booked', $type)) {
-			$data['booked'] = EnquiryProgress::whereHas('Enquiry')
+			$data['booked'] = EnquiryProgress::with('Enquiry')
 				->where('status', 1)
 				->where('progress', '=', 'Booked')
 				->whereDate('nfd', '=', $request->date)
 				->get();
 		}
 		if (in_array('lost', $type)) {
-			$data['lost'] = EnquiryProgress::whereHas('Enquiry')
+			$data['lost'] = EnquiryProgress::with('Enquiry')
 				->where('status', 1)
 				->where('progress', '=', 'Lost')
 				->whereDate('nfd', '=', $request->date)

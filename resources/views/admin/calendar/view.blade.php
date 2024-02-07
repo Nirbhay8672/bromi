@@ -150,30 +150,6 @@
                                             </div>
                                             @forelse($new_enquiry as $data)
                                                 @php
-                                                    $prop_type = $configuration_name = $requiretype_name = $furnished = $project_name = $area_name = '';
-                                                    // if (!empty($data->property_type) && isset(json_decode($data->property_type)[0])) {
-                                                    //     foreach (json_decode($data->property_type) as $key => $value) {
-                                                    //         if (isset($dropdowns[$value]['name'])) {
-                                                    //             if ($key > 0) {
-                                                    //                 $prop_type .= ', ' . $dropdowns[$value]['name'];
-                                                    //             } else {
-                                                    //                 $prop_type .= $dropdowns[$value]['name'];
-                                                    //             }
-                                                    //         }
-                                                    //     }
-                                                    // }
-                                                    // if (!empty($data->configuration) && isset(json_decode($data->configuration)[0])) {
-                                                    //     foreach (json_decode($data->configuration) as $key => $value) {
-                                                    //         if (isset($dropdowns[$value]['name'])) {
-                                                    //             if ($key > 0) {
-                                                    //                 $configuration_name .= ', ' . $dropdowns[$value]['name'];
-                                                    //             } else {
-                                                    //                 $configuration_name .= $dropdowns[$value]['name'];
-                                                    //             }
-                                                    //         }
-                                                    //     }
-                                                    // }
-
                                                     // $indId = array_filter($dropdowns, function ($value) {
                                                     //     return $value['dropdown_for'] == 'property_specific_type';
                                                     // });
@@ -188,23 +164,6 @@
                                                     // ) {
                                                     //     $requiretype_name = $dropdown['name'];
                                                     // }
-
-                                                    $indId = [];
-                                                    foreach ($dropdowns as $key => $value) {
-                                                        if ($value['dropdown_for'] == 'property_specific_type') {
-                                                            $indId[] = $value;
-                                                        }
-                                                    }
-                                                    $requiretype_name=null;
-                                                    $prop_type=null;
-                                                    foreach ($indId as $dropdown) {
-                                                        if ($dropdown['parent_id'] == $data->requirement_type) {
-                                                            $requiretype_name = $dropdown['name'];
-                                                            $prop_type = $dropdown['parent_id'];
-                                                            break;
-                                                        }
-                                                    }
-
                                                     // if (!empty($data->requirement_type) && isset(json_decode($data->requirement_type)[0])) {
                                                     // if (!empty($data->requirement_type)) {
                                                     //     // foreach (json_decode($data->requirement_type) as $key => $value) {
@@ -217,6 +176,24 @@
                                                     //     }
                                                     //     // }
                                                     // }
+                                                    $prop_type = $configuration_name = $requiretype_name = $furnished = $project_name = $area_name = '';
+
+                                                    $indId = [];
+                                                    foreach ($dropdowns as $key => $value) {
+                                                        if ($value['dropdown_for'] == 'property_specific_type') {
+                                                            $indId[] = $value;
+                                                        }
+                                                    }
+                                                    $requiretype_name = null;
+                                                    $prop_type = null;
+                                                    foreach ($indId as $dropdown) {
+                                                        if ($dropdown['parent_id'] == $data->requirement_type) {
+                                                            $requiretype_name = $dropdown['name'];
+                                                            $prop_type = $dropdown['parent_id'];
+                                                            break;
+                                                        }
+                                                    }
+
                                                     if (!empty($data->furnished_status) && isset(json_decode($data->furnished_status)[0])) {
                                                         foreach (json_decode($data->furnished_status) as $key => $value) {
                                                             if (isset($dropdowns[$value]['name'])) {
@@ -297,7 +274,9 @@
                                                                 <h6><b>Property Type</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
-                                                                <div>: {{ $prop_type === 85 ? "Commercial" : "Residential"  }}</div>
+                                                                <div>:
+                                                                    {{ $prop_type === 85 ? 'Commercial' : 'Residential' }}
+                                                                </div>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Property Category</b></h6>
@@ -305,23 +284,23 @@
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ $requiretype_name }}</div>
                                                             </div>
-                                                            <div class="form-group col-6 m-b-5">
+                                                            {{-- <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Configuration</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
+                                                            </div> --}}
+                                                            {{-- <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ $configuration_name }}</div>
-                                                            </div>
+                                                            </div> --}}
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Area:</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>:
                                                                     {{-- {{ $data->area_size_from . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] .'to': '') }} --}}
-                                                                    {{ $data->area_from  . ' To ' . $data->area_to }}
+                                                                    {{ $data->area_from . ' To ' . $data->area_to }}
                                                                     {{-- {{ $data->area_size_to . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] : '') }} --}}
                                                                 </div>
                                                             </div>
-                                                            
+
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Budget</b></h6>
                                                             </div>
@@ -347,7 +326,7 @@
                                                             </div>
 
 
-                                                           {{-- <div class="form-group col-6 m-b-5">
+                                                            {{-- <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Purpose</b></h6>
                                                             </div>
 
@@ -469,6 +448,58 @@
                                             <h5 class="border-style">Site Visit Scheduled</h5>
                                         </div>
                                         @forelse ($site_visit_completed as $data)
+                                            @php
+                                                $prop_type = $configuration_name = $requiretype_name = $furnished = $project_name = $area_name = '';
+
+                                                $indId = [];
+                                                foreach ($dropdowns as $key => $value) {
+                                                    if ($value['dropdown_for'] == 'property_specific_type') {
+                                                        $indId[] = $value;
+                                                    }
+                                                }
+                                                $requiretype_name = null;
+                                                $prop_type = null;
+                                                foreach ($indId as $dropdown) {
+                                                    if ($dropdown['parent_id'] == $data->Enquiry->requirement_type) {
+                                                        $requiretype_name = $dropdown['name'];
+                                                        $prop_type = $dropdown['parent_id'];
+                                                        break;
+                                                    }
+                                                }
+                                                if (!empty($data->Enquiry->furnished_status) && isset(json_decode($data->Enquiry->furnished_status)[0])) {
+                                                    foreach (json_decode($data->Enquiry->furnished_status) as $key => $value) {
+                                                        if (isset($dropdowns[$value]['name'])) {
+                                                            if ($key > 0) {
+                                                                $furnished .= ', ' . $dropdowns[$value]['name'];
+                                                            } else {
+                                                                $furnished .= $dropdowns[$value]['name'];
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                if (!empty($data->Enquiry->building_id) && isset(json_decode($data->Enquiry->building_id)[0])) {
+                                                    foreach (json_decode($data->Enquiry->building_id) as $key => $value) {
+                                                        if (isset($builds[$value]['project_name'])) {
+                                                            if ($key > 0) {
+                                                                $project_name .= ', ' . $builds[$value]['project_name'];
+                                                            } else {
+                                                                $project_name .= $builds[$value]['project_name'];
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                if (!empty($data->Enquiry->area_ids)) {
+                                                    foreach (json_decode($data->Enquiry->area_ids) as $key => $value) {
+                                                        if (isset($areas[$value]['name'])) {
+                                                            if ($key > 0) {
+                                                                $area_name .= ', ' . $areas[$value]['name'];
+                                                            } else {
+                                                                $area_name .= $areas[$value]['name'];
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            @endphp
                                             <div class="col-md-4 mb-3">
                                                 <div class="card-body h-100">
                                                     <div class="row">
@@ -498,6 +529,85 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-6 m-b-5">
+                                                            <h6 for="Client Name"><b>Client Name</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>: {{ $data->Enquiry->client_name }}</div>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <h6><b>Mobile</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>: {{ $data->Enquiry->client_mobile }}</div>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <h6><b>Email</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>: {{ $data->Enquiry->client_email }}</div>
+                                                        </div>
+
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <h6><b>Enquiry For</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>: {{ $data->Enquiry->enquiry_for }}</div>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <h6><b>Property Type</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>:
+                                                                {{ $prop_type === 85 ? 'Commercial' : 'Residential' }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <h6><b>Property Category</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>: {{ $requiretype_name }}</div>
+                                                        </div>
+                                                        {{-- <div class="form-group col-6 m-b-5">
+                                                            <h6><b>Configuration</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>: {{ $configuration_name }}</div>
+                                                        </div> --}}
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <h6><b>Area:</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>:
+                                                                {{-- {{ $data->Enquiry->area_size_from . ' ' . (isset($dropdowns[$data->Enquiry->area_measurement]['name']) ? $dropdowns[$data->Enquiry->area_measurement]['name'] .'to': '') }} --}}
+                                                                {{ $data->Enquiry->area_from . ' To ' . $data->Enquiry->area_to }}
+                                                                {{-- {{ $data->Enquiry->area_size_to . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] : '') }} --}}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <h6><b>Budget</b></h6>
+                                                        </div>
+
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
+                                                                to {{ $data->budget_to }}</div>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <h6><b>Enquiry Source</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>:
+                                                                {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <h6><b>Furnished Status</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
+                                                            <div>: {{ $furnished }}</div>
+                                                        </div>
+                                                        <div class="form-group col-6 m-b-5">
                                                             <h6><b>NFD</b></h6>
                                                         </div>
                                                         <div class="form-group col-6 m-b-5">
@@ -511,12 +621,12 @@
                                                         <div class="form-group col-6 m-b-5">
                                                             <div>: {{ $data->remarks }}</div>
                                                         </div>
-                                                        <div class="form-group col-6 m-b-5">
+                                                        {{-- <div class="form-group col-6 m-b-5">
                                                             <h6><b>Type of Lead</b></h6>
                                                         </div>
                                                         <div class="form-group col-6 m-b-5">
                                                             <div>: {{ ucFirst($data->lead_type) }}</div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -534,6 +644,58 @@
                                                 <h5 class="border-style">Lead Confirm Schedule</h5>
                                             </div>
                                             @forelse($leadConf as $data)
+                                                @php
+                                                    $prop_type = $configuration_name = $requiretype_name = $furnished = $project_name = $area_name = '';
+
+                                                    $indId = [];
+                                                    foreach ($dropdowns as $key => $value) {
+                                                        if ($value['dropdown_for'] == 'property_specific_type') {
+                                                            $indId[] = $value;
+                                                        }
+                                                    }
+                                                    $requiretype_name = null;
+                                                    $prop_type = null;
+                                                    foreach ($indId as $dropdown) {
+                                                        if ($dropdown['parent_id'] == $data->Enquiry->requirement_type) {
+                                                            $requiretype_name = $dropdown['name'];
+                                                            $prop_type = $dropdown['parent_id'];
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->furnished_status) && isset(json_decode($data->Enquiry->furnished_status)[0])) {
+                                                        foreach (json_decode($data->Enquiry->furnished_status) as $key => $value) {
+                                                            if (isset($dropdowns[$value]['name'])) {
+                                                                if ($key > 0) {
+                                                                    $furnished .= ', ' . $dropdowns[$value]['name'];
+                                                                } else {
+                                                                    $furnished .= $dropdowns[$value]['name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->building_id) && isset(json_decode($data->Enquiry->building_id)[0])) {
+                                                        foreach (json_decode($data->Enquiry->building_id) as $key => $value) {
+                                                            if (isset($builds[$value]['project_name'])) {
+                                                                if ($key > 0) {
+                                                                    $project_name .= ', ' . $builds[$value]['project_name'];
+                                                                } else {
+                                                                    $project_name .= $builds[$value]['project_name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->area_ids)) {
+                                                        foreach (json_decode($data->Enquiry->area_ids) as $key => $value) {
+                                                            if (isset($areas[$value]['name'])) {
+                                                                if ($key > 0) {
+                                                                    $area_name .= ', ' . $areas[$value]['name'];
+                                                                } else {
+                                                                    $area_name .= $areas[$value]['name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                @endphp
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card-body h-100">
                                                         <div class="row">
@@ -558,14 +720,6 @@
                                                                 <div>: {{ $data->progress }}</div>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
-                                                                <h6><b>Sales Comments</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <div>:
-                                                                    {{-- {{ $data->dropdowns ? $data->dropdowns->name : '' }} --}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
                                                                 <h6><b>NFD</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
@@ -574,17 +728,91 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
+                                                                <h6 for="Client Name"><b>Client Name</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_name }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Mobile</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_mobile }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Email</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_email }}</div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Enquiry For</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->enquiry_for }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Property Type</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{ $prop_type === 85 ? 'Commercial' : 'Residential' }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Property Category</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $requiretype_name }}</div>
+                                                            </div>
+                                                            {{-- <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Configuration</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $configuration_name }}</div>
+                                                            </div> --}}
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Area:</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{-- {{ $data->Enquiry->area_size_from . ' ' . (isset($dropdowns[$data->Enquiry->area_measurement]['name']) ? $dropdowns[$data->Enquiry->area_measurement]['name'] .'to': '') }} --}}
+                                                                    {{ $data->Enquiry->area_from . ' To ' . $data->Enquiry->area_to }}
+                                                                    {{-- {{ $data->Enquiry->area_size_to . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] : '') }} --}}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Budget</b></h6>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
+                                                                    to {{ $data->budget_to }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Enquiry Source</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Furnished Status</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $furnished }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Remarks</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ $data->remarks }}</div>
                                                             </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <h6><b>Type of Lead</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <div>: {{ ucFirst($data->lead_type) }}</div>
-                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -603,6 +831,58 @@
                                                 <h5 class="border-style">Discussion Schedule</h5>
                                             </div>
                                             @forelse($discussion_schedule as $data)
+                                                @php
+                                                    $prop_type = $configuration_name = $requiretype_name = $furnished = $project_name = $area_name = '';
+
+                                                    $indId = [];
+                                                    foreach ($dropdowns as $key => $value) {
+                                                        if ($value['dropdown_for'] == 'property_specific_type') {
+                                                            $indId[] = $value;
+                                                        }
+                                                    }
+                                                    $requiretype_name = null;
+                                                    $prop_type = null;
+                                                    foreach ($indId as $dropdown) {
+                                                        if ($dropdown['parent_id'] == $data->Enquiry->requirement_type) {
+                                                            $requiretype_name = $dropdown['name'];
+                                                            $prop_type = $dropdown['parent_id'];
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->furnished_status) && isset(json_decode($data->Enquiry->furnished_status)[0])) {
+                                                        foreach (json_decode($data->Enquiry->furnished_status) as $key => $value) {
+                                                            if (isset($dropdowns[$value]['name'])) {
+                                                                if ($key > 0) {
+                                                                    $furnished .= ', ' . $dropdowns[$value]['name'];
+                                                                } else {
+                                                                    $furnished .= $dropdowns[$value]['name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->building_id) && isset(json_decode($data->Enquiry->building_id)[0])) {
+                                                        foreach (json_decode($data->Enquiry->building_id) as $key => $value) {
+                                                            if (isset($builds[$value]['project_name'])) {
+                                                                if ($key > 0) {
+                                                                    $project_name .= ', ' . $builds[$value]['project_name'];
+                                                                } else {
+                                                                    $project_name .= $builds[$value]['project_name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->area_ids)) {
+                                                        foreach (json_decode($data->Enquiry->area_ids) as $key => $value) {
+                                                            if (isset($areas[$value]['name'])) {
+                                                                if ($key > 0) {
+                                                                    $area_name .= ', ' . $areas[$value]['name'];
+                                                                } else {
+                                                                    $area_name .= $areas[$value]['name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                @endphp
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card-body h-100">
                                                         <div class="row">
@@ -643,17 +923,96 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
+                                                                <h6 for="Client Name"><b>Client Name</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_name }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Mobile</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_mobile }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Email</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_email }}</div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Enquiry For</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->enquiry_for }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Property Type</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{ $prop_type === 85 ? 'Commercial' : 'Residential' }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Property Category</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $requiretype_name }}</div>
+                                                            </div>
+                                                            {{-- <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Configuration</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $configuration_name }}</div>
+                                                            </div> --}}
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Area:</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{-- {{ $data->Enquiry->area_size_from . ' ' . (isset($dropdowns[$data->Enquiry->area_measurement]['name']) ? $dropdowns[$data->Enquiry->area_measurement]['name'] .'to': '') }} --}}
+                                                                    {{ $data->Enquiry->area_from . ' To ' . $data->Enquiry->area_to }}
+                                                                    {{-- {{ $data->Enquiry->area_size_to . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] : '') }} --}}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Budget</b></h6>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
+                                                                    to {{ $data->budget_to }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Enquiry Source</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Furnished Status</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $furnished }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Remarks</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ $data->remarks }}</div>
                                                             </div>
-                                                            <div class="form-group col-6 m-b-5">
+                                                            {{-- <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Type of Lead</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ ucFirst($data->lead_type) }}</div>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -672,6 +1031,58 @@
                                                 <h5 class="border-style">Booked</h5>
                                             </div>
                                             @forelse($booked as $data)
+                                                @php
+                                                    $prop_type = $configuration_name = $requiretype_name = $furnished = $project_name = $area_name = '';
+
+                                                    $indId = [];
+                                                    foreach ($dropdowns as $key => $value) {
+                                                        if ($value['dropdown_for'] == 'property_specific_type') {
+                                                            $indId[] = $value;
+                                                        }
+                                                    }
+                                                    $requiretype_name = null;
+                                                    $prop_type = null;
+                                                    foreach ($indId as $dropdown) {
+                                                        if ($dropdown['parent_id'] == $data->Enquiry->requirement_type) {
+                                                            $requiretype_name = $dropdown['name'];
+                                                            $prop_type = $dropdown['parent_id'];
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->furnished_status) && isset(json_decode($data->Enquiry->furnished_status)[0])) {
+                                                        foreach (json_decode($data->Enquiry->furnished_status) as $key => $value) {
+                                                            if (isset($dropdowns[$value]['name'])) {
+                                                                if ($key > 0) {
+                                                                    $furnished .= ', ' . $dropdowns[$value]['name'];
+                                                                } else {
+                                                                    $furnished .= $dropdowns[$value]['name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->building_id) && isset(json_decode($data->Enquiry->building_id)[0])) {
+                                                        foreach (json_decode($data->Enquiry->building_id) as $key => $value) {
+                                                            if (isset($builds[$value]['project_name'])) {
+                                                                if ($key > 0) {
+                                                                    $project_name .= ', ' . $builds[$value]['project_name'];
+                                                                } else {
+                                                                    $project_name .= $builds[$value]['project_name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->area_ids)) {
+                                                        foreach (json_decode($data->Enquiry->area_ids) as $key => $value) {
+                                                            if (isset($areas[$value]['name'])) {
+                                                                if ($key > 0) {
+                                                                    $area_name .= ', ' . $areas[$value]['name'];
+                                                                } else {
+                                                                    $area_name .= $areas[$value]['name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                @endphp
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card-body h-100">
                                                         <div class="row">
@@ -712,17 +1123,96 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
+                                                                <h6 for="Client Name"><b>Client Name</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_name }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Mobile</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_mobile }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Email</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_email }}</div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Enquiry For</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->enquiry_for }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Property Type</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{ $prop_type === 85 ? 'Commercial' : 'Residential' }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Property Category</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $requiretype_name }}</div>
+                                                            </div>
+                                                            {{-- <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Configuration</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $configuration_name }}</div>
+                                                            </div> --}}
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Area:</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{-- {{ $data->Enquiry->area_size_from . ' ' . (isset($dropdowns[$data->Enquiry->area_measurement]['name']) ? $dropdowns[$data->Enquiry->area_measurement]['name'] .'to': '') }} --}}
+                                                                    {{ $data->Enquiry->area_from . ' To ' . $data->Enquiry->area_to }}
+                                                                    {{-- {{ $data->Enquiry->area_size_to . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] : '') }} --}}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Budget</b></h6>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
+                                                                    to {{ $data->budget_to }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Enquiry Source</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Furnished Status</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $furnished }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Remarks</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ $data->remarks }}</div>
                                                             </div>
-                                                            <div class="form-group col-6 m-b-5">
+                                                            {{-- <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Type of Lead</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ ucFirst($data->lead_type) }}</div>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -741,6 +1231,58 @@
                                                 <h5 class="border-style">Lost</h5>
                                             </div>
                                             @forelse($lost as $data)
+                                                @php
+                                                    $prop_type = $configuration_name = $requiretype_name = $furnished = $project_name = $area_name = '';
+
+                                                    $indId = [];
+                                                    foreach ($dropdowns as $key => $value) {
+                                                        if ($value['dropdown_for'] == 'property_specific_type') {
+                                                            $indId[] = $value;
+                                                        }
+                                                    }
+                                                    $requiretype_name = null;
+                                                    $prop_type = null;
+                                                    foreach ($indId as $dropdown) {
+                                                        if ($dropdown['parent_id'] == $data->Enquiry->requirement_type) {
+                                                            $requiretype_name = $dropdown['name'];
+                                                            $prop_type = $dropdown['parent_id'];
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->furnished_status) && isset(json_decode($data->Enquiry->furnished_status)[0])) {
+                                                        foreach (json_decode($data->Enquiry->furnished_status) as $key => $value) {
+                                                            if (isset($dropdowns[$value]['name'])) {
+                                                                if ($key > 0) {
+                                                                    $furnished .= ', ' . $dropdowns[$value]['name'];
+                                                                } else {
+                                                                    $furnished .= $dropdowns[$value]['name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->building_id) && isset(json_decode($data->Enquiry->building_id)[0])) {
+                                                        foreach (json_decode($data->Enquiry->building_id) as $key => $value) {
+                                                            if (isset($builds[$value]['project_name'])) {
+                                                                if ($key > 0) {
+                                                                    $project_name .= ', ' . $builds[$value]['project_name'];
+                                                                } else {
+                                                                    $project_name .= $builds[$value]['project_name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!empty($data->Enquiry->area_ids)) {
+                                                        foreach (json_decode($data->Enquiry->area_ids) as $key => $value) {
+                                                            if (isset($areas[$value]['name'])) {
+                                                                if ($key > 0) {
+                                                                    $area_name .= ', ' . $areas[$value]['name'];
+                                                                } else {
+                                                                    $area_name .= $areas[$value]['name'];
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                @endphp
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card-body h-100">
                                                         <div class="row">
@@ -781,17 +1323,96 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
+                                                                <h6 for="Client Name"><b>Client Name</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_name }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Mobile</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_mobile }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Email</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->client_email }}</div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Enquiry For</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->Enquiry->enquiry_for }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Property Type</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{ $prop_type === 85 ? 'Commercial' : 'Residential' }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Property Category</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $requiretype_name }}</div>
+                                                            </div>
+                                                            {{-- <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Configuration</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $configuration_name }}</div>
+                                                            </div> --}}
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Area:</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{-- {{ $data->Enquiry->area_size_from . ' ' . (isset($dropdowns[$data->Enquiry->area_measurement]['name']) ? $dropdowns[$data->Enquiry->area_measurement]['name'] .'to': '') }} --}}
+                                                                    {{ $data->Enquiry->area_from . ' To ' . $data->Enquiry->area_to }}
+                                                                    {{-- {{ $data->Enquiry->area_size_to . ' ' . (isset($dropdowns[$data->area_measurement]['name']) ? $dropdowns[$data->area_measurement]['name'] : '') }} --}}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Budget</b></h6>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
+                                                                    to {{ $data->budget_to }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Enquiry Source</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>:
+                                                                    {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <h6><b>Furnished Status</b></h6>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
+                                                                <div>: {{ $furnished }}</div>
+                                                            </div>
+                                                            <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Remarks</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ $data->remarks }}</div>
                                                             </div>
-                                                            <div class="form-group col-6 m-b-5">
+                                                            {{-- <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Type of Lead</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
                                                                 <div>: {{ ucFirst($data->lead_type) }}</div>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                 </div>
