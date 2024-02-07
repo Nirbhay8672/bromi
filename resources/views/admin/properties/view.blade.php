@@ -2776,7 +2776,10 @@
                                                 <table class="table table-responsive custom-table-design mb-3">
                                                     <thead>
                                                         <tr>
+                                                            <th scope="col">Enquiry For</th>
                                                             <th scope="col">Client Name</th>
+                                                            <th scope="col">Client Mobile</th>
+                                                            <th scope="col">Client Email</th>
                                                             <th scope="col">Activity</th>
                                                             <th scope="col">Date</th>
 
@@ -2788,8 +2791,11 @@
                                                         @forelse ($visits as $value)
                                                             <tr>
                                                                 @if ($value->visit_status == "Completed")
+                                                                <td>{{$value->Enquiry->enquiry_for}}</td>
                                                                     <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
                                                                     </td>
+                                                                    <td>{{$value->Enquiry->client_mobile}}</td>
+                                                                    <td>{{$value->Enquiry->client_email}}</td>
                                                                     <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
                                                                     </td>
                                                                     <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
