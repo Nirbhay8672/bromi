@@ -1,5 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
+    <link rel="stylesheet" type="text/css" href="{{ asset('admins/assets/css/vendors/chartist.css') }}">
     <div class="page-body" x-data="dashboard">
         <div class="container-fluid">
             <div class="page-title">
@@ -13,7 +14,7 @@
                 <div class="row card-body">
                     <div class="d-flex flex-row-reverse bd-highlight">
                         <div class="p-2 bd-highlight">
-                            <div class="dropdown">
+                            <div class="dropdown" style="border: 1px solid black;width:250px;">
                                 <button
                                     class="btn dropdown-toggle"
                                     type="button"
@@ -23,10 +24,10 @@
                                 >
                                     Chart Selection
                                 </button>
-                                <div class="dropdown-menu">
+                                <div class="dropdown-menu p-1">
                                     <template x-for="(chart , index ) in chart_option" :key="index">
                                         <span>
-                                            <div class="form-check" style="margin-left: 10px;">
+                                            <div class="form-check" style="margin-left: 10px;margin-right:10px;margin-top:5px;">
                                                 <input class="form-check-input pl-2" type="checkbox" x-model="charts" :value="chart" :id="`ck_${index}`">
                                                 <label class="form-check-label" :for="`ck_${index}`" x-text="chart"></label>
                                             </div>
@@ -36,9 +37,9 @@
                             </div>
                         </div>
                         <div class="p-2 bd-highlight">
-                            <div class="input-group border border-dark">
+                            <div class="input-group" style="border: 1px solid black;">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                <select class="form-control border border-dark" id="choose_date_range" style="width: 150px;">
+                                <select class="form-control" id="choose_date_range" style="border: 1px solid black;width: 200px;">
                                     <option value="this_month" selected>This Month</option>
                                     <option value="today" {{ request('date_range') == 'today' ? 'selected' : '' }}>Today</option>
                                     <option value="yesterday" {{ request('date_range') == 'yesterday' ? 'selected' : '' }}>Yesterday</option>
@@ -57,16 +58,11 @@
                 @include('admin.components.dashboard_content')
             </div>
         </div>
-
-        <!-- Container-fluid Ends-->
         @php
             $totalSource = json_encode($totalSource);
         @endphp
     </div>
 @endsection
-@push('page-css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('admins/assets/css/vendors/chartist.css') }}">
-@endpush
 @push('scripts')
     <script src="{{ asset('admins/assets/js/chart/knob/knob.min.js') }}"></script>
     <script src="{{ asset('admins/assets/js/chart/knob/knob-chart.js') }}"></script>
@@ -78,16 +74,11 @@
     
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
-    
     <script type="text/javascript">
-
         document.addEventListener('alpine:init', () => {
-
             Alpine.data('dashboard', () => ({
-
                 charts : [
                     'New Leads',
                     'New Leads Source Wise',
