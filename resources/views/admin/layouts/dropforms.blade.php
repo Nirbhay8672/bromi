@@ -175,11 +175,9 @@
                                     >
                             </div>
                         </div>
-                        <div class="row bg-light pt-3 pb-3">
-                            <div class="col">
-                                <button class="btn btn-secondary" id="drop_saveEnquiry">Save</button>
-                                <button class="btn btn-danger ms-2" type="button" data-bs-dismiss="modal">Cancel</button>
-                            </div>
+                        <div class="text-center mt-3">
+                            <button class="btn btn-success" style="border-radius: 5px;" id="drop_saveEnquiry">Save</button>
+                            <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -425,11 +423,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row bg-light pt-3 pb-3">
-                            <div class="col">
-                                <button class="btn btn-secondary" id="drop2_saveProperty">Save</button>
-                                <button class="btn btn-danger ms-2" type="button" data-bs-dismiss="modal">Cancel</button>
-                            </div>
+                        <div class="text-center mt-3">
+                            <button class="btn btn-success" style="border-radius: 5px;" id="drop2_saveProperty">Save</button>
+                            <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                         </div>
                     </form>
                 </div>
