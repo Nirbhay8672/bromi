@@ -22,8 +22,7 @@
                                 @include('admin.properties.change_menu')
                                 <div class="col">
                                     <a  
-                                        class="btn btn-success"
-                                        style="border-radius: 5px;"
+                                        class="btn custom-icon-theme-button"
                                         href="{{ route('admin.property.add') }}"
                                         title="Add Property"
                                     >
@@ -31,43 +30,39 @@
                                     </a>
 
                                     <button
-                                        class="btn btn-primary ms-3"
+                                        class="btn ms-3 custom-icon-theme-button"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#filtermodal"
-                                        style="border-radius: 5px;"
                                         title="Filter"
                                     ><i class="fa fa-filter"></i></button>
 
                                     <button
-                                        class="btn btn-warning ms-3"
+                                        class="btn ms-3 custom-icon-theme-button"
                                         type="button"
                                         title="Clear Filter"
                                         id="resetfilter"
-                                        style="display: none;border-radius: 5px;"
+                                        style="display: none;"
                                     ><i class="fa fa-refresh"></i></button>
 
                                     <button 
-                                        class="btn btn-primary matchbutton ms-3"
+                                        class="btn matchbutton ms-3 custom-icon-theme-button"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#matchModal"
                                         title="Matching"
-                                        style="border-radius: 5px;"
                                     ><i class="fa fa-random"></i></button>
 
                                     <button
-                                        class="btn btn-info ms-3"
+                                        class="btn ms-3 custom-icon-theme-button"
                                         onclick="exportProperties()"
-                                        style="border-radius: 5px;"
                                         type="button"
                                         title="Export"
                                     ><i class="fa fa-download"></i></button>
 
                                     <button
-                                        class="btn btn-info ms-3"
+                                        class="btn ms-3 custom-icon-theme-button"
                                         onclick="importProperties()"
-                                        style="border-radius: 5px;"
                                         type="button"
                                         title="Import"
                                     ><i class="fa fa-upload"></i></button>
@@ -81,16 +76,15 @@
                                     ><i class="fa fa-trash"></i></button>
 
                                     <button
-                                        class="btn btn-success share_table_row ms-3"
-                                        style="border-radius: 5px;display: none;"
+                                        class="btn share_table_row ms-3"
+                                        style="border-radius: 5px;display: none;background-color:#25d366;color:white;"
                                         onclick="shareTableRow()"
                                         type="button"
                                         title="Share"
                                     ><i class="fa fa-whatsapp"></i></button>
 
                                     <a
-                                        class="btn btn-info float-end"
-                                        style="border-radius: 5px;"
+                                        class="btn float-end custom-icon-theme-button"
                                         title="Project Vise Unit"
                                         href="{{ route('admin.project.byunit') }}"
                                     ><i class="fa fa-list"></i></a>

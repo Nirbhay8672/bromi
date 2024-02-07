@@ -25821,7 +25821,7 @@ ul.pro-services li:nth-child(n + 2) {
   right: 20px;
   z-index: 5;
   color: #fff;
-  background-color:blue;
+  background-color:#1d2848;
   border: none;
   padding: 7px;
   -webkit-box-shadow: 0 0 10px var(--theme-deafult);
@@ -57720,4 +57720,16 @@ table.dataTable.display tbody tr:last-child td:last-child{
 }
 .bromi-loader{
 	width: 250px;
+}
+
+.custom-theme-button {
+  border-radius: 5px !important;
+  color: white !important;
+  background-color: #1d2848 !important;
+}
+
+.custom-icon-theme-button {
+  border-radius: 5px !important;
+  color: white !important;
+  background-color: #1d2848 !important;
 }
