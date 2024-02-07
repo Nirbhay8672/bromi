@@ -132,13 +132,13 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Share On whatsapp</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-5 m-b-4 mb-3">
-                                <select class="form-select mt-1" id="conatct_id">
+                                <select class="form-select mt-1" id="conatct_id" style="border: 1px solid black;border-radius:5px;">
                                     <option value=""> Contact</option>
                                     @forelse ($conatcts_numbers as $number)
                                         <option value="{{ $number['number'] }}">{{ $number['name'] }}
@@ -148,8 +148,13 @@
                                     @endforelse
                                 </select>
                             </div>
-                            <div class="form-group col-md-2 m-b-4 mb-3">
-                                <select class="form-control" id="CountryCode" name="CountryCode">
+                            <div class="form-group col-md-3 m-b-4 mb-3">
+                                <select
+                                    class="form-control"
+                                    id="CountryCode" 
+                                    name="CountryCode"
+                                    style="border: 1px solid black;border-radius:5px;"
+                                >
                                     <option value=""></option>
                                     <option value="93">93</option>
                                     <option value="355">355</option>
@@ -391,14 +396,18 @@
                                     <option value="263">263</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-3 m-b-4 mb-3">
+                            <div class="form-group col-md-4 m-b-4 mb-3">
+                                <div class="fname">
                                 <input type="text" placeholder="Number" name="whatsapp_number" class="form-control"
                                     pattern="[1-9]{1}[0-9]{9}" id="whatsapp_number">
+                                </div>
                             </div>
                             <input type="hidden" name="shar_string" id="shar_string">
                         </div>
-                        <button class="btn btn-secondary" type="button" id="shareonwhatsapp">Share</button>
-                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                        <div class="text-center mt-3">
+                            <button class="btn custom-theme-button" type="button" id="shareonwhatsapp">Share</button>
+                            <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -422,7 +431,6 @@
                                 </select>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -432,7 +440,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Import Property</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
@@ -463,8 +471,10 @@
                                 </div>
                                 <br>
                             </div>
-                            <button class="btn btn-secondary" id="importFile">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" id="importFile">Save</button>
+                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -475,7 +485,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Filter</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="filter_form" novalidate="">
@@ -638,7 +648,6 @@
                                                 data-language="en">
                                         </div>
                                     </div>
-                                    <hr class="color-hr">
                                     <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_is_preleased" type="checkbox">
                                         <label class="form-check-label" for="filter_is_preleased">Pre-leased</label>
@@ -653,8 +662,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-secondary" id="filtersearch">Filter</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" id="filtersearch">Filter</button>
+                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -666,7 +677,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Match By</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="match_modal" novalidate="">
@@ -712,60 +723,57 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Match By</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="match_modal" novalidate="">
                             @csrf
                             <div>
                                 <div class="row" id="matchbyfield">
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
                                         <input class="form-check-input" checked id="match_enquiry_for" type="checkbox">
                                         <label class="form-check-label" for="match_enquiry_for">Property For</label>
                                     </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
                                         <input class="form-check-input" checked id="match_property_type" type="checkbox">
                                         <label class="form-check-label" for="match_property_type">Property
                                             Requirement</label>
                                     </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
                                         <input class="form-check-input" checked id="match_specific_type" type="checkbox">
                                         <label class="form-check-label" for="match_specific_type">Property
                                             Category</label>
                                     </div>
-									<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+									<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
                                         <input class="form-check-input" checked id="match_specific_sub_type" type="checkbox">
                                         <label class="form-check-label" for="match_specific_sub_type">Property
                                           Sub Category</label>
                                     </div>
-                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
                                         <input class="form-check-input" id="match_building" type="checkbox">
                                         <label class="form-check-label" for="match_building">Project</label>
                                     </div> --}}
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
                                         <input class="form-check-input" checked id="match_budget_from_type"
                                             type="checkbox">
                                         <label class="form-check-label" for="match_budget_from_type">Property
                                             Budget</label>
                                     </div>
-                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
                                         <input class="form-check-input" checked id="match_budget_to_type"
                                             type="checkbox">
                                         <label class="form-check-label" for="match_budget_to_type">Budget to</label>
                                     </div> --}}
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
                                         <input class="form-check-input" checked id="match_enquiry_size" type="checkbox">
                                         <label class="form-check-label" for="match_enquiry_size">Property Size</label>
                                     </div>
-
-                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
-                                        <input class="form-check-input" id="match_inquiry_source" type="checkbox">
-                                        <label class="form-check-label" for="match_inquiry_source">Enquiry Source</label>
-                                    </div> --}}
                                 </div>
                             </div>
-                            <button class="btn btn-secondary" type="button" id="matchagain">Match</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center mt-3">
+                                <button class="btn custom-theme-button" type="button" id="matchagain">Match</button>
+                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -807,28 +815,22 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Users</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
-                            id="btnClose">
-                        </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" route="" id="userRecordForm"
                             novalidate="">
-                            <div class="modal-content">
-                                <div class="row">
-                                    <div class="form-group col-md-12 m-b-4 mb-4">
-                                        <label class="mb-0">&nbsp;</label>
-                                        <label class="select2_label" for="Property list">Select User </label>
-                                        <select class="form-select" id="users_list" multiple>
-                                            {{-- <option value="">Select Users</option> --}}
-                                        </select>
-                                    </div>
-                                    <span style="color: #FF0000" id="err_partner"></span>
-                                    <div class="form-group col-md-6 m-b-4 mb-3">
-                                        <button class="btn btn-secondary" id="shareData" data-id=""
-                                            type="button">Share
-                                            Property</button>
-                                    </div>
+                            <div class="row">
+                                <div class="form-group col-md-12 m-b-4 mb-5 mt-2">
+                                    <label class="select2_label" for="Property list">Select User </label>
+                                    <select class="form-select" id="users_list" multiple>
+                                    </select>
+                                </div>
+                                <span style="color: #FF0000" id="err_partner"></span>
+                                <div class="form-group m-b-4 mb-3 text-center">
+                                    <button class="btn custom-theme-button" id="shareData" data-id=""
+                                        type="button">Share
+                                        Property</button>
                                 </div>
                             </div>
                         </form>

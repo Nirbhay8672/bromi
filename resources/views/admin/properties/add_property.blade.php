@@ -451,7 +451,7 @@
                                                             <div id="storage_type_error"></div>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary nextBtn" id="nextButton"
+                                                    <button class="btn btn-primary nextBtn" style="border-radius: 5px;" id="nextButton"
                                                         type="button">Next</button>
                                                 </div>
                                             </div>
@@ -1832,9 +1832,12 @@
                                                                 type="text" autocomplete="off">
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary previousBtn1"
-                                                        type="button">Previous</button>
-                                                    <button class="btn btn-primary nextBtn" type="button">Next</button>
+                                                    <button
+                                                        class="btn btn-primary previousBtn1"
+                                                        type="button"
+                                                        style="border-radius: 5px;"
+                                                    >Previous</button>
+                                                    <button class="btn btn-primary ms-3 nextBtn" style="border-radius: 5px;" type="button">Next</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2459,13 +2462,10 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    {{-- <button id="saveProperty" class="btn btn-primary previousBtn"
-													type="button">Previous</button> --}}
-                                                    <button class="btn btn-primary previousBtn2"
+                                                    <button class="btn btn-primary previousBtn2" style="border-radius: 5px;"
                                                         type="button">Previous</button>
-                                                    <button id="saveProperty" class="btn btn-primary nextBtn submitFnl"
-                                                        type="button">Finish</button>
+                                                    <button id="saveProperty" class="btn btn-primary ms-3 nextBtn submitFnl"
+                                                        type="button" style="border-radius: 5px;">Finish</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -3345,7 +3345,7 @@
                     '<div data-contact_id= ' + id +
                     ' class="form-group col-md-3 m-b-4 mb-3"><button data-contact_id=' + id +
                     ' class="' + ((plus) ? "add_owner_contacts get-pos" : "remove_owner_contacts remove-pos") +
-                    ' btn btn-danger btn-air-danger" type="button">' + ((plus) ? "+" : "-") + '</button>  </div>'
+                    ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((plus) ? "+" : "-") + '</button>  </div>'
                 '</div>';
                 // if (plus === 0) {
                 //     var selectElement = document.getElementById("key_arrangement");
@@ -3475,7 +3475,7 @@
                 '</div>' +
                 '<div data-unit_id= ' + id +
                     ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
-                    ' class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-danger btn-air-danger" type="button">' + ((
+                    ' class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((
                         plus) ? "+" : "-") + '</button>  </div>' +
                     '</div>';
                 return myvar;
