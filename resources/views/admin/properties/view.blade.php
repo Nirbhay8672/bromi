@@ -89,7 +89,7 @@
                                         </div>
 
                                         <div class="col-lg-3 col-md-6 col-12" style="margin-left: 10px;">
-                                            <button class="btn btn-primary" type="submit">Update</button>
+                                            <button class="btn btn-primary" style="border-radius:5px;" type="submit">Update</button>
                                         </div>
                                     </form>
 
