@@ -15,10 +15,27 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Builders</h5>
-                            <button class="btn btn-primary btn-air-primary open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#builderModal">Add New Builder</button>
-								<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()"
-									type="button">Delete</button>
+
+                            <div class="row mt-2 mb-2">
+                                <div class="col">
+                                    <button
+                                        class="btn custom-icon-theme-button"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#builderModal"
+                                        title="Add Builder"
+                                    ><i class="fa fa-plus"></i></button>
+
+                                    <button
+                                        class="btn text-white delete_table_row ms-3"
+                                        style="border-radius: 5px;display: none;background-color:red"
+                                        onclick="deleteTableRow()"
+                                        type="button"
+                                        title="Delete"
+                                    ><i class="fa fa-trash"></i></button>
+
+                                </div>
+                            </div>
 
                         </div>
                         <div class="card-body">
@@ -43,18 +60,15 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
         </div>
         <div class="modal fade" id="builderModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add New Builder</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
@@ -67,8 +81,10 @@
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
-                            <button class="btn btn-secondary" id="saveBuilder">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" id="saveBuilder">Save</button>
+                                <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>

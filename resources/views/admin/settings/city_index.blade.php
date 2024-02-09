@@ -15,12 +15,35 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Cities</h5>
-                            <button class="btn btn-primary btn-air-primary open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#cityModal">Add New City</button>
-								<button class="btn btn-primary btn-air-primary" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#importmodal"> Import Cities</button>
-									<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()"
-									type="button">Delete</button>
+                            <div class="row mt-2 mb-2">
+                                <div class="col">
+                                    <button
+                                        class="btn custom-icon-theme-button"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cityModal"
+                                        title="Add City"
+                                    ><i class="fa fa-plus"></i></button>
+
+                                    <button
+                                        class="btn ms-3 custom-icon-theme-button"
+                                        type="button"
+                                        title="Import City"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#importmodal"
+                                    ><i class="fa fa-upload"></i></button>
+
+
+                                    <button
+                                        class="btn text-white delete_table_row ms-3"
+                                        style="border-radius: 5px;display: none;background-color:red"
+                                        onclick="deleteTableRow()"
+                                        type="button"
+                                        title="Delete"
+                                    ><i class="fa fa-trash"></i></button>
+
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -53,7 +76,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add New City</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
@@ -86,8 +109,10 @@
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
-                            <button class="btn btn-secondary" id="saveCity">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" id="saveCity">Save</button>
+                                <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -98,7 +123,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Import Cities</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation" method="post" id="import_form" novalidate="">
@@ -133,8 +158,11 @@
                                     </template>
                                 </div>
                             </template>
-                            <button class="btn btn-secondary" type="button" @click="importCity">Import</button>
-                            <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" @click="importCity">Save</button>
+                                <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>

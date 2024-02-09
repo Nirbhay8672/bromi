@@ -15,9 +15,6 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of States</h5>
-                            <button class="btn btn-primary btn-air-primary open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#stateModal">Add New State</button>
-
                         </div>
                         <div class="card-body">
                             <div class="row mb-4">
@@ -27,6 +24,15 @@
                                         <option value="{{ route('admin.settings.city') }}">Cities</option>
                                         <option value="{{ route('admin.areas') }}">Localities</option>
                                     </select>
+                                </div>
+                                <div class="col-2">
+                                    <button
+                                        class="btn custom-icon-theme-button"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#stateModal"
+                                        title="Add State"
+                                    ><i class="fa fa-plus"></i></button>
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -52,7 +58,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add New State</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
@@ -74,8 +80,10 @@
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
-                            <button class="btn btn-secondary" id="saveState">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" id="saveState">Save</button>
+                                <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>

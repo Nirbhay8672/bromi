@@ -76,7 +76,7 @@
                         <template x-if="email_bulk_array.length > 0">
                             <h5 class="modal-title" id="exampleModalLabel">Plan Details</h5>
                         </template>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" x-show="email_bulk_array.length == 0">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
@@ -94,8 +94,10 @@
                                 <span id="password_error" class="text-danger"></span>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
-                            <button class="btn btn-secondary mt-3" id="saveCity">Save</button>
-                            <button class="btn btn-danger mt-3" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button mt-3" id="saveCity">Save</button>
+                                <button class="btn btn-primary mt-3 ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                     <template x-if="email_bulk_array.length > 0">
@@ -105,10 +107,8 @@
                             <p><strong>Email Balance : </strong> {{ $email_bulk[0]->email_balance }}</p>
                             <p><strong>Plan Expire : </strong> {{ $email_bulk[0]->expired_date }}</p>
 
-                            <div class="row">
-                                <div class="col-6">
-                                    <button class="btn btn-primary" @click="chnageEmail">Change Account</button>
-                                </div>
+                            <div class="text-center">
+                                <button class="btn btn-primary" style="border-radius: 5px;" @click="chnageEmail">Change Account</button>
                             </div>
                         </div>
                     </template>
@@ -122,7 +122,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add Email</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
@@ -137,8 +137,10 @@
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
-                            <a  class="btn btn-secondary" id="saveMail">Send Mail</a>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" id="saveMail">Send Mail</button>
+                                <button class="btn btn-primary ms-3" type="button" style="border-radius: 5px;" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>

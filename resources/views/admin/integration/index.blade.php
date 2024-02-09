@@ -14,7 +14,17 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Email Template </h5>
-                            <a href="{{route('admin.email.create')}}" class="btn btn-pill btn-primary btn-air-primary">Add New Template</a>
+
+                            <div class="col">
+                                <a  
+                                    class="btn custom-icon-theme-button"
+                                    href="{{route('admin.email.create')}}"
+                                    title="Add Template"
+                                >
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </div>
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

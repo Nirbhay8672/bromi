@@ -148,8 +148,12 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <button class="btn btn-primary nextBtn pull-right"
-                                                            type="button">Next</button>
+
+                                                        <button
+                                                            class="btn custom-theme-button nextBtn pull-right"
+                                                            type="button"
+
+                                                        >Next</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -302,12 +306,14 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <button id="saveUser" class="btn btn-primary nextBtn pull-right"
-                                                            type="button">Finish</button>
+                                                        <button
+                                                            class="btn custom-theme-button nextBtn pull-right"
+                                                            type="button"
+                                                            id="saveUser"
+                                                        >Finish</button>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </form>
                                     </div>
                                 </div>

@@ -20,9 +20,14 @@
                     <div class="card-body">
                         <div class="row" id="configuration_container">
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal"
+                                <div class="project-box">
+                                    
+                                    <span
+                                        id="openAddFieldMOdal"
                                         data-dropdown_for="property_construction_type"
-                                        class="badge btn btn-primary badge-primary">Add</span>
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
                                     <h6>Property Construction Type</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_construction_type_ul">
@@ -32,9 +37,13 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal"
+                                <div class="project-box">
+                                    <span
+                                        id="openAddFieldMOdal"
                                         data-dropdown_for="property_priority_type"
-                                        class="badge btn btn-primary badge-primary">Add</span>
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
                                     <h6>Priority Type</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_priority_type_ul">
@@ -44,11 +53,14 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal"
+                                <div class="project-box">
+                                    <span
+                                        id="openAddFieldMOdal"
                                         data-dropdown_for="property_specific_type"
-                                        class="badge btn btn-primary badge-primary">Add</span>
-                                    <h6>Category
-                                    </h6>
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
+                                    <h6>Category</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_specific_type_ul">
 
@@ -57,11 +69,14 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal"
+                                <div class="project-box">
+                                    <span
+                                        id="openAddFieldMOdal"
                                         data-dropdown_for="property_source"
-                                        class="badge btn btn-primary badge-primary">Add</span>
-                                    <h6>Property Source
-                                    </h6>
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
+                                    <h6>Property Source</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_source_ul">
 
@@ -70,10 +85,15 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6" style="display: none">
-                                <div class="project-box"><span id="openAddFieldMOdal" data-dropdown_for="property_for"
-                                        class="badge btn btn-primary badge-primary">Add</span>
-                                    <h6>Property For
-                                    </h6>
+                                <div class="project-box">
+                                    
+                                    <span
+                                        id="openAddFieldMOdal"
+                                        data-dropdown_for="property_for"
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
+                                    <h6>Property For</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_for_ul">
 
@@ -82,8 +102,14 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal1" data-dropdown_for="property_plan_type"
-                                        class="badge btn btn-primary badge-primary">Add</span>
+                                <div class="project-box">
+
+                                    <span
+                                        id="openAddFieldMOdal"
+                                        data-dropdown_for="property_plan_type"
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
                                     <h6>Sub Category</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_plan_type_ul">
@@ -93,24 +119,32 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal"
+                                <div class="project-box">
+
+                                    <span
+                                        id="openAddFieldMOdal"
                                         data-dropdown_for="property_owner_type"
-                                        class="badge btn btn-primary badge-primary">Add</span>
-                                    <h6>Owner Type
-                                    </h6>
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
+                                    <h6>Owner Type</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_owner_type_ul">
-
                                         </ul>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal"
+                                <div class="project-box">
+
+                                    <span
+                                        id="openAddFieldMOdal"
                                         data-dropdown_for="property_furniture_type"
-                                        class="badge btn btn-primary badge-primary">Add</span>
-                                    <h6>Furniture Type
-                                    </h6>
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
+                                    <h6>Furniture Type</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_furniture_type_ul">
 
@@ -119,9 +153,13 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal"
+                                <div class="project-box">
+                                    <span
+                                        id="openAddFieldMOdal"
                                         data-dropdown_for="property_measurement_type"
-                                        class="badge btn btn-primary badge-primary">Add</span>
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
                                     <h6>Mesurement Type
                                     </h6>
                                     <div class="row details mt-5">
@@ -132,8 +170,14 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal" data-dropdown_for="property_zone"
-                                        class="badge btn btn-primary badge-primary">Add</span>
+                                <div class="project-box">
+
+                                    <span
+                                        id="openAddFieldMOdal"
+                                        data-dropdown_for="property_zone"
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+                                    
                                     <h6>Property Zone</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_zone_ul">
@@ -143,9 +187,14 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal"
+                                <div class="project-box">
+
+                                    <span
+                                        id="openAddFieldMOdal"
                                         data-dropdown_for="property_amenities"
-                                        class="badge btn btn-primary badge-primary">Add</span>
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
                                     <h6>Amenities</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_amenities_ul">
@@ -155,8 +204,13 @@
                                 </div>
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box"><span id="openAddFieldMOdal2" data-dropdown_for="property_construction"
-                                        class="badge btn btn-primary badge-primary">Add</span>
+                                <div class="project-box">
+                                    <span
+                                        id="openAddFieldMOdal"
+                                        data-dropdown_for="property_construction"
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span>
+
                                     <h6>Property Construction Documents</h6>
                                     <div class="row details mt-5">
                                         <ul class="drop_list_container" id="property_construction_ul">
@@ -178,7 +232,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Add / Edit</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div class="modal-body">
                 <form class="form-bookmark needs-validation " method="post" id="add_edit_form" novalidate="">
@@ -197,8 +251,10 @@
                             </select>
                         </div>
                     </div>
-                    <button class="btn btn-secondary" id="saveField">Save</button>
-                    <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <div class="text-center mt-3">
+                        <button class="btn custom-theme-button" id="saveField">Save</button>
+                        <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -209,7 +265,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Add / Edit</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div class="modal-body">
                 <form class="form-bookmark needs-validation " method="post" id="add_edit_form" novalidate="">
@@ -228,8 +284,10 @@
                             </select>
                         </div>
                     </div>
-                    <button class="btn btn-secondary" id="saveField1">Save</button>
-                    <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <div class="text-center mt-3">
+                        <button class="btn custom-theme-button" id="saveField1">Save</button>
+                        <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -240,7 +298,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Add Const Docs</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div class="modal-body">
                 <form class="form-bookmark needs-validation " method="post" id="add_edit_form" novalidate="">
@@ -253,8 +311,10 @@
                             <input class="form-control" type="text" name="const_doc_name" id="const_doc_name">
                         </div>
                     </div>
-                    <button class="btn btn-secondary" id="const_save">Save</button>
-                    <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <div class="text-center mt-3">
+                        <button class="btn custom-theme-button" id="const_save">Save</button>
+                        <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                    </div>
                 </form>
             </div>
         </div>

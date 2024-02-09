@@ -15,9 +15,27 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Talukas</h5>
-                            <button class="btn btn-primary btn-air-primary open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#cityModal">Add New Taluka</button>
-								<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()" type="button">Delete</button>
+
+                            <div class="row mt-2 mb-2">
+                                <div class="col">
+                                    <button
+                                        class="btn custom-icon-theme-button"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cityModal"
+                                        title="Add Taluka"
+                                    ><i class="fa fa-plus"></i></button>
+
+                                    <button
+                                        class="btn text-white delete_table_row ms-3"
+                                        style="border-radius: 5px;display: none;background-color:red"
+                                        onclick="deleteTableRow()"
+                                        type="button"
+                                        title="Delete"
+                                    ><i class="fa fa-trash"></i></button>
+
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -50,7 +68,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add New Taluka</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
@@ -66,7 +84,7 @@
                                         required
                                     >
                                 </div>
-                                <div class="form-group col-md-4 d-inline-block m-b-4 mt-1">
+                                <div class="form-group ms-3 col-md-4 d-inline-block m-b-4 mt-1">
                                     <label class="mb-0">State</label>
                                     <select class="form-select" id="district_id" required>
                                         <option value="">District</option>
@@ -80,8 +98,10 @@
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
-                            <button class="btn btn-secondary" id="saveCity">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" id="saveCity">Save</button>
+                                <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>

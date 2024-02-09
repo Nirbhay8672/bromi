@@ -13,16 +13,38 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Projects</h5>
-                            @can('project-create')
-							<a class="btn btn-primary btn-air-primary"  href="{{route('admin.project.add')}}">Add New Project</a>
-                            @endcan
-       <!--                     @can('unit-list')-->
-							<!--<a href="{{route('admin.project.unit')}}" class="ms-2"><button class="btn btn-primary btn-air-primary " type="button" >List Of Units</button></a>-->
-       <!--                     @endcan-->
-                            @if(auth()->user()->parent_id == null && auth()->user()->company_name && auth()->user()->birth_date == null)
-                                <a href="{{route('admin.all-projects')}}" class="ms-2"><button class="btn btn-primary btn-air-primary " type="button" >All Projects</button></a>
-                            @endif
-							<button class="btn btn-primary btn-air-primary delete_table_row ms-2" style="display: none" onclick="deleteTableRow()" type="button">Delete</button>
+
+                            <div class="col">
+
+                                @can('project-create')
+                                    <a  
+                                        class="btn custom-icon-theme-button"
+                                        href="{{route('admin.project.add')}}"
+                                        title="Add Project"
+                                    >
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                @endcan
+
+                                @if(auth()->user()->parent_id == null && auth()->user()->company_name && auth()->user()->birth_date == null)
+                                    <a  
+                                        class="btn custom-icon-theme-button ms-3"
+                                        href="{{route('admin.all-projects')}}"
+                                        title="All Projects"
+                                    >
+                                        <i class="fa fa-list"></i>
+                                    </a>
+                                @endcan
+
+                                <button
+                                    class="btn text-white delete_table_row ms-3"
+                                    style="border-radius: 5px;display: none;background-color:red"
+                                    onclick="deleteTableRow()"
+                                    type="button"
+                                    title="Delete"
+                                ><i class="fa fa-trash"></i></button>
+                            </div>
+
                         </div>
                         <div class="card-body">
                             @if(Session::has('message'))

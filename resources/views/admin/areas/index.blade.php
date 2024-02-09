@@ -15,25 +15,38 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Locality</h5>
-                            @can('area-create')
-                            <button
-                                class="btn btn-primary btn-air-primary open_modal_with_this"
-                                type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#areaModal"
-                            >Add New Locality</button>
-                            @endcan
-                            <button
-                                class="btn btn-primary btn-air-primary"
-                                type="button"
-                                data-bs-toggle="modal" data-bs-target="#importmodal"
-                            >Import Locality</button>
-                            <button
-                                class="btn btn-primary btn-air-primary delete_table_row"
-                                style="display: none"
-                                onclick="deleteTableRow()"
-                                type="button"
-                            >Delete</button>
+                            <div class="row mt-2 mb-2">
+                                <div class="col">
+
+                                    @can('area-create')
+                                    <button
+                                        class="btn ms-3 custom-icon-theme-button"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#areaModal"
+                                        title="Add Locality"
+                                    ><i class="fa fa-plus"></i></button>
+                                    @endcan
+
+                                    <button
+                                        class="btn ms-3 custom-icon-theme-button"
+                                        type="button"
+                                        title="Import Locality"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#importmodal"
+                                    ><i class="fa fa-upload"></i></button>
+
+
+                                    <button
+                                        class="btn text-white delete_table_row ms-3"
+                                        style="border-radius: 5px;display: none;background-color:red"
+                                        onclick="deleteTableRow()"
+                                        type="button"
+                                        title="Delete"
+                                    ><i class="fa fa-trash"></i></button>
+                                    
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -73,11 +86,11 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add New Locality</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="modal_form" novalidate="">
-                            <div class="form-row">
+                            <div class="row">
                                 <div class="form-group col-md-5 d-inline-block m-b-20">
                                     <label class="mb-0">State</label>
                                     <select id="state_id" required>
@@ -124,20 +137,24 @@
                                     </div>
                                     <label id="pincode-error" class="error" for="pincode"></label>
                                 </div>
-                                <div class="d-flex align-items-center mb-3 col-md-2">
-                                    <div class="form-group me-2">
-                                        <label for="area_active" class="mb-1">Active</label>
-                                    </div>
-                                    <div class="media-body text-end icon-state">
-                                        <label class="switch mb-0">
-                                            <input type="checkbox" id="area_active" checked>
-                                            <span class="switch-state"></span>
-                                        </label>
+                                <div class="row">
+                                    <div class="d-flex align-items-center mb-3 col-md-2">
+                                        <div class="form-group me-2">
+                                            <label for="area_active" class="mb-1">Active</label>
+                                        </div>
+                                        <div class="media-body text-end icon-state">
+                                            <label class="switch mb-0">
+                                                <input type="checkbox" id="area_active" checked>
+                                                <span class="switch-state"></span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-secondary" type="button" id="saveArea">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" id="saveArea">Save</button>
+                                <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -148,7 +165,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Import Areas</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
@@ -188,8 +205,10 @@
                                     </template>
                                 </div>
                             </template>
-                            <button class="btn btn-secondary" type="button" @click="importArea">Import</button>
-                            <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" @click="importArea">Save</button>
+                                <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>

@@ -303,10 +303,10 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
-                                                                        <button class="add_contacts btn btn-danger btn-air-danger" type="button" @click="removeOtherContact(`${index}`)" title="">-</button>
+                                                                        <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeOtherContact(`${index}`)" title="">-</button>
                                                                     </div>
                                                                     <div class="form-group col-md-1 m-b-4 mb-3" x-show="index == 0">
-                                                                        <button class="add_contacts btn btn-danger btn-air-danger" type="button" data-bs-original-title="" @click="addOtherContact()" title="">+</button>
+                                                                        <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" data-bs-original-title="" @click="addOtherContact()" title="">+</button>
                                                                     </div>
                                                                 </div>
                                                             </template>
@@ -333,7 +333,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary nextBtn pull-right"
+                                                    <button class="btn btn-primary nextBtn pull-right" style="border-radius:5px;"
                                                         type="button">Next</button>
                                                 </div>
                                             </div>
@@ -831,10 +831,10 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
-                                                                            <button class="add_contacts btn btn-danger btn-air-danger" type="button" @click="removeWingDetail(index)" title="">-</button>
+                                                                            <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeWingDetail(index)" title="">-</button>
                                                                         </div>
                                                                         <div class="form-group col-md-1 m-b-4 mb-3" x-show="index == 0">
-                                                                            <button class="add_contacts btn btn-danger btn-air-danger" type="button" data-bs-original-title="" @click="addWingDetail()" title="">+</button>
+                                                                            <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" data-bs-original-title="" @click="addWingDetail()" title="">+</button>
                                                                         </div>
                                                                     </div>
                                                                 </template>
@@ -1102,10 +1102,10 @@
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
-                                                                                <button class="add_contacts btn btn-danger btn-air-danger" type="button" @click="removeUnitDetail(index)" title="">-</button>
+                                                                                <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeUnitDetail(index)" title="">-</button>
                                                                             </div>
                                                                             <div class="form-group col-md-1 m-b-4 mb-3" x-show="index == 0">
-                                                                                <button class="add_contacts btn btn-danger btn-air-danger" type="button" data-bs-original-title="" @click="addUnitDetail()" title="">+</button>
+                                                                                <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" data-bs-original-title="" @click="addUnitDetail()" title="">+</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1792,8 +1792,9 @@
                                                                             <div class="col-md-1">
                                                                                 <span class="d-none" x-text="nextTickForWareColdPlot"></span>
                                                                                 <button
-                                                                                    class="add_contacts btn btn-danger btn-air-danger"
+                                                                                    class="add_contacts btn btn-primary"
                                                                                     type="button"
+                                                                                    style="border-radius:5px;"
                                                                                     @click="addType()"
                                                                                 >+</button>
                                                                             </div>
@@ -1801,8 +1802,9 @@
                                                                         <div class="row mb-3 mt-2" x-show="index > 0">
                                                                             <div class="col-md-1">
                                                                                 <button
-                                                                                    class="add_contacts btn btn-danger btn-air-danger"
+                                                                                    class="add_contacts btn btn-primary"
                                                                                     type="button"
+                                                                                    style="border-radius:5px;"
                                                                                     @click="removeType(index)"
                                                                                 >-</button>
                                                                             </div>
@@ -1870,8 +1872,9 @@
                                                                         </div>
                                                                         <div class="col-md-1">
                                                                             <button
-                                                                                class="add_contacts btn btn-danger btn-air-danger" type="button"
+                                                                                class="add_contacts btn btn-primary" type="button"
                                                                                 @click="removeExtraFacility(index)"
+                                                                                style="border-radius:5px;"
                                                                             >-</button>
                                                                         </div>
                                                                     </div>
@@ -2534,10 +2537,10 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
-                                                                            <button class="add_contacts btn btn-danger btn-air-danger" type="button" @click="removeWingDetail(index)" title="">-</button>
+                                                                            <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeWingDetail(index)" title="">-</button>
                                                                         </div>
                                                                         <div class="form-group col-md-1 m-b-4 mb-3" x-show="index == 0">
-                                                                            <button class="add_contacts btn btn-danger btn-air-danger" type="button" data-bs-original-title="" @click="addWingDetail()" title="">+</button>
+                                                                            <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" data-bs-original-title="" @click="addWingDetail()" title="">+</button>
                                                                         </div>
                                                                     </div>
                                                                 </template>
@@ -2802,10 +2805,10 @@
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
-                                                                                <button class="add_contacts btn btn-danger btn-air-danger" type="button" @click="removeUnitDetail(index)" title="">-</button>
+                                                                                <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeUnitDetail(index)" title="">-</button>
                                                                             </div>
                                                                             <div class="form-group col-md-1 m-b-4 mb-3" x-show="index == 0">
-                                                                                <button class="add_contacts btn btn-danger btn-air-danger" type="button" data-bs-original-title="" @click="addUnitDetail()" title="">+</button>
+                                                                                <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" data-bs-original-title="" @click="addUnitDetail()" title="">+</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -3139,7 +3142,7 @@
                                                         </div>
                                                     </template>
 
-                                                    <button class="btn btn-primary nextBtn pull-right"
+                                                    <button class="btn btn-primary nextBtn pull-right" style="border-radius:5px;"
                                                         type="button">Next</button>
                                                     </div>
                                             </div>
@@ -3354,7 +3357,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-md-1 m-b-4 mb-3">
-                                                                <button class="btn btn-danger" type="button" @click="addOtherImageOrDoc()" title="">+</button>
+                                                                <button class="btn btn-primary" style="border-radius:5px;" type="button" @click="addOtherImageOrDoc()" title="">+</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -3382,7 +3385,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-md-1 m-b-4 mb-3">
-                                                                <button class="btn btn-danger" type="button" @click="removeOtherImageOrDoc(index)" title="">-</button>
+                                                                <button class="btn btn-primary" style="border-radius:5px;" type="button" @click="removeOtherImageOrDoc(index)" title="">-</button>
                                                             </div>
                                                         </div>
                                                     </template>
@@ -3427,7 +3430,8 @@
                                                     </div>
                                                     
                                                     <button @click="submitHandle()" class="btn btn-secondary pull-right"
-                                                    type="button">Finish!</button>
+                                                    style="border-radius:5px;"
+                                                    type="button">Finish</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -5554,7 +5558,7 @@
 				'   </div>' +
 				'<div data-contact_id= ' + id +
 				' class="form-group col-md-1 m-b-4 mb-3"><button data-contact_id=' + id +
-				' class="remove_contacts btn btn-danger btn-air-danger" type="button">-</button>  </div>';
+				' class="remove_contacts btn btn-primary" style="border-radius:5px;" type="button">-</button>  </div>';
 			return myvar;
 		}
 
@@ -6009,7 +6013,7 @@
                 '        </div>' +
 				'<div data-unit_id= ' + id +
                     ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
-                    ' class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-danger btn-air-danger" type="button">' + ((
+                    ' class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-primary" style="border-radius:5px;" type="button">' + ((
                         plus) ? "+" : "-") + '</button>  </div>'+
                 '</div>';
                 return myvar;

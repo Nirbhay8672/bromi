@@ -17,18 +17,22 @@
                             <h5 class="mb-3">Users</h5>
                             @can('user-create')
                                 @if(intval($total_user) < Auth::user()->total_user_limit)
-                                    <a class="btn btn-primary btn-air-primary"  href="{{route('admin.user.add')}}">Add New User</a>
+                                    <a  
+                                        class="btn custom-icon-theme-button"
+                                        href="{{route('admin.user.add')}}"
+                                        title="Add User"
+                                    >
+                                        <i class="fa fa-plus"></i>
+                                    </a>
                                 @else
                                     <button
-                                        class="btn btn-primary btn-air-primary"
+                                        class="btn ms-3 custom-icon-theme-button"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#planModal"
-                                        data-bs-original-title=""
-                                        title=""
-                                        onclick="reset()"
-                                    >Upgrade Plan</button>
-                                    <strong class="text-danger">You have exceeded your user limit</strong>
+                                        title="Filter"
+                                    ><i class="fa fa-wrench"></i></button>
+                                    <strong class="ms-3 text-danger">You have exceeded your user limit</strong>
                                 @endif
                             @endcan
                         </div>

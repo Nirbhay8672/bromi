@@ -21,9 +21,14 @@
                             <div class="row" id="configuration_container">
 
                                 <div class="col-xxl-8 box-col-8 col-lg-8">
-                                    <div class="project-box"><span id="openAddFieldMOdal"
+                                    <div class="project-box">
+                                    
+                                        <span
+                                            id="openAddFieldMOdal"
                                             data-dropdown_for="enquiry_sales_comment"
-                                            class="badge btn btn-primary badge-primary">Add</span>
+                                            class="badge btn btn-primary badge-primary"
+                                        ><i class="fa fa-plus"></i></span>
+                                            
                                         <h6>Sales Comment</h6>
                                         <div class="row details mt-5">
                                             <ul class="drop_list_container" id="enquiry_sales_comment_ul">
@@ -45,14 +50,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add / Edit</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <div class="modal-body">
                     <form class="form-bookmark needs-validation " method="post" id="add_edit_form" novalidate="">
                         @csrf
                         <input type="hidden" name="dropdown_for" id="dropdown_for">
                         <input type="hidden" name="this_data_id" id="this_data_id">
-                        <div class="form-row">
+                        <div class="row">
                             <div class="form-group col-md-7 m-b-20 d-inline-block">
                                 <label for="name">Name:</label>
                                 <input class="form-control" type="text"  name="field_name"
@@ -75,8 +80,10 @@
 								  <input class="form-control form-control-color" id="color_picker_input" type="color" value="#5655e5">
 							  </div>
                         </div>
-                        <button class="btn btn-secondary" id="saveField">Save</button>
-                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                        <div class="text-center mt-3">
+                            <button class="btn custom-theme-button" id="saveField">Save</button>
+                            <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>

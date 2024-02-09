@@ -15,11 +15,23 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Partners</h5>
-                            <a class="btn btn-primary btn-air-primary" href="#" onclick="parentModal()">Add New
-                                Partner</a>
-                            <a href="{{ route('admin.partnerRequest') }}"><button class="btn btn-primary btn-air-primary "
-                                    type="button">Partner
-                                    Requests</button></a>
+
+                            <div class="col">
+                                <button
+                                    class="btn custom-icon-theme-button"
+                                    type="button"
+                                    onclick="parentModal()"
+                                    title="Add Partner"
+                                ><i class="fa fa-plus"></i></button>
+
+                                <a  
+                                    class="btn ms-3 custom-icon-theme-button"
+                                    href="{{ route('admin.partnerRequest') }}"
+                                    title="Requests"
+                                >
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
