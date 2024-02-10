@@ -748,14 +748,31 @@
                                                                             <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraflatkind5">4bhk</label>
                                                                         </div>
                                                                         <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                                                                            <input type="checkbox" class="btn-check" value="18" x-model="sub_categories" id="extraflatkind6" name="flat_type[]" @click="addWingSubCategory($event,'4+ bhk')" data-error="#flat_type_error" autocomplete="off" data-bs-original-title="" title="">
-                                                                            <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraflatkind6">4+bhk</label>
+                                                                            <input type="checkbox" class="btn-check" value="18" x-model="sub_categories" id="extraflatkind6" name="flat_type[]" @click="addWingSubCategory($event,'5bhk')" data-error="#flat_type_error" autocomplete="off" data-bs-original-title="" title="">
+                                                                            <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraflatkind6">5bhk</label>
+                                                                        </div>
+                                                                        <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
+                                                                            <input type="checkbox" class="btn-check" value="19" x-model="sub_categories" id="extraflatkind7" name="flat_type[]" @click="addWingSubCategory($event,'5+ bhk')" data-error="#flat_type_error" autocomplete="off" data-bs-original-title="" title="">
+                                                                            <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraflatkind7">5+bhk</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
 
-                                                            <div class="row mb-2" x-show="sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18')">
+                                                            <div class="row" x-show="sub_categories.includes('19')">
+                                                                <div class="form-group col-md-3 m-b-20">
+                                                                    <div class="fname" :class="is_flat_or_penthouse.number_of_room == '' ? '' : 'focused' ">
+                                                                        <label>Total Room</label>
+                                                                        <input
+                                                                            class="form-control"
+                                                                            x-model="is_flat_or_penthouse.number_of_room"
+                                                                            type="text"
+                                                                        >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row mb-2" x-show="sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18') || sub_categories.includes('19')">
                                                                 <div class="col-md-2 mb-3">
                                                                     <div class="fname" :class="is_flat_or_penthouse.number_of_towers == '' ? '' : 'focused' ">
                                                                         <label for="Total Floor">No. Of Tower</label>
@@ -791,7 +808,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="row mb-2" x-show="sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18')">
+                                                            <div class="row mb-2" x-show="sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18') || sub_categories.includes('19')">
                                                                 <template x-for="(wing , index) in if_residential_only_wings.wing_details">
                                                                     <div class="row">
                                                                         <div class="form-group col-md-3 m-b-20">
@@ -1527,14 +1544,38 @@
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input type="checkbox" class="btn-check"
                                                                         value="18" x-model="sub_categories" id="flatkind6" name="flat_type[]"
-                                                                        @click="addWingSubCategory($event,'4+ bhk')"
+                                                                        @click="addWingSubCategory($event,'5bhk')"
                                                                         data-error="#flat_type_error" autocomplete="off">
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind6">4+bhk</label>
+                                                                        for="flatkind6">5bhk</label>
+                                                                </div>
+                                                                <div class="btn-group bromi-checkbox-btn me-1"
+                                                                    role="group"
+                                                                    aria-label="Basic radio toggle button group">
+                                                                    <input type="checkbox" class="btn-check"
+                                                                        value="19" x-model="sub_categories" id="flatkind7" name="flat_type[]"
+                                                                        @click="addWingSubCategory($event,'5+ bhk')"
+                                                                        data-error="#flat_type_error" autocomplete="off">
+                                                                    <label
+                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                        for="flatkind7">5+ bhk</label>
                                                                 </div>
                                                             </div>
                                                             <div id="flat_type_error"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class" x-show="sub_categories.includes('19')">
+                                                        <div class="form-group col-md-3 m-b-20">
+                                                            <div class="fname" :class="is_flat_or_penthouse.number_of_room == '' ? '' : 'focused' ">
+                                                                <label>Total Room</label>
+                                                                <input
+                                                                    class="form-control"
+                                                                    x-model="is_flat_or_penthouse.number_of_room"
+                                                                    type="text"
+                                                                >
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -3631,7 +3672,8 @@
                                 15 : '2BHK',
                                 16 : '3BHK',
                                 17 : '4BHK',
-                                18 : '4+BHK',
+                                18 : '5BHK',
+                                19 : '5+BHK',
                             };
 
                             this.sub_categories.forEach(element => {
@@ -3732,7 +3774,8 @@
                                 15 : '2BHK',
                                 16 : '3BHK',
                                 17 : '4BHK',
-                                18 : '4+BHK',
+                                18 : '5BHK',
+                                19 : '5+BHK',
                             };
 
                             this.sub_categories.forEach(element => {
@@ -3961,6 +4004,7 @@
                 wings_name_array : [],
 
                 is_flat_or_penthouse : {
+                    number_of_room: '',
                     number_of_towers : '',
                     number_of_floors : '',
                     total_units : '',
@@ -4189,6 +4233,7 @@
                     this.wings_name_array = [];
                     
                     this.is_flat_or_penthouse = {
+                        number_of_room : "",
                         number_of_towers : '',
                         number_of_floors : '',
                         total_units : '',
