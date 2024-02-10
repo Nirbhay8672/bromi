@@ -84,6 +84,11 @@ class HomeController extends Controller
 					}
 				}
 
+				if($request->filled('from_date') && $request->filled('to_date')){
+					$start_date = Carbon::parse($request->from_date)->format('Y-m-d 00:00:00');
+					$end_date = Carbon::parse($request->to_date)->format('Y-m-d 00:00:00');
+				}
+
 				$totalsales = Enquiries::whereHas('activeProgress', function ($query) {
 					$query->where('progress', '=', 'Booked');
 				})->where('user_id', Auth::user()->id)->count();

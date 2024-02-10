@@ -39,7 +39,7 @@
                         <div class="p-2 bd-highlight">
                             <div class="input-group" style="border: 1px solid black;">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                <select class="form-control" id="choose_date_range" style="border: 1px solid black;width: 200px;">
+                                <select class="form-control custom-select" id="choose_date_range" style="border: 1px solid black;width: 200px;">
                                     <option value="this_month" selected>This Month</option>
                                     <option value="today" {{ request('date_range') == 'today' ? 'selected' : '' }}>Today</option>
                                     <option value="yesterday" {{ request('date_range') == 'yesterday' ? 'selected' : '' }}>Yesterday</option>
@@ -48,14 +48,58 @@
                                     <option value="3month" {{ request('date_range') == '3month' ? 'selected' : '' }}>Last 3 Month</option>
                                     <option value="6month" {{ request('date_range') == '6month' ? 'selected' : '' }}>Last 6 Month</option>
                                     <option value="yearly" {{ request('date_range') == 'yearly' ? 'selected' : '' }}>Last 1 Year</option>
+                                    <option value="openModal" style="color: #333;font-weight: bold;min-height:100px;">
+                                        Custom Date
+                                    </option>
                                 </select>
                             </div>
                         </div>
+                        <button
+                            type="button"
+                            id="daterangeModalElement"
+                            data-bs-toggle="modal"
+                            class="d-none"
+                            data-bs-target="#dateRangeModal"
+                        >Custom Date</button>
                     </div>
                 </div>
             </div>
             <div id="content-view">
                 @include('admin.components.dashboard_content')
+            </div>
+        </div>
+        <div class="modal fade" id="dateRangeModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Custom Filter</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-5">
+                            <div class="col-5">
+                                <div class="fname">
+                                    <input type="date" class="form-control" id="from_date">
+                                    <span id="from_date_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="text-center mt-2">
+                                    <i class="fa fa-arrow-right fs-4"></i>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="fname">
+                                    <input type="date" class="form-control" id="to_date">
+                                    <span id="to_date_error" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-secondary" style="border-radius: 5px;" onclick="filterWithDate()">Filter</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         @php
@@ -369,12 +413,40 @@
             dashboardInitial();
         })
 
+        function filterWithDate() {
+            let from = $('#from_date').val();
+            let to = $('#to_date').val();
+
+            let valid = true;
+
+            $('#from_date_error').text("");
+            $('#to_date_error').text("");
+
+            if(from == '') {
+                valid = false;
+                $('#from_date_error').text("From date is required.");
+            }
+
+            if(to == '') {
+                valid = false;
+                $('#to_date_error').text("To date is required.");
+            }
+
+            if(valid) {
+                window.location.href = "{{ route('admin') }}?from_date=" + from + "&to_date=" + to;
+            }
+        }
+
         $(document).on('change', '#choose_date_range', function() {
             var range = $(this).val();
-            if (range) {
-                window.location.href = "{{ route('admin') }}?date_range=" + range;
+            if(range != 'openModal') {
+                if (range) {
+                    window.location.href = "{{ route('admin') }}?date_range=" + range;
+                }
             } else {
-                window.location.href = "{{ route('admin') }}";
+                let modalButton = document.getElementById('daterangeModalElement');
+                modalButton.click();
+                $("#choose_date_range").val("").trigger( "change" );
             }
         });
 
