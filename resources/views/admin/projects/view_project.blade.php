@@ -422,7 +422,7 @@
                                                                 <span>{{ $map_unit[$office_tower['saleable_from_to_map_unit']] }}</span>
                                                             </td>
                                                             <td>
-                                                                {{$office_tower['carpet']}} }}
+                                                                {{$office_tower['carpet']}}
                                                                 <span>{{ $map_unit[$office_tower['carpet_from_to_map_unit']] }}</span>
                                                             </td>
                                                             <td>

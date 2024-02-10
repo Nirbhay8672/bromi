@@ -49,7 +49,30 @@
                                             <div class="col-xs-12">
                                                 <div class="col-md-12">
                                                     <div class="row">
-                                                        <input type="hidden" name="this_data_id" id="this_data_id">                  
+                                                        <input type="hidden" name="this_data_id" id="this_data_id">
+                                                        <div>
+                                                            <label><b>Builder Information</b></label>
+                                                        </div>
+                                                        <div class="form-group col-md-6 m-b-4 mb-3">
+                                                            <div class="fname" :class="website == '' ? '' : 'focused' ">
+                                                                <label for="Project Name">Website</label>
+                                                                <div class="fvalue">
+                                                                    <input
+                                                                        class="form-control"
+                                                                        name="website"
+                                                                        x-model="website"
+                                                                        id="website"
+                                                                        type="text"
+                                                                        style="text-transform: none !important;"
+                                                                        autocomplete="off"
+                                                                        :class="errors.hasOwnProperty('website') ? 'is-invalid' : ''"
+                                                                    >
+                                                                    <div class="invalid-feedback">
+                                                                        <span x-text="errors.website"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>                    
                                                         <div>
                                                             <label><b>Project Information</b></label>
                                                         </div>
@@ -268,10 +291,10 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
-                                                                        <button class="add_contacts btn btn-danger btn-air-danger" type="button" @click="removeOtherContact(`${index}`)" title="">-</button>
+                                                                        <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeOtherContact(`${index}`)" title="">-</button>
                                                                     </div>
                                                                     <div class="form-group col-md-1 m-b-4 mb-3" x-show="index == 0">
-                                                                        <button class="add_contacts btn btn-danger btn-air-danger" type="button" data-bs-original-title="" @click="addOtherContact()" title="">+</button>
+                                                                        <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" data-bs-original-title="" @click="addOtherContact()" title="">+</button>
                                                                     </div>
                                                                 </div>
                                                             </template>
@@ -298,7 +321,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary nextBtn pull-right"
+                                                    <button class="btn btn-primary nextBtn pull-right" style="border-radius:5px;"
                                                         type="button">Next</button>
                                                 </div>
                                             </div>
@@ -550,7 +573,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`second_tower_detail_saleable_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`second_tower_detail_saleable_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -608,7 +631,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`second_tower_detail_carpet_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`second_tower_detail_carpet_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -650,7 +673,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`second_tower_detail_built_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`second_tower_detail_built_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -692,8 +715,8 @@
                                                                         <label><b>Sub category</b></label>
                                                                     </div>
                                                                     <div class="m-checkbox-inline custom-radio-ml">
-                                                                        <div class="the_1rk btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group" style="">
-                                                                            <input type="checkbox" class="btn-check filled" x-model="sub_categories" @click="addWingSubCategory($event,'1 rk')" value="13" id="extraflatkind1" name="excat" data-error="#flat_type_error" autocomplete="off" data-bs-original-title="" title="">
+                                                                        <div class="the_1rk btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
+                                                                            <input type="checkbox" class="btn-check filled" value="13" x-model="sub_categories" @click="addWingSubCategory($event,'1 rk')" id="extraflatkind1" name="excat" data-error="#flat_type_error" autocomplete="off" data-bs-original-title="" title="">
                                                                             <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraflatkind1">1 rk</label>
                                                                         </div>
                                                                         <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
@@ -713,13 +736,31 @@
                                                                             <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraflatkind5">4bhk</label>
                                                                         </div>
                                                                         <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                                                                            <input type="checkbox" class="btn-check" value="18" x-model="sub_categories" id="extraflatkind6" name="flat_type[]" @click="addWingSubCategory($event,'4+ bhk')" data-error="#flat_type_error" autocomplete="off" data-bs-original-title="" title="">
-                                                                            <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraflatkind6">4+bhk</label>
+                                                                            <input type="checkbox" class="btn-check" value="18" x-model="sub_categories" id="extraflatkind6" name="flat_type[]" @click="addWingSubCategory($event,'5bhk')" data-error="#flat_type_error" autocomplete="off" data-bs-original-title="" title="">
+                                                                            <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraflatkind6">5bhk</label>
+                                                                        </div>
+                                                                        <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
+                                                                            <input type="checkbox" class="btn-check" value="19" x-model="sub_categories" id="extraflatkind7" name="flat_type[]" @click="addWingSubCategory($event,'5+ bhk')" data-error="#flat_type_error" autocomplete="off" data-bs-original-title="" title="">
+                                                                            <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="extraflatkind7">5+bhk</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="row mb-2" x-show="sub_categories.length > 0">
+
+                                                            <div class="row" x-show="sub_categories.includes('19')">
+                                                                <div class="form-group col-md-3 m-b-20">
+                                                                    <div class="fname" :class="is_flat_or_penthouse.number_of_room == '' ? '' : 'focused' ">
+                                                                        <label>Total Room</label>
+                                                                        <input
+                                                                            class="form-control"
+                                                                            x-model="is_flat_or_penthouse.number_of_room"
+                                                                            type="text"
+                                                                        >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row mb-2" x-show="sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18') || sub_categories.includes('19')">
                                                                 <div class="col-md-2 mb-3">
                                                                     <div class="fname" :class="is_flat_or_penthouse.number_of_towers == '' ? '' : 'focused' ">
                                                                         <label for="Total Floor">No. Of Tower</label>
@@ -755,7 +796,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div x-show="sub_categories.length > 0">
+                                                            <div class="row mb-2" x-show="sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18') || sub_categories.includes('19')">
                                                                 <template x-for="(wing , index) in if_residential_only_wings.wing_details">
                                                                     <div class="row">
                                                                         <div class="form-group col-md-3 m-b-20">
@@ -795,10 +836,10 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
-                                                                            <button class="add_contacts btn btn-danger btn-air-danger" type="button" @click="removeWingDetail(index)" title="">-</button>
+                                                                            <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeWingDetail(index)" title="">-</button>
                                                                         </div>
                                                                         <div class="form-group col-md-1 m-b-4 mb-3" x-show="index == 0">
-                                                                            <button class="add_contacts btn btn-danger btn-air-danger" type="button" data-bs-original-title="" @click="addWingDetail()" title="">+</button>
+                                                                            <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" data-bs-original-title="" @click="addWingDetail()" title="">+</button>
                                                                         </div>
                                                                     </div>
                                                                 </template>
@@ -1066,10 +1107,10 @@
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
-                                                                                <button class="add_contacts btn btn-danger btn-air-danger" type="button" @click="removeUnitDetail(index)" title="">-</button>
+                                                                                <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeUnitDetail(index)" title="">-</button>
                                                                             </div>
                                                                             <div class="form-group col-md-1 m-b-4 mb-3" x-show="index == 0">
-                                                                                <button class="add_contacts btn btn-danger btn-air-danger" type="button" data-bs-original-title="" @click="addUnitDetail()" title="">+</button>
+                                                                                <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" data-bs-original-title="" @click="addUnitDetail()" title="">+</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1095,6 +1136,7 @@
                                                                         <input type="checkbox" class="btn-check"
                                                                             value="37" id="extraretailkind1"
                                                                             x-model="sub_categories"
+                                                                            @change="addNewUnitDetailsAccordingFloor('extraretailkind1')"
                                                                             data-error="#retail_type_error"
                                                                             autocomplete="off">
                                                                         <label
@@ -1105,8 +1147,11 @@
                                                                         role="group"
                                                                         aria-label="Basic radio toggle button group">
                                                                         <input type="checkbox" class="btn-check"
-                                                                            data-error="#retail_type_error" x-model="sub_categories" value="38"
+                                                                            data-error="#retail_type_error"
+                                                                            x-model="sub_categories"
+                                                                            value="38"
                                                                             id="extraretailkind2"
+                                                                            @change="addNewUnitDetailsAccordingFloor('extraretailkind2')"
                                                                             autocomplete="off">
                                                                         <label
                                                                             class="btn btn-outline-primary btn-pill btn-sm py-1"
@@ -1116,8 +1161,11 @@
                                                                         role="group"
                                                                         aria-label="Basic radio toggle button group">
                                                                         <input type="checkbox" class="btn-check"
-                                                                            data-error="#retail_type_error" value="39"
-                                                                            id="extraretailkind3" x-model="sub_categories"
+                                                                            data-error="#retail_type_error"
+                                                                            value="39"
+                                                                            id="extraretailkind3"
+                                                                            x-model="sub_categories"
+                                                                            @change="addNewUnitDetailsAccordingFloor('extraretailkind3')"
                                                                             autocomplete="off">
                                                                         <label
                                                                             class="btn btn-outline-primary btn-pill btn-sm py-1"
@@ -1128,6 +1176,7 @@
                                                                         aria-label="Basic radio toggle button group">
                                                                         <input type="checkbox" class="btn-check" x-model="sub_categories"
                                                                             data-error="#retail_type_error" value="40"
+                                                                            @change="addNewUnitDetailsAccordingFloor('extraretailkind4')"
                                                                             id="extraretailkind4"
                                                                             autocomplete="off">
                                                                         <label
@@ -1140,12 +1189,16 @@
 
                                                             <div x-show="sub_categories.length > 0">
                                                                 <label><b>Unit Details</b></label>
-
                                                                 <template x-for="(tower, index) in if_retail_tower_details">
                                                                     <div class="row mt-2">
                                                                         <div x-show="index > 0">
                                                                             <hr>
                                                                         </div>
+
+                                                                        <div class="col-12 m-b-20">
+                                                                            <span x-text="tower.floor_name" class="mb-3 text-primary"></span>
+                                                                        </div>
+
                                                                         <div class="form-group col-md-3 m-b-20">
                                                                             <div class="fname" :class="tower.tower_name == '' ? '' : 'focused' ">
                                                                                 <span class="d-none" x-text="nextTickForIfRetail()"></span>
@@ -1194,7 +1247,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`extra_tower_size_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`extra_tower_size_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -1255,15 +1308,6 @@
                                                                         </div>
                                                                     </div>
                                                                 </template>
-                                                                <div class="row" x-show="if_office_or_retail.number_of_tower > 1">
-                                                                    <div class="form-group col-md-3">
-                                                                        <button
-                                                                            class="btn btn-primary btn-air-primary"
-                                                                            type="button"
-                                                                            @click="addRetailUnitDetails()"
-                                                                        >Add Floors</button>
-                                                                    </div>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1488,14 +1532,38 @@
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input type="checkbox" class="btn-check"
                                                                         value="18" x-model="sub_categories" id="flatkind6" name="flat_type[]"
-                                                                        @click="addWingSubCategory($event,'4+ bhk')"
+                                                                        @click="addWingSubCategory($event,'5bhk')"
                                                                         data-error="#flat_type_error" autocomplete="off">
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind6">4+bhk</label>
+                                                                        for="flatkind6">5bhk</label>
+                                                                </div>
+                                                                <div class="btn-group bromi-checkbox-btn me-1"
+                                                                    role="group"
+                                                                    aria-label="Basic radio toggle button group">
+                                                                    <input type="checkbox" class="btn-check"
+                                                                        value="19" x-model="sub_categories" id="flatkind7" name="flat_type[]"
+                                                                        @click="addWingSubCategory($event,'5+ bhk')"
+                                                                        data-error="#flat_type_error" autocomplete="off">
+                                                                    <label
+                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                        for="flatkind7">5+ bhk</label>
                                                                 </div>
                                                             </div>
                                                             <div id="flat_type_error"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class" x-show="sub_categories.includes('19')">
+                                                        <div class="form-group col-md-3 m-b-20">
+                                                            <div class="fname" :class="is_flat_or_penthouse.number_of_room == '' ? '' : 'focused' ">
+                                                                <label>Total Room</label>
+                                                                <input
+                                                                    class="form-control"
+                                                                    x-model="is_flat_or_penthouse.number_of_room"
+                                                                    type="text"
+                                                                >
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -1623,7 +1691,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`carpet_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`carpet_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -1665,7 +1733,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`constructed_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`constructed_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -1707,7 +1775,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`road_width_of_front_side_area_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`road_width_of_front_side_area_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -1753,8 +1821,9 @@
                                                                             <div class="col-md-1">
                                                                                 <span class="d-none" x-text="nextTickForWareColdPlot"></span>
                                                                                 <button
-                                                                                    class="add_contacts btn btn-danger btn-air-danger"
+                                                                                    class="add_contacts btn btn-primary"
                                                                                     type="button"
+                                                                                    style="border-radius:5px;"
                                                                                     @click="addType()"
                                                                                 >+</button>
                                                                             </div>
@@ -1762,8 +1831,9 @@
                                                                         <div class="row mb-3 mt-2" x-show="index > 0">
                                                                             <div class="col-md-1">
                                                                                 <button
-                                                                                    class="add_contacts btn btn-danger btn-air-danger"
+                                                                                    class="add_contacts btn btn-primary"
                                                                                     type="button"
+                                                                                    style="border-radius:5px;"
                                                                                     @click="removeType(index)"
                                                                                 >-</button>
                                                                             </div>
@@ -1831,8 +1901,9 @@
                                                                         </div>
                                                                         <div class="col-md-1">
                                                                             <button
-                                                                                class="add_contacts btn btn-danger btn-air-danger" type="button"
+                                                                                class="add_contacts btn btn-primary" type="button"
                                                                                 @click="removeExtraFacility(index)"
+                                                                                style="border-radius:5px;"
                                                                             >-</button>
                                                                         </div>
                                                                     </div>
@@ -2160,7 +2231,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`tower_detail_saleable_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`tower_detail_saleable_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -2247,7 +2318,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`tower_detail_carpet_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`tower_detail_carpet_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -2288,7 +2359,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`tower_detail_built_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`tower_detail_built_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -2375,7 +2446,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-group col-md-3 m-b-10">
-                                                                                    <select class="form-select" :id="`tower_size_from_to_select_${index}`">
+                                                                                    <select class="form-select" :id="`tower_size_from_to_select_${index}`" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                                                                                         <option value="117" selected>Sq.Ft.</option>
                                                                                         <option value="118">Sq.Yard</option>
                                                                                         <option value="119">Sq.Meter</option>
@@ -2495,10 +2566,10 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
-                                                                            <button class="add_contacts btn btn-danger btn-air-danger" type="button" @click="removeWingDetail(index)" title="">-</button>
+                                                                            <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeWingDetail(index)" title="">-</button>
                                                                         </div>
                                                                         <div class="form-group col-md-1 m-b-4 mb-3" x-show="index == 0">
-                                                                            <button class="add_contacts btn btn-danger btn-air-danger" type="button" data-bs-original-title="" @click="addWingDetail()" title="">+</button>
+                                                                            <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" data-bs-original-title="" @click="addWingDetail()" title="">+</button>
                                                                         </div>
                                                                     </div>
                                                                 </template>
@@ -2763,10 +2834,10 @@
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
-                                                                                <button class="add_contacts btn btn-danger btn-air-danger" type="button" @click="removeUnitDetail(index)" title="">-</button>
+                                                                                <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeUnitDetail(index)" title="">-</button>
                                                                             </div>
                                                                             <div class="form-group col-md-1 m-b-4 mb-3" x-show="index == 0">
-                                                                                <button class="add_contacts btn btn-danger btn-air-danger" type="button" data-bs-original-title="" @click="addUnitDetail()" title="">+</button>
+                                                                                <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" data-bs-original-title="" @click="addUnitDetail()" title="">+</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -3100,7 +3171,7 @@
                                                         </div>
                                                     </template>
 
-                                                    <button class="btn btn-primary nextBtn pull-right"
+                                                    <button class="btn btn-primary nextBtn pull-right" style="border-radius:5px;"
                                                         type="button">Next</button>
                                                     </div>
                                             </div>
@@ -3315,7 +3386,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-md-1 m-b-4 mb-3">
-                                                                <button class="btn btn-danger" type="button" @click="addOtherImageOrDoc()" title="">+</button>
+                                                                <button class="btn btn-primary" style="border-radius:5px;" type="button" @click="addOtherImageOrDoc()" title="">+</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -3343,7 +3414,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-md-1 m-b-4 mb-3">
-                                                                <button class="btn btn-danger" type="button" @click="removeOtherImageOrDoc(index)" title="">-</button>
+                                                                <button class="btn btn-primary" style="border-radius:5px;" type="button" @click="removeOtherImageOrDoc(index)" title="">-</button>
                                                             </div>
                                                         </div>
                                                     </template>
@@ -3388,7 +3459,8 @@
                                                     </div>
                                                     
                                                     <button @click="submitHandle()" class="btn btn-secondary pull-right"
-                                                    type="button">Finish!</button>
+                                                    style="border-radius:5px;"
+                                                    type="button">Finish</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -3479,6 +3551,7 @@
 
                         let project_data = JSON.parse(data);
                         
+                        
                         document.getElementById('state_id').disabled = false;
                         document.getElementById('city_id').disabled = false;
                         document.getElementById('area_id').disabled = false;
@@ -3516,6 +3589,8 @@
 					
                         // first section
                         this.id = project_data['id'];
+                        $("#builder_id").val(project_data['builder_id']).trigger('change');
+                        this.website = project_data['website'] ?? '';
 
                         this.other_contact_details = JSON.parse(project_data['contact_details']) ?? [{'name' : '','mobile' : '','email' : '','designation' : ''}];
 
@@ -3585,7 +3660,8 @@
                                 15 : '2BHK',
                                 16 : '3BHK',
                                 17 : '4BHK',
-                                18 : '4+BHK',
+                                18 : '5BHK',
+                                19 : '5+BHK',
                             };
 
                             this.sub_categories.forEach(element => {
@@ -3686,7 +3762,8 @@
                                 15 : '2BHK',
                                 16 : '3BHK',
                                 17 : '4BHK',
-                                18 : '4+BHK',
+                                18 : '5BHK',
+                                19 : '5+BHK',
                             };
 
                             this.sub_categories.forEach(element => {
@@ -3861,7 +3938,7 @@
                             _this_doc.setSelect2ForOtherDoc();
                         });
                         
-                        this.remark = project_data['remark'];
+                        this.remark = project_data['remark'] ?? "";
                     }
                 },
 
@@ -3870,6 +3947,7 @@
                 // first_sections
 
                 id : '',
+                website : '',
                 other_contact_details : [{
                     'name' : '',
                     'mobile' : '',
@@ -3914,6 +3992,7 @@
                 wings_name_array : [],
 
                 is_flat_or_penthouse : {
+                    number_of_room: '',
                     number_of_towers : '',
                     number_of_floors : '',
                     total_units : '',
@@ -4036,6 +4115,7 @@
 
                 if_retail_tower_details : [
                     {
+                        floor_name : '',
                         tower_name : '',
                         sub_category : '',
                         size_from : '',
@@ -4141,6 +4221,7 @@
                     this.wings_name_array = [];
                     
                     this.is_flat_or_penthouse = {
+                        number_of_room : "",
                         number_of_towers : '',
                         number_of_floors : '',
                         total_units : '',
@@ -4262,6 +4343,7 @@
 
                     this.if_retail_tower_details = [
                         {
+                            floor_name : '',
                             tower_name : '',
                             sub_category : '',
                             size_from : '',
@@ -4611,6 +4693,7 @@
                         this.if_retail_tower_details = [];
                         for (let index = 0; index < this.if_office_or_retail.number_of_tower; index++) {
                             this.if_retail_tower_details.push({
+                                floor_name : '',
                                 tower_name : '',
                                 sub_category : '',
                                 size_from : '',
@@ -4705,6 +4788,45 @@
 
                         });
                     });
+                },
+
+                floor_slug : {
+                    37 : "Ground Floor Details",
+                    38 : "1st Floor Details",
+                    39 : "2nd Floor Details",
+                    40 : "3rd Floor Details",
+                },
+
+                addNewUnitDetailsAccordingFloor(element_id) {
+                    if(this.if_retail_tower_details[0].floor_name == "") 
+                    {
+                        this.if_retail_tower_details = [];
+                    }
+
+                    if(document.getElementById(element_id).checked) {
+                        let value = $(`#${element_id}`).val();
+
+                        this.if_retail_tower_details.push({
+                            floor_name : this.floor_slug[value],
+                            tower_name : '',
+                            sub_category : '',
+                            size_from : '',
+                            size_to : '',
+                            front_opening : '',
+                            number_of_each_floor : '',
+                            ceiling_height : '',
+
+                            size_from_map_unit  : '',
+                            size_to_map_unit  : '',
+                            tower_ceiling_map_unit  : '',
+                        });
+                    } else {
+                        let value = $(`#${element_id}`).val();
+                        let index = this.if_retail_tower_details.findIndex(tower => tower.floor_name == this.floor_slug[value]);
+                        if(index >=0 ) {
+                            this.if_retail_tower_details.splice(index, 1);
+                        }
+                    }
                 },
 
                 // third section
@@ -4893,6 +5015,9 @@
                     let form_data = new FormData();
 
                     form_data.set('id', this.id);
+                    form_data.set('builder_id', $('#builder_id').val());
+                    form_data.set('website', this.website);
+
                     form_data.set('other_contact_details', JSON.stringify(this.other_contact_details));
 
                     form_data.set('project_name', this.project_name);
@@ -4901,6 +5026,7 @@
                     form_data.set('locality', $('#area_id').val() ?? '');
                     form_data.set('state', $('#state_id').val() ?? '');
                     form_data.set('city', $('#city_id').val() ?? '' );
+
                     form_data.set('location_link', this.location_link);
                     
                     let pincode = document.getElementById('pincode').value;
@@ -5155,6 +5281,10 @@
 						name: 'address'
 					},
 					{
+						data: 'builder_id',
+						name: 'builder_id'
+					},
+					{
 						data: 'property_type',
 						name: 'property_type'
 					},
@@ -5210,17 +5340,46 @@
 			}
 		})
 
-		$(document).on('click', '#add_document_image', function(e) {
-			var fd = new FormData();
-			var files = $('#document_image')[0].files;
-			if (files.length == 0 || $('#this_data_id').val() == '') {
-				return;
+		var allowedselect2s = ['builder_id'];
+		$(document).on('keydown', '.select2-search__field', function(e) {
+			setTimeout(() => {
+				var par = $(this).closest('.select2-dropdown')
+				var tar = $(par).find('.select2-results')
+				var kar = $(tar).find('.select2-results__options')
+				var opt = $(kar).find('li')
+				if (opt.length == 1 && $(opt[0]).text() == 'No results found') {
+					var idd = $(kar).attr('id')
+					idd = idd.replace("select2-", "");
+					idd = idd.replace("-results", "");
+					if (allowedselect2s.includes(idd)) {
+						$("#" + idd + " option[last_added='" + true + "']").each(function(i, e) {
+							$('#' + idd + ' option[value="' + $(this).val() + '"]').detach();
+						});
+						if ($("#" + idd + " option[value='" + $(this).val() + "']").length == 0) {
+							var newState = new Option($(this).val(), $(this).val(), true, true);
+
+							vvvv = $.parseHTML('<option last_added="true" value="' + $(this).val() +
+								'" selected="">' + $(this).val() + '</option>');
+							$("#" + idd).append(vvvv).trigger('change');
+						}
+					}
+				}else if ($(this).val() != '' && $(opt[0])[0] !== undefined && $($(opt[0])[0]).attr('id') != ''){
+				var idd = $(kar).attr('id')
+				idd = idd.replace("select2-", "");
+				idd = idd.replace("-results", "");
+				if (allowedselect2s.includes(idd)) {
+					$("#"+idd+ " option[last_added='"+true+"']").each(function(i,e){
+						$('#'+idd+' option[value="' + $(this).val() + '"]').detach();
+					});
+					if ($("#"+idd+ " option[value='"+$(this).val()+"']").length == 0) {
+						var newState = new Option($(this).val(), $(this).val(), true, true);
+
+						vvvv = $.parseHTML('<option last_added="true" value="'+$(this).val()+'" selected="">'+$(this).val()+'</option>');
+						$("#"+idd).append(vvvv).trigger('change');
+					}
+				}
 			}
-			fd.append('category', $('#image_category').val());
-			fd.append('building_id', $('#this_data_id').val());
-			for (let i = 0; i < files.length; i++) {
-				fd.append('images[]', files[i]);
-			}
+			}, 50);
 		})
 
 		$(document).on('change', '#select_all_checkbox', function(e) {
@@ -5353,7 +5512,7 @@
 				'   </div>' +
 				'<div data-contact_id= ' + id +
 				' class="form-group col-md-1 m-b-4 mb-3"><button data-contact_id=' + id +
-				' class="remove_contacts btn btn-danger btn-air-danger" type="button">-</button>  </div>';
+				' class="remove_contacts btn btn-primary" style="border-radius:5px;" type="button">-</button>  </div>';
 			return myvar;
 		}
 
@@ -5585,6 +5744,7 @@
 				data: {
 					id: id,
 					project_name: $('#project_name').val(),
+					builder_id: $('#builder_id').val(),
 					area_id: $('#area_id').val(),
 					state_id: $('#state_id').val(),
 					city_id: $('#city_id').val(),
@@ -5807,7 +5967,7 @@
                 '        </div>' +
 				'<div data-unit_id= ' + id +
                     ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
-                    ' class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-danger btn-air-danger" type="button">' + ((
+                    ' class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-primary" style="border-radius:5px;" type="button">' + ((
                         plus) ? "+" : "-") + '</button>  </div>'+
                 '</div>';
                 return myvar;

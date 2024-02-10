@@ -15,8 +15,24 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Projects</h5>
-							<a class="btn btn-primary btn-air-primary"  href="{{route('builder.project.add')}}">Add New Project</a>
-							<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()" type="button">Delete</button>
+                            <div class="col">
+                                <a
+                                    class="btn custom-icon-theme-button"
+                                    href="{{route('builder.project.add')}}"
+                                    title="Add Project"
+                                >
+                                    <i class="fa fa-plus"></i>
+                                </a>
+
+                                <button
+                                    class="btn text-white delete_table_row ms-3"
+                                    style="border-radius: 5px;display: none;background-color:red"
+                                    onclick="deleteTableRow()"
+                                    type="button"
+                                    title="Delete"
+                                ><i class="fa fa-trash"></i></button>
+
+                            </div>
                         </div>
                         <div class="card-body">
 

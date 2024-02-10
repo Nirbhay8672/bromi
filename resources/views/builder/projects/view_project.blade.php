@@ -115,12 +115,12 @@
 
                                                 <div class="row pull-right" style="display: contents;">
                                                     <div class="col-md-1">
-                                                        <a href={{ URL::to("builder/Projects") }}>
+                                                        <a href={{ URL::to("admin/Projects") }}>
                                                             <button class="nav-link mx-1 active" id="v-view-summary-tab">Back</button>
                                                         </a>
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <a href="{{ URL::to('builder/project/edit/'.$project->id)}} ">
+                                                        <a href="{{ URL::to('admin/project/edit/'.$project->id)}} ">
                                                             <button class="nav-link mx-1 active" id="v-view-summary-tab">Edit</button>
                                                         </a>
                                                     </div>
@@ -214,6 +214,12 @@
                                                     @endif
                                                     <div class="form-group col-8 m-b-20 data_conent_4">
                                                         <div>: {{ $project->project_status_question }}</div>
+                                                    </div>
+                                                    <div class="form-group col-4 m-b-20 data_conent_4">
+                                                        <h6><b>Builder Name</b></h6>
+                                                    </div>
+                                                    <div class="form-group col-8 m-b-20 data_conent_4">
+                                                        <div>: {{ $project->builder_name }}</div>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Rera Number</b></h6>
@@ -416,7 +422,7 @@
                                                                 <span>{{ $map_unit[$office_tower['saleable_from_to_map_unit']] }}</span>
                                                             </td>
                                                             <td>
-                                                                {{$office_tower['carpet']}} }}
+                                                                {{$office_tower['carpet']}}
                                                                 <span>{{ $map_unit[$office_tower['carpet_from_to_map_unit']] }}</span>
                                                             </td>
                                                             <td>
@@ -476,6 +482,35 @@
                                     <div id="wing_details" class="mt-3">
                                         @if ($project->property_type  == 87 && ($project->property_category == '254' || $project->property_category == '257' || $project->property_category == '255'))
                                             <div class="row">
+                                                <div class="form-group col-md-12">
+                                                    <h5 class="border-style mb-1">Basic Details</h5>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <table class="table custom-table-design">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Number Of Tower</th>
+                                                                <th scope="col">Number Of Floor</th>
+                                                                <th scope="col">Total Unit</th>
+                                                                <th scope="col">Number Of Elevator In Each Tower</th>
+                                                                <th scope="col">Total Room</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @php
+                                                                $new_data = json_decode($project->tower_details, true)['if_flat_or_penthouse'];
+                                                                $if_flat = json_decode($new_data);
+                                                            @endphp
+                                                            <tr>
+                                                                <td>{{ $if_flat->number_of_towers }}</td>
+                                                                <td>{{ $if_flat->number_of_floors }}</td>
+                                                                <td>{{ $if_flat->total_units }}</td>
+                                                                <td>{{ $if_flat->number_of_elevator }}</td>
+                                                                <td>{{ $if_flat->number_of_room }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Tower Details</h5>
                                                 </div>
@@ -846,8 +881,8 @@
                                                                     <span>{{ $map_unit[$office_tower['saleable_from_to_map_unit']] }}</span>
                                                                 </td>
                                                                 <td>
-                                                                    {{$office_tower['carpet']}} - {{ $office_tower['carpet_to'] }}
-                                                                    <span>{{ $map_unit[$office_tower['carpet_from_to_map_unit']] }}</span>
+                                                                    {{$office_tower['carpet'] ?? '-'}} - {{ $office_tower['carpet_to'] ?? '-' }}
+                                                                    <span>{{ $map_unit[$office_tower['carpet_from_to_map_unit']] ?? '-' }}</span>
                                                                 </td>
                                                                 <td>
                                                                     {{$office_tower['built_up']}} - {{ $office_tower['built_up_to'] }}
@@ -1091,5 +1126,4 @@
         });
 
     </script>
-
-    @endpush
+@endpush

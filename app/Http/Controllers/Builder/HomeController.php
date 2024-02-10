@@ -106,7 +106,7 @@ class HomeController extends Controller
 				DB::raw("state.name AS state_name"),
 				DB::raw("city.name AS city_name"),
 				DB::raw("areas.name AS area_name"),
-			])->join('builders','projects.builder_id','builders.id')
+			])->leftJoin('builders','projects.builder_id','builders.id')
 			->join('city','projects.city_id','city.id')
 			->join('state','projects.state_id','state.id')
 			->join('areas','projects.area_id','areas.id')
@@ -147,34 +147,59 @@ class HomeController extends Controller
 		$project->parkings = json_decode($project->parkings_decode['parking_details'], true);
 
 		$project->amenity_array = json_decode($project->amenities, true);
+		$project->other_documents = json_decode($project->other_documents, true) ?? [];
 
 		return view('builder.projects.view_project')->with(['project' => $project]);
 	}
 
 	public function addproject(Request $request){
-		$cities = City::orderBy('name')->get();
-		$states = State::orderBy('name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$areas = Areas::orderBy('name')
+			->where('user_id',Auth::user()->id)
+			->where('status',1)
+			->get();
+
 		$builders = Builders::orderBy('name')->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
 
 		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
-		
-		$data['prop_type'] = [85,87];
+		$prop_type = [];
+		foreach ($data['property_configuration_settings'] as $key => $value) {
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'],'property_')) {
+				array_push($prop_type,$value['id']);
+			}
+		}
+		$data['prop_type'] = $prop_type;
 
-		return view('builder.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings'), $data);
+		$first_state = State::where('user_id',Auth::user()->id)->first();
+		$first_city = City::where('user_id',Auth::user()->id)->first();
+
+		return view('builder.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city'), $data);
 	}
 
 	public function editproject(Projects $id){
-		$cities = City::orderBy('name')->get();
-		$states = State::orderBy('name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$areas = Areas::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$builders = Builders::orderBy('name')->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
-		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
-		$data['prop_type'] = [85,87];
 
-		return view('builder.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings', 'id'), $data);
+		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
+		$prop_type = [];
+		foreach ($data['property_configuration_settings'] as $key => $value) {
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'],'property_')) {
+				array_push($prop_type,$value['id']);
+			}
+		}
+		$data['prop_type'] = $prop_type;
+		
+		$id->other_documents = json_decode($id->other_documents, true) ?? [];
+
+		$first_state = State::where('user_id',Auth::user()->id)->first();
+		$first_city = City::where('user_id',Auth::user()->id)->first();
+
+		return view('builder.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings', 'id','first_state','first_city'), $data);
 	}
 
 	public function storeFile(UploadedFile $file)
@@ -211,12 +236,12 @@ class HomeController extends Controller
 		}
 
 		if($request->id == '' || $request->id == null) {
-			$data->user_id = 8;
+			$data->user_id = Auth::user()->id;
 			$data->added_by = Auth::user()->id;
 		}
 
 		//  first section data
-		$data->builder_id = $request->builder_id;
+		$data->builder_id = Auth::user()->id;
 		$data->website = $request->website;
 
 		$data->contact_details = $request->other_contact_details;
@@ -263,8 +288,8 @@ class HomeController extends Controller
 
 		if($request->propery_type == 87 || $request->property_category == 259 || $request->property_category == 260) {
 			if($request->propery_type == 87) {
-				// $array = '[';
-				// foreach(json_decode($data->unit_details) as $unit) {
+				$array = '[';
+				foreach(json_decode($data->unit_details) as $unit) {
 					// if($unit->wing) {
 					// 	$array .= '[';
 					// 	$array .= $unit->wing;
@@ -275,9 +300,9 @@ class HomeController extends Controller
 					// 	$array .= ','.$unit->wash_area;
 					// 	$array .= '],';
 					// }
-				// }
+				}
 
-				// $data->unit = $array;
+				$data->unit = $array;
 				$data->tower = '';
 			} else {
 				$data->unit = '';
@@ -342,6 +367,20 @@ class HomeController extends Controller
 			$catlot_file = $request->catlog_file;
 			$data->catlog_file = $this->storeFile($catlot_file);
 		}
+
+		$other_documents = json_decode($request->other_documents);
+
+		if(count($other_documents) > 0) {
+			foreach($other_documents as $index => $document) {
+				if($request['other_doc_'.$index]) {
+					$other_documents[$index]->file = $this->storeFile($request['other_doc_'.$index]);
+				}
+			}
+			$data->other_documents = json_encode($other_documents);
+ 		}
+		
+		$data->is_indirectly_store = 0;
+		$data->remark = $request->remark;
 
 		$data->save();
 
