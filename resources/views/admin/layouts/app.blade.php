@@ -308,30 +308,16 @@ Helper::set_default_measuerement();
                                                 <li class="p-4">
                                                     <div class="row">
                                                         <p>Enquiry</p>
-                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.enquiries') . '?filter_by=new' }}">
-                                                            <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="layers"></i><span class="badge rounded-pill badge-warning">{{ !empty($enquiry_count['new_counts']) ? $enquiry_count['new_counts'] : 0 }}</span>
-                                                                </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">New</a>
-                                                                </h5>
+
+                                                        <div class="col-4 text-center mb-3">
+                                                            <div data-bs-toggle="modal" data-bs-target="#drop_enquiryModal" class="bookmark-content">
+                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
+                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add
+                                                                       
+                                                                Enquiry</a></h5>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.enquiries') . '?filter_by=today' }}">
-                                                            <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="calendar"></i><span class="badge rounded-pill badge-warning">{{ !empty($enquiry_count['today_counts']) ? $enquiry_count['today_counts'] : 0 }}</span>
-                                                                </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Today</a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.enquiries') . '?filter_by=tomorrow' }}">
-                                                            <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="calendar"></i><span class="badge rounded-pill badge-warning">{{ !empty($enquiry_count['tomo_counts']) ? $enquiry_count['tomo_counts'] : 0 }}</span>
-                                                                </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Tomorrow</a>
-                                                                </h5>
-                                                            </div>
-                                                        </div>
+
                                                         <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.enquiries') . '?filter_by=yesterday' }}">
                                                             <div class="bookmark-content">
                                                                 <div class="bookmark-icon"><i data-feather="calendar"></i><span class="badge rounded-pill badge-warning">{{ !empty($enquiry_count['yes_counts']) ? $enquiry_count['yes_counts'] : 0 }}</span>
@@ -340,59 +326,75 @@ Helper::set_default_measuerement();
                                                                 </h5>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.enquiries') . '?filter_by=due' }}">
+
+                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.enquiries') . '?filter_by=today' }}">
                                                             <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="calendar"></i><span class="badge rounded-pill badge-warning">{{ !empty($enquiry_count['due_counts']) ? $enquiry_count['due_counts'] : 0 }}</span>
+                                                                <div class="bookmark-icon"><i data-feather="calendar"></i><span class="badge rounded-pill badge-warning">{{ !empty($enquiry_count['today_counts']) ? $enquiry_count['today_counts'] : 0 }}</span>
                                                                 </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Due
-                                                                        Followup</a>
+                                                                <h5 class="mt-2 text-center"> <a href="javascript:void(0)">Today</a>
                                                                 </h5>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.enquiries') . '?filter_by=weekend' }}">
+
+                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.enquiries') . '?filter_by=tomorrow' }}">
                                                             <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="calendar"></i><span class="badge rounded-pill badge-warning">{{ !empty($enquiry_count['week_counts']) ? $enquiry_count['week_counts'] : 0 }}</span>
+                                                                <div class="bookmark-icon"><i data-feather="calendar"></i><span class="badge rounded-pill badge-warning">{{ !empty($enquiry_count['tomo_counts']) ? $enquiry_count['tomo_counts'] : 0 }}</span>
                                                                 </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Weekend</a>
+                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Tomorrow</a>
                                                                 </h5>
                                                             </div>
                                                         </div>
-                                                        <hr>
+
+                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.enquiries') . '?filter_by=new' }}">
+                                                            <div class="bookmark-content">
+                                                                <div class="bookmark-icon"><i data-feather="layers"></i><span class="badge rounded-pill badge-warning">{{ !empty($enquiry_count['new_counts']) ? $enquiry_count['new_counts'] : 0 }}</span>
+                                                                </div>
+                                                                <h5 class="mt-2"> <a href="javascript:void(0)">New</a>
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.enquiries') . '?filter_by=missed' }}">
+                                                            <div class="bookmark-content">
+                                                                <div class="bookmark-icon"><i data-feather="layers"></i><span class="badge rounded-pill badge-warning">{{ !empty($enquiry_count['miss_counts']) ? $enquiry_count['miss_counts'] : 0 }}</span>
+                                                                </div>
+                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Missed</a>
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+
                                                         <p>Property</p>
-                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.properties') . '?filter_by=reminder' }}">
+
+                                                        <div class="col-4 text-center mb-3 drop_list_url" data-url="{{ route('admin.project.add') }}">
                                                             <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="bell"></i>
-                                                                </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Reminder</a>
-                                                                </h5>
+                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
+                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add Project</a></h5>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.properties') . '?filter_by=favourite' }}">
+
+                                                        <div class="col-4 text-center mb-3 drop_list_url" data-url="{{ route('admin.property.add') }}">
                                                             <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="heart"></i>
-                                                                </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Favourites</a>
-                                                                </h5>
+                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
+                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add Propery</a></h5>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.properties') . '?filter_by=new' }}">
+
+                                                        <div class="col-4 text-center mb-3 drop_list_url" data-url="{{ route('admin.partner.index') }}">
                                                             <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="home"></i>
-                                                                </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">New
-                                                                        Arrival</a>
-                                                                </h5>
+                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
+                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add Partner</a></h5>
                                                             </div>
                                                         </div>
+
                                                         <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.shared.properties') }}">
                                                             <div class="bookmark-content">
                                                                 <div class="bookmark-icon"><i data-feather="list"></i>
                                                                 </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Shared
-                                                                        Properties</a>
+                                                                <h5 class="mt-2 text-center"> <a href="javascript:void(0)">Shared Properties</a>
                                                                 </h5>
                                                             </div>
                                                         </div>
+
                                                         <div class="col-4 text-center drop_list_url" data-url="{{ route('admin.shared.requests') }}">
                                                             <div class="bookmark-content">
                                                                 <div class="bookmark-icon"><i data-feather="list"></i>
@@ -402,7 +404,6 @@ Helper::set_default_measuerement();
                                                                 </h5>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </li>
                                             </ul>
@@ -432,45 +433,7 @@ Helper::set_default_measuerement();
                                             <ul class="bookmark-dropdown pb-0">
                                                 <li class="p-0">
                                                     <div class="row">
-                                                        <p>Enquiry / Property</p>
-                                                        <div class="col-4 text-center mb-3">
-                                                            <div data-bs-toggle="modal" data-bs-target="#drop_enquiryModal" class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add
-                                                                        Enquiry</a></h5>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-4 text-center mb-3">
-                                                            <div data-bs-toggle="modal" data-bs-target="#drop_instaModal" class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="user"></i>
-                                                                </div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add
-                                                                        Insta property</a></h5>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-4 text-center mb-3 drop_list_url" data-url="{{ route('admin.project.add') }}">
-                                                            <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add Project</a></h5>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-4 text-center mb-3 drop_list_url" data-url="{{ route('admin.property.add') }}">
-                                                            <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add Propery</a></h5>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-4 text-center mb-3 drop_list_url" data-url="{{ route('admin.partner.index') }}">
-                                                            <div class="bookmark-content">
-                                                                <div class="bookmark-icon"><i data-feather="file-text"></i></div>
-                                                                <h5 class="mt-2"> <a href="javascript:void(0)">Add Partner</a></h5>
-                                                            </div>
-                                                        </div>
-
                                                         <p>Tools</p>
-
                                                         <div class="col-4 text-center" data-bs-toggle="modal" data-bs-target="#drop_capital_gain_calculator">
                                                             <div class="bookmark-content">
                                                                 <div class="bookmark-icon"><i data-feather="server"></i>
@@ -481,7 +444,6 @@ Helper::set_default_measuerement();
                                                                 </h5>
                                                             </div>
                                                         </div>
-
                                                         <div class="col-4 text-center" data-bs-toggle="modal" data-bs-target="#drop3_whole_unit_calculator">
                                                             <div class="bookmark-content">
                                                                 <div class="bookmark-icon"><i data-feather="smartphone"></i>
@@ -492,7 +454,6 @@ Helper::set_default_measuerement();
                                                                 </h5>
                                                             </div>
                                                         </div>
-
                                                         <div class="col-4 text-center" data-bs-toggle="modal" data-bs-target="#drop4_emi_calculator">
                                                             <div class="bookmark-content">
                                                                 <div class="bookmark-icon"><i data-feather="credit-card"></i>
@@ -502,7 +463,6 @@ Helper::set_default_measuerement();
                                                                 </h5>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </li>
                                             </ul>
