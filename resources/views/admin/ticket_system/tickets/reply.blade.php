@@ -17,7 +17,10 @@
                     <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
 
                     <div class="form-group{{ $errors->has('comment') ? ' has-error' : '' }}">
-                        <textarea rows="10" id="comment" class="form-control" name="comment"></textarea>
+
+                        <div class="fname">
+                            <textarea rows="10" id="comment" class="form-control" name="comment"></textarea>
+                        </div>
 
                         @if ($errors->has('comment'))
                             <span class="help-block">
@@ -27,7 +30,7 @@
                     </div>
                     <br>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" style="border-radius:5px;" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
