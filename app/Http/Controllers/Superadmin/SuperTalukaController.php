@@ -42,7 +42,8 @@ class SuperTalukaController extends Controller
 				->rawColumns(['Actions', 'select_checkbox'])
 				->make(true);
 		}
-		$districts = District::orderBy('name')->get();
+
+		$districts = District::orderBy('name')->where('user_id', 6)->get();
 		return view('superadmin.supersettings.super_taluka_index', compact('districts'));
 	}
 

@@ -496,12 +496,16 @@ class HomeController extends Controller
 					} else {
 						$new_state_id = $current_user_state->id;
 					}
-					
-					$city = new City();
-					$city->user_id = Auth::user()->id;
-					$city->name = $value->name;
-					$city->state_id = $new_state_id;
-					$city->save();
+
+					$current_user_city = City::where('user_id',Auth::user()->id)->where('name', $value->name)->first();
+
+					if(!$current_user_city) {
+						$city = new City();
+						$city->user_id = Auth::user()->id;
+						$city->name = $value->name;
+						$city->state_id = $new_state_id;
+						$city->save();
+					}
 				}
 			}
 		}

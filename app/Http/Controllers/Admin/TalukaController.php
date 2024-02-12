@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Areas;
 use App\Models\District;
+use App\Models\SuperTaluka;
 use App\Models\Taluka;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,9 +45,11 @@ class TalukaController extends Controller
 				->rawColumns(['Actions', 'select_checkbox'])
 				->make(true);
 		}
-		$districts = District::orderBy('name')->where('user_id',Auth::user()->id)->get();
 
-		return view('admin.settings.taluka_index',compact('districts'));
+		$districts = District::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$super_admin_districts = District::orderBy('name')->where('user_id',6)->get();
+
+		return view('admin.settings.taluka_index',compact('districts', 'super_admin_districts'));
 	}
 
 	public function saveTaluka(Request $request)
@@ -102,4 +105,58 @@ class TalukaController extends Controller
 			$data = Taluka::whereIn('id', json_decode($request->allids))->delete();
 		}
 	}
+
+	public function getTalukaForImport(Request $request)
+	{
+		return response()->json([
+			'message' => 'Detail fetch',
+			'data' => [
+				'taluka_data' => SuperTaluka::where('district_id',$request->district_id)->get()	
+			]
+		]);
+	}
+
+	public function importTaluka(Request $request)
+	{
+		if(!empty($request->district_id)){
+
+			$alltaluka = SuperTaluka::whereIn('id',$request->taluka_array)->get();
+			
+			foreach ($alltaluka as $key => $value) {
+				
+				$exist = Taluka::where('name',$value->name)->where('district_id',$value->district_id)->first();
+
+				if (empty($exist->id)) {
+					$district = District::find($value->district_id);
+
+					$current_user_district = District::where('user_id',Auth::user()->id)->where('name', $district->name)->first();
+
+					$new_district_id = $district->id;
+					    
+					if(!$current_user_district) {
+						$new_state = new District();
+						$new_state->fill([
+							'name' => $district->name,
+							'user_id' => Auth::user()->id,
+						])->save();
+						
+						$new_district_id = $new_state->id;
+					} else {
+						$new_district_id = $current_user_district->id;
+					}
+
+					$current_user_taluka = Taluka::where('user_id',Auth::user()->id)->where('name', $value->name)->first();
+
+					if(!$current_user_taluka) {
+						$taluka = new Taluka();
+						$taluka->user_id = Auth::user()->id;
+						$taluka->name = $value->name;
+						$taluka->district_id = $new_district_id;
+						$taluka->save();
+					}
+				}
+			}
+		}
+	}
+
 }
