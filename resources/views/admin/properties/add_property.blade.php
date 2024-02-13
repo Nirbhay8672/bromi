@@ -3294,7 +3294,11 @@
                 var theFor = $('input[name=property_for]:checked').val();
                 if (theFor == 'Sell' && parent_val == '87') {
                     $('.property-type-element[data-property-id="256"]').show();
-                } else {
+                }else if(theFor == 'Rent' && parent_val == '85') {
+                    $('.property-type-element[data-property-id="262"]').hide();
+                }
+                else {
+                    $('.property-type-element[data-property-id="262"]').show();
                     $('.property-type-element[data-property-id="256"]').hide();
                 }
             }
