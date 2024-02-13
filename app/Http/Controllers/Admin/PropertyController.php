@@ -427,8 +427,8 @@ class PropertyController extends Controller
 					' . Carbon::parse($row->updated_at)->format('d-m-Y') . '<br>' . Carbon::parse($row->updated_at)->diffInDays() . ' days</td>';
                 })
                 ->editColumn('property_category', function ($row) use ($dropdowns) {
-                    // $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
-                   $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk','Test', 'testw');
+                    // $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk');
+                    $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk','Test', 'testw');
                     if ($row->property_for == 'Both') {
                         $forr = 'Rent & Sell';
                     } else {
@@ -1439,7 +1439,6 @@ class PropertyController extends Controller
     }
     public function saveProperty(Request $request)
     {
-        // dd(json_decode($request->construction_allowed_for));
         // dd("reqs:",($request->all()));
         if (!empty($request->id) && $request->id != '') {
             $data = Properties::find($request->id);
@@ -1472,6 +1471,7 @@ class PropertyController extends Controller
         }
 
         $data->property_for = $request->property_for;
+        $data->res_more = $request->res_more;
         $data->property_type = $request->property_type;
         $data->property_category = $request->property_category;
         $data->configuration = $request->configuration;

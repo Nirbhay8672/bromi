@@ -3315,7 +3315,6 @@
                 $('#address').val($('#project_id').find(":selected").attr('data-addr')).trigger('change');
                 $('#city_id').val($('#project_id').find(":selected").attr('data-city')).trigger('change');
                 $('#state-dropdown').val($('#project_id').find(":selected").attr('data-city')).trigger('change');
-               
                 $('#area_id').val($('#project_id').find(":selected").attr('data-area')).trigger('change');
                 $('#property_link').val($('#project_id').find(":selected").attr('data-location')).trigger('change');
             })

@@ -31,7 +31,7 @@
                                             <div class="stepwizard-step mb-5" style="text-align:initial">
                                                 <button class="btn btn-light" id="step1"
                                                     data-action="#profile-step">2</button>
-                                                <p class="ms-2">Profile Details</p>
+                                                <p class="ms-2">Property Details</p>
                                             </div>
 
                                             <div class="stepwizard-step" style="text-align:initial">
@@ -43,8 +43,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-9 col-lg-10 border-start ps-4">
-                                    <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
-                                        novalidate="">
+                                    <form class="form-bookmark needs-validation modal_form" enctype="multipart/form-data"
+                                        method="post" id="modal_form" novalidate="">
                                         <div class="setup-content" id="information-step">
                                             <div class="col-xs-12">
                                                 <div class="col-md-12">
@@ -54,7 +54,6 @@
                                                                 <label><b>Property For</b></label>
                                                             </div>
                                                             <input type="hidden" name="this_data_id" id="this_data_id">
-
                                                             <div class="btn-group me-2" role="group"
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Rent" class="btn-check"
@@ -80,27 +79,26 @@
                                                                     for="propertyfor3">Both</label>
                                                             </div>
                                                         </div>
+
+                        
+
                                                         <div class="col-md-12 mb-3">
                                                             <div>
                                                                 <label><b>Property Type</b></label>
                                                             </div>
                                                             <div class="m-checkbox-inline custom-radio-ml">
-                                                                @forelse ($property_configuration_settings as $props)
-                                                                    @if ($props['dropdown_for'] == 'property_construction_type' && in_array($props['id'], $prop_type))
-                                                                        <div
-                                                                            class="form-check form-check-inline radio radio-primary">
-                                                                            <input class="form-check-input"
-                                                                                id="propertytype{{ $props['id'] }}"
-                                                                                type="radio" name="property_type"
-                                                                                data-val="{{ $props['name'] }}"
-                                                                                value="{{ $props['id'] }}"
-                                                                                {{ $props['name'] == 'Commercial' ? 'checked' : '' }}>
-                                                                            <label class="form-check-label mb-0"
-                                                                                for="propertytype{{ $props['id'] }}">{{ $props['name'] }}</label>
-                                                                        </div>
-                                                                    @endif
-                                                                @empty
-                                                                @endforelse
+                                                                <input class="form-check-input" id="propertytype85"
+                                                                    type="radio" name="property_type"
+                                                                    data-val="Commercial" value="85" checked=""
+                                                                    data-bs-original-title="" title="">
+                                                                <label class="form-check-label mb-0"
+                                                                    for="propertytype85">Commercial</label>
+                                                                <input class="form-check-input" id="propertytype87"
+                                                                    type="radio" name="property_type"
+                                                                    data-val="Residential" value="87"
+                                                                    data-bs-original-title="" title="">
+                                                                <label class="form-check-label mb-0"
+                                                                    for="propertytype87">Residential</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12 mb-3">
@@ -110,22 +108,25 @@
                                                             <div class="m-checkbox-inline custom-radio-ml">
                                                                 @forelse ($property_configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_specific_type')
-                                                                        <div class="btn-group bromi-checkbox-btn me-1"
-                                                                            role="group"
-                                                                            aria-label="Basic radio toggle button group">
-                                                                            <input type="radio"
-                                                                                data-parent_id="{{ $props['parent_id'] }}"
-                                                                                class="btn-check"
-                                                                                value="{{ $props['id'] }}"
-                                                                                data-val="{{ $props['name'] }}"
-                                                                                name="property_category"
-                                                                                id="category-{{ $props['id'] }}"
-                                                                                data-error="#property_category_error"
-                                                                                autocomplete="off">
-                                                                            <label
-                                                                                class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                                for="category-{{ $props['id'] }}">{{ $props['name'] }}</label>
-                                                                        </div>
+                                                                        
+                                                                            <div class="btn-group bromi-checkbox-btn me-1 property-type-element"
+                                                                                role="group"
+                                                                                aria-label="Basic radio toggle button group"
+                                                                                data-property-id="{{ $props['id'] }}">
+                                                                                <input type="radio"
+                                                                                    data-parent_id="{{ $props['parent_id'] }}"
+                                                                                    class="btn-check"
+                                                                                    value="{{ $props['id'] }}"
+                                                                                    data-val="{{ $props['name'] }}"
+                                                                                    name="property_category"
+                                                                                    id="category-{{ $props['id'] }}"
+                                                                                    data-error="#property_category_error"
+                                                                                    autocomplete="off">
+                                                                                <label
+                                                                                    class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                                    for="category-{{ $props['id'] }}">{{ $props['name'] }}</label>
+                                                                            </div>
+                                                                        
                                                                     @endif
                                                                 @empty
                                                                 @endforelse
@@ -134,40 +135,6 @@
                                                                 <label id="property_category_error"></label>
                                                             </div>
                                                         </div>
-                                                        {{-- Bharat subcategory --}}
-                                                        {{-- <div class="col-md-12 mb-3">
-                                                            <div>
-                                                                <label><b>Category</b></label>
-                                                            </div>
-                                                            <div class="m-checkbox-inline custom-radio-ml">
-                                                                @forelse ($property_configuration_settings as $props)
-                                                                    @if ($props['dropdown_for'] == 'property_specific_type')
-                                                                        <div class="btn-group bromi-checkbox-btn me-1"
-                                                                            role="group"
-                                                                            aria-label="Basic radio toggle button group">
-                                                                            <input type="radio"
-                                                                                data-parent_id="{{ $props['parent_id'] }}"
-                                                                                class="btn-check"
-                                                                                value="{{ $props['id'] }}"
-                                                                                data-val="{{ $props['name'] }}"
-                                                                                name="property_category"
-                                                                                id="category-{{ $props['id'] }}"
-                                                                                data-error="#property_category_error"
-                                                                                autocomplete="off">
-                                                                            <label
-                                                                                class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                                for="category-{{ $props['id'] }}">{{ $props['name'] }}</label>
-                                                                        </div>
-                                                                    @endif
-
-
-                                                                @empty
-                                                                @endforelse
-                                                            </div>
-                                                            <div>
-                                                                <label id="property_category_error"></label>
-                                                            </div>
-                                                        </div> --}}
                                                     </div>
                                                     <div class="row mb-3 div_office_type" id="">
                                                         <div class="col-md-12 mb-3">
@@ -329,84 +296,6 @@
                                                         </div>
                                                     </div>
 
-                                                    {{-- multi select but does not store on db --}}
-                                                    {{-- <div class="row mb-3 div_flat_type" id="">
-                                                        <div class="col-md-12 mb-3">
-                                                            <div>
-                                                                <label><b>Sub category</b></label>
-                                                            </div>
-                                                            <div class="m-checkbox-inline custom-radio-ml">
-                                                                <div class="the_1rk btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="13" id="flatkind1"
-                                                                        name="configuration[]"
-                                                                        data-error="#flat_type_error" autocomplete="off">
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind1">1 rk</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="14" id="flatkind2"
-                                                                        name="configuration[]"
-                                                                        data-error="#flat_type_error" autocomplete="off">
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind2">1bhk</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="15" id="flatkind3"
-                                                                        name="configuration[]"
-                                                                        data-error="#flat_type_error" autocomplete="off">
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind3">2bhk</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="16" id="flatkind4"
-                                                                        name="configuration[]"
-                                                                        data-error="#flat_type_error" autocomplete="off">
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind4">3bhk</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="17" id="flatkind5"
-                                                                        name="configuration[]"
-                                                                        data-error="#flat_type_error" autocomplete="off">
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind5">4bhk</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="18" id="flatkind6"
-                                                                        name="configuration[]"
-                                                                        data-error="#flat_type_error" autocomplete="off">
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind6">4+bhk</label>
-                                                                </div>
-                                                            </div>
-                                                            <div id="flat_type_error"></div>
-                                                        </div>
-                                                    </div> --}}
-                                                    {{-- Bharat subcategory Villa/Bunglow Static --}}
                                                     <div class="row mb-3 div_vila_type" id="vila_type">
                                                         <div class="col-md-12 mb-3">
                                                             <div>
@@ -417,62 +306,61 @@
                                                                     role="group"
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input type="radio" class="btn-check"
-                                                                        value="21" id="vilakind1"
+                                                                        value="14" id="vilakind1"
                                                                         data-val="resedential" name="vila_type"
                                                                         data-error="#vila_type_error" autocomplete="off">
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind1">1 Bed</label>
+                                                                        for="vilakind1">1 BHK</label>
                                                                 </div>
                                                                 <div class="btn-group bromi-checkbox-btn me-1"
                                                                     role="group"
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input type="radio" class="btn-check"
-                                                                        value="22" id="vilakind2"
+                                                                        value="15" id="vilakind2"
                                                                         data-val="resedential" name="vila_type"
                                                                         data-error="#vila_type_error" autocomplete="off">
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind2">2 Bed</label>
+                                                                        for="vilakind2">2 BHK</label>
                                                                 </div>
                                                                 <div class="btn-group bromi-checkbox-btn me-1"
                                                                     role="group"
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input type="radio" data-val="resedential"
-                                                                        class="btn-check" value="23" id="vilakind3"
+                                                                        class="btn-check" value="16" id="vilakind3"
                                                                         name="vila_type" data-error="#vila_type_error"
                                                                         autocomplete="off">
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind3">3 Bed</label>
+                                                                        for="vilakind3">3 BHK</label>
                                                                 </div>
                                                                 <div class="btn-group bromi-checkbox-btn me-1"
                                                                     role="group"
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input type="radio" data-val="resedential"
-                                                                        class="btn-check" value="24" id="vilakind4"
+                                                                        class="btn-check" value="17" id="vilakind4"
                                                                         name="vila_type" data-error="#vila_type_error"
                                                                         autocomplete="off">
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind4">4 Bed</label>
+                                                                        for="vilakind4">4 BHK</label>
                                                                 </div>
                                                                 <div class="btn-group bromi-checkbox-btn me-1"
                                                                     role="group"
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input type="radio" class="btn-check"
-                                                                        value="25" data-val="resedential"
+                                                                        value="18" data-val="resedential"
                                                                         id="vilakind5" name="vila_type"
                                                                         data-error="#vila_type_error" autocomplete="off">
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind5">4+ Bed</label>
+                                                                        for="vilakind5">4+BHK</label>
                                                                 </div>
                                                                 <div id="vila_type_error"></div>
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <div class="row mb-3 div_plot_type" id="">
                                                         <div class="col-md-12 mb-3">
                                                             <div>
@@ -502,17 +390,6 @@
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
                                                                         for="plotkind2">Agricultural/Farm Land</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input type="radio" class="btn-check"
-                                                                        value="12" id="plotkind3"
-                                                                        data-val="industrial" name="plot_type"
-                                                                        data-error="#plot_type_error" autocomplete="off">
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="plotkind3">Industrial Land</label>
                                                                 </div>
                                                             </div>
                                                             <div id="plot_type_error"></div>
@@ -564,17 +441,17 @@
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input type="radio" class="btn-check"
                                                                         data-error="#storage_type_error" value="20"
-                                                                        id="storagekind2" name="storage_type"
+                                                                        id="storagekind4" name="storage_type"
                                                                         autocomplete="off">
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="storagekind2">Plotting</label>
+                                                                        for="storagekind4">Plotting</label>
                                                                 </div>
                                                             </div>
                                                             <div id="storage_type_error"></div>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary nextBtn" id="nextButton"
+                                                    <button class="btn btn-primary nextBtn" style="border-radius: 5px;" id="nextButton"
                                                         type="button">Next</button>
                                                 </div>
                                             </div>
@@ -584,9 +461,9 @@
                                             <div class="col-xs-12">
                                                 <div class="col-md-12">
                                                     <div class="row div_flat_details_2" id="">
-
-                                                        {{-- Bharat Hide  --}}
+                                                        {{-- Project Dropdown  --}}
                                                         <div class="col-md-2 m-b-4 mb-4" id="project_hide">
+                                                            <!-- <button id="openDropdownButton">Add Prop</button> -->
                                                             <select class="form-select" name="project_id"
                                                                 data-error="#project_id_error" id="project_id">
                                                                 <option value="">Project</option>
@@ -594,40 +471,46 @@
                                                                     <option data-addr="{{ $building->address }}"
                                                                         data-city="{{ $building->city_id }}"
                                                                         data-area="{{ $building->area_id }}"
+                                                                        data-location="{{ $building->location_link }}"
                                                                         value="{{ $building->id }}">
-                                                                        {{ $building->project_name }}</option>
+                                                                        {{ $building->project_name }}
+                                                                    </option>
                                                                 @endforeach
                                                             </select>
                                                             <div id="project_id_error"></div>
                                                         </div>
 
-
-                                                        {{-- bharat state city --}}
-                                                        <div class="form-group col-md-3 m-b-4 mb-3">
+                                                        {{-- state city --}}
+                                                        @php
+                                                            $authStateId = Auth::user()->state_id;
+                                                        @endphp
+                                                        <div class="form-group col-md-3 m-b-4 mb-3 state-hide">
                                                             <select class="form-select" id="state_id">
-                                                                <option value=""> States</option>
+                                                                <option value="">Select States</option>
                                                                 @foreach ($states as $state)
-                                                                    <option value="{{ $state['id'] }}">
-                                                                        {{ $state['name'] }}</option>
+                                                                    @if ($state['user_id'] == auth()->user()->id)
+                                                                        <option value="{{ $state['id'] }}">
+                                                                            {{ $state['name'] }}
+                                                                        </option>
+                                                                    @endif
                                                                 @endforeach
                                                             </select>
                                                         </div>
-
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
-                                                            {{-- <select class="form-select" id="city_id">
-                                                                <option value=""> City</option>
-                                                                @foreach ($cities as $city)
-                                                                    <option value="{{ $city['id'] }}">
-                                                                        {{ $city['name'] }}</option>
-                                                                @endforeach
-                                                            </select> --}}
                                                             <select id="state-dropdown" class="form-control">
+                                                                <option value="">Select City</option>
+                                                                @foreach ($cities as $city)
+                                                                    <option data-city_id="{{ $city->state_id }}"
+                                                                        data-state_id="{{ $city->state_id }}"
+                                                                        value="{{ $city->id }}">{{ $city->name }}
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
 
                                                         <div class="form-group col-md-3 m-b-4 mb-3 cl-locality">
                                                             <select class="form-select" id="area_id">
-                                                                <option value=""> Locality</option>
+                                                                <option value="">Select Locality</option>
                                                                 @foreach ($areas as $area)
                                                                     <option data-city_id="{{ $area->city_id }}"
                                                                         data-state_id="{{ $area->state_id }}"
@@ -649,20 +532,7 @@
                                                                     id="property_link" type="text" autocomplete="off">
                                                             </div>
                                                         </div>
-
                                                     </div>
-
-                                                    <div class="row col-md-2 div_checkboxes1">
-
-                                                        <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20 terrace"
-                                                            style="display:none">
-                                                            <input class="form-check-input" id="is_terrace"
-                                                                type="checkbox">
-                                                            <label class="form-check-label"
-                                                                for="is_terrace">Terrace</label>
-                                                        </div>
-                                                    </div>
-
                                                     <div class="row div_property_address" id="">
                                                         <div class="form-group col-md-3 mb-3 div_extra_land_details">
                                                             <select class="form-select" id="district_id">
@@ -746,54 +616,85 @@
                                                                         id="constructed_carpet_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
+
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
                                                                             id="constructed_carpet_area_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
 
+                                                        <div class="col-md-3 the_salable_plot_area">
+                                                            <div class="input-group">
+                                                                <div class="form-group col-md-7 m-b-20">
+                                                                    <label for="Salable Plot Area">Salable Plot
+                                                                        Area</label>
+                                                                    <input class="form-control" name="salable_plot_area"
+                                                                        id="salable_plot_area" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="salable_plot_area_measurement">
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
                                                         <div class="col-md-4 the_constructed_salable_area">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
-                                                                    <label
-                                                                        for="Salable
-                                                                    Constructed Area">Salable
+                                                                    <label for="Salable Constructed Area">Salable
                                                                         Constructed Area</label>
                                                                     <input class="form-control"
                                                                         name="constructed_salable_area"
                                                                         id="constructed_salable_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
+                                                                <!--<div class="input-group-append col-md-5 m-b-20">-->
+                                                                <!--    <div class="form-group form_measurement">-->
+                                                                <!--        <select class="form-select measure_select"-->
+                                                                <!--            id="carpet_area_measurement">-->
+                                                                {{-- <!--            @forelse ($property_configuration_settings as $props)--> --}}
+                                                                {{-- <!--                @if ($props['dropdown_for'] == 'property_measurement_type')-->
+                                                                <!--                    <option-->
+                                                                <!--                        @if ($props['id'] == Session::get('default_measurement')) selected @endif-->
+                                                                <!--                        data-parent_id="{{ $props['parent_id'] }}"-->
+                                                                <!--                        value="{{ $props['id'] }}">-->
+                                                                <!--                        {{ $props['name'] }}-->
+                                                                <!--                    </option>-->
+                                                                <!--                @endif-->
+                                                                <!--            @empty-->
+                                                                <!--            @endforelse--> --}}
+                                                                <!--        </select>-->
+                                                                <!--    </div>-->
+                                                                <!--</div>-->
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
                                                                             id="constructed_salable_area_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -811,57 +712,23 @@
                                                                         id="constructed_builtup_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
+
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
                                                                             id="constructed_builtup_area_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-3 the_salable_plot_area">
-                                                            <div class="input-group">
-                                                                <div class="form-group col-md-7 m-b-20">
-                                                                    <label for="Salable Plot Area">Salable Plot
-                                                                        Area</label>
-                                                                    <input class="form-control" name="salable_plot_area"
-                                                                        id="salable_plot_area" type="text"
-                                                                        autocomplete="off">
-                                                                </div>
-                                                                <div class="input-group-append col-md-5 m-b-20">
-                                                                    <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
-                                                                            id="salable_plot_area_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
 
-                                                            </div>
-                                                        </div>
 
                                                         <div class="col-md-3 the_carpet_plot_area">
                                                             <div class="input-group">
@@ -871,21 +738,16 @@
                                                                         id="carpet_plot_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
+
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
                                                                             id="carpet_plot_area_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -927,21 +789,16 @@
                                                                         id="salable_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
+
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
                                                                             id="salable_area_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -971,6 +828,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                         <div class="col-md-3 the_width_of_plot">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
@@ -1005,19 +863,13 @@
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
                                                                             id="carpet_area_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1079,7 +931,7 @@
                                                                         id="builtup_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
-                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                {{-- <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
                                                                         <select class="form-select measure_select"
                                                                             id="builtup_area_measurement">
@@ -1096,7 +948,30 @@
                                                                             @endforelse
                                                                         </select>
                                                                     </div>
+                                                                </div> --}}
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="builtup_area_measurement">
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
+                                                                        </select>
+                                                                    </div>
                                                                 </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row col-md-2 div_checkboxes1">
+
+                                                            <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20 terrace"
+                                                                style="display:none">
+                                                                <input class="form-check-input" id="is_terrace"
+                                                                    type="checkbox">
+                                                                <label class="form-check-label"
+                                                                    for="is_terrace">Terrace</label>
                                                             </div>
                                                         </div>
 
@@ -1107,7 +982,7 @@
                                                                     <input class="form-control" name="plot_area"
                                                                         id="plot_area" type="text" autocomplete="off">
                                                                 </div>
-                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                {{-- <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
                                                                         <select class="form-select measure_select"
                                                                             id="plot_area_measurement">
@@ -1124,6 +999,18 @@
                                                                             @endforelse
                                                                         </select>
                                                                     </div>
+                                                                </div> --}}
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="plot_area_measurement">
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
+                                                                        </select>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1137,7 +1024,7 @@
                                                                         id="construction_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
-                                                                <div class="input-group-append col-md-4 m-b-20 ">
+                                                                {{-- <div class="input-group-append col-md-4 m-b-20 ">
                                                                     <div class="form-group form_measurement">
                                                                         <select class="form-select  measure_select"
                                                                             id="construction_area_measurement">
@@ -1152,6 +1039,18 @@
                                                                                 @endif
                                                                             @empty
                                                                             @endforelse
+                                                                        </select>
+                                                                    </div>
+                                                                </div> --}}
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="construction_area_measurement">
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1169,7 +1068,7 @@
                                                                         id="terrace_salable_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
-                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                {{-- <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
                                                                         <select class="form-select measure_select"
                                                                             id="terrace_salable_area_measurement">
@@ -1186,7 +1085,20 @@
                                                                             @endforelse
                                                                         </select>
                                                                     </div>
+                                                                </div> --}}
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="terrace_salable_area_measurement">
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
+                                                                        </select>
+                                                                    </div>
                                                                 </div>
+
 
                                                             </div>
                                                         </div>
@@ -1200,7 +1112,7 @@
                                                                         id="terrace_carpet_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
-                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                {{-- <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
                                                                         <select class="form-select measure_select"
                                                                             id="terrace_carpet_area_measurement">
@@ -1215,6 +1127,18 @@
                                                                                 @endif
                                                                             @empty
                                                                             @endforelse
+                                                                        </select>
+                                                                    </div>
+                                                                </div> --}}
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="terrace_carpet_area_measurement">
+                                                                            <option value="117" selected>Sq.Ft.</option>
+                                                                            <option value="118">Sq.Yard</option>
+                                                                            <option value="119">Sq.Meter</option>
+                                                                            <option value="120">VIGHA</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1233,25 +1157,25 @@
 
                                                         <div class="row ">
                                                             <div class="col-md-2 mb-3 the_total_units_in_project">
-                                                                <label for="Total Floor">Total Units in project</label>
+                                                                <label for="Total Floor">Units in project</label>
                                                                 <input class="form-control" name="total_units_in_project"
                                                                     id="total_units_in_project" type="text"
                                                                     autocomplete="off">
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_total_no_of_floor">
-                                                                <label for="Property on floor">Total no. of floor</label>
+                                                                <label for="Property on floor">no. of floor</label>
                                                                 <input class="form-control" name="total_no_of_floor"
                                                                     id="total_no_of_floor" type="text"
                                                                     autocomplete="off">
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_total_units_in_tower">
-                                                                <label for="Total Floor">Total Units in tower</label>
+                                                                <label for="Total Floor">Units in tower</label>
                                                                 <input class="form-control" name="total_units_in_tower"
                                                                     id="total_units_in_tower" type="text"
                                                                     autocomplete="off">
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_property_on_floors">
-                                                                <label for="Total Floor">Property On Floor</label>
+                                                                <label for="Total Floor">Units on Floor</label>
                                                                 <input class="form-control" name="property_on_floors"
                                                                     id="property_on_floors" type="text"
                                                                     autocomplete="off">
@@ -1332,13 +1256,13 @@
                                                                 <label class="form-check-label" for="hot_property">Hot
                                                                 </label>
                                                             </div>
-                                                            <div
+                                                            {{-- <div
                                                                 class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20">
                                                                 <input class="form-check-input" id="is_favourite"
                                                                     type="checkbox">
                                                                 <label class="form-check-label"
                                                                     for="is_favourite">Favourite</label>
-                                                            </div>
+                                                            </div> --}}
                                                             {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20 terrace" --}}
                                                             {{-- style="display:none"> --}}
                                                             {{-- <input class="form-check-input" id="terrace_id" --}}
@@ -1388,9 +1312,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <div class="row mb-4 div_road_width" id="">
-
                                                         <div class="col-md-4">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
@@ -1421,21 +1343,65 @@
                                                     <div class="row mb-3 div_construction_allowed_for" id="">
 
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
-                                                            <select class="form-select" id="construction_allowed_for">
-                                                                <option value="">Construction allowed for
-                                                                </option>
+                                                            <label class="select2_label"
+                                                                for="Select Construction allowed for"> Construction allowed
+                                                                for</label>
+                                                            <select class="form-select" id="construction_allowed_for"
+                                                                name="construction_allowed_for[]" multiple>
                                                                 <option value="residential">Residential </option>
                                                                 <option value="commercial">Commercial </option>
                                                                 <option value="industrial">Industrial </option>
                                                             </select>
                                                         </div>
+                                                        <div class="form-group col-md-3 m-b-4 mb-3">
+                                                            <label class="select2_label"
+                                                                for="Select Construction Documents"> Construction
+                                                                Documents</label>
+                                                            <select class="form-select" id="construction_documents"
+                                                                multiple>
+                                                                @foreach ($property_const_docs as $document)
+                                                                    <option value="{{ $document->id }}">
+                                                                        {{ $document->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
                                                     </div>
 
+                                                    <div class="mb-4 div_construction_documents">
+                                                        <label><b>Construction Documents :</b></label>
+                                                        <div class="input-group control-group increment">
+                                                            <input type="file" id="const_documents"
+                                                                name="const_documents[]" class="form-control">
+                                                            <div class="input-group-btn"
+                                                                style="margin-right: 31%;margin-left: 6%;">
+                                                                <button class="btn btn-primary btn-air-primary add-docs"
+                                                                    style="width: 90px;" type="button"><i
+                                                                        class="glyphicon glyphicon-plus"></i>Add</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="clone hide">
+                                                            <div class="control-group input-group"
+                                                                style="margin-top:10px">
+                                                                <input type="file" name="const_documents[]"
+                                                                    class="form-control">
+                                                                <div class="input-group-btn"
+                                                                    style="margin-right: 31%;margin-left: 6%;">
+                                                                    <button
+                                                                        class="btn btn-primary btn-air-primary rem-docs"
+                                                                        type="button"><i
+                                                                            class="glyphicon glyphicon-remove"></i>Remove</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {{-- <button type="button"
+                                                            class="btn mb-2 btn-primary btn-air-primary upload-btn"
+                                                            style="margin-left: 10px;width:8rem;">Upload</button> --}}
+                                                    </div>
 
                                                     <div class="row div_plot_ind_common" id="">
-
                                                         <div class="form-group col-md-3 mb-3">
-                                                            <label for="FSI">FSI</label>
+                                                            <label for="FSI">FSI/FAR</label>
                                                             <input class="form-control" name="fsi" id="fsi"
                                                                 type="text" autocomplete="off">
                                                         </div>
@@ -1468,7 +1434,6 @@
                                                                 autocomplete="off">
                                                         </div>
                                                     </div>
-
 
                                                     <div class="row div_flat_details_5" id="">
                                                         <div
@@ -1526,9 +1491,7 @@
                                                         </div>
                                                     </div>
 
-
-
-
+                                                    {{-- bhrt --}}
                                                     <div class="row mb-3 div_availability_status" id="">
                                                         <div class="col-md-12 mb-3">
                                                             <div>
@@ -1652,26 +1615,25 @@
                                                                     id="amenity_passenger_lift"
                                                                     name="property_amenities" type="checkbox">
                                                                 <label class="form-check-label"
-                                                                    for="amenity_passenger_lift">Passenger Lift</label>
+                                                                    for="amenity_passenger_lift">Garden</label>
                                                             </div>
                                                             <div
-                                                                class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                                                class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
                                                                 <input class="project_amenity form-check-input"
                                                                     id="amenity_garden" name="property_amenities"
                                                                     type="checkbox">
                                                                 <label class="form-check-label"
-                                                                    for="amenity_garden">Garden &
-                                                                    Children Play
+                                                                    for="amenity_garden">Children Play
                                                                     Area</label>
                                                             </div>
-                                                            <div
+                                                            {{-- <div
                                                                 class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                                                 <input class="project_amenity form-check-input"
                                                                     id="amenity_service_lift" name="property_amenities"
                                                                     type="checkbox">
                                                                 <label class="form-check-label"
                                                                     for="amenity_service_lift">Service Lift</label>
-                                                            </div>
+                                                            </div> --}}
                                                             <div
                                                                 class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                                                 <input class="project_amenity form-check-input"
@@ -1756,34 +1718,34 @@
                                                                     name="ec_noc_remark" id="ec_noc_remark"
                                                                     type="text" autocomplete="off">
                                                             </div>
-                                                            <div
+                                                            {{-- <div
                                                                 class="form-check mb-3 checkbox  checkbox-solid-success mb-0 col-md-3 pe-0 m-b-20">
                                                                 <input class="form-check-input extra_industrial_field"
                                                                     id="bail" type="checkbox">
                                                                 <label class="form-check-label" for="bail">Bail
                                                                     Membership</label>
-                                                            </div>
+                                                            </div> --}}
 
-                                                            <div class="form-group mb-3 col-md-9 m-b-20">
+                                                            {{-- <div class="form-group mb-3 col-md-9 m-b-20">
                                                                 <label>Bail Membership</label>
                                                                 <input class="form-control extra_industrial_field_remark"
                                                                     name="bail_remark" id="bail_remark" type="text"
                                                                     autocomplete="off">
-                                                            </div>
-                                                            <div
+                                                            </div> --}}
+                                                            {{-- <div
                                                                 class="form-check checkbox  mb-3 checkbox-solid-success mb-0 col-md-3 pe-0 m-b-20">
                                                                 <input class="form-check-input extra_industrial_field"
                                                                     id="discharge" type="checkbox">
                                                                 <label class="form-check-label"
                                                                     for="discharge">Discharge</label>
-                                                            </div>
+                                                            </div> --}}
 
-                                                            <div class="form-group mb-3 col-md-9 m-b-20">
+                                                            {{-- <div class="form-group mb-3 col-md-9 m-b-20">
                                                                 <label>Discharge</label>
                                                                 <input class="form-control extra_industrial_field_remark"
                                                                     name="discharge_remark" id="discharge_remark"
                                                                     type="text" autocomplete="off">
-                                                            </div>
+                                                            </div> --}}
 
                                                             <div
                                                                 class="form-check checkbox mb-3  checkbox-solid-success mb-0 col-md-3 pe-0 m-b-20">
@@ -1825,32 +1787,32 @@
                                                                     name="water_remark" id="water_remark"
                                                                     type="text" autocomplete="off">
                                                             </div>
-                                                            <div
+                                                            {{-- <div
                                                                 class="form-check checkbox  mb-3 checkbox-solid-success mb-0 col-md-3 pe-0">
                                                                 <input class="form-check-input extra_industrial_field"
                                                                     id="machinery" type="checkbox">
                                                                 <label class="form-check-label"
                                                                     for="machinery">Machinery</label>
-                                                            </div>
-                                                            <div class="form-group col-md-9 mb-3">
+                                                            </div> --}}
+                                                            {{-- <div class="form-group col-md-9 mb-3">
                                                                 <label>Machinery</label>
                                                                 <input class="form-control extra_industrial_field_remark"
                                                                     name="machinery_remark" id="machinery_remark"
                                                                     type="text" autocomplete="off">
-                                                            </div>
-                                                            <div
+                                                            </div> --}}
+                                                            {{-- <div
                                                                 class="form-check checkbox mb-3 checkbox-solid-success mb-0 col-md-3 pe-0">
                                                                 <input class="form-check-input extra_industrial_field"
                                                                     id="etl_necpt" type="checkbox">
                                                                 <label class="form-check-label"
                                                                     for="etl_necpt">ETL/CEPT/ NLTL</label>
-                                                            </div>
-                                                            <div class="form-group col-md-9 mb-3 m-b-20">
+                                                            </div> --}}
+                                                            {{-- <div class="form-group col-md-9 mb-3 m-b-20">
                                                                 <label>ETL/CEPT/NLTL</label>
                                                                 <input class="form-control extra_industrial_field_remark"
                                                                     name="etl_necpt_remark" id="etl_necpt_remark"
                                                                     type="text" autocomplete="off">
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                     <div class="row mb-3 div_extra_retail_details" id="">
@@ -1870,9 +1832,12 @@
                                                                 type="text" autocomplete="off">
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary previousBtn1"
-                                                        type="button">Previous</button>
-                                                    <button class="btn btn-primary nextBtn" type="button">Next</button>
+                                                    <button
+                                                        class="btn btn-primary previousBtn1"
+                                                        type="button"
+                                                        style="border-radius: 5px;"
+                                                    >Previous</button>
+                                                    <button class="btn btn-primary ms-3 nextBtn" style="border-radius: 5px;" type="button">Next</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -1907,7 +1872,7 @@
                                                                 </div>
                                                                 <div class="input-group-append col-md-4 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select  measure_select"
+                                                                        <select class="form-select measure_select"
                                                                             id="survey_plot_measurement">
                                                                             @forelse ($property_configuration_settings as $props)
                                                                                 @if ($props['dropdown_for'] == 'property_measurement_type')
@@ -1934,6 +1899,7 @@
                                                         </div>
                                                     </div>
 
+                                                    {{-- bharat tp --}}
                                                     <div class="row div_tp_details" id="">
                                                         <label><b>TP Details</b></label>
                                                         <div class="form-group col-md-3 m-b-20">
@@ -1984,64 +1950,61 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-12">
-                                                        <div class="row div_flat_details_8">
-                                                            <div>
-                                                                <label><b>Owner Information</b></label>
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                <select class="form-select" id="owner_is">
-                                                                    <option value="">Owner is</option>
-                                                                    @forelse ($property_configuration_settings as $props)
-                                                                        @if ($props['dropdown_for'] == 'property_owner_type')
-                                                                            <option
-                                                                                data-parent_id="{{ $props['parent_id'] }}"
-                                                                                value="{{ $props['id'] }}">
-                                                                                {{ $props['name'] }}
-                                                                            </option>
-                                                                        @endif
-                                                                    @empty
-                                                                    @endforelse
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label for="Owner Name">Name</label>
-                                                                <input class="form-control" name="owner_info_name"
-                                                                    id="owner_info_name" type="text"
-                                                                    autocomplete="off">
-                                                            </div>
-                                                            <div class="form-group col-md-2">
-                                                                <label for="Owner Contact Specific No">Contact</label>
-                                                                <input class="form-control"
-                                                                    name="owner_contact_specific_no"
-                                                                    id="owner_contact_specific_no" type="text"
-                                                                    autocomplete="off">
-                                                            </div>
-                                                            <div class="form-group col-md-3">
-                                                                <label for="Email">Email</label>
-                                                                <input class="form-control" name="property_email"
-                                                                    id="property_email" type="email"
-                                                                    autocomplete="off">
-                                                            </div>
+                                                    {{-- <div class="col-md-12"> --}}
+                                                    <div class="row div_flat_details_8">
+                                                        <div>
+                                                            <label><b>Owner Information</b></label>
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <select class="form-select" id="owner_is">
+                                                                <option value="">Owner </option>
+                                                                @forelse ($property_configuration_settings as $props)
+                                                                    @if ($props['dropdown_for'] == 'property_owner_type')
+                                                                        <option
+                                                                            data-parent_id="{{ $props['parent_id'] }}"
+                                                                            value="{{ $props['id'] }}">
+                                                                            {{ $props['name'] }}
+                                                                        </option>
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label for="Owner Name">Name</label>
+                                                            <input class="form-control" name="owner_info_name"
+                                                                id="owner_info_name" type="text"
+                                                                autocomplete="off">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label for="Owner Contact Specific No">Contact</label>
+                                                            <input class="form-control" name="owner_contact_specific_no"
+                                                                id="owner_contact_specific_no" type="text"
+                                                                autocomplete="off">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label for="Email">Email</label>
+                                                            <input class="form-control" name="property_email"
+                                                                id="property_email" type="email" autocomplete="off">
+                                                        </div>
 
-                                                            <div
-                                                                class="form-check checkbox  checkbox-solid-success mb-0 col-md-1 m-b-20">
-                                                                <input class="form-check-input" id="is_nri"
-                                                                    type="checkbox">
-                                                                <label class="form-check-label"
-                                                                    for="is_nri">NRI</label>
-                                                            </div>
+                                                        <div
+                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-1 m-b-20">
+                                                            <input class="form-check-input" id="is_nri"
+                                                                type="checkbox">
+                                                            <label class="form-check-label" for="is_nri">NRI</label>
+                                                        </div>
 
-                                                            <div>
-                                                                <label><b>Other Contact Details</b></label>
-                                                            </div>
+                                                        <div>
+                                                            <label><b>Other Contact Details</b></label>
+                                                        </div>
 
 
-                                                            <div class="row" id="all_owner_contacts">
+                                                        <div class="row" id="all_owner_contacts">
 
-                                                            </div>
+                                                        </div>
 
-                                                            {{--  <div class="div_care_taker">
+                                                        {{--  <div class="div_care_taker">
                                                                 <label><b>Care Taker Information</b></label>
                                                             </div>
 
@@ -2058,52 +2021,50 @@
                                                                     id="care_take_contact_no" type="text"
                                                                     autocomplete="off">
                                                             </div> --}}
-                                                            {{-- bharat key  --}}
-                                                            <div class="form-group div_care_taker col-md-3 m-b-4">
+                                                        {{-- <div class="form-group div_care_taker col-md-3 m-b-4">
                                                                 <select class="form-select" id="key_arrangement">
-                                                                    <option value=""> Key Available At</option>
-                                                                    <option value="Office">Office</option>
-                                                                    <option value="Owner">Owner</option>
-                                                                    <option value="cotact_1">other contact 1</option>
-                                                                    <option value="cotact_2">other contact 2</option>
-                                                                    <option value="cotact_3">other contact 3</option>
+                                                                    <option value="">Key Available At</option>
+                                                                    <option value="Office"
+                                                                        {{ $edit_property[0] == 'Office' ? 'selected' : '' }}>
+                                                                        Office</option>
+                                                                    <option value="Owner"
+                                                                        {{ $edit_property[0] == 'Owner' ? 'selected' : '' }}>
+                                                                        Owner</option>
+                                                                    <option value="cotact_1"
+                                                                        {{ $edit_property[0] == 'cotact_1' ? 'selected' : '' }}>
+                                                                        Other contact 1</option>
+                                                                    <option value="cotact_2"
+                                                                        {{ $edit_property[0] == 'cotact_2' ? 'selected' : '' }}>
+                                                                        Other contact 2</option>
+                                                                    <option value="cotact_3"
+                                                                        {{ $edit_property[0] == 'cotact_3' ? 'selected' : '' }}>
+                                                                        Other contact 3</option>
                                                                 </select>
-                                                            </div>
-                                                        </div>
+                                                            </div> --}}
 
+                                                        <div class="form-group div_care_taker col-md-3 m-b-4">
+                                                            <select class="form-select" id="key_arrangement">
+                                                                <option value="">Key Available At</option>
+                                                                <option value="Office"> Office </option>
+                                                                <option value="Owner"> Owner </option>
+                                                        </div>
                                                     </div>
-
+                                                    {{-- </div> --}}
                                                     <div class="row">
-                                                        <div class="row div_document_section" id="">
-                                                            <label><b>Images/Documents</b></label>
-                                                            <div id="uploadImageBox" class="row">
-                                                                <div class="form-group col-md-5 m-b-4 mb-3"><input
-                                                                        class="form-control" type="file"
-                                                                        id="land_images" name="land_images"
-                                                                        accept=".jpg,.png" multiple></div>
-                                                                {{-- <div class="form-group col-md-3 m-b-4 mb-3"><button
-                                                                        type="button"
-                                                                        class="btn mb-2 btn-primary btn-air-primary submitFnl"
-                                                                        id="add_images">Upload</button></div> --}}
-                                                            </div>
-                                                            <div class="row" id="all_images"
-                                                                style="max-height: 300px;overflow-y: auto;">
-                                                            </div>
-                                                        </div>
-
-                                                        <div id="retail_furnished_template" style="display:none">
+                                                        <div class="row mb-3 " id="retail_furnished_template"
+                                                            style="display:none">
                                                             <div class="row mb-3 div_retail_furnished">
-
                                                                 <div class="col-md-5">
                                                                     <label for="Remarks">Remarks</label>
                                                                     <input class="form-control furnished_type_item"
                                                                         name="retail_furnished_remarks"
                                                                         id="retail_furnished_remarks" type="text"
-                                                                        autocomplete="off">
+                                                                        autocomplete="off" style="display: none">
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div id="office_furnished_template" style="display: none">
+                                                        <div class="row mb-3 " id="office_furnished_template"
+                                                            style="display: none">
                                                             <div class="row mb-3 div_office_furnished">
 
                                                                 <div class="col-md-2">
@@ -2149,8 +2110,6 @@
 
                                                             </div>
                                                         </div>
-
-
                                                         <div class="row mb-3 div_conference_room" id="">
                                                             <div class="col-md-12 mb-3">
                                                                 <div>
@@ -2252,8 +2211,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
-
                                                         <div id="furnished_types_template" style="display: none">
                                                             <div class="row div_furnished_items">
                                                                 <div class="col-md-2 mb-3 pe-0">
@@ -2321,10 +2278,8 @@
                                                                                 class=" furnished_type_item touchspin25 border-0 text-center ms-0"
                                                                                 name="property_beds_count"
                                                                                 type="text" value="0">
-
                                                                         </div>
                                                                     </div>
-
                                                                 </div>
                                                                 <div class="col-md-3 mb-3 align-self-center">
                                                                     <span class="align-middle">Beds</span>
@@ -2377,7 +2332,6 @@
                                                                 </div>
                                                             </div>
                                                             <div class="row div_furnished_items_2" id="">
-
                                                                 <div
                                                                     class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                                                     <input
@@ -2459,17 +2413,59 @@
                                                                     <label class="form-check-label remained"
                                                                         for="amenity_exhaust">Exhaust Fan</label>
                                                                 </div>
-
+                                                            </div>
+                                                            <hr id="hr_furnished">
+                                                        </div>
+                                                    </div>
+                                                    {{-- Image Document Upload --}}
+                                                    <div class="row col md-12 mt-2 mb-4">
+                                                        <div class="col md-6">
+                                                            <div class="row div_document_section" id="">
+                                                                <label><b>Images :</b></label>
+                                                                <div id="uploadImageBox" class="row">
+                                                                    <div class="form-group">
+                                                                        <input class="form-control" type="file"
+                                                                            id="land_images" name="land_images"
+                                                                            accept=".jpg,.png" multiple>
+                                                                    </div>
+                                                                    <span style="color: red;"
+                                                                        id="property_image"></span>
+                                                                    {{-- <div class="form-group col-md-3 m-b-4 mb-3"><button
+                                                                        type="button"
+                                                                        class="btn mb-2 btn-primary btn-air-primary submitFnl"
+                                                                        id="add_images">Upload</button></div> --}}
+                                                                </div>
+                                                                {{-- <div class="row" id="all_images"
+                                                                style="max-height: 300px;overflow-y: auto;">
+                                                            </div> --}}
                                                             </div>
                                                         </div>
-
+                                                        <div class="col md-6">
+                                                            <div class="row div_document_section" id="">
+                                                                <label><b>Documents :</b></label>
+                                                                <div id="uploadImageBox" class="row">
+                                                                    <div class="form-group">
+                                                                        <input class="form-control" type="file"
+                                                                            id="land_document" name="land_document"
+                                                                            accept=".jpg,.png" multiple>
+                                                                    </div>
+                                                                    <span style="color: red;"
+                                                                        id="property_image"></span>
+                                                                    {{-- <div class="form-group col-md-3 m-b-4 mb-3"><button
+                                                                            type="button"
+                                                                            class="btn mb-2 btn-primary btn-air-primary submitFnl"
+                                                                            id="add_images">Upload</button></div> --}}
+                                                                </div>
+                                                                {{-- <div class="row" id="all_document"
+                                                                    style="max-height: 300px;overflow-y: auto;">
+                                                                </div> --}}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    {{-- <button id="saveProperty" class="btn btn-primary previousBtn"
-													type="button">Previous</button> --}}
-                                                    <button class="btn btn-primary previousBtn2"
+                                                    <button class="btn btn-primary previousBtn2" style="border-radius: 5px;"
                                                         type="button">Previous</button>
-                                                    <button id="saveProperty" class="btn btn-primary nextBtn submitFnl"
-                                                        type="button">Finish</button>
+                                                    <button id="saveProperty" class="btn btn-primary ms-3 nextBtn submitFnl"
+                                                        type="button" style="border-radius: 5px;">Finish</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2481,12 +2477,152 @@
                 </div>
             </div>
         </div>
+        @php
+            $dist_encoded = json_encode($districts);
+            $tal_encoded = json_encode($talukas);
+            $vil_encoded = json_encode($villages);
+
+            $state_encoded = json_encode($states);
+            $city_encoded = json_encode($cities);
+            $area_encoded = json_encode($areas);
+
+        @endphp
     @endsection
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/property_wizard.js') }}"></script>
-
-        {{-- Hide field comment by Bharat-script --}}
         <script>
+        
+         // Hide State dropdown
+            const numberOfOptions = $('#state_id').find('option').length;
+            if (numberOfOptions > 2) {
+                $('.state-hide').show();
+            } else {
+                $('.state-hide').hide();
+            }
+            
+            var cities = @Json($city_encoded);
+            var states = @Json($state_encoded);
+            var areas = @Json($area_encoded);
+            citiesar = JSON.parse(cities);
+            areass = JSON.parse(areas);
+            $(document).ready(function() {
+                //#B Project default Open on add Prop first - time
+                $('#project_id').select2().select2('open');
+                $('#nextButton').click(function() {
+                    $('#project_id').select2('toggleDropdown');
+                });
+                //#B This function used for in input textbox only numeric value enter not string 
+                function restrictToNumeric(inputSelectors) {
+                    $(inputSelectors.join(',')).on('input', function() {
+                        // Get the current value of the input
+                        let inputValue = $(this).val();
+
+                        // Remove any non-numeric characters using a regular expression
+                        let numericValue = inputValue.replace(/[^0-9]/g, '');
+
+                        // Update the input value with the numeric-only value
+                        $(this).val(numericValue);
+                    });
+                }
+                restrictToNumeric(['#terrace_salable_area', '#salable_area', '#another_area', '#length_of_plot',
+                    '#width_of_plot', '#carpet_area', '#entrance_width', '#ceiling_height',
+                    '#storage_centre_height', '#carpet_plot_area', '#constructed_builtup_area',
+                    '#constructed_salable_area', '#salable_plot_area', '#constructed_carpet_area'
+                ]);
+
+                //Add multiple Constructin Docs 
+                $(".add-docs").click(function() {
+                    var html = $(".clone").html();
+                    $(".increment").after(html);
+                });
+                $("body").on("click", ".rem-docs", function() {
+                    $(this).parents(".control-group").remove();
+                });
+
+                // $(".add-more").click(function() {
+                //     var fileUploadGroup = $(".file-upload-group:first").clone();
+                //     fileUploadGroup.find("input[type='file']").val('');
+                //     fileUploadGroup.find('.add-more').remove();
+                //     $(".file-upload-container").append(fileUploadGroup);
+                // });
+
+                // // Remove the last file upload section
+                // $(".file-upload-container").on('click', '.remove-file', function() {
+                //     $(this).closest('.file-upload-group').remove();
+                // });
+
+                // // Handle file upload logic here
+                // $(".file-upload-container").on('click', '.upload-btn', function() {
+                //     // Implement your file upload logic here
+                // });
+
+            });
+
+            //Hide Constructed Salable Area when click on storage->plotting
+            $('#storagekind4').click(function() {
+                if ($(this).prop('checked')) {
+                    $('.the_constructed_salable_area').hide();
+                    $('.the_centre_height').hide();
+                } else {
+                    $('.the_constructed_salable_area').show();
+                    $('.the_centre_height').show();
+                }
+            });
+
+            //Disable Price on Land
+            var $price1 = $('#price');
+            var $price2 = $('#price2');
+            $price1.on('input', function() {
+                if ($(this).val() !== '') {
+                    $price2.prop('disabled', true);
+                } else {
+                    $price2.prop('disabled', false);
+                }
+            });
+            $price2.on('input', function() {
+                if ($(this).val() !== '') {
+                    $price1.prop('disabled', true);
+                } else {
+                    $price1.prop('disabled', false);
+                }
+            });
+
+            //Add property default select state-city-locality
+            let id = '{{ isset($current_id) ? $current_id : 'null' }}';
+            if (id === 'null') {
+                function updateStateSelect() {
+                    let auth = '{{ Auth::user() }}';
+                    let authStateId = '{{ Auth::user()->state_id }}';
+                    let authCityId = '{{ Auth::user()->city_id }}';
+
+                    $('#state_id').val(authStateId).trigger('change');
+                    $('#state-dropdown').val(authCityId).trigger('change');
+
+                    $('#area_id').html('');
+                    for (let i = 0; i < areass.length; i++) {
+                        if (areass[i]['city_id'] == $("#state-dropdown").val()) {
+                            $('#area_id').append(`<option value="${areass[i]['id']}"
+                            data-pincode="${areass[i]['pincode']}"
+                            data-city_id="${areass[i]['city_id']}"
+                            data-state_id="${areass[i]['state_id']}">
+                            ${areass[i]['name']}
+                        	</option>`);
+                        }
+                    }
+                    $('#area_id').select2();
+                }
+                updateStateSelect();
+            }
+
+            //Measurement (units) are change all on one change
+            $(".measure_square").select2();
+            $(".measure_square").on("change", function() {
+                let selectedValue = $(this).val();
+                $(".measure_square").val(selectedValue).trigger("change.select2");
+            });
+            // });
+
+            // {{-- Hide field comment by Bharat-script --}}
             function toggleProjectDropdown(input) {
                 var hideElement = document.getElementById('project_hide');
                 if (input.value === '10') {
@@ -2497,36 +2633,59 @@
                     projectDropdown.style.display = 'block';
                 }
             }
-        </script>
 
-        {{-- bharat state city dropdown --}}
-        <script>
             $(document).ready(function() {
                 $('#state_id').on('change', function() {
-                    console.log("state");
-                    var idCountry = this.value;
-                    $("#state-dropdown").html('');
-                    $.ajax({
-                        url: "{{ url('admin/property/state') }}",
-                        type: "POST",
-                        data: {
-                            state_id: idCountry,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        dataType: 'json',
-                        success: function(result) {
-                            $('#state-dropdown').html(
-                                '<option value="">-- Select City --</option>');
-                            $.each(result.states, function(key, value) {
-                                $("#state-dropdown").append('<option value="' + value
-                                    .id + '">' + value.name + '</option>');
-                            });
-
+                    $(document).on('change', '#state_id', function(e) {
+                        $('#state-dropdown').select2('destroy');
+                        $('#area_id').select2('destroy');
+                        // citiesar = JSON.parse(cities);
+                        // areass = JSON.parse(areas);
+                        $('#state-dropdown').html('');
+                        for (let i = 0; i < citiesar.length; i++) {
+                            if (citiesar[i]['state_id'] == $("#state_id").val()) {
+                                $('#state-dropdown').append('<option value="' + citiesar[i]['id'] +
+                                    '">' + citiesar[i][
+                                        'name'
+                                    ] + '</option>')
+                            }
                         }
-                    });
+                        $('#state-dropdown').select2();
+
+                        $('#area_id').html('');
+                        for (let i = 0; i < areass.length; i++) {
+                            if (areass[i]['state_id'] == $("#state_id").val()) {
+                                $('#area_id').append(`<option value="${areass[i]['id']}"
+                            data-pincode="${areass[i]['pincode']}"
+                            data-city_id="${areass[i]['city_id']}"
+                            data-state_id="${areass[i]['state_id']}">
+                            ${areass[i]['name']}
+                        </option>`);
+                            }
+                        }
+                        $('#area_id').select2();
+                    })
+                });
+
+                $('#state-dropdown').on('change', function() {
+                    $(document).on('change', '#state-dropdown', function(e) {
+                        $('#area_id').html('');
+                        for (let i = 0; i < areass.length; i++) {
+                            if (areass[i]['city_id'] == $("#state-dropdown").val()) {
+                                $('#area_id').append(`<option value="${areass[i]['id']}"
+                                    data-pincode="${areass[i]['pincode']}"
+                                    data-city_id="${areass[i]['city_id']}"
+                                    data-state_id="${areass[i]['state_id']}">
+                                    ${areass[i]['name']}
+                                </option>`);
+                            }
+                        }
+                        $('#area_id').select2();
+                    })
                 });
             });
         </script>
+
         <script>
             var land_image_show_url = "{{ asset('upload/land_images') }}";
 
@@ -2573,7 +2732,52 @@
                 })(window, document, jQuery);
             }
 
+            var district = @Json($dist_encoded);
+            var taluka = @Json($tal_encoded);
+            var vilage = @Json($vil_encoded);
+
+            $(document).on('change', '#district_id', function(e) {
+
+                $('#taluka_id').select2('destroy');
+                $('#village_id').select2('destroy');
+                talukasss = JSON.parse(taluka);
+                $('#taluka_id').html('');
+                $('#village_id').html('');
+
+                $('#taluka_id').append('<option value="">Select Taluka</option>');
+
+                for (let i = 0; i < talukasss.length; i++) {
+                    if (talukasss[i]['district_id'] == $("#district_id").val()) {
+                        $('#taluka_id').append('<option value="' + talukasss[i]['id'] + '">' + talukasss[i][
+                            'name'
+                        ] + '</option>')
+                    }
+                }
+
+                $('#taluka_id').select2();
+                $('#village_id').select2();
+            })
+
+            $(document).on('change', '#taluka_id', function(e) {
+
+                $('#village_id').select2('destroy');
+                vilagess = JSON.parse(vilage);
+                $('#village_id').html('');
+
+                $('#village_id').append('<option value="">Select Village</option>');
+
+                for (let i = 0; i < vilagess.length; i++) {
+                    if (vilagess[i]['taluka_id'] == $("#taluka_id").val()) {
+                        $('#village_id').append('<option value="' + vilagess[i]['id'] + '">' + vilagess[i][
+                            'name'
+                        ] + '</option>')
+                    }
+                }
+                $('#village_id').select2();
+            })
+
             $(document).on('change', '[name="property_for"]', function(e) {
+                // console.log("prop chnged");
                 setSellRentBoth();
             });
 
@@ -2613,17 +2817,24 @@
                 }
             }
 
+            // categorybhrt
             function setSellRentBoth() {
                 var theFor = $('input[name=property_for]:checked').val()
+                console.log("the for ==", theFor);
+                var selectedCategory = $('input[name=property_category]:checked').attr('data-val');
                 if (theFor == 'Rent') {
                     $('.the_price_rent').show()
                     $('.the_price').hide()
+                    $('.div_flat_details_5').hide()
+
                 } else if (theFor == 'Sell') {
                     $('.the_price_rent').hide()
                     $('.the_price').show()
                 } else {
                     $('.the_price_rent').show()
                     $('.the_price').show()
+                    // $('.div_flat_details_5').hide()
+
                 }
                 $('.the_constructed_plot_price').hide()
                 var theFor2 = $('input[name=property_category]:checked').attr('data-val')
@@ -2649,7 +2860,10 @@
                     $('.the_constructed_plot_price').show()
                     $('.the_price').hide()
                 }
-                if (theFor2 == 'Plot' || theFor2 == 'Storage/industrial') {
+                if (theFor2 == 'Plot' || theFor2 == 'Storage/industrial' || theFor2 == 'Land') {
+                    $('.the_furnished_status').hide();
+                }
+                if (theFor2 == 'Plot') {
                     $('.the_furnished_status').hide();
                 }
                 if (theFor2 == 'Vila/Bunglow' || theFor2 == 'Plot' || theFor2 == 'Farmhouse') {
@@ -2657,25 +2871,70 @@
                 }
             }
 
-            $(document).on('keyup', '[name="price_constructed"],[name="price_plot"]', function(e) {
+            $(document).on('keyup', '[name="price_constructed"]', function(e) {
                 var id = $(this).attr('data-unit_id');
                 var Amount1 = parseInt(($('[name="price_constructed"][data-unit_id="' + id + '"]').val()).replaceAll(
                     ',', ''));
                 var Amount2 = parseInt(($('[name="price_plot"][data-unit_id="' + id + '"]').val()).replaceAll(',', ''));
+
                 if (Amount1 > 0 && Amount2 > 0) {
-                    $('[name="price_total"][data-unit_id="' + id + '"]').val((Amount1) + (Amount2)).trigger('change');
-                } else {
+                    let number = (Amount1) + (Amount2);
+                    let format_number = number.toLocaleString('en-IN');
+                    $('[name="price_total"][data-unit_id="' + id + '"]').val(format_number).trigger('change');
+                }
+
+                if (Amount1 > 0 && Amount2 == 0) {
+                    let format_number = Amount1.toLocaleString('en-IN');
+                    $('[name="price_total"][data-unit_id="' + id + '"]').val(format_number).trigger('change');
+                }
+
+                if (Amount2 > 0 && Amount1 == 0) {
+                    let format_number = Amount2.toLocaleString('en-IN');
+                    $('[name="price_total"][data-unit_id="' + id + '"]').val(format_number).trigger('change');
+                }
+
+                if (Amount2 == 0 && Amount1 == 0) {
                     $('[name="price_total"][data-unit_id="' + id + '"]').val(0).trigger('change');
                 }
             })
 
+            $(document).on('keyup', '[name="price_plot"]', function(e) {
+                var id = $(this).attr('data-unit_id');
+                var Amount1 = parseInt(($('[name="price_constructed"][data-unit_id="' + id + '"]').val()).replaceAll(
+                    ',', ''));
+                var Amount2 = parseInt(($('[name="price_plot"][data-unit_id="' + id + '"]').val()).replaceAll(',', ''));
+
+                if (Amount1 > 0 && Amount2 > 0) {
+                    let number = (Amount1) + (Amount2);
+                    let format_number = number.toLocaleString('en-IN');
+                    $('[name="price_total"][data-unit_id="' + id + '"]').val(format_number).trigger('change');
+                }
+
+                if (Amount1 > 0 && Amount2 == 0) {
+                    let format_number = Amount1.toLocaleString('en-IN');
+                    $('[name="price_total"][data-unit_id="' + id + '"]').val(format_number).trigger('change');
+                }
+
+                if (Amount2 > 0 && Amount1 == 0) {
+                    let format_number = Amount2.toLocaleString('en-IN');
+                    $('[name="price_total"][data-unit_id="' + id + '"]').val(format_number).trigger('change');
+                }
+
+                if (Amount2 == 0 && Amount1 == 0) {
+                    $('[name="price_total"][data-unit_id="' + id + '"]').val(0).trigger('change');
+                }
+            })
+
+            // bhrt
             $(document).on('change', '[name="availability_status"]', function(e) {
                 if ($(this).val() == 1) {
                     $('.div_age_of_property').show()
                     $('.div_available_from').hide()
+                    $('input[name="available_from"]').val('');
                 } else {
                     $('.div_age_of_property').hide()
                     $('.div_available_from').show()
+                    $('input[name="propertyage"]').prop('checked', false);
                 }
             })
 
@@ -2683,7 +2942,7 @@
                 $('input[name=property_category]:checked').prop('checked', false).trigger('change')
                 resetallfields();
                 setIndividualfields();
-                showReleventCategory()
+                showReleventCategory();
             })
 
             $(document).on('change', 'select[name="furnished_status"]', function(e) {
@@ -2693,13 +2952,17 @@
             });
 
             function setFurnishedStatus(TheStatus, id) {
+                $('#hr_furnished').hide();
                 $('.div_retail_furnished[data-unit_id="' + id + '"]').hide()
                 $('.div_office_furnished[data-unit_id="' + id + '"]').hide()
                 $('.div_furnished_items[data-unit_id="' + id + '"]').hide()
                 $('.div_furnished_items_2[data-unit_id="' + id + '"]').hide()
+                $('.hr-element[data-unit_id="' + id + '"]').hide();
 
                 if (TheStatus == 'Unfurnished' || TheStatus == '' || TheStatus == undefined) {
                     return;
+                } else if (TheStatus == "Furnished" || TheStatus == "Semi Furnished" || TheStatus == "Can Furnished") {
+                    $('#hr_furnished').show();
                 }
                 if ($('input[name=property_category]:checked').attr('data-val') == 'Retail') {
                     $('.div_retail_furnished[data-unit_id="' + id + '"]').show()
@@ -2708,9 +2971,9 @@
                 } else {
                     $('.div_furnished_items[data-unit_id="' + id + '"]').show()
                     $('.div_furnished_items_2[data-unit_id="' + id + '"]').show()
-
                 }
             }
+
             $(document).on('change', '#property_source', function(e) {
                 var TheStatus = $($(this).find(":selected")).attr('data-val');
                 if (TheStatus == 'Reference') {
@@ -2740,6 +3003,8 @@
                 var theFor = $('input[name=plot_type]:checked').attr('data-val');
                 $('.div_borewell').show()
                 $('.div_construction_allowed_for').show()
+                $('.div_construction_documents').show()
+                $('.div_construction_docs_allowed_for').show()
                 $('.the_no_of_floors_allowed').show()
                 $('.div_plot_ind_common').show()
                 $('.div_tp_details').show()
@@ -2751,6 +3016,8 @@
                     $(".cl-locality").show();
                 } else if (theFor == 'agriculture') {
                     $('.div_construction_allowed_for').hide()
+                    $('.div_construction_documents').hide()
+                    $('.div_construction_docs_allowed_for').hide()
                     $('.the_no_of_floors_allowed').hide()
                     $('.div_plot_ind_common').hide()
                     $('.div_tp_details').hide()
@@ -2758,6 +3025,8 @@
                     $(".cl-locality").hide();
                 } else if (theFor == 'industrial') {
                     $('.div_construction_allowed_for').hide()
+                    $('.div_construction_documents').hide()
+                    $('.div_construction_docs_allowed_for').hide()
                     $('.div_borewell').hide()
                     $('.div_extra_land_details').hide()
                     $(".cl-locality").show();
@@ -2780,7 +3049,8 @@
                     'div_area_size_details', 'div_area_size_details_land_plot', 'div_flat_details_vila',
                     'div_checkboxes1', 'div_extra_retail_details', 'div_property_source', 'div_office_furnished',
                     'div_care_taker', 'div_furnished_items', 'div_furnished_items_2', 'the_furnished_status',
-                    'div_construction_allowed_for', 'div_retail_furnished', 'div_amenities', 'div_amenities_checks'
+                    'div_construction_allowed_for', 'div_retail_furnished', 'div_amenities', 'div_amenities_checks',
+                    'div_construction_documents', 'div_construction_docs_allowed_for',
                 ]
                 for (let i = 0; i < hidefields.length; i++) {
                     $('.' + hidefields[i]).hide();
@@ -2816,7 +3086,7 @@
             resetallfields()
             $(document).on('change', '[name="property_category"]', function(e) {
                 var category_type = $(this).attr('data-val');
-                console.log("cat Type :", category_type);
+                console.log("cat type", category_type);
                 resetallfields();
                 setIndividualfields();
                 $('#all_units').html('')
@@ -2831,19 +3101,19 @@
                         'div_flat_details_5', 'div_flat_details_4', 'div_property_source', 'the_total_no_of_floor',
                         'the_two_wheller_Parking', 'div_checkboxes1', 'div_flat_details_7', 'div_flat_details_8',
                         'div_care_taker', 'div_availability_status', 'the_furnished_status', 'the_1rk',
-                        'div_amenities', 'cl-locality', 'terrace',
+                        'div_amenities', 'cl-locality', 'terrace', 'div_document_section', 'the_ceilling_height',
                     ];
                     addAddAreaButtons(['the_carpet_area'], ['Add Carpet Area']);
-                    // bharat subcategory
                 } else if (category_type == 'Vila/Bunglow') {
                     showfields = ['div_vila_type', 'div_flat_details_2', 'div_area_size_details',
                         'the_constructed_salable_area', 'the_salable_plot_area',
                         'div_furnished_items', 'div_furnished_items_2',
                         'div_flat_details', 'the_no_of_bathrooms', 'the_no_of_balcony',
-                        'the_total_no_of_units', 'the_no_of_side_open', 'the_no_of_room', 'the_servent_room',
+                        'the_total_no_of_units', 'the_no_of_side_open', 'the_servent_room',
                         'div_flat_details_5', 'div_flat_details_4', 'div_property_source', 'div_checkboxes1',
                         'div_flat_details_7', 'div_flat_details_8', 'div_care_taker', 'div_availability_status',
-                        'the_furnished_status', 'div_amenities', 'cl-locality',
+                        'the_furnished_status', 'div_amenities', 'cl-locality', 'div_document_section',
+                        // 'the_no_of_room',
                     ];
                     addAddAreaButtons(['the_carpet_plot_area', 'the_constructed_carpet_area',
                         'the_constructed_builtup_area'
@@ -2851,10 +3121,12 @@
                 } else if (category_type == 'Plot') {
                     showfields = ['div_flat_details_2', 'div_area_size_details', 'the_salable_area',
                         'div_flat_details', 'the_total_no_of_units', 'the_no_of_side_open', 'the_length_of_plot',
-                        'the_width_of_plot', 'the_no_of_floors_allowed', 'div_flat_details_5', ,
+                        'the_width_of_plot', 'the_no_of_floors_allowed',
                         'div_property_source', 'div_property_address', 'div_checkboxes1', 'div_flat_details_7',
-                        'div_flat_details_8', 'div_extra_land_details',
+                        'div_flat_details_8', 'div_document_section', 'cl-locality',
+                        // div_flat_details_5
                     ];
+                    $('.div_extra_land_details').hide()
                     // $('.div_extra_land_details').show()
                     addAddAreaButtons(['the_carpet_plot_area'], ['Add Carpet Plot Area']);
                 } else if (category_type == 'Penthouse') {
@@ -2868,6 +3140,7 @@
                         'div_care_taker',
                         'div_availability_status', 'div_amenities',
                         'the_furnished_status', 'the_total_no_of_floor', 'the_no_of_balcony', 'cl-locality',
+                        'div_document_section', 'the_ceilling_height',
                     ];
                     addAddAreaButtons(['the_carpet_area', 'the_builtup_area', 'the_terrace_carpet_area'], [
                         'Add Carpet Area', 'Add Builtup Area', 'Add Terrace Carpet Area'
@@ -2880,7 +3153,7 @@
                         'div_checkboxes1', 'div_flat_details_7', 'div_flat_details_8', 'div_care_taker',
                         'div_availability_status', 'div_amenities',
                         'the_furnished_status', 'the_no_of_balcony', 'the_no_of_room', 'the_no_of_side_open',
-                        'div_extra_land_details'
+                        'div_extra_land_details', 'div_document_section', 'cl-locality',
                     ];
                     addAddAreaButtons(['the_constructed_carpet_area', 'the_constructed_builtup_area',
                         'the_carpet_plot_area'
@@ -2892,8 +3165,8 @@
                         'div_flat_details_5', 'div_flat_details_4', 'div_property_source', 'the_no_of_elavators',
                         'div_checkboxes1', 'div_flat_details_7', 'div_flat_details_8', 'div_care_taker',
                         'div_availability_status', 'div_office_furnished', 'the_service_elavator',
-                        'div_washroom_type_2',
-                        'the_furnished_status', 'cl-locality', 'the_two_wheller_Parking',
+                        'div_washroom_type_2', 'terrace', 'the_ceilling_height',
+                        'the_furnished_status', 'cl-locality', 'the_two_wheller_Parking', 'div_document_section',
                     ];
                     addAddAreaButtons(['the_carpet_area'], ['Add Carpet Area']);
                 } else if (category_type == 'Retail') {
@@ -2905,7 +3178,7 @@
                         'div_flat_details_8', 'div_care_taker', 'the_service_elavator',
                         'div_availability_status', 'div_washroom_type_2',
                         'the_furnished_status', 'the_two_wheller_Parking', 'div_extra_retail_details',
-                        'cl-locality',
+                        'cl-locality', 'div_document_section',
                     ];
                     addAddAreaButtons(['the_carpet_area'], ['Add Carpet Area']);
                 } else if (category_type == 'Storage/industrial') {
@@ -2914,9 +3187,9 @@
                         'the_centre_height', 'div_flat_details', 'div_flat_details_5', 'div_flat_details_4',
                         'div_property_source', 'div_checkboxes1', 'div_flat_details_7',
                         'div_flat_details_8', 'div_other_details',
-                        'div_availability_status',
+                        'div_availability_status', 'the_total_units_in_project',
                         'the_furnished_status', 'the_two_wheller_Parking', 'div_road_width', 'cl-locality',
-                        'div_care_taker'
+                        'div_care_taker', 'div_document_section',
                     ];
                     addAddAreaButtons(['the_carpet_plot_area', 'the_constructed_carpet_area'], ['Add Carpet plot Area',
                         'Add Constructed Carpet Area'
@@ -2924,24 +3197,22 @@
                 } else if (category_type == 'Land') {
                     showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
                         'div_area_size_details', 'div_borewell',
-                        'the_length_of_plot', 'the_width_of_plot', 'div_flat_details_5',
-                        'the_no_of_floors_allowed',
+                        'the_length_of_plot', 'the_width_of_plot',
+                        'the_no_of_floors_allowed', 'div_construction_documents',
+                        // 'div_care_taker','div_flat_details_5','div_flat_details_7'
                         'div_property_source', 'div_checkboxes1', 'div_construction_allowed_for', 'div_tp_details',
-                        'div_flat_details_8', 'div_plot_ind_common', 'div_survey_details', 'div_road_width',
-                        'div_document_section',
+                        'div_flat_details_8', 'div_plot_ind_common', 'div_document_section', 'div_survey_details',
+                        'div_road_width', 'div_construction_docs_allowed_for'
                     ];
                 }
                 for (let i = 0; i < showfields.length; i++) {
                     $('.' + showfields[i]).show();
                 }
                 var id = '{{ isset($current_id) ? $current_id : '' }}';
-                // console.log("prop category id current line 2863 :", id);
                 if (id == '') {
                     generate_contact_detail_click(1)
                     generate_unit_detail_click(1);
                 }
-                // console.log("prop category id current line 2865 :", id);
-
             })
 
             function setIndividualfields() {
@@ -2964,7 +3235,7 @@
 
             function showReleventCategory(params) {
                 var parent_val = $('input[name=property_type]:checked').val();
-                console.log("parent_val :", parent_val);
+
                 $("[name='property_category']").each(function(i, e) {
                     if ($(this).attr('data-Parent_id') == parent_val) {
                         $(this).parent().show();
@@ -2972,6 +3243,13 @@
                         $(this).parent().hide();
                     }
                 });
+                //Hide Land while click on rent or both 
+                var theFor = $('input[name=property_for]:checked').val();
+                if (theFor == 'Sell' && parent_val == '87') {
+                    $('.property-type-element[data-property-id="256"]').show();
+                } else {
+                    $('.property-type-element[data-property-id="256"]').hide();
+                }
             }
 
             $(document).on('change', '#project_id', function(e) {
@@ -2985,7 +3263,9 @@
                 $('#address').parent().parent().addClass('focused')
                 $('#address').val($('#project_id').find(":selected").attr('data-addr')).trigger('change');
                 $('#city_id').val($('#project_id').find(":selected").attr('data-city')).trigger('change');
+
                 $('#area_id').val($('#project_id').find(":selected").attr('data-area')).trigger('change');
+                $('#property_link').val($('#project_id').find(":selected").attr('data-location')).trigger('change');
             })
 
             var allowedselect2s = ['project_id'];
@@ -3062,30 +3342,31 @@
                     '       <input class="form-control" name="position" id="position"' +
                     '           type="text"  autocomplete="off">' +
                     '   </div>' +
-                    // '<div data-contact_id= ' + id +
-                    // '   class="form-group col-md-2 m-b-20">' +
-                    // '   <input class="form-check-input" name="is_key" id="is_key" type="checkbox"' +
-                    // '            autocomplete="off">' +
-                    // '   <label>Key</label>' +
-                    // '</div>' +
                     '<div data-contact_id= ' + id +
                     ' class="form-group col-md-3 m-b-4 mb-3"><button data-contact_id=' + id +
                     ' class="' + ((plus) ? "add_owner_contacts get-pos" : "remove_owner_contacts remove-pos") +
-                    ' btn btn-danger btn-air-danger" type="button">' + ((plus) ? "+" : "-") + '</button>  </div>'
+                    ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((plus) ? "+" : "-") + '</button>  </div>'
                 '</div>';
+                // if (plus === 0) {
+                //     var selectElement = document.getElementById("key_arrangement");
+                //     var optionValue = 'Other contact ' + (selectElement.options.length - 2);
+                //     var newOption = document.createElement("option");
+                //     newOption.value = optionValue;
+                //     newOption.text = optionValue;
+                //     selectElement.add(newOption);
+                // }'
+                if (plus === 0) {
+                    var selectElement = document.getElementById("key_arrangement");
+                    var nameInput = document.getElementById("other_name");
+                    var nameValue = nameInput.value;
+                    var optionValue = nameValue + (selectElement.options.length - 2);
+                    var newOption = document.createElement("option");
+                    newOption.value = optionValue;
+                    newOption.text = optionValue;
+                    selectElement.add(newOption);
+                }
                 return myvar;
             }
-
-            // bharat key
-            // var position = $("input[id='position']")
-            //         .map(function() {
-            //             return $(this).val();
-            // }).get();
-            // console.log("position : ",position);
-            // $("#position").on("change", function() {
-            // 	console.log("val Changed");
-            // });
-
 
             function generate_furnished_detail(id) {
                 var currentFurnished = $('input[name=property_category]:checked').attr('data-val')
@@ -3137,22 +3418,24 @@
                     '        </div>' +
                     '        <div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-4 mb-3">' +
                     '            <select class="form-select" name="unit_status">' +
-                    '                <option value="">Unit Status</option>' +
                     '                <option value="Available">Available</option>' +
                     '                <option value="Rent Out">Rent Out</option>' +
                     '                <option value="Sold Out">Sold Out</option>' +
                     '            </select>' +
                     '        </div>' +
+
                     '<div  data-unit_id= ' + id + ' class="the_price_rent form-group col-md-2 m-b-20">' +
                     '<label>Price Rent</label>' +
                     '            <input class="form-control indian_currency_amount" name="price_rent" ' +
                     '                type="text"  autocomplete="off">' +
                     '        </div>' +
+
                     '<div  data-unit_id= ' + id + ' class="the_price form-group col-md-2 m-b-20">' +
                     '<label>Price</label>' +
                     '            <input class="form-control indian_currency_amount" name="price" ' +
                     '                type="text"  autocomplete="off">' +
                     '        </div>' +
+
                     '<div class="the_constructed_plot_price row"><div  data-unit_id= ' + id +
                     ' class=" form-group col-md-2 m-b-20">' +
                     '<label class="price_constructed_label"> Construction Price</label>' +
@@ -3160,6 +3443,7 @@
                     ' name="price_constructed" ' +
                     '                type="text"  autocomplete="off">' +
                     '        </div>' +
+
                     '<div  data-unit_id= ' + id + ' class="col-md-2 m-b-20">' +
                     '<div class=" form-group">' +
                     '<label class="price_plot_label"> Plot Price</label>' +
@@ -3174,7 +3458,7 @@
                     '<label>Price</label>' +
                     '            <input class="form-control indian_currency_amount" data-unit_id= ' + id +
                     ' name="price_total" ' +
-                    '                type="text"  autocomplete="off">' +
+                    '                type="text"  autocomplete="off" disabled>' +
                     '        </div>' +
                     '<small style="display:none"  class="text-secondary ps-1 converted_value"></small>' +
                     '</div></div>' +
@@ -3183,20 +3467,22 @@
                     '                <option value="">Furnished Status</option>' +
                     @forelse ($property_configuration_settings as $props)
                         @if ($props['dropdown_for'] == 'property_furniture_type')
-                            '                <option data-val="{{ $props['name'] }}" value="{{ $props['id'] }}">{{ $props['name'] }}</option>' +
+                            '<option data-val="{{ $props['name'] }}" value="{{ $props['id'] }}">{{ $props['name'] }}</option>' +
                         @endif
                     @empty
                     @endforelse
-
-                '            </select>' +
-                '        </div>' +
+                '</select>' +
+                '</div>' +
                 '<div data-unit_id= ' + id +
                     ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
-                    ' class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-danger btn-air-danger" type="button">' + ((
+                    ' class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((
                         plus) ? "+" : "-") + '</button>  </div>' +
                     '</div>';
                 return myvar;
             }
+
+
+            //decimal
 
             $(document).on('click', '.add_owner_contacts', function(e) {
                 generate_contact_detail_click(0);
@@ -3212,10 +3498,8 @@
                 generate_unit_detail_click();
             })
 
-
             function generate_contact_detail_click(plus = 0) {
                 id = makeid(10);
-                // console.log("generate conntatc detais 3143", id);
                 $('#all_owner_contacts').append(generate_contact_detail(id, plus));
                 $("#all_owner_contacts select").each(function(index) {
                     $(this).select2();
@@ -3225,7 +3509,6 @@
 
             function generate_unit_detail_click(plus = 0) {
                 id = makeid(10);
-                // console.log("id generate_unit_detail_click 3153", id);
                 $('#all_units').append(generate_unit_detail(id, plus));
                 $('#all_units').append(generate_furnished_detail(id));
                 setFurnishedStatus('', id);
@@ -3298,10 +3581,7 @@
             });
 
             function getProperty() {
-                // var id = '{{ isset($current_id) ? $current_id : auth()->id() }}';
-                // commented by bharat
-                var id = '{{ isset($current_id) ? $current_id : '' }}';
-                // console.log("idddddddddddddddd :", id);
+                var id = '{{ isset($current_id) ? $current_id : 'null' }}';
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.getProperty') }}",
@@ -3313,6 +3593,27 @@
                         if (data == '') {
                             return
                         }
+
+                        //Disable Price on Land
+                        var $price1 = $('#price');
+                        var $price2 = $('#price2');
+
+                        $price1.on('input', function() {
+                            if ($(this).val() !== '') {
+                                $price2.prop('disabled', true);
+                            } else {
+                                $price2.prop('disabled', false);
+                            }
+                        });
+
+                        $price2.on('input', function() {
+                            if ($(this).val() !== '') {
+                                $price1.prop('disabled', true);
+                            } else {
+                                $price1.prop('disabled', false);
+                            }
+                        });
+                        // edit property selected valdata.width_of_plot, 1
                         data = JSON.parse(data);
                         $('#this_data_id').val(data.id);
                         $('input[name=property_for][value=' + data.property_for + ']').prop('checked', true)
@@ -3329,9 +3630,16 @@
                             $('input[name=plot_type][value=' + data.configuration + ']').prop('checked', true)
                             $('input[name=storage_type][value=' + data.configuration + ']').prop('checked', true)
                         }
+                        $('#price').val(data.survey_price);
+                        if (data.survey_price !== '') {
+                            $('#price2').prop('disabled', true);
+                        }
+                        $('#price2').val(data.fp_plot_price);
+
                         $('#remarks').val(data.remarks);
                         $('#project_id').val(data.project_id);
-                        $('#city_id').val(data.city_id);
+                        $('#state-dropdown').val(data.city_id);
+                        $('#state_id').val(data.state_id);
                         $('#area_id').val(data.locality_id);
                         $('#address').val(data.address);
                         $('#property_link').val(data.location_link);
@@ -3402,6 +3710,7 @@
                         $('#front_road_width').val(setSplitedValue(data.front_road_width, 1));
                         $('#front_road_width_measurement').val(setSplitedValue(data.front_road_width, 2));
                         $('#construction_allowed_for').val(data.construction_allowed_for);
+                        $('#construction_documents').val(data.construction_documents);
                         $('#fsi').val(data.fsi);
                         $('#no_of_borewell').val(data.no_of_borewell);
                         $('#fourwheller_parking').val(data.fourwheller_parking);
@@ -3432,7 +3741,7 @@
                         $('#is_nri').prop('checked', Number(data.owner_nri)).trigger('change');
                         $('#care_take_name').val(data.care_taker_name);
                         $('#care_take_contact_no').val(data.care_taker_contact);
-                        // $('#key_arrangement').val(data.key_available_at).trigger('change');
+                        $('#key_arrangement').val(data.key_available_at).trigger('change');
                         $('input[name=conference_available][value=' + data.conference_room + ']').prop('checked',
                             true)
                         $('input[name=reception_available][value=' + data.reception_area + ']').prop('checked',
@@ -3490,25 +3799,45 @@
                             }
                         }
 
-                        if (data.contact_details != '') {
-                            details = JSON.parse(data.contact_details);
+                        // if (data.contact_details != '') {
+                        //     details = JSON.parse(data.contact_details);
+                        //     if ((details != null) && (details.length > 0)) {
+                        //         for (let i = 0; i < details.length; i++) {
+                        //             id = makeid(10);
+                        //             if (i == 0) {
+                        //                 $('#all_owner_contacts').append(generate_contact_detail(id, 1))
+                        //             } else {
+                        //                 $('#all_owner_contacts').append(generate_contact_detail(id, 0))
+                        //             }
+                        //             floatingField()
+                        //             $("[data-contact_id=" + id + "] select[name=owner_status]").select2()
+                        //             $("[data-contact_id=" + id + "] input[name=owner_name]").val(details[i][0]);
+                        //             $("[data-contact_id=" + id + "] input[name=owner_contact_no]").val(details[i][
+                        //                 1
+                        //             ]);
+                        //             $("[data-contact_id=" + id + "] select[name=owner_status]").val(details[i][2])
+                        //                 .trigger('change');
+                        //         }
+                        //     } else {
+                        //         generate_contact_detail_click(1)
+                        //     }
+                        // }
+
+                        //bharat other contact
+                        if (data.other_contact_details != '') {
+                            details = JSON.parse(data.other_contact_details);
                             if ((details != null) && (details.length > 0)) {
                                 for (let i = 0; i < details.length; i++) {
                                     id = makeid(10);
-                                    // console.log("idd contact details line 3422", id);
                                     if (i == 0) {
                                         $('#all_owner_contacts').append(generate_contact_detail(id, 1))
                                     } else {
                                         $('#all_owner_contacts').append(generate_contact_detail(id, 0))
                                     }
                                     floatingField()
-                                    $("[data-contact_id=" + id + "] select[name=owner_status]").select2()
-                                    $("[data-contact_id=" + id + "] input[name=owner_name]").val(details[i][0]);
-                                    $("[data-contact_id=" + id + "] input[name=owner_contact_no]").val(details[i][
-                                        1
-                                    ]);
-                                    $("[data-contact_id=" + id + "] select[name=owner_status]").val(details[i][2])
-                                        .trigger('change');
+                                    $("[data-contact_id=" + id + "] input[name=other_name]").val(details[i][0]);
+                                    $("[data-contact_id=" + id + "] input[name=other_contact]").val(details[i][1]);
+                                    $("[data-contact_id=" + id + "] input[name=position]").val(details[i][2]);
                                 }
                             } else {
                                 generate_contact_detail_click(1)
@@ -3518,7 +3847,6 @@
                         if (data.unit_details != '') {
                             details = JSON.parse(data.unit_details);
                             if ((details != null) && (details.length > 0)) {
-
                                 for (let i = 0; i < details.length; i++) {
                                     id = makeid(10);
                                     if (i == 0) {
@@ -3587,20 +3915,19 @@
             }
             getProperty()
 
-
-
             //save property
             $(document).on('click', '.submitFnl', function(e) {
-                console.log("submittedd ");
                 e.preventDefault();
                 $("#modal_form").validate();
                 if (!$("#modal_form").valid()) {
                     return
                 }
-                // $(this).prop('disabled', true);
+                $(this).prop('disabled', true);
                 var owner_details = [];
                 var unit_details = [];
                 var amenity_details = [];
+                var other_contact_details = [];
+
                 $("#modal_form [name=owner_name]").each(function(index) {
                     cona_arr = []
                     unique_id = $(this).closest('.form-group').attr('data-contact_id');
@@ -3614,6 +3941,22 @@
                 });
                 owner_details = JSON.stringify(owner_details);
 
+                // other_contact_details
+                $("#modal_form [name=other_name]").each(function(index) {
+                    cona_arr = []
+                    unique_id = $(this).closest('.form-group').attr('data-contact_id');
+                    name = $(this).val();
+                    otherName = $("[data-contact_id=" + unique_id + "] input[name=other_name]").val();
+                    otherContact = $("[data-contact_id=" + unique_id + "] input[name=other_contact]").val();
+                    position = $("[data-contact_id=" + unique_id + "] input[name=position]").val();
+                    cona_arr.push(otherName)
+                    cona_arr.push(otherContact)
+                    cona_arr.push(position)
+                    if (filtercona_arr(cona_arr)) {
+                        other_contact_details.push(cona_arr);
+                    }
+                });
+                other_contact_details = JSON.stringify(other_contact_details);
                 $("#modal_form [name=unit_unit_no]").each(function(index) {
                     cona_arr = []
                     unique_id = $(this).closest('.form-group').attr('data-unit_id');
@@ -3690,13 +4033,10 @@
                     //
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Penthouse') {
                     var configuration = $('input[name=flat_type]:checked').val()
-                    // bharat vila sub cat
+                    //
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Vila/Bunglow') {
                     var configuration = $('input[name=vila_type]:checked').val()
-                    // console.log("Conf :", configuration);
                     //
-                } else {
-
                 }
                 var other_name = $("input[id='other_name']")
                     .map(function() {
@@ -3712,19 +4052,22 @@
                     }).get();
 
                 var id = $('#this_data_id').val()
-                // return;
+                $('.add-btn').click(function() {
+                    $('.increment').append('<input type="file" name="const_documents[]" class="form-control">');
+                });
+
+                // save property
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.saveProperty') }}",
                     data: {
                         id: id,
                         property_for: $('input[name=property_for]:checked').val(),
-                        // property_type: $('input[name=property_type]:checked').val(),
                         property_type: $('input[name=property_type]:checked').val(),
                         property_category: $('input[name=property_category]:checked').val(),
                         configuration: configuration,
                         project_id: $('#project_id').val(),
-                        city_id: $('#city_id').val(),
+                        city_id: $('#state-dropdown').val(),
                         locality_id: $('#area_id').val(),
                         address: $('#address').val(),
                         property_link: $('#property_link').val(),
@@ -3786,6 +4129,7 @@
                         front_road_width: $('#front_road_width').val() + '_-||-_' + $(
                             '#front_road_width_measurement').val(),
                         construction_allowed_for: $('#construction_allowed_for').val(),
+                        construction_documents: $('#construction_documents').val(),
                         fsi: $('#fsi').val(),
                         no_of_borewell: $('#no_of_borewell').val(),
                         fourwheller_parking: $('#fourwheller_parking').val(),
@@ -3804,10 +4148,10 @@
                         survey_plot_size: $('#plot_size').val() + '_-||-_' + $('#survey_plot_measurement')
                             .val(),
                         survey_price: $('#price').val(),
+                        fp_plot_price: $('#price2').val(),
                         tp_number: $('#tp_number').val(),
                         fp_number: $('#fp_number').val(),
                         fp_plot_size: $('#plot2_size').val() + '_-||-_' + $('#plot2_measurement').val(),
-                        fp_plot_price: $('#price2').val(),
                         owner_is: $('#owner_is').val(),
                         other_industrial_fields: JSON.stringify(all_extra_industrial_fields),
                         owner_name: $('#owner_info_name').val(),
@@ -3823,164 +4167,160 @@
                         pantry_type: $('input[name=pantry_available]:checked').val(),
                         _token: '{{ csrf_token() }}',
                         remarks: $('#remarks').val(),
+                        state_id: $('#state_id').val(),
                         other_name: other_name,
                         other_contact: other_contact,
                         position: position,
+                        other_contact_details: other_contact_details,
                         // is_key: is_key
                     },
                     success: function(data) {
-                        console.log("Image Clicked", data.data.id);
-                        var fd = new FormData();
-                        var files = $('#land_images')[0].files;
-                        if (files.length == 0) {
-                            return;
-                        }
-                        fd.append('land_id', $('#this_data_id').val());
-                        fd.append('pro_id', data.data.id);
-                        for (let i = 0; i < files.length; i++) {
-                            fd.append('images[]', files[i]);
-                        }
+                        console.log("data fnl after prop ==", data.data);
+                        if (data.data != '') {
+                            let fd = new FormData();
+                            let filesImages = $('#land_images')[0].files;
+                            let filesDocuments = $('#land_document')[0].files;
+                            // let construction_docs = $('#const_documents')[0].files;
 
-                        fd.append('_token', '{{ csrf_token() }}');
-                        console.log("fd:", fd);
-                        $.ajax({
-                            url: "{{ route('admin.saveLandImages') }}",
-                            type: 'post',
-                            data: fd,
-                            contentType: false,
-                            processData: false,
-                            success: function(response) {
-                                console.log("Responsess :", response);
-                                $('#all_images').html('');
-                                $('#land_images').val('');
-                                if (response != '') {
-                                    images = JSON.parse(response);
-                                    for (let i = 0; i < images.length; i++) {
-                                        var src = land_image_show_url + '/' + images[i];
-                                        var fileType = images[i].split('.').pop().toLowerCase();
-                                        if (isImageFile(fileType)) {
-                                            $('#all_images').append(
-                                                '<div class="col-md-4 m-b-4 mb-3"><img src="' +
-                                                src +
-                                                '" alt="" height="200" width="200"></div>');
-                                        } else {
-                                            $('#all_images').append(
-                                                '');
-                                        }
+                            let construction_docs = document.getElementsByName("const_documents[]");
+                            let files = [];
+
+                            // Loop through all const_documents inputs to collect files
+                            for (let i = 0; i < construction_docs.length; i++) {
+                                if (construction_docs[i].files.length > 0) {
+                                    for (let j = 0; j < construction_docs[i].files.length; j++) {
+                                        files.push(construction_docs[i].files[j]);
                                     }
-
-                                    function isImageFile(fileType) {
-                                        var imageExtensions = ['jpg', 'jpeg', 'png', 'gif',
-                                            'bmp'
-                                        ];
-                                        return imageExtensions.includes(fileType);
-                                    }
-
                                 }
-                            },
-                        });
-                        $('#propertyModal').modal('hide');
+                            }
+
+                            console.log("files : ==", files);
+                            if (filesImages.length == 0 || construction_docs
+                                .length == 0) {
+                                let propertyCategory = data.data.property_category;
+                                if (propertyCategory === '262' || propertyCategory === '256') {
+                                    window.location.href = "{{ route('admin.land.properties') }}";
+                                } else if (propertyCategory === '261') {
+                                    window.location.href = "{{ route('admin.industrial.properties') }}";
+                                } else {
+                                    window.location.href = "{{ route('admin.properties') }}";
+                                } // property_image.innerHTML = 'Property Image is required.';
+                            }
+                            if (filesImages.length > 0) {
+                                for (let i = 0; i < filesImages.length; i++) {
+                                    fd.append('images[]', filesImages[i]);
+                                }
+                            }
+                            if (files.length > 0) {
+                                for (let i = 0; i < files.length; i++) {
+                                    fd.append('construction_docs[]', files[i]);
+                                }
+                            }
+                            if (filesDocuments.length > 0) {
+                                for (let i = 0; i < filesDocuments.length; i++) {
+                                    fd.append('documents[]', filesDocuments[i]);
+                                }
+                            }
+
+                            fd.append('land_id', $('#this_data_id').val());
+                            fd.append('pro_id', data.data.id);
+                            fd.append('_token', '{{ csrf_token() }}');
+                            console.log("fdd ==", fd);
+                            // return;
+                            $.ajax({
+                                url: "{{ route('admin.saveLandImages') }}",
+                                type: 'post',
+                                data: fd,
+                                contentType: false,
+                                processData: false,
+                                success: function(response) {
+                                    console.log("Response ==", response);
+                                    $('#all_images').html('');
+                                    $('#land_images').val('');
+                                    $('#land_document').val('');
+                                    if (response != '') {
+                                        function isImageFile(fileType) {
+                                            var imageExtensions = ['jpg', 'jpeg', 'png', 'gif',
+                                                'bmp'
+                                            ];
+                                            return imageExtensions.includes(fileType);
+                                        }
+                                        $('#propertyModal').modal('hide');
+
+                                        // Redirect to different routes based on property_category after a delay
+                                        setTimeout(function() {
+                                            let propertyCategory = data.data
+                                                .property_category;
+                                            if (propertyCategory === '262' ||
+                                                propertyCategory === '256') {
+                                                window.location.href =
+                                                    "{{ route('admin.land.properties') }}";
+                                            } else if (propertyCategory === '261') {
+                                                window.location.href =
+                                                    "{{ route('admin.industrial.properties') }}";
+                                            } else {
+                                                window.location.href =
+                                                    "{{ route('admin.properties') }}";
+                                            }
+                                        }, 2000);
+                                    }
+                                },
+                            });
+                        }
+                        // $('#propertyModal').modal('hide');
+                        // var redirect_url = "{{ route('admin.properties') }}";
+                        // window.location.href = redirect_url;
                         // $('#saveProperty').prop('disabled',false);
-                        var redirect_url = "{{ route('admin.properties') }}";
-                        window.location.href = redirect_url;
                     }
                 });
             })
 
-            //file upload
-            // $(document).on('click', '.submitFnl', function(e) {
-            //     console.log("Image Clicked");
-            //     var pro_id = 1;
-            //     var fd = new FormData();
-            //     var files = $('#land_images')[0].files;
-            //     if (files.length == 0) {
-            //         return;
-            //     }
-            //     fd.append('land_id', $('#this_data_id').val());
-            //     fd.append('pro_id', 1);
-            //     for (let i = 0; i < files.length; i++) {
-            //         fd.append('images[]', files[i]);
-            //     }
+            var uploadImageField = document.getElementById("land_images");
+            var uploadDocumentField = document.getElementById("land_document");
 
-            //     fd.append('_token', '{{ csrf_token() }}');
-            //     console.log("fd:", fd);
-            //     $.ajax({
-            //         url: "{{ route('admin.saveLandImages') }}",
-            //         type: 'post',
-            //         data: fd,
-            //         contentType: false,
-            //         processData: false,
-            //         success: function(response) {
-            //             console.log("Responsess :", response);
-            //             $('#all_images').html('');
-            //             $('#land_images').val('');
-            //             if (response != '') {
-            //                 images = JSON.parse(response);
-            //                 for (let i = 0; i < images.length; i++) {
-            //                     var src = land_image_show_url + '/' + images[i];
-            //                     var fileType = images[i].split('.').pop().toLowerCase();
-            //                     if (isImageFile(fileType)) {
-            //                         $('#all_images').append('<div class="col-md-4 m-b-4 mb-3"><img src="' +
-            //                             src + '" alt="" height="200" width="200"></div>');
-            //                     } else {
-            //                         $('#all_images').append(
-            //                             '');
-            //                     }
-            //                 }
+            var maxImageCount = 10;
+            var maxImageSize = 2097152;
+            var maxDocumentSize = 2097152;
 
-            //                 function isImageFile(fileType) {
-            //                     var imageExtensions = ['jpg', 'jpeg', 'png', 'gif',
-            //                         'bmp'
-            //                     ];
-            //                     return imageExtensions.includes(fileType);
-            //                 }
-
-            //             }
-            //         },
-            //     });
-            // })
-            // File Validations
-            var uploadField = document.getElementById("land_images");
-            var maxPDFCount = 5;
-            var maxImageCount = 20;
-            uploadField.onchange = function() {
-                var pdfCount = 0;
-                var imageCount = 0;
-                for (var i = 0; i < this.files.length; i++) {
-                    var file = this.files[i];
-                    var fileType = file.type;
-
-                    if (isPDFExcelWordFile(fileType)) {
-                        pdfCount++;
-                    } else {
-                        imageCount++;
-                    }
-                    if (file.size > 2097152) {
-                        uploadField.value = '';
-                        Swal.fire({
-                            title: "Maximum file size limit is 2MB",
-                            icon: "warning",
-                        });
-                        return;
-                    }
-                }
-                if (pdfCount > maxPDFCount || imageCount > maxImageCount) {
-                    uploadField.value = '';
-                    var message = "Maximum ";
-                    message += (pdfCount > maxPDFCount) ? "PDF, Excel, or Word" : "image";
-                    message += " count limit is ";
-                    message += (pdfCount > maxPDFCount) ? maxPDFCount : maxImageCount;
-
+            uploadImageField.onchange = function() {
+                if (this.files.length > maxImageCount) {
+                    this.value = '';
                     Swal.fire({
-                        title: message,
+                        title: "Maximum image count limit is " + maxImageCount,
                         icon: "warning",
                     });
                 }
             };
 
+            uploadDocumentField.onchange = function() {
+                // if (this.files.length > 1) {
+                //     this.value = '';
+                //     Swal.fire({
+                //         title: "Only one document is allowed at a time.",
+                //         icon: "warning",
+                //     });
+                //     return;
+                // }
+                var totalSize = 0;
+                for (var i = 0; i < this.files.length; i++) {
+                    totalSize += this.files[i].size;
+                }
+                if (totalSize >= maxDocumentSize) {
+                    this.value = '';
+                    Swal.fire({
+                        title: "Total size of all documents exceeds the maximum limit of 10 MB",
+                        icon: "warning",
+                    });
+                }
+            };
+
+            function isImageFile(fileType) {
+                var imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+                return imageExtensions.includes(fileType);
+            }
+
             $(document).on('change', '#property_type', function(e) {
                 var parent_value = $(this).val();
-                // console.log("Parent Val", parent_value);
                 $("#specific_type option , #configuration option").each(function() {
                     if (parent_value !== '') {
                         if ($(this).attr('value') != '') {
@@ -4014,6 +4354,47 @@
                     }
                 });
             });
+
+            function isImageFile(fileName) {
+                var imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+                var extension = fileName.split('.').pop().toLowerCase();
+                return imageExtensions.includes(extension);
+            }
+
+            $(document).on('change', '#land_images', function() {
+                var fileName = this.files[0].name.toLowerCase();
+
+                if (!isImageFile(fileName)) {
+                    $(this).val(''); // Clear the input field
+                    Swal.fire({
+                        title: "Only image files are supported for images.",
+                        icon: "warning",
+                    });
+                }
+            });
+
+            $(document).on('change', '#land_document', function() {
+                var fileType = this.files[0].type.toLowerCase();
+                var fileName = this.files[0].name.toLowerCase();
+                var fileExtensions = ["pdf", "xlsx", "xls", "docx", "doc", "pptx", "ppt"];
+
+                var fileExtension = fileName.split(".").pop();
+
+                if (fileExtensions.includes(fileExtension) || (fileType === 'application/pdf' || fileType.includes(
+                        'excel'))) {
+                    // The selected file has a valid extension or MIME type
+                    // You can proceed with your logic here
+                } else {
+                    $(this).val(''); // Clear the input field
+                    Swal.fire({
+                        title: "Only Document files are supported.",
+                        icon: "warning",
+                    });
+                }
+            });
+
+
+
 
             function floatingField() {
                 //changed by Subhash
