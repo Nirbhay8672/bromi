@@ -315,6 +315,9 @@ Helper::set_default_measuerement();
         </div>
         <!-- Page Header Ends                              -->
         <!-- Page Body Start-->
+        @php
+            $permissions = Auth::user()->permissions;
+        @endphp
         <div class="page-body-wrapper">
             <!-- Page Sidebar Start-->
             <div class="sidebar-wrapper">
@@ -337,93 +340,161 @@ Helper::set_default_measuerement();
                                             aria-hidden="true"> </i></div>
                                 </li>
 
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.users') active @endif"
-                                        href="{{ route('superadmin.users') }}"><i class="fa fa-user"></i><span
-                                            class="lan-3">Users</span></a>
-                                </li>
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::USERS))
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.users') active @endif"
+                                            href="{{ route('superadmin.users') }}"><i class="fa fa-user"></i><span
+                                                class="lan-3">Users</span></a>
+                                    </li>
+                                @endif
+                                
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::MEMBERS))
+                                    <li class="sidebar-list">
+                                        <a class="sidebar-link sidebar-title  @if ($route == 'superadmin.members') active @endif"
+                                            href="{{ route('superadmin.members') }}"><i class="fa fa-user"></i><span
+                                                class="lan-3">Members</span></a>
+                                    </li>
+                                @endif
 
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.usersLoginActivity') active @endif"
-                                        href="{{ route('superadmin.usersLoginActivity') }}"><i class="fa fa-user"></i><span
-                                            class="lan-3">Login Activity</span></a>
-                                </li>
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::BUILDERS))
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.builders') active @endif"
+                                            href="{{ route('superadmin.builders') }}"><i class="fa fa-user"></i><span
+                                                class="lan-3">Builders</span></a>
+                                    </li>
+                                @endif
 
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.builders') active @endif"
-                                        href="{{ route('superadmin.builders') }}"><i class="fa fa-user"></i><span
-                                            class="lan-3">Builders</span></a>
-                                </li>
-                                <li class="sidebar-list"><a
-                                    class="sidebar-link sidebar-title  @if ($route == 'superadmin.projects') active @endif"
-                                    href="{{ route('superadmin.projects') }}"><i class="fa fa-user"></i><span
-                                        class="lan-3">Projects</span></a>
-                                </li>
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.tickets') active @endif"
-                                        href="{{ route('superadmin.tickets') }}"><i class="fa fa-ticket"></i><span
-                                            class="lan-3">Ticket System</span></a>
-                                </li>
-                                <li class="sidebar-list"><a class="sidebar-link sidebar-title  @if ($route == 'superadmin.plans') active @endif"
-                                        href="{{ route('superadmin.plans') }}"><i class="fa fa-user"></i><span
-                                            class="lan-3">Plans</span></a>
-                                </li>
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.coupons') active @endif"
-                                        href="{{ route('superadmin.coupons') }}"><i class="fa fa-user"></i><span
-                                            class="lan-3">Coupons</span></a>
-                                </li>
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.notifications') active @endif"
-                                        href="{{ route('superadmin.notifications') }}"><i
-                                            class="fa fa-bell"></i><span class="lan-3">Notifications</span></a>
-                                </li>
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.tpscheme') active @endif"
-                                        href="{{ route('superadmin.tpscheme') }}"><i class="fa fa-copy"></i><span
-                                            class="lan-3">Tp Scheme</span></a>
-                                </li>
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.rera') active @endif"
-                                        href="{{ route('superadmin.rera') }}"><i class="fa fa-user"></i><span
-                                            class="lan-3">Rera</span></a>
-                                </li>
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.city') active @endif"
-                                        href="{{ route('superadmin.settings.city') }}"><i
-                                            class="fa fa-user"></i><span class="lan-3">City</span></a>
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.area') active @endif"
-                                        href="{{ route('superadmin.settings.area') }}"><i
-                                            class="fa fa-user"></i><span class="lan-3">Area</span></a>
-                                <li class="sidebar-list">
-                                    <a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.taluka') active @endif"
-                                        href="{{ route('superadmin.settings.taluka') }}"
-                                    >
-                                    <i class="fa fa-user"></i>
-                                    <span class="lan-3">Taluka</span>
-                                </a>
-                                <li class="sidebar-list">
-                                    <a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.village') active @endif"
-                                        href="{{ route('superadmin.settings.village') }}"
-                                    >
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::PROJECTS))
+                                    <li class="sidebar-list"><a
+                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.projects') active @endif"
+                                        href="{{ route('superadmin.projects') }}"><i class="fa fa-user"></i><span
+                                            class="lan-3">Projects</span></a>
+                                    </li>
+                                @endif
+
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::TICKET_SYSTEM))
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.tickets') active @endif"
+                                            href="{{ route('superadmin.tickets') }}"><i class="fa fa-ticket"></i><span
+                                                class="lan-3">Ticket System</span></a>
+                                    </li>
+                                @endif
+                                <!--<li class="sidebar-list"><a class="sidebar-link sidebar-title -->
+                                <!--        href="{{ route('superadmin.tickets') }}"><i class="fa fa-user"></i>-->
+                                <!--        <span="lan-3">Ticket System</span></a>-->
+                                <!--</li>-->
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::PLANS))
+                                    <li class="sidebar-list"><a class="sidebar-link sidebar-title  @if ($route == 'superadmin.plans') active @endif"
+                                            href="{{ route('superadmin.plans') }}"><i class="fa fa-user"></i><span
+                                                class="lan-3">Plans</span></a>
+                                    </li>
+                                @endif
+
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::COUPONS))
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.coupons') active @endif"
+                                            href="{{ route('superadmin.coupons') }}"><i class="fa fa-user"></i><span
+                                                class="lan-3">Coupons</span></a>
+                                    </li>
+                                @endif
+
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::NOTIFICATIONS))
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.notifications') active @endif"
+                                            href="{{ route('superadmin.notifications') }}"><i
+                                                class="fa fa-bell"></i><span class="lan-3">Notifications</span></a>
+                                    </li>
+                                @endif
+
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::TP_SCHEME))
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.tpscheme') active @endif"
+                                            href="{{ route('superadmin.tpscheme') }}"><i class="fa fa-copy"></i><span
+                                                class="lan-3">Tp Scheme</span></a>
+                                    </li>
+                                @endif
+
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::RERA))
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.rera') active @endif"
+                                            href="{{ route('superadmin.rera') }}"><i class="fa fa-user"></i><span
+                                                class="lan-3">Rera</span></a>
+                                    </li>
+                                @endif
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::CITY))
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.city') active @endif"
+                                            href="{{ route('superadmin.settings.city') }}"><i
+                                                class="fa fa-user"></i><span class="lan-3">City</span></a>
+                                    </li>
+                                @endif
+
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::AREA))
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.area') active @endif"
+                                            href="{{ route('superadmin.settings.area') }}"><i
+                                                class="fa fa-user"></i><span class="lan-3">Area</span></a>
+                                    </li>
+                                @endif
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::TALUKA))
+                                    <li class="sidebar-list">
+                                        <a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.taluka') active @endif"
+                                            href="{{ route('superadmin.settings.taluka') }}"
+                                        >
                                         <i class="fa fa-user"></i>
-                                        <span class="lan-3">Village</span>
-                                    </a>
-                                <li class="sidebar-list"><a
-                                        class="sidebar-link sidebar-title  @if ($route == 'superadmin.email.index') active @endif"
-                                        href="{{ route('superadmin.email.index') }}"><i
+                                        <span class="lan-3">Taluka</span></a>
+                                    </li>
+                                @endif
+
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::VILLAGE))
+                                    <li class="sidebar-list">
+                                        <a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.settings.village') active @endif"
+                                            href="{{ route('superadmin.settings.village') }}"
+                                        >
+                                            <i class="fa fa-user"></i>
+                                            <span class="lan-3">Village</span>
+                                        </a>
+                                    </li>
+                                @endif
+                                
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::EMAIL_TEMPLATE))
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link sidebar-title  @if ($route == 'superadmin.email.index') active @endif"
+                                            href="{{ route('superadmin.email.index') }}"><i
+                                                class="fa fa-envelope"></i>
+                                                <span class="lan-3">Email Template</span></a>
+                                    </li>
+                                @endif
+                                
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::SMS_TEMPLATE))
+                                    <li class="sidebar-list"><a
+                                        class="sidebar-link sidebar-title"
+                                        href="{{ route('superadmin.sms.index') }}"><i
                                             class="fa fa-envelope"></i>
-                                            <span class="lan-3">Email Template</span></a>
-                                </li>
-                                            <li class="sidebar-list"><a
-                                                class="sidebar-link sidebar-title"
-                                                href="{{ route('superadmin.sms.index') }}"><i
-                                                    class="fa fa-envelope"></i>
-                                                    <span class="lan-3">SMS Template</span></a>
-                                 </li>   
+                                            <span class="lan-3">SMS Template</span></a>
+                                    </li>   
+                                @endif 
+                                
+                                {{-- This for members with super admin role --}}
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::REQUESTS))
+                                    <li class="sidebar-list"><a
+                                        class="sidebar-link sidebar-title"
+                                        href="{{ route('superadmin.listEnquiries') }}"><i
+                                            class="fa fa-envelope"></i>
+                                            <span class="lan-3">Requests</span></a>
+                                    </li>   
+                                @endif
+                                {{-- This for super admin as super admin will only have access to bromi_requests --}}
+                                @if ($permissions->contains(\App\Constants\SupAdminPermissions::BROMI_REQUESTS))
+                                    <li class="sidebar-list"><a
+                                        class="sidebar-link sidebar-title"
+                                        href="{{ route('superadmin.adminEnquiries') }}"><i
+                                            class="fa fa-envelope"></i>
+                                            <span class="lan-3">Bromi Requests</span></a>
+                                    </li>   
+                                @endif
                             </ul>
                         </div>
                         <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

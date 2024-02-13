@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\Superadmin\BromiEnquiryController;
 use App\Http\Controllers\Superadmin\CouponController;
 use App\Http\Controllers\Superadmin\EmailTemplateController;
 use App\Http\Controllers\Superadmin\HomeController;
@@ -42,6 +42,18 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/get-user', [UserController::class, 'getSpecificUser'])->name('superadmin.getUser');
 		Route::post('/delete-user', [UserController::class, 'destroy'])->name('superadmin.deleteUser');
 		Route::post('/save-user', [UserController::class, 'saveUser'])->name('superadmin.saveUser');
+		
+		Route::any('/Members', [UserController::class, 'membersList'])->name('superadmin.members');
+		Route::post('/get-member', [UserController::class, 'getSpecificMember'])->name('superadmin.getMember');
+		Route::post('/delete-member', [UserController::class, 'destroyMember'])->name('superadmin.deleteMember');
+		Route::post('/save-member', [UserController::class, 'saveMember'])->name('superadmin.saveMember');
+		
+		Route::any('/brom-enquiries', [BromiEnquiryController::class, 'index'])->name('superadmin.listEnquiries');
+		Route::any('/superadmin-brom-enquiries', [BromiEnquiryController::class, 'superadminList'])->name('superadmin.adminEnquiries');
+		Route::post('/save-brom-enquiry', [BromiEnquiryController::class, 'store'])->name('superadmin.saveEnquiry');
+		Route::post('/get-brom-enquiry', [BromiEnquiryController::class, 'show'])->name('superadmin.showEnquiry');
+        Route::post('/change-enquiry-status', [BromiEnquiryController::class, 'changeStatus'])->name('superadmin.changeEnquiryStatus');
+
 		Route::any('/Plans', [PlanController::class, 'index'])->name('superadmin.plans');
 		Route::post('/get-plan', [PlanController::class, 'getSpecificPlan'])->name('superadmin.getPlan');
 		Route::post('/delete-plan', [PlanController::class, 'destroy'])->name('superadmin.deletePlan');

@@ -92,6 +92,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/save-taluka', [TalukaController::class, 'saveTaluka'])->name('admin.save_taluka');
 		Route::post('/get-taluka', [TalukaController::class, 'getTaluka'])->name('admin.get_taluka');
 		Route::post('/delete-taluka', [TalukaController::class, 'destroy'])->name('admin.destroy_taluka');
+		
 		Route::any('/settings-get-taluka-for-import', [TalukaController::class, 'getTalukaForImport'])->name('admin.setting.getTaluka');
 		Route::post('/settings-import-taluka', [TalukaController::class, 'importTaluka'])->name('admin.importTaluka');
 		

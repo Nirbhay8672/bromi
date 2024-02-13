@@ -83,7 +83,7 @@ class HomeController extends Controller
 						$start_date = Carbon::now()->subDays(7)->format('Y-m-d 00:00:00');
 					}
 				}
-
+				
 				if($request->filled('from_date') && $request->filled('to_date')){
 					$start_date = Carbon::parse($request->from_date)->format('Y-m-d 00:00:00');
 					$end_date = Carbon::parse($request->to_date)->format('Y-m-d 00:00:00');
@@ -496,7 +496,7 @@ class HomeController extends Controller
 					} else {
 						$new_state_id = $current_user_state->id;
 					}
-
+					
 					$current_user_city = City::where('user_id',Auth::user()->id)->where('name', $value->name)->first();
 
 					if(!$current_user_city) {

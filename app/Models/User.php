@@ -131,4 +131,13 @@ class User extends Authenticatable
 	{
 		return $this->hasMany(Projects::class);
 	}
+	
+	public function getPermissionsAttribute($attrbute)
+    {
+        $permissions = collect();
+        if (!empty($attrbute)) {
+            $permissions = collect(json_decode($attrbute, true));
+        }
+        return $permissions;
+    }
 }
