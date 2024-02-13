@@ -425,31 +425,7 @@
                                                                         ?>>
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind6">5bhk</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic checkbox toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="19" id="flatkind7" name="flat_type[]"
-                                                                        data-error="#flat_type_error" autocomplete="off"
-                                                                        <?php
-                                                                        if (!empty($edit_category) && !empty($edit_configuration) && in_array('18', $edit_configuration)) {
-                                                                            if ($edit_category == '254' || $edit_category == '257') {
-                                                                                echo 'checked';
-                                                                            }
-                                                                        }
-                                                                        ?>>
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind7">5+bhk</label>
-
-                                                                </div>
-                                                                <div id="textboxWrapper"
-                                                                    class="btn-group bromi-checkbox-btn me-1"
-                                                                    style="width:10%;display: none;">
-                                                                    <input type="text" id="txt5moreFlate"
-                                                                        name="res_more" class="form-control">
+                                                                        for="flatkind6">4+bhk</label>
                                                                 </div>
                                                             </div>
                                                             <div id="flat_type_error"></div>
@@ -613,28 +589,7 @@
                                                                         ?>>
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind5">5bhk</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic checkbox toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="19" id="vilakind6" name="vila_type[]"
-                                                                        data-val="resedential"
-                                                                        data-error="#vila_type_error" autocomplete="off"
-                                                                        <?php
-                                                                        echo !empty($edit_category) && !empty($edit_configuration) && $edit_category == '255' && in_array('18', $edit_configuration) ? 'checked' : '';
-                                                                        ?>>
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind6">5+bhk</label>
-
-                                                                </div>
-                                                                <div id="textboxWrapperVilla"
-                                                                    class="btn-group bromi-checkbox-btn me-1"
-                                                                    style="display: none;width:10%">
-                                                                    <input type="text" id="txt5moreVilla"
-                                                                        name="textbox" class="form-control">
+                                                                        for="vilakind5">4+BHK</label>
                                                                 </div>
                                                                 <div id="vila_type_error"></div>
                                                             </div>
@@ -853,7 +808,7 @@
                                                                 </div>
                                                             </div>
                                                         </div> --}}
-
+                                                        
                                                         <div class="form-group col-md-4 m-b-20 f-status">
                                                             <label class="select2_label" for="Furnished Status">Furnished
                                                                 Status</label>
@@ -873,8 +828,8 @@
                                                         <div class="form-group col-md-2 m-b-20">
                                                             <label for="Budget From">Budget From</label>
                                                             <input class="form-control indian_currency_amount"
-                                                                name="budget" value="0" id="budget_from"
-                                                                type="text" autocomplete="off">
+                                                                name="budget" value="0" id="budget_from" type="text"
+                                                                autocomplete="off">
                                                         </div>
 
                                                         <div class="form-group col-md-2 m-b-20">
@@ -923,7 +878,7 @@
                                                                 @forelse ($configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_source')
                                                                         <option data-parent_id="{{ $props['parent_id'] }}"
-                                                                            value="{{ $props['id'] }}"
+                                                                            value="{{ $props['id'] }}" 
                                                                             data-val="{{ $props['name'] }}">
                                                                             {{ $props['name'] }}
                                                                         </option>
@@ -1061,24 +1016,6 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
         <script>
-            //#B 5+BHK then add txtbox
-            $('input:checkbox[name*="flat_type"]').change(function() {
-                if ($(this).val() === "19" && $(this).is(':checked')) {
-                    console.log("clicked ==");
-                    $('#textboxWrapper').show();
-                } else {
-                    console.log("clicked not ==");
-                    $('#textboxWrapper').hide();
-                }
-            });
-
-            $('input:checkbox[name*="vila_type"]').change(function() {
-                if ($(this).val() === "19" && $(this).is(':checked')) {
-                    $('#textboxWrapperVilla').show();
-                } else {
-                    $('#textboxWrapperVilla').hide();
-                }
-            });
             //Default Selected display on add Enquiry City- locality
             let id = '{{ isset($current_id) ? $current_id : 'null' }}';
             if (id === 'null') {
@@ -2036,7 +1973,9 @@
                     return false; // for demo
                 }
             });
-           
+
+
+
             $(document).on('click', '#saveEnquiry', function(e) {
                 e.preventDefault();
                 $("#modal_form").validate();
@@ -2131,7 +2070,6 @@
                         enquiry_source: $('#enquiry_source').val(),
                         furnished_status: JSON.stringify($('#furnished_status').val()),
                         budget_from: $('#budget_from').val(),
-                        // res_more: $('#txt5moreFlate').val() !== "" ? $('#txt5moreFlate').val() : $('#txt5moreVilla').val(),
                         budget_to: $('#budget_to').val(),
                         purpose: $('#purpose').val(),
                         building_id: JSON.stringify($('#building_id').val()),
@@ -2213,7 +2151,7 @@
 
             function resetallfields() {
                 hidefields = ['div_office_type', 'div_retail_type', 'div_vila_type', 'div_flat_type', 'div_plot_type',
-                    'div_storage_type', 'the_source_refrence',
+                    'div_storage_type','the_source_refrence',
                     'div_property_address', 'div_flat_details', 'div_flat_details_2', 'div_flat_details_3',
                     'div_description_section', 'div_survey_details', 'div_tp_details',
                     'div_document_section', 'div_office_setup', 'div_road_width',

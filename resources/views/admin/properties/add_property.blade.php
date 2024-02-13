@@ -80,7 +80,7 @@
                                                             </div>
                                                         </div>
 
-                        
+
 
                                                         <div class="col-md-12 mb-3">
                                                             <div>
@@ -108,25 +108,23 @@
                                                             <div class="m-checkbox-inline custom-radio-ml">
                                                                 @forelse ($property_configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_specific_type')
-                                                                        
-                                                                            <div class="btn-group bromi-checkbox-btn me-1 property-type-element"
-                                                                                role="group"
-                                                                                aria-label="Basic radio toggle button group"
-                                                                                data-property-id="{{ $props['id'] }}">
-                                                                                <input type="radio"
-                                                                                    data-parent_id="{{ $props['parent_id'] }}"
-                                                                                    class="btn-check"
-                                                                                    value="{{ $props['id'] }}"
-                                                                                    data-val="{{ $props['name'] }}"
-                                                                                    name="property_category"
-                                                                                    id="category-{{ $props['id'] }}"
-                                                                                    data-error="#property_category_error"
-                                                                                    autocomplete="off">
-                                                                                <label
-                                                                                    class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                                    for="category-{{ $props['id'] }}">{{ $props['name'] }}</label>
-                                                                            </div>
-                                                                        
+                                                                        <div class="btn-group bromi-checkbox-btn me-1 property-type-element"
+                                                                            role="group"
+                                                                            aria-label="Basic radio toggle button group"
+                                                                            data-property-id="{{ $props['id'] }}">
+                                                                            <input type="radio"
+                                                                                data-parent_id="{{ $props['parent_id'] }}"
+                                                                                class="btn-check"
+                                                                                value="{{ $props['id'] }}"
+                                                                                data-val="{{ $props['name'] }}"
+                                                                                name="property_category"
+                                                                                id="category-{{ $props['id'] }}"
+                                                                                data-error="#property_category_error"
+                                                                                autocomplete="off">
+                                                                            <label
+                                                                                class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                                for="category-{{ $props['id'] }}">{{ $props['name'] }}</label>
+                                                                        </div>
                                                                     @endif
                                                                 @empty
                                                                 @endforelse
@@ -289,7 +287,23 @@
                                                                         data-error="#flat_type_error" autocomplete="off">
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="flatkind6">4+bhk</label>
+                                                                        for="flatkind6">5bhk</label>
+                                                                </div>
+                                                                <div class="btn-group bromi-checkbox-btn me-1 txt5plus"
+                                                                    role="group"
+                                                                    aria-label="Basic radio toggle button group">
+                                                                    <input type="radio" class="btn-check"
+                                                                        value="19" id="flatkind7" name="flat_type"
+                                                                        data-error="#flat_type_error" autocomplete="off">
+                                                                    <label
+                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                        for="flatkind7">5+bhk</label>
+                                                                </div>
+                                                                <div id="textboxWrapper"
+                                                                    class="btn-group bromi-checkbox-btn me-1"
+                                                                    style="width:10%;display: none;">
+                                                                    <input type="text" id="txt5moreFlate"
+                                                                        name="res_more" class="form-control">
                                                                 </div>
                                                             </div>
                                                             <div id="flat_type_error"></div>
@@ -355,7 +369,24 @@
                                                                         data-error="#vila_type_error" autocomplete="off">
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind5">4+BHK</label>
+                                                                        for="vilakind5">5bhk</label>
+                                                                </div>
+                                                                <div class="btn-group bromi-checkbox-btn me-1"
+                                                                    role="group"
+                                                                    aria-label="Basic radio toggle button group txt5plus">
+                                                                    <input type="radio" class="btn-check"
+                                                                        value="19" data-val="resedential"
+                                                                        id="vilakind6" name="vila_type"
+                                                                        data-error="#vila_type_error" autocomplete="off">
+                                                                    <label
+                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                        for="vilakind6">5+bhk</label>
+                                                                </div>
+                                                                <div id="textboxWrapperVilla"
+                                                                    class="btn-group bromi-checkbox-btn me-1"
+                                                                    style="display: none;width:10%">
+                                                                    <input type="text" id="txt5moreVilla"
+                                                                        name="textbox" class="form-control">
                                                                 </div>
                                                                 <div id="vila_type_error"></div>
                                                             </div>
@@ -451,8 +482,8 @@
                                                             <div id="storage_type_error"></div>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary nextBtn" style="border-radius: 5px;" id="nextButton"
-                                                        type="button">Next</button>
+                                                    <button class="btn btn-primary nextBtn" style="border-radius: 5px;"
+                                                        id="nextButton" type="button">Next</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -1344,7 +1375,8 @@
 
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
                                                             <label class="select2_label"
-                                                                for="Select Construction allowed for"> Construction allowed
+                                                                for="Select Construction allowed for"> Construction
+                                                                allowed
                                                                 for</label>
                                                             <select class="form-select" id="construction_allowed_for"
                                                                 name="construction_allowed_for[]" multiple>
@@ -1832,12 +1864,10 @@
                                                                 type="text" autocomplete="off">
                                                         </div>
                                                     </div>
-                                                    <button
-                                                        class="btn btn-primary previousBtn1"
-                                                        type="button"
-                                                        style="border-radius: 5px;"
-                                                    >Previous</button>
-                                                    <button class="btn btn-primary ms-3 nextBtn" style="border-radius: 5px;" type="button">Next</button>
+                                                    <button class="btn btn-primary previousBtn1" type="button"
+                                                        style="border-radius: 5px;">Previous</button>
+                                                    <button class="btn btn-primary ms-3 nextBtn"
+                                                        style="border-radius: 5px;" type="button">Next</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2462,10 +2492,11 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary previousBtn2" style="border-radius: 5px;"
-                                                        type="button">Previous</button>
-                                                    <button id="saveProperty" class="btn btn-primary ms-3 nextBtn submitFnl"
-                                                        type="button" style="border-radius: 5px;">Finish</button>
+                                                    <button class="btn btn-primary previousBtn2"
+                                                        style="border-radius: 5px;" type="button">Previous</button>
+                                                    <button id="saveProperty"
+                                                        class="btn btn-primary ms-3 nextBtn submitFnl" type="button"
+                                                        style="border-radius: 5px;">Finish</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2491,15 +2522,31 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/property_wizard.js') }}"></script>
         <script>
-        
-         // Hide State dropdown
+            // Hide State dropdown
+
+            //#B 5+BHK then add txtbox
+            $('input[name="flat_type"][value="19"]').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#textboxWrapper').show();
+                } else {
+                    $('#textboxWrapper').hide();
+                }
+            });
+            $('input[name="vila_type"][value="19"]').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#textboxWrapperVilla').show();
+                } else {
+                    $('#textboxWrapperVilla').hide();
+                }
+            });
+
             const numberOfOptions = $('#state_id').find('option').length;
             if (numberOfOptions > 2) {
                 $('.state-hide').show();
             } else {
                 $('.state-hide').hide();
             }
-            
+
             var cities = @Json($city_encoded);
             var states = @Json($state_encoded);
             var areas = @Json($area_encoded);
@@ -3263,7 +3310,7 @@
                 $('#address').parent().parent().addClass('focused')
                 $('#address').val($('#project_id').find(":selected").attr('data-addr')).trigger('change');
                 $('#city_id').val($('#project_id').find(":selected").attr('data-city')).trigger('change');
-
+                $('#state-dropdown').val($('#project_id').find(":selected").attr('data-city')).trigger('change');
                 $('#area_id').val($('#project_id').find(":selected").attr('data-area')).trigger('change');
                 $('#property_link').val($('#project_id').find(":selected").attr('data-location')).trigger('change');
             })
@@ -3475,7 +3522,8 @@
                 '</div>' +
                 '<div data-unit_id= ' + id +
                     ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
-                    ' class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((
+                    ' class="' + ((plus) ? "add_units" : "remove_units") +
+                    ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((
                         plus) ? "+" : "-") + '</button>  </div>' +
                     '</div>';
                 return myvar;
@@ -4056,6 +4104,7 @@
                     $('.increment').append('<input type="file" name="const_documents[]" class="form-control">');
                 });
 
+               
                 // save property
                 $.ajax({
                     type: "POST",
@@ -4074,6 +4123,7 @@
                         district_id: $('#district_id').val(),
                         taluka_id: $('#taluka_id').val(),
                         village_id: $('#village_id').val(),
+                        res_more: $('#txt5moreFlate').val() !== "" ? $('#txt5moreFlate').val() : $('#txt5moreVilla').val(),
                         zone_id: $('#zone').val(),
                         constructed_carpet_area: $('#constructed_carpet_area').val() + '_-||-_' + $(
                             '#constructed_carpet_area_measurement').val(),

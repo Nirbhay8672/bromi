@@ -404,10 +404,8 @@ class EnquiriesController extends Controller
 
 						$configurationArray = json_decode($row->configuration);
 						if (!empty($configurationArray) && isset($configurationArray[0])) {
-							$configurationKey = $configurationArray[0];
-
-							if (!empty(config('constant.property_configuration')[$configurationKey])) {
-								$configuration_name = config('constant.property_configuration')[$configurationKey];
+							if (!empty(config('constant.property_configuration')[$configurationArray[0]])) {
+								$configuration_name = config('constant.property_configuration')[$configurationArray[0]];
 							} else {
 								$configuration_name = "Null";
 							}
