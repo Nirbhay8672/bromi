@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\District;
+use App\Models\SuperTaluka;
+use App\Models\SuperVillages;
 use App\Models\Taluka;
 use App\Models\Village;
 use Illuminate\Http\Request;
@@ -66,7 +68,11 @@ class VillageController extends Controller
 		}
 		$districts = District::orderBy('name')->where('user_id',Auth::user()->id)->get()->toArray();
 		$talukas = Taluka::orderBy('name')->where('user_id',Auth::user()->id)->get()->toArray();
-		return view('admin.settings.village_index',compact('districts','talukas'));
+
+		$superDistrict = District::orderBy('name')->where('user_id',6)->get()->toArray();
+		$superTaluka = SuperTaluka::orderBy('name')->get()->toArray();
+
+		return view('admin.settings.village_index',compact('districts','talukas','superDistrict', 'superTaluka'));
 	}
 
 	public function saveVillage(Request $request)
@@ -113,6 +119,82 @@ class VillageController extends Controller
 		}
 		if (!empty($request->allids) && isset(json_decode($request->allids)[0]) ) {
 			$data = Village::whereIn('id', json_decode($request->allids))->delete();
+		}
+	}
+
+	public function getVillageForImport(Request $request)
+	{
+		return response()->json([
+			'message' => 'Detail fetch',
+			'data' => [
+				'village_data' => SuperVillages::where('super_taluka_id',$request->taluka_id)->get()	
+			]
+		]);
+	}
+
+	public function importVillage(Request $request)
+	{
+		if(!empty($request->district_id) && !empty($request->taluka_id) && count($request->village_array) > 0)
+		{
+			$allvillage = SuperVillages::whereIn('id',$request->village_array)->get();
+
+			foreach ($allvillage as $value)
+			{
+				$district_obj = District::find($request->district_id);
+				$user_district = District::where('name',$district_obj->name)->where('user_id',Auth::user()->id)->first();
+
+				$district_id = 0;
+				if($user_district)
+				{
+					$district_id = $user_district->id;
+				}
+				else
+				{
+					$new_district = new District();
+					$new_district->fill([
+						'name' => $district_obj->name,
+						'user_id' => Auth::user()->id,
+					])->save();
+
+					$district_id = $new_district->id;
+				}
+
+				$super_taluka = SuperTaluka::find($request->taluka_id);
+
+				$taluka = Taluka::where('name',$super_taluka->name)
+					->where('user_id', Auth::user()->id)
+					->first();
+
+				$taluka_id = 0;
+
+				if(empty($taluka))
+				{
+					$taluka = Taluka::create([
+						'name'=>$super_taluka->name,
+						'district_id'=>$district_id,
+						'user_id'=> Auth::User()->id
+					]);
+
+					$taluka_id = $taluka->id;
+				} else {
+					$taluka_id = $taluka->id;
+				}
+
+				$exist = Village::where('name',$value->name)
+					->where('taluka_id',$taluka->id)
+					->where('user_id', Auth::user()->id)
+					->first();
+
+				if (empty($exist->id)){
+					$village = new Village();
+					$village->user_id = Auth::user()->id;
+					$village->name = $value->name;
+					$village->taluka_id = $taluka_id;
+					$village->district_id =$district_id;
+					$village->status = 1;
+					$village->save();
+				}
+			}
 		}
 	}
 }

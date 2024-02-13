@@ -322,6 +322,8 @@ class Helper
 			$query->whereDate('nfd', '<=', Carbon::now()->endOfWeek())->whereDate('nfd', '>=', Carbon::now()->endOfWeek()->subDay());
 		})->count();
 
+		$arr['miss_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->whereDate('created_at', '<', Carbon::now()->format('Y-m-d'))->count();
+
 		return $arr;
 	}
 

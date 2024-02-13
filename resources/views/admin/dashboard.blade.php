@@ -54,6 +54,7 @@
                                 </select>
                             </div>
                         </div>
+
                         <button
                             type="button"
                             id="daterangeModalElement"
@@ -79,7 +80,7 @@
                         <div class="row mb-5">
                             <div class="col-5">
                                 <div class="fname">
-                                    <input type="date" class="form-control" id="from_date">
+                                    <input type="date" class="form-control" id="from_date" max="{{ now()->format('Y-m-d') }}">
                                     <span id="from_date_error" class="text-danger"></span>
                                 </div>
                             </div>
@@ -90,7 +91,7 @@
                             </div>
                             <div class="col-5">
                                 <div class="fname">
-                                    <input type="date" class="form-control" id="to_date">
+                                    <input type="date" class="form-control" id="to_date" max="{{ now()->format('Y-m-d') }}">
                                     <span id="to_date_error" class="text-danger"></span>
                                 </div>
                             </div>
@@ -430,6 +431,16 @@
             if(to == '') {
                 valid = false;
                 $('#to_date_error').text("To date is required.");
+            }
+
+            if(to) {
+                let date1 = new Date(from).getTime();
+                let date2 = new Date(to).getTime();
+
+                if (date1 >= date2) {
+                    valid = false;
+                    $('#to_date_error').text("To date must greater than from date.");
+                }
             }
 
             if(valid) {

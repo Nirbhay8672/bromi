@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-    <div class="page-body">
+    <div class="page-body" x-data="city_form">
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
@@ -25,6 +25,14 @@
                                         data-bs-target="#cityModal"
                                         title="Add Taluka"
                                     ><i class="fa fa-plus"></i></button>
+
+                                    <button
+                                        class="btn ms-3 custom-icon-theme-button"
+                                        type="button"
+                                        title="Import Talukas"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#importmodal"
+                                    ><i class="fa fa-upload"></i></button>
 
                                     <button
                                         class="btn text-white delete_table_row ms-3"
@@ -89,9 +97,7 @@
                                     <select class="form-select" id="district_id" required>
                                         <option value="">District</option>
                                         @forelse ($districts as $district)
-                                            @if($district->user_id == auth()->user()->id)
-                                                <option value="{{ $district->id }}">{{ $district->name }}</option>
-                                            @endif
+                                            <option value="{{ $district->id }}">{{ $district->name }}</option>
                                         @empty
                                         @endforelse
                                     </select>
@@ -107,8 +113,142 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="importmodal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import Talukas</h5>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-bookmark needs-validation" method="post" id="import_form" novalidate="">
+							<div class="form-row">
+                                <div class="form-group col-md-5 d-inline-block m-b-20">
+                                    <label class="mb-0">District</label>
+                                    <select id="import_district_id" required>
+                                        <option value="">-- Select District --</option>
+                                        @foreach ($super_admin_districts as $district)
+                                            <option value="{{ $district['id'] }}">{{ $district['name'] }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger" id="state_error"></span>
+                                </div>
+							</div>
+                            <template x-if="taluka_array.length > 0">
+                                <div class="row p-2">
+                                    <div class="row mb-3">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-6 m-b-10">
+                                            <input class="project_amenity form-check-input filled" id="check_all" x-model="check_all" type="checkbox" value="" @click="selectCheckbox($event)">
+                                            <label class="form-check-label" for="check_all">Select All Talukas</label>
+                                        </div>
+                                        <span class="text-danger" id="city_error"></span>
+                                    </div>
+                                    <template x-for="(taluka, index) in taluka_array">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-10">
+                                            <input class="project_amenity form-check-input filled" :id="`taluka_${taluka.id}`" type="checkbox" :value="taluka.id" x-model="selected_taluka">
+                                            <label class="form-check-label" :for="`taluka_${taluka.id}`" x-text="taluka.name"></label>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" type="button" @click="importCity()">Save</button>
+                                <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     @endsection
     @push('scripts')
+
+        <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+        <script type="text/javascript">
+
+            document.addEventListener('alpine:init', () => {
+
+                Alpine.data('city_form', () => ({
+
+                    init() {
+                        let _this = this;
+                        $('#import_district_id').on('change', function() {
+                            _this.setTalukas();
+                        });
+                    },
+
+                    taluka_array : [],
+                    selected_taluka : [],
+                    check_all : false,
+
+                    selectCheckbox(event) {
+                        _this = this;
+                        if(event.target.checked) {
+                            _this.taluka_array.forEach((city) => {
+                                _this.selected_taluka.push(city.id);   
+                            });
+                        } else {
+                            _this.selected_taluka = [];
+                        }
+                    },
+
+                    setTalukas() {
+                        let _this = this;
+                        if($('#import_district_id').val() != '') {
+                            _this.selected_taluka = [];
+                            let url = "{{ route('admin.setting.getTaluka') }}";
+                            axios.post(url , { 'district_id' : $('#import_district_id').val()}).then((response) => {
+                                _this.taluka_array = response.data.data.taluka_data;
+                            });
+                        } else {
+                            _this.taluka_array = [];
+                        }
+                    },
+
+                    importCity() {
+                        let _this = this;
+                        document.getElementById('state_error').innerHTML = '';
+
+                        let district_id = $('#import_district_id').val();
+
+                        if(district_id == '' || this.selected_taluka.length == 0) {
+                            if(district_id == '') {
+                                document.getElementById('state_error').innerHTML = 'State field is required.';
+                            }
+
+                            if(this.selected_taluka.length == 0) {
+                                let city_error =  document.getElementById('city_error');
+
+                                if(city_error) {
+                                    city_error.innerHTML = 'Please select at least one city.';
+                                }
+                            }
+
+                            return;
+                        }
+
+                        let url = "{{ route('admin.importTaluka') }}";
+                    
+                        axios.post(url, {
+                            'taluka_array' : _this.selected_taluka,
+                            'district_id' : district_id,
+                        })
+                        .then((res) => {
+                            $('#cityTable').DataTable().draw();
+                            $('#importmodal').modal('hide');
+                            $('#import_form')[0].reset();
+                        });
+                    }
+                }));
+            });
+
+            </script>
+
         <script>
 
             $(document).ready(function() {

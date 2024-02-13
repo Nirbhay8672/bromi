@@ -17,56 +17,37 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-9 col-lg-10 border-start ps-4">
-                                    <div class="col-md-12">
-                                        <div class="card">
-                                            <div class="card-header">Query</div>
-                                            <div class="card-body">
-                                                <div class="card" style="margin-right: 27%;/* padding-left: 24%; */margin-left: 20%;margin-inline: 19%;">
-                                                    <div class="row" >
-                                                        <div class="col-md-10 col-md-offset-1">
-                                                        <div class="panel panel-default">
-                                                            <div class="panel-heading">
-                                                                #{{ $ticket->ticket_id }} - {{ $ticket->title }}
-                                                            </div>
-                                            
-                                                            <div class="panel-body">
-                                                                @if (session('status'))
-                                                                    <div class="alert alert-success">
-                                                                        {{ session('status') }}
-                                                                    </div>
-                                                                @endif
-                                            
-                                                                <div class="ticket-info">
-                                                                    <p>{{ $ticket->message }}</p>
-                                                                    <p>Category: {{ $ticket->category->name }}</p>
-                                                                    <p>
-                                                                        @if ($ticket->status === 'Open')
-                                                                            Status: <span class="label label-success">{{ $ticket->status }}</span>
-                                                                        @else
-                                                                            Status: <span class="label label-danger">{{ $ticket->status }}</span>
-                                                                        @endif
-                                                                    </p>
-                                                                    <p>Created on: {{ $ticket->created_at->diffForHumans() }}</p>
-                                                                </div>
-                                            
-                                                            </div>
-                                                        </div>
-                                            
-                                                        <hr>
-                                            
-                                                        @include('admin.ticket_system.tickets.comments')
-                                            
-                                                        <hr>
-                                            
-                                                        @include('admin.ticket_system.tickets.reply')
-                                                        </div>
+                                <div class="col-md-10 col-md-offset-1">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <strong>#{{ $ticket->ticket_id }} - {{ $ticket->title }}</strong>
+                                        </div>
+                        
+                                        <div class="panel-body">
+                                            @if (session('status'))
+                                                <div class="alert alert-success">
+                                                    {{ session('status') }}
                                                 </div>
-                                                </div>
-                                             
+                                            @endif
+                        
+                                            <div class="ticket-info">
+                                                <p>{{ $ticket->message }}</p>
+                                                <p>Category: {{ $ticket->category->name }}</p>
+                                                <p>
+                                                    @if ($ticket->status === 'Open')
+                                                        Status: <span class="label label-success">{{ $ticket->status }}</span>
+                                                    @else
+                                                        Status: <span class="label label-danger">{{ $ticket->status }}</span>
+                                                    @endif
+                                                </p>
+                                                <p>Created on: {{ $ticket->created_at->diffForHumans() }}</p>
                                             </div>
                                         </div>
                                     </div>
+                                    <hr>
+                                    @include('admin.ticket_system.tickets.comments')
+                                    <hr>
+                                    @include('admin.ticket_system.tickets.reply')
                                 </div>
                             </div>
                         </div>

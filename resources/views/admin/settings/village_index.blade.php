@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('content')
-    <div class="page-body">
+    <div class="page-body" x-data="village_form">
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
@@ -24,6 +24,14 @@
                                         data-bs-target="#areaModal"
                                         title="Add Village"
                                     ><i class="fa fa-plus"></i></button>
+
+                                    <button
+                                        class="btn ms-3 custom-icon-theme-button"
+                                        type="button"
+                                        title="Import Villages"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#importmodal"
+                                    ><i class="fa fa-upload"></i></button>
 
                                     <button
                                         class="btn text-white delete_table_row ms-3"
@@ -126,12 +134,156 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="importmodal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import Areas</h5>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
+                            <div class="row g-3 mt-2 mb-4">
+                                <div class="col">
+                                    <select id="import_district_id">
+                                        <option value=""> District</option>
+                                        @foreach ($superDistrict as $district)
+                                            <option value="{{ $district['id'] }}">{{ $district['name'] }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger" id="district_error"></span>
+                                </div>
+                                <div class="col">
+                                    <select id="import_taluka_id">
+                                        <option value="">-- Select Taluka --</option>
+                                    </select>
+                                    <span class="text-danger" id="taluka_error"></span>
+                                </div>
+                            </div>
+                            <template x-if="village_array.length > 0">
+                                <div class="row p-2">
+                                    <div class="row mb-3">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-6 m-b-10">
+                                            <input class="project_amenity form-check-input filled" id="check_all" x-model="check_all" type="checkbox" value="" @click="selectCheckbox($event)">
+                                            <label class="form-check-label" for="check_all">Select All Area</label>
+                                        </div>
+                                        <span class="text-danger" id="area_error"></span>
+                                    </div>
+                                    <template x-for="(area, index) in village_array">
+                                        <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-10">
+                                            <input class="project_amenity form-check-input filled" :id="`area_${area.id}`" type="checkbox" :value="area.id" x-model="selected_area">
+                                            <label class="form-check-label" :for="`area_${area.id}`" x-text="area.name"></label>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" @click="importArea()" type="button">Save</button>
+                                <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         @php
             $district_encoded = json_encode($districts);
             $taluka_encoded = json_encode($talukas);
+
+            $supertalukas = json_encode($superTaluka);
         @endphp
     @endsection
     @push('scripts')
+
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+        <script type="text/javascript">
+
+            document.addEventListener('alpine:init', () => {
+    
+                Alpine.data('village_form', () => ({
+
+                    init() {
+                        let _this = this;
+                        $('#import_taluka_id').on('change', function() {
+                            _this.setArea();
+                        });
+                    },
+
+                    village_array : [],
+                    selected_area : [],
+                    check_all : false,
+
+                    selectCheckbox(event) {
+                        _this = this;
+                        if(event.target.checked) {
+                            _this.village_array.forEach((city) => {
+                                _this.selected_area.push(city.id);   
+                            });
+                        } else {
+                            _this.selected_area = [];
+                        }
+                    },
+
+                    setArea() {
+                        let _this = this;
+                        if($('#import_taluka_id').val() != '') {
+                            _this.selected_area = [];
+                            let url = "{{ route('admin.settings.getVillageForImport') }}";
+                            axios.post(url , { 'taluka_id' : $('#import_taluka_id').val()}).then((response) => {
+                                _this.village_array = response.data.data.village_data;
+                            });
+                        } else {
+                            _this.village_array = [];
+                        }
+                    },
+
+                    importArea() {
+                        let _this = this;
+                        document.getElementById('taluka_error').innerHTML = '';
+                        document.getElementById('district_error').innerHTML = '';
+
+                        let city_id = $('#import_taluka_id').val();
+                        let state_id = $('#import_district_id').val();
+
+                        if(city_id == '' || this.selected_area.length == 0 || state_id == '') {
+                            if(city_id == '') {
+                                document.getElementById('taluka_error').innerHTML = 'Taluka field is required.';
+                            }
+                            if(state_id == '') {
+                                document.getElementById('district_error').innerHTML = 'District field is required.';
+                            }
+
+                            if(this.selected_area.length == 0) {
+                                let area_error =  document.getElementById('area_error');
+
+                                if(area_error) {
+                                    area_error.innerHTML = 'Please select at least one village.';
+                                }
+                            }
+
+                            return;
+                        }
+
+                        let url = "{{ route('admin.importvillage') }}";
+                    
+                        axios.post(url, {
+                            'village_array' : _this.selected_area,
+                            'taluka_id' : city_id,
+                            'district_id' : state_id,
+                        })
+                        .then((res) => {
+                            $('#areaTable').DataTable().draw();
+                            $('#importmodal').modal('hide');
+                            $('#import_form')[0].reset();
+                        });
+                    }
+                }));
+            });
+
+        </script>
+
         <script>
             var shouldchangecity = 1;
 
@@ -154,6 +306,23 @@
                         }
                         $('#city_id').select2();
                     }
+                })
+
+                var supercities = @Json($supertalukas);
+
+                $(document).on('change', '#import_district_id', function(e) {
+                    $('#import_taluka_id').select2('destroy');
+                    supercitiess = JSON.parse(supercities);
+                    $('#import_taluka_id').html('');
+                    $('#import_taluka_id').append('<option value="">-- Select Taluka --</option>');
+                    for (let i = 0; i < supercitiess.length; i++) {
+                        if (supercitiess[i]['district_id'] == $("#import_district_id").val()) {
+                            $('#import_taluka_id').append('<option value="' + supercitiess[i]['id'] + '">' + supercitiess[i][
+                                'name'
+                            ] + '</option>')
+                        }
+                    }
+                    $('#import_taluka_id').select2();
                 })
 
                 var queryString = window.location.search;

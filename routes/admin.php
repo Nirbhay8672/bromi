@@ -92,11 +92,15 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/save-taluka', [TalukaController::class, 'saveTaluka'])->name('admin.save_taluka');
 		Route::post('/get-taluka', [TalukaController::class, 'getTaluka'])->name('admin.get_taluka');
 		Route::post('/delete-taluka', [TalukaController::class, 'destroy'])->name('admin.destroy_taluka');
+		Route::any('/settings-get-taluka-for-import', [TalukaController::class, 'getTalukaForImport'])->name('admin.setting.getTaluka');
+		Route::post('/settings-import-taluka', [TalukaController::class, 'importTaluka'])->name('admin.importTaluka');
 		
 		Route::any('/villages', [VillageController::class, 'index'])->name('admin.villages');
 		Route::post('/save-village', [VillageController::class, 'saveVillage'])->name('admin.save_village');
 		Route::post('/get-village', [VillageController::class, 'getVillage'])->name('admin.get_village');
 		Route::post('/delete-village', [VillageController::class, 'destroy'])->name('admin.destroy_village');
+		Route::any('/settings-get-village-for-import', [VillageController::class, 'getVillageForImport'])->name('admin.settings.getVillageForImport');
+		Route::post('/import-village', [VillageController::class, 'importVillage'])->name('admin.importvillage');
 		
 		
 		Route::any('/Areas', [AreaController::class, 'index'])->name('admin.areas');

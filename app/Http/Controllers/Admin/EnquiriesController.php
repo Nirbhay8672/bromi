@@ -105,6 +105,9 @@ class EnquiriesController extends Controller
 								$query->whereDate('nfd', '<=', Carbon::now()->endOfWeek())->whereDate('nfd', '>=', Carbon::now()->endOfWeek()->subDay());
 							});
 						}
+						elseif ($request->filter_by == 'missed') {
+							return $query->whereDate('created_at', '<', Carbon::now()->format('Y-m-d'));
+						}
 					})
 					->when($request->calendar_date && $request->calendar_type, function ($query) use ($request) {
 						if ($request->calendar_type == 'New Enquiry') {
