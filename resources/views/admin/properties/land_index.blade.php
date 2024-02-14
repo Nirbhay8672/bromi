@@ -21,52 +21,72 @@
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col-md-8">
-                                    <a class="btn btn-primary btn-air-primary" href="{{ route('admin.property.add') }}">Add
-                                        Property</a>
-                                    <button class="btn btn-primary btn-air-primary" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#filtermodal">Filter</button>
-                                    <button style="display:none" class="btn btn-primary btn-air-primary"
-                                        id="resetfilter">Clear
-                                        Filter</button>
-                                    <button class="btn btn-primary btn-air-primary delete_table_row" style="display: none"
-                                        onclick="deleteTableRow()" type="button">Delete</button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="display" id="propertyTable">
-                                        <thead>
-                                            <tr>
-                                                <th>
-                                                    <div
-                                                        class="form-check form-check-inline checkbox checkbox-dark mb-0 me-0">
-                                                        <input class="form-check-input" id="select_all_checkbox"
-                                                            name="selectrows" type="checkbox">
-                                                        <label class="form-check-label" for="select_all_checkbox"></label>
-                                                    </div>
-                                                </th>
-                                                <th>Project / Village</th>
-                                                <th>Property Info</th>
-                                                <th>Unit</th>
-                                                <th>Price</th>
-                                                <th>Details</th>
-                                                <th>Remarks</th>
-                                                <th>Contacts</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
 
-                                        </tbody>
-                                    </table>
+                                    <a
+                                        class="btn custom-icon-theme-button"
+                                        href="{{ route('admin.property.add') }}"
+                                        title="Add Property"
+                                    >
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+
+                                    <button
+                                        class="btn ms-3 custom-icon-theme-button"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#filtermodal"
+                                        title="Filter"
+                                    ><i class="fa fa-filter"></i></button>
+
+                                    <button
+                                        class="btn ms-3 custom-icon-theme-button"
+                                        type="button"
+                                        title="Clear Filter"
+                                        id="resetfilter"
+                                        style="display: none;"
+                                    ><i class="fa fa-refresh"></i></button>
+
+                                    <button
+                                        class="btn text-white delete_table_row ms-3"
+                                        style="border-radius: 5px;display: none;background-color:red"
+                                        onclick="deleteTableRow()"
+                                        type="button"
+                                        title="Delete"
+                                    ><i class="fa fa-trash"></i></button>
                                 </div>
                             </div>
                         </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="display" id="propertyTable">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <div
+                                                    class="form-check form-check-inline checkbox checkbox-dark mb-0 me-0">
+                                                    <input class="form-check-input" id="select_all_checkbox"
+                                                        name="selectrows" type="checkbox">
+                                                    <label class="form-check-label" for="select_all_checkbox"></label>
+                                                </div>
+                                            </th>
+                                            <th>Project / Village</th>
+                                            <th>Property Info</th>
+                                            <th>Unit</th>
+                                            <th>Price</th>
+                                            <th>Details</th>
+                                            <th>Remarks</th>
+                                            <th>Contacts</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-
             </div>
             <div class="modal fade" id="landpropertyModal" role="dialog" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">

@@ -21,17 +21,44 @@
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col-md-8">
-                                    <a class="btn btn-primary btn-air-primary" href="{{ route('admin.property.add') }}">Add
-                                        Property</a>
-                                    <button class="btn btn-primary btn-air-primary" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#filtermodal">Filter</button>
-                                    <button style="display:none" class="btn btn-primary btn-air-primary"
-                                        id="resetfilter">Clear
-                                        Filter</button>
-                                    <button class="btn btn-primary btn-air-primary" onclick="importProperties()"
-                                        type="button">Import</button>
-                                    <button class="btn btn-primary btn-air-primary delete_table_row" style="display: none"
-                                        onclick="deleteTableRow()" type="button">Delete</button>
+                                    <a
+                                        class="btn custom-icon-theme-button"
+                                        href="{{ route('admin.property.add') }}"
+                                        title="Add Property"
+                                    >
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+
+                                    <button
+                                        class="btn ms-3 custom-icon-theme-button"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#filtermodal"
+                                        title="Filter"
+                                    ><i class="fa fa-filter"></i></button>
+
+                                    <button
+                                        class="btn ms-3 custom-icon-theme-button"
+                                        type="button"
+                                        title="Clear Filter"
+                                        id="resetfilter"
+                                        style="display: none;"
+                                    ><i class="fa fa-refresh"></i></button>
+
+                                    <button
+                                        class="btn ms-3 custom-icon-theme-button"
+                                        onclick="importProperties()"
+                                        type="button"
+                                        title="Import"
+                                    ><i class="fa fa-upload"></i></button>
+
+                                    <button
+                                        class="btn text-white delete_table_row ms-3"
+                                        style="border-radius: 5px;display: none;background-color:red"
+                                        onclick="deleteTableRow()"
+                                        type="button"
+                                        title="Delete"
+                                    ><i class="fa fa-trash"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -65,8 +92,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
         <div class="modal fade" id="industrialpropertyModal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
