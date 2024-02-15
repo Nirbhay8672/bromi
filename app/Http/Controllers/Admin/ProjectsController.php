@@ -420,13 +420,16 @@ class ProjectsController extends Controller
 			$data = Properties::with('Projects')->whereHas('Projects')->when(!empty($request->project_id), function ($query) use ($request) {
 				return $query->where('project_id', $request->project_id);
 			})->get();
-			$dataa = [];
+			$totalRecords = $data->count();
+            $dataa = [];
 			foreach ($data as $key => $value2) {
+			 //   dd("value2",$value2);
 				//bhrt furnished
-				if (!empty($value2->unit_details) && isset(json_decode($value2->unit_details)[0])) {
+				if (!empty($value2->unit_details)) {
 					$arr = json_decode($value2->unit_details);
+				// 	dd("777",$arr);
 					foreach ($arr as $key => $value) {
-						if (!empty($value[0]) && !empty($value[1]) && isset($value[2])) {
+						if (!empty($value[0]) || !empty($value[1]) && isset($value[2])) {
 							$arrr['id'] = $value2->id;
 							$arrr['wing'] = $value[0];
 							$arrr['project'] = $value2->projects->project_name;
@@ -460,6 +463,8 @@ class ProjectsController extends Controller
 									$price = 'R : ' . $value[4] . ' / ' . 'S : ' . $value[7];
 								} elseif (!empty($value[3]) && !empty($value[4])) {
 									$price = 'R : ' . $value[4] . ' / ' . 'S : ' . $value[3];
+								}else{
+								    $price = "-";
 								}
 							} else {
 								if (!empty($value[7])) {
@@ -468,17 +473,23 @@ class ProjectsController extends Controller
 									$price = $value[4];
 								} elseif (!empty($value[3])) {
 									$price = $value[3];
+								}else{
+								    $price = "-";
 								}
 							}
 							$arrr['price'] = $price;
 
 							array_push($dataa, $arrr);
+				// 			dd("price Arr",$price,$arrr);
+						}else{
+						    dd("no");
 						}
 					}
 				}
 			}
 			return DataTables::of($dataa)
 				->editColumn('project', function ($row) {
+				    // dd("rowww",$row);
 					if (isset($row['project'])) {
 						return '<a href="' . route('admin.project.view', encrypt($row['id'])) . ' ">' . $row['project'] . '</a>';
 					} else {
