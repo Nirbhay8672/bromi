@@ -116,8 +116,9 @@ class PropertyController extends Controller
                         $query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
                     });
                 })
-                ->when($request->filter_property_type && empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {;
-                    return $query->where('properties.property_type', $request->filter_property_type);
+                ->when($request->filter_property_type && empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
+                    $filterPropertyType = intval($request->filter_property_type); // Convert to integer
+                    return $query->where('properties.property_type', $filterPropertyType);
                 })
                 ->when($request->filter_specific_type && empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {;
                     return $query->where('properties.property_category', $request->filter_specific_type);

@@ -423,11 +423,9 @@ class ProjectsController extends Controller
 			$totalRecords = $data->count();
             $dataa = [];
 			foreach ($data as $key => $value2) {
-			 //   dd("value2",$value2);
 				//bhrt furnished
 				if (!empty($value2->unit_details)) {
 					$arr = json_decode($value2->unit_details);
-				// 	dd("777",$arr);
 					foreach ($arr as $key => $value) {
 						if (!empty($value[0]) || !empty($value[1]) && isset($value[2])) {
 							$arrr['id'] = $value2->id;
@@ -480,7 +478,6 @@ class ProjectsController extends Controller
 							$arrr['price'] = $price;
 
 							array_push($dataa, $arrr);
-				// 			dd("price Arr",$price,$arrr);
 						}else{
 						    dd("no");
 						}

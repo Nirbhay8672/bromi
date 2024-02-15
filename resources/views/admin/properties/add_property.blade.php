@@ -3059,7 +3059,7 @@
                 $('.div_borewell').show()
                 if (theFor == 'commercial') {
                     $('.div_borewell').hide()
-                    $('.div_extra_land_details').hide()
+                    $('.div_extra_land_details').show()
                     $(".cl-locality").show();
                 } else if (theFor == 'agriculture') {
                     $('.div_construction_allowed_for').hide()
@@ -3294,10 +3294,9 @@
                 var theFor = $('input[name=property_for]:checked').val();
                 if (theFor == 'Sell' && parent_val == '87') {
                     $('.property-type-element[data-property-id="256"]').show();
-                }else if(theFor == 'Rent' && parent_val == '85') {
+                } else if (theFor == 'Rent' && parent_val == '85') {
                     $('.property-type-element[data-property-id="262"]').hide();
-                }
-                else {
+                } else {
                     $('.property-type-element[data-property-id="262"]').show();
                     $('.property-type-element[data-property-id="256"]').hide();
                 }
@@ -3667,6 +3666,8 @@
                         });
                         // edit property selected valdata.width_of_plot, 1
                         data = JSON.parse(data);
+                        const ceilingHeight = data.ceiling_height; 
+                        let parts = ceilingHeight.split('_-||-_'); 
                         $('#this_data_id').val(data.id);
                         $('input[name=property_for][value=' + data.property_for + ']').prop('checked', true)
                         $('input[name=property_type][value=' + data.property_type + ']').prop('checked', true)
@@ -3727,8 +3728,9 @@
                         $('#width_of_plot_measurement').val(setSplitedValue(data.constructed_carpet_area, 2));
                         $('#entrance_width').val(setSplitedValue(data.entrance_width, 1));
                         $('#entrance_width_measurement').val(setSplitedValue(data.constructed_carpet_area, 2));
-                        $('#ceiling_height').val(setSplitedValue(data.ceiling_height, 1));
-                        $('#ceiling_height_measurement').val(setSplitedValue(data.constructed_carpet_area, 2));
+                        $('#ceiling_height').val(parseFloat(parts[0]));
+                        // $('#ceiling_height').val(setSplitedValue(data.ceiling_height, 1));
+                        $('#ceiling_height_measurement').val(parts[1]);
                         $('#builtup_area').val(setSplitedValue(data.builtup_area, 1));
                         $('#builtup_area_measurement').val(setSplitedValue(data.constructed_carpet_area, 2));
                         $('#plot_area').val(setSplitedValue(data.plot_area, 1));
@@ -4108,7 +4110,7 @@
                     $('.increment').append('<input type="file" name="const_documents[]" class="form-control">');
                 });
 
-               
+
                 // save property
                 $.ajax({
                     type: "POST",
@@ -4127,7 +4129,8 @@
                         district_id: $('#district_id').val(),
                         taluka_id: $('#taluka_id').val(),
                         village_id: $('#village_id').val(),
-                        res_more: $('#txt5moreFlate').val() !== "" ? $('#txt5moreFlate').val() : $('#txt5moreVilla').val(),
+                        res_more: $('#txt5moreFlate').val() !== "" ? $('#txt5moreFlate').val() : $(
+                            '#txt5moreVilla').val(),
                         zone_id: $('#zone').val(),
                         constructed_carpet_area: $('#constructed_carpet_area').val() + '_-||-_' + $(
                             '#constructed_carpet_area_measurement').val(),
