@@ -38,11 +38,11 @@
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
-                                    <span
+                                    <!-- <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_priority_type"
                                         class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
+                                    ><i class="fa fa-plus"></i></span> -->
 
                                     <h6>Priority Type</h6>
                                     <div class="row details mt-5">
@@ -517,12 +517,16 @@ function generateListHtml(params) {
     var myvar = '<div class="col-lg-6 col-md-6 sm-12 d-inline-block">' + '<div class="row">' +
         ' <div class="col-lg-7 col-md-7 col-sm-12 mb-2">' + params['name'] + '</div>' +
         ' <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right">';
-    if (params['editable'] != 1) {
-        myvar += ' <i data-name="' + params['name'] + '" data-parent_id="' + params['parent_id'] +
-            '" data-dropdown_for="' + params['dropdown_for'] + '"' + '     data-id="' + params['id'] +
-            '"  role="button" class="openEditFieldMOdal pointer  fa-pencil fa"></i>' + '<i data-id="' + params['id'] +
-            '"  role="button" class="deleteField fa pointer m-l-5  fa-trash"></i>';
+
+    if(params.dropdown_for != 'property_priority_type') {
+        if (params['editable'] != 1) {
+            myvar += ' <i data-name="' + params['name'] + '" data-parent_id="' + params['parent_id'] +
+                '" data-dropdown_for="' + params['dropdown_for'] + '"' + '     data-id="' + params['id'] +
+                '"  role="button" class="openEditFieldMOdal pointer  fa-pencil fa"></i>' + '<i data-id="' + params['id'] +
+                '"  role="button" class="deleteField fa pointer m-l-5  fa-trash"></i>';
+        }
     }
+
     myvar += '</div>' +
         '' +
         '     </div>' +
