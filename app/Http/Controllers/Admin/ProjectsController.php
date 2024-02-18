@@ -329,31 +329,31 @@ class ProjectsController extends Controller
 
 				$array = '[';
 				foreach(json_decode($decode_obj->if_office_tower_details) as $tower) {
-					if($tower->tower_name != '') {
-						$array .= '[';
-						$array .= $tower->tower_name;
-						$array .= ','.$tower->total_floor;
-						$array .= ','.$tower->total_unit;
-						$array .= ','.$tower->carpet;
-						$array .= ','.$tower->saleable;
-						$array .= '],';
-					}
+					// if($tower->tower_name != '') {
+					// 	$array .= '[';
+					// 	$array .= $tower->tower_name;
+					// 	$array .= ','.$tower->total_floor;
+					// 	$array .= ','.$tower->total_unit;
+					// 	$array .= ','.$tower->carpet;
+					// 	$array .= ','.$tower->saleable;
+					// 	$array .= '],';
+					// }
 				}
 				$array .= ']';
 
 				if($array == "[]") {
 					$array = '['; 
-					foreach(json_decode($decode_obj->if_retail_tower_details) as $tower) {
-						if($tower->tower_name != '') {
-							$array .= '[';
-							$array .= $tower->tower_name;
-							$array .= ','.$tower->size_from;
-							$array .= ','.$tower->size_to;
-							$array .= ','.$tower->front_opening;
-							$array .= ','.$tower->number_of_each_floor;
-							$array .= '],';
-						}
-					}
+					// foreach(json_decode($decode_obj->if_retail_tower_details) as $tower) {
+					// 	if($tower->tower_name != '') {
+					// 		$array .= '[';
+					// 		$array .= $tower->tower_name;
+					// 		$array .= ','.$tower->size_from;
+					// 		$array .= ','.$tower->size_to;
+					// 		$array .= ','.$tower->front_opening;
+					// 		$array .= ','.$tower->number_of_each_floor;
+					// 		$array .= '],';
+					// 	}
+					// }
 					$array .= ']';
 				}
 
@@ -617,7 +617,9 @@ class ProjectsController extends Controller
 		$first_state = State::where('user_id',Auth::user()->id)->first();
 		$first_city = City::where('user_id',Auth::user()->id)->first();
 
-		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city'), $data);
+		$land_units = DB::table('land_units')->get();
+
+		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city','land_units'), $data);
 	}
 
 
@@ -642,7 +644,9 @@ class ProjectsController extends Controller
 		$first_state = State::where('user_id',Auth::user()->id)->first();
 		$first_city = City::where('user_id',Auth::user()->id)->first();
 
-		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings', 'id','first_state','first_city'), $data);
+		$land_units = DB::table('land_units')->get();
+
+		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings', 'id','first_state','first_city','land_units'), $data);
 	}
 
 
