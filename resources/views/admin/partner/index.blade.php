@@ -61,12 +61,11 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="ParentModel" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+         <div class="modal fade" id="ParentModel" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-l" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add Partner</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close" id="btnClose">
                         <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close" id="btnClose">
                         </button>
                     </div>
@@ -74,22 +73,16 @@
                         <form class="form-bookmark needs-validation modal_form" route="" id="findRecordForm"
                             novalidate="">
                             <input type="hidden" name="schedule_visit_id" id="schedule_visit_id">
-                            <div class="row mt-2">
-                                <div class="form-group col-md-6 m-b-4 mb-3">
-                                    <div class="fname">
-                                        <label class="select2_label" for="Property list">Email</label>
-                                        <input class="form-control" name="partner_email" value="" id="partner_email"
+                            <div class="row">
+                                <div class="form-group col-md-12 m-b-4 mb-3">
+                                    <label class="mb-0">&nbsp;</label>
+                                    <label class="select2_label" for="Property list">Email</label>
+                                    <input class="form-control" name="partner_email" value="" id="partner_email"
                                         type="email" autocomplete="off">
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mt-2 mb-2 text-center">
-                                <div class="col-md-6">
-                                    <span class="text-center">OR</span>
-                                </div>
-                            </div>
-                            <div class="row mt-4">
-                                <div class="form-group col-md-6 m-b-4 mb-3">
+                                <center><label for="" class="text-cnter">OR</label></center>
+                                <div class="form-group col-md-612m-b-4 mb-3">
+                                    <label class="mb-0">&nbsp;</label>
                                     <label class="select2_label" for="Property list">Number</label>
                                     <input class="form-control" name="partner_number" value="" id="partner_number"
                                         type="text" autocomplete="off">
@@ -100,16 +93,18 @@
                                 </div>
                             </div>
                         </form>
-                        <table class="table custom-table-design mt-2" style="border: 1px solid black;">
+                        <table class="table custom-table-design mt-2">
                             <thead>
                                 <tr>
                                     <th scope="col">Name</th>
                                     <th scope="col">Company</th>
                                     <th scope="col">Email</th>
+                                    {{-- <th scope="col">Number By</th> --}}
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="tBody">
+
                             </tbody>
                         </table>
                     </div>
