@@ -97,29 +97,16 @@ class PropertyController extends Controller
                         return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'));
                     }
                 })
-                // ->when(!empty(Auth::user()->property_for_id), function ($query) use ($request) {
-                //     // dd("testtt",(Auth::user()->property_type_id));
-                //     return $query->where(function ($query) use ($request) {
-                //         $query->where('properties.property_for', Auth::user()->property_for_id)->orWhere('properties.property_for', 'Both');
-                //     });
-                // })
-                // ->when(!empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
-                //     // dd("345",(Auth::user()->property_type_id));
-                //     return $query->whereIn('properties.property_type', json_decode(Auth::user()->property_type_id));
-                // })
-                // ->when(!empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {
-                //     // dd("123",(Auth::user()->property_type_id));
-                //     return $query->whereIn('properties.property_category', json_decode(Auth::user()->specific_properties));
-                // })
-                ->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
+                ->when($request->filter_property_for || empty(Auth::user()->property_for_id), function ($query) use ($request) {
                     return $query->where(function ($query) use ($request) {
                         $query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
                     });
                 })
-                ->when($request->filter_property_type && empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {;
-                    return $query->where('properties.property_type', $request->filter_property_type);
+                ->when($request->filter_property_type || empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
+                    $filterPropertyType = intval($request->filter_property_type); // Convert to integer
+                    return $query->where('properties.property_type', $filterPropertyType);
                 })
-                ->when($request->filter_specific_type && empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {;
+                ->when($request->filter_specific_type || empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {;
                     return $query->where('properties.property_category', $request->filter_specific_type);
                 })
                 ->when($request->filter_configuration, function ($query) use ($request) {

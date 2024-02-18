@@ -28,9 +28,10 @@
                                                     <label class="form-check-label" for="select_all_checkbox"></label>
                                                 </div>
                                             </th>
-                                            <th class="text-center">Project Name</th>
+                                            {{-- <th class="text-center">Project Name</th> --}}
                                             <th class="text-center">Name</th>
                                             <th class="text-center">Company Name</th>
+                                            <th class="text-center">Mobile No</th>
                                             <th class="text-center">Email</th>
                                             <th class="text-center">Status</th>
                                             {{-- <th>Actions</th> --}}
@@ -67,15 +68,14 @@
                         name: 'id'
                     },
                     {
-                        data: 'project_name',
-                        name: 'project_name'
-                    },
-                    {
                         data: 'partner_name',
                         name: 'partner_id'
                     }, {
                         data: 'company_name',
                         name: 'company_name'
+                    }, {
+                        data: 'partner_number',
+                        name: 'partner_number'
                     }, {
                         data: 'partner_email',
                         name: 'email'

@@ -1287,7 +1287,7 @@
                                                         </div>
                                                     @endif
                                                     <!-- Second Image Section -->
-                                                    @if ($type === 'Land' && count($construction_docs_list > 0))  
+                                                    @if ($type === 'Land' && count($construction_docs_list) > 0)  
                                                     <div class="flex-fill text-center" style="margin-left: 20px;">
                                                         <h5 class="border-style">Constrution Image</h5>
                                                         <img src="{{ asset('imgIcon.png') }}" alt="" onclick="image1()" style="height: 90px;">
@@ -2638,7 +2638,7 @@
                                                 </div>
                                             </div>
                                         </div> --}}
-                                        @if ($type === 'Land' && count($construction_docs_list > 0))  
+                                        @if ($type === 'Land' && count($construction_docs_list) > 0)  
                                         <div class="modal fade" id="imageModel2" role="dialog" aria-labelledby="imageLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <!-- Construction Docs Section -->

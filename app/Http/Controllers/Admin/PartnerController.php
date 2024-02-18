@@ -147,20 +147,20 @@ class PartnerController extends Controller
 			// $mergedData = $sharedproperty->concat($sharedproperty2);
 			// dd(Auth::user()->id,"shared",$mergedData);
 			return DataTables::of($sharedproperty)
-				->editColumn('project_name', function ($sharedproperty) use ($request) {
-					// dd($row->Property_details,"prj");
-					$first =  '<td style="vertical-align:top">
-					<font size="3"><a href="#" style="font-weight: bold;">' . ((isset($sharedproperty->Property_details->Projects->project_name)) ? $sharedproperty->Property_details->Projects->project_name : '') . '</a>';
-					$first_middle = '';
+				// ->editColumn('project_name', function ($sharedproperty) use ($request) {
+				// 	// dd($row->Property_details,"prj");
+				// 	$first =  '<td style="vertical-align:top">
+				// 	<font size="3"><a href="#" style="font-weight: bold;">' . ((isset($sharedproperty->Property_details->Projects->project_name)) ? $sharedproperty->Property_details->Projects->project_name : '') . '</a>';
+				// 	$first_middle = '';
 					
-					$first_end = '</font>';
-					$last =     '</td>';
+				// 	$first_end = '</font>';
+				// 	$last =     '</td>';
 
-					'</td>';
-					return $first . $first_middle . $first_end . $last;
+				// 	'</td>';
+				// 	return $first . $first_middle . $first_end . $last;
 
-					return '';
-				})
+				// 	return '';
+				// })
 				->addColumn('partner_name', function ($SharedProperty) {
 					if (!empty($SharedProperty->User->first_name)) {
 						return $SharedProperty->User->first_name;
@@ -182,13 +182,13 @@ class PartnerController extends Controller
 						return 'N/A';
 					}
 				})
-				// ->addColumn('partner_number', function ($SharedProperty) {
-				// 	if (!empty($SharedProperty->User->mobile_number)) {
-				// 		return $SharedProperty->User->mobile_number;
-				// 	} else {
-				// 		return 'N/A';
-				// 	}
-				// })
+				->addColumn('partner_number', function ($SharedProperty) {
+					if (!empty($SharedProperty->User->mobile_number)) {
+						return $SharedProperty->User->mobile_number;
+					} else {
+						return 'N/A';
+					}
+				})
 				// ->addColumn('user_number', function ($SharedProperty) {
 				// 	if (!empty(Auth::user()->mobile_number)) {
 				// 		return Auth::user()->mobile_number;
@@ -210,7 +210,7 @@ class PartnerController extends Controller
 				// 	$action .= '<i role="button" title="Delete" data-id=' . $SharedProperty->id . ' onclick="deletePartner(this)" class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
 				// 	return $action;
 				// })
-				->rawColumns(['partner_name','project_name', 'company_name', 'partner_email',   'status'])
+				->rawColumns(['partner_name', 'partner_number','company_name', 'partner_email',   'status'])
 				->make(true);
 		}
 		return view('admin.partner.partner_req');
