@@ -1766,7 +1766,7 @@
         }
 
         $(document).on('click', '#saveProgress', function(e) {
-            // console.log("edit modal data ==");
+            console.log("saved progress 2 ==");
             e.preventDefault();
             $(this).prop('disabled', true);
             var id = $('#progress_enquiry_id').val()

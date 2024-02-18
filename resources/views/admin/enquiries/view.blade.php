@@ -1587,6 +1587,7 @@
 
             // save progress
             $(document).on('click', '#saveProgress', function(e) {
+                console.log("saved progress 4 ==");
                 var email_reminder = document.getElementById("email_reminder_progress");
                 var sms_reminder = document.getElementById("sms_reminder_progress");
 
@@ -1618,6 +1619,8 @@
 
             // bharat filter
             $(document).on('click', '#save_enquiry_progress_status', function(e) {
+                console.log("saved progress 5 ==");
+
                 if ($('#enquiry_progress_status').val() == "") {
                     alert('Please select the status.');
                     return;
