@@ -437,21 +437,25 @@ class HomeController extends Controller
 
 				$total_prop_for_sell = ApiProperties::where('property_for','Sell')
 					->where('user_id',Auth::user()->id)
+					->whereNull('deleted_at')
 					->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 					->count();
 				
 				$total_prop_for_rent = ApiProperties::where('property_for','Rent')
 					->where('user_id',Auth::user()->id)
+					->whereNull('deleted_at')
 					->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 					->count();
 
 				$total_prop_for_comm = ApiProperties::where('property_type',85)
 					->where('user_id',Auth::user()->id)
+					->whereNull('deleted_at')
 					->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 					->count();
 				
 				$total_prop_for_rec = ApiProperties::where('property_type',87)
 					->where('user_id',Auth::user()->id)
+					->whereNull('deleted_at')
 					->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 					->count();
 				

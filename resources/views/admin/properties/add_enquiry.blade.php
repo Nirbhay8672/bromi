@@ -1610,6 +1610,7 @@
             }
 
             $(document).on('click', '#saveProgress', function(e) {
+                console.log("saved prog 1 ==");
                 e.preventDefault();
                 $(this).prop('disabled', true);
                 var id = $('#progress_enquiry_id').val()
