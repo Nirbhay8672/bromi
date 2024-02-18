@@ -28,7 +28,6 @@
                                                     <label class="form-check-label" for="select_all_checkbox"></label>
                                                 </div>
                                             </th>
-                                            {{-- <th class="text-center">Project Name</th> --}}
                                             <th class="text-center">Name</th>
                                             <th class="text-center">Company Name</th>
                                             <th class="text-center">Mobile No</th>
