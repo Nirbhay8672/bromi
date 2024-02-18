@@ -799,40 +799,46 @@ class EnquiriesController extends Controller
         $enq = Enquiries::find($request->enquiry_id);
         $notif = UserNotifications::where(['notification_type' => Constants::ENQUIRY_ASSIGNED, 'enquiry_id' => $request->enquiry_id])
                 ->orderBy('id', 'desc')->first();
+        if (empty($notif)) {
+            $notif = UserNotifications::where(['notification_type' => Constants::ENQUIRY_FOLLOWUP, 'enquiry_id' => $request->enquiry_id])
+                ->orderBy('id', 'desc')->first();
+        }
         $user = Auth::user();
         $nfDate = Carbon::parse($request->nfd)->format('Y-m-d H:i:s');
         $message = "There an update on enquiry for the client `$enq->client_name`: The next follow up date is " . $nfDate;
 
-        // notify user for next follow up date
-        $userNotification = UserNotifications::create([
-            "user_id" => @$notif->by_user,
-            "notification" => $message,
-            "notification_type" => Constants::ENQUIRY_ASSIGNED,
-            'enquiry_id' => $request->enquiry_id,
-            'schedule_date' => $nfDate,
-            'by_user' => (int) $user->id
-        ]);
-        // if notificaton creation failed.
-        if (!$userNotification) {
-            Log::error('Unable to create user notification');
-        }
-        // send if user has onesignal id
-        if (!empty($user->onesignal_token)) {
-            HelperFn::sendPushNotification($user->onesignal_token, $message);
-        }
-
-        // notify logged in user for next follow up date
-        UserNotifications::create([
-            "user_id" => (int) $user->id,
-            "notification" => $message,
-            "notification_type" => "enquiry",
-            'enquiry_id' => $request->enquiry_id,
-            'by_user' => @$notif->by_user
-        ]);
-        $otherUser = User::where('id', $notif->by_user)->first();
-        // send if user has onesignal id
-        if (!empty($otherUser->onesignal_token)) {
-            HelperFn::sendPushNotification($otherUser->onesignal_token, $message);
+        if(!empty($notif)) {
+            // notify user for next follow up date
+            $userNotification = UserNotifications::create([
+                "user_id" => @$notif->by_user,
+                "notification" => $message,
+                "notification_type" => Constants::ENQUIRY_FOLLOWUP,
+                'enquiry_id' => $request->enquiry_id,
+                'schedule_date' => $nfDate,
+                'by_user' => (int) $user->id
+            ]);
+            // if notificaton creation failed.
+            if (!$userNotification) {
+                Log::error('Unable to create user notification');
+            }
+            // send if user has onesignal id
+            if (!empty($user->onesignal_token)) {
+                HelperFn::sendPushNotification($user->onesignal_token, $message);
+            }
+    
+            // notify logged in user for next follow up date
+            UserNotifications::create([
+                "user_id" => (int) $user->id,
+                "notification" => $message,
+                "notification_type" => Constants::ENQUIRY_FOLLOWUP,
+                'enquiry_id' => $request->enquiry_id,
+                'by_user' => @$notif->by_user
+            ]);
+            $otherUser = User::where('id', $notif->by_user)->first();
+            // send if user has onesignal id
+            if (!empty($otherUser->onesignal_token)) {
+                HelperFn::sendPushNotification($otherUser->onesignal_token, $message);
+            }
         }
 	}
 
@@ -874,8 +880,7 @@ class EnquiriesController extends Controller
 			$data->progress = $the_progress;
 			// $data->lead_type = $previous->lead_type;
 			$data->nfd = $request->visit_date;
-			$data->remarks = $request->description;
-
+            $data->remarks = $request->description;
 			$data->save();
 			
 			// if same notification already exist for the same user...then delete it.
@@ -1248,6 +1253,8 @@ class EnquiriesController extends Controller
 			AssignHistory::create(['enquiry_id' => $request->enquiry_id, 'user_id' => Auth::user()->id, 'assign_id' => $request->employee]);
 
             // create notification for new user
+            UserNotifications::where(['user_id' => $request->employee, 'notification_type' => Constants::ENQUIRY_ASSIGNED, 'enquiry_id' => $request->enquiry_id])
+                ->delete();
             $enq = Enquiries::find($request->enquiry_id);
             $msg = Auth::user()->first_name . " has assigned you enquiry. The client Name is: $enq->client_name";
             $userNotification = UserNotifications::create([
