@@ -952,23 +952,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                {{-- <div class="form-group col-md-3 m-b-20">
-                                    <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
-                                    <input class="form-control " id="site_visit_time" max='31-10-2050'
-                                        name="site_visit_time" type="datetime-local" oninput="limitYearTo4Digits()">
-                                </div> --}}
-                                {{-- bharat date --}}
-                                <div class="form-group col-md-3 m-b-20">
-                                    <label for="site_visit_date" class="mb-0">Site Visit Date:</label>
-                                    <input class="form-control limitYear4digits" id="site_visit_date"
-                                        name="site_visit_date" type="date" oninput="limitYearTo4Digits()">
-                                </div>
-                                <div class="form-group col-md-3 m-b-20">
-                                    <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
-                                    <input class="form-control" id="site_visit_time" name="site_visit_time"
-                                        type="time">
-                                </div>
-
                                 <div class="form-group col-md-4 m-b-20">
                                     <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
                                     <div class="form-group">
@@ -986,7 +969,23 @@
                                     <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
                                         type="remarks" autocomplete="off">
                                 </div>
-                                <div class="form-group col-md-8 m-b-20">
+                                {{-- <div class="form-group col-md-3 m-b-20">
+                                    <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
+                                    <input class="form-control " id="site_visit_time" max='31-10-2050'
+                                        name="site_visit_time" type="datetime-local" oninput="limitYearTo4Digits()">
+                                </div> --}}
+                                {{-- bharat date --}}
+                                <div class="form-group col-md-3 m-b-20">
+                                    <label for="site_visit_date" class="mb-0">Site Visit Date:</label>
+                                    <input class="form-control limitYear4digits" id="site_visit_date"
+                                        name="site_visit_date" type="date" oninput="limitYearTo4Digits()">
+                                </div>
+                                <div class="form-group col-md-3 m-b-20">
+                                    <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
+                                    <input class="form-control" id="site_visit_time" name="site_visit_time"
+                                        type="time">
+                                </div>
+                                <div class="form-group col-md-6 m-b-20">
                                     <label for="Site Visit Time" class="mb-0">Description:</label>
                                     <input class="form-control" name="schedule_description" id="schedule_description"
                                         type="remarks" autocomplete="off">

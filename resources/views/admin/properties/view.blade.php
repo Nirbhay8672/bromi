@@ -1283,7 +1283,7 @@
                                                     @if(count($multiple_image) > 0)
                                                         <div class="flex-fill text-center">
                                                             <h5 class="border-style">Property Image</h5>
-                                                            <img src="{{ asset('gallary_image.jpeg') }}" alt="" onclick="image()" style="height: 90px;">
+                                                            <img src="{{ asset('assets/prop_images/property-image.png') }}" alt="" onclick="image()" style="height: 90px;">
                                                         </div>
                                                     @endif
                                                     <!-- Second Image Section -->
