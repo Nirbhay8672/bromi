@@ -21,74 +21,40 @@
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col">
-                                    <a  
-                                        class="btn custom-icon-theme-button"
-                                        href="{{ route('admin.property.add') }}"
-                                        title="Add Property"
-                                    >
+                                    <a class="btn custom-icon-theme-button" href="{{ route('admin.property.add') }}"
+                                        title="Add Property">
                                         <i class="fa fa-plus"></i>
                                     </a>
 
-                                    <button
-                                        class="btn ms-3 custom-icon-theme-button"
-                                        type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#filtermodal"
-                                        title="Filter"
-                                    ><i class="fa fa-filter"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#filtermodal" title="Filter"><i class="fa fa-filter"></i></button>
 
-                                    <button
-                                        class="btn ms-3 custom-icon-theme-button"
-                                        type="button"
-                                        title="Clear Filter"
-                                        id="resetfilter"
-                                        style="display: none;"
-                                    ><i class="fa fa-refresh"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button" type="button" title="Clear Filter"
+                                        id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
 
-                                    <button 
-                                        class="btn matchbutton ms-3 custom-icon-theme-button"
-                                        type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#matchModal"
-                                        title="Matching"
-                                    ><i class="fa fa-random"></i></button>
+                                    <button class="btn matchbutton ms-3 custom-icon-theme-button" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#matchModal" title="Matching"><i
+                                            class="fa fa-random"></i></button>
 
-                                    <button
-                                        class="btn ms-3 custom-icon-theme-button"
-                                        onclick="exportProperties()"
-                                        type="button"
-                                        title="Export"
-                                    ><i class="fa fa-download"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button" onclick="exportProperties()"
+                                        type="button" title="Export"><i class="fa fa-download"></i></button>
 
-                                    <button
-                                        class="btn ms-3 custom-icon-theme-button"
-                                        onclick="importProperties()"
-                                        type="button"
-                                        title="Import"
-                                    ><i class="fa fa-upload"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button" onclick="importProperties()"
+                                        type="button" title="Import"><i class="fa fa-upload"></i></button>
 
-                                    <button
-                                        class="btn text-white delete_table_row ms-3"
+                                    <button class="btn text-white delete_table_row ms-3"
                                         style="border-radius: 5px;display: none;background-color:red"
-                                        onclick="deleteTableRow()"
-                                        type="button"
-                                        title="Delete"
-                                    ><i class="fa fa-trash"></i></button>
+                                        onclick="deleteTableRow()" type="button" title="Delete"><i
+                                            class="fa fa-trash"></i></button>
 
-                                    <button
-                                        class="btn share_table_row ms-3"
+                                    <button class="btn share_table_row ms-3"
                                         style="border-radius: 5px;display: none;background-color:#25d366;color:white;"
-                                        onclick="shareTableRow()"
-                                        type="button"
-                                        title="Share"
-                                    ><i class="fa fa-whatsapp"></i></button>
+                                        onclick="shareTableRow()" type="button" title="Share"><i
+                                            class="fa fa-whatsapp"></i></button>
 
-                                    <a
-                                        class="btn float-end custom-icon-theme-button"
-                                        title="Project Vise Unit"
-                                        href="{{ route('admin.project.byunit') }}"
-                                    ><i class="fa fa-list"></i></a>
-                                    
+                                    <a class="btn float-end custom-icon-theme-button" title="Project Vise Unit"
+                                        href="{{ route('admin.project.byunit') }}"><i class="fa fa-list"></i></a>
+
                                 </div>
                             </div>
                         </div>
@@ -132,13 +98,15 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Share On whatsapp</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-5 m-b-4 mb-3">
-                                <select class="form-select mt-1" id="conatct_id" style="border: 1px solid black;border-radius:5px;">
+                                <select class="form-select mt-1" id="conatct_id"
+                                    style="border: 1px solid black;border-radius:5px;">
                                     <option value=""> Contact</option>
                                     @forelse ($conatcts_numbers as $number)
                                         <option value="{{ $number['number'] }}">{{ $number['name'] }}
@@ -149,12 +117,8 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-3 m-b-4 mb-3">
-                                <select
-                                    class="form-control"
-                                    id="CountryCode" 
-                                    name="CountryCode"
-                                    style="border: 1px solid black;border-radius:5px;"
-                                >
+                                <select class="form-control" id="CountryCode" name="CountryCode"
+                                    style="border: 1px solid black;border-radius:5px;">
                                     <option value=""></option>
                                     <option value="93">93</option>
                                     <option value="355">355</option>
@@ -398,15 +362,16 @@
                             </div>
                             <div class="form-group col-md-4 m-b-4 mb-3">
                                 <div class="fname">
-                                <input type="text" placeholder="Number" name="whatsapp_number" class="form-control"
-                                    pattern="[1-9]{1}[0-9]{9}" id="whatsapp_number">
+                                    <input type="text" placeholder="Number" name="whatsapp_number"
+                                        class="form-control" pattern="[1-9]{1}[0-9]{9}" id="whatsapp_number">
                                 </div>
                             </div>
                             <input type="hidden" name="shar_string" id="shar_string">
                         </div>
                         <div class="text-center mt-3">
                             <button class="btn custom-theme-button" type="button" id="shareonwhatsapp">Share</button>
-                            <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
+                                data-bs-dismiss="modal">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -440,7 +405,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Import Property</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
@@ -473,7 +439,8 @@
                             </div>
                             <div class="text-center">
                                 <button class="btn custom-theme-button" id="importFile">Save</button>
-                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
+                                    data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </form>
                     </div>
@@ -485,7 +452,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Filter</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="filter_form" novalidate="">
@@ -534,8 +502,8 @@
                                         </select>
                                     </div>
 
-									<div class="form-group col-md-2 m-b-4 mb-3">
-										<label class="select2_label" for="Select Project"> Project</label>
+                                    <div class="form-group col-md-2 m-b-4 mb-3">
+                                        <label class="select2_label" for="Select Project"> Project</label>
                                         <select class="form-select" id="filter_building_id" multiple>
                                             @foreach ($projects as $building)
                                                 <option value="{{ $building->id }}">{{ $building->project_name }}
@@ -544,7 +512,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2 m-b-4 mb-3">
-										<label class="select2_label" for="Select Area"> Locality</label>
+                                        <label class="select2_label" for="Select Area"> Locality</label>
                                         <select class="form-select" id="filter_area_id" multiple>
                                             @foreach ($areas as $area)
                                                 <option value="{{ $area->id }}">{{ $area->name }}</option>
@@ -664,7 +632,8 @@
                             </div>
                             <div class="text-center">
                                 <button class="btn custom-theme-button" id="filtersearch">Filter</button>
-                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
+                                    data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </form>
                     </div>
@@ -719,63 +688,76 @@
         </div> --}}
 
         <div class="modal fade" id="matchModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Match By</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-bookmark needs-validation " method="post" id="match_modal" novalidate="">
-                            @csrf
-                            <div>
-                                <div class="row" id="matchbyfield">
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
-                                        <input class="form-check-input" checked id="match_enquiry_for" type="checkbox">
-                                        <label class="form-check-label" for="match_enquiry_for">Property For</label>
-                                    </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
-                                        <input class="form-check-input" checked id="match_property_type" type="checkbox">
-                                        <label class="form-check-label" for="match_property_type">Property
-                                            Requirement</label>
-                                    </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
-                                        <input class="form-check-input" checked id="match_specific_type" type="checkbox">
-                                        <label class="form-check-label" for="match_specific_type">Property
-                                            Category</label>
-                                    </div>
-									<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
-                                        <input class="form-check-input" checked id="match_specific_sub_type" type="checkbox">
-                                        <label class="form-check-label" for="match_specific_sub_type">Property
-                                          Sub Category</label>
-                                    </div>
-                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
-                                        <input class="form-check-input" id="match_building" type="checkbox">
-                                        <label class="form-check-label" for="match_building">Project</label>
-                                    </div> --}}
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
-                                        <input class="form-check-input" checked id="match_budget_from_type"
-                                            type="checkbox">
-                                        <label class="form-check-label" for="match_budget_from_type">Property
-                                            Budget</label>
-                                    </div>
-                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
-                                        <input class="form-check-input" checked id="match_budget_to_type"
-                                            type="checkbox">
-                                        <label class="form-check-label" for="match_budget_to_type">Budget to</label>
-                                    </div> --}}
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-10">
-                                        <input class="form-check-input" checked id="match_enquiry_size" type="checkbox">
-                                        <label class="form-check-label" for="match_enquiry_size">Property Size</label>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Match By</h5>
+                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal"
+                                aria-label="Close"> </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-bookmark needs-validation " method="post" id="match_modal"
+                                novalidate="">
+                                @csrf
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" id="match_enquiry_all"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_enquiry_all">Select All</label>
+                                            </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_enquiry_for"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_enquiry_for">Property
+                                                    For</label>
+                                            </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_property_type"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_property_type">Property
+                                                    Requirement</label>
+                                            </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_specific_type"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_specific_type">Property
+                                                    Category</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_specific_sub_type"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_specific_sub_type">Property Sub
+                                                    Category</label>
+                                            </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_budget_from_type"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_budget_from_type">Property
+                                                    Budget</label>
+                                            </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_enquiry_size"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_enquiry_size">Property
+                                                    Size</label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="text-center mt-3">
-                                <button class="btn custom-theme-button" type="button" id="matchagain">Match</button>
-                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
-                            </div>
-                        </form>
+                                <div class="text-center mt-3">
+                                    <button class="btn custom-theme-button" type="button" id="matchagain">Match</button>
+                                    <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -815,7 +797,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Users</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" route="" id="userRecordForm"
@@ -857,7 +840,7 @@
                 $('#match_property_type').prop('checked', <?= $matchPropertyType === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_type').prop('checked', <?= $matchSpecificType === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_sub_type').prop('checked', <?= $matchSpecificSubType === '1' ? 'true' : 'false' ?>);
-				$('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
+                $('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
                 $('#match_enquiry_size').prop('checked', <?= $matchEnqSize === '1' ? 'true' : 'false' ?>);
                 $('#match_inquiry_source').prop('checked', <?= $matchEnqSource === '1' ? 'true' : 'false' ?>);
 
@@ -1104,6 +1087,11 @@
                 //     $('#matchModal').modal('hide');
                 // });
 
+                $('#match_enquiry_all').on('change', function() {
+                    let isChecked = $(this).prop('checked');
+                    $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                        .prop('checked', isChecked);
+                });
 
                 $(document).on('click', '#matchagain', function(e) {
                     e.preventDefault();
@@ -1166,8 +1154,9 @@
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
-                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop('checked'));
-							d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
+                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop(
+                                'checked'));
+                            d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
                             d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
                             d.match_enquiry_size = Number($('#match_enquiry_size').prop('checked'));
                             d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
