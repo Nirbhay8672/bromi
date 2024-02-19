@@ -862,14 +862,6 @@
             </div>
         </div>
 
-
-
-
-
-
-
-
-
         <div class="modal fade" id="showprogressmodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
