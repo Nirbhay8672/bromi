@@ -866,7 +866,7 @@
                 extra_category: '',
 
                 sub_categories : [],
-                sub_category_single : '1',
+                sub_category_single : '',
 
                 sub_category_array : [],
 
@@ -1969,13 +1969,16 @@
                         }
                     }
 
-                    let sub_category = [];
-                    sub_category = this.sub_categories;
-                    if(this.sub_category_single != '') {
-                        sub_category.push(this.sub_category_single);
+                    console.log(`before -${this.sub_categories}`);
+
+                    let new_category_array = [...this.sub_categories];
+                    let new_sub_category_single = this.sub_category_single;
+
+                    if(new_sub_category_single != '') {
+                        new_category_array.push(new_sub_category_single);
                     }
 
-                    if(sub_category.length == 0) {
+                    if(new_category_array.length == 0) {
                         let sub_category_error = document.getElementById('err_sub_category');
                         if(sub_category_error) {
                             sub_category_error.classList.remove('d-none');
