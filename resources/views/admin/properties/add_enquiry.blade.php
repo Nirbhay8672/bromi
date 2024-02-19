@@ -59,20 +59,29 @@
                                                             <label><b>Customer Information</b></label>
                                                         </div>
                                                         <div class="form-group col-md-3 m-b-20">
-                                                            <label for="Client Name">Client Name</label>
-                                                            <input class="form-control" name="client_name" id="client_name"
-                                                                type="text" autocomplete="off">
+                                                            <div class="fname">
+                                                                <label for="Client Name">Client Name</label>
+                                                                <input class="form-control" name="client_name" id="client_name"
+                                                                    type="text" autocomplete="off">
+                                                            </div>
+                                                            <span class="text-danger new_error d-none" id="err_client_name">Client name field is required.</span>
                                                         </div>
                                                         <div class="form-group col-md-3 m-b-20">
-                                                            <label for="Mobile">Mobile</label>
-                                                            <input class="form-control" name="client_mobile"
-                                                                id="client_mobile" type="text" autocomplete="off">
+                                                            <div class="fname">
+                                                                <label for="Mobile">Mobile</label>
+                                                                <input class="form-control" name="client_mobile"
+                                                                    id="client_mobile" type="text" autocomplete="off">
+                                                            </div>
+                                                            <span class="text-danger new_error d-none" id="err_client_mobile">Client mobile field is required.</span>
                                                         </div>
                                                         <div class="form-group col-md-4 m-b-20">
-                                                            <label for="Email">Email</label>
-                                                            <input class="form-control" name="client_email"
-                                                                id="client_email" type="email" autocomplete="off"
-                                                                required>
+                                                            <div class="fname">
+                                                                <label for="Email">Email</label>
+                                                                <input class="form-control" name="client_email"
+                                                                    id="client_email" type="email" autocomplete="off"
+                                                                    required>
+                                                            </div>
+                                                                <span class="text-danger new_error d-none" id="err_client_email">Client email field is required.</span>
                                                         </div>
                                                         <div class="col-md-1 m-b-20 ps-0">
                                                             <div class="form-check checkbox checkbox-solid-success mb-0">
@@ -91,7 +100,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary nextBtn" type="button">Next</button>
+                                                    <button class="btn btn-primary nextBtn" style="border-radius: 5px;" type="button">Next</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -130,7 +139,7 @@
                                                                     for="propertyfor3">Both</label>
                                                             </div>
                                                         </div>
-
+                                                        <span class="text-danger new_error d-none" id="err_enquiry_for">Customer Requirement is required.</span>
                                                     </div>
                                                     <div class="row">
                                                         <div class="form-group col-md-12 m-b-20">
@@ -164,23 +173,11 @@
                                                                         for="propertytype-87">Residential</label>
                                                                 </div>
                                                             </div>
-
+                                                            <span class="text-danger new_error d-none" id="err_property_type">Property type is required.</span>
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="form-group col-md-12 m-b-20">
-                                                            {{-- <label class="select2_label" for="Property Type">Property Type</label>
-															<select class="form-select" id="property_type" multiple>
-																@forelse ($configuration_settings as $props)
-																	@if ($props['dropdown_for'] == 'property_specific_type')
-																		<option data-parent_id="{{ $props['parent_id'] }}"
-																			value="{{ $props['id'] }}">{{ $props['name'] }}
-																		</option>
-																	@endif
-																@empty
-																@endforelse
-															</select> --}}
-
                                                             <div>
                                                                 <label><b>Category</b></label>
                                                             </div>
@@ -209,9 +206,9 @@
                                                                 @empty
                                                                 @endforelse
                                                             </div>
+                                                            <span class="text-danger new_error d-none" id="err_property_category">Category is required.</span>
                                                         </div>
                                                     </div>
-
 
                                                     <div class="row mb-3 div_office_type" id="">
                                                         <div class="col-md-12 mb-3">
@@ -455,89 +452,6 @@
                                                             <div id="flat_type_error"></div>
                                                         </div>
                                                     </div>
-
-                                                    {{-- 1bed 2bed --}}
-                                                    {{-- <div class="row mb-3 div_vila_type" id="vila_type">
-                                                        <div class="col-md-12 mb-3">
-                                                            <div>
-                                                                <label><b>Sub category</b></label>
-                                                            </div>
-                                                            <div class="m-checkbox-inline custom-radio-ml">
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic checkbox toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="21" id="vilakind1"
-                                                                        name="vila_type[]"data-val="resedential"
-                                                                        data-error="#vila_type_error" autocomplete="off"
-                                                                        <?php
-                                                                        echo !empty($edit_category) && !empty($edit_configuration) && $edit_category == '255' && in_array('21', $edit_configuration) ? 'checked' : '';
-                                                                        ?>>
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind1">1Bed</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic checkbox toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="22" id="vilakind2" name="vila_type[]"
-                                                                        data-val="resedential"
-                                                                        data-error="#vila_type_error" autocomplete="off"
-                                                                        <?php
-                                                                        echo !empty($edit_category) && !empty($edit_configuration) && $edit_category == '255' && in_array('22', $edit_configuration) ? 'checked' : '';
-                                                                        ?>>
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind2">2Bed</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic checkbox toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="23" id="vilakind3" name="vila_type[]"
-                                                                        data-val="resedential"
-                                                                        data-error="#vila_type_error" autocomplete="off"
-                                                                        <?php
-                                                                        echo !empty($edit_category) && !empty($edit_configuration) && $edit_category == '255' && in_array('23', $edit_configuration) ? 'checked' : '';
-                                                                        ?>>
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind3">3Bed</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic checkbox toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="24" id="vilakind4" name="vila_type[]"
-                                                                        data-val="resedential"
-                                                                        data-error="#vila_type_error" autocomplete="off"
-                                                                        <?php
-                                                                        echo !empty($edit_category) && !empty($edit_configuration) && $edit_category == '255' && in_array('24', $edit_configuration) ? 'checked' : '';
-                                                                        ?>>
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind4">4Bed</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic checkbox toggle button group">
-                                                                    <input type="checkbox" class="btn-check"
-                                                                        value="25" id="vilakind5" name="vila_type[]"
-                                                                        data-val="resedential"
-                                                                        data-error="#vila_type_error" autocomplete="off"
-                                                                        <?php
-                                                                        echo !empty($edit_category) && !empty($edit_configuration) && $edit_category == '255' && in_array('25', $edit_configuration) ? 'checked' : '';
-                                                                        ?>>
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="vilakind5">4+Bed</label>
-                                                                </div>
-                                                                <div id="vila_type_error"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div> --}}
-
 
                                                     <div class="row mb-3 div_vila_type" id="vila_type">
                                                         <div class="col-md-12 mb-3">
@@ -809,50 +723,14 @@
                                                                     <div class="form-group form_measurement">
                                                                         <select class="form-select measure_select"
                                                                             id="area_from_measurement">
-                                                                            @forelse ($configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-
-                                                        {{-- <div class="col-md-4 the_constructed_carpet_area">
-                                                            <div class="input-group">
-                                                                <div class="form-group col-md-7 m-b-20">
-                                                                    <label for="Area To">Area To</label>
-                                                                    <input class="form-control" name="area_to"
-                                                                        id="area_to" type="text" autocomplete="off">
-                                                                </div>
-                                                                <div class="input-group-append col-md-5 m-b-20">
-                                                                    <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
-                                                                            id="area_to_measurement">
-                                                                            @forelse ($configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div> --}}
 
                                                         <div class="form-group col-md-4 m-b-20 f-status">
                                                             <label class="select2_label" for="Furnished Status">Furnished
@@ -970,9 +848,9 @@
                                                                 for="is_preleased">Pre-leased</label>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary previousBtn1"
-                                                        type="button">Previous</button>
-                                                    <button class="btn btn-primary nextBtn" type="button">Next</button>
+                                                    <button class="btn btn-primary previousBtn1 me-2"
+                                                        type="button" style="border-radius: 5px;">Previous</button>
+                                                    <button class="btn btn-primary nextBtn" style="border-radius: 5px;" type="button">Next</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -999,27 +877,12 @@
                                                                 id="telephonic_discussion" type="text"
                                                                 autocomplete="off">
                                                         </div>
-
-                                                        {{-- <div class="form-group col-md-6 m-b-20 mt-1">
-                                                            <label for="Highligths">Highligths</label>
-                                                            <input class="form-control" name="highlights" id="highlights"
-                                                                type="text" autocomplete="off">
-                                                        </div> --}}
                                                     </div>
 
                                                     <div class="row">
                                                         <div>
                                                             <label><b>Enquiry Allocation</b></label>
                                                         </div>
-                                                        {{-- <div class="form-group col-md-4 m-b-4 mb-3">
-                                                            <select class="form-select" id="enquiry_city_id">
-                                                                <option value="">Select City</option>
-                                                                @foreach ($cities as $city)
-                                                                    <option value="{{ $city->id }}">
-                                                                        {{ $city->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div> --}}
 
                                                         <div class="form-group col-md-4 m-b-4 mb-3">
                                                             <select class="form-select" id="enquiry_branch_id">
@@ -1029,23 +892,25 @@
                                                                         {{ $branch->name }}</option>
                                                                 @endforeach
                                                             </select>
+                                                            <span class="text-danger new_error d-none" id="err_enquiry_branch_id">Branch is required.</span>
                                                         </div>
 
                                                         <div class="form-group col-md-4 m-b-4 mb-3">
                                                             <select class="form-select" id="employee_id">
-                                                                <option value=""> Employee</option>
+                                                                <option value=""> Employee</option> 
                                                                 @foreach ($employees as $employee)
                                                                     <option value="{{ $employee->id }}">
                                                                         {{ $employee->first_name . ' ' . $employee->last_name }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            <span class="text-danger new_error d-none" id="err_employee_id">Employee is required.</span>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary previousBtn2"
-                                                        type="button">Previous</button>
+                                                    <button class="btn btn-primary previousBtn2 me-2"
+                                                        type="button" style="border-radius: 5px;">Previous</button>
                                                     <button id="saveEnquiry" class="btn btn-secondary"
-                                                        type="button">Finish!</button>
+                                                        type="button" style="border-radius: 5px;">Finish!</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -1064,10 +929,8 @@
             //#B 5+BHK then add txtbox
             $('input:checkbox[name*="flat_type"]').change(function() {
                 if ($(this).val() === "19" && $(this).is(':checked')) {
-                    console.log("clicked ==");
                     $('#textboxWrapper').show();
                 } else {
-                    console.log("clicked not ==");
                     $('#textboxWrapper').hide();
                 }
             });
@@ -1086,7 +949,6 @@
                     let auth = '{{ Auth::user() }}';
                     // let authStateId = '{{ Auth::user()->state_id }}';
                     let authCityId = '{{ Auth::user()->city_id }}';
-                    console.log("==> authCityId", authCityId);
 
                     // $('#state_id').val(authStateId).trigger('change');
                     $('#enquiry_city_id').val(authCityId).trigger('change');
@@ -1135,7 +997,7 @@
 
             $(document).on('change', '#enquiry_source', function(e) {
                 var TheStatus = $($(this).find(":selected")).attr('data-val');
-                console.log("the status ==", TheStatus);
+
                 if (TheStatus == 'Reference') {
                     $('.the_source_refrence').show()
                 } else {
@@ -1145,7 +1007,7 @@
 
             function showReleventCategory() {
                 var parent_val = $('input[name=property_type]:checked').val();
-                console.log("Parent Val ==", parent_val);
+
                 $("[name='property_category']").each(function(i, e) {
                     if ($(this).attr('data-Parent_id') == parent_val) {
                         $(this).parent().show();
@@ -1171,7 +1033,6 @@
             resetallfields();
             $(document).on('change', '[name="property_category"]', function(e) {
                 var category_type = $(this).attr('data-val');
-                console.log("cat", category_type);
                 resetallfields()
                 if (category_type == 'Flat') {
                     $('.div_flat_type').show()
@@ -1492,11 +1353,9 @@
                         }
                         // edit enquiry
                         data = JSON.parse(data);
-                        console.log("data", data);
 
                         // Requirement Type
                         if (data.requirement_type != null) {
-                            console.log("data.requirement_type :", data.requirement_type);
                             $('input[name=property_type][value=' + data.requirement_type + ']').prop('checked',
                                 true).trigger('change')
 
@@ -1610,7 +1469,7 @@
             }
 
             $(document).on('click', '#saveProgress', function(e) {
-                console.log("saved prog 1 ==");
+
                 e.preventDefault();
                 $(this).prop('disabled', true);
                 var id = $('#progress_enquiry_id').val()
@@ -1903,7 +1762,6 @@
                                     ]['last_name'] +
                                     '</td>';
                             } else {
-                                //console.log(data[i]['assigned_by']['first_name']);
                                 str += '<td></td>';
                             }
                             $('.schedule_data').append(str.replace('null', ''))
@@ -1945,14 +1803,6 @@
                     '       <input class="form-control" name="contact_person_no"' +
                     '           type="text"  autocomplete="off">' +
                     '   </div>' +
-                    // '       <div data-contact_id= ' + id +
-                    // ' class="form-group col-md-3 m-b-4 mb-3">' +
-                    // '    <select class="form-select" name="contact_status">' +
-                    // '     <option value="">Contact Status</option>' +
-                    // '    <option value="Contactable">Contactable</option>' +
-                    // '     <option value="Not Contactable">Not Contactable</option>' +
-                    // '  </select>'
-                    // ' </div>' +
                     '<div data-contact_id= ' + id +
                     ' class="form-check custom-checkbox   checkbox-solid-success mb-0 col-md-1 m-b-20">' +
                     ' <input class="form-check-input" name="contact_nri" type="checkbox">' +
@@ -2039,12 +1889,79 @@
             });
            
             $(document).on('click', '#saveEnquiry', function(e) {
-                e.preventDefault();
-                $("#modal_form").validate();
-                if (!$("#modal_form").valid()) {
-                    return
+
+                let all_error = document.querySelectorAll('.new_error');
+
+                all_error.forEach(element => {
+                    element.classList.add('d-none');
+                });
+
+                let is_valid = true;
+
+                let fields = [
+                    'client_name',
+                    'client_mobile',
+                    'client_email',
+                ];
+
+                fields.forEach(field => {
+                    let ele = document.getElementById(field);
+
+                    if(ele) {
+                        if(ele.value == '') {
+                            let error_field = document.getElementById(`err_${field}`);
+                            if(error_field) {
+                                error_field.classList.remove('d-none');
+                                is_valid = false;
+                            }
+                        }
+                    }
+                });
+
+                if($("[name=enquiry_for]:checked").length == 0) {
+                    let err_enquiry_for = document.getElementById(`err_enquiry_for`);
+                    if(err_enquiry_for) {
+                        err_enquiry_for.classList.remove('d-none');
+                        is_valid = false;
+                    }
                 }
-                $(this).prop('disabled', true);
+
+                if($("[name=property_type]:checked").length == 0) {
+                    let err_property_type = document.getElementById(`err_property_type`);
+                    if(err_property_type) {
+                        err_property_type.classList.remove('d-none');
+                        is_valid = false;
+                    }
+                }
+
+                if($("[name=property_category]:checked").length == 0) {
+                    let err_property_category = document.getElementById(`err_property_category`);
+                    if(err_property_category) {
+                        err_property_category.classList.remove('d-none');
+                        is_valid = false;
+                    }
+                }
+
+                if($('#enquiry_branch_id').val() == '') {
+                    let err_branch_id = document.getElementById(`err_enquiry_branch_id`);
+                    if(err_branch_id) {
+                        err_branch_id.classList.remove('d-none');
+                        is_valid = false;
+                    }
+                }
+
+                if($('#employee_id').val() == '') {
+                    let err_employee_id = document.getElementById(`err_employee_id`);
+                    if(err_employee_id) {
+                        err_employee_id.classList.remove('d-none');
+                        is_valid = false;
+                    }
+                }
+
+                if(!is_valid) {
+                    return;
+                }
+
                 var contact_details = [];
                 $("#all_contacts [name=contact_person_name]").each(function(index) {
                     cona_arr = []
@@ -2078,36 +1995,25 @@
                     var configuration = $('input[name="flat_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
-                    console.log("Conf flat_type:", configuration);
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Retail') {
                     var configuration = $('input[name="retail_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
-                    console.log("Conf retail_type:", configuration);
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Storage/industrial') {
                     var configuration = $('input[name="storage_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
-                    console.log("Conf Penthouse:", configuration);
-                    //
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Penthouse') {
                     var configuration = $('input[name="flat_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
-                    console.log("Conf Penthouse:", configuration);
-                    //
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Vila/Bunglow') {
                     var configuration = $('input[name="vila_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
-                    console.log("Conf vila type:", configuration);
-                    //
                 } else {}
 
                 var id = $('#this_data_id').val()
-                // let home = $("[name=enquiry_for]:checked").val();
-                // console.log("val enquiry_for ", home);
-                // return;
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.saveEnquiry') }}",
@@ -2153,10 +2059,6 @@
                         village_id: $('#village_id').val(),
                     },
                     success: function(data) {
-                        console.log("data all :", data);
-                        // $('#enquiryTable').DataTable().draw();
-                        // $('#enquiryModal').modal('hide');
-                        // $('#saveEnquiry').prop('disabled', false);
                         var redirect_url = "{{ route('admin.enquiries') }}";
                         window.location.href = redirect_url;
                     }
@@ -2236,7 +2138,7 @@
 
             function showReleventCategory(params) {
                 var parent_val = $('input[name=property_type]:checked').val();
-                console.log("Sub ==", parent_val);
+
                 $("[name='property_category']").each(function(i, e) {
                     if ($(this).attr('data-Parent_id') == parent_val) {
                         $(this).parent().show();
@@ -2247,7 +2149,7 @@
 
                 //Hide Land while click on rent or both 
                 var theFor = $('input[name=enquiry_for]:checked').val();
-                console.log("The Forr Enq ==", theFor);
+
                 if (theFor == 'Buy' && parent_val == '87') {
                     $('.enquiry-type-element[data-enquiry-id="256"]').show();
                 } else {
@@ -2268,7 +2170,7 @@
             })
             $(document).on('change', '.btn-check', function() {
                 var attr_name = this.id;
-                // console.log(attr_name);
+
                 const newCategories = ['plotkind2'];
                 if (newCategories.includes(attr_name)) {
                     $(".div_land_plot").show();

@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\Session;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 
 class EnquiriesController extends Controller
@@ -1572,7 +1572,9 @@ class EnquiriesController extends Controller
 		$districts = District::orderBy('name')->get();
 		$talukas   = Taluka::orderBy('name')->get();
 		$villages  = Village::orderBy('name')->get();
-		return view('admin.properties.add_enquiry', compact('enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
+		$land_units = DB::table('land_units')->get();
+
+		return view('admin.properties.add_enquiry', compact('enquiry_list', 'land_units', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
 	}
 
 	public function editEnquiry(Request $request)
@@ -1601,8 +1603,9 @@ class EnquiriesController extends Controller
 
 		$edit_configuration = Enquiries::where('id', $request->id)->pluck('configuration');
 		$edit_category = Enquiries::where('id', $request->id)->pluck('property_type');
-		// 		dd($edit_configuration,$edit_category,$enquiry_list,$prop_type,$projects);
-		return view('admin.properties.add_enquiry', compact('edit_configuration', 'edit_category', 'enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'current_id', 'districts', 'talukas', 'villages'));
+		$land_units = DB::table('land_units')->get();
+
+		return view('admin.properties.add_enquiry', compact('edit_configuration', 'land_units', 'edit_category', 'enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'current_id', 'districts', 'talukas', 'villages'));
 	}
 	public function getEnquiryConfiguration(Request $request)
 	{
