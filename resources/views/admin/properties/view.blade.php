@@ -1283,7 +1283,7 @@
                                                     @if(count($multiple_image) > 0)
                                                         <div class="flex-fill text-center">
                                                             <h5 class="border-style">Property Image</h5>
-                                                            <img src="{{ asset('gallary_image.jpeg') }}" alt="" onclick="image()" style="height: 90px;">
+                                                            <img src="{{ asset('assets/prop_images/property-image.png') }}" alt="" onclick="image()" style="height: 90px;">
                                                         </div>
                                                     @endif
                                                     <!-- Second Image Section -->
@@ -1302,7 +1302,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <h5 class="border-style">Property Viewer</h5>
+                                                    <h5 class="border-style">Enquiry Visit Logs</h5>
                                                     <br>
                                                     <div class="form-group">
                                                         <table class="table table-responsive custom-table-design mb-3">
@@ -1320,8 +1320,9 @@
                                                                 @forelse ($visits as $value)
                                                                     <tr>
                                                                         @if ($value->visit_status == "Completed")
-                                                                            <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
-                                                                            </td>
+                                                                        <td>
+                                                                            <a href="{{ route('admin.view.enquiry',encrypt($value->Enquiry->id)) }}">{{ $value->Enquiry->client_name }}</a>
+                                                                        </td>
                                                                             <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
                                                                             </td>
                                                                             <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
@@ -2770,7 +2771,7 @@
                                         </div>
                                         <div class="tab-pane fade" id="v-property-viewer" role="tabpanel"
                                             aria-labelledby="v-property-viewer-tab">
-                                            <h5 class="border-style">Property Viewer</h5>
+                                            <h5 class="border-style">Enquiry Visit Logs</h5>
                                             <br>
                                             <div class="form-group">
                                                 <table class="table table-responsive custom-table-design mb-3">
@@ -2792,7 +2793,10 @@
                                                             <tr>
                                                                 @if ($value->visit_status == "Completed")
                                                                 <td>{{$value->Enquiry->enquiry_for}}</td>
-                                                                    <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
+                                                                     {{-- <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
+                                                                    </td> --}}
+                                                                    <td>
+                                                                        <a href="{{ route('admin.view.enquiry', $value->Enquiry->id) }}">{{ $value->Enquiry->client_name }}</a>
                                                                     </td>
                                                                     <td>{{$value->Enquiry->client_mobile}}</td>
                                                                     <td>{{$value->Enquiry->client_email}}</td>
