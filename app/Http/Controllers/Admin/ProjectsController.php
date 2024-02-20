@@ -308,16 +308,16 @@ class ProjectsController extends Controller
 			if($request->propery_type == 87) {
 				$array = '[';
 				foreach(json_decode($data->unit_details) as $unit) {
-					// if($unit->wing) {
-					// 	$array .= '[';
-					// 	$array .= $unit->wing;
-					// 	$array .= ','.$unit->saleable;
-					// 	$array .= ','.$unit->built_up;
-					// 	$array .= ','.$unit->carpet_area;
-					// 	$array .= ','.$unit->balcony;
-					// 	$array .= ','.$unit->wash_area;
-					// 	$array .= '],';
-					// }
+					if($unit->wing) {
+						$array .= '[';
+						$array .= $unit->wing;
+						$array .= ','.$unit->saleable;
+						$array .= ','.$unit->built_up;
+						$array .= ','.$unit->carpet_area;
+						$array .= ','.$unit->balcony;
+						$array .= ','.$unit->wash_area;
+						$array .= '],';
+					}
 				}
 
 				$data->unit = $array;
@@ -329,31 +329,29 @@ class ProjectsController extends Controller
 
 				$array = '[';
 				foreach(json_decode($decode_obj->if_office_tower_details) as $tower) {
-					// if($tower->tower_name != '') {
-					// 	$array .= '[';
-					// 	$array .= $tower->tower_name;
-					// 	$array .= ','.$tower->total_floor;
-					// 	$array .= ','.$tower->total_unit;
-					// 	$array .= ','.$tower->carpet;
-					// 	$array .= ','.$tower->saleable;
-					// 	$array .= '],';
-					// }
+					if($tower->tower_name != '') {
+						$array .= '[';
+						$array .= $tower->tower_name;
+						$array .= ','.$tower->carpet ?? '';
+						$array .= ','.$tower->saleable ?? '';
+						$array .= '],';
+					}
 				}
 				$array .= ']';
 
 				if($array == "[]") {
 					$array = '['; 
-					// foreach(json_decode($decode_obj->if_retail_tower_details) as $tower) {
-					// 	if($tower->tower_name != '') {
-					// 		$array .= '[';
-					// 		$array .= $tower->tower_name;
-					// 		$array .= ','.$tower->size_from;
-					// 		$array .= ','.$tower->size_to;
-					// 		$array .= ','.$tower->front_opening;
-					// 		$array .= ','.$tower->number_of_each_floor;
-					// 		$array .= '],';
-					// 	}
-					// }
+					foreach(json_decode($decode_obj->if_retail_tower_details) as $tower) {
+						if($tower->tower_name != '') {
+							$array .= '[';
+							$array .= $tower->tower_name;
+							$array .= ','.$tower->size_from;
+							$array .= ','.$tower->size_to;
+							$array .= ','.$tower->front_opening;
+							$array .= ','.$tower->number_of_each_floor;
+							$array .= '],';
+						}
+					}
 					$array .= ']';
 				}
 

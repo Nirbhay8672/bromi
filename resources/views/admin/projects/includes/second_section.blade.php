@@ -152,8 +152,9 @@
                                 <div class="input-group-append col-md-5 m-b-20">
                                     <div class="form-group form_measurement">
                                         <select class="form-select form_measurement measure_select" name="road_width_select" id="second_front_road_map_unit_select">
-                                            <option selected="selected" value="121">Ft.</option>
-                                            <option value="122">Meter</option>
+                                            @forEach($land_units as $land_unit)
+                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -693,8 +694,9 @@
                                         <div class="input-group-append col-md-5 m-b-20">
                                             <div class="form-group form_measurement">
                                                 <select class="form-select form_measurement measure_select" :id="`second_floor_height_select_${index}`">
-                                                    <option selected="selected" value="121">Ft.</option>
-                                                    <option value="122">Meter</option>
+                                                    @forEach($land_units as $land_unit)
+                                                        <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -933,8 +935,9 @@
                                             <div class="input-group-append col-md-5 m-b-20">
                                                 <div class="form-group form_measurement">
                                                     <select class="form-select form_measurement measure_select" name="tower_front_opening_select" :id="`extra_tower_front_opening_select_${index}`">
-                                                        <option selected="selected" value="121">Ft.</option>
-                                                        <option value="122">Meter</option>
+                                                        @forEach($land_units as $land_unit)
+                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -960,8 +963,9 @@
                                             <div class="input-group-append col-md-5 m-b-20">
                                                 <div class="form-group form_measurement">
                                                     <select class="form-select form_measurement measure_select" name="tower_ceiling_select" :id="`extra_tower_ceiling_select_${index}`">
-                                                        <option selected="selected" value="121">Ft.</option>
-                                                        <option value="122">Meter</option>
+                                                        @forEach($land_units as $land_unit)
+                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -1223,23 +1227,23 @@
                     </div>
                     <div class="m-checkbox-inline custom-radio-ml">
                         <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                            <input type="checkbox" class="btn-check" value="21" id="vilakind1" data-val="resedential" x-model="sub_categories" name="vila_type" data-error="#vila_type_error" autocomplete="off" data-bs-original-title="" title="">
+                            <input type="checkbox" class="btn-check" value="21" id="vilakind1" @click="addWingSubCategory($event,'1 Bed')" data-val="resedential" x-model="sub_categories" name="vila_type" data-error="#vila_type_error" autocomplete="off" data-bs-original-title="" title="">
                             <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="vilakind1">1 Bed</label>
                         </div>
                         <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                            <input type="checkbox" class="btn-check" value="22" id="vilakind2" data-val="resedential" x-model="sub_categories" name="vila_type" data-error="#vila_type_error" autocomplete="off" data-bs-original-title="" title="">
+                            <input type="checkbox" class="btn-check" value="22" id="vilakind2" data-val="resedential" @click="addWingSubCategory($event,'2 Bed')" x-model="sub_categories" name="vila_type" data-error="#vila_type_error" autocomplete="off" data-bs-original-title="" title="">
                             <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="vilakind2">2 Bed</label>
                         </div>
                         <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                            <input type="checkbox" data-val="resedential" class="btn-check" value="23" id="vilakind3" x-model="sub_categories" name="vila_type" data-error="#vila_type_error" autocomplete="off" data-bs-original-title="" title="">
+                            <input type="checkbox" data-val="resedential" class="btn-check" value="23" id="vilakind3" @click="addWingSubCategory($event,'3 Bed')" x-model="sub_categories" name="vila_type" data-error="#vila_type_error" autocomplete="off" data-bs-original-title="" title="">
                             <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="vilakind3">3 Bed</label>
                         </div>
                         <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                            <input type="checkbox" data-val="resedential" class="btn-check" value="24" id="vilakind4" x-model="sub_categories" name="vila_type" data-error="#vila_type_error" autocomplete="off" data-bs-original-title="" title="">
+                            <input type="checkbox" data-val="resedential" class="btn-check" value="24" id="vilakind4" @click="addWingSubCategory($event,'4 Bed')" x-model="sub_categories" name="vila_type" data-error="#vila_type_error" autocomplete="off" data-bs-original-title="" title="">
                             <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="vilakind4">4 Bed</label>
                         </div>
                         <div class="btn-group bromi-checkbox-btn me-1" role="group" aria-label="Basic radio toggle button group">
-                            <input type="checkbox" class="btn-check" value="25" data-val="resedential" x-model="sub_categories" id="vilakind5" name="vila_type" data-error="#vila_type_error" autocomplete="off" data-bs-original-title="" title="">
+                            <input type="checkbox" class="btn-check" value="25" data-val="resedential" x-model="sub_categories" @click="addWingSubCategory($event,'4+ Bed')" id="vilakind5" name="vila_type" data-error="#vila_type_error" autocomplete="off" data-bs-original-title="" title="">
                             <label class="btn btn-outline-primary btn-pill btn-sm py-1" for="vilakind5">4+ Bed</label>
                         </div>
                     </div>
@@ -1467,8 +1471,9 @@
                                             <div class="input-group-append col-md-5 m-b-20">
                                                 <div class="form-group form_measurement">
                                                     <select class="form-select form_measurement measure_select" :id="`type_ceiling_height_${index}`">
-                                                        <option selected="selected" value="121">Ft.</option>
-                                                        <option value="122">Meter</option>
+                                                        @forEach($land_units as $land_unit)
+                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -1859,8 +1864,9 @@
                                     <div class="input-group-append col-md-5 m-b-20">
                                         <div class="form-group form_measurement">
                                             <select class="form-select form_measurement measure_select" name="road_width_select" id="first_front_road_map_unit_select">
-                                                <option selected="selected" value="121">Ft.</option>
-                                                <option value="122">Meter</option>
+                                                @forEach($land_units as $land_unit)
+                                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -1984,8 +1990,9 @@
                                         <div class="input-group-append col-md-5 m-b-20">
                                             <div class="form-group form_measurement">
                                                 <select class="form-select form_measurement measure_select" name="road_width_select" :id="`first_ceiling_height_map_unit_select_${index}`">
-                                                    <option selected="selected" value="121">Ft.</option>
-                                                    <option value="122">Meter</option>
+                                                    @forEach($land_units as $land_unit)
+                                                        <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -2205,8 +2212,9 @@
                                             <div class="input-group-append col-md-5 m-b-20">
                                                 <div class="form-group form_measurement">
                                                     <select class="form-select form_measurement measure_select" name="tower_front_opening_select" :id="`tower_front_opening_select_${index}`">
-                                                        <option selected="selected" value="121">Ft.</option>
-                                                        <option value="122">Meter</option>
+                                                        @forEach($land_units as $land_unit)
+                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -2234,8 +2242,9 @@
                                             <div class="input-group-append col-md-5 m-b-20">
                                                 <div class="form-group form_measurement">
                                                     <select class="form-select form_measurement measure_select" name="tower_ceiling_select" :id="`tower_ceiling_select_${index}`">
-                                                        <option selected="selected" value="121">Ft.</option>
-                                                        <option value="122">Meter</option>
+                                                        @forEach($land_units as $land_unit)
+                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -2342,6 +2351,7 @@
                                             </template>
                                         </select>
                                     </div>
+                                    <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_wing_${index}`">Wing name is required.</span>
                                 </div>
                                 <div class="row mt-4">
                                     <div class="input-group mb-3">
@@ -2350,6 +2360,7 @@
                                                 <label class="mb-0">Saleable</label>
                                                 <input class="form-control" x-model="unit.saleable" name="saleable_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_saleable_${index}`">Saleable from is required.</span>
                                         </div>
                                         <div class="form-group">
                                             <span class="input-group-text" style="min-height:41px;">To</span>
@@ -2359,10 +2370,11 @@
                                                 <label class="mb-0">Saleable</label>
                                                 <input class="form-control" x-model="unit.saleable_to" name="saleable_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_saleable_to_${index}`">Saleable to is required.</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`saleable_area_select_${index}`">
-                                            @forEach($land_units as $land_unit)
+                                                @forEach($land_units as $land_unit)
                                                     <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
                                                 @endforeach
                                             </select>
@@ -2388,6 +2400,7 @@
                                                 <label class="mb-0">Built up Area</label>
                                                 <input class="form-control" x-model="unit.built_up" name="built_up_areass" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_built_up_${index}`">Built up form is required.</span>
                                         </div>
                                         <div class="form-group">
                                             <span class="input-group-text" style="min-height:41px;">To</span>
@@ -2397,6 +2410,7 @@
                                                 <label class="mb-0">Built up Area</label>
                                                 <input class="form-control" x-model="unit.built_up_to" name="built_up_areass" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_built_up_to_${index}`">Built up to  is required.</span>
                                         </div>
                                         <div class="form-group col-md-2 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`built_up_area_select_${index}`">
@@ -2415,6 +2429,7 @@
                                                 <label class="mb-0">Carpet Area</label>
                                                 <input class="form-control" x-model="unit.carpet_area" name="carpet_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_carpet_area_${index}`">Carpet area from is required.</span>
                                         </div>
                                         <div class="form-group">
                                             <span class="input-group-text" style="min-height:41px;">To</span>
@@ -2424,10 +2439,11 @@
                                                 <label class="mb-0">Carpet Area</label>
                                                 <input class="form-control" x-model="unit.carpet_area_to" name="carpet_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_carpet_area_to_${index}`">Carpet area to is required.</span>
                                         </div>
                                         <div class="form-group col-md-2 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`carpet_area_select_${index}`">
-                                            @forEach($land_units as $land_unit)
+                                                @forEach($land_units as $land_unit)
                                                     <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
                                                 @endforeach
                                             </select>
@@ -2442,13 +2458,13 @@
                                                 <label class="mb-0">Wash Area</label>
                                                 <input class="form-control" x-model="unit.wash_area" name="wash_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_wash_area_${index}`">Wash area is required.</span>
                                         </div>
                                         <div class="form-group col-md-5 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`wash_area_select_${index}`">
-                                                <option value="117" selected>Sq.Ft.</option>
-                                                <option value="118">Sq.Yard</option>
-                                                <option value="119">Sq.Meter</option>
-                                                <option value="120">VIGHA</option>
+                                                @forEach($land_units as $land_unit)
+                                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -2461,10 +2477,11 @@
                                                 <label class="mb-0">Balcony Area</label>
                                                 <input class="form-control" x-model="unit.balcony" name="balcony_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_balcony_${index}`">Balcony area is required.</span>
                                         </div>
                                         <div class="form-group col-md-5 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`balcony_area_select_${index}`">
-                                            @forEach($land_units as $land_unit)
+                                                @forEach($land_units as $land_unit)
                                                     <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
                                                 @endforeach
                                             </select>
@@ -2479,12 +2496,14 @@
                                                 <label class="mb-0">Floor Height</label>
                                                 <input class="form-control" x-model="unit.floor_height" name="floor_height" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_floor_height_${index}`">Floor height is required.</span>
                                         </div>
                                         <div class="input-group-append col-md-5 m-b-20">
                                             <div class="form-group form_measurement">
                                                 <select class="form-select form_measurement measure_select" :id="`floor_height_select_${index}`">
-                                                    <option selected="selected" value="121">Ft.</option>
-                                                    <option value="122">Meter</option>
+                                                    @forEach($land_units as $land_unit)
+                                                        <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -2498,12 +2517,14 @@
                                                 <label class="mb-0">Ceiling Height</label>
                                                 <input class="form-control" x-model="unit.ceiling_height" name="floor_height" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_ceiling_height_${index}`">Ceiling height is required.</span>
                                         </div>
                                         <div class="input-group-append col-md-5 m-b-20">
                                             <div class="form-group form_measurement">
                                                 <select class="form-select form_measurement measure_select" :id="`second_ceiling_height_select_${index}`">
-                                                    <option selected="selected" value="121">Ft.</option>
-                                                    <option value="122">Meter</option>
+                                                    @forEach($land_units as $land_unit)
+                                                        <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -2540,8 +2561,8 @@
                                                     <select class="form-select form_measurement measure_select" :id="`terrace_saleable_select_${index}`"
                                                         name="terrace_super_builtup_area_measurement">
                                                         @forEach($land_units as $land_unit)
-                                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                @endforeach
+                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -2560,8 +2581,8 @@
                                                     <select class="form-select form_measurement measure_select" :id="`terrace_carpet_select_${index}`"
                                                         name="terrace_carpet_area_measurement">
                                                         @forEach($land_units as $land_unit)
-                                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                @endforeach
+                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -2595,13 +2616,14 @@
                                         <div class="fvalue">
                                             <input class="form-control" x-model="if_farm_plot_land.total_open_area" name="total_open_area" type="text" autocomplete="off" data-bs-original-title="" title="">
                                         </div>
+                                        <span class="text-danger new_error d-none" id="err_if_farm_plot_land_total_open_area">Open area is required.</span>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6 m-b-10">
                                     <select class="form-select form_measurement measure_select" name="open_area_map_select" id="open_area_select">
-                                    @forEach($land_units as $land_unit)
-                                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                @endforeach
+                                        @forEach($land_units as $land_unit)
+                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -2613,6 +2635,7 @@
                                     <div class="fvalue">
                                         <input class="form-control" x-model="if_farm_plot_land.total_number_of_plot" name="total_no_of_plots" type="text" autocomplete="off" data-bs-original-title="" title="">
                                     </div>
+                                    <span class="text-danger new_error d-none" id="err_if_farm_plot_land_total_number_of_plot">number of plot is required.</span>
                                 </div>
                             </div>
                         </div>
@@ -2649,6 +2672,7 @@
                             <div class="fvalue">
                                 <input class="form-control" x-model="if_farm_plot_land.phase_name" name="phase_name" type="text" autocomplete="off" data-bs-original-title="" title="">
                             </div>
+                            <span class="text-danger new_error d-none" id="err_if_farm_plot_land_phase_name">Phase name is required.</span>
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -2660,6 +2684,7 @@
                                         <input type="text" name="saleable_plot_from" class="form-control" data-bs-original-title="" x-model="if_farm_plot_land.plot_size_from" title="">
                                     </div>
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_if_farm_plot_land_plot_size_from">Saleable from is required.</span>
                             </div>
                             <div class="form-group">
                                 <span class="input-group-text" style="min-height:41px;">To</span>
@@ -2671,12 +2696,13 @@
                                         <input type="text" name="saleable_plot_from" class="form-control" data-bs-original-title="" x-model="if_farm_plot_land.plot_size_to" title="">
                                     </div>
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_if_farm_plot_land_plot_size_to">Saleable to is required.</span>
                             </div>
                             <div class="form-group col-md-2 m-b-10">
                                 <select class="form-select form_measurement measure_select" name="common_area_map_select" id="plot_size_from_select">
-                                @forEach($land_units as $land_unit)
-                                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                @endforeach
+                                    @forEach($land_units as $land_unit)
+                                        <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -2703,6 +2729,7 @@
                                 <div class="fvalue">
                                     <input class="form-control" x-model="if_farm_plot_land.carpet_plot_size" name="carpet_plot_size" type="text" autocomplete="off" data-bs-original-title="" title="">
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_if_farm_plot_land_carpet_plot_size">Carpet from is required.</span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -2715,13 +2742,14 @@
                                 <div class="fvalue">
                                     <input class="form-control" x-model="if_farm_plot_land.carpet_plot_size_to" name="carpet_plot_size" type="text" autocomplete="off" data-bs-original-title="" title="">
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_if_farm_plot_land_carpet_plot_size_to">Carpet to is required.</span>
                             </div>
                         </div>
                         <div class="form-group col-md-2 m-b-10">
                             <select class="form-select" name="carpet_plot_size_select" tabindex="-1" aria-hidden="true" id="carpet_plot_size_select">
-                            @forEach($land_units as $land_unit)
-                                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                @endforeach
+                                @forEach($land_units as $land_unit)
+                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -2739,6 +2767,7 @@
                                     <input class="form-control" 
                                     x-model="if_farm_plot_land.constructed_saleable_area" name="constructed_saleable_area" type="text" autocomplete="off" data-bs-original-title="" title="">
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_if_farm_plot_land_constructed_saleable_area">constructed saleable from is required.</span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -2752,6 +2781,7 @@
                                     <input class="form-control" 
                                     x-model="if_farm_plot_land.constructed_saleable_area_to" name="constructed_saleable_area" type="text" autocomplete="off" data-bs-original-title="" title="">
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_if_farm_plot_land_constructed_saleable_area_to">constructed saleable to is required.</span>
                             </div>
                         </div>
                         <div class="form-group col-md-2 m-b-10">
