@@ -175,7 +175,9 @@ class HomeController extends Controller
 		$first_state = State::where('user_id',Auth::user()->id)->first();
 		$first_city = City::where('user_id',Auth::user()->id)->first();
 
-		return view('builder.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city'), $data);
+		$land_units = DB::table('land_units')->get();
+
+		return view('builder.projects.add_project_new', compact('cities', 'land_units', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city'), $data);
 	}
 
 	public function editproject(Projects $id){
@@ -199,7 +201,9 @@ class HomeController extends Controller
 		$first_state = State::where('user_id',Auth::user()->id)->first();
 		$first_city = City::where('user_id',Auth::user()->id)->first();
 
-		return view('builder.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings', 'id','first_state','first_city'), $data);
+		$land_units = DB::table('land_units')->get();
+
+		return view('builder.projects.add_project_new', compact('cities', 'land_units', 'states', 'areas', 'builders','project_configuration_settings', 'id','first_state','first_city'), $data);
 	}
 
 	public function storeFile(UploadedFile $file)

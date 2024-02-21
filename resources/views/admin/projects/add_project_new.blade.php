@@ -169,8 +169,8 @@
                                                                         <div class="input-group-append col-md-5 m-b-20">
                                                                             <div class="form-group">
                                                                                 <select class="form-select" name="height_of_basement_select" tabindex="-1" aria-hidden="true" :id="`height_basement_select_${index}`">
-                                                                                    <option selected="selected" value="121">Ft.</option>
-                                                                                    <option value="122">Meter</option>
+                                                                                    <option selected="selected" value="1">Ft.</option>
+                                                                                    <option value="3">Meter</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>

@@ -130,13 +130,31 @@
                                     </div>
 
                                     @php
+                                        
                                         $map_unit = [
-                                            117 => 'Sq.Ft.',
-                                            118 => 'Sq.Yard',
-                                            119 => 'Sq.Meter',
-                                            120 => 'VIGHA',
-                                            121 => 'Ft.',
-                                            122 => 'Meter',
+                                           1 => 'Square Fit',
+                                           2 => 'Square Yard',
+                                           3 => 'Square Meter',
+                                           4 => 'Ground',
+                                           5 => 'Square Mile',
+                                           6 => 'Bigha',
+                                           7 => 'Square Karam',
+                                           8 => 'Square Kilometer',
+                                           9 => 'Murabba',
+                                           10 => 'Decimal',
+                                           11 => 'Lessa',
+                                           12 => 'Cent',
+                                           13 => 'Biswa Kacha',
+                                           14 => 'Marla',
+                                           15 => 'Chatak',
+                                           16 => 'Dhur',
+                                           17 => 'Biswa',
+                                           18 => 'Acre',
+                                           19 => 'Kanal',
+                                           20 => 'Gaj',
+                                           21 => 'Killa',
+                                           22 => 'Pura',
+                                           23 => 'Katha',
                                         ];
 
                                         $sub_category_key = [
