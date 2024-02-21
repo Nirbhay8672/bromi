@@ -100,34 +100,59 @@
                                     <input
                                         class="form-control" name="first_number_of_tower"
                                         type="text"
-                                        id="number_of_tower"
+                                        id="88_if_office_or_retail_number_of_tower"
                                         x-model="if_office_or_retail.number_of_tower"
                                     >
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_88_if_office_or_retail_number_of_tower">Number of tower is required.</span>
                             </div>
                         </div>
                         <div class="form-group col-md-3 m-b-20">
                             <div class="fname" :class="if_office_or_retail.number_of_floor == '' ? '' : 'focused' ">
                                 <label>No. of Floors</label>
                                 <div class="fvalue">
-                                    <input class="form-control" name="first_number_of_floors" type="text" x-model="if_office_or_retail.number_of_floor" autocomplete="off" data-bs-original-title="" title="">
+                                    <input
+                                        class="form-control"
+                                        name="first_number_of_floors"
+                                        id="88_if_office_or_retail_number_of_floor"
+                                        type="text"
+                                        x-model="if_office_or_retail.number_of_floor"
+                                        autocomplete="off"
+                                    >
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_88_if_office_or_retail_number_of_floor">Number of floor is required.</span>
                             </div>
                         </div>
                         <div class="form-group col-md-3 m-b-20">
                             <div class="fname" :class="if_office_or_retail.number_of_unit_each_block == '' ? '' : 'focused' ">
                                 <label>No. of Unit each tower </label>
                                 <div class="fvalue">
-                                    <input class="form-control" name="first_number_of_unit_each_block" x-model="if_office_or_retail.number_of_unit_each_block" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                    <input
+                                        class="form-control"
+                                        name="first_number_of_unit_each_block"
+                                        id="88_if_office_or_retail_number_of_unit_each_block"
+                                        x-model="if_office_or_retail.number_of_unit_each_block"
+                                        type="text"
+                                        autocomplete="off"
+                                    >
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_88_if_office_or_retail_number_of_unit_each_block">Number of units is required.</span>
                             </div>
                         </div>
                         <div class="form-group col-md-3 m-b-20">
                             <div class="fname" :class="if_office_or_retail.number_of_lift == '' ? '' : 'focused' ">
                                 <label>No. of Lift </label>
                                 <div class="fvalue">
-                                    <input class="form-control" x-model="if_office_or_retail.number_of_lift" name="first_number_of_lift" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                    <input
+                                        class="form-control"
+                                        x-model="if_office_or_retail.number_of_lift"
+                                        name="first_number_of_lift"
+                                        type="text"
+                                        autocomplete="off"
+                                        id="88_if_office_or_retail_number_of_lift"
+                                    >
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_88_if_office_or_retail_number_of_lift">Number of lift is required.</span>
                             </div>
                         </div>
 
@@ -143,18 +168,17 @@
                                                 type="text"
                                                 x-model="if_office_or_retail.front_road_width"
                                                 autocomplete="off"
-                                                data-bs-original-title=""
-                                                title=""
+                                                id="88_if_office_or_retail_front_road_width"
                                             >
                                         </div>
+                                        <span class="text-danger new_error d-none" id="err_88_if_office_or_retail_front_road_width">Front road width is required.</span>
                                     </div>
                                 </div>
                                 <div class="input-group-append col-md-5 m-b-20">
                                     <div class="form-group form_measurement">
                                         <select class="form-select form_measurement measure_select" name="road_width_select" id="second_front_road_map_unit_select">
-                                            @forEach($land_units as $land_unit)
-                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                            @endforeach
+                                            <option selected="selected" value="1">Ft.</option>
+                                            <option value="3">Meter</option>
                                         </select>
                                     </div>
                                 </div>
@@ -204,14 +228,22 @@
                                         <div class="fvalue">
                                             <input class="form-control" name="tower_name" x-model="tower_detail.tower_name" type="text" autocomplete="off" data-bs-original-title="" title="">
                                         </div>
+                                        <span class="text-danger new_error d-none" :id="`err_88_tower_detail_tower_name_${index}`">Tower name is required.</span>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3 m-b-20">
                                     <div class="fname" :class="tower_detail.total_unit == '' ? '' : 'focused' ">
                                         <label>Total Units</label>
                                         <div class="fvalue">
-                                            <input class="form-control" x-model="tower_detail.total_unit" name="total_units" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                            <input
+                                                class="form-control"
+                                                x-model="tower_detail.total_unit"
+                                                name="total_units"
+                                                type="text"
+                                                autocomplete="off"
+                                            >
                                         </div>
+                                        <span class="text-danger new_error d-none" :id="`err_88_tower_detail_total_unit_${index}`">Total unit is required.</span>
                                     </div>
                                 </div>
 
@@ -226,9 +258,11 @@
                                                     <input
                                                         type="text"
                                                         class="form-control"
-                                                        placeholder="size" data-bs-original-title="" x-model="tower_detail.saleable"
+                                                        placeholder="size"
+                                                        x-model="tower_detail.saleable"
                                                     >
                                                 </div>
+                                                <span class="text-danger new_error d-none" :id="`err_88_tower_detail_saleable_${index}`">Saleable from is required.</span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -244,6 +278,7 @@
                                                         x-model="tower_detail.saleable_to"
                                                     >
                                                 </div>
+                                                <span class="text-danger new_error d-none" :id="`err_88_tower_detail_saleable_to_${index}`">Saleable to is required.</span>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
@@ -283,9 +318,11 @@
                                                     <input
                                                         type="text"
                                                         class="form-control"
-                                                        placeholder="size" data-bs-original-title="" x-model="tower_detail.carpet"
+                                                        placeholder="size"
+                                                        x-model="tower_detail.carpet"
                                                     >
                                                 </div>
+                                                <span class="text-danger new_error d-none" :id="`err_88_tower_detail_carpet_${index}`">Carpet from is required.</span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -301,6 +338,7 @@
                                                         x-model="tower_detail.carpet_to"
                                                     >
                                                 </div>
+                                                <span class="text-danger new_error d-none" :id="`err_88_tower_detail_carpet_to_${index}`">Carpet to is required.</span>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
@@ -324,9 +362,11 @@
                                                     <input
                                                         type="text"
                                                         class="form-control"
-                                                        placeholder="size" data-bs-original-title="" x-model="tower_detail.built_up"
+                                                        placeholder="size"
+                                                        x-model="tower_detail.built_up"
                                                     >
                                                 </div>
+                                                <span class="text-danger new_error d-none" :id="`err_88_tower_detail_built_up_${index}`">Built up from is required.</span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -342,6 +382,7 @@
                                                         x-model="tower_detail.built_up_to"
                                                     >
                                                 </div>
+                                                <span class="text-danger new_error d-none" :id="`err_88_tower_detail_built_up_to_${index}`">Built up to is required.</span>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
@@ -370,8 +411,6 @@
                             </div>
                         </div>
                     </div>
-
-                    
                 </div>
             </div>
 
@@ -431,7 +470,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-2" x-show="sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18') || sub_categories.includes('19')">
+                    <div class="row mb-2" x-show="sub_categories.includes('13') || sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18') || sub_categories.includes('19')">
                         <div class="col-md-2 mb-3">
                             <div class="fname" :class="is_flat_or_penthouse.number_of_towers == '' ? '' : 'focused' ">
                                 <label for="Total Floor">No. Of Tower</label>
@@ -439,6 +478,7 @@
                                     <input class="form-control" x-model="is_flat_or_penthouse.number_of_towers" type="text" autocomplete="off"
                                     data-bs-original-title="" title="">
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_89_flat_number_of_towers">Number of tower is required.</span>
                             </div>
                         </div>
                         <div class="col-md-2 mb-3">
@@ -447,6 +487,7 @@
                                 <div class="fvalue">
                                     <input class="form-control" x-model="is_flat_or_penthouse.number_of_floors" type="text" autocomplete="off" data-bs-original-title="" title="">
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_89_flat_number_of_floors">Number of floor is required.</span>
                             </div>
                         </div>
                         <div class="col-md-2 mb-3 the_total_units_in_tower">
@@ -455,6 +496,7 @@
                                 <div class="fvalue">
                                     <input class="form-control" x-model="is_flat_or_penthouse.total_units" type="text" autocomplete="off" data-bs-original-title="" title="">
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_89_flat_total_units">Total unit is required.</span>
                             </div>
                         </div>
                         <div class="col-md-4 mb-3 the_total_elevator_in_tower">
@@ -463,11 +505,12 @@
                                 <div class="fvalue">
                                     <input class="form-control" x-model="is_flat_or_penthouse.number_of_elevator" type="text" autocomplete="off" data-bs-original-title="" title="">
                                 </div>
+                                <span class="text-danger new_error d-none" id="err_89_flat_number_of_elevator">Number of elevator is required.</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row mb-2" x-show="sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18') || sub_categories.includes('19')">
+                    <div class="row mb-2" x-show="sub_categories.includes('13') || sub_categories.includes('14') || sub_categories.includes('15') || sub_categories.includes('16') || sub_categories.includes('17') || sub_categories.includes('18') || sub_categories.includes('19')">
                         <template x-for="(wing , index) in if_residential_only_wings.wing_details">
                             <div class="row">
                                 <div class="form-group col-md-3 m-b-20">
@@ -482,18 +525,21 @@
                                             @focusOut="manageWingNameArray()"
                                         >
                                     </div>
+                                    <span class="text-danger new_error d-none" :id="`err_second_res_wing_wing_name_${index}`">Wing name is required.</span>
                                 </div>
                                 <div class="form-group col-md-2 m-b-20">
                                     <div class="fname" :class="wing.total_total_units == '' ? '' : 'focused' ">
                                         <label>Total Units</label>
                                         <input class="form-control" x-model="wing.total_total_units" type="text" autocomplete="off">
                                     </div>
+                                    <span class="text-danger new_error d-none" :id="`err_second_res_wing_total_total_units_${index}`">Total units is required.</span>
                                 </div>
                                 <div class="form-group col-md-2 m-b-20">
                                     <div class="fname" :class="wing.total_floors == '' ? '' : 'focused' ">
                                         <label>Total Floor</label>
                                         <input class="form-control" x-model="wing.total_floors" type="text" autocomplete="off">
                                     </div>
+                                    <span class="text-danger new_error d-none" :id="`err_second_res_wing_total_floors_${index}`">Total floor is required.</span>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="fname">
@@ -505,6 +551,7 @@
                                             </template>
                                         </select>
                                     </div>
+                                    <span class="text-danger new_error d-none" :id="`err_second_res_wing_sub_categories_${index}`">Category is required.</span>
                                 </div>
                                 <div class="form-group col-md-1 m-b-4 mb-3" x-show="index > 0">
                                     <button class="add_contacts btn btn-primary" style="border-radius:5px;" type="button" @click="removeWingDetail(index)" title="">-</button>
@@ -535,6 +582,7 @@
                                                 </option>
                                             </template>
                                         </select>
+                                        <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_wing_${index}`">Wing name is required.</span>
                                     </div>
                                 </div>
                                 <div class="row mt-4">
@@ -544,6 +592,7 @@
                                                 <label class="mb-0">Saleable</label>
                                                 <input class="form-control" x-model="unit.saleable" name="saleable_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_saleable_${index}`">Saleable from is required.</span>
                                         </div>
                                         <div class="form-group">
                                             <span class="input-group-text" style="min-height:41px;">To</span>
@@ -553,6 +602,7 @@
                                                 <label class="mb-0">Saleable</label>
                                                 <input class="form-control" x-model="unit.saleable_to" name="saleable_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_saleable_to_${index}`">Saleable to is required.</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`second_saleable_area_select_${index}`">
@@ -582,6 +632,7 @@
                                                 <label class="mb-0">Built up Area</label>
                                                 <input class="form-control" x-model="unit.built_up" name="built_up_areass" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_built_up_${index}`">Built up is required.</span><span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_built_up_${index}`">Built up is required.</span>
                                         </div>
                                         <div class="form-group">
                                             <span class="input-group-text" style="min-height:41px;">To</span>
@@ -591,6 +642,7 @@
                                                 <label class="mb-0">Built up Area</label>
                                                 <input class="form-control" x-model="unit.built_up_to" name="built_up_areass" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_built_up_to_${index}`">Built up to is required.</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`second_built_up_area_select_${index}`">
@@ -609,6 +661,7 @@
                                                 <label class="mb-0">Carpet Area</label>
                                                 <input class="form-control" x-model="unit.carpet_area" name="carpet_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_carpet_area_${index}`">Carpet area from is required.</span>
                                         </div>
                                         <div class="form-group">
                                             <span class="input-group-text" style="min-height:41px;">To</span>
@@ -618,6 +671,7 @@
                                                 <label class="mb-0">Carpet Area</label>
                                                 <input class="form-control" x-model="unit.carpet_area_to" name="carpet_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_carpet_area_to_${index}`">Carpet area to is required.</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`second_carpet_area_select_${index}`">
@@ -636,6 +690,7 @@
                                                 <label class="mb-0">Wash Area</label>
                                                 <input class="form-control" x-model="unit.wash_area" name="wash_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_wash_area_${index}`">Wash area from is required.</span>
                                         </div>
                                         <div class="form-group">
                                             <span class="input-group-text" style="min-height:41px;">To</span>
@@ -645,6 +700,7 @@
                                                 <label class="mb-0">Wash Area</label>
                                                 <input class="form-control" x-model="unit.wash_area_to" name="wash_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_wash_area_to_${index}`">Wash area to is required.</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`second_wash_area_select_${index}`">
@@ -663,6 +719,7 @@
                                                 <label class="mb-0">Balcony Area</label>
                                                 <input class="form-control" x-model="unit.balcony" name="balcony_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_balcony_${index}`">Balcony from is required.</span>
                                         </div>
                                         <div class="form-group">
                                             <span class="input-group-text" style="min-height:41px;">To</span>
@@ -672,6 +729,7 @@
                                                 <label class="mb-0">Balcony Area</label>
                                                 <input class="form-control" x-model="unit.balcony_to" name="balcony_area" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_balcony_to_${index}`">Balcony to is required.</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`second_balcony_area_select_${index}`">
@@ -690,13 +748,13 @@
                                                 <label class="mb-0">Floor Height</label>
                                                 <input class="form-control" x-model="unit.floor_height" name="floor_height" type="text" autocomplete="off">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_floor_height_${index}`">floor height is required.</span>
                                         </div>
                                         <div class="input-group-append col-md-5 m-b-20">
                                             <div class="form-group form_measurement">
                                                 <select class="form-select form_measurement measure_select" :id="`second_floor_height_select_${index}`">
-                                                    @forEach($land_units as $land_unit)
-                                                        <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                    @endforeach
+                                                    <option selected="selected" value="1">Ft.</option>
+                                                    <option value="3">Meter</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -869,8 +927,15 @@
                                         <span class="d-none" x-text="nextTickForIfRetail()"></span>
                                         <label>Tower Name</label>
                                         <div class="fvalue">
-                                            <input class="form-control" x-model="tower.tower_name" name="tower_name" type="text" autocomplete="off" data-bs-original-title="" title="">
+                                            <input
+                                                class="form-control"
+                                                x-model="tower.tower_name"
+                                                name="tower_name"
+                                                type="text"
+                                                autocomplete="off"
+                                            >
                                         </div>
+                                        <span class="text-danger new_error d-none" :id="`err_88_89_retail_tower_tower_name_${index}`">Tower name is required.</span>
                                     </div>
                                 </div>
 
@@ -881,6 +946,7 @@
                                         <option value="First">First</option>
                                         <option value="Second">Second</option>
                                     </select>
+                                    <span class="text-danger new_error d-none" :id="`err_88_89_retail_tower_sub_category_${index}`">Sub Category is required.</span>
                                 </div>
 
                                 <div class="row">
@@ -894,6 +960,7 @@
                                                         placeholder="size" data-bs-original-title="" x-model="tower.size_from"
                                                     >
                                                 </div>
+                                                <span class="text-danger new_error d-none" :id="`err_88_89_retail_tower_size_from_${index}`">Size from is required.</span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -909,6 +976,7 @@
                                                         x-model="tower.size_to"
                                                     >
                                                 </div>
+                                                <span class="text-danger new_error d-none" :id="`err_88_89_retail_tower_size_to_${index}`">Size to is required.</span>
                                             </div>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
@@ -931,13 +999,13 @@
                                                     x-model="tower.front_opening" autocomplete="off"
                                                     data-bs-original-title="" title="">
                                                 </div>
+                                                <span class="text-danger new_error d-none" :id="`err_88_89_retail_tower_front_opening_${index}`">Front opening is required.</span>
                                             </div>
                                             <div class="input-group-append col-md-5 m-b-20">
                                                 <div class="form-group form_measurement">
                                                     <select class="form-select form_measurement measure_select" name="tower_front_opening_select" :id="`extra_tower_front_opening_select_${index}`">
-                                                        @forEach($land_units as $land_unit)
-                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                        @endforeach
+                                                        <option selected="selected" value="1">Ft.</option>
+                                                        <option value="3">Meter</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -949,6 +1017,7 @@
                                             <div class="fvalue">
                                                 <input class="form-control" x-model="tower.number_of_each_floor" name="no_of_unit_each_floor" type="text" autocomplete="off" data-bs-original-title="" title="">
                                             </div>
+                                            <span class="text-danger new_error d-none" :id="`err_88_89_retail_tower_number_of_each_floor_${index}`">Number of each floor is required.</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-3 m-b-5">
@@ -959,13 +1028,13 @@
                                                     <input class="form-control" name="ceiling_height" type="text" 
                                                     x-model="tower.ceiling_height" autocomplete="off" data-bs-original-title="" title="">
                                                 </div>
+                                                <span class="text-danger new_error d-none" :id="`err_88_89_retail_tower_ceiling_height_${index}`">Ceiling height is required.</span>
                                             </div>
                                             <div class="input-group-append col-md-5 m-b-20">
                                                 <div class="form-group form_measurement">
                                                     <select class="form-select form_measurement measure_select" name="tower_ceiling_select" :id="`extra_tower_ceiling_select_${index}`">
-                                                        @forEach($land_units as $land_unit)
-                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                        @endforeach
+                                                        <option selected="selected" value="1">Ft.</option>
+                                                        <option value="3">Meter</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -1471,9 +1540,8 @@
                                             <div class="input-group-append col-md-5 m-b-20">
                                                 <div class="form-group form_measurement">
                                                     <select class="form-select form_measurement measure_select" :id="`type_ceiling_height_${index}`">
-                                                        @forEach($land_units as $land_unit)
-                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                        @endforeach
+                                                        <option selected="selected" value="1">Ft.</option>
+                                                        <option value="3">Meter</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -1864,9 +1932,8 @@
                                     <div class="input-group-append col-md-5 m-b-20">
                                         <div class="form-group form_measurement">
                                             <select class="form-select form_measurement measure_select" name="road_width_select" id="first_front_road_map_unit_select">
-                                                @forEach($land_units as $land_unit)
-                                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                @endforeach
+                                                <option selected="selected" value="1">Ft.</option>
+                                                <option value="3">Meter</option>
                                             </select>
                                         </div>
                                     </div>
@@ -1990,9 +2057,8 @@
                                         <div class="input-group-append col-md-5 m-b-20">
                                             <div class="form-group form_measurement">
                                                 <select class="form-select form_measurement measure_select" name="road_width_select" :id="`first_ceiling_height_map_unit_select_${index}`">
-                                                    @forEach($land_units as $land_unit)
-                                                        <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                    @endforeach
+                                                    <option selected="selected" value="1">Ft.</option>
+                                                    <option value="3">Meter</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -2212,9 +2278,8 @@
                                             <div class="input-group-append col-md-5 m-b-20">
                                                 <div class="form-group form_measurement">
                                                     <select class="form-select form_measurement measure_select" name="tower_front_opening_select" :id="`tower_front_opening_select_${index}`">
-                                                        @forEach($land_units as $land_unit)
-                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                        @endforeach
+                                                        <option selected="selected" value="1">Ft.</option>
+                                                        <option value="3">Meter</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -2242,9 +2307,8 @@
                                             <div class="input-group-append col-md-5 m-b-20">
                                                 <div class="form-group form_measurement">
                                                     <select class="form-select form_measurement measure_select" name="tower_ceiling_select" :id="`tower_ceiling_select_${index}`">
-                                                        @forEach($land_units as $land_unit)
-                                                            <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                        @endforeach
+                                                        <option selected="selected" value="1">Ft.</option>
+                                                        <option value="3">Meter</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -2501,9 +2565,8 @@
                                         <div class="input-group-append col-md-5 m-b-20">
                                             <div class="form-group form_measurement">
                                                 <select class="form-select form_measurement measure_select" :id="`floor_height_select_${index}`">
-                                                    @forEach($land_units as $land_unit)
-                                                        <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                    @endforeach
+                                                    <option selected="selected" value="1">Ft.</option>
+                                                    <option value="3">Meter</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -2522,9 +2585,8 @@
                                         <div class="input-group-append col-md-5 m-b-20">
                                             <div class="form-group form_measurement">
                                                 <select class="form-select form_measurement measure_select" :id="`second_ceiling_height_select_${index}`">
-                                                    @forEach($land_units as $land_unit)
-                                                        <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                    @endforeach
+                                                    <option selected="selected" value="1">Ft.</option>
+                                                    <option value="3">Meter</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -2786,9 +2848,9 @@
                         </div>
                         <div class="form-group col-md-2 m-b-10">
                             <select class="form-select" name="constructed_saleable_area_select" tabindex="-1" aria-hidden="true" id="constructed_saleable_area_select">
-                            @forEach($land_units as $land_unit)
-                                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
-                                                @endforeach
+                                @forEach($land_units as $land_unit)
+                                    <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

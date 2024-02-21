@@ -1998,6 +1998,7 @@
                             // sub category = 1 office space
 
                             if(this.if_office_or_retail.number_of_tower == '') {
+                                let number_of_tower = document.getElementById('85_if_office_or_retail_number_of_tower');
                                 if(number_of_tower) {
                                     let err_number_of_tower = document.getElementById('err_85_if_office_or_retail_number_of_tower');
                                     err_number_of_tower.classList.remove("d-none");
@@ -2581,6 +2582,314 @@
                                 }
                             }
                         }
+                    }
+
+                    if(this.property_type == 88) {
+
+                        if(this.if_office_or_retail.number_of_tower == '') {
+                            let number_of_tower = document.getElementById('88_if_office_or_retail_number_of_tower');
+                            if(number_of_tower) {
+                                let err_number_of_tower = document.getElementById('err_88_if_office_or_retail_number_of_tower');
+                                err_number_of_tower.classList.remove("d-none");
+                                is_valid = false;
+                            }
+                        } else {
+                            if (isNaN(this.if_office_or_retail.number_of_tower)) {
+                                let err_number_of_tower = document.getElementById('err_88_if_office_or_retail_number_of_tower');
+                                if(err_number_of_tower) {
+                                    err_number_of_tower.innerText = 'Number of tower must be number';
+                                    err_number_of_tower.classList.remove('d-none');
+                                    is_valid = false;
+                                }
+                            }
+                        }
+
+                        if(this.if_office_or_retail.number_of_floor == '') {
+                            let number_of_floor = document.getElementById('88_if_office_or_retail_number_of_floor');
+                            if(number_of_floor) {
+                                let err_number_of_floor = document.getElementById('err_88_if_office_or_retail_number_of_floor');
+                                err_number_of_floor.classList.remove("d-none");
+                                is_valid = false;
+                            }
+                        } else {
+                            if (isNaN(this.if_office_or_retail.number_of_floor)) {
+                                let err_number_of_floor = document.getElementById('err_88_if_office_or_retail_number_of_floor');
+                                if(err_number_of_floor) {
+                                    err_number_of_floor.innerText = 'Number of floor must be number';
+                                    err_number_of_floor.classList.remove('d-none');
+                                    is_valid = false;
+                                }
+                            }
+                        }
+
+                        if(this.if_office_or_retail.number_of_unit_each_block == '') {
+                            let number_of_unit = document.getElementById('88_if_office_or_retail_number_of_unit_each_block');
+                            if(number_of_unit) {
+                                let err_number_of_unit = document.getElementById('err_88_if_office_or_retail_number_of_unit_each_block');
+                                err_number_of_unit.classList.remove("d-none");
+                                is_valid = false;
+                            }
+                        } else {
+                            if (isNaN(this.if_office_or_retail.number_of_unit)) {
+                                let err_number_of_unit = document.getElementById('err_88_if_office_or_retail_number_of_unit_each_block');
+                                if(err_number_of_unit) {
+                                    err_number_of_unit.innerText = 'Number of unit must be number';
+                                    err_number_of_unit.classList.remove('d-none');
+                                    is_valid = false;
+                                }
+                            }
+                        }
+
+                        if(this.if_office_or_retail.number_of_lift == '') {
+                            let number_of_lift = document.getElementById('88_if_office_or_retail_number_of_lift');
+                            if(number_of_lift) {
+                                let err_number_of_lift = document.getElementById('err_88_if_office_or_retail_number_of_lift');
+                                err_number_of_lift.classList.remove("d-none");
+                                is_valid = false;
+                            }
+                        } else {
+                            if (isNaN(this.if_office_or_retail.number_of_lift)) {
+                                let err_number_of_lift = document.getElementById('err_88_if_office_or_retail_number_of_lift');
+                                if(err_number_of_lift) {
+                                    err_number_of_lift.innerText = 'Number of lift must be number';
+                                    err_number_of_lift.classList.remove('d-none');
+                                    is_valid = false;
+                                }
+                            }
+                        }
+
+                        if(this.if_office_or_retail.front_road_width == '') {
+                            let front_road_width = document.getElementById('88_if_office_or_retail_front_road_width');
+                            if(front_road_width) {
+                                let err_front_road_width = document.getElementById('err_88_if_office_or_retail_front_road_width');
+                                err_front_road_width.classList.remove("d-none");
+                                is_valid = false;
+                            }
+                        } else {
+                            if (isNaN(this.if_office_or_retail.front_road_width)) {
+                                let err_front_road_width = document.getElementById('err_88_if_office_or_retail_front_road_width');
+                                if(err_front_road_width) {
+                                    err_front_road_width.innerText = 'Number of front raod width must be number';
+                                    err_front_road_width.classList.remove('d-none');
+                                    is_valid = false;
+                                }
+                            }
+                        }
+
+                        this.if_office_tower_details.forEach((office_tower , index) => {
+
+                            Object.entries(office_tower).forEach((key_name) => {
+                                if(key_name[1] == '' && !['is_carpet','is_built_up','carpet','carpet_to','built_up','built_up_to'].includes(key_name[0])) {
+                                    let error_element = document.getElementById(`err_88_tower_detail_${key_name[0]}_${index}`);
+                                    if(error_element) {
+                                        error_element.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+
+                                if(key_name[0] == 'carpet' || key_name[0] == 'carpet_to') {
+                                    if(office_tower.is_carpet) {
+                                        if(key_name[1] == '') {
+                                            let error_element = document.getElementById(`err_88_tower_detail_${key_name[0]}_${index}`);
+                                            if(error_element) {
+                                                error_element.classList.remove('d-none');
+                                                is_valid = false;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if(key_name[0] == 'built_up' || key_name[0] == 'built_up_to') {
+                                    if(office_tower.is_built_up) {
+                                        if(key_name[1] == '') {
+                                            let error_element = document.getElementById(`err_88_tower_detail_${key_name[0]}_${index}`);
+                                            if(error_element) {
+                                                error_element.classList.remove('d-none');
+                                                is_valid = false;
+                                            }
+                                        } 
+                                    }
+                                }
+                            });
+                        });
+
+                        
+                        this.if_retail_tower_details.forEach((retail_tower , index) => {
+                            Object.entries(retail_tower).forEach((key_name) => {
+                                if(key_name[1] == '' && key_name[0] != 'sub_category') {
+                                    let error_element = document.getElementById(`err_88_89_retail_tower_${key_name[0]}_${index}`);
+                                    if(error_element) {
+                                        error_element.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+                            });
+                        });
+                    }
+
+                    if(this.property_type == 89) {
+                        if(this.is_flat_or_penthouse.number_of_towers == '')
+                        { 
+                            let err_89_flat_number_of_tower = document.getElementById('err_89_flat_number_of_towers');
+                            if(err_89_flat_number_of_tower) {
+                                err_89_flat_number_of_tower.classList.remove('d-none');
+                                is_valid = false;
+                            }
+                        }
+
+                        if(this.is_flat_or_penthouse.number_of_floors == '')
+                        { 
+                            let err_89_flat_number_of_floors = document.getElementById('err_89_flat_number_of_floors');
+                            if(err_89_flat_number_of_floors) {
+                                err_89_flat_number_of_floors.classList.remove('d-none');
+                                is_valid = false;
+                            }
+                        }
+
+                        if(this.is_flat_or_penthouse.total_units == '')
+                        { 
+                            let err_89_flat_total_units = document.getElementById('err_89_flat_total_units');
+                            if(err_89_flat_total_units) {
+                                err_89_flat_total_units.classList.remove('d-none');
+                                is_valid = false;
+                            }
+                        }
+
+                        if(this.is_flat_or_penthouse.number_of_elevator == '')
+                        { 
+                            let err_89_flat_number_of_elevator = document.getElementById('err_89_flat_number_of_elevator');
+                            if(err_89_flat_number_of_elevator) {
+                                err_89_flat_number_of_elevator.classList.remove('d-none');
+                                is_valid = false;
+                            }
+                        }
+
+                        this.if_residential_only_wings.wing_details.forEach((res_wing , index) => {
+                            Object.entries(res_wing).forEach((key_name) => {
+                                if(key_name[1] == '' && key_name[0] != 'sub_categories') {
+                                    let error_element = document.getElementById(`err_second_res_wing_${key_name[0]}_${index}`);
+                                    if(error_element) {
+                                        error_element.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+
+                                if(key_name[0] == 'sub_categories') {
+                                    let first_categories_select = document.getElementById(`extra_sub_category_of_wings_${index}`);
+
+                                    if(first_categories_select) {
+                                        if(first_categories_select.value == '') {
+                                            let error_element = document.getElementById(`err_second_res_wing_${key_name[0]}_${index}`);
+                                            if(error_element) {
+                                                error_element.classList.remove('d-none');
+                                                is_valid = false;
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        });
+
+                        this.if_residential_only_units.unit_details.forEach((res_unit_details , index) => {
+
+                            let wing_element = document.getElementById(`second_wing_array_${index}`);
+
+                            if(wing_element) {
+                                if(wing_element.value == '') {
+                                    let err_wing = document.getElementById(`err_second_if_residential_only_units_wing_${index}`);
+                                    if(err_wing) {
+                                        err_wing.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+                            }
+
+                            if(res_unit_details.has_built_up) {
+                                if(res_unit_details.built_up == '') {
+                                    let error_built_up_from = document.getElementById(`err_second_if_residential_only_units_built_up_${index}`);
+                                    if(error_built_up_from) {
+                                        error_built_up_from.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+
+                                if(res_unit_details.built_up_to == '') {
+                                    let error_built_up_to = document.getElementById(`err_second_if_residential_only_units_built_up_to_${index}`);
+                                    if(error_built_up_to) {
+                                        error_built_up_to.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+                            }
+
+                            if(res_unit_details.has_carpet) {
+                                if(res_unit_details.carpet_area == '') {
+                                    let error_carpet_area_from = document.getElementById(`err_second_if_residential_only_units_carpet_area_${index}`);
+                                    if(error_carpet_area_from) {
+                                        error_carpet_area_from.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+
+                                if(res_unit_details.carpet_area_to == '') {
+                                    let error_carpet_to = document.getElementById(`err_second_if_residential_only_units_carpet_area_to_${index}`);
+                                    if(error_carpet_to) {
+                                        error_carpet_to.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+                            }
+
+                            Object.entries(res_unit_details).forEach((key_name) => {
+
+                                let res_only_unit_fields = [
+                                    'saleable',
+                                    'saleable_to',
+                                    'wash_area',
+                                    'wash_area_to',
+                                    'balcony',
+                                    'balcony_to',
+                                    'floor_height',
+                                    'ceiling_height',
+                                ];
+
+                                if(key_name[1] == '' && res_only_unit_fields.includes(key_name[0])) {
+                                    let error_element = document.getElementById(`err_second_if_residential_only_units_${key_name[0]}_${index}`);
+                                    if(error_element) {
+                                        error_element.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+                            });
+                        });
+
+                         
+                        this.if_retail_tower_details.forEach((retail_tower , index) => {
+                            Object.entries(retail_tower).forEach((key_name) => {
+                                if(key_name[1] == '' && key_name[0] != 'sub_category') {
+                                    let error_element = document.getElementById(`err_88_89_retail_tower_${key_name[0]}_${index}`);
+                                    if(error_element) {
+                                        error_element.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+
+                                if(key_name[0] == 'sub_category') {
+
+                                    let first_categories_selection = document.getElementById(`extra_floor_category_${index}`);
+
+                                    if(first_categories_selection) {
+                                        if(first_categories_selection.value == '') {
+                                            let error_element = document.getElementById(`err_88_89_retail_tower_${key_name[0]}_${index}`);
+                                            if(error_element) {
+                                                error_element.classList.remove('d-none');
+                                                is_valid = false;
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        });
                     }
 
                     return is_valid;
