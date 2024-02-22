@@ -421,8 +421,6 @@
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Tower Name</th>
-                                                            <th scope="col">Total Floor</th>
-                                                            <th scope="col">Total Unit</th>
                                                             <th scope="col">Saleable</th>
                                                             <th scope="col">Carpet</th>
                                                             <th scope="col">Built Up</th>
@@ -432,19 +430,14 @@
                                                         @foreach ($project->if_office as $office_tower)
                                                         <tr>
                                                             <td>{{$office_tower['tower_name']}}</td>
-                                                            <td>{{$office_tower['total_floor']}}</td>
-                                                            <td>{{$office_tower['total_unit']}}</td>
                                                             <td>
                                                                 {{$office_tower['saleable']}} - {{ $office_tower['saleable_to'] }}
-                                                                <span>{{ $map_unit[$office_tower['saleable_from_to_map_unit']] }}</span>
                                                             </td>
                                                             <td>
                                                                 {{$office_tower['carpet']}}
-                                                                <span>{{ $map_unit[$office_tower['carpet_from_to_map_unit']] }}</span>
                                                             </td>
                                                             <td>
                                                                 {{$office_tower['built_up']}} - {{ $office_tower['built_up_to'] }}
-                                                                <span>{{ $map_unit[$office_tower['built_from_to_map_unit']] }}</span>
                                                             </td>
                                                         </tr>
                                                         @endforeach
@@ -784,7 +777,6 @@
                                                                 <td>{{$parking['hydraulic_parking']}}</td>
                                                                 <td>
                                                                     {{$parking['height_of_basement']}}
-                                                                    <span>{{ $map_unit[$parking['height_of_basement_map_unit']]}}</span>
                                                                 </td>
                                                             </tr>
                                                         @endforeach

@@ -13,6 +13,7 @@ use App\Http\Controllers\Superadmin\CommentsController;
 use App\Http\Controllers\Superadmin\ProjectsController;
 use App\Http\Controllers\Superadmin\SuperTalukaController;
 use App\Http\Controllers\Superadmin\SuperVillageController;
+use App\Http\Controllers\Superadmin\UnitController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,11 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/get-user', [UserController::class, 'getSpecificUser'])->name('superadmin.getUser');
 		Route::post('/delete-user', [UserController::class, 'destroy'])->name('superadmin.deleteUser');
 		Route::post('/save-user', [UserController::class, 'saveUser'])->name('superadmin.saveUser');
+
+		Route::any('/units', [UnitController::class, 'index'])->name('superadmin.units');
+		Route::post('/get-unit', [UnitController::class, 'getUnit'])->name('superadmin.getUnit');
+		Route::post('/delete-unit', [UnitController::class, 'destroy'])->name('superadmin.deleteUnits');
+		Route::post('/save-unit', [UnitController::class, 'saveUnit'])->name('superadmin.saveUnits');
 		
 		Route::any('/Members', [UserController::class, 'membersList'])->name('superadmin.members');
 		Route::post('/get-member', [UserController::class, 'getSpecificMember'])->name('superadmin.getMember');

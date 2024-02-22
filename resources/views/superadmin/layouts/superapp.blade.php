@@ -379,16 +379,18 @@ Helper::set_default_measuerement();
                                                 class="lan-3">Ticket System</span></a>
                                     </li>
                                 @endif
-                                <!--<li class="sidebar-list"><a class="sidebar-link sidebar-title -->
-                                <!--        href="{{ route('superadmin.tickets') }}"><i class="fa fa-user"></i>-->
-                                <!--        <span="lan-3">Ticket System</span></a>-->
-                                <!--</li>-->
+
                                 @if ($permissions->contains(\App\Constants\SupAdminPermissions::PLANS))
                                     <li class="sidebar-list"><a class="sidebar-link sidebar-title  @if ($route == 'superadmin.plans') active @endif"
                                             href="{{ route('superadmin.plans') }}"><i class="fa fa-user"></i><span
                                                 class="lan-3">Plans</span></a>
                                     </li>
                                 @endif
+
+                                <li class="sidebar-list"><a class="sidebar-link sidebar-title  @if ($route == 'superadmin.units') active @endif"
+                                        href="{{ route('superadmin.units') }}"><i class="fa fa-user"></i><span
+                                            class="lan-3">Measurement Units</span></a>
+                                </li>
 
                                 @if ($permissions->contains(\App\Constants\SupAdminPermissions::COUPONS))
                                     <li class="sidebar-list"><a
