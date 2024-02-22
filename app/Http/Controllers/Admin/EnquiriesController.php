@@ -40,8 +40,8 @@ use Illuminate\Support\Facades\DB;
 
 class EnquiriesController extends Controller
 {
-    use HelperFn;
-    
+	use HelperFn;
+
 	public function __construct()
 	{
 		$this->middleware('auth');
@@ -49,9 +49,11 @@ class EnquiriesController extends Controller
 
 	public function index(Request $request)
 	{
-	    
+
 		if ($request->ajax()) {
 			$dropdowns = DropdownSettings::get()->toArray();
+			// $land_units = DB::table('land_units')->get();
+
 			$dropdownsarr = [];
 			foreach ($dropdowns as $key => $value) {
 				$dropdownsarr[$value['id']] = $value;
@@ -104,8 +106,7 @@ class EnquiriesController extends Controller
 							return $query->whereHas('activeProgress', function ($query) {
 								$query->whereDate('nfd', '<=', Carbon::now()->endOfWeek())->whereDate('nfd', '>=', Carbon::now()->endOfWeek()->subDay());
 							});
-						}
-						elseif ($request->filter_by == 'missed') {
+						} elseif ($request->filter_by == 'missed') {
 							return $query->whereDate('created_at', '<', Carbon::now()->format('Y-m-d'));
 						}
 					})
@@ -128,7 +129,7 @@ class EnquiriesController extends Controller
 						return $query->where('employee_id', $request->filter_employee_id);
 					})
 					->when($request->filter_property_type, function ($query) use ($request) {
-					
+
 						return $query->where('requirement_type', $request->filter_property_type);
 					})
 					->when($request->filter_specific_type, function ($query) use ($request) {
@@ -141,9 +142,9 @@ class EnquiriesController extends Controller
 							}
 						});
 					})
-				->when($request->filter_configuration, function ($query) use ($request) {
-                        return $query->where('configuration', 'like', '%"'.$request->filter_configuration.'"%');
-                    })
+					->when($request->filter_configuration, function ($query) use ($request) {
+						return $query->where('configuration', 'like', '%"' . $request->filter_configuration . '"%');
+					})
 
 					->when($request->filter_area_id, function ($query) use ($request) {
 						$query->where(function ($query) use ($request) {
@@ -291,7 +292,7 @@ class EnquiriesController extends Controller
 					WHEN enquiries.enq_status = 1 THEN 1
 					ELSE 2
 					END,  enquiries.id DESC');
-					// ->orderBy('id', 'desc');
+				// ->orderBy('id', 'desc');
 
 				$parts = explode('?', $request->location);
 
@@ -393,96 +394,112 @@ class EnquiriesController extends Controller
 					return $first . $second . $end;
 				})
 				->editColumn('client_requirement', function ($row) use ($dropdowns, $areas) {
-					try {
-						$area_name = '';
-						$configuration_name = '';
-						$requiretype_name = '';
-						$configurationArray = json_decode($row->configuration);
+					// try {
+					$area_name = '';
+					$configuration_name = '';
+					$requiretype_name = '';
+					$configurationArray = json_decode($row->configuration);
 
-						// if (!empty(config('constant.property_configuration')[$row->configuration])) {
-						// 	$configuration_name = config('constant.property_configuration')[$row->configuration];
-						// 	dd($configuration_name);
+					// if (!empty(config('constant.property_configuration')[$row->configuration])) {
+					// 	$configuration_name = config('constant.property_configuration')[$row->configuration];
+					// 	dd($configuration_name);
 
-						$sub_cat = ((!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '');
+					$sub_cat = ((!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '');
 
-						$configurationArray = json_decode($row->configuration);
-						if (!empty($configurationArray) && isset($configurationArray[0])) {
-							$configurationKey = $configurationArray[0];
+					$configurationArray = json_decode($row->configuration);
+					if (!empty($configurationArray) && isset($configurationArray[0])) {
+						$configurationKey = $configurationArray[0];
 
-							if (!empty(config('constant.property_configuration')[$configurationKey])) {
-								$configuration_name = config('constant.property_configuration')[$configurationKey];
-							} else {
-								$configuration_name = "Null";
-							}
+						if (!empty(config('constant.property_configuration')[$configurationKey])) {
+							$configuration_name = config('constant.property_configuration')[$configurationKey];
 						} else {
-							$category = $sub_cat;
+							$configuration_name = "Null";
 						}
-
+					} else {
 						$category = $sub_cat;
-
-						$area_name = '';
-						$other_areas = '';
-						$area_title = '';
-						if (!empty($row->area_ids)) {
-							foreach (json_decode($row->area_ids) as $key => $value) {
-								if ($key < 2) {
-									if ($key > 0) {
-										$area_name .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-									} else {
-										$area_name .= (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-									}
-								} else {
-									$other_areas .= $area_name;
-									$other_areas .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-								}
-							}
-						}
-						if ($other_areas) {
-							$area_title = ' <i class="fa fa-info-circle cursor-pointer" data-bs-content="' . $other_areas . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom"></i>';
-						}
-						$area_form_m = '';
-						if (!empty($row->area_from_measurement)) {
-							$area_form_m = $dropdowns[$row->area_from_measurement]['name'];
-						}
-						$area_form_t = '';
-						if (!empty($row->area_to_measurement)) {
-							$area_form_t = $dropdowns[$row->area_to_measurement]['name'];
-						}
-
-						if ($row->property_type == '256') {
-							$fstatus  = '';
-						} else {
-							$fstatus  = 'Unfurnished';
-							if (!empty($row->furnished_status) && !empty(json_decode($row->furnished_status))) {
-								$vv = json_decode($row->furnished_status);
-								if (isset($vv[0])) {
-									if (!empty($vv[0])) {
-										if ($vv[0] == "106" || $vv[0] == "34") {
-											$fstatus = 'Furnished';
-										} elseif ($vv[0] == "107" || $vv[0] == "35") {
-											$fstatus = 'Semi Furnished';
-										} elseif ($vv[0] == "108" || $vv[0] == "36") {
-											$fstatus = 'Unfurnished';
-										} else {
-											$fstatus = 'Can Furnished';
-										}
-									}
-								}
-							}
-						}
-
-						$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_name)) ? ' | ' : $category) . $configuration_name . '</div>';
-						//	$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " " . $area_form_m . " - " . $row->area_to . " " . $area_form_t : "") . '</div>';
-						$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " - " . $row->area_to . " " . $area_form_t : "") . '</div>';
-						$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"></small></div>';
-						$req .= $fstatus;
-						if (!empty($area_name)) {
-							$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"><i class="fa fa-map-marker"></i> ' . $area_name . $area_title . '</small></div>';
-						}
-						return $req;
-					} catch (\Throwable $th) {
-						report($th);
 					}
+
+					$category = $sub_cat;
+
+					$area_name = '';
+					$other_areas = '';
+					$area_title = '';
+					if (!empty($row->area_ids)) {
+						foreach (json_decode($row->area_ids) as $key => $value) {
+							if ($key < 2) {
+								if ($key > 0) {
+									$area_name .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+								} else {
+									$area_name .= (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+								}
+							} else {
+								$other_areas .= $area_name;
+								$other_areas .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+							}
+						}
+					}
+					if ($other_areas) {
+						$area_title = ' <i class="fa fa-info-circle cursor-pointer" data-bs-content="' . $other_areas . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom"></i>';
+					}
+					$area_form_m = '';
+					// if (!empty($row->area_from_measurement)) {  //1
+					// 	$area_form_m = $land_units[$row->area_from_measurement]['unit_name'];
+					// }
+					$land_units = DB::table('land_units')->get();
+
+					if (!empty($row->area_from_measurement)) {
+						// Find the unit with the specified ID in the collection
+						$unit = $land_units->firstWhere('id', $row->area_from_measurement);
+
+						if ($unit) {
+							// Access the unit_name property of the object
+							$area_form_m = $unit->unit_name;
+						} else {
+							// Handle the case when the unit with the specified ID doesn't exist
+							$area_form_m = null; // or any default value you want
+						}
+					}
+
+
+					// $area_form_t = '';
+					// if (!empty($row->area_to_measurement)) {
+					// 	$area_form_t = $dropdowns[$row->area_to_measurement]['name'];
+					// }
+
+					if ($row->property_type == '256') {
+						$fstatus  = '';
+					} else {
+						$fstatus  = 'Unfurnished';
+						if (!empty($row->furnished_status) && !empty(json_decode($row->furnished_status))) {
+							$vv = json_decode($row->furnished_status);
+							if (isset($vv[0])) {
+								if (!empty($vv[0])) {
+									if ($vv[0] == "106" || $vv[0] == "34") {
+										$fstatus = 'Furnished';
+									} elseif ($vv[0] == "107" || $vv[0] == "35") {
+										$fstatus = 'Semi Furnished';
+									} elseif ($vv[0] == "108" || $vv[0] == "36") {
+										$fstatus = 'Unfurnished';
+									} else {
+										$fstatus = 'Can Furnished';
+									}
+								}
+							}
+						}
+					}
+
+					$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_name)) ? ' | ' : $category) . $configuration_name . '</div>';
+					//	$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " " . $area_form_m . " - " . $row->area_to . " " . $area_form_t : "") . '</div>';
+					$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " - " . $row->area_to . " " . $area_form_m : "") . '</div>';
+					$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"></small></div>';
+					$req .= $fstatus;
+					if (!empty($area_name)) {
+						$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"><i class="fa fa-map-marker"></i> ' . $area_name . $area_title . '</small></div>';
+					}
+					return $req;
+					// } catch (\Throwable $th) {
+					// 	report($th);
+					// }
 				})
 				->editColumn('budget', function ($row) {
 					$bud = '';
@@ -573,7 +590,7 @@ class EnquiriesController extends Controller
 		}
 
 
-		$cities = City::orderBy('name')->where('user_id','=',Auth::user()->id)->get();
+		$cities = City::orderBy('name')->where('user_id', '=', Auth::user()->id)->get();
 		$branches = Branches::orderBy('name')->get();
 		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
@@ -716,7 +733,7 @@ class EnquiriesController extends Controller
 				$prop_type = $dropdowns[$value['property_type']]['name'];
 			}
 
-			$areas = Areas::where('user_id',Auth::user()->id)->get()->toArray();
+			$areas = Areas::where('user_id', Auth::user()->id)->get()->toArray();
 			$areaarr = [];
 			foreach ($areas as $key3 => $value2) {
 				$areaarr[$value2['id']] = $value2;
@@ -794,52 +811,52 @@ class EnquiriesController extends Controller
 		$data->remarks = $request->remarks;
 		$data->save();
 
-       
-        // create notification for new user
-        $enq = Enquiries::find($request->enquiry_id);
-        $notif = UserNotifications::where(['notification_type' => Constants::ENQUIRY_ASSIGNED, 'enquiry_id' => $request->enquiry_id])
-                ->orderBy('id', 'desc')->first();
-        if (empty($notif)) {
-            $notif = UserNotifications::where(['notification_type' => Constants::ENQUIRY_FOLLOWUP, 'enquiry_id' => $request->enquiry_id])
-                ->orderBy('id', 'desc')->first();
-        }
-        $user = Auth::user();
-        $nfDate = Carbon::parse($request->nfd)->format('Y-m-d H:i:s');
-        $message = "There an update on enquiry for the client `$enq->client_name`: The next follow up date is " . $nfDate;
 
-        if(!empty($notif)) {
-            // notify user for next follow up date
-            $userNotification = UserNotifications::create([
-                "user_id" => @$notif->by_user,
-                "notification" => $message,
-                "notification_type" => Constants::ENQUIRY_FOLLOWUP,
-                'enquiry_id' => $request->enquiry_id,
-                'schedule_date' => $nfDate,
-                'by_user' => (int) $user->id
-            ]);
-            // if notificaton creation failed.
-            if (!$userNotification) {
-                Log::error('Unable to create user notification');
-            }
-            // send if user has onesignal id
-            if (!empty($user->onesignal_token)) {
-                HelperFn::sendPushNotification($user->onesignal_token, $message);
-            }
-    
-            // notify logged in user for next follow up date
-            UserNotifications::create([
-                "user_id" => (int) $user->id,
-                "notification" => $message,
-                "notification_type" => Constants::ENQUIRY_FOLLOWUP,
-                'enquiry_id' => $request->enquiry_id,
-                'by_user' => @$notif->by_user
-            ]);
-            $otherUser = User::where('id', $notif->by_user)->first();
-            // send if user has onesignal id
-            if (!empty($otherUser->onesignal_token)) {
-                HelperFn::sendPushNotification($otherUser->onesignal_token, $message);
-            }
-        }
+		// create notification for new user
+		$enq = Enquiries::find($request->enquiry_id);
+		$notif = UserNotifications::where(['notification_type' => Constants::ENQUIRY_ASSIGNED, 'enquiry_id' => $request->enquiry_id])
+			->orderBy('id', 'desc')->first();
+		if (empty($notif)) {
+			$notif = UserNotifications::where(['notification_type' => Constants::ENQUIRY_FOLLOWUP, 'enquiry_id' => $request->enquiry_id])
+				->orderBy('id', 'desc')->first();
+		}
+		$user = Auth::user();
+		$nfDate = Carbon::parse($request->nfd)->format('Y-m-d H:i:s');
+		$message = "There an update on enquiry for the client `$enq->client_name`: The next follow up date is " . $nfDate;
+
+		if (!empty($notif)) {
+			// notify user for next follow up date
+			$userNotification = UserNotifications::create([
+				"user_id" => @$notif->by_user,
+				"notification" => $message,
+				"notification_type" => Constants::ENQUIRY_FOLLOWUP,
+				'enquiry_id' => $request->enquiry_id,
+				'schedule_date' => $nfDate,
+				'by_user' => (int) $user->id
+			]);
+			// if notificaton creation failed.
+			if (!$userNotification) {
+				Log::error('Unable to create user notification');
+			}
+			// send if user has onesignal id
+			if (!empty($user->onesignal_token)) {
+				HelperFn::sendPushNotification($user->onesignal_token, $message);
+			}
+
+			// notify logged in user for next follow up date
+			UserNotifications::create([
+				"user_id" => (int) $user->id,
+				"notification" => $message,
+				"notification_type" => Constants::ENQUIRY_FOLLOWUP,
+				'enquiry_id' => $request->enquiry_id,
+				'by_user' => @$notif->by_user
+			]);
+			$otherUser = User::where('id', $notif->by_user)->first();
+			// send if user has onesignal id
+			if (!empty($otherUser->onesignal_token)) {
+				HelperFn::sendPushNotification($otherUser->onesignal_token, $message);
+			}
+		}
 	}
 
 	public function saveSchedule(Request $request)
@@ -864,7 +881,7 @@ class EnquiriesController extends Controller
 		}
 		$data->description = $request->description;
 		$data->save();
-        
+
 		if ($request->visit_status == 'Confirmed' || $request->visit_status == 'Completed') {
 			if ($request->visit_status == 'Confirmed') {
 				$the_progress = 'Site Visit Scheduled';
@@ -880,35 +897,35 @@ class EnquiriesController extends Controller
 			$data->progress = $the_progress;
 			// $data->lead_type = $previous->lead_type;
 			$data->nfd = $request->visit_date;
-            $data->remarks = $request->description;
+			$data->remarks = $request->description;
 			$data->save();
-			
-			// if same notification already exist for the same user...then delete it.
-            UserNotifications::where(['notification_type' => Constants::SCHEDULE_VISIT, 'enquiry_id' => $request->enquiry_id])->delete();
-                
-			$notif = UserNotifications::where(['notification_type' => Constants::ENQUIRY_ASSIGNED, 'enquiry_id' => $request->enquiry_id])
-                ->orderBy('id', 'desc')->first();
-            if (!$notif) {
-                Log::error('User notifcation with '. $request->enquiry_id. ' id and enquiry_assigned status not found');
-            }
-            $user = Auth::user();
 
-            // notify user for next schedule visit date
-            $message = $the_progress . ' for client '. $enq->client_name .' at '. $request->visit_date;
-            if (!empty($notif)) {
-                $userNotification = UserNotifications::create([
-                    "user_id" => (int) $notif->user_id,
-                    "notification" => $message,
-                    "notification_type" => Constants::SCHEDULE_VISIT,
-                    'enquiry_id' => $request->enquiry_id,
-                    'by_user' => (int) $user->id,
-                    'schedule_date' => $request->visit_date
-                ]);
-                // if notificaton creation failed.
-                if (!$userNotification) {
-                    Log::error('Save Schedule Visit: Unable to create user notification');
-                }
-            }
+			// if same notification already exist for the same user...then delete it.
+			UserNotifications::where(['notification_type' => Constants::SCHEDULE_VISIT, 'enquiry_id' => $request->enquiry_id])->delete();
+
+			$notif = UserNotifications::where(['notification_type' => Constants::ENQUIRY_ASSIGNED, 'enquiry_id' => $request->enquiry_id])
+				->orderBy('id', 'desc')->first();
+			if (!$notif) {
+				Log::error('User notifcation with ' . $request->enquiry_id . ' id and enquiry_assigned status not found');
+			}
+			$user = Auth::user();
+
+			// notify user for next schedule visit date
+			$message = $the_progress . ' for client ' . $enq->client_name . ' at ' . $request->visit_date;
+			if (!empty($notif)) {
+				$userNotification = UserNotifications::create([
+					"user_id" => (int) $notif->user_id,
+					"notification" => $message,
+					"notification_type" => Constants::SCHEDULE_VISIT,
+					'enquiry_id' => $request->enquiry_id,
+					'by_user' => (int) $user->id,
+					'schedule_date' => $request->visit_date
+				]);
+				// if notificaton creation failed.
+				if (!$userNotification) {
+					Log::error('Save Schedule Visit: Unable to create user notification');
+				}
+			}
 		}
 	}
 	public function enquiryCalendar(Request $request)
@@ -931,8 +948,8 @@ class EnquiriesController extends Controller
 				})->when($request->year, function ($query) use ($request) {
 					return $query->whereYear('created_at', '=', $request->year);
 				})
-				->where('enq_status', 1)
-				->get();
+					->where('enq_status', 1)
+					->get();
 				foreach ($newenq as $key => $value) {
 					array_push($ar, Carbon::parse($value->created_at)->format('Y-m-d'));
 				}
@@ -1252,27 +1269,27 @@ class EnquiriesController extends Controller
 			/* Stored Assign Enquiry History */
 			AssignHistory::create(['enquiry_id' => $request->enquiry_id, 'user_id' => Auth::user()->id, 'assign_id' => $request->employee]);
 
-            // create notification for new user
-            UserNotifications::where(['user_id' => $request->employee, 'notification_type' => Constants::ENQUIRY_ASSIGNED, 'enquiry_id' => $request->enquiry_id])
-                ->delete();
-            $enq = Enquiries::find($request->enquiry_id);
-            $msg = Auth::user()->first_name . " has assigned you enquiry. The client Name is: $enq->client_name";
-            $userNotification = UserNotifications::create([
-                "user_id" => (int) $request->employee,
-                "notification" => $msg,
-                "notification_type" => Constants::ENQUIRY_ASSIGNED,
-                'enquiry_id' => $request->enquiry_id,
-                'by_user' => Auth::user()->id
-            ]);
-            // if notificaton creation failed.
-            if (!$userNotification) {
-                Log::error('Unable to create user notification');
-            }
-            $user = User::where('id', $request->employee)->first();
-            // send if user has onesignal id
-            if (!empty($user->onesignal_token)) {
-                HelperFn::sendPushNotification($user->onesignal_token, $msg);
-            }
+			// create notification for new user
+			UserNotifications::where(['user_id' => $request->employee, 'notification_type' => Constants::ENQUIRY_ASSIGNED, 'enquiry_id' => $request->enquiry_id])
+				->delete();
+			$enq = Enquiries::find($request->enquiry_id);
+			$msg = Auth::user()->first_name . " has assigned you enquiry. The client Name is: $enq->client_name";
+			$userNotification = UserNotifications::create([
+				"user_id" => (int) $request->employee,
+				"notification" => $msg,
+				"notification_type" => Constants::ENQUIRY_ASSIGNED,
+				'enquiry_id' => $request->enquiry_id,
+				'by_user' => Auth::user()->id
+			]);
+			// if notificaton creation failed.
+			if (!$userNotification) {
+				Log::error('Unable to create user notification');
+			}
+			$user = User::where('id', $request->employee)->first();
+			// send if user has onesignal id
+			if (!empty($user->onesignal_token)) {
+				HelperFn::sendPushNotification($user->onesignal_token, $msg);
+			}
 		}
 	}
 
@@ -1346,7 +1363,7 @@ class EnquiriesController extends Controller
 		}
 		$dropdowns = $dropdownsarr;
 
-		$areas = Areas::where('user_id',Auth::user()->id)->get()->toArray();
+		$areas = Areas::where('user_id', Auth::user()->id)->get()->toArray();
 		$areaarr = [];
 		foreach ($areas as $key => $value) {
 			$areaarr[$value['id']] = $value;
@@ -1451,7 +1468,7 @@ class EnquiriesController extends Controller
 		$projects = Projects::orderBy('project_name')->get();
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$prop_list = Helper::get_property_units_helper();
 		return view('admin.enquiries.view', compact('areas', 'employees', 'data', 'prop_type', 'configuration_name', 'requiretype_name', 'area_name', 'city', 'branches', 'cities', 'project_name', 'employee', 'dropdowns', 'furnished', 'configuration_settings', 'projects', 'properties', 'prop_list'));
 	}
@@ -1464,7 +1481,7 @@ class EnquiriesController extends Controller
 		$type = explode(',', $request->type);
 		if (in_array('new_enquiry', $type)) {
 			// $data['new_enquiry'] = Enquiries::whereDate('created_at', $request->date)->get();
-			$data['new_enquiry'] = Enquiries::where('enq_status',1)->whereDate('created_at', $request->date)->get();
+			$data['new_enquiry'] = Enquiries::where('enq_status', 1)->whereDate('created_at', $request->date)->get();
 		}
 		if (in_array('leadConf', $type)) {
 			$data['leadConf'] = EnquiryProgress::with('Enquiry')
@@ -1519,7 +1536,7 @@ class EnquiriesController extends Controller
 				->get();
 		}
 
-		$areas = Areas::where('user_id',Auth::user()->id)->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->get();
 		$areaarr = [];
 		foreach ($areas as $key => $value) {
 			$areaarr[$value['id']] = $value;
@@ -1567,7 +1584,7 @@ class EnquiriesController extends Controller
 		}
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		$districts = District::orderBy('name')->get();
 		$talukas   = Taluka::orderBy('name')->get();
@@ -1593,7 +1610,7 @@ class EnquiriesController extends Controller
 
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
-		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		$current_id = $request->id;
 
@@ -1645,7 +1662,7 @@ class EnquiriesController extends Controller
 	public function deleteRecord($id)
 	{
 		$record = EnquiryProgress::find($id);
-		
+
 		if ($record) {
 			$record->delete();
 			return response()->json(['message' => 'Record deleted successfully']);
@@ -1654,11 +1671,11 @@ class EnquiriesController extends Controller
 		}
 	}
 
-	
+
 	public function updateEnquiryStatus(Request $request)
 	{
 		$status = $request->status;
-        $vv = Enquiries::where('id', $request->id)->update(['enq_status' => $status]); 
-        return redirect('admin/Enquiries');
+		$vv = Enquiries::where('id', $request->id)->update(['enq_status' => $status]);
+		return redirect('admin/Enquiries');
 	}
 }

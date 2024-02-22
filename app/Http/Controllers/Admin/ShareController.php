@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\DropdownSettings;
+use App\Models\LandUnit;
 use App\Models\ShareProperty;
 use App\Models\SharedProperty;
 use App\Models\User;
@@ -110,6 +111,7 @@ class ShareController extends Controller
         //   dd("shared-properties Me working done  ===>");
         if ($request->ajax()) {
             $dropdowns = DropdownSettings::get()->toArray();
+            $land_units = LandUnit::all();
             $dropdownsarr = [];
             foreach ($dropdowns as $key => $value) {
                 $dropdownsarr[$value['id']] = $value;
@@ -156,7 +158,7 @@ class ShareController extends Controller
 
                     return '';
                 })
-                ->editColumn('super_builtup_area', function ($row) use ($dropdowns) {
+                ->editColumn('super_builtup_area', function ($row) use ($dropdowns, $land_units) {
                     $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk', 'Test', 'testw', 'fgfgmf', 'sfbsbsfn', '252626', 'sh');
                     if ($row->property_for == 'Both') {
                         $forr = 'Rent & Sell';
@@ -201,7 +203,7 @@ class ShareController extends Controller
                         }
                     }
 
-                    $salable_area_print = $this->generateAreaDetails($row, $dropdowns[$row->property_category]['name'], $dropdowns);
+                    $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
                     if (empty($salable_area_print)) {
                         $salable_area_print = "Area Not Available";
                     }
@@ -358,6 +360,47 @@ class ShareController extends Controller
 
         if (!empty($area) && !empty($measure)) {
             $formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
+            return $formattedArea;
+        } else {
+            return "Area Not Available";
+        }
+    }
+
+    public function generateAreaUnitDetails($row, $type, $land_units)
+    {
+        $area = '';
+        $measure = '';
+        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+            $area = explode('_-||-_', $row->salable_area)[0];
+            $measure = explode('_-||-_', $row->salable_area)[1];
+        } elseif ($type == 'Storage/industrial') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+        } elseif ($type == 'Vila/Bunglow') {
+            $salable = explode('_-||-_', $row->salable_plot_area)[0];
+            $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+            $measure = explode('_-||-_', $row->constructed_salable_area)[1];
+            if (empty($salable)) {
+                $salable = '';
+            }
+            // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+            $area = "P:" . $salable . ' - C: ' . $constructed;
+        } elseif ($type == 'Farmhouse') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+        }
+
+        // Find the land unit name corresponding to the measure
+        $unit_name = '';
+        foreach ($land_units as $unit) {
+            if ($unit->id == $measure) {
+                $unit_name = $unit->unit_name;
+                break;
+            }
+        }
+
+        if (!empty($area) && !empty($unit_name)) {
+            $formattedArea = $area . ' ' . $unit_name;
             return $formattedArea;
         } else {
             return "Area Not Available";

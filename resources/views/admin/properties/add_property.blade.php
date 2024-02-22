@@ -653,10 +653,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="constructed_carpet_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -678,10 +677,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="salable_plot_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -722,10 +720,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="constructed_salable_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -749,10 +746,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="constructed_builtup_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -775,10 +771,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="carpet_plot_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -826,10 +821,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="salable_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -897,10 +891,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="carpet_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -985,10 +978,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="builtup_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1036,10 +1028,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="plot_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1078,10 +1069,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="construction_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1122,10 +1112,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="terrace_salable_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1166,10 +1155,9 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="terrace_carpet_area_measurement">
-                                                                            <option value="117" selected>Sq.Ft.</option>
-                                                                            <option value="118">Sq.Yard</option>
-                                                                            <option value="119">Sq.Meter</option>
-                                                                            <option value="120">VIGHA</option>
+                                                                            @forEach($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
