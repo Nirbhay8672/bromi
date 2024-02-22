@@ -19,6 +19,7 @@
                                     <button
                                         class="btn custom-icon-theme-button"
                                         type="button"
+                                        onclick="reset()"
                                         data-bs-toggle="modal"
                                         data-bs-target="#roleModal"
                                         title="Add Measurement Unit"
@@ -49,7 +50,7 @@
             <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel" onclick="reset()">Add New Measurement Unit</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Add New Measurement Unit</h5>
                         <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
@@ -111,7 +112,6 @@
 
             function getUnit(data) {
                 $('#modal_form').trigger("reset");
-                reset();
                 var id = $(data).attr('data-id');
                 $.ajax({
                     type: "POST",
