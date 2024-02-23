@@ -294,16 +294,16 @@ class HomeController extends Controller
 			if($request->propery_type == 87) {
 				$array = '[';
 				foreach(json_decode($data->unit_details) as $unit) {
-					// if($unit->wing) {
-					// 	$array .= '[';
-					// 	$array .= $unit->wing;
-					// 	$array .= ','.$unit->saleable;
-					// 	$array .= ','.$unit->built_up;
-					// 	$array .= ','.$unit->carpet_area;
-					// 	$array .= ','.$unit->balcony;
-					// 	$array .= ','.$unit->wash_area;
-					// 	$array .= '],';
-					// }
+					if(isset($unit->wing)) {
+						$array .= '[';
+						$array .= $unit->wing;
+						$array .= ','.$unit->saleable;
+						$array .= ','.$unit->built_up;
+						$array .= ','.$unit->carpet_area;
+						$array .= ','.$unit->balcony;
+						$array .= ','.$unit->wash_area;
+						$array .= '],';
+					}
 				}
 
 				$data->unit = $array;
@@ -318,10 +318,8 @@ class HomeController extends Controller
 					if($tower->tower_name != '') {
 						$array .= '[';
 						$array .= $tower->tower_name;
-						$array .= ','.$tower->total_floor;
-						$array .= ','.$tower->total_unit;
-						$array .= ','.$tower->carpet;
-						$array .= ','.$tower->saleable;
+						$array .= ','.$tower->carpet ?? '';
+						$array .= ','.$tower->saleable ?? '';
 						$array .= '],';
 					}
 				}

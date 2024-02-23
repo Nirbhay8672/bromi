@@ -265,9 +265,6 @@
                                                 <span class="text-danger new_error d-none" :id="`err_88_tower_detail_saleable_${index}`">Saleable from is required.</span>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
-                                        </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="tower_detail.saleable_to == '' ? '' : 'focused' ">
                                                 <div class="fvalue">
@@ -325,9 +322,6 @@
                                                 <span class="text-danger new_error d-none" :id="`err_88_tower_detail_carpet_${index}`">Carpet from is required.</span>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
-                                        </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="tower_detail.carpet_to == '' ? '' : 'focused' ">
                                                 <div class="fvalue">
@@ -368,9 +362,6 @@
                                                 </div>
                                                 <span class="text-danger new_error d-none" :id="`err_88_tower_detail_built_up_${index}`">Built up from is required.</span>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="tower_detail.built_up_to == '' ? '' : 'focused' ">
@@ -594,9 +585,6 @@
                                             </div>
                                             <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_saleable_${index}`">Saleable from is required.</span>
                                         </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
-                                        </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="unit.saleable_to == '' ? '' : 'focused' ">
                                                 <label class="mb-0">Saleable</label>
@@ -634,9 +622,6 @@
                                             </div>
                                             <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_built_up_${index}`">Built up is required.</span><span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_built_up_${index}`">Built up is required.</span>
                                         </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
-                                        </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="unit.built_up_to == '' ? '' : 'focused' ">
                                                 <label class="mb-0">Built up Area</label>
@@ -662,9 +647,6 @@
                                                 <input class="form-control" x-model="unit.carpet_area" name="carpet_area" type="text" autocomplete="off">
                                             </div>
                                             <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_carpet_area_${index}`">Carpet area from is required.</span>
-                                        </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="unit.carpet_area_to == '' ? '' : 'focused' ">
@@ -692,9 +674,6 @@
                                             </div>
                                             <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_wash_area_${index}`">Wash area from is required.</span>
                                         </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
-                                        </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="unit.wash_area_to == '' ? '' : 'focused' ">
                                                 <label class="mb-0">Wash Area</label>
@@ -720,9 +699,6 @@
                                                 <input class="form-control" x-model="unit.balcony" name="balcony_area" type="text" autocomplete="off">
                                             </div>
                                             <span class="text-danger new_error d-none" :id="`err_second_if_residential_only_units_balcony_${index}`">Balcony from is required.</span>
-                                        </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="unit.balcony_to == '' ? '' : 'focused' ">
@@ -962,9 +938,6 @@
                                                 </div>
                                                 <span class="text-danger new_error d-none" :id="`err_88_89_retail_tower_size_from_${index}`">Size from is required.</span>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="tower.size_to == '' ? '' : 'focused' ">
@@ -1415,9 +1388,6 @@
                                                 <span class="text-danger new_error d-none" :id="`err_cold_ind_plot_plot_area_from_${index}`">Plot area from is required.</span>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
-                                        </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="types.plot_area_to == '' ? '' : 'focused' ">
                                                 <div class="fvalue">
@@ -1458,9 +1428,6 @@
                                                 <span class="text-danger new_error d-none" :id="`err_cold_ind_plot_construced_area_from_${index}`">Construced area from is required.</span>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
-                                        </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="types.construced_area_to == '' ? '' : 'focused' ">
                                                 <div class="fvalue">
@@ -1500,9 +1467,6 @@
                                                 </div>
                                                 <span class="text-danger new_error d-none" :id="`err_cold_ind_plot_road_width_of_front_side_area_from_${index}`">size from is required.</span>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="types.road_width_of_front_side_area_to == '' ? '' : 'focused' ">
@@ -2011,9 +1975,6 @@
                                             </div>
                                             <span class="text-danger new_error d-none" :id="`err_259_tower_detail_saleable_${index}`">Saleable from is required.</span>
                                         </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
-                                        </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="tower_detail.saleable_to == '' ? '' : 'focused' ">
                                                 <div class="fvalue">
@@ -2097,9 +2058,6 @@
                                                 </div>
                                             </div>
                                             <span class="text-danger new_error d-none" :id="`err_259_tower_detail_carpet_${index}`">Carpet from is required.</span>
-                                        </div>
-                                        <div class="form-group">
-                                            <span class="input-group-text" style="min-height:41px;">To</span>
                                         </div>
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="tower_detail.carpet_to == '' ? '' : 'focused' ">

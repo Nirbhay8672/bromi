@@ -308,7 +308,7 @@ class ProjectsController extends Controller
 			if($request->propery_type == 87) {
 				$array = '[';
 				foreach(json_decode($data->unit_details) as $unit) {
-					if($unit->wing) {
+					if(isset($unit->wing)) {
 						$array .= '[';
 						$array .= $unit->wing;
 						$array .= ','.$unit->saleable;

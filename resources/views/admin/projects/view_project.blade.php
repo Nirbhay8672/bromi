@@ -727,7 +727,7 @@
                                                         <h6 for="Client Name"><b>Saleable Plot Size From</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_2">
-                                                        <div>: {{ $project->land_plot['plot_size_from'] }} - {{ $project->land_plot['plot_size_to'] }} {{ $map_unit[$project->land_plot['plot_size_from_map_unit']] }}</div>
+                                                        <div>: {{ $project->land_plot['plot_size_from'] }} - {{ $project->land_plot['plot_size_to'] }} {{ $project->land_plot['plot_size_from_map_unit'] ? $map_unit[$project->land_plot['plot_size_from_map_unit']] : '' }}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -740,7 +740,7 @@
                                                         <h6><b>Constructed Saleable Area</b></h6>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
-                                                        <div>: {{ $project->land_plot['constructed_saleable_area'] }} {{ $map_unit[$project->land_plot['constructed_saleable_area_map_unit']] }}</div>
+                                                        <div>: {{ $project->land_plot['constructed_saleable_area'] }} {{ $project->land_plot['constructed_saleable_area_map_unit'] ? $map_unit[$project->land_plot['constructed_saleable_area_map_unit']] : '' }}</div>
                                                     </div>
                                                     <div class="form-group col-6 m-b-20 data_conent_4">
                                                         <h6><b>Servant Room</b></h6>
@@ -872,7 +872,6 @@
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
-                                                                <th scope="col">Total Floor</th>
                                                                 <th scope="col">Total Unit</th>
                                                                 <th scope="col">Saleable</th>
                                                                 <th scope="col">Carpet</th>
@@ -883,7 +882,6 @@
                                                             @foreach ($project->if_office as $office_tower)
                                                             <tr>
                                                                 <td>{{$office_tower['tower_name']}}</td>
-                                                                <td>{{$office_tower['total_floor']}}</td>
                                                                 <td>{{$office_tower['total_unit']}}</td>
                                                                 <td>
                                                                     {{$office_tower['saleable']}} - {{ $office_tower['saleable_to'] }}

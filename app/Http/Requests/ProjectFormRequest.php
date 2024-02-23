@@ -41,8 +41,6 @@ class ProjectFormRequest extends FormRequest
 
 			'propery_type' => 'required',
 
-			'total_floor_for_parking' => 'required|gt:0',
-			'parking_details' => 'required',
 			'amenities' => 'required|min:1',
 			'remark' => 'required',
 		];
@@ -64,7 +62,6 @@ class ProjectFormRequest extends FormRequest
 			}
 		}
 		
-
 		if($this->document_image) {
 			$rules['document_category'] = 'required';
 		}
