@@ -172,6 +172,15 @@ class UserController extends Controller
 		$data->specific_properties = $request->specific_properties;
 		$data->buildings = $request->buildings;
 		$data->working = $request->working;
+		$data->plan_id = Auth::user()->plan_id;
+		
+		$plan = Subplans::find(Auth::user()->plan_id);
+		
+		if($plan) {
+			$data->total_user_limit = $plan->user_limit;
+		} else {
+			$data->total_user_limit = 10;
+		}
 		
 		$data->id_type = $request->id_type;
 
