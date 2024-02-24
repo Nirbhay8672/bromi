@@ -7,6 +7,7 @@ class SupAdminPermissions
     const MEMBERS = 'members';
     const BUILDERS = 'builders';
     const PROJECTS = 'projects';
+    const UNITS = 'units';
     const TICKET_SYSTEM = 'ticket-system';
     const PLANS = 'plans';
     const COUPONS = 'coupons';
