@@ -29,7 +29,7 @@ class BuildingController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = Buildings::with('Area', 'Builder', 'City', 'State')->when($request->go_data_id, function ($query) use ($request) {
+			$data = Buildings::with('Area', 'Builder', 'City', 'State')->where('user_id',Auth::user()->id)->when($request->go_data_id, function ($query) use ($request) {
 				return $query->where('id', $request->go_data_id);
 			})->orderBy('id','desc')->get();
 			return DataTables::of($data)
