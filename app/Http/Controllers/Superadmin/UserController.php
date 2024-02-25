@@ -53,15 +53,16 @@ class UserController extends Controller
 
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$route = url('superadmin/tickets');
-					$buttons =  $buttons . '<button data-id="' . $row->id . '" onclick=getUser(this) class="btn btn-pill btn-primary" type="button">View</button>';
+					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" onclick=getUser(this) class="fa fa-pencil pointer fa fs-22 py-2 mx-2"></i>';
+
 					if ($row->role_id != 3) {
 						if ($row->status) {
-							$buttons =  $buttons . ' <button data-id="' . $row->id . '" onclick=userActivate(this,0) class="btn btn-pill btn-danger" type="button">Deactivate</button>';
+							$buttons =  $buttons . ' <button data-id="' . $row->id . '" onclick=userActivate(this,0) class="btn" style="border-radius: 5px !important;background-color: red !important;color: white !important;" type="button">Deactivate</button>';
 						} else {
-							$buttons =  $buttons . ' <button data-id="' . $row->id . '" onclick=userActivate(this,1) class="btn btn-pill btn-primary" type="button">Activate</button>';
+							$buttons =  $buttons . ' <button data-id="' . $row->id . '" onclick=userActivate(this,1) class="btn" style="border-radius: 5px !important;background-color: green !important;color: white !important;" type="button">Activate</button>';
 						}
 					}
+					
 					return $buttons;
 				})
 				->rawColumns(['Actions'])
@@ -76,7 +77,7 @@ class UserController extends Controller
     public function membersList(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = User::where('role_id', '3')->with('Plan')->get();
+			$data = User::where('role_id', '3')->where('id','!=',6)->with('Plan')->get();
 			return DataTables::of($data)
 				->editColumn('birth_date', function ($row) {
 					if (!empty($row->birth_date)) {
@@ -86,8 +87,8 @@ class UserController extends Controller
 
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$route = url('superadmin/tickets');
-					$buttons =  $buttons . '<button data-id="' . $row->id . '" onclick=getUser(this) class="btn btn-pill btn-primary" type="button">View</button>';
+					
+					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" onclick=getUser(this) class="fa-pencil pointer fa fs-22 py-2 mx-2" type="button"></i>';
 					return $buttons;
 				})
 				->rawColumns(['Actions'])

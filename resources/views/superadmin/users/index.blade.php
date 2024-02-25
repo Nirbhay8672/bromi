@@ -15,7 +15,15 @@
                 <div class="card">
                     <div class="card-header pb-0">
                         <h5 class="mb-3">Users </h5>
-                        <button class="btn btn-pill btn-primary btn-air-primary open_modal_with_this" type="button" data-bs-toggle="modal" data-bs-target="#userModal" onclick="resetData()">Add New User</button>
+                        <button
+                            class="btn custom-icon-theme-button"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#userModal"
+                            title="Add User"
+                            onclick="resetData()"
+                        ><i class="fa fa-plus"></i>
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -47,7 +55,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div class="modal-body">
                 <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
@@ -126,8 +134,10 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-secondary me-3" id="saveUser">Save</button>
-                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <div class="text-center">
+                        <button class="btn custom-theme-button" id="saveUser">Save</button>
+                        <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -165,8 +175,9 @@
                     name: 'last_name'
                 },
                 {
-                    data: 'email',
-                    name: 'email'
+                    data: "email" , render : function ( data, type, row, meta ) {
+                        return `<span style="text-transform:lowercase !important">${row.email}</span>`; 
+                    }
                 },
                 {
                     data: 'mobile_number',
