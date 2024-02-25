@@ -655,8 +655,8 @@ class HomeController extends Controller
 		$total_taluka = Taluka::get()->where('user_id',Auth::user()->id)->count();
 		$total_village = Village::get()->where('user_id',Auth::user()->id)->count();
 
-		$builder =  Builders::get()->count();
-		$branch =  Branches::get()->count();
+		$builder =  Builders::get()->where('user_id', Auth::user()->id)->count();
+		$branch =  Branches::get()->where('user_id', Auth::user()->id)->count();
 		$user =  User::where('parent_id',Auth::User()->id)->orWhere('id',Auth::User()->id)->get()->count()-1;
 		$role = Role::where('user_id', Session::get('parent_id'))->get()->count();
 		$enquiry = DropdownSettings::where('dropdown_for', 'LIKE', "%enquiry_%")->get()->count();
