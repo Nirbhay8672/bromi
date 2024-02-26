@@ -10,6 +10,8 @@ use App\Models\City;
 use App\Models\DropdownSettings;
 use App\Models\Projects;
 use App\Models\State;
+use App\Models\SuperAreas;
+use App\Models\SuperCity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -32,6 +34,9 @@ class ProjectsController extends Controller
 						return $row->Area->name;
 					}
 					return '';
+				})
+				->editColumn('auth_id', function ($row) {
+					return Auth::user()->id;
 				})
 				->editColumn('builder_id', function ($row) {
 					if (isset($row->Builder->name)) {
@@ -58,8 +63,12 @@ class ProjectsController extends Controller
 				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$buttons =  $buttons . '<a href="'.route('superadmin.project.edit',$row->id).'"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
-					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProject(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+
+					if($row->user_id == Auth::user()->id) {
+						$buttons =  $buttons . '<a href="'.route('superadmin.project.edit',$row->id).'"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+					}
+
+					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProject(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';					
 
 					return $buttons;
 				})
@@ -84,12 +93,12 @@ class ProjectsController extends Controller
 				'projects.*',
 				DB::raw("builders.name AS builder_name"),
 				DB::raw("state.name AS state_name"),
-				DB::raw("city.name AS city_name"),
-				DB::raw("areas.name AS area_name"),
+				DB::raw("super_cities.name AS city_name"),
+				DB::raw("super_areas.name AS area_name"),
 			])->join('builders','projects.builder_id','builders.id')
-			->join('city','projects.city_id','city.id')
+			->join('super_cities','projects.city_id','super_cities.id')
 			->join('state','projects.state_id','state.id')
-			->join('areas','projects.area_id','areas.id')
+			->join('super_areas','projects.area_id','super_areas.id')	
 			->where('projects.id', $project_id)->first();
 
 		$project->contacts = json_decode($project->contact_details, true);
@@ -127,34 +136,55 @@ class ProjectsController extends Controller
 		$project->parkings = json_decode($project->parkings_decode['parking_details'], true);
 
 		$project->amenity_array = json_decode($project->amenities, true);
+		$project->other_documents = json_decode($project->other_documents, true) ?? [];
 
 		return view('superadmin.projects.view_project')->with(['project' => $project]);
 	}
 
 	public function addproject(Request $request){
-		$cities = City::orderBy('name')->get();
-		$states = State::orderBy('name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$cities = SuperCity::orderBy('name')->get();
+		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$areas = SuperAreas::orderBy('name')->get();
 		$builders = Builders::orderBy('name')->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
 
 		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
-		
-		$data['prop_type'] = [85,87];
+		$prop_type = [];
+		foreach ($data['property_configuration_settings'] as $key => $value) {
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'],'property_')) {
+				array_push($prop_type,$value['id']);
+			}
+		}
 
-		return view('superadmin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings'), $data);
+		$first_state = State::where('user_id',Auth::user()->id)->first();
+		$first_city = SuperCity::first();
+
+		$land_units = DB::table('land_units')->get();
+
+		return view('superadmin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city','land_units'), $data);
 	}
 
 	public function editproject(Projects $id){
-		$cities = City::orderBy('name')->get();
-		$states = State::orderBy('name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$cities = SuperCity::orderBy('name')->get();
+		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+		$areas = SuperAreas::orderBy('name')->get();
 		$builders = Builders::orderBy('name')->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
-		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
-		$data['prop_type'] = [85,87];
 
-		return view('superadmin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings', 'id'), $data);
+		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
+		$prop_type = [];
+		foreach ($data['property_configuration_settings'] as $key => $value) {
+			if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'],'property_')) {
+				array_push($prop_type,$value['id']);
+			}
+		}
+
+		$first_state = State::where('user_id',Auth::user()->id)->first();
+		$first_city = SuperCity::first();
+
+		$land_units = DB::table('land_units')->get();
+
+		return view('superadmin.projects.add_project_new', compact('cities','land_units','first_state', 'first_city', 'states', 'areas', 'builders','project_configuration_settings', 'id'), $data);
 	}
 
 	public function storeFile(UploadedFile $file)
@@ -191,7 +221,7 @@ class ProjectsController extends Controller
 		}
 
 		if($request->id == '' || $request->id == null) {
-			$data->user_id = 8;
+			$data->user_id = Auth::user()->id;
 			$data->added_by = Auth::user()->id;
 		}
 
@@ -243,21 +273,21 @@ class ProjectsController extends Controller
 
 		if($request->propery_type == 87 || $request->property_category == 259 || $request->property_category == 260) {
 			if($request->propery_type == 87) {
-				// $array = '[';
-				// foreach(json_decode($data->unit_details) as $unit) {
-					// if($unit->wing) {
-					// 	$array .= '[';
-					// 	$array .= $unit->wing;
-					// 	$array .= ','.$unit->saleable;
-					// 	$array .= ','.$unit->built_up;
-					// 	$array .= ','.$unit->carpet_area;
-					// 	$array .= ','.$unit->balcony;
-					// 	$array .= ','.$unit->wash_area;
-					// 	$array .= '],';
-					// }
-				// }
+				$array = '[';
+				foreach(json_decode($data->unit_details) as $unit) {
+					if(isset($unit->wing)) {
+						$array .= '[';
+						$array .= $unit->wing;
+						$array .= ','.$unit->saleable;
+						$array .= ','.$unit->built_up;
+						$array .= ','.$unit->carpet_area;
+						$array .= ','.$unit->balcony;
+						$array .= ','.$unit->wash_area;
+						$array .= '],';
+					}
+				}
 
-				// $data->unit = $array;
+				$data->unit = $array;
 				$data->tower = '';
 			} else {
 				$data->unit = '';
@@ -269,10 +299,8 @@ class ProjectsController extends Controller
 					if($tower->tower_name != '') {
 						$array .= '[';
 						$array .= $tower->tower_name;
-						$array .= ','.$tower->total_floor;
-						$array .= ','.$tower->total_unit;
-						$array .= ','.$tower->carpet;
-						$array .= ','.$tower->saleable;
+						$array .= ','.$tower->carpet ?? '';
+						$array .= ','.$tower->saleable ?? '';
 						$array .= '],';
 					}
 				}
@@ -322,6 +350,20 @@ class ProjectsController extends Controller
 			$catlot_file = $request->catlog_file;
 			$data->catlog_file = $this->storeFile($catlot_file);
 		}
+
+		$other_documents = json_decode($request->other_documents);
+
+		if(count($other_documents) > 0) {
+			foreach($other_documents as $index => $document) {
+				if($request['other_doc_'.$index]) {
+					$other_documents[$index]->file = $this->storeFile($request['other_doc_'.$index]);
+				}
+			}
+			$data->other_documents = json_encode($other_documents);
+ 		}
+		
+		$data->is_indirectly_store = 0;
+		$data->remark = $request->remark;
 
 		$data->save();
 

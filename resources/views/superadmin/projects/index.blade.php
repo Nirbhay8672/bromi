@@ -4,28 +4,42 @@
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
-
                 </div>
             </div>
         </div>
-        <!-- Container-fluid starts-->
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Projects</h5>
-							<a class="btn btn-primary btn-air-primary"  href="{{route('superadmin.project.add')}}">Add New Project</a>
-							<button class="btn btn-primary btn-air-primary delete_table_row" style="display: none" onclick="deleteTableRow()" type="button">Delete</button>
+
+                            <div class="col">
+
+                                <a  
+                                    class="btn custom-icon-theme-button"
+                                    href="{{route('superadmin.project.add')}}"
+                                    title="Add Project"
+                                >
+                                    <i class="fa fa-plus"></i>
+                                </a>
+
+                                <button
+                                    class="btn text-white delete_table_row ms-3"
+                                    style="border-radius: 5px;display: none;background-color:red"
+                                    onclick="deleteTableRow()"
+                                    type="button"
+                                    title="Delete"
+                                ><i class="fa fa-trash"></i></button>
+                            </div>
+
                         </div>
                         <div class="card-body">
-
                             @if(Session::has('message'))
                                 <div class="alert alert-success" role="alert">
                                     {{ Session::get('message') }}
                                 </div>
                             @endif
-
                             <div class="table-responsive">
                                 <table class="display" id="projectTable">
                                     <thead>
@@ -45,281 +59,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-        </div>
-        <div class="modal fade" id="projectModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add New Project</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
-                            novalidate="">
-                            <input type="hidden" name="this_data_id" id="this_data_id">
-                            <div class="row">
-                                <h5 class="border-style">Information</h5>
-                                <div class="form-group col-md-6 m-b-20">
-                                    <label for="Project Name"> Name</label>
-                                    <input class="form-control" name="project_name" id="project_name" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-3 m-b-4 mb-3">
-                                    <select class="form-select" id="builder_id">
-                                        <option value=""> Builder</option>
-                                        @foreach ($builders as $builder)
-                                            <option value="{{ $builder->id }}">{{ $builder->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3 m-b-4 mb-3">
-                                    <select class="form-select" id="area_id">
-                                        <option value="">Area</option>
-                                        @foreach ($areas as $area)
-                                            <option data-pincode="{{ $area->pincode }}" data-city_id="{{ $area->city_id }}"
-                                                data-state_id="{{ $area->state_id }}" value="{{ $area->id }}">
-                                                {{ $area->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6 m-b-20">
-                                    <label for="Address">Address</label>
-                                    <input class="form-control mt-3" name="address" id="address" type="text"
-                                        autocomplete="off">
-                                </div>
-
-                                <div class="form-group col-md-3 m-b-4 mb-3">
-                                    <label for="City" class="mb-0">State</label>
-                                    <select class="form-select" id="state_id">
-                                        <option value="">State</option>
-                                        @foreach ($states as $state)
-                                            <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3 m-b-4 mb-3">
-                                    <label for="City" class="mb-0">City</label>
-                                    <select class="form-select" id="city_id">
-                                        <option value="">City</option>
-                                        @foreach ($cities as $city)
-                                            <option value="{{ $city['id'] }}">{{ $city['name'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3 m-b-20">
-                                    <label for="Pincode">Pincode</label>
-                                    <input class="form-control" name="pincode" id="pincode" type="text"
-                                        autocomplete="off">
-                                </div>
-                                {{-- <div class="d-flex align-items-center mb-3 col-md-2">
-                                    <div class="form-group">
-                                        <label class="switch mb-0">
-                                            <input type="checkbox" id="status" ><span class="switch-state"></span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group ms-2">
-                                        <label for="status" class="mb-1">Active</label>
-                                    </div>
-                                </div> --}}
-                                <div class="form-group col-md-7 m-b-20">
-                                    <label for="Email">Email</label>
-                                    <input class="form-control" name="email" id="email" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="form-check-input" id="prime_project" type="checkbox">
-                                    <label class="form-check-label" for="prime_project">Prime </label>
-                                </div>
-
-                                <h5 class="border-style"> Other Information</h5>
-                                <div class="form-group col-md-4 m-b-20">
-                                    <label for="No Of Floor">No of Floor</label>
-                                    <input class="form-control" name="floor_count" id="floor_count" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-4 m-b-20">
-                                    <label for="No. of unit">No of Unit</label>
-                                    <input class="form-control" name="unit_no" id="unit_no" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-4 m-b-20">
-                                    <label for="No of Lift each block">No of Lift Each Block</label>
-                                    <input class="form-control" name="lift_count" id="lift_count" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-8 m-b-4 mb-3">
-                                    <label class="select2_label" for="Property Type">Property Type</label>
-                                    <select class="form-select" id="property_type" multiple="multiple">
-                                        @forelse ($project_configuration_settings as $props)
-                                            @if ($props['dropdown_for'] == 'property_construction_type')
-                                                <option data-parent_id="{{ $props['parent_id'] }}"
-                                                    value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                </option>
-                                            @endif
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                </div>
-
-
-                                <h5 class="border-style"> Description</h5>
-
-
-                                <div class="form-group col-md-2 m-b-20">
-                                    <label for="Building Posession"> Posession(Year)</label>
-                                    <input class="form-control" name="building_posession" id="building_posession"
-                                        type="text" autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-2 m-b-20 mt-1">
-                                    <select class="form-select form-design" id="building_status">
-                                        <option value=""> Project Status</option>
-                                        @forelse ($project_configuration_settings as $props)
-                                            @if ($props['dropdown_for'] == 'building_progress')
-                                                <option data-parent_id="{{ $props['parent_id'] }}"
-                                                    value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                </option>
-                                            @endif
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-2 m-b-20 mt-1">
-                                    <select class="form-select" id="building_quality">
-                                        <option value="">Quality </option>
-                                        <option value="1">Average</option>
-                                        <option value="2">Excellent</option>
-                                        <option value="3">Good</option>
-                                        <option value="4">Poor</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-3 m-b-20">
-                                    <label class="select2_label" for="Restricted User">Restricted User</label>
-                                    <select class="form-select" id="restrictions" multiple="multiple">
-                                        @forelse ($project_configuration_settings as $props)
-                                            @if ($props['dropdown_for'] == 'building_restriction')
-                                                <option data-parent_id="{{ $props['parent_id'] }}"
-                                                    value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                </option>
-                                            @endif
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-12 m-b-20">
-                                    <label for=" Description"> Description</label>
-                                    <input class="form-control" name="project_description" id="project_description"
-                                        type="text" autocomplete="off">
-                                </div>
-
-
-                                <h5 class="border-style"> Amenities</h5>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_pool" type="checkbox">
-                                    <label class="form-check-label" for="amenity_pool">Swimming Pool</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_club_house"
-                                        type="checkbox">
-                                    <label class="form-check-label" for="amenity_club_house">Club house</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_passenger_lift"
-                                        type="checkbox">
-                                    <label class="form-check-label" for="amenity_passenger_lift">Passenger Lift</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_garden" type="checkbox">
-                                    <label class="form-check-label" for="amenity_garden">Garden & Children Play
-                                        Area</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_service_lift"
-                                        type="checkbox">
-                                    <label class="form-check-label" for="amenity_service_lift">Service Lift</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_streature_lift"
-                                        type="checkbox">
-                                    <label class="form-check-label" for="amenity_streature_lift">Streature Lift</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_ac" type="checkbox">
-                                    <label class="form-check-label" for="amenity_ac">Central AC</label>
-                                </div>
-                                <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                    <input class="project_amenity form-check-input" id="amenity_gym" type="checkbox">
-                                    <label class="form-check-label" for="amenity_gym">Gym</label>
-                                </div>
-
-                                <h5 class="border-style">Contact Details</h5>
-                                <div><button type="button" class="btn mb-3 btn-primary btn-air-primary"
-                                        id="add_contacts">Add Contact</button></div>
-                                <div class="row" id="all_contacts">
-
-                                </div>
-
-
-                                <h5 class="border-style">Wing Details</h5>
-
-                                <div><button type="button" class="btn mb-3 btn-primary btn-air-primary"
-                                        id="add_towers">Add Wing</button></div>
-                                <div class="row" id="all_towers">
-
-                                </div>
-
-                                <h5 class="border-style">Unit Types</h5>
-                                <div><button type="button" class="btn mb-3 btn-primary btn-air-primary"
-                                        id="add_unit_types">Add Unit Type</button></div>
-                                <div class="row" id="all_unit_types">
-
-                                </div>
-
-
-                                <h5 class="border-style">Images/Documents</h5>
-                                <div id="uploadImageBox" class="row">
-                                    <div class="form-group col-md-4 m-b-4 mt-1">
-                                        <select class="form-select" id="image_category">
-                                            <option value=""> Category</option>
-                                            <option value="1">Building Elevation</option>
-                                            <option value="2">Common Amenities Photos</option>
-                                            <option value="3">Master Layout Of Building</option>
-                                            <option value="4">Brochure</option>
-                                            <option value="5">Cost Sheet</option>
-                                            <option value="6">Other</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6 m-b-4 mb-3"><input class="form-control"
-                                            type="file" id="building_images" name="building_images" multiple></div>
-                                    <div class="form-group col-md-2 m-b-4 mb-3"><button type="button"
-                                            class="btn mb-2 btn-primary btn-air-primary" id="add_images">Upload</button>
-                                    </div>
-                                </div>
-                                <div class="row" id="all_images">
-
-                                </div>
-
-
-                            </div>
-
-                            @if (Auth::user()->can('project-edit') || Auth::user()->can('project-create'))
-                                <button class="btn btn-secondary" id="saveProject">Save</button>
-                            @endif
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -582,6 +325,7 @@
                         url: "{{ route('superadmin.projects') }}",
                         data: function(d) {
                             d.go_data_id = go_data_id;
+                            d.location = window.location.href;
                         }
                     },
                     columns: [
@@ -596,18 +340,23 @@
                             render : function ( data, type, row, meta ) {
                                 let project_data = row;
                                 
-                                if(project_data.is_indirectly_store > 0) {
-                                    return `<span style="cursor: pointer;" title="View after fill all data">${data}</span>`;
+                                if(project_data.user_id == project_data.auth_id) {
+                                    if(project_data.is_indirectly_store > 0) {
+                                        return `<span style="cursor: pointer;" title="View after fill all data">${data}</span>`;
+                                    } else {
+                                        var url = '{{ route("superadmin.viewProject", ":id") }}';
+                                        url = url.replace(':id', project_data.id);
+                                        return `<a href="${url}">${data}</a>`;    
+                                    }
                                 } else {
-                                    var url = '{{ route("superadmin.viewProject", ":id") }}';
-                                    url = url.replace(':id', project_data.id);
-                                    return `<a href="${url}">${data}</a>`;    
+                                    return data;    
                                 }
                             }
                         },
                         {
                             data: 'address',
                             name: 'address'
+                            
                         },
                         {
                             data: 'builder_id',
@@ -627,6 +376,7 @@
                             orderable: false
                         },
                     ],
+                    "order":  [[ 1, "asc"]],
                 });
             });
 
@@ -646,207 +396,6 @@
                 $('#all_images').html('');
                 floatingField()
             })
-
-            $(document).on('change', '.changeTheStatus', function(e) {
-                stat = 0;
-                if ($(this).prop('checked')) {
-                    stat = 1;
-                }
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('admin.changeProjectStatus') }}",
-                    data: {
-                        id: $(this).attr('data-id'),
-                        status: stat,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-
-                    }
-                });
-            })
-
-            function getProject(data) {
-                shouldchangecity = 0
-                $('#modal_form').trigger("reset");
-                var id = $(data).attr('data-id');
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('admin.getProject') }}",
-                    data: {
-                        id: id,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        data = JSON.parse(data);
-                        $('#this_data_id').val(data.id);
-                        $('#project_name').val(data.project_name);
-                        $('#prime_project').prop('checked', Number(data.is_prime));
-                        $('#builder_id').val(data.builder_id).trigger('change');
-                        $('#area_id').val(data.area_id).trigger('change');
-                        $('#state_id').val(data.state_id).trigger('change');
-                        $('#city_id').val(data.city_id).trigger('change');
-                        $('#address').val(data.address);
-                        $('#pincode').val(data.pincode);
-                        $('#status').prop('checked', Number(data.status));
-                        $('#email').val(data.email);
-                        $('#floor_count').val(data.floor_count);
-                        $('#unit_no').val(data.unit_no);
-                        $('#lift_count').val(data.lift_count);
-                        $('#building_quality').val(data.building_quality).trigger('change');;
-                        $('#building_status').val(data.building_status).trigger('change');;
-                        $('#restrictions').val(JSON.parse(data.restrictions)).trigger('change');;
-                        $('#building_posession').val(data.building_posession)
-                        $('#property_type').val(JSON.parse(data.property_type)).trigger('change');
-                        $('#project_description').val(data.project_description);
-                        shouldchangecity = 1
-                        $(".project_amenity").each(function(index) {
-                            var amenities = JSON.parse(data.amenities)
-                            if ((amenities != null) && (amenities.length > 0)) {
-                                $(this).prop('checked', Number(amenities[index]));
-                            }
-                        });
-                        $('#all_contacts').html('');
-                        $('#all_towers').html('');
-                        $('#all_unit_types').html('')
-
-                        $('#all_images').html('');
-                        if (data.images != '') {
-                            for (let i = 0; i < data.images.length; i++) {
-                                var category = '';
-                                if (data.images[i].category == 1) {
-                                    category = 'Building Elevation';
-                                } else if (data.images[i].category == 2) {
-                                    category = 'Common Amenities Photos';
-                                } else if (data.images[i].category == 3) {
-                                    category = 'Master Layout Of Building';
-                                } else if (data.images[i].category == 4) {
-                                    category = 'Brochure';
-                                } else if (data.images[i].category == 5) {
-                                    category = 'Cost Sheet';
-                                } else if (data.images[i].category == 6) {
-                                    category = 'Other';
-                                }
-
-                                var src = building_image_show_url + '/' + data.images[i].image;
-                                if (src.includes('.pdf')) {
-                                    $('#all_images').append(
-                                        '<div class="col-md-4 m-b-4 mb-3"><a target="_blank" href="' + src +
-                                        '"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a><p>' +
-                                        category + '</p></div>')
-                                } else {
-                                    $('#all_images').append('<div class="col-md-4 m-b-4 mb-3"><img src="' + src +
-                                        '" alt="" height="200" width="200"><p>' + category + '</p></div>')
-                                }
-                            }
-
-                        }
-
-                        if (data.contact_details != '') {
-                            details = JSON.parse(data.contact_details);
-                            if ((details != null) && (details.length > 0)) {
-                                for (let i = 0; i < details.length; i++) {
-                                    id = makeid(10);
-                                    $('#all_contacts').append(generate_contact_detail(id))
-                                    $("[data-contact_id=" + id + "] input[name=contact_person_name]").val(details[i]
-                                        [
-                                            0
-                                        ]);
-                                    $("[data-contact_id=" + id + "] input[name=contact_person_no]").val(details[i][
-                                        1]);
-                                    $("[data-contact_id=" + id + "] input[name=contact_person_type]").val(details[i]
-                                        [2]);
-                                }
-
-                            }
-                        }
-
-                        if (data.tower_details != '') {
-                            details = JSON.parse(data.tower_details);
-                            if ((details != null) && (details.length > 0)) {
-                                for (let i = 0; i < details.length; i++) {
-                                    id = makeid(10);
-                                    $('#all_towers').append(generate_tower_detail(id))
-                                    $("[data-contact_id=" + id + "] [name=tower_name]").val(details[i][
-                                        0
-                                    ]);
-                                    $("[data-contact_id=" + id + "] [name=tower_total_units]").val(details[i][1]);
-                                    $("[data-contact_id=" + id + "] [name=total_floor]").val(details[i][2]).trigger(
-                                        'change');
-                                }
-                                floatingField()
-                            }
-                        }
-
-                        if (data.unit_details != '') {
-                            details = JSON.parse(data.unit_details);
-                            if ((details != null) && (details.length > 0)) {
-                                for (let i = 0; i < details.length; i++) {
-                                    unique_id = makeid(10);
-                                    $('#all_unit_types').append(generate_unit_types_detail(unique_id));
-                                    $("#all_unit_types select").each(function(index) {
-                                        $(this).select2();
-                                    })
-                                    $("[data-contact_id=" + unique_id + "] [name=type_plan_name]").val(details[i][
-                                        0]);
-                                    $("[data-contact_id=" + unique_id + "] [name=requirement_type]").val(details[i][
-                                        1
-                                    ]).trigger('change');
-                                    $("[data-contact_id=" + unique_id + "] [name=configuration]").val(details[i][2])
-                                        .trigger('change');
-                                    $("[data-contact_id=" + unique_id + "] [name=builtup_area]").val(details[i][3]);
-                                    $("[data-contact_id=" + unique_id + "] [name=builtup_area_measurement]").val(
-                                        details[i][4]).trigger('change');
-                                    $("[data-contact_id=" + unique_id + "] [name=rera_area]").val(details[i][5]);
-                                    $("[data-contact_id=" + unique_id + "] [name=rera_area_measurement]").val(
-                                        details[i]
-                                        [6]).trigger('change');
-                                    $("[data-contact_id=" + unique_id + "] [name=wash_area]").val(details[i][7]);
-                                    $("[data-contact_id=" + unique_id + "] [name=wash_area_measurement]").val(
-                                        details[i]
-                                        [8]).trigger('change');
-                                    $("[data-contact_id=" + unique_id + "] [name=balcony_area]").val(details[i][9]);
-                                    $("[data-contact_id=" + unique_id + "] [name=balcony_area_measurement]").val(
-                                        details[i][10]).trigger('change');
-                                    $("[data-contact_id=" + unique_id + "] [name=carpet_area]").val(details[i][11]);
-                                    $("[data-contact_id=" + unique_id + "] [name=carpet_area_measurement]").val(
-                                        details[
-                                            i][12]).trigger('change');
-                                    $("[data-contact_id=" + unique_id + "] [name=terrace_carpet_area]").val(details[
-                                        i][
-                                        13
-                                    ]);
-                                    $("[data-contact_id=" + unique_id + "] [name=terrace_carpet_area_measurement]")
-                                        .val(
-                                            details[i][14]).trigger('change');
-                                    $("[data-contact_id=" + unique_id + "] [name=terrace_super_builtup_area]").val(
-                                        details[i][15]);
-                                    $("[data-contact_id=" + unique_id +
-                                            "] [name=terrace_super_builtup_area_measurement]").val(details[i][16])
-                                        .trigger('change');
-										$("[data-contact_id=" + unique_id + "] [name=penthouse]").prop('checked',true)
-                                    if (details[i][13] == '') {
-										$("[data-contact_id=" + unique_id + "] [name=penthouse]").prop('checked',false)
-										$("[data-contact_id=" + unique_id + "] [name=terrace_carpet_area]").closest(
-                                        '.col-md-3').hide()
-                                    $("[data-contact_id=" + unique_id + "] [name=terrace_carpet_area_measurement]")
-                                        .closest('.col-md-3').hide()
-                                    $("[data-contact_id=" + unique_id + "] [name=terrace_super_builtup_area]")
-                                        .closest('.col-md-3').hide()
-                                    $("[data-contact_id=" + unique_id +
-                                            "] [name=terrace_super_builtup_area_measurement]").closest('.col-md-3')
-                                        .hide()
-									}
-                                }
-                            }
-                        }
-
-                        $('#projectModal').modal('show');
-                        triggerChangeinput()
-                        floatingField();
-                    }
-                });
-            }
 
             $(document).on('change', '[name=penthouse]', function(e) {
 
@@ -910,66 +459,6 @@
 					}
 				}
                 }, 50);
-            })
-
-            $(document).on('click', '#add_images', function(e) {
-                var fd = new FormData();
-                var files = $('#building_images')[0].files;
-                if (files.length == 0 || $('#this_data_id').val() == '') {
-                    return;
-                }
-                fd.append('category', $('#image_category').val());
-                fd.append('building_id', $('#this_data_id').val());
-                for (let i = 0; i < files.length; i++) {
-                    fd.append('images[]', files[i]);
-                }
-
-
-                fd.append('_token', '{{ csrf_token() }}');
-                $.ajax({
-                    url: "{{ route('admin.saveBuildingImages') }}",
-                    type: 'post',
-                    data: fd,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        $('#all_images').html('');
-                        $('#building_images').val('');
-                        if (response != '') {
-                            images = JSON.parse(response);
-                            for (let i = 0; i < images.length; i++) {
-                                var category = '';
-                                if (images[i].category == 1) {
-                                    category = 'Building Elevation';
-                                } else if (images[i].category == 2) {
-                                    category = 'Common Amenities Photos';
-                                } else if (images[i].category == 3) {
-                                    category = 'Master Layout Of Building';
-                                } else if (images[i].category == 4) {
-                                    category = 'Brochure';
-                                } else if (images[i].category == 5) {
-                                    category = 'Cost Sheet';
-                                } else if (images[i].category == 6) {
-                                    category = 'Other';
-                                }
-
-                                var src = building_image_show_url + '/' + images[i].image;
-                                if (src.includes('.pdf')) {
-                                    $('#all_images').append(
-                                        '<div class="col-md-4 m-b-4 mb-3"><a target="_blank" href="' +
-                                        src +
-                                        '"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a><p>' +
-                                        category + '</p></div>')
-                                } else {
-                                    $('#all_images').append('<div class="col-md-4 m-b-4 mb-3"><img src="' +
-                                        src +
-                                        '" alt="" height="200" width="200"><p>' + category +
-                                        '</p></div>')
-                                }
-                            }
-                        }
-                    },
-                });
             })
 
 			$(document).on('change', '#select_all_checkbox', function(e) {
