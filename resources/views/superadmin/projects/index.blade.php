@@ -340,16 +340,17 @@
                             render : function ( data, type, row, meta ) {
                                 let project_data = row;
                                 
-                                if(project_data.user_id == project_data.auth_id) {
-                                    if(project_data.is_indirectly_store > 0) {
-                                        return `<span style="cursor: pointer;" title="View after fill all data">${data}</span>`;
-                                    } else {
-                                        var url = '{{ route("superadmin.viewProject", ":id") }}';
-                                        url = url.replace(':id', project_data.id);
-                                        return `<a href="${url}">${data}</a>`;    
-                                    }
+                                // if(project_data.user_id == project_data.auth_id) {
+                                // } else {
+                                //     return data;    
+                                // }
+
+                                if(project_data.is_indirectly_store > 0) {
+                                    return `<span style="cursor: pointer;" title="View after fill all data">${data}</span>`;
                                 } else {
-                                    return data;    
+                                    var url = '{{ route("superadmin.viewProject", ":id") }}';
+                                    url = url.replace(':id', project_data.id);
+                                    return `<a href="${url}">${data}</a>`;    
                                 }
                             }
                         },

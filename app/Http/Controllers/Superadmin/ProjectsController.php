@@ -12,6 +12,7 @@ use App\Models\Projects;
 use App\Models\State;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -88,7 +89,13 @@ class ProjectsController extends Controller
 
 	public function viewProject($project_id)
 	{
-		$project = DB::table('projects')
+		$obj = Projects::find(intval($project_id));
+		$user = User::find($obj->user_id);
+
+		$project = null;
+
+		if($user->role_id == 3) {
+			$project = DB::table('projects')
 			->select([
 				'projects.*',
 				DB::raw("builders.name AS builder_name"),
@@ -100,6 +107,20 @@ class ProjectsController extends Controller
 			->join('state','projects.state_id','state.id')
 			->join('super_areas','projects.area_id','super_areas.id')	
 			->where('projects.id', $project_id)->first();
+		} else {
+			$project = DB::table('projects')
+			->select([
+				'projects.*',
+				DB::raw("builders.name AS builder_name"),
+				DB::raw("state.name AS state_name"),
+				DB::raw("city.name AS city_name"),
+				DB::raw("areas.name AS area_name"),
+			])->join('builders','projects.builder_id','builders.id')
+			->join('city','projects.city_id','city.id')
+			->join('state','projects.state_id','state.id')
+			->join('areas','projects.area_id','areas.id')
+			->where('projects.id', $project_id)->first();
+		}
 
 		$project->contacts = json_decode($project->contact_details, true);
 
