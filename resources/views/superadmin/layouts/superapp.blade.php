@@ -485,20 +485,22 @@ Helper::set_default_measuerement();
                                 @endif
                                 
                                 @if ($permissions->contains(\App\Constants\SupAdminPermissions::SMS_TEMPLATE))
-                                    <li class="sidebar-list"><a
-                                        class="sidebar-link
-                                        href="{{ route('superadmin.sms.index') }}"><i
-                                            class="fa fa-envelope"></i>
-                                            <span class="lan-3">SMS Template</span></a>
+                                    <li class="sidebar-list">
+                                        <a class="sidebar-link" href="{{ route('superadmin.sms.index') }}">
+                                            <i class="fa fa-envelope"></i>
+                                            <span class="lan-3">SMS Template</span>
+                                        </a>
                                     </li>   
-                                @endif 
+                                @endif
                                 
                                 @if ($permissions->contains(\App\Constants\SupAdminPermissions::REQUESTS))
-                                    <li class="sidebar-list"><a
-                                        class="sidebar-link
-                                        href="{{ route('superadmin.listEnquiries') }}"><i
-                                            class="fa fa-comments"></i>
-                                            <span class="lan-3">Requests</span></a>
+                                    <li class="sidebar-list">
+                                        <a
+                                            class="sidebar-link"
+                                            href="{{ route('superadmin.listEnquiries') }}">
+                                            <i class="fa fa-comments"></i>
+                                            <span class="lan-3">Requests</span>
+                                        </a>
                                     </li>   
                                 @endif
 

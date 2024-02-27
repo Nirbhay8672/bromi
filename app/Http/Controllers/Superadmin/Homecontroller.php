@@ -62,8 +62,8 @@ class Homecontroller extends Controller
 			return DataTables::of($data)
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$buttons =  $buttons . '<button data-id="' . $row->id . '" onclick=getTp(this) class="btn btn-pill btn-primary" type="button">View</button>';
-					$buttons =  $buttons . ' <button data-id="' . $row->id . '" onclick=deleteTp(this) class="btn btn-pill btn-danger" type="button">Delete</button>';
+					$buttons =  $buttons . '<i data-id="' . $row->id . '" onclick=getTp(this) class="fs-22 py-2 mx-2 fa-pencil pointer fa" type="button"></i>';
+					$buttons =  $buttons . ' <i data-id="' . $row->id . '" onclick=deleteTp(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
 					return $buttons;
 				})
 				->rawColumns(['Actions'])
