@@ -993,71 +993,6 @@
                         <h5 class="modal-title">Add Schedule Visit</h5>
                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
-                    <!-- {{-- <div class="modal-body">
-                        <form class="form-bookmark needs-validation modal_form" method="post" id="schedule_form"
-                            novalidate="">
-                            <input type="hidden" name="schedule_visit_id" value="{{ $data->id }}"
-                                id="schedule_visit_id">
-                            <div class="row">
-                                <div class="form-group col-md-4 m-b-4 mb-3">
-                                    <label class="mb-0">&nbsp;</label>
-                                    <label class="select2_label" for="Property list">Property</label>
-                                    <select class="form-select" id="property_list" multiple>
-                                        @forelse ($prop_list as $list)
-                                            @php
-                                                $theprop = !empty(explode(' - ', $list)[0]) ? explode(' - ', $list)[0] : '';
-                                                if (empty($theprop)) {
-                                                    continue;
-                                                }
-                                                $real_list = explode(' - ', $list);
-                                                unset($real_list[0]);
-                                                $real_list = implode(' - ', $real_list);
-                                            @endphp
-                                            <option value="{{ $theprop }}">{{ $real_list }}</option>
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2 m-b-10">
-                                    <label class="mb-0">&nbsp;</label>
-                                    <select class="form-select" id="schedule_visit_status">
-                                        <option value="">Status </option>
-                                        <option value="Confirmed">Confirmed</option>
-                                        <option value="Completed"> Completed</option>
-                                        <option value="Cancelled"> Cancelled</option>
-                                        <option value="Postponed"> Postponed</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2 m-b-4 mb-3">
-                                    <label class="mb-0">&nbsp;</label>
-                                    <select class="form-select" id="schedule_assigned_to">
-                                        <option value=""> Assigned To</option>
-                                        @foreach ($employees as $employee)
-                                            <option value="{{ $employee->id }}">
-                                                {{ $employee->first_name . ' ' . $employee->last_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3 m-b-10">
-                                    <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
-                                    <input class="form-control " id="site_visit_time" name="site_visit_time"
-                                        type="datetime-local">
-                                </div>
-                                <div class="form-group col-md-2 m-b-10">
-                                    <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
-                                    <input class="form-control" name="schedule_remind" id="schedule_remind"
-                                        type="remarks" autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-8 m-b-10">
-                                    <label for="Site Visit Time" class="mb-0">Description:</label>
-                                    <input class="form-control" name="schedule_description" id="schedule_description"
-                                        type="remarks" autocomplete="off">
-                                </div>
-                            </div>
-                            <button class="btn btn-secondary" id="saveSchedule">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                        </form>
-                    </div> --}} -->
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="schedule_form"
                             novalidate="">
@@ -1162,7 +1097,7 @@
         </div>
 
         <!-- progress modal -->
-        <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
+        {{-- <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
@@ -1297,7 +1232,138 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+        <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+            <div class="modal-dialog" style="width:30rem" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Progress</h5>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form"
+                                novalidate="">
+                                <input type="hidden" name="progress_enquiry_id" id="progress_enquiry_id">
+                                @forelse ($configuration_settings as $progs)
+                                    @if ($progs['dropdown_for'] == 'enquiry_progress')
+                                        @php
+                                            $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
+                                        @endphp
+                                        <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
+                                    @endif
+                                @empty
+                                @endforelse
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="mb-0">Enquiry Progress: </label>
+                                            <select class="form-select" id="progress_enquiry_progress">
+                                                <option value="">Enquiry Progress </option>
+                                                <option value="New Lead">New Lead</option>
+                                                <option value="Lead Confirmed"> Lead Confirmed</option>
+                                                <option value="Discussion"> Discussion</option>
+                                                <option value="Booked"> Booked</option>
+                                                <option value="Lost"> Lost</option>
+                                                @forelse ($configuration_settings as $progs)
+                                                    @if ($progs['dropdown_for'] == 'enquiry_progress')
+                                                        @php
+                                                            $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
+                                                        @endphp
+                                                        <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
+                                                    @endif
+                                                @empty
+                                                @endforelse
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="site_visit_date1" style="margin-top: 10px">NFD Date:</label>
+                                            <input class="form-control limitYear4digits" id="site_visit_date1"
+                                                name="nfdDate" max='31-12-2050' type="date"
+                                                oninput="limitYearTo4Digits1()">
+                                        </div>                                        
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="mb-0">Comments:</label>
+                                            <select class="form-select" id="progress_sales_comment">
+                                                <option value="">Sales Comments</option>
+                                                @forelse ($configuration_settings as $props)
+                                                    @if ($props['dropdown_for'] == 'enquiry_sales_comment')
+                                                        <option data-parent_id="{{ $props['parent_id'] }}"
+                                                            value="{{ $props['id'] }}">{{ $props['name'] }}
+                                                        </option>
+                                                    @endif
+                                                @empty
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="nfdTime" style="margin-top: 10px">NFD Time:</label>
+                                            <input class="form-control" id="site_visit_time1" name="nfdTime"
+                                                type="time">
+                                        </div>
+                                    
+                                    </div>
+                                    <div class="col-md-12 mt-2">
+                                        <div class="form-group">
+                                            <label>Lead Type:</label><br>
+                                            <div class="form-check form-check-inline radio radio-primary"
+                                                style="margin-right:3rem">
+                                                <input class="form-check-input" id="progress_lead_type_1" type="radio"
+                                                    name="progress_lead_type" value="Hot Lead">
+                                                <label class="form-check-label mb-0" for="progress_lead_type_1">Hot
+                                                    Lead</label>
+                                            </div>
+                                            <div class="form-check form-check-inline radio radio-primary"
+                                                style="margin-right:3rem">
+                                                <input class="form-check-input" type="radio" id="progress_lead_type_2"
+                                                    name="progress_lead_type" value="Warm Lead">
+                                                <label class="form-check-label mb-0" for="progress_lead_type_2"> Warm
+                                                    Lead</label>
+                                            </div>
+                                            <div class="form-check form-check-inline radio radio-primary"
+                                                style="margin-right:3rem">
+                                                <input class="form-check-input" id="progress_lead_type_3" type="radio"
+                                                    name="progress_lead_type" value="Cold Lead">
+                                                <label class="form-check-label mb-0" for="progress_lead_type_3">Cold
+                                                    Lead</label>
+                                            </div>
+                                            <!-- Add other Lead Type checkboxes similarly -->
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 mt-2">
+                                        <div class="form-group">
+                                            <label for="progress_remarks">Remarks:</label>
+                                            <input class="form-control" name="progress_remarks" id="progress_remarks"
+                                                type="remarks" autocomplete="off">
+                                        </div>
+                                    </div>
+                                
+                                </div>
+                                <div class="text-center mt-3">
+                                    <button class="btn custom-theme-button" type="button"
+                                        id="saveProgress">Save</button>
+                                    <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
         </div>
+
     @endsection
     @push('scripts')
         <script>

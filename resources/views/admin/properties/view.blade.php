@@ -205,10 +205,8 @@
                                                             <div class="form-group col-8 m-b-10 data_conent_53">
 
                                                                 <div>:
-                                                                    @if (
-                                                                        !empty(explode('_-||-_', $property->carpet_area)[0]) &&
-                                                                            !empty($dropdowns[explode('_-||-_', $property->carpet_area)[1]]['name']))
-                                                                        {{ explode('_-||-_', $property->carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_area)[1]]['name'] }}
+                                                                    @if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name']))
+                                                                        {{ explode('_-||-_', $property->carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name'] }}
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -219,10 +217,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_54">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->salable_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->salable_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -232,10 +228,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_55">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->carpet_plot_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->carpet_plot_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_plot_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -244,11 +238,8 @@
                                                                 <h6><b>Salable Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_56">:
-
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->salable_plot_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->salable_plot_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_plot_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -258,10 +249,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_57">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->constructed_salable_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->constructed_salable_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_salable_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -271,10 +260,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_58">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->constructed_carpet_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->constructed_carpet_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_carpet_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -284,10 +271,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_59">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->constructed_builtup_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->constructed_builtup_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_builtup_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -297,10 +282,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_60">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->builtup_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->builtup_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->builtup_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -311,10 +294,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_61">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->terrace_carpet_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->terrace_carpet_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_carpet_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -324,10 +305,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_62">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->terrace_salable_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->terrace_salable_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_salable_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -747,10 +726,8 @@
                                                             <div class="form-group col-8 m-b-10 data_conent_45">
 
                                                                 <div>:
-                                                                    @if (
-                                                                        !empty(explode('_-||-_', $property->survey_plot_size)[0]) &&
-                                                                            !empty($dropdowns[explode('_-||-_', $property->survey_plot_size)[1]]['name']))
-                                                                        {{ explode('_-||-_', $property->survey_plot_size)[0] . ' ' . $dropdowns[explode('_-||-_', $property->survey_plot_size)[1]]['name'] }}
+                                                                    @if (!empty(explode('_-||-_', $property->survey_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name']))
+                                                                        {{ explode('_-||-_', $property->survey_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name'] }}
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -788,10 +765,8 @@
                                                             <div class="form-group col-8 m-b-10 data_conent_49">
 
                                                                 <div>:
-                                                                    @if (
-                                                                        !empty(explode('_-||-_', $property->fp_plot_size)[0]) &&
-                                                                            !empty($dropdowns[explode('_-||-_', $property->fp_plot_size)[1]]['name']))
-                                                                        {{ explode('_-||-_', $property->fp_plot_size)[0] . ' ' . $dropdowns[explode('_-||-_', $property->fp_plot_size)[1]]['name'] }}
+                                                                    @if (!empty(explode('_-||-_', $property->fp_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name']))
+                                                                        {{ explode('_-||-_', $property->fp_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name'] }}
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -1283,7 +1258,7 @@
                                                     @if(count($multiple_image) > 0)
                                                         <div class="flex-fill text-center">
                                                             <h5 class="border-style">Property Image</h5>
-                                                            <img src="{{ asset('gallary_image.jpeg') }}" alt="" onclick="image()" style="height: 90px;">
+                                                            <img src="{{ asset('assets/prop_images/property-image.png') }}" alt="" onclick="image()" style="height: 90px;">
                                                         </div>
                                                     @endif
                                                     <!-- Second Image Section -->
@@ -1302,7 +1277,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <h5 class="border-style">Property Viewer</h5>
+                                                    <h5 class="border-style">Enquiry Visit Logs</h5>
                                                     <br>
                                                     <div class="form-group">
                                                         <table class="table table-responsive custom-table-design mb-3">
@@ -1320,8 +1295,9 @@
                                                                 @forelse ($visits as $value)
                                                                     <tr>
                                                                         @if ($value->visit_status == "Completed")
-                                                                            <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
-                                                                            </td>
+                                                                        <td>
+                                                                            <a href="{{ route('admin.view.enquiry',encrypt($value->Enquiry->id)) }}">{{ $value->Enquiry->client_name }}</a>
+                                                                        </td>
                                                                             <td>{{ 'Visit ' . $value->visit_status ? 'Visit ' . $value->visit_status : '-' }}
                                                                             </td>
                                                                             <td>{{ \Carbon\Carbon::parse($value->visit_date)->format('d-m-Y g:i A') }}
@@ -1472,10 +1448,8 @@
                                                             <div class="form-group col-8 m-b-10 data_conent_53">
 
                                                                 <div>:
-                                                                    @if (
-                                                                        !empty(explode('_-||-_', $property->carpet_area)[0]) &&
-                                                                            !empty($dropdowns[explode('_-||-_', $property->carpet_area)[1]]['name']))
-                                                                        {{ explode('_-||-_', $property->carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_area)[1]]['name'] }}
+                                                                    @if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name']))
+                                                                        {{ explode('_-||-_', $property->carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name'] }}
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -1486,10 +1460,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_54">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->salable_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->salable_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -1499,10 +1471,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_55">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->carpet_plot_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->carpet_plot_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_plot_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -1512,10 +1482,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_56">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->salable_plot_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->salable_plot_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_plot_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -1525,10 +1493,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_57">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->constructed_salable_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->constructed_salable_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_salable_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -1538,10 +1504,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_58">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->constructed_carpet_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->constructed_carpet_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_carpet_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -1551,10 +1515,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_59">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->constructed_builtup_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->constructed_builtup_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_builtup_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -1564,10 +1526,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_60">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->builtup_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->builtup_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->builtup_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -1578,10 +1538,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_61">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->terrace_carpet_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->terrace_carpet_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_carpet_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -1591,10 +1549,8 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_62">:
 
-                                                                @if (
-                                                                    !empty(explode('_-||-_', $property->terrace_salable_area)[0]) &&
-                                                                        !empty($dropdowns[explode('_-||-_', $property->terrace_salable_area)[1]]['name']))
-                                                                    {{ explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_salable_area)[1]]['name'] }}
+                                                                @if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name']))
+                                                                    {{ explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name'] }}
                                                                 @endif
                                                             </div>
                                                         @endif
@@ -1994,10 +1950,8 @@
                                                             <div class="form-group col-8 m-b-10 data_conent_45">
 
                                                                 <div>:
-                                                                    @if (
-                                                                        !empty(explode('_-||-_', $property->survey_plot_size)[0]) &&
-                                                                            !empty($dropdowns[explode('_-||-_', $property->survey_plot_size)[1]]['name']))
-                                                                        {{ explode('_-||-_', $property->survey_plot_size)[0] . ' ' . $dropdowns[explode('_-||-_', $property->survey_plot_size)[1]]['name'] }}
+                                                                    @if (!empty(explode('_-||-_', $property->survey_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name']))
+                                                                        {{ explode('_-||-_', $property->survey_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name'] }}
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -2035,10 +1989,8 @@
                                                             <div class="form-group col-8 m-b-10 data_conent_49">
 
                                                                 <div>:
-                                                                    @if (
-                                                                        !empty(explode('_-||-_', $property->fp_plot_size)[0]) &&
-                                                                            !empty($dropdowns[explode('_-||-_', $property->fp_plot_size)[1]]['name']))
-                                                                        {{ explode('_-||-_', $property->fp_plot_size)[0] . ' ' . $dropdowns[explode('_-||-_', $property->fp_plot_size)[1]]['name'] }}
+                                                                    @if (!empty(explode('_-||-_', $property->fp_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name']))
+                                                                        {{ explode('_-||-_', $property->fp_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name'] }}
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -2770,7 +2722,7 @@
                                         </div>
                                         <div class="tab-pane fade" id="v-property-viewer" role="tabpanel"
                                             aria-labelledby="v-property-viewer-tab">
-                                            <h5 class="border-style">Property Viewer</h5>
+                                            <h5 class="border-style">Enquiry Visit Logs</h5>
                                             <br>
                                             <div class="form-group">
                                                 <table class="table table-responsive custom-table-design mb-3">
@@ -2792,7 +2744,10 @@
                                                             <tr>
                                                                 @if ($value->visit_status == "Completed")
                                                                 <td>{{$value->Enquiry->enquiry_for}}</td>
-                                                                    <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
+                                                                     {{-- <td>{{ $value->Enquiry ? $value->Enquiry->client_name : '' }}
+                                                                    </td> --}}
+                                                                    <td>
+                                                                        <a href="{{ route('admin.view.enquiry', $value->Enquiry->id) }}">{{ $value->Enquiry->client_name }}</a>
                                                                     </td>
                                                                     <td>{{$value->Enquiry->client_mobile}}</td>
                                                                     <td>{{$value->Enquiry->client_email}}</td>

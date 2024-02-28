@@ -10,6 +10,7 @@ use App\Models\District;
 use App\Models\DropdownSettings;
 use App\Models\Enquiries;
 use App\Models\LandImages;
+use App\Models\LandUnit;
 use App\Models\Projects;
 use App\Models\PropertyConstructionDocs;
 use App\Models\Properties;
@@ -73,6 +74,8 @@ class PropertyController extends Controller
 
         if ($request->ajax()) {
             $dropdowns = DropdownSettings::get()->toArray();
+            $land_units = LandUnit::all();
+
             $dropdownsarr = [];
             foreach ($dropdowns as $key => $value) {
                 $dropdownsarr[$value['id']] = $value;
@@ -413,9 +416,9 @@ class PropertyController extends Controller
                     return '<td style="vertical-align:top">
 					' . Carbon::parse($row->updated_at)->format('d-m-Y') . '<br>' . Carbon::parse($row->updated_at)->diffInDays() . ' days</td>';
                 })
-                ->editColumn('property_category', function ($row) use ($dropdowns) {
+                ->editColumn('property_category', function ($row) use ($dropdowns, $land_units) {
                     // $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk');
-                    $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk','Test', 'testw');
+                    $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk', 'Test', 'testw');
                     if ($row->property_for == 'Both') {
                         $forr = 'Rent & Sell';
                     } else {
@@ -458,8 +461,7 @@ class PropertyController extends Controller
                             }
                         }
                     }
-
-                    $salable_area_print = $this->generateAreaDetails($row, $dropdowns[$row->property_category]['name'], $dropdowns);
+                    $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
                     if (empty($salable_area_print)) {
                         $salable_area_print = "Area Not Available";
                     }
@@ -652,7 +654,7 @@ class PropertyController extends Controller
 				  	</div>';
                     return $abc;
                 })
-                ->addColumn('Actions2', function ($row) use ($dropdowns) {
+                ->addColumn('Actions2', function ($row) use ($dropdowns, $land_units) {
                     $buttons = '';
                     $building_name = '';
                     $area = '';
@@ -699,7 +701,7 @@ class PropertyController extends Controller
                     $config = urlencode($config);
                     $price = urlencode($row->price);
                     $property_for = urlencode(($row->property_for == 'Both') ? 'Rent & Sell' : '');
-                    $details = urlencode($this->generateAreaDetails($row, $config, $dropdowns));
+                    $details = urlencode($this->generateAreaUnitDetails($row, $config, $land_units));
                     $location_link = urlencode($row->location_link);
                     $message = "$building_name | $area \n $config | $details | $price \n Available For : $property_for\n\n | Link: $location_link";
                     $sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
@@ -771,7 +773,6 @@ class PropertyController extends Controller
     {
         $area = '';
         $measure = '';
-
         if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
             $area = explode('_-||-_', $row->salable_area)[0];
             $measure = explode('_-||-_', $row->salable_area)[1];
@@ -794,6 +795,47 @@ class PropertyController extends Controller
 
         if (!empty($area) && !empty($measure)) {
             $formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
+            return $formattedArea;
+        } else {
+            return "Area Not Available";
+        }
+    }
+
+    public function generateAreaUnitDetails($row, $type, $land_units)
+    {
+        $area = '';
+        $measure = '';
+        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+            $area = explode('_-||-_', $row->salable_area)[0];
+            $measure = explode('_-||-_', $row->salable_area)[1];
+        } elseif ($type == 'Storage/industrial') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+        } elseif ($type == 'Vila/Bunglow') {
+            $salable = explode('_-||-_', $row->salable_plot_area)[0];
+            $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+            $measure = explode('_-||-_', $row->constructed_salable_area)[1];
+            if (empty($salable)) {
+                $salable = '';
+            }
+            // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+            $area = "P:" . $salable . ' - C: ' . $constructed;
+        } elseif ($type == 'Farmhouse') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+        }
+
+        // Find the land unit name corresponding to the measure
+        $unit_name = '';
+        foreach ($land_units as $unit) {
+            if ($unit->id == $measure) {
+                $unit_name = $unit->unit_name;
+                break;
+            }
+        }
+
+        if (!empty($area) && !empty($unit_name)) {
+            $formattedArea = $area . ' ' . $unit_name;
             return $formattedArea;
         } else {
             return "Area Not Available";
@@ -1574,6 +1616,8 @@ class PropertyController extends Controller
         dd("shared-properties  ===>");
         if ($request->ajax()) {
             $dropdowns = DropdownSettings::get()->toArray();
+            $land_units = LandUnit::all();
+
             $dropdownsarr = [];
             foreach ($dropdowns as $key => $value) {
                 $dropdownsarr[$value['id']] = $value;
@@ -1610,8 +1654,8 @@ class PropertyController extends Controller
 
                     return '';
                 })
-                ->editColumn('super_builtup_area', function ($row) use ($dropdowns) {
-                    $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk','5+bhk', 'Test', 'testw', 'fgfgmf', 'sfbsbsfn', '252626', 'sh');
+                ->editColumn('super_builtup_area', function ($row) use ($dropdowns, $land_units) {
+                    $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk', 'Test', 'testw', 'fgfgmf', 'sfbsbsfn', '252626', 'sh');
                     if ($row->Property->property_for == 'Both') {
                         $forr = 'Rent & Sell';
                     } else {
@@ -1654,8 +1698,9 @@ class PropertyController extends Controller
                         }
                     }
 
-                    $salable_area_print = $this->generateAreaDetails($row->Property, $dropdowns[$row->Property->property_category]['name'], $dropdowns);
-
+                    // $salable_area_print = $this->generateAreaDetails($row->Property, $dropdowns[$row->Property->property_category]['name'], $dropdowns);
+                    $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
+                   
                     if (empty($salable_area_print)) {
                         $salable_area_print = "Area Not Available";
                     }
@@ -1979,6 +2024,7 @@ class PropertyController extends Controller
     {
         $property = Properties::with('Projects', 'District', 'Taluka', 'Village')->find(Helper::theDecrypt($id));
         $dropdowns = DropdownSettings::get()->toArray();
+        $land_units = LandUnit::all();
         $vv = PropertyViewer::create(['user_id' => Session::get('parent_id'), 'visited_by' => Auth::user()->id, 'property_id' => $property->id]);
         $dropdownsarr = [];
         foreach ($dropdowns as $key => $value) {
@@ -2018,8 +2064,8 @@ class PropertyController extends Controller
             })
             ->get();
 
-        
-            $prop_type = [];
+
+        $prop_type = [];
         foreach ($dropdowns as $key => $value) {
             if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
                 array_push($prop_type, $value['id']);
@@ -2047,7 +2093,7 @@ class PropertyController extends Controller
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property', 'multiple_image', 'construction_docs_list', 'dropdowns', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units','configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
 
     // public function downloadZip($type, $prop)
@@ -2289,6 +2335,7 @@ class PropertyController extends Controller
         $edit_configuration = Properties::where('id', $request->id)->pluck('configuration');
         $edit_category = Properties::where('id', $request->id)->pluck('property_category');
         $data['property_const_docs'] = PropertyConstructionDocs::all();
+        $data['land_units'] = FacadesDB::table('land_units')->get();
         return view('admin.properties.add_property', $data, compact('edit_category', 'edit_configuration'));
     }
 
@@ -2341,6 +2388,7 @@ class PropertyController extends Controller
         $data['prop_type'] = $prop_type;
         $data['amenities'] = $amenities;
         $data['property_const_docs'] = PropertyConstructionDocs::all();
+        $data['land_units'] = FacadesDB::table('land_units')->get();
         return view('admin.properties.add_property', $data);
     }
 
