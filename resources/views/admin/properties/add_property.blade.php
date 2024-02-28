@@ -487,7 +487,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        {{-- mb validation --}}
                                         <div class="setup-content" id="profile-step">
                                             <div class="col-xs-12">
                                                 <div class="col-md-12">
@@ -508,7 +508,7 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
-                                                            <div id="project_id_error"></div>
+                                                            <div id="project_id_error" style="color: red"></div>
                                                         </div>
 
                                                         {{-- state city --}}
@@ -516,7 +516,8 @@
                                                             $authStateId = Auth::user()->state_id;
                                                         @endphp
                                                         <div class="form-group col-md-3 m-b-4 mb-3 state-hide">
-                                                            <select class="form-select" id="state_id">
+                                                            <select class="form-select" id="state_id"
+                                                                data-error="#state_id_error">
                                                                 <option value="">Select States</option>
                                                                 @foreach ($states as $state)
                                                                     @if ($state['user_id'] == auth()->user()->id)
@@ -526,9 +527,12 @@
                                                                     @endif
                                                                 @endforeach
                                                             </select>
+                                                            <div id="state_id_error" style="color: red"></div>
                                                         </div>
+
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
-                                                            <select id="state-dropdown" class="form-control">
+                                                            <select id="state-dropdown" class="form-control"
+                                                                data-error="#city_id_error">
                                                                 <option value="">Select City</option>
                                                                 @foreach ($cities as $city)
                                                                     <option data-city_id="{{ $city->state_id }}"
@@ -537,10 +541,12 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            <div id="city_id_error" style="color: red"></div>
                                                         </div>
 
                                                         <div class="form-group col-md-3 m-b-4 mb-3 cl-locality">
-                                                            <select class="form-select" id="area_id">
+                                                            <select class="form-select" id="area_id"
+                                                                data-error="#locality_id_error">
                                                                 <option value="">Select Locality</option>
                                                                 @foreach ($areas as $area)
                                                                     <option data-city_id="{{ $area->city_id }}"
@@ -549,12 +555,17 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            <div id="locality_id_error" style="color: red"></div>
                                                         </div>
 
                                                         <div class="col-md-5 m-b-4 mb-3">
-                                                            <label for="Addresss">Address</label>
-                                                            <input class="form-control" type="text" value=""
-                                                                name="address" id="address">
+                                                            <div>
+                                                                <label for="Addresss">Address</label>
+                                                                <input class="form-control" type="text" value=""
+                                                                    name="address" id="address">
+                                                            </div>
+                                                            <div class="invalid-feedback" id="address_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                         <div class="row col-md-7 div_flat_details_7 mb-3">
                                                             <div class="form-group col-md-9">
@@ -562,20 +573,25 @@
                                                                 <input class="form-control" name="property_link"
                                                                     id="property_link" type="text" autocomplete="off">
                                                             </div>
+                                                            <div class="invalid-feedback" id="property_link_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                     </div>
                                                     <div class="row div_property_address" id="">
                                                         <div class="form-group col-md-3 mb-3 div_extra_land_details">
-                                                            <select class="form-select" id="district_id">
+                                                            <select class="form-select" id="district_id"
+                                                                data-error="#district_id_error">
                                                                 <option value=""> District</option>
                                                                 @foreach ($districts as $disctrict)
                                                                     <option value="{{ $disctrict->id }}">
                                                                         {{ $disctrict->name }}</option>
                                                                 @endforeach
                                                             </select>
+                                                            <div id="district_id_error" style="color: red"></div>
                                                         </div>
                                                         <div class="form-group col-md-2 mb-3 div_extra_land_details">
-                                                            <select class="form-select" id="taluka_id">
+                                                            <select class="form-select" id="taluka_id"
+                                                                data-error="#taluka_id_error">
                                                                 <option value=""> Taluka</option>
                                                                 @foreach ($talukas as $taluka)
                                                                     <option data-parent_id="{{ $taluka->district_id }}"
@@ -583,9 +599,11 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            <div id="taluka_id_error" style="color: red"></div>
                                                         </div>
                                                         <div class="form-group col-md-2 m-b-4 mb-3 div_extra_land_details">
-                                                            <select class="form-select" id="village_id">
+                                                            <select class="form-select" id="village_id"
+                                                                data-error="#village_id_error">
                                                                 <option value=""> Village</option>
                                                                 @foreach ($villages as $village)
                                                                     <option data-parent_id="{{ $village->taluka_id }}"
@@ -593,10 +611,12 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            <div id="village_id_error" style="color: red"></div>
                                                         </div>
 
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
-                                                            <select class="form-select" id="zone">
+                                                            <select class="form-select" id="zone"
+                                                                data-error="#zone_id_error">
                                                                 <option value="">Zone</option>
                                                                 @forelse ($property_configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_zone')
@@ -608,6 +628,7 @@
                                                                 @empty
                                                                 @endforelse
                                                             </select>
+                                                            <div id="zone_id_error" style="color: red"></div>
                                                         </div>
                                                     </div>
 
@@ -621,7 +642,6 @@
                                                                 <div class="form-group col-md-7 m-b-20">
                                                                     <div class="fname">
                                                                         <label for="terrace Area">Terrace Area</label>
-
                                                                         <div class="fvalue"><input class="form-control"
                                                                                 name="terrace_area" id="terrace_area"
                                                                                 type="text" autocomplete="off"
@@ -653,8 +673,10 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="constructed_carpet_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
@@ -671,19 +693,21 @@
                                                                         id="salable_plot_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
-
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="salable_plot_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
-
+                                                                <div class="invalid-feedback" id="salable_plot_area_error"
+                                                                    style="display: block;color:red;"></div>
                                                             </div>
                                                         </div>
 
@@ -697,36 +721,23 @@
                                                                         id="constructed_salable_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
-                                                                <!--<div class="input-group-append col-md-5 m-b-20">-->
-                                                                <!--    <div class="form-group form_measurement">-->
-                                                                <!--        <select class="form-select measure_select"-->
-                                                                <!--            id="carpet_area_measurement">-->
-                                                                {{-- <!--            @forelse ($property_configuration_settings as $props)--> --}}
-                                                                {{-- <!--                @if ($props['dropdown_for'] == 'property_measurement_type')-->
-                                                                <!--                    <option-->
-                                                                <!--                        @if ($props['id'] == Session::get('default_measurement')) selected @endif-->
-                                                                <!--                        data-parent_id="{{ $props['parent_id'] }}"-->
-                                                                <!--                        value="{{ $props['id'] }}">-->
-                                                                <!--                        {{ $props['name'] }}-->
-                                                                <!--                    </option>-->
-                                                                <!--                @endif-->
-                                                                <!--            @empty-->
-                                                                <!--            @endforelse--> --}}
-                                                                <!--        </select>-->
-                                                                <!--    </div>-->
-                                                                <!--</div>-->
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="constructed_salable_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="invalid-feedback"
+                                                                id="constructed_salable_area_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
 
 
@@ -746,16 +757,16 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="constructed_builtup_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-
-
 
                                                         <div class="col-md-3 the_carpet_plot_area">
                                                             <div class="input-group">
@@ -771,8 +782,10 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="carpet_plot_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
@@ -805,6 +818,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="invalid-feedback" id="storage_centre_height_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
 
                                                         <div class="col-md-3 the_salable_area">
@@ -821,12 +836,18 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="salable_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                            <div class="invalid-feedback" id="salable_area_error"
+                                                                style="display: none;color:red;">Please enter Salable
+                                                                area
                                                             </div>
                                                         </div>
 
@@ -852,6 +873,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+
                                                         </div>
 
                                                         <div class="col-md-3 the_width_of_plot">
@@ -891,8 +913,10 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="carpet_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
@@ -920,6 +944,8 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
+                                                                <div class="invalid-feedback" id="entrance_width_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3 the_ceilling_height">
@@ -944,6 +970,9 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="invalid-feedback" id="ceiling_height_error"
+                                                                style="display: none;color:red;">Please enter ceiling
+                                                                height</div>
                                                         </div>
 
 
@@ -955,36 +984,22 @@
                                                                         id="builtup_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
-                                                                {{-- <div class="input-group-append col-md-5 m-b-20">
-                                                                    <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
-                                                                            id="builtup_area_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
-                                                                        </select>
-                                                                    </div>
-                                                                </div> --}}
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="builtup_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="invalid-feedback" id="builtup_area_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
 
                                                         <div class="row col-md-2 div_checkboxes1">
@@ -996,6 +1011,8 @@
                                                                 <label class="form-check-label"
                                                                     for="is_terrace">Terrace</label>
                                                             </div>
+                                                            <div class="invalid-feedback" id="terrace_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
 
                                                         <div class="col-md-3 the_plot_area">
@@ -1028,8 +1045,10 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="plot_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
@@ -1069,8 +1088,10 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="construction_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
@@ -1089,38 +1110,22 @@
                                                                         id="terrace_salable_area" type="text"
                                                                         autocomplete="off">
                                                                 </div>
-                                                                {{-- <div class="input-group-append col-md-5 m-b-20">
-                                                                    <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
-                                                                            id="terrace_salable_area_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
-                                                                        </select>
-                                                                    </div>
-                                                                </div> --}}
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="terrace_salable_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
-
-
                                                             </div>
+                                                            <div class="invalid-feedback"id="terrace_salable_area_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
 
                                                         <div class="col-md-4 the_terrace_carpet_area">
@@ -1155,8 +1160,10 @@
                                                                         <select
                                                                             class="form-select measure_select measure_square"
                                                                             id="terrace_carpet_area_measurement">
-                                                                            @forEach($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
@@ -1176,75 +1183,126 @@
 
                                                         <div class="row ">
                                                             <div class="col-md-2 mb-3 the_total_units_in_project">
-                                                                <label for="Total Floor">Units in project</label>
-                                                                <input class="form-control" name="total_units_in_project"
-                                                                    id="total_units_in_project" type="text"
-                                                                    autocomplete="off">
+                                                                <div>
+                                                                    <label for="Total Floor">Units in project</label>
+                                                                    <input class="form-control"
+                                                                        name="total_units_in_project"
+                                                                        id="total_units_in_project" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback"id="total_units_in_project_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_total_no_of_floor">
-                                                                <label for="Property on floor">no. of floor</label>
-                                                                <input class="form-control" name="total_no_of_floor"
-                                                                    id="total_no_of_floor" type="text"
-                                                                    autocomplete="off">
+                                                                <div>
+                                                                    <label for="Property on floor">no. of floor</label>
+                                                                    <input class="form-control" name="total_no_of_floor"
+                                                                        id="total_no_of_floor" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback" id="total_no_of_floor_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_total_units_in_tower">
-                                                                <label for="Total Floor">Units in tower</label>
-                                                                <input class="form-control" name="total_units_in_tower"
-                                                                    id="total_units_in_tower" type="text"
-                                                                    autocomplete="off">
+                                                                <div>
+                                                                    <label for="Total Floor">Units in tower</label>
+                                                                    <input class="form-control"
+                                                                        name="total_units_in_tower"
+                                                                        id="total_units_in_tower" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback"
+                                                                    id="total_units_in_tower_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_property_on_floors">
-                                                                <label for="Total Floor">Units on Floor</label>
-                                                                <input class="form-control" name="property_on_floors"
-                                                                    id="property_on_floors" type="text"
-                                                                    autocomplete="off">
+                                                                <div>
+                                                                    <label for="Total Floor">Units on Floor</label>
+                                                                    <input class="form-control" name="property_on_floors"
+                                                                        id="property_on_floors" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback"
+                                                                    id="property_on_floors_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_no_of_elavators">
-                                                                <label for="No of elavators">No Of Elavators</label>
-                                                                <input class="form-control" name="no_of_elavators"
-                                                                    id="no_of_elavators" type="text"
-                                                                    autocomplete="off">
+                                                                <div>
+                                                                    <label for="No of elavators">No Of Elavators</label>
+                                                                    <input class="form-control" name="no_of_elavators"
+                                                                        id="no_of_elavators" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback" id="no_of_elavators_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
 
                                                             <div class="col-md-2 mb-3 the_no_of_balcony">
-                                                                <label for="No of Balcony">No Of Balcony</label>
-                                                                <input class="form-control" name="no_of_balcony"
-                                                                    id="no_of_balcony" type="text" autocomplete="off">
+                                                                <div>
+                                                                    <label for="No of Balcony">No Of Balcony</label>
+                                                                    <input class="form-control" name="no_of_balcony"
+                                                                        id="no_of_balcony" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback" id="no_of_balcony_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
 
                                                             <div class="col-md-2 mb-3 the_total_no_of_units">
-                                                                <label for="Total No. of units">Total No. of units</label>
-                                                                <input class="form-control" name="total_no_of_units"
-                                                                    id="total_no_of_units" type="text"
-                                                                    autocomplete="off">
+                                                                <div>
+                                                                    <label for="Total No. of units">Total No. of
+                                                                        units</label>
+                                                                    <input class="form-control" name="total_no_of_units"
+                                                                        id="total_no_of_units" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback" id="total_no_of_units_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_no_of_room">
-                                                                <label for="NO. of room">No. of room</label>
-                                                                <input class="form-control" name="no_of_room"
-                                                                    id="no_of_room" type="text" autocomplete="off">
+                                                                <div>
+                                                                    <label for="NO. of room">No. of room</label>
+                                                                    <input class="form-control" name="no_of_room"
+                                                                        id="no_of_room" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback" id="no_of_room_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_no_of_bathrooms">
-                                                                <label for="No of bathrooms">No Of Bathrooms</label>
-                                                                <input class="form-control" name="no_of_bathrooms"
-                                                                    id="no_of_bathrooms" type="text"
-                                                                    autocomplete="off">
+                                                                <div>
+                                                                    <label for="No of bathrooms">No Of Bathrooms</label>
+                                                                    <input class="form-control" name="no_of_bathrooms"
+                                                                        id="no_of_bathrooms" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback" id="no_of_bathrooms_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
 
                                                             <div class="col-md-3 mb-3 the_no_of_floors_allowed">
-                                                                <label for="No Of Floors Allowed">No Of Floors
-                                                                    Allowed</label>
-                                                                <input class="form-control" name="no_of_floors_allowed"
-                                                                    id="no_of_floors_allowed" type="text"
-                                                                    autocomplete="off">
+                                                                <div>
+                                                                    <label for="No Of Floors Allowed">No Of Floors
+                                                                        Allowed</label>
+                                                                    <input class="form-control"
+                                                                        name="no_of_floors_allowed"
+                                                                        id="no_of_floors_allowed" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback"
+                                                                    id="no_of_floors_allowed_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
                                                             <div class="col-md-2 mb-3 the_no_of_side_open">
-                                                                <label for="No Of Side Open">No Of Side Open</label>
-                                                                <input class="form-control" name="no_of_side_open"
-                                                                    id="no_of_side_open" type="text"
-                                                                    autocomplete="off">
+                                                                <div>
+                                                                    <label for="No Of Side Open">No Of Side Open</label>
+                                                                    <input class="form-control" name="no_of_side_open"
+                                                                        id="no_of_side_open" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="invalid-feedback" id="no_of_side_open_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
-
-
                                                         </div>
 
                                                     </div>
@@ -1265,7 +1323,8 @@
                                                                 class="form-check checkbox the_servent_room checkbox-solid-success mb-0 col-md-2 m-b-20">
                                                                 <input class="form-check-input" id="servant_room"
                                                                     type="checkbox">
-                                                                <label class="form-check-label" for="servant_room">Servant
+                                                                <label class="form-check-label"
+                                                                    for="servant_room">Servant
                                                                     Room</label>
                                                             </div>
                                                             <div
@@ -1303,7 +1362,8 @@
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input type="radio" class="btn-check"
                                                                         value="1" id="washoroom2_1"
-                                                                        name="washrooms2_type" autocomplete="off">
+                                                                        name="washrooms2_type" autocomplete="off"
+                                                                        @selected(true)>
                                                                     <label
                                                                         class="btn btn-outline-primary btn-pill btn-sm py-1"
                                                                         for="washoroom2_1">Private Washrooms</label>
@@ -1355,6 +1415,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="invalid-feedback" id="front_road_width_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
 
                                                     </div>
@@ -1425,6 +1487,8 @@
                                                             <input class="form-control" name="fsi" id="fsi"
                                                                 type="text" autocomplete="off">
                                                         </div>
+                                                        <div class="invalid-feedback" id="fsi_error"
+                                                            style="display: none;color:red;"></div>
                                                     </div>
 
                                                     <div class="row mb-3 div_borewell" id="">
@@ -1436,22 +1500,32 @@
                                                             <input class="form-control" name="no_of_borewell"
                                                                 id="no_of_borewell" type="text" autocomplete="off">
                                                         </div>
+                                                        <div class="invalid-feedback" id="no_of_borewell_error"
+                                                            style="display: none;color:red;"></div>
                                                     </div>
 
                                                     <div class="row mb-3 div_flat_details_4" id="">
                                                         <div class="form-group col-md-2 pe-0">
-                                                            <label for="Four Wheeler Parking">Four Wheeler
-                                                                Parking</label>
-                                                            <input class="form-control" name="fourwheller_parking"
-                                                                id="fourwheller_parking" type="text"
-                                                                autocomplete="off">
+                                                            <div>
+                                                                <label for="Four Wheeler Parking">Four Wheeler
+                                                                    Parking</label>
+                                                                <input class="form-control" name="fourwheller_parking"
+                                                                    id="fourwheller_parking" type="text"
+                                                                    autocomplete="off">
+                                                            </div>
+                                                            <div class="invalid-feedback" id="fourwheller_parking_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                         <div class="form-group col-md-2 pe-0 the_two_wheller_Parking">
-                                                            <label for="Two Wheeler Parking">Two Wheeler
-                                                                Parking</label>
-                                                            <input class="form-control" name="twowheeler_parking"
-                                                                id="twowheeler_parking" type="text"
-                                                                autocomplete="off">
+                                                            <div>
+                                                                <label for="Two Wheeler Parking">Two Wheeler
+                                                                    Parking</label>
+                                                                <input class="form-control" name="twowheeler_parking"
+                                                                    id="twowheeler_parking" type="text"
+                                                                    autocomplete="off">
+                                                            </div>
+                                                            <div class="invalid-feedback" id="twowheeler_parking_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                     </div>
 
@@ -1464,10 +1538,15 @@
                                                                 for="is_pre_leased">Pre-leased</label>
                                                         </div>
                                                         <div class="form-group the_pre_leased_remarks col-md-8 m-b-20">
-                                                            <label for="Pre Leased Remarks">Pre-Leased Remarks</label>
-                                                            <input class="form-control" name="pre_leased_remarks"
-                                                                id="pre_leased_remarks" type="text"
-                                                                autocomplete="off">
+                                                            <div>
+                                                                <label for="Pre Leased Remarks">Pre-Leased Remarks</label>
+                                                                <input class="form-control" name="pre_leased_remarks"
+                                                                    id="pre_leased_remarks" type="text"
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback"
+                                                                    id="pre_leased_remarks_error"
+                                                                    style="display: none;color:red;"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -1486,6 +1565,8 @@
                                                                 @empty
                                                                 @endforelse
                                                             </select>
+                                                            <div class="invalid-feedback" id="Property_priority_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                         <div class="form-group col-md-3 m-b-4 mb-3">
                                                             <select class="form-select" id="property_source">
@@ -1503,15 +1584,19 @@
                                                                 @empty
                                                                 @endforelse
                                                             </select>
+                                                            <div class="invalid-feedback" id="property_source_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                         <div class="form-group col-md-5 m-b-20 the_source_refrence mb-3">
                                                             <label for="Refrence">Refrence</label>
                                                             <input class="form-control" name="refrence" id="refrence"
                                                                 type="text" autocomplete="off">
+                                                            <div class="invalid-feedback" id="refrence_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                     </div>
 
-                                                    {{-- bhrt --}}
+
                                                     <div class="row mb-3 div_availability_status" id="">
                                                         <div class="col-md-12 mb-3">
                                                             <div>
@@ -1597,6 +1682,8 @@
                                                             <input class="form-control" id="available_from"
                                                                 name="available_from" type="text"
                                                                 autocomplete="off">
+                                                            <div class="invalid-feedback" id="available_from_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                     </div>
                                                     <div class="row " id="">
@@ -1851,11 +1938,14 @@
                                                             <input class="form-control" name="remarks" id="remarks"
                                                                 type="text" autocomplete="off">
                                                         </div>
+                                                        <div class="invalid-feedback" id="remarks_error"
+                                                            style="display: none;color:red;"></div>
                                                     </div>
                                                     <button class="btn btn-primary previousBtn1" type="button"
                                                         style="border-radius: 5px;">Previous</button>
-                                                    <button class="btn btn-primary ms-3 nextBtn"
-                                                        style="border-radius: 5px;" type="button">Next</button>
+                                                    <button class="btn btn-primary ms-3 nextBtn submitClick"
+                                                        style="border-radius: 5px;" id="nextButtonSecond"
+                                                        type="button">Next2</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -1974,36 +2064,55 @@
                                                             <label><b>Owner Information</b></label>
                                                         </div>
                                                         <div class="form-group col-md-2">
-                                                            <select class="form-select" id="owner_is">
-                                                                <option value="">Owner </option>
-                                                                @forelse ($property_configuration_settings as $props)
-                                                                    @if ($props['dropdown_for'] == 'property_owner_type')
-                                                                        <option
-                                                                            data-parent_id="{{ $props['parent_id'] }}"
-                                                                            value="{{ $props['id'] }}">
-                                                                            {{ $props['name'] }}
-                                                                        </option>
-                                                                    @endif
-                                                                @empty
-                                                                @endforelse
-                                                            </select>
+                                                            <div>
+                                                                <select class="form-select" id="owner_is">
+                                                                    <option value="">Owner </option>
+                                                                    @forelse ($property_configuration_settings as $props)
+                                                                        @if ($props['dropdown_for'] == 'property_owner_type')
+                                                                            <option
+                                                                                data-parent_id="{{ $props['parent_id'] }}"
+                                                                                value="{{ $props['id'] }}">
+                                                                                {{ $props['name'] }}
+                                                                            </option>
+                                                                        @endif
+                                                                    @empty
+                                                                    @endforelse
+                                                                </select>
+                                                            </div>
+                                                            <div class="invalid-feedback" id="owner_is_error"
+                                                                style="display: none;color:red;">saad</div>
                                                         </div>
                                                         <div class="form-group col-md-3">
-                                                            <label for="Owner Name">Name</label>
-                                                            <input class="form-control" name="owner_info_name"
-                                                                id="owner_info_name" type="text"
-                                                                autocomplete="off">
+                                                            <div>
+                                                                <label for="Owner Name">Name</label>
+                                                                <input class="form-control" name="owner_info_name"
+                                                                    id="owner_info_name" type="text"
+                                                                    autocomplete="off">
+                                                            </div>
+                                                            <div class="invalid-feedback" id="owner_info_name_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                         <div class="form-group col-md-2">
-                                                            <label for="Owner Contact Specific No">Contact</label>
-                                                            <input class="form-control" name="owner_contact_specific_no"
-                                                                id="owner_contact_specific_no" type="text"
-                                                                autocomplete="off">
+                                                            <div>
+                                                                <label for="Owner Contact Specific No">Contact</label>
+                                                                <input class="form-control"
+                                                                    name="owner_contact_specific_no"
+                                                                    id="owner_contact_specific_no" type="text"
+                                                                    autocomplete="off">
+                                                            </div>
+                                                            <div class="invalid-feedback"
+                                                                id="owner_contact_specific_no_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                         <div class="form-group col-md-3">
-                                                            <label for="Email">Email</label>
-                                                            <input class="form-control" name="property_email"
-                                                                id="property_email" type="email" autocomplete="off">
+                                                            <div>
+                                                                <label for="Email">Email</label>
+                                                                <input class="form-control" name="property_email"
+                                                                    id="property_email" type="email"
+                                                                    autocomplete="off">
+                                                            </div>
+                                                            <div class="invalid-feedback" id="property_email_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
 
                                                         <div
@@ -2065,6 +2174,9 @@
                                                                 <option value="">Key Available At</option>
                                                                 <option value="Office"> Office </option>
                                                                 <option value="Owner"> Owner </option>
+                                                            </select>
+                                                            <div class="invalid-feedback" id="owner_is_error"
+                                                                style="display: none;color:red;">saad</div>
                                                         </div>
                                                     </div>
                                                     {{-- </div> --}}
@@ -2483,8 +2595,8 @@
                                                     <button class="btn btn-primary previousBtn2"
                                                         style="border-radius: 5px;" type="button">Previous</button>
                                                     <button id="saveProperty"
-                                                        class="btn btn-primary ms-3 nextBtn submitFnl" type="button"
-                                                        style="border-radius: 5px;">Finish</button>
+                                                        class="btn btn-primary ms-3 nextBtn submitFnl" id="submitFnl"
+                                                        type="button" style="border-radius: 5px;">Finish</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2528,6 +2640,302 @@
                 }
             });
 
+            //Property Validation
+            // $(document).ready(function() {
+            //     $(document).on('click', '#nextButtonSecond', function(e) {
+            //         console.log("clicked");
+
+            //     })
+            // });
+
+            $(document).ready(function() {
+                // Initialize Select2 for all dropdowns
+                $('#project_id, #state_id, #area_id, #zone, #village_id, #taluka_id, #district_id, #state-dropdown')
+                    .select2();
+
+
+                // Function to validate dropdown
+                function validateDropdown(dropdown, errorDiv, errorMessage) {
+                    var selectedData = dropdown.select2('data');
+                    // console.log("Selected Data:", selectedData); 
+                    if (!selectedData || !selectedData.length || !selectedData[0].id) {
+                        errorDiv.text(errorMessage).show();
+                        return false;
+                    } else {
+                        errorDiv.hide();
+                        return true;
+                    }
+                }
+
+                function validateField(inputSelector, errorSelector, errorMessage) {
+                    let isValid = $(inputSelector).val().trim() !== '';
+                    $(inputSelector).toggleClass('is-invalid', !isValid);
+                    $(errorSelector).toggle(!isValid).text(errorMessage);
+                    return isValid;
+                }
+
+                let penthouseConf, plotConf, farmConf, villaConfiguration, flateConfiguration, landConfiguration,
+                    officeConf,
+                    retailConfiguration, storageConfiguration,
+                    theFor;
+
+                //office_type
+                $(document).on('change', 'input[name=office_type]', function() {
+                    office_type_val = $(this).attr('data-val');
+                    console.log("office_type ==", office_type_val);
+                    if ($('input[name=property_category]:checked').attr('data-val') == 'Office') {
+                        officeConf = $('input[name=office_type]:checked')
+                            .val(); // Assign value to global configuration variable
+                        console.log("officeConf ==", officeConf);
+                    }
+                });
+
+                // Retail retail_type
+                $(document).on('change', 'input[name=retail_type]', function() {
+                    storage_type_val = $(this).attr('data-val');
+                    console.log("storage_type ==", storage_type_val);
+                    if ($('input[name=property_category]:checked').attr('data-val') == 'Retail') {
+                        retailConfiguration = $('input[name=retail_type]:checked')
+                            .val(); // Assign value to global configuration variable
+                        console.log("retailConfiguration ==", retailConfiguration);
+                    }
+                });
+
+                // storage/ind.
+                $(document).on('change', 'input[name=storage_type]', function() {
+                    storage_type_val = $(this).attr('data-val');
+                    console.log("storage_type ==", storage_type_val);
+                    if ($('input[name=property_category]:checked').attr('data-val') == 'Storage/industrial') {
+                        storageConfiguration = $('input[name=storage_type]:checked')
+                            .val(); // Assign value to global configuration variable
+                        console.log("storageConfigurationConfff ==", storageConfiguration);
+                    }
+                });
+
+                // Land.
+                $(document).on('change', 'input[name=plot_type]', function() {
+                    plot_type_val = $(this).attr('data-val');
+                    console.log("plot_type ==", plot_type_val);
+                    if ($('input[name=property_category]:checked').attr('data-val') == 'Land') {
+                        landConfiguration = $('input[name=plot_type]:checked').val();
+                        console.log("landConfiguration ==", landConfiguration);
+                    }
+                });
+
+                // Flate and Penthouse
+                $(document).on('change', 'input[name=flat_type]', function() {
+                    let flat_type_val = $(this).attr('data-val');
+                    console.log("flat_type ==", flat_type_val);
+                    if ($('input[name=property_category]:checked').attr('data-val') === 'Flat' || $(
+                            'input[name=property_category]:checked').attr('data-val') === 'Penthouse') {
+                        flateConfiguration = $('input[name=flat_type]:checked').val();
+                        console.log("flateConfiguration ==", flateConfiguration);
+                    }
+                });
+
+                // Villa
+                $(document).on('change', 'input[name=vila_type]', function() {
+                    vila_type_val = $(this).attr('data-val');
+                    console.log("vila_type ==", vila_type_val);
+                    if ($('input[name=property_category]:checked').attr('data-val') === 'Vila/Bunglow') {
+                        villaConfiguration = $('input[name=vila_type]:checked').val();
+                        console.log("villaConfiguration ==", villaConfiguration);
+                    }
+                });
+
+                //Penthouse cat
+                $(document).on('change', '[name="property_category"]', function(e) {
+                    penthouseConf = $(this).attr('data-val') === 'Penthouse'
+                    console.log("penthouseConf ==", penthouseConf);
+                });
+
+                //farmhouse
+                $(document).on('change', '[name="property_category"]', function(e) {
+                    farmConf = $(this).attr('data-val') === 'Farmhouse'
+                    console.log("farmConf ==", farmConf);
+                });
+
+                //Plot
+                $(document).on('change', '[name="property_category"]', function(e) {
+                    plotConf = $(this).attr('data-val') === 'Plot'
+                    console.log("plotConf ==", plotConf);
+                });
+
+                function validateForm() {
+                    let isValid = true;
+
+                    if (flateConfiguration || plotConf || officeConf || retailConfiguration) {
+                        isValid = validateField('#salable_area', '#salable_area_error',
+                                'Salable Area filed is required') &&
+                            isValid;
+                    }
+                    if (officeConf || flateConfiguration) {
+                        isValid = validateField('#property_on_floors', '#property_on_floors_error',
+                            'units floor field is required') && isValid;
+                    }
+                    if (flateConfiguration) {
+                        // isValid = validateField('#builtup_area', '#builtup_area_error',
+                        //     'Built up area field is required') && isValid;
+                        isValid = validateField('#no_of_bathrooms', '#no_of_bathrooms_error',
+                            'no of bathroom field is required') && isValid;
+                    }
+                    // if (retailConfiguration) {
+                    //     isValid = validateField('#entrance_width', '#entrance_width_error',
+                    //         'entrance width field is required') && isValid;
+                    // }
+                    if (villaConfiguration || farmConf) {
+                        isValid = validateField('#constructed_salable_area', '#constructed_salable_area_error',
+                            'constructed salable area field is required') && isValid;
+                        isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
+                            'Salable plot area field is required') && isValid;
+                    }
+                    if (storageConfiguration == '7' || storageConfiguration == '8' || storageConfiguration == '9') {
+                        isValid = validateField('#constructed_salable_area', '#constructed_salable_area_error',
+                            'constructed salable area field is required') && isValid;
+                    }
+                    if (villaConfiguration || farmConf) {
+                        isValid = validateField('#no_of_balcony', '#no_of_balcony_error',
+                            'no of balcony field is required') && isValid;
+                        isValid = validateField('#total_no_of_units', '#total_no_of_units_error',
+                            'units field is required') && isValid;
+                        isValid = validateField('#no_of_side_open', '#no_of_side_open_error',
+                            'no of side open field is required') && isValid;
+                        isValid = validateField('#no_of_bathrooms', '#no_of_bathrooms_error',
+                            'no of bathroom field is required') && isValid;
+                    }
+                    if (farmConf) {
+                        isValid = validateField('#no_of_room', '#no_of_room_error',
+                            'rooms field is required') && isValid;
+                    }
+                    if (storageConfiguration) {
+                        isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
+                            'Salable plot area field is required') && isValid;
+                        isValid = validateField('#storage_centre_height', '#storage_centre_height_error',
+                            'center height field is required') && isValid;
+                        isValid = validateField('#front_road_width', '#front_road_width_error',
+                            'front road side field is required') && isValid;
+                        isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
+                            'total units field is required') && isValid;
+                        isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
+                            'two wheel parking field is required') && isValid;
+                    }
+                    if (flateConfiguration || officeConf || retailConfiguration) {
+                        isValid = validateField('#ceiling_height', '#ceiling_height_error',
+                            'ceiling height field is required') && isValid;
+                        isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
+                            'total units field is required') && isValid;
+                        isValid = validateField('#total_no_of_floor', '#total_no_of_floor_error',
+                            'no of floor field is required') && isValid;
+                        isValid = validateField('#total_units_in_tower', '#total_units_in_tower_error',
+                            'unit tower field is required') && isValid;
+                        isValid = validateField('#no_of_elavators', '#no_of_elavators_error',
+                            'elavators field is required') && isValid;
+                        isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
+                            'two wheel parking field is required') && isValid;
+                    }
+                    if (penthouseConf) {
+                        isValid = validateField('#no_of_balcony', '#no_of_balcony_error',
+                            'no of balcony field is required') && isValid;
+                        isValid = validateField('#terrace_salable_area', '#terrace_salable_area_error',
+                            'terrace salable area field is required') && isValid;
+                    }
+                    isValid = validateField('#property_link', '#property_link_error',
+                        'Location Link field is required') && isValid;
+                    isValid = validateField('#address', '#address_error',
+                        'address field is required') && isValid;
+                    isValid = validateField('#fourwheller_parking', '#fourwheller_parking_error',
+                        'four wheel parking field is required') && isValid;
+                    isValid = validateField('#remarks', '#remarks_error',
+                        'remarks field is required') && isValid;
+                    // isValid = validateField('#property_email', '#property_email_error',
+                    //     'entrance width field is required') && isValid;
+                    // isValid = validateField('#owner_contact_specific_no', '#owner_contact_specific_no_error',
+                    //     'entrance width field is required') && isValid;
+                    // isValid = validateField('#owner_info_name', '#owner_info_name_error',
+                    //     'entrance width field is required') && isValid;
+                   
+                    // isValid = validateField('#fsi', '#fsi_error',
+                    //     'elavators field is required') && isValid;
+                    // isValid = validateField('#no_of_borewell', '#no_of_borewell_error',
+                    //     'elavators field is required') && isValid;
+                    // isValid = validateField('#pre_leased_remarks', '#pre_leased_remarks_error',
+                    //     'pre-leased field is required') && isValid;
+                    // isValid = validateField('#refrence', '#refrence_error',
+                    //     'reference field is required') && isValid;
+                    // isValid = validateField('#is_terrace', '#terrace_error',
+                    //     'terrace field is required') && isValid;
+                    // isValid = validateField('#no_of_floors_allowed', '#no_of_floors_allowed_error',
+                    // 'no of floor field is required') && isValid;
+
+                    return isValid;
+                }
+
+                // Update theFor when plot_type is clicked
+                $(document).on('change', 'input[name=plot_type]', function() {
+                    theFor = $(this).attr('data-val');
+                    console.log("theFor select dropdown val ==", theFor);
+                });
+
+                // Validation on 2ndstep submit
+                const stateLength = $('#state_id').find('option').length;
+                $('#nextButtonSecond').click(function() {
+                    $('input[name=plot_type]:checked').trigger('change');
+                    // var isValid = true;
+                    var isValid = validateForm();
+                    if (stateLength > 2) {
+                        isValid = validateDropdown($('#state_id'), $('#state_id_error'),
+                            'State field is required.') && isValid;
+                    }
+                    if (theFor !== 'commercial' || theFor !== 'agriculture') {
+                        isValid = validateDropdown($('#project_id'), $('#project_id_error'),
+                            'project field is required.') && isValid;
+                    }
+
+                    isValid = validateDropdown($('#state-dropdown'), $('#city_id_error'),
+                        'City field is required.') && isValid;
+                    isValid = validateDropdown($('#area_id'), $('#locality_id_error'),
+                        'Locality field is required.') && isValid;
+                    isValid = validateDropdown($('#property_source'), $('#property_source_error'),
+                        'property source field is required.') && isValid;
+                    isValid = validateDropdown($('#Property_priority'), $('#Property_priority_error'),
+                        'property priority field is required.') && isValid;
+                        isValid = validateDropdown('#owner_is', '#owner_is_error',
+                        'entrance width field is required') && isValid;
+
+                    if (theFor === 'commercial' || theFor === 'agriculture' || farmConf) {
+                        isValid = validateDropdown($('#zone'), $('#zone_id_error'),
+                            'Zone field is required.') && isValid;
+                        isValid = validateDropdown($('#village_id'), $('#village_id_error'),
+                            'Village field is required.') && isValid;
+                        isValid = validateDropdown($('#taluka_id'), $('#taluka_id_error'),
+                            'Taluka field is required.') && isValid;
+                        isValid = validateDropdown($('#district_id'), $('#district_id_error'),
+                            'District field is required.') && isValid;
+                    }
+
+                    if (isValid) {
+                        console.log("isvalid error true ==", isValid);
+                        $("#unit-owner-step").show();
+                    } else {
+                        console.log("isvalid false done ==", isValid);
+                        $("#profile-step").show();
+                        $("#step1").addClass("btn-primary");
+                        $("#step2").removeClass("btn-primary");
+                        $("#profile-step").show();
+                        $("#unit-owner-step").hide();
+                    }
+                    return isValid;
+                });
+
+
+
+            });
+
+
+
+
+
+
             const numberOfOptions = $('#state_id').find('option').length;
             if (numberOfOptions > 2) {
                 $('.state-hide').show();
@@ -2546,6 +2954,29 @@
                 $('#nextButton').click(function() {
                     $('#project_id').select2('toggleDropdown');
                 });
+
+                // $('#project_id').select2().select2('open');
+
+                // // Click event handler for the nextButton
+                // $('#nextButton').click(function() {
+                //     // Toggle the dropdown
+                //     $('#project_id').select2('toggleDropdown');
+                //     var selectedProject = $('#project_id').val();
+                //     if (!selectedProject) {
+                //         $('#project_id_error').text('Please select a project.');
+                //         return false;
+                //     } else {
+                //         $('#project_id_error').text('');
+                //     }
+                // });
+
+                // // Change event handler for the project dropdown
+                // $('#project_id').on('change', function() {
+                //     if ($(this).val()) {
+                //         $('#project_id_error').text('');
+                //     }
+                // });
+
                 //#B This function used for in input textbox only numeric value enter not string 
                 function restrictToNumeric(inputSelectors) {
                     $(inputSelectors.join(',')).on('input', function() {
@@ -3241,7 +3672,7 @@
                         // 'div_care_taker','div_flat_details_5','div_flat_details_7'
                         'div_property_source', 'div_checkboxes1', 'div_construction_allowed_for', 'div_tp_details',
                         'div_flat_details_8', 'div_plot_ind_common', 'div_document_section', 'div_survey_details',
-                        'div_road_width', 'div_construction_docs_allowed_for','div_extra_land_details',
+                        'div_road_width', 'div_construction_docs_allowed_for', 'div_extra_land_details',
                     ];
                 }
                 for (let i = 0; i < showfields.length; i++) {
@@ -3372,18 +3803,27 @@
                     '       <input class="form-control" name="other_name" id="other_name" type="text"' +
                     '            autocomplete="off">' +
                     '     </div>' +
+                    '</div>' +
+                    '</div><div id="other_name_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;">' +
                     '     <div data-contact_id= ' + id +
                     ' class="form-group col-md-2 m-b-20">' +
-                    '<label>Contact No</label>' +
+                    '<div><label>Contact No</label>' +
                     '       <input class="form-control" name="other_contact" id="other_contact"' +
                     '           type="text"  autocomplete="off">' +
                     '   </div>' +
+                    '</div><div id="other_contact_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
                     '     <div data-contact_id= ' + id +
                     ' class="form-group col-md-2 m-b-20">' +
-                    '<label>Position</label>' +
+                    '<div><label>Position</label>' +
                     '       <input class="form-control" name="position" id="position"' +
                     '           type="text"  autocomplete="off">' +
                     '   </div>' +
+                    '</div><div id="position_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
                     '<div data-contact_id= ' + id +
                     ' class="form-group col-md-3 m-b-4 mb-3"><button data-contact_id=' + id +
                     ' class="' + ((plus) ? "add_owner_contacts get-pos" : "remove_owner_contacts remove-pos") +
@@ -3449,15 +3889,19 @@
             function generate_unit_detail(id, plus = 0) {
                 var myvar = '<div class="row"><div  data-unit_id= ' +
                     id + ' class="form-group the_wing col-md-2 m-b-20">' +
-                    '<label>Wing</label>' +
+                    '<div><label>Wing</label>' +
                     '            <input class="form-control" name="wing" ' +
                     '                type="text"  autocomplete="off">' +
-                    '        </div>' +
+                    '</div><div id="wing_no_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
                     '<div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-20">' +
-                    '<label>Unit No</label>' +
+                    '<div><label>Unit No</label>' +
                     '            <input class="form-control" name="unit_unit_no" ' +
                     '                type="text"  autocomplete="off">' +
-                    '        </div>' +
+                    '</div><div id="unit_no__error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
                     '        <div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-4 mb-3">' +
                     '            <select class="form-select" name="unit_status">' +
                     '                <option value="Available">Available</option>' +
@@ -3467,45 +3911,55 @@
                     '        </div>' +
 
                     '<div  data-unit_id= ' + id + ' class="the_price_rent form-group col-md-2 m-b-20">' +
-                    '<label>Price Rent</label>' +
+                    '<div><label>Price Rent</label>' +
                     '            <input class="form-control indian_currency_amount" name="price_rent" ' +
                     '                type="text"  autocomplete="off">' +
+                    '</div><div id="price_rent_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '        </div>' +
 
                     '<div  data-unit_id= ' + id + ' class="the_price form-group col-md-2 m-b-20">' +
-                    '<label>Price</label>' +
+                    '<div><label>Price</label>' +
                     '            <input class="form-control indian_currency_amount" name="price" ' +
                     '                type="text"  autocomplete="off">' +
+                    '</div><div id="price_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '        </div>' +
 
                     '<div class="the_constructed_plot_price row"><div  data-unit_id= ' + id +
                     ' class=" form-group col-md-2 m-b-20">' +
-                    '<label class="price_constructed_label"> Construction Price</label>' +
+                    '<div><label class="price_constructed_label"> Construction Price</label>' +
                     '            <input class="form-control indian_currency_amount" data-unit_id= ' + id +
                     ' name="price_constructed" ' +
                     '                type="text"  autocomplete="off">' +
+                    '</div><div id="price_constructed_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '        </div>' +
 
                     '<div  data-unit_id= ' + id + ' class="col-md-2 m-b-20">' +
                     '<div class=" form-group">' +
-                    '<label class="price_plot_label"> Plot Price</label>' +
+                    '<div><label class="price_plot_label"> Plot Price</label>' +
                     '            <input class="form-control indian_currency_amount" data-unit_id= ' + id +
                     ' name="price_plot" ' +
                     '                type="text"  autocomplete="off">' +
+                    '</div><div id="price_plot_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '        </div>' +
 
                     '</div>' +
                     '<div  data-unit_id= ' + id + ' class=" form-group col-md-2 m-b-20">' +
                     '<div class=" form-group">' +
-                    '<label>Price</label>' +
+                    '<div><label>Price</label>' +
                     '            <input class="form-control indian_currency_amount" data-unit_id= ' + id +
                     ' name="price_total" ' +
                     '                type="text"  autocomplete="off" disabled>' +
+                    '</div><div id="price_total_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '        </div>' +
                     '<small style="display:none"  class="text-secondary ps-1 converted_value"></small>' +
                     '</div></div>' +
                     '        <div  data-unit_id= ' + id + ' class="the_furnished_status form-group col-md-3 m-b-4 mb-3">' +
-                    '            <select class="form-select" name="furnished_status">' +
+                    '            <div><select class="form-select" name="furnished_status">' +
                     '                <option value="">Furnished Status</option>' +
                     @forelse ($property_configuration_settings as $props)
                         @if ($props['dropdown_for'] == 'property_furniture_type')
@@ -3514,8 +3968,10 @@
                     @empty
                     @endforelse
                 '</select>' +
-                '</div>' +
-                '<div data-unit_id= ' + id +
+                '</div><div id="furnished_status_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
+                    '<div data-unit_id= ' + id +
                     ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
                     ' class="' + ((plus) ? "add_units" : "remove_units") +
                     ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((
@@ -3658,8 +4114,8 @@
                         });
                         // edit property selected valdata.width_of_plot, 1
                         data = JSON.parse(data);
-                        const ceilingHeight = data.ceiling_height; 
-                        let parts = ceilingHeight.split('_-||-_'); 
+                        const ceilingHeight = data.ceiling_height;
+                        let parts = ceilingHeight.split('_-||-_');
                         $('#this_data_id').val(data.id);
                         $('input[name=property_for][value=' + data.property_for + ']').prop('checked', true)
                         $('input[name=property_type][value=' + data.property_type + ']').prop('checked', true)
@@ -3961,6 +4417,14 @@
             }
             getProperty()
 
+            function toggleError(unique_id, field, errorMessage) {
+                var errorDiv = $("#" + field + "_error_" + unique_id);
+                if (field.trim() === "") {
+                    errorDiv.text(errorMessage).show();
+                } else {
+                    errorDiv.hide();
+                }
+            }
             //save property
             $(document).on('click', '.submitFnl', function(e) {
                 e.preventDefault();
@@ -3968,7 +4432,9 @@
                 if (!$("#modal_form").valid()) {
                     return
                 }
-                $(this).prop('disabled', true);
+
+                console.log("third final clicked");
+                // $(this).prop('disabled', true);
                 var owner_details = [];
                 var unit_details = [];
                 var amenity_details = [];
@@ -3978,6 +4444,7 @@
                     cona_arr = []
                     unique_id = $(this).closest('.form-group').attr('data-contact_id');
                     name = $(this).val();
+                    console.log("name owner ", name);
                     contact = $("[data-contact_id=" + unique_id + "] input[name=owner_contact_no]").val();
                     cona_arr.push(name)
                     cona_arr.push(contact)
@@ -3986,7 +4453,7 @@
                     }
                 });
                 owner_details = JSON.stringify(owner_details);
-
+                // return
                 // other_contact_details
                 $("#modal_form [name=other_name]").each(function(index) {
                     cona_arr = []
@@ -3995,6 +4462,21 @@
                     otherName = $("[data-contact_id=" + unique_id + "] input[name=other_name]").val();
                     otherContact = $("[data-contact_id=" + unique_id + "] input[name=other_contact]").val();
                     position = $("[data-contact_id=" + unique_id + "] input[name=position]").val();
+                    if (otherName.trim() === "") {
+                        $("#other_name_error_" + unique_id).text("other name field is required").show();
+                    } else {
+                        $("#other_name_error_" + unique_id).hide();
+                    }
+                    if (otherContact.trim() === "") {
+                        $("#other_contact_error_" + unique_id).text("other contact field is required").show();
+                    } else {
+                        $("#other_contact_error_" + unique_id).hide();
+                    }
+                    if (otherName.trim() === "") {
+                        $("#position_error_" + unique_id).text("position field is required").show();
+                    } else {
+                        $("#position_error_" + unique_id).hide();
+                    }
                     cona_arr.push(otherName)
                     cona_arr.push(otherContact)
                     cona_arr.push(position)
@@ -4003,13 +4485,15 @@
                     }
                 });
                 other_contact_details = JSON.stringify(other_contact_details);
+
                 $("#modal_form [name=unit_unit_no]").each(function(index) {
-                    cona_arr = []
-                    unique_id = $(this).closest('.form-group').attr('data-unit_id');
-                    name = $(this).val();
-                    furnisheditem = [];
-                    furnisheditem2 = [];
-                    wing = $("[data-unit_id=" + unique_id + "] input[name=wing]").val();
+                    let cona_arr = [];
+                    let unique_id = $(this).closest('.form-group').attr('data-unit_id');
+                    let name = $(this).val();
+                    let furnisheditem = [];
+                    let furnisheditem2 = [];
+                    let wing = $("[data-unit_id=" + unique_id + "] input[name=wing]").val();
+                    let unit = $("[data-unit_id=" + unique_id + "] input[name=unit_unit_no]").val();
                     status = $("[data-unit_id=" + unique_id + "] select[name=unit_status]").val();
                     price = $("[data-unit_id=" + unique_id + "] input[name=price]").val();
                     pricerent = $("[data-unit_id=" + unique_id + "] input[name=price_rent]").val();
@@ -4025,6 +4509,29 @@
                         furnisheditem2.push(Number($(this).prop('checked')));
                     })
 
+                    if (pricerent.trim() === "") {
+                        $("#price_rent_error_" + unique_id).text("price rent field is required").show();
+                    } else {
+                        $("#price_rent_error_" + unique_id).hide();
+                    }
+
+                    if (furnished.trim() === "") {
+                        $("#furnished_status_error_" + unique_id).text("furnished field is required").show();
+                    } else {
+                        $("#furnished_status_error_" + unique_id).hide();
+                    }
+
+                    if (wing.trim() === "") {
+                        $("#wing_no_error_" + unique_id).text("Wing field is required").show();
+                    } else {
+                        $("#wing_no_error_" + unique_id).hide();
+                    }
+
+                    if (unit.trim() === "") {
+                        $("#unit_no__error_" + unique_id).text("unit field is required").show();
+                    } else {
+                        $("#unit_no__error_" + unique_id).hide();
+                    }
                     cona_arr.push(wing)
                     cona_arr.push(name)
                     cona_arr.push(status)
@@ -4092,6 +4599,7 @@
                     .map(function() {
                         return $(this).val();
                     }).get();
+                console.log("other_contact :".other_contact);
                 var position = $("input[id='position']")
                     .map(function() {
                         return $(this).val();
@@ -4101,6 +4609,9 @@
                 $('.add-btn').click(function() {
                     $('.increment').append('<input type="file" name="const_documents[]" class="form-control">');
                 });
+
+
+                return
 
 
                 // save property

@@ -19,6 +19,9 @@
             flat_type: {
                 required: true,
             },
+            vila_type: {
+                required: true,
+            },
             office_type: {
                 required: true,
             },
@@ -45,6 +48,9 @@
             office_type: {
                 required: "Office type is required.",
             },
+            vila_type: {
+                required: "Vila Bunglow type is required.",
+            },
             retail_type: {
                 required: "Retail type is required.",
             },
@@ -52,7 +58,7 @@
                 required: "Storage type is required.",
             },
             plot_type: {
-                required: "Plot type is required.",
+                required: "Land type is required.",
             }
         }
     });
