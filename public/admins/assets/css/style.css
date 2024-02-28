@@ -15791,7 +15791,7 @@ th {
   position: unset;
 }
 .simplebar-mask {
-  top: 30%;
+  top: 250px;
 }
 .simplebar-track {
   right: -2px;
