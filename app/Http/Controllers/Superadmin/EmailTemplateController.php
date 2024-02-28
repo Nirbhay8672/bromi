@@ -34,9 +34,9 @@ class EmailTemplateController extends Controller
                 })
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$buttons =  $buttons . '<button data-url="'.route('superadmin.email.show',$row->id).'" class="btn btn-pill btn-primary show-email-template" type="button">View</button>';
-					$buttons =  $buttons . ' <a href="' . route('superadmin.email.edit',$row->id) . '"><button class="btn btn-pill btn-primary">Edit</button></a>';
-					$buttons =  $buttons . ' <button data-url="' . route('superadmin.email.delete',$row->id) . '" class="btn btn-pill btn-danger delete-record" type="button">Delete</button>';
+                    $buttons =  $buttons . '<i data-url="'.route('superadmin.email.show',$row->id).'" class="fs-22 py-2 mx-2 fa-eye pointer text-info fa show-email-template" type="button"></i>';
+					$buttons =  $buttons . ' <a href="' . route('superadmin.email.edit',$row->id) . '"><i class="fs-22 py-2 mx-2 fa-pencil pointer fa"></i></a>';
+                    $buttons =  $buttons . '<i data-url="' . route('superadmin.email.delete',$row->id) . '" class="text-danger fs-22 py-2 mx-2 fa-trash pointer fa" type="button"></i>';
 					return $buttons;
 				})
 				->rawColumns(['Actions','status'])
@@ -167,9 +167,9 @@ class EmailTemplateController extends Controller
                 })
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$buttons =  $buttons . '<button data-url="'.route('superadmin.sms.show',$row->id).'" class="btn btn-pill btn-primary show-email-template" type="button">View</button>';
-					$buttons =  $buttons . ' <a href="' . route('superadmin.sms.edit',$row->id) . '"><button class="btn btn-pill btn-primary">Edit</button></a>';
-					$buttons =  $buttons . ' <button data-url="' . route('superadmin.sms.delete',$row->id) . '" class="btn btn-pill btn-danger delete-record" type="button">Delete</button>';
+                    $buttons =  $buttons . '<i data-url="'.route('superadmin.sms.show',$row->id).'" class="fs-22 py-2 mx-2 fa-eye pointer text-info fa show-email-template" type="button"></i>';
+					$buttons =  $buttons . ' <a href="' . route('superadmin.sms.edit',$row->id) . '"><i class="fs-22 py-2 mx-2 fa-pencil pointer fa"></i></a>';
+                    $buttons =  $buttons . '<i data-url="' . route('superadmin.sms.delete',$row->id) . '" class="text-danger fs-22 py-2 mx-2 fa-trash pointer fa" type="button"></i>';
 					return $buttons;
 				})
 				->rawColumns(['Actions','status'])

@@ -8,16 +8,20 @@
                 </div>
             </div>
         </div>
-        <!-- Container-fluid starts-->
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Members </h5>
-                            <button class="btn btn-pill btn-primary btn-air-primary open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#userModal" onclick="resetData()">Add New
-                                Member</button>
+                            <button
+                                class="btn custom-icon-theme-button"
+                                type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#userModal"
+                                title="Add Member"
+                                onclick="resetData()"
+                            ><i class="fa fa-plus"></i></button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -28,8 +32,6 @@
                                             <th>Last Name</th>
                                             <th>Email</th>
                                             <th>Birth Date</th>
-                                            {{-- <th>Plan</th>
-                                            <th>Users</th> --}}
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -49,7 +51,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add New Member</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <div class="modal-body">
                     <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
@@ -92,14 +94,14 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="d-flex flex-column justify-content-start">
-                                            {{-- <label class="d-flex">
-                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" value="view-dashboard"> VIEW-DASHBOARD
-                                            </label> --}}
                                             <label class="d-flex">
                                                 <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="users_" value="users"> Users
                                             </label>
                                             <label class="d-flex">
                                                 <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="members_" value="members"> Members
+                                            </label>
+                                            <label class="d-flex">
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="units_" value="units"> Measurement Units
                                             </label>
                                             <label class="d-flex">
                                                 <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="builders_" value="builders"> Builders
@@ -161,11 +163,12 @@
                         </div>
 
                         <div class="row" id="total-card">
-                            {{--  --}}
                         </div>
 
-                        <button class="btn btn-secondary me-3" id="saveUser">Save</button>
-                        <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                        <div class="text-center mt-3">  
+                            <button class="btn custom-theme-button" id="saveUser">Save</button>
+                            <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -203,8 +206,9 @@
                         name: 'last_name'
                     },
                     {
-                        data: 'email',
-                        name: 'email'
+                        data: "email" , render : function ( data, type, row, meta ) {
+                            return `<span style="text-transform:lowercase !important">${row.email}</span>`; 
+                        }
                     },
                     {
                         data: 'birth_date',
@@ -272,44 +276,6 @@
                         })
                         console.log(data.main_user.permissions);
                     }
-                    /* let table = document.getElementById('user_table');
-                    let table_data = document.getElementById('user_data');
-                    let total_property = document.getElementById('total_property');
-                    let total_project = document.getElementById('total_project');
-                    let total_inquiry = document.getElementById('total_enquiry');
-
-                    let routeUrl = `{{ route('login_as_user', ['id' => ':id']) }}`.replace(':id', data.main_user.id);
-
-                    var anchorTag = document.createElement('a');
-                    anchorTag.href = routeUrl;
-                    anchorTag.className = "btn btn-primary";
-                    anchorTag.innerText = 'Login As User';
-
-                    let login = document.getElementById('login_as_user');
-                    login.innerHTML = '';
-                    login.appendChild(anchorTag);
-
-                    total_property.innerHTML = data.total_property;
-                    total_project.innerHTML = data.total_project;
-                    total_inquiry.innerHTML = data.total_enquiry;
-
-                    if (data.sub_user.length > 0) {
-                        table.classList.remove('d-none');
-                        table_data.innerHTML = '';
-
-                        data.sub_user.forEach((user) => {
-                            table_data.innerHTML += `<tr>
-                                <td>${user.first_name}</td>
-                                <td>${user.last_name}</td>
-                                <td>${user.email}</td>
-                                <td>${user.mobile_number}</td>
-                            </tr>`;
-                        });
-
-                    } else {
-                        table.classList.add('d-none');
-                        table_data.innerHTML = '';
-                    } */
                 }
             });
         }

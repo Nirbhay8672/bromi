@@ -15,9 +15,9 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Requests </h5>
-                            <button class="btn btn-pill btn-primary btn-air-primary open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#requestModal" onclick="resetData()">Add New
-                                Request</button>
+
+                            <button class="btn custom-icon-theme-button open_modal_with_this" type="button"
+                                data-bs-toggle="modal" data-bs-target="#requestModal"  onclick="resetData()"><i class="fa fa-plus"></i></button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -46,7 +46,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add New Request</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <div class="modal-body">
                     <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
@@ -59,8 +59,10 @@
                             
                         </div>
 
-                        <button class="btn btn-secondary me-3" id="saveEnq">Save</button>
-                        <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                        <div class="text-center">
+                            <button class="btn custom-theme-button" id="saveEnq">Save</button>
+                            <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>

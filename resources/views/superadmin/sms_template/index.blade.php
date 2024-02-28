@@ -14,7 +14,7 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">SMS Template </h5>
-                            <a href="{{route('superadmin.sms.create')}}" class="btn btn-pill btn-primary btn-air-primary">Add New Template</a>
+                            <a href="{{route('superadmin.sms.create')}}" class="btn custom-icon-theme-button btn-air-primary"><i class="fa fa-plus"></i></a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -44,7 +44,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">View Template</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button class="btn-close  bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="load_email_content">

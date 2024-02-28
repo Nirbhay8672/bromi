@@ -44,7 +44,7 @@ class BromiEnquiryController extends Controller
 
             ->editColumn('Actions', function ($row) {
                 $buttons = '';
-                $buttons =  $buttons . '<button data-id="' . $row->id . '" onclick=getBromiEnq(this) class="btn btn-pill btn-primary" type="button">View</button>';
+                $buttons =  $buttons . '<i data-id="' . $row->id . '" onclick=getBromiEnq(this) class="fs-22 py-2 mx-2 fa-pencil pointer fa" type="button"></i>';
                 return $buttons;
             })
             ->rawColumns(['status', 'Actions'])

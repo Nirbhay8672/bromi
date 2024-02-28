@@ -15,8 +15,8 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Notifications </h5>
-                            <button class="btn btn-pill btn-primary btn-air-primary open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#notificationModal">Add New Notification</button>
+                            <button class="btn custom-icon-theme-button open_modal_with_this" type="button"
+                                data-bs-toggle="modal" data-bs-target="#notificationModal"><i class="fa fa-plus"></i></button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -45,24 +45,27 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add New Notification</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <div class="modal-body">
                     <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
                         <input type="hidden" name="this_data_id" id="this_data_id">
                         <div class="row">
-                            <div class="form-group col-md-10 m-b-20">
-                                <input class="form-control" name="notification" id="notification" type="text"
+                            <div class="form-group col-md-6 m-b-20">
+                                <div class="fname">
+                                    <input class="form-control" name="notification" id="notification" type="text"
                                     placeholder="Notification" required="" autocomplete="off">
+                                </div>
                             </div>
-
 							<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
 								<input class="form-check-input" id="status" type="checkbox">
 								<label class="form-check-label" for="status">Active</label>
 							</div>
                         </div>
-                        <button class="btn btn-secondary" id="saveNotification">Save</button>
-                        <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                        <div class="text-center">
+                            <button class="btn custom-theme-button" id="saveNotification">Save</button>
+                            <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </form>
                 </div>
             </div>

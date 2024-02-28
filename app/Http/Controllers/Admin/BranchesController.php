@@ -23,7 +23,7 @@ class BranchesController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = Branches::with('City')->orderBy('id','desc')->get();
+			$data = Branches::with('City')->where('user_id', Auth::user()->id)->orderBy('id','desc')->get();
 			return DataTables::of($data)
 				->editColumn('city_id', function ($row) {
 					if (isset($row->City->name)) {

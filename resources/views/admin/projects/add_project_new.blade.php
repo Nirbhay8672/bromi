@@ -1979,7 +1979,7 @@
                         new_category_array.push(new_sub_category_single);
                     }
 
-                    if(this.property_category != 256) {
+                    if(this.property_category != 256 && this.property_category != 258 ) {
                         if(new_category_array.length == 0) {
                             let sub_category_error = document.getElementById('err_sub_category');
                             if(sub_category_error) {

@@ -8,17 +8,16 @@
                 </div>
             </div>
         </div>
-        <!-- Container-fluid starts-->
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                        
+                        <div class="card-header pb-0">
+                            <h5 class="mb-3">Comment</h5>
+                        </div>
                         <div class="card-body">
-                            <div class="card" style="margin-right: 27%;/* padding-left: 24%; */margin-left: 20%;margin-inline: 19%;">
-
-                                <div class="row" >
-                                    <div class="col-md-10 col-md-offset-1">
+                            <div class="row" >
+                                <div class="col-md-6 col-md-offset-1">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             #{{ $ticket->ticket_id }} - {{ $ticket->title }}
@@ -46,27 +45,18 @@
                         
                                         </div>
                                     </div>
-                        
                                     <hr>
-                        
                                     @include('admin.ticket_system.tickets.comments')
-                        
                                     <hr>
-                        
                                     @include('admin.ticket_system.tickets.reply')
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-   
-    
-     
-  
 @endsection
 @push('scripts')
     <script>
@@ -76,22 +66,6 @@
         function comment() {
             var id=  document.getElementsByTagName("a").value
            console.log(id);
-            // $.ajax({
-            //     type: "POST",
-            //     url: "{{ route('superadmin.getUser') }}",
-            //     data: {
-            //         id: id,
-            //         _token: '{{ csrf_token() }}'
-            //     },
-            //     success: function(data) {
-            //         dataa = JSON.parse(data);
-            //         $('#this_data_id').val(dataa.id)
-            //         $('#first_name').val(dataa.first_name)
-            //         $('#last_name').val(dataa.last_name)
-            //         $('#email').val(dataa.email)
-            //         $('#userModal').modal('show');
-            //     }
-            // });
         }
         function userActivate(user, status) {
             $.ajax({

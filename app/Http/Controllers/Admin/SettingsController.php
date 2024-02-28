@@ -288,7 +288,7 @@ class SettingsController extends Controller
 	public function builder_index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = Builders::orderBy('id', 'desc')->get();
+			$data = Builders::orderBy('id', 'desc')->where('user_id', Auth::user()->id)->get();
 			return DataTables::of($data)
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
