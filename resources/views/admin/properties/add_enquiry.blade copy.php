@@ -14,7 +14,7 @@
             <div class="page-title">
                 <div class="row">
 
-                </div>
+                </div>Branch Is Required.
             </div>
         </div>
         <!-- Container-fluid starts-->
@@ -61,12 +61,10 @@
                                                         <div class="form-group col-md-3 m-b-20">
                                                             <div class="fname">
                                                                 <label for="Client Name">Client Name</label>
-                                                                <input class="form-control" name="client_name"
-                                                                    id="client_name" type="text" autocomplete="off">
-
+                                                                <input class="form-control" name="client_name" id="client_name"
+                                                                    type="text" autocomplete="off">
                                                             </div>
-                                                            <div class="invalid-feedback" id="client_name_error"
-                                                                style="display: block;color:red;"></div>
+                                                            <span class="text-danger new_error d-none" id="err_client_name">Client name field is required.</span>
                                                         </div>
                                                         <div class="form-group col-md-3 m-b-20">
                                                             <div class="fname">
@@ -74,8 +72,7 @@
                                                                 <input class="form-control" name="client_mobile"
                                                                     id="client_mobile" type="text" autocomplete="off">
                                                             </div>
-                                                            <div class="invalid-feedback" id="client_mobile_error"
-                                                                style="display: block;color:red;"></div>
+                                                            <span class="text-danger new_error d-none" id="err_client_mobile">Client mobile field is required.</span>
                                                         </div>
                                                         <div class="form-group col-md-4 m-b-20">
                                                             <div class="fname">
@@ -84,8 +81,7 @@
                                                                     id="client_email" type="email" autocomplete="off"
                                                                     required>
                                                             </div>
-                                                            <div class="invalid-feedback" id="client_email_error"
-                                                                style="display: block;color:red;"></div>
+                                                                <span class="text-danger new_error d-none" id="err_client_email">Client email field is required.</span>
                                                         </div>
                                                         <div class="col-md-1 m-b-20 ps-0">
                                                             <div class="form-check checkbox checkbox-solid-success mb-0">
@@ -104,8 +100,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary nextBtn" style="border-radius: 5px;"
-                                                        id="nextFirst" type="button">Next</button>
+                                                    <button class="btn btn-primary nextBtn" style="border-radius: 5px;" type="button">Next</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -122,8 +117,8 @@
                                                             <div class="btn-group me-2" role="group"
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Rent" class="btn-check"
-                                                                    name="enquiry_for" id="propertyfor1"
-                                                                    autocomplete="off" checked>
+                                                                    name="enquiry_for" id="propertyfor1" autocomplete="off"
+                                                                    checked>
                                                                 <label class="btn btn-outline-info btn-pill btn-sm py-1"
                                                                     for="propertyfor1">Rent</label>
                                                             </div>
@@ -144,6 +139,7 @@
                                                                     for="propertyfor3">Both</label>
                                                             </div>
                                                         </div>
+                                                        <span class="text-danger new_error d-none" id="err_enquiry_for">Customer Requirement is required.</span>
                                                     </div>
                                                     <div class="row">
                                                         <div class="form-group col-md-12 m-b-20">
@@ -177,6 +173,7 @@
                                                                         for="propertytype-87">Residential</label>
                                                                 </div>
                                                             </div>
+                                                            <span class="text-danger new_error d-none" id="err_property_type">Property type is required.</span>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -209,6 +206,7 @@
                                                                 @empty
                                                                 @endforelse
                                                             </div>
+                                                            <span class="text-danger new_error d-none" id="err_property_category">Category is required.</span>
                                                         </div>
                                                     </div>
 
@@ -685,8 +683,6 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <div class="invalid-feedback" id="district_id_error"
-                                                            style="display: block;color:red;">validate here</div>
                                                         <div class="form-group col-md-2 mb-3 div_extra_land_details">
                                                             <select class="form-select" id="taluka_id">
                                                                 <option value=""> Taluka</option>
@@ -697,8 +693,6 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <div class="invalid-feedback" id="taluka_id_error"
-                                                            style="display: block;color:red;">validate here</div>
                                                         <div class="form-group col-md-2 m-b-4 mb-3 div_extra_land_details">
                                                             <label class="select2_label" for="Area">Village</label>
                                                             <select class="form-select" id="village_id" multiple>
@@ -716,39 +710,31 @@
                                                         <div class="col-md-4 the_constructed_carpet_area">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-4 m-b-20">
-                                                                    <div> <label for="Area From">Area From</label>
-                                                                        <input class="form-control" name="area_from"
-                                                                            id="area_from" type="text"
-                                                                            autocomplete="off">
-                                                                    </div>
-                                                                    <div class="invalid-feedback" id="area_from_error"
-                                                                        style="display: block;color:red;">
-                                                                    </div>
+                                                                    <label for="Area From">Area From</label>
+                                                                    <input class="form-control" name="area_from"
+                                                                        id="area_from" type="text" autocomplete="off">
                                                                 </div>
                                                                 <div class="form-group col-md-4 m-b-20">
-                                                                    <div>
-                                                                        <label for="Area To">Area To</label>
-                                                                        <input class="form-control" name="area_to"
-                                                                            id="area_to" type="text"
-                                                                            autocomplete="off">
-                                                                    </div>
-                                                                    <div class="invalid-feedback" id="area_to_error"
-                                                                        style="display: block;color:red;">
-                                                                    </div>
+                                                                    <label for="Area To">Area To</label>
+                                                                    <input class="form-control" name="area_to"
+                                                                        id="area_to" type="text" autocomplete="off">
                                                                 </div>
                                                                 <div class="input-group-append col-md-4 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <div>
-                                                                            <select class="form-select measure_select"
-                                                                                id="area_from_measurement">
-                                                                                @foreach ($land_units as $land_unit)
-                                                                                    <option value="{{ $land_unit->id }}"
-                                                                                        {{ $land_unit->id == 1 ? 'selected' : '' }}>
-                                                                                        {{ $land_unit->unit_name }}
+                                                                        <select class="form-select measure_select"
+                                                                            id="area_from_measurement">
+                                                                            @forelse ($configuration_settings as $props)
+                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
+                                                                                    <option
+                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
+                                                                                        data-parent_id="{{ $props['parent_id'] }}"
+                                                                                        value="{{ $props['id'] }}">
+                                                                                        {{ $props['name'] }}
                                                                                     </option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
+                                                                                @endif
+                                                                            @empty
+                                                                            @endforelse
+                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -768,141 +754,100 @@
                                                                 @empty
                                                                 @endforelse
                                                             </select>
-                                                            <div class="invalid-feedback" id="furnished_status_error"
-                                                                style="display: block;color:red;"></div>
                                                         </div>
 
                                                         <div class="form-group col-md-2 m-b-20">
-                                                            <div>
-                                                                <label for="Budget From">Budget From</label>
-                                                                <input class="form-control indian_currency_amount"
-                                                                    name="budget" value="0" id="budget_from"
-                                                                    type="text" autocomplete="off">
-                                                            </div>
-                                                            <div class="invalid-feedback" id="budget_from_error"
-                                                                style="display: block;color:red;"></div>
+                                                            <label for="Budget From">Budget From</label>
+                                                            <input class="form-control indian_currency_amount"
+                                                                name="budget" value="0" id="budget_from"
+                                                                type="text" autocomplete="off">
                                                         </div>
 
                                                         <div class="form-group col-md-2 m-b-20">
-                                                            <div>
-                                                                <label for="Budget To">Budget To</label>
-                                                                <input class="form-control indian_currency_amount"
-                                                                    name="budget_to" id="budget_to" type="text"
-                                                                    autocomplete="off">
-                                                            </div>
-                                                            <div class="invalid-feedback" id="budget_to_error"
-                                                                style="display: block;color:red;"></div>
+                                                            <label for="Budget To">Budget To</label>
+                                                            <input class="form-control indian_currency_amount"
+                                                                name="budget_to" id="budget_to" type="text"
+                                                                autocomplete="off">
                                                         </div>
+
                                                         <div class="form-group col-md-2 m-b-20 mb-3">
-                                                            <div>
-                                                                <select class="form-select" id="purpose">
-                                                                    <option value="">Purpose</option>
-                                                                    <option value="Investment">Investment</option>
-                                                                    <option value="Own Use">Own Use</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="invalid-feedback" id="purpose_error"
-                                                                style="display: block;color:red;"></div>
+                                                            <select class="form-select" id="purpose">
+                                                                <option value="">Purpose</option>
+                                                                <option value="Investment">Investment</option>
+                                                                <option value="Own Use">Own Use</option>
+                                                            </select>
                                                         </div>
 
 
                                                         <div class="form-group col-md-4 m-b-20 mb-3 cat-project">
-                                                            <div>
-                                                                <label class="select2_label" for="Select Project">
-                                                                    Project</label>
-                                                                <select class="form-select" id="building_id" multiple>
-                                                                    @foreach ($projects as $project)
-                                                                        <option value="{{ $project->id }}">
-                                                                            {{ $project->project_name }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="invalid-feedback" id="building_id_error"
-                                                                style="display: block;color:red;"></div>
+                                                            <label class="select2_label" for="Select Project">
+                                                                Project</label>
+                                                            <select class="form-select" id="building_id" multiple>
+                                                                @foreach ($projects as $project)
+                                                                    <option value="{{ $project->id }}">
+                                                                        {{ $project->project_name }}</option>
+                                                                @endforeach
+                                                            </select>
                                                         </div>
                                                         <div class="form-group col-md-2 m-b-20 mb-3 cat-project-status">
-                                                            <div>
-                                                                <select class="form-select" id="project_status">
-                                                                    <option value="">Project Status</option>
-                                                                    @forelse ($configuration_settings as $props)
-                                                                        @if ($props['dropdown_for'] == 'building_progress')
-                                                                            <option
-                                                                                data-parent_id="{{ $props['parent_id'] }}"
-                                                                                value="{{ $props['id'] }}">
-                                                                                {{ $props['name'] }}
-                                                                            </option>
-                                                                        @endif
-                                                                    @empty
-                                                                    @endforelse
-                                                                </select>
-                                                            </div>
-                                                            <div class="invalid-feedback" id="project_status_error"
-                                                                style="display: block;color:red;"></div>
+                                                            <select class="form-select" id="project_status">
+                                                                <option value="">Project Status</option>
+                                                                @forelse ($configuration_settings as $props)
+                                                                    @if ($props['dropdown_for'] == 'building_progress')
+                                                                        <option data-parent_id="{{ $props['parent_id'] }}"
+                                                                            value="{{ $props['id'] }}">
+                                                                            {{ $props['name'] }}
+                                                                        </option>
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            </select>
                                                         </div>
                                                         <div class="form-group col-md-4 m-b-20">
-                                                            <div>
-                                                                <select class="form-select" id="enquiry_source">
-                                                                    <option value="">Enquiry Source</option>
-                                                                    @forelse ($configuration_settings as $props)
-                                                                        @if ($props['dropdown_for'] == 'property_source')
-                                                                            <option
-                                                                                data-parent_id="{{ $props['parent_id'] }}"
-                                                                                value="{{ $props['id'] }}"
-                                                                                data-val="{{ $props['name'] }}">
-                                                                                {{ $props['name'] }}
-                                                                            </option>
-                                                                        @endif
-                                                                    @empty
-                                                                    @endforelse
-                                                                </select>
-                                                            </div>
-                                                            <div class="invalid-feedback" id="enquiry_source_error"
-                                                                style="display: none;color:red;"></div>
+                                                            <select class="form-select" id="enquiry_source">
+                                                                <option value="">Enquiry Source</option>
+                                                                @forelse ($configuration_settings as $props)
+                                                                    @if ($props['dropdown_for'] == 'property_source')
+                                                                        <option data-parent_id="{{ $props['parent_id'] }}"
+                                                                            value="{{ $props['id'] }}"
+                                                                            data-val="{{ $props['name'] }}">
+                                                                            {{ $props['name'] }}
+                                                                        </option>
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            </select>
                                                         </div>
                                                         <div class="form-group col-md-3 m-b-20 the_source_refrence mb-3">
-                                                            <div>
-                                                                <label for="Refrence">Refrence</label>
-                                                                <input class="form-control" name="refrence"
-                                                                    id="refrence" type="text" autocomplete="off">
-                                                            </div>
-                                                            <div class="invalid-feedback" id="refrence_error"
-                                                                style="display: block;color:red;">validate here</div>
+                                                            <label for="Refrence">Refrence</label>
+                                                            <input class="form-control" name="refrence" id="refrence"
+                                                                type="text" autocomplete="off">
                                                         </div>
                                                         <div class="form-group col-md-3 m-b-4 mb-3 cat-zone">
-                                                            <div>
-                                                                <select class="form-select" id="zone"
-                                                                    name="zone">
-                                                                    <option value="">Zone</option>
-                                                                    @forelse ($configuration_settings as $props)
-                                                                        @if ($props['dropdown_for'] == 'property_zone')
-                                                                            <option
-                                                                                data-parent_id="{{ $props['parent_id'] }}"
-                                                                                value="{{ $props['id'] }}">
-                                                                                {{ $props['name'] }}
-                                                                            </option>
-                                                                            </option>
-                                                                        @endif
-                                                                    @empty
-                                                                    @endforelse
-                                                                </select>
-                                                            </div>
-                                                            <div class="invalid-feedback" id="zone_error"
-                                                                style="display: block;color:red;"></div>
+                                                            <select class="form-select" id="zone" name="zone">
+                                                                <option value="">Zone</option>
+                                                                @forelse ($configuration_settings as $props)
+                                                                    @if ($props['dropdown_for'] == 'property_zone')
+                                                                        <option data-parent_id="{{ $props['parent_id'] }}"
+                                                                            value="{{ $props['id'] }}">
+                                                                            {{ $props['name'] }}
+                                                                        </option>
+                                                                        </option>
+                                                                    @endif
+                                                                @empty
+                                                                @endforelse
+                                                            </select>
                                                         </div>
                                                         <div class="form-group col-md-4 m-b-20 mb-3 cl-locality">
-                                                            <div>
-                                                                <label class="select2_label"
-                                                                    for="Area">Locality</label>
-                                                                <select class="form-select" id="area_ids" multiple>
-                                                                    @foreach ($areas as $area)
-                                                                        <option value="{{ $area->id }}">
-                                                                            {{ $area->name }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="invalid-feedback" id="area_ids_error"
-                                                                style="display: block;color:red;"></div>
+                                                            <label class="select2_label" for="Area">Locality</label>
+                                                            <select class="form-select" id="area_ids" multiple>
+                                                                @foreach ($areas as $area)
+                                                                    <option value="{{ $area->id }}">
+                                                                        {{ $area->name }}</option>
+                                                                @endforeach
+                                                            </select>
                                                         </div>
+
                                                         <div
                                                             class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20">
                                                             <input class="form-check-input" id="is_preleased"
@@ -911,10 +856,9 @@
                                                                 for="is_preleased">Pre-leased</label>
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary previousBtn1 me-2" type="button"
-                                                        style="border-radius: 5px;">Previous</button>
-                                                    <button class="btn btn-primary nextBtn" id="nextSecond"
-                                                        style="border-radius: 5px;" type="button">Next</button>
+                                                    <button class="btn btn-primary previousBtn1 me-2"
+                                                        type="button" style="border-radius: 5px;">Previous</button>
+                                                    <button class="btn btn-primary nextBtn" style="border-radius: 5px;" type="button">Next</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -936,14 +880,10 @@
                                                             <label><b>Remarks</b></label>
                                                         </div>
                                                         <div class="form-group col-md-6 m-b-20 mt-1">
-                                                            <div>
-                                                                <label for="Telephonic Discussion">Remark</label>
-                                                                <input class="form-control" name="telephonic_discussion"
-                                                                    id="telephonic_discussion" type="text"
-                                                                    autocomplete="off">
-                                                            </div>
-                                                            <div class="invalid-feedback" id="telephonic_discussion_error"
-                                                                style="display: block;color:red;"></div>
+                                                            <label for="Telephonic Discussion">Remark</label>
+                                                            <input class="form-control" name="telephonic_discussion"
+                                                                id="telephonic_discussion" type="text"
+                                                                autocomplete="off">
                                                         </div>
                                                     </div>
 
@@ -960,30 +900,28 @@
                                                                         {{ $branch->name }}</option>
                                                                 @endforeach
                                                             </select>
-                                                            <div class="invalid-feedback" id="enquiry_branch_id_error"
-                                                                style="display: block;color:red;"></div>
-
+                                                            <!--<span class="text-danger new_error d-none" id="err_enquiry_branch_id">Branch is required.</span>-->
                                                         </div>
 
                                                         <div class="form-group col-md-4 m-b-4 mb-3">
                                                             <select class="form-select" id="employee_id">
-                                                                <option value=""> Employee</option>
+                                                                <option value=""> Employee</option> 
                                                                 @foreach ($employees as $employee)
                                                                     <option value="{{ $employee->id }}">
                                                                         {{ $employee->first_name . ' ' . $employee->last_name }}
                                                                     </option>
                                                                 @endforeach
                                                             </select>
-                                                            <div class="invalid-feedback" id="employee_id_error"
-                                                                style="display: block;color:red;"></div>
-
+                                                            <!--<span class="text-danger new_error d-none" id="err_employee_id">Employee is required.</span>-->
                                                         </div>
                                                     </div>
-                                                    <button class="btn btn-primary previousBtn2 me-2" type="button"
-                                                        style="border-radius: 5px;">Previous</button>
-                                                    <button id="saveEnquiry" class="btn btn-secondary" type="button"
-                                                        style="border-radius: 5px;">Finish!</button>
+                                                    <button class="btn btn-primary previousBtn2 me-2"
+                                                        type="button" style="border-radius: 5px;">Previous</button>
+                                                    <button id="saveEnquiry" class="btn btn-secondary"
+                                                        type="button" style="border-radius: 5px;">Finish!</button>
                                                 </div>
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -996,112 +934,6 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
         <script>
-            let isValid = true; 
-            function validateField(inputSelector, errorSelector, errorMessage) {
-                let isValidField = $(inputSelector).val().trim() !== '';
-                $(inputSelector).toggleClass('is-invalid', !isValidField);
-                $(errorSelector).toggle(!isValidField).text(errorMessage);
-                return isValidField;
-            }
-
-            function validateSelect2(inputSelector, errorSelector, errorMessage) {
-                isValid = $(inputSelector).val() !== ''; // Check if a value is selected
-                console.log("select 2 val ==", $(inputSelector).val());
-                $(errorSelector).toggle(!isValid).text(errorMessage);
-                return isValid;
-            }
-
-            function validateForm() {
-                 isValid = true;
-                isValid = validateField('#client_name', '#client_name_error', 'client name field is required') && isValid;
-                isValid = validateField('#client_mobile', '#client_mobile_error', 'client mobile field is required') && isValid;
-                isValid = validateField('#client_email', '#client_email_error', 'client email field is required') && isValid;
-                return isValid;
-            }
-
-            function validateStep2Form() {
-                isValid = true;
-                const selectedValues = $('#furnished_status').val();
-                isValid = selectedValues && selectedValues.length > 0 && isValid;
-                $('#furnished_status_error').toggle(!isValid).text(isValid ? '' : 'furnished status field is required');
-                isValid = validateField('#area_from', '#area_from_error', 'area from field is required') && isValid;
-                isValid = validateField('#area_to', '#area_to_error', 'area to field is required') && isValid;
-                isValid = validateField('#budget_from', '#budget_from_error', 'budget from field is required') && isValid;
-                isValid = validateField('#budget_to', '#budget_to_error', 'budget to field is required') && isValid;
-                isValid = validateSelect2('#purpose', '#purpose_error', 'purpose field is required') && isValid;
-                isValid = validateSelect2('#project_status', '#project_status_error', 'project status field is required') &&
-                    isValid;
-                isValid = validateSelect2('#enquiry_source', '#enquiry_source_error', 'enquiry source field is required') &&
-                    isValid;
-                isValid = validateSelect2('#zone', '#zone_error', 'zone field is required') && isValid;
-                const selectedArea = $('#area_ids').val();
-                isValid = selectedArea && selectedArea.length > 0 && isValid;
-                $('#area_ids_error').toggle(!isValid).text(isValid ? '' : 'area field field is required');
-                const selectedBuilding = $('#building_id').val();
-                isValid = selectedBuilding && selectedBuilding.length > 0 && isValid;
-                $('#building_id_error').toggle(!isValid).text(isValid ? '' : 'project field field is required');
-                return isValid;
-            }
-
-            function validateStep3Form() {
-                isValid = true;
-                const selectedValues = $('#furnished_status').val();
-                isValid = selectedValues && selectedValues.length > 0 && isValid;
-                $('#furnished_status_error').toggle(!isValid).text(isValid ? '' : 'furnished status field is required');
-                isValid = validateField('#telephonic_discussion', '#telephonic_discussion_error',
-                    'remarks field is required') && isValid;
-                isValid = validateSelect2('#enquiry_branch_id', '#enquiry_branch_id_error', 'branch field is required') &&
-                    isValid;
-                isValid = validateSelect2('#employee_id', '#employee_id_error', 'employee field is required') && isValid;
-
-                //    employee_id 
-                return isValid;
-            }
-
-            $(document).ready(function() {
-                $('#nextFirst').click(function() {
-                    if (validateForm()) {
-                        console.log("All fields are valid");
-                        $("#customer-requirement").show();
-                    } else {
-                        console.log("Some fields are invalid");
-                        $("#customer-info").show();
-                        $("#step0").addClass("btn-primary");
-                        $("#step1").removeClass("btn-primary");
-                        $("#customer-requirement").hide();
-                    }
-                });
-
-                $('#nextSecond').click(function() {
-                    if (validateStep2Form()) {
-                        console.log("All second fields are valid");
-                        $("#other-contact").show();
-                    } else {
-                        console.log("Some second fields are invalid");
-                        $("#customer-requirement").show();
-                        $("#step1").addClass("btn-primary");
-                        $("#step2").removeClass("btn-primary");
-                        $("#other-contact").hide();
-                    }
-                });
-
-                $('#saveEnquiry').click(function() {
-                    if (validateStep3Form()) {
-                        console.log("All third fields are valid");
-                        $("#other-contact").show();
-                    } else {
-                        console.log("Some third fields are invalid");
-                        $("#other-contact").show();
-                        $("#step2").addClass("btn-primary");
-                        $("#step1").removeClass("btn-primary");
-                        $("#customer-requirement").hide();
-                    }
-                });
-            });
-
-
-
-
             //#B 5+BHK then add txtbox
             $('input:checkbox[name*="flat_type"]').change(function() {
                 if ($(this).val() === "19" && $(this).is(':checked')) {
@@ -1892,6 +1724,8 @@
                 }
             }
 
+
+
             function getScheduleVisit(id) {
                 $('.schedule_data').html('')
                 $.ajax({
@@ -1964,6 +1798,7 @@
                 return result;
             }
 
+
             function generate_contact_detail(id, plus = 0) {
                 var myvar = '<div data-contact_id= ' + id + ' class="form-group col-md-4 m-b-20">' +
                     '<label>Contact person</label>' +
@@ -2023,6 +1858,8 @@
                 }
             }, 'Budget To greater than Budget From');
 
+
+
             $.validator.addMethod("checkArea", function(value, element) {
                 val2 = $('#area_size_from').val()
                 if (val2 != '' && value != '') {
@@ -2058,8 +1895,80 @@
                     return false; // for demo
                 }
             });
-
+           
             $(document).on('click', '#saveEnquiry', function(e) {
+
+                let all_error = document.querySelectorAll('.new_error');
+
+                all_error.forEach(element => {
+                    element.classList.add('d-none');
+                });
+
+                let is_valid = true;
+
+                let fields = [
+                    'client_name',
+                    'client_mobile',
+                    'client_email',
+                ];
+
+                fields.forEach(field => {
+                    let ele = document.getElementById(field);
+
+                    if(ele) {
+                        if(ele.value == '') {
+                            let error_field = document.getElementById(`err_${field}`);
+                            if(error_field) {
+                                error_field.classList.remove('d-none');
+                                is_valid = false;
+                            }
+                        }
+                    }
+                });
+
+                if($("[name=enquiry_for]:checked").length == 0) {
+                    let err_enquiry_for = document.getElementById(`err_enquiry_for`);
+                    if(err_enquiry_for) {
+                        err_enquiry_for.classList.remove('d-none');
+                        is_valid = false;
+                    }
+                }
+
+                if($("[name=property_type]:checked").length == 0) {
+                    let err_property_type = document.getElementById(`err_property_type`);
+                    if(err_property_type) {
+                        err_property_type.classList.remove('d-none');
+                        is_valid = false;
+                    }
+                }
+
+                if($("[name=property_category]:checked").length == 0) {
+                    let err_property_category = document.getElementById(`err_property_category`);
+                    if(err_property_category) {
+                        err_property_category.classList.remove('d-none');
+                        is_valid = false;
+                    }
+                }
+
+                // if($('#enquiry_branch_id').val() == '') {
+                //     let err_branch_id = document.getElementById(`err_enquiry_branch_id`);
+                //     if(err_branch_id) {
+                //         err_branch_id.classList.remove('d-none');
+                //         is_valid = false;
+                //     }
+                // }
+
+                // if($('#employee_id').val() == '') {
+                //     let err_employee_id = document.getElementById(`err_employee_id`);
+                //     if(err_employee_id) {
+                //         err_employee_id.classList.remove('d-none');
+                //         is_valid = false;
+                //     }
+                // }
+
+                if(!is_valid) {
+                    return;
+                }
 
                 var contact_details = [];
                 $("#all_contacts [name=contact_person_name]").each(function(index) {
@@ -2112,12 +2021,6 @@
                     }).get();
                 } else {}
 
-                if (!isValid) {
-                    console.log("error on validations :",isValid);
-                    return
-                }else{
-                    console.log("true redirect",isValid);
-                }
                 var id = $('#this_data_id').val()
                 $.ajax({
                     type: "POST",

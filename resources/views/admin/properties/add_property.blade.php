@@ -2175,8 +2175,8 @@
                                                                 <option value="Office"> Office </option>
                                                                 <option value="Owner"> Owner </option>
                                                             </select>
-                                                            <div class="invalid-feedback" id="owner_is_error"
-                                                                style="display: none;color:red;">saad</div>
+                                                            <div class="invalid-feedback" id="key_arrangement_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                     </div>
                                                     {{-- </div> --}}
@@ -2640,19 +2640,12 @@
                 }
             });
 
-            //Property Validation
-            // $(document).ready(function() {
-            //     $(document).on('click', '#nextButtonSecond', function(e) {
-            //         console.log("clicked");
 
-            //     })
-            // });
-
+            let isValid = true;
             $(document).ready(function() {
                 // Initialize Select2 for all dropdowns
                 $('#project_id, #state_id, #area_id, #zone, #village_id, #taluka_id, #district_id, #state-dropdown')
                     .select2();
-
 
                 // Function to validate dropdown
                 function validateDropdown(dropdown, errorDiv, errorMessage) {
@@ -2668,7 +2661,7 @@
                 }
 
                 function validateField(inputSelector, errorSelector, errorMessage) {
-                    let isValid = $(inputSelector).val().trim() !== '';
+                    isValid = $(inputSelector).val().trim() !== '';
                     $(inputSelector).toggleClass('is-invalid', !isValid);
                     $(errorSelector).toggle(!isValid).text(errorMessage);
                     return isValid;
@@ -2762,7 +2755,7 @@
                 });
 
                 function validateForm() {
-                    let isValid = true;
+                    isValid = true;
 
                     if (flateConfiguration || plotConf || officeConf || retailConfiguration) {
                         isValid = validateField('#salable_area', '#salable_area_error',
@@ -2847,26 +2840,6 @@
                         'four wheel parking field is required') && isValid;
                     isValid = validateField('#remarks', '#remarks_error',
                         'remarks field is required') && isValid;
-                    // isValid = validateField('#property_email', '#property_email_error',
-                    //     'entrance width field is required') && isValid;
-                    // isValid = validateField('#owner_contact_specific_no', '#owner_contact_specific_no_error',
-                    //     'entrance width field is required') && isValid;
-                    // isValid = validateField('#owner_info_name', '#owner_info_name_error',
-                    //     'entrance width field is required') && isValid;
-                   
-                    // isValid = validateField('#fsi', '#fsi_error',
-                    //     'elavators field is required') && isValid;
-                    // isValid = validateField('#no_of_borewell', '#no_of_borewell_error',
-                    //     'elavators field is required') && isValid;
-                    // isValid = validateField('#pre_leased_remarks', '#pre_leased_remarks_error',
-                    //     'pre-leased field is required') && isValid;
-                    // isValid = validateField('#refrence', '#refrence_error',
-                    //     'reference field is required') && isValid;
-                    // isValid = validateField('#is_terrace', '#terrace_error',
-                    //     'terrace field is required') && isValid;
-                    // isValid = validateField('#no_of_floors_allowed', '#no_of_floors_allowed_error',
-                    // 'no of floor field is required') && isValid;
-
                     return isValid;
                 }
 
@@ -2899,8 +2872,6 @@
                         'property source field is required.') && isValid;
                     isValid = validateDropdown($('#Property_priority'), $('#Property_priority_error'),
                         'property priority field is required.') && isValid;
-                        isValid = validateDropdown('#owner_is', '#owner_is_error',
-                        'entrance width field is required') && isValid;
 
                     if (theFor === 'commercial' || theFor === 'agriculture' || farmConf) {
                         isValid = validateDropdown($('#zone'), $('#zone_id_error'),
@@ -2927,13 +2898,7 @@
                     return isValid;
                 });
 
-
-
             });
-
-
-
-
 
 
             const numberOfOptions = $('#state_id').find('option').length;
@@ -3717,10 +3682,7 @@
                 var theFor = $('input[name=property_for]:checked').val();
                 if (theFor == 'Sell' && parent_val == '87') {
                     $('.property-type-element[data-property-id="256"]').show();
-                } else if (theFor == 'Rent' && parent_val == '85') {
-                    $('.property-type-element[data-property-id="262"]').hide();
                 } else {
-                    $('.property-type-element[data-property-id="262"]').show();
                     $('.property-type-element[data-property-id="256"]').hide();
                 }
             }
@@ -3799,19 +3761,17 @@
             function generate_contact_detail(id, plus = 0) {
                 var myvar = '<div data-contact-id=' + id + ' class="row"><div data-contact_id= ' + id +
                     ' class="form-group col-md-3 m-b-20">' +
-                    '<label>Name</label>' +
+                    '<div><label>Name</label>' +
                     '       <input class="form-control" name="other_name" id="other_name" type="text"' +
                     '            autocomplete="off">' +
-                    '     </div>' +
-                    '</div>' +
                     '</div><div id="other_name_error_' + id +
-                    '" class="invalid-feedback" style="display: none; color: red;">' +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
                     '     <div data-contact_id= ' + id +
                     ' class="form-group col-md-2 m-b-20">' +
                     '<div><label>Contact No</label>' +
                     '       <input class="form-control" name="other_contact" id="other_contact"' +
                     '           type="text"  autocomplete="off">' +
-                    '   </div>' +
                     '</div><div id="other_contact_error_' + id +
                     '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '</div>' +
@@ -3820,7 +3780,6 @@
                     '<div><label>Position</label>' +
                     '       <input class="form-control" name="position" id="position"' +
                     '           type="text"  autocomplete="off">' +
-                    '   </div>' +
                     '</div><div id="position_error_' + id +
                     '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '</div>' +
@@ -4417,14 +4376,6 @@
             }
             getProperty()
 
-            function toggleError(unique_id, field, errorMessage) {
-                var errorDiv = $("#" + field + "_error_" + unique_id);
-                if (field.trim() === "") {
-                    errorDiv.text(errorMessage).show();
-                } else {
-                    errorDiv.hide();
-                }
-            }
             //save property
             $(document).on('click', '.submitFnl', function(e) {
                 e.preventDefault();
@@ -4453,7 +4404,6 @@
                     }
                 });
                 owner_details = JSON.stringify(owner_details);
-                // return
                 // other_contact_details
                 $("#modal_form [name=other_name]").each(function(index) {
                     cona_arr = []
@@ -4467,15 +4417,15 @@
                     } else {
                         $("#other_name_error_" + unique_id).hide();
                     }
-                    if (otherContact.trim() === "") {
-                        $("#other_contact_error_" + unique_id).text("other contact field is required").show();
-                    } else {
-                        $("#other_contact_error_" + unique_id).hide();
-                    }
                     if (otherName.trim() === "") {
                         $("#position_error_" + unique_id).text("position field is required").show();
                     } else {
                         $("#position_error_" + unique_id).hide();
+                    }
+                    if (otherContact.trim() === "") {
+                        $("#other_contact_error_" + unique_id).text("contact field is required").show();
+                    } else {
+                        $("#other_contact_error_" + unique_id).hide();
                     }
                     cona_arr.push(otherName)
                     cona_arr.push(otherContact)
@@ -4485,7 +4435,7 @@
                     }
                 });
                 other_contact_details = JSON.stringify(other_contact_details);
-
+                let allFieldsValid = true;
                 $("#modal_form [name=unit_unit_no]").each(function(index) {
                     let cona_arr = [];
                     let unique_id = $(this).closest('.form-group').attr('data-unit_id');
@@ -4511,27 +4461,38 @@
 
                     if (pricerent.trim() === "") {
                         $("#price_rent_error_" + unique_id).text("price rent field is required").show();
+                        allFieldsValid = false;
                     } else {
                         $("#price_rent_error_" + unique_id).hide();
                     }
 
                     if (furnished.trim() === "") {
                         $("#furnished_status_error_" + unique_id).text("furnished field is required").show();
+                        allFieldsValid = false;
                     } else {
                         $("#furnished_status_error_" + unique_id).hide();
                     }
 
                     if (wing.trim() === "") {
                         $("#wing_no_error_" + unique_id).text("Wing field is required").show();
+                        allFieldsValid = false;
                     } else {
                         $("#wing_no_error_" + unique_id).hide();
                     }
 
                     if (unit.trim() === "") {
                         $("#unit_no__error_" + unique_id).text("unit field is required").show();
+                        allFieldsValid = false;
                     } else {
                         $("#unit_no__error_" + unique_id).hide();
                     }
+
+                    // if(!allFieldsValid){
+                    //     console.log("error validation on all field :",allFieldsValid);
+                    //     return
+                    // }else{
+                    //     console.log("success run :",allFieldsValid);
+                    // }
                     cona_arr.push(wing)
                     cona_arr.push(name)
                     cona_arr.push(status)
@@ -4610,9 +4571,37 @@
                     $('.increment').append('<input type="file" name="const_documents[]" class="form-control">');
                 });
 
+                console.log("#owner_info_name.val()",$("#owner_info_name").val());
+                if ($("#owner_info_name").val().trim() === "") {
+                    $("#owner_info_name_error").text("owner's name field is required").show();
+                } else {
+                    $("#owner_info_name_error" + unique_id).hide();
+                }
 
-                return
+                if ($("#owner_contact_specific_no").val().trim() === "") {
+                    $("#owner_contact_specific_no_error").text("contact field is required").show();
+                } else {
+                    $("#owner_contact_specific_no_error" + unique_id).hide();
+                }
 
+                if ($("#property_email").val().trim() === "") {
+                    $("#property_email_error").text("email field is required").show();
+                } else {
+                    $("#property_email_error" + unique_id).hide();
+                }
+                
+                if ($("#key_arrangement").val().trim() === "") {
+                    $("#key_arrangement_error").text("key field is required").show();
+                } else {
+                    $("#key_arrangement_error").hide();
+                }
+
+                if (!allFieldsValid) {
+                    console.log("error validation on all field :", allFieldsValid);
+                    return
+                } else {
+                    console.log("success run :", allFieldsValid);
+                }
 
                 // save property
                 $.ajax({
@@ -4754,7 +4743,6 @@
                                 }
                             }
 
-                            console.log("files : ==", files);
                             if (filesImages.length == 0 || construction_docs
                                 .length == 0) {
                                 let propertyCategory = data.data.property_category;
@@ -4953,9 +4941,6 @@
                 }
             });
 
-
-
-
             function floatingField() {
                 //changed by Subhash
                 $("form input").each(function(index) {
@@ -4981,18 +4966,13 @@
                 })
             }
 
-
-
-
             function isPDFExcelWordFile(fileType) {
                 var allowedTypes = ["application/pdf", "application/vnd.ms-excel",
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/msword",
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 ];
-
                 return allowedTypes.includes(fileType);
             }
-
 
             $(document).on('click', '.previousBtn1', function() {
                 $("#profile-step").hide();
