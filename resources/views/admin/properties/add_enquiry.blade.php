@@ -177,6 +177,8 @@
                                                                         for="propertytype-87">Residential</label>
                                                                 </div>
                                                             </div>
+                                                            <div class="invalid-feedback" id="property_type_error"
+                                                                style="display: block;color:red;"></div>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -209,6 +211,8 @@
                                                                 @empty
                                                                 @endforelse
                                                             </div>
+                                                            <div class="invalid-feedback" id="property_category_error"
+                                                            style="display: block;color:red;"></div>
                                                         </div>
                                                     </div>
 
@@ -996,7 +1000,8 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
         <script>
-            let isValid = true; 
+            let isValid = true;
+
             function validateField(inputSelector, errorSelector, errorMessage) {
                 let isValidField = $(inputSelector).val().trim() !== '';
                 $(inputSelector).toggleClass('is-invalid', !isValidField);
@@ -1012,51 +1017,98 @@
             }
 
             function validateForm() {
-                 isValid = true;
+                isValid = true;
                 isValid = validateField('#client_name', '#client_name_error', 'client name field is required') && isValid;
-                isValid = validateField('#client_mobile', '#client_mobile_error', 'client mobile field is required') && isValid;
-                isValid = validateField('#client_email', '#client_email_error', 'client email field is required') && isValid;
+                validateMobileNumber('#client_mobile', '#client_mobile_error', 'Client mobile field is required', 'Invalid mobile number format');
+
+                // isValid = validateField('#client_email', '#client_email_error', 'client email field is required') && isValid;
+                isValid = validateEmail('#client_email', '#client_email_error', 'client email field is required') && isValid;
+   
                 return isValid;
             }
+
+            function validateMobileNumber(field, errorField, requiredErrorMessage, invalidErrorMessage) {
+    var value = $(field).val().trim();
+    var isValidMobileNumber = /^\d{10}$/.test(value);
+
+    if (value === '') {
+        $(errorField).text(requiredErrorMessage);
+    } else if (!isValidMobileNumber) {
+        $(errorField).text(invalidErrorMessage);
+    } else {
+        $(errorField).text('');
+    }
+
+    $(field).toggleClass('is-invalid', value === '' || !isValidMobileNumber);
+    return value !== '' && isValidMobileNumber;
+}
+
+
+            function validateEmail(field, errorField, errorMessage) {
+    var value = $(field).val().trim();
+    var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    $(errorField).text(isValidEmail ? '' : errorMessage);
+    $(field).toggleClass('is-invalid', !isValidEmail);
+    return isValidEmail;
+}
+
+function validateNumericField(field, errorField, errorMessage) {
+    var value = $(field).val().trim();
+    var isValidNumeric = /^\d+$/.test(value);
+
+    if (value === '') {
+        $(errorField).text(errorMessage);
+    } else if (!isValidNumeric) {
+        $(errorField).text('Please enter a valid numeric value');
+    } else {
+        $(errorField).text('');
+    }
+
+    $(field).toggleClass('is-invalid', value === '' || !isValidNumeric);
+    return value !== '' && isValidNumeric;
+}
 
             function validateStep2Form() {
                 isValid = true;
-                const selectedValues = $('#furnished_status').val();
-                isValid = selectedValues && selectedValues.length > 0 && isValid;
-                $('#furnished_status_error').toggle(!isValid).text(isValid ? '' : 'furnished status field is required');
-                isValid = validateField('#area_from', '#area_from_error', 'area from field is required') && isValid;
-                isValid = validateField('#area_to', '#area_to_error', 'area to field is required') && isValid;
+                // const selectedValues = $('#furnished_status').val();
+                // isValid = selectedValues && selectedValues.length > 0 && isValid;
+                // $('#furnished_status_error').toggle(!isValid).text(isValid ? '' : 'furnished status field is required');
+                // isValid = validateField('#area_from', '#area_from_error', 'area from field is required') && isValid;
+                // isValid = validateField('#area_to', '#area_to_error', 'area to field is required') && isValid;
+                isValid = validateNumericField('#area_from', '#area_from_error', 'Area from field is required') && isValid;
+                isValid = validateNumericField('#area_to', '#area_to_error', 'Area to field is required') && isValid;
+   
                 isValid = validateField('#budget_from', '#budget_from_error', 'budget from field is required') && isValid;
                 isValid = validateField('#budget_to', '#budget_to_error', 'budget to field is required') && isValid;
-                isValid = validateSelect2('#purpose', '#purpose_error', 'purpose field is required') && isValid;
-                isValid = validateSelect2('#project_status', '#project_status_error', 'project status field is required') &&
-                    isValid;
-                isValid = validateSelect2('#enquiry_source', '#enquiry_source_error', 'enquiry source field is required') &&
-                    isValid;
-                isValid = validateSelect2('#zone', '#zone_error', 'zone field is required') && isValid;
-                const selectedArea = $('#area_ids').val();
-                isValid = selectedArea && selectedArea.length > 0 && isValid;
-                $('#area_ids_error').toggle(!isValid).text(isValid ? '' : 'area field field is required');
-                const selectedBuilding = $('#building_id').val();
-                isValid = selectedBuilding && selectedBuilding.length > 0 && isValid;
-                $('#building_id_error').toggle(!isValid).text(isValid ? '' : 'project field field is required');
+                // isValid = validateSelect2('#purpose', '#purpose_error', 'purpose field is required') && isValid;
+                // isValid = validateSelect2('#project_status', '#project_status_error', 'project status field is required') &&
+                //     isValid;
+                // isValid = validateSelect2('#enquiry_source', '#enquiry_source_error', 'enquiry source field is required') &&
+                //     isValid;
+                // isValid = validateSelect2('#zone', '#zone_error', 'zone field is required') && isValid;
+                // const selectedArea = $('#area_ids').val();
+                // isValid = selectedArea && selectedArea.length > 0 && isValid;
+                // $('#area_ids_error').toggle(!isValid).text(isValid ? '' : 'area field field is required');
+                // const selectedBuilding = $('#building_id').val();
+                // isValid = selectedBuilding && selectedBuilding.length > 0 && isValid;
+                // $('#building_id_error').toggle(!isValid).text(isValid ? '' : 'project field field is required');
                 return isValid;
             }
 
-            function validateStep3Form() {
-                isValid = true;
-                const selectedValues = $('#furnished_status').val();
-                isValid = selectedValues && selectedValues.length > 0 && isValid;
-                $('#furnished_status_error').toggle(!isValid).text(isValid ? '' : 'furnished status field is required');
-                isValid = validateField('#telephonic_discussion', '#telephonic_discussion_error',
-                    'remarks field is required') && isValid;
-                isValid = validateSelect2('#enquiry_branch_id', '#enquiry_branch_id_error', 'branch field is required') &&
-                    isValid;
-                isValid = validateSelect2('#employee_id', '#employee_id_error', 'employee field is required') && isValid;
+            // function validateStep3Form() {
+            //     isValid = true;
+            //     const selectedValues = $('#furnished_status').val();
+            //     isValid = selectedValues && selectedValues.length > 0 && isValid;
+            //     $('#furnished_status_error').toggle(!isValid).text(isValid ? '' : 'furnished status field is required');
+            //     isValid = validateField('#telephonic_discussion', '#telephonic_discussion_error',
+            //         'remarks field is required') && isValid;
+            //     isValid = validateSelect2('#enquiry_branch_id', '#enquiry_branch_id_error', 'branch field is required') &&
+            //         isValid;
+            //     isValid = validateSelect2('#employee_id', '#employee_id_error', 'employee field is required') && isValid;
 
-                //    employee_id 
-                return isValid;
-            }
+            //     //    employee_id 
+            //     return isValid;
+            // }
 
             $(document).ready(function() {
                 $('#nextFirst').click(function() {
@@ -1073,6 +1125,20 @@
                 });
 
                 $('#nextSecond').click(function() {
+                    if ($('input[name="property_type"]:checked').length > 0) {
+                        $("#property_type_error").hide().text("requirement field is requierd");
+
+                    }else{
+                        $("#property_type_error").show().text("requirement field is requierd");
+                    }
+
+                    if ($('input[name="property_category"]:checked').length > 0) {
+                        $("#property_category_error").hide().text("category field is requierd");
+                    }else{
+                        $("#property_category_error").show().text("category field is requierd");
+                    }
+
+
                     if (validateStep2Form()) {
                         console.log("All second fields are valid");
                         $("#other-contact").show();
@@ -1085,18 +1151,18 @@
                     }
                 });
 
-                $('#saveEnquiry').click(function() {
-                    if (validateStep3Form()) {
-                        console.log("All third fields are valid");
-                        $("#other-contact").show();
-                    } else {
-                        console.log("Some third fields are invalid");
-                        $("#other-contact").show();
-                        $("#step2").addClass("btn-primary");
-                        $("#step1").removeClass("btn-primary");
-                        $("#customer-requirement").hide();
-                    }
-                });
+                // $('#saveEnquiry').click(function() {
+                //     if (validateStep3Form()) {
+                //         console.log("All third fields are valid");
+                //         $("#other-contact").show();
+                //     } else {
+                //         console.log("Some third fields are invalid");
+                //         $("#other-contact").show();
+                //         $("#step2").addClass("btn-primary");
+                //         $("#step1").removeClass("btn-primary");
+                //         $("#customer-requirement").hide();
+                //     }
+                // });
             });
 
 
@@ -1137,7 +1203,7 @@
             //     data-city_id="${areass[i]['city_id']}"
             //     data-state_id="${areass[i]['state_id']}">
             //     ${areass[i]['name']}
-            // 	</option>`);
+            //  </option>`);
                     //     }
                     // }
                     // $('#area_ids').select2();
@@ -1966,16 +2032,20 @@
 
             function generate_contact_detail(id, plus = 0) {
                 var myvar = '<div data-contact_id= ' + id + ' class="form-group col-md-4 m-b-20">' +
-                    '<label>Contact person</label>' +
+                    '<div><label>Contact person</label>' +
                     '       <input class="form-control" name="contact_person_name" type="text"' +
                     '            autocomplete="off">' +
-                    '     </div>' +
+                    '</div><div id="contact_person_name_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '        </div>' +
                     '     <div data-contact_id= ' + id +
                     ' class="form-group col-md-4 m-b-20">' +
-                    '<label>Contact person No</label>' +
+                    '<div><label>Contact person No</label>' +
                     '       <input class="form-control" name="contact_person_no"' +
                     '           type="text"  autocomplete="off">' +
-                    '   </div>' +
+                    '</div><div id="contact_person_no_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '        </div>' +
                     '<div data-contact_id= ' + id +
                     ' class="form-check custom-checkbox   checkbox-solid-success mb-0 col-md-1 m-b-20">' +
                     ' <input class="form-check-input" name="contact_nri" type="checkbox">' +
@@ -2069,6 +2139,20 @@
                     no = $("[data-contact_id=" + unique_id + "] input[name=contact_person_no]").val();
                     status = $("[data-contact_id=" + unique_id + "] select[name=contact_status]").val();
                     nri = $("[data-contact_id=" + unique_id + "] input[name=contact_nri]").prop('checked')
+                    // if (name.trim() === "") {
+                    //     $("#contact_person_name_error_" + unique_id).text("name is required").show();
+                    //     isValid = false;
+                    // } else {
+                    //     $("#contact_person_name_error_" + unique_id).hide();
+                    //     isValid = true;
+                    // }
+                    // if (no.trim() === "") {
+                    //     $("#contact_person_no_error_" + unique_id).text("number field is required").show();
+                    //     isValid = false;
+                    // } else {
+                    //     $("#contact_person_no_error_" + unique_id).hide();
+                    //     isValid = true;
+                    // }
                     cona_arr.push(name)
                     cona_arr.push(no)
                     cona_arr.push(status)
@@ -2113,10 +2197,10 @@
                 } else {}
 
                 if (!isValid) {
-                    console.log("error on validations :",isValid);
+                    console.log("error on validations :", isValid);
                     return
-                }else{
-                    console.log("true redirect",isValid);
+                } else {
+                    console.log("true redirect", isValid);
                 }
                 var id = $('#this_data_id').val()
                 $.ajax({

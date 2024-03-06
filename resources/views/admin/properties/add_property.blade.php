@@ -873,6 +873,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="invalid-feedback" id="length_of_plot_error"
+                                                                style="display: none;color:red;"></div>
 
                                                         </div>
 
@@ -899,6 +901,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="invalid-feedback" id="width_of_plot_error"
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                         <div class="col-md-3 the_carpet_area">
                                                             <div class="input-group">
@@ -2080,7 +2084,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="invalid-feedback" id="owner_is_error"
-                                                                style="display: none;color:red;">saad</div>
+                                                                style="display: none;color:red;"></div>
                                                         </div>
                                                         <div class="form-group col-md-3">
                                                             <div>
@@ -2642,6 +2646,10 @@
 
 
             let isValid = true;
+            let penthouseConf,farmConf, plotConf,VillaCategory, villaConfiguration, flateConfiguration, landConfiguration,
+                    officeConf,
+                    retailConfiguration, storageConfiguration,
+                    theFor;
             $(document).ready(function() {
                 // Initialize Select2 for all dropdowns
                 $('#project_id, #state_id, #area_id, #zone, #village_id, #taluka_id, #district_id, #state-dropdown')
@@ -2667,10 +2675,7 @@
                     return isValid;
                 }
 
-                let penthouseConf, plotConf, farmConf, villaConfiguration, flateConfiguration, landConfiguration,
-                    officeConf,
-                    retailConfiguration, storageConfiguration,
-                    theFor;
+                
 
                 //office_type
                 $(document).on('change', 'input[name=office_type]', function() {
@@ -2736,6 +2741,12 @@
                     }
                 });
 
+                 //villa cat
+                 $(document).on('change', '[name="property_category"]', function(e) {
+                    VillaCategory = $(this).attr('data-val') === 'Vila/Bunglow'
+                    console.log("VillaCategory ==", VillaCategory);
+                });
+
                 //Penthouse cat
                 $(document).on('change', '[name="property_category"]', function(e) {
                     penthouseConf = $(this).attr('data-val') === 'Penthouse'
@@ -2762,16 +2773,16 @@
                                 'Salable Area filed is required') &&
                             isValid;
                     }
-                    if (officeConf || flateConfiguration) {
-                        isValid = validateField('#property_on_floors', '#property_on_floors_error',
-                            'units floor field is required') && isValid;
-                    }
-                    if (flateConfiguration) {
-                        // isValid = validateField('#builtup_area', '#builtup_area_error',
-                        //     'Built up area field is required') && isValid;
-                        isValid = validateField('#no_of_bathrooms', '#no_of_bathrooms_error',
-                            'no of bathroom field is required') && isValid;
-                    }
+                    // if (officeConf || flateConfiguration) {
+                    //     isValid = validateField('#property_on_floors', '#property_on_floors_error',
+                    //         'units floor field is required') && isValid;
+                    // }
+                    // if (flateConfiguration) {
+                    //     // isValid = validateField('#builtup_area', '#builtup_area_error',
+                    //     //     'Built up area field is required') && isValid;
+                    //     isValid = validateField('#no_of_bathrooms', '#no_of_bathrooms_error',
+                    //         'no of bathroom field is required') && isValid;
+                    // }
                     // if (retailConfiguration) {
                     //     isValid = validateField('#entrance_width', '#entrance_width_error',
                     //         'entrance width field is required') && isValid;
@@ -2782,64 +2793,72 @@
                         isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
                             'Salable plot area field is required') && isValid;
                     }
-                    if (storageConfiguration == '7' || storageConfiguration == '8' || storageConfiguration == '9') {
-                        isValid = validateField('#constructed_salable_area', '#constructed_salable_area_error',
-                            'constructed salable area field is required') && isValid;
-                    }
-                    if (villaConfiguration || farmConf) {
-                        isValid = validateField('#no_of_balcony', '#no_of_balcony_error',
-                            'no of balcony field is required') && isValid;
-                        isValid = validateField('#total_no_of_units', '#total_no_of_units_error',
-                            'units field is required') && isValid;
-                        isValid = validateField('#no_of_side_open', '#no_of_side_open_error',
-                            'no of side open field is required') && isValid;
-                        isValid = validateField('#no_of_bathrooms', '#no_of_bathrooms_error',
-                            'no of bathroom field is required') && isValid;
-                    }
-                    if (farmConf) {
-                        isValid = validateField('#no_of_room', '#no_of_room_error',
-                            'rooms field is required') && isValid;
-                    }
+                    // if (storageConfiguration == '7' || storageConfiguration == '8' || storageConfiguration == '9') {
+                    //     isValid = validateField('#constructed_salable_area', '#constructed_salable_area_error',
+                    //         'constructed salable area field is required') && isValid;
+                    // }
+                    // if (villaConfiguration || farmConf) {
+                    //     isValid = validateField('#no_of_balcony', '#no_of_balcony_error',
+                    //         'no of balcony field is required') && isValid;
+                    //     isValid = validateField('#total_no_of_units', '#total_no_of_units_error',
+                    //         'units field is required') && isValid;
+                    //     isValid = validateField('#no_of_side_open', '#no_of_side_open_error',
+                    //         'no of side open field is required') && isValid;
+                    //     isValid = validateField('#no_of_bathrooms', '#no_of_bathrooms_error',
+                    //         'no of bathroom field is required') && isValid;
+                    // }
+                    // if (farmConf) {
+                    //     isValid = validateField('#no_of_room', '#no_of_room_error',
+                    //         'rooms field is required') && isValid;
+                    // }
+                    // if (landConfiguration) {
+                    //     // console.log("valid land prop");
+                    //     // isValid = validateField('#length_of_plot', '#length_of_plot_error',
+                    //     //     'length of plot field is required') && isValid;
+                    //     //     Valid = validateField('#width_of_plot', '#width_of_plot_error',
+                    //     //     'length of plot field is required') && isValid;
+
+                    // }
                     if (storageConfiguration) {
-                        isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
-                            'Salable plot area field is required') && isValid;
+                        // isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
+                        //     'Salable plot area field is required') && isValid;
                         isValid = validateField('#storage_centre_height', '#storage_centre_height_error',
                             'center height field is required') && isValid;
-                        isValid = validateField('#front_road_width', '#front_road_width_error',
-                            'front road side field is required') && isValid;
-                        isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
-                            'total units field is required') && isValid;
-                        isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
-                            'two wheel parking field is required') && isValid;
+                        // isValid = validateField('#front_road_width', '#front_road_width_error',
+                        //     'front road side field is required') && isValid;
+                        // isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
+                        //     'total units field is required') && isValid;
+                        // isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
+                        //     'two wheel parking field is required') && isValid;
                     }
-                    if (flateConfiguration || officeConf || retailConfiguration) {
-                        isValid = validateField('#ceiling_height', '#ceiling_height_error',
-                            'ceiling height field is required') && isValid;
-                        isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
-                            'total units field is required') && isValid;
-                        isValid = validateField('#total_no_of_floor', '#total_no_of_floor_error',
-                            'no of floor field is required') && isValid;
-                        isValid = validateField('#total_units_in_tower', '#total_units_in_tower_error',
-                            'unit tower field is required') && isValid;
-                        isValid = validateField('#no_of_elavators', '#no_of_elavators_error',
-                            'elavators field is required') && isValid;
-                        isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
-                            'two wheel parking field is required') && isValid;
-                    }
-                    if (penthouseConf) {
-                        isValid = validateField('#no_of_balcony', '#no_of_balcony_error',
-                            'no of balcony field is required') && isValid;
-                        isValid = validateField('#terrace_salable_area', '#terrace_salable_area_error',
-                            'terrace salable area field is required') && isValid;
-                    }
-                    isValid = validateField('#property_link', '#property_link_error',
-                        'Location Link field is required') && isValid;
+                    // if (flateConfiguration || officeConf || retailConfiguration) {
+                    //     isValid = validateField('#ceiling_height', '#ceiling_height_error',
+                    //         'ceiling height field is required') && isValid;
+                    //     // isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
+                    //     //     'total units field is required') && isValid;
+                    //     // isValid = validateField('#total_no_of_floor', '#total_no_of_floor_error',
+                    //     //     'no of floor field is required') && isValid;
+                    //     // isValid = validateField('#total_units_in_tower', '#total_units_in_tower_error',
+                    //     //     'unit tower field is required') && isValid;
+                    //     // isValid = validateField('#no_of_elavators', '#no_of_elavators_error',
+                    //     //     'elavators field is required') && isValid;
+                    //     // isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
+                    //     //     'two wheel parking field is required') && isValid;
+                    // }
+                    // if (penthouseConf) {
+                    //     isValid = validateField('#no_of_balcony', '#no_of_balcony_error',
+                    //         'no of balcony field is required') && isValid;
+                    //     isValid = validateField('#terrace_salable_area', '#terrace_salable_area_error',
+                    //         'terrace salable area field is required') && isValid;
+                    // }
+                    // isValid = validateField('#property_link', '#property_link_error',
+                    //     'Location Link field is required') && isValid;
                     isValid = validateField('#address', '#address_error',
                         'address field is required') && isValid;
-                    isValid = validateField('#fourwheller_parking', '#fourwheller_parking_error',
-                        'four wheel parking field is required') && isValid;
-                    isValid = validateField('#remarks', '#remarks_error',
-                        'remarks field is required') && isValid;
+                    // isValid = validateField('#fourwheller_parking', '#fourwheller_parking_error',
+                    //     'four wheel parking field is required') && isValid;
+                    // isValid = validateField('#remarks', '#remarks_error',
+                    //     'remarks field is required') && isValid;
                     return isValid;
                 }
 
@@ -2868,20 +2887,20 @@
                         'City field is required.') && isValid;
                     isValid = validateDropdown($('#area_id'), $('#locality_id_error'),
                         'Locality field is required.') && isValid;
-                    isValid = validateDropdown($('#property_source'), $('#property_source_error'),
-                        'property source field is required.') && isValid;
-                    isValid = validateDropdown($('#Property_priority'), $('#Property_priority_error'),
-                        'property priority field is required.') && isValid;
+                    // isValid = validateDropdown($('#property_source'), $('#property_source_error'),
+                    //     'property source field is required.') && isValid;
+                    // isValid = validateDropdown($('#Property_priority'), $('#Property_priority_error'),
+                    //     'property priority field is required.') && isValid;
 
                     if (theFor === 'commercial' || theFor === 'agriculture' || farmConf) {
                         isValid = validateDropdown($('#zone'), $('#zone_id_error'),
-                            'Zone field is required.') && isValid;
+                            'Zone field is required') && isValid;
                         isValid = validateDropdown($('#village_id'), $('#village_id_error'),
-                            'Village field is required.') && isValid;
+                            'Village field is required') && isValid;
                         isValid = validateDropdown($('#taluka_id'), $('#taluka_id_error'),
-                            'Taluka field is required.') && isValid;
+                            'Taluka field is required') && isValid;
                         isValid = validateDropdown($('#district_id'), $('#district_id_error'),
-                            'District field is required.') && isValid;
+                            'District field is required') && isValid;
                     }
 
                     if (isValid) {
@@ -4376,6 +4395,7 @@
             }
             getProperty()
 
+            console.log("outide farmConf", farmConf);
             //save property
             $(document).on('click', '.submitFnl', function(e) {
                 e.preventDefault();
@@ -4383,6 +4403,7 @@
                 if (!$("#modal_form").valid()) {
                     return
                 }
+                let allFieldsValid = true;
 
                 console.log("third final clicked");
                 // $(this).prop('disabled', true);
@@ -4412,21 +4433,33 @@
                     otherName = $("[data-contact_id=" + unique_id + "] input[name=other_name]").val();
                     otherContact = $("[data-contact_id=" + unique_id + "] input[name=other_contact]").val();
                     position = $("[data-contact_id=" + unique_id + "] input[name=position]").val();
-                    if (otherName.trim() === "") {
-                        $("#other_name_error_" + unique_id).text("other name field is required").show();
-                    } else {
-                        $("#other_name_error_" + unique_id).hide();
-                    }
-                    if (otherName.trim() === "") {
-                        $("#position_error_" + unique_id).text("position field is required").show();
-                    } else {
-                        $("#position_error_" + unique_id).hide();
-                    }
-                    if (otherContact.trim() === "") {
-                        $("#other_contact_error_" + unique_id).text("contact field is required").show();
-                    } else {
-                        $("#other_contact_error_" + unique_id).hide();
-                    }
+                    // if (otherName.trim() === "") {
+                    //     $("#other_name_error_" + unique_id).text("other name field is required").show();
+                    //     allFieldsValid = false;
+                    // } else {
+                    //     $("#other_name_error_" + unique_id).hide();
+                    //     console.log("1");
+                    //     // allFieldsValid = true;
+                    // }
+                    // if (position.trim() === "") {
+                    //     $("#position_error_" + unique_id).text("position field is required").show();
+                    //     allFieldsValid = false;
+                    // } else {
+                    //     $("#position_error_" + unique_id).hide();
+                    //     // allFieldsValid = true;
+                    //     console.log("2");
+
+                    // }
+                    // if (otherContact.trim() === "") {
+                    //     $("#other_contact_error_" + unique_id).text("contact field is required").show();
+                    //     allFieldsValid = false;
+
+                    // } else {
+                    //     $("#other_contact_error_" + unique_id).hide();
+                    //     // allFieldsValid = true;
+                    //     console.log("3");
+
+                    // }
                     cona_arr.push(otherName)
                     cona_arr.push(otherContact)
                     cona_arr.push(position)
@@ -4435,7 +4468,9 @@
                     }
                 });
                 other_contact_details = JSON.stringify(other_contact_details);
-                let allFieldsValid = true;
+
+
+
                 $("#modal_form [name=unit_unit_no]").each(function(index) {
                     let cona_arr = [];
                     let unique_id = $(this).closest('.form-group').attr('data-unit_id');
@@ -4464,6 +4499,7 @@
                         allFieldsValid = false;
                     } else {
                         $("#price_rent_error_" + unique_id).hide();
+                        console.log("4");
                     }
 
                     if (furnished.trim() === "") {
@@ -4471,28 +4507,33 @@
                         allFieldsValid = false;
                     } else {
                         $("#furnished_status_error_" + unique_id).hide();
+                        console.log("5");
+
+                    }
+                    if (!farmConf || VillaCategory === false || !plotConf) {
+                        console.log(":is not farm, vila, plot");
+                        if (wing.trim() === "") {
+                            $("#wing_no_error_" + unique_id).text("Wing field is required").show();
+                            allFieldsValid = false;
+                        } else {
+                            $("#wing_no_error_" + unique_id).hide();
+                            console.log("6");
+
+                        }
+                    } else {
+                        console.log(":is farm, villa, plot",);
                     }
 
-                    if (wing.trim() === "") {
-                        $("#wing_no_error_" + unique_id).text("Wing field is required").show();
-                        allFieldsValid = false;
-                    } else {
-                        $("#wing_no_error_" + unique_id).hide();
-                    }
 
                     if (unit.trim() === "") {
                         $("#unit_no__error_" + unique_id).text("unit field is required").show();
                         allFieldsValid = false;
                     } else {
                         $("#unit_no__error_" + unique_id).hide();
+                        console.log("7");
+
                     }
 
-                    // if(!allFieldsValid){
-                    //     console.log("error validation on all field :",allFieldsValid);
-                    //     return
-                    // }else{
-                    //     console.log("success run :",allFieldsValid);
-                    // }
                     cona_arr.push(wing)
                     cona_arr.push(name)
                     cona_arr.push(status)
@@ -4571,25 +4612,32 @@
                     $('.increment').append('<input type="file" name="const_documents[]" class="form-control">');
                 });
 
-                console.log("#owner_info_name.val()",$("#owner_info_name").val());
                 if ($("#owner_info_name").val().trim() === "") {
                     $("#owner_info_name_error").text("owner's name field is required").show();
+                    allFieldsValid = false;
                 } else {
-                    $("#owner_info_name_error" + unique_id).hide();
+                    $("#owner_info_name_error").hide();
+                    // allFieldsValid = true;
                 }
 
                 if ($("#owner_contact_specific_no").val().trim() === "") {
                     $("#owner_contact_specific_no_error").text("contact field is required").show();
+                    allFieldsValid = false;
+
                 } else {
-                    $("#owner_contact_specific_no_error" + unique_id).hide();
+                    $("#owner_contact_specific_no_error").hide();
+                    // allFieldsValid = true;
                 }
 
                 if ($("#property_email").val().trim() === "") {
                     $("#property_email_error").text("email field is required").show();
+                    allFieldsValid = false;
+
                 } else {
-                    $("#property_email_error" + unique_id).hide();
+                    $("#property_email_error").hide();
+                    // allFieldsValid = true;
                 }
-                
+
                 if ($("#key_arrangement").val().trim() === "") {
                     $("#key_arrangement_error").text("key field is required").show();
                 } else {
