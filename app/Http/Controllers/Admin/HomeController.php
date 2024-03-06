@@ -638,9 +638,18 @@ class HomeController extends Controller
 	}
     
 	public function ProfileDetails(){
-		$user =  Auth::user()->id;
+		$login_user = Auth::user();
+
 		$plans = Subplans::get();
-		$user = User::with('Branch','State','City')->where('id',$user)->first();
+
+		if($login_user->parent_id) {
+			$user = User::with('Branch','State','city')->where('id',$login_user->id)->first();
+			$user->city_name = $user->city->name;
+		} else {
+			$user = User::with('Branch','State','superCity')->where('id',$login_user->id)->first();
+			$user->city_name = $user->superCity->name;
+		}
+
 		$user_count =  User::where('parent_id',Auth::User()->id)->orWhere('id',Auth::User()->id)->get()->count();
 		$cities = City::orderBy('name')->get()->toArray();
 		$states = State::orderBy('name')->get()->toArray();

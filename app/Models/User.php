@@ -140,4 +140,9 @@ class User extends Authenticatable
         }
         return $permissions;
     }
+
+	public function superCity()
+	{
+		return $this->belongsTo(SuperCity::class, 'city_id', 'id')->withTrashed();
+	}
 }

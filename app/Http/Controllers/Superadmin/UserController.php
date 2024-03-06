@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Api\Properties;
 use App\Models\Enquiries;
 use App\Models\Projects;
+use ArrayObject;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -37,29 +38,98 @@ class UserController extends Controller
 		return redirect('/admin');
 	}
 
+	public function customFilter($item, $searchTerm) {
+		if (isset($item)) {
+			return stripos($item, $searchTerm) !== false;
+		}
+		return false;
+	}
+
 	public function index(Request $request)
 	{
-		if ($request->ajax()) {
-			$data = User::whereNotNull('vendor_id')->with('Plan')->get();
-			return DataTables::of($data)
+		if ($request->ajax())
+		{
+			$admin_users = User::with(['Plan','State:id,name','city:id,name'])
+				->select([
+					'id',
+					'first_name',
+					'last_name',
+					'email',
+					'mobile_number',
+					'city_id',
+					'plan_id',
+					'state_id',
+					'role_id',
+					'status',
+				])
+				->whereNotNull('parent_id')
+				->where('role_id','!=',3)
+				->get();
+
+			$main_users = User::with(['Plan','State:id,name','superCity:id,name'])
+				->select([
+					'id',
+					'first_name',
+					'last_name',
+					'email',
+					'mobile_number',
+					'city_id',
+					'plan_id',
+					'state_id',
+					'role_id',
+					'status',
+				])
+				->where('role_id','!=',3)
+				->whereNull('parent_id')
+				->get();
+
+			$new_array = array_merge($admin_users->toArray(), $main_users->toArray());
+
+			$final_array = [];
+
+			foreach ($new_array as $user) {
+				$user['state_name'] = $user['state'] ? $user['state']['name'] : '';
+				if(array_key_exists('city',$user)) {
+					$user['city_name'] = $user['city'] ? $user['city']['name'] : '';
+					array_push($final_array, $user);
+				} else {
+					$user['city_name'] = $user['super_city'] ? $user['super_city']['name'] : '';
+					array_push($final_array, $user);
+				}
+			}
+
+			if($request->filter_value) {
+				$value = $request->filter_value;
+				if($request->filter_type == 'state') {
+					$final_array = array_filter($final_array, function ($item) use ($value) {
+						return $this->customFilter($item['state_name'], $value);
+					});
+				}
+				if($request->filter_type == 'city') {
+					$final_array = array_filter($final_array, function ($item) use ($value) {
+						return $this->customFilter($item['city_name'], $value);
+					});
+				}
+			}
+
+			return DataTables::of($final_array)
 				->editColumn('plan', function ($row) {
-					if (!empty($row->Plan->name)) {
-						return $row->Plan->name;
+					if (!empty($row['plan']['name'])) {
+						return $row['plan']['name'];
 					}
 				})
 				->editColumn('users', function ($row) {
-					return User::where('parent_id', $row->id)->whereNull('vendor_id')->get()->count();
+					return User::where('users.parent_id', $row['id'])->whereNull('users.vendor_id')->get()->count();
 				})
-
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" onclick=getUser(this) class="fa fa-pencil pointer fa fs-22 py-2 mx-2"></i>';
+					$buttons =  $buttons . '<i role="button" data-id="' . $row['id'] . '" onclick=getUser(this) class="fa fa-pencil pointer fa fs-22 py-2 mx-2"></i>';
 
-					if ($row->role_id != 3) {
-						if ($row->status) {
-							$buttons =  $buttons . ' <button data-id="' . $row->id . '" onclick=userActivate(this,0) class="btn" style="border-radius: 5px !important;background-color: red !important;color: white !important;" type="button">Deactivate</button>';
+					if ($row['role_id'] != 3) {
+						if ($row['status']) {
+							$buttons =  $buttons . ' <button data-id="' . $row['id'] . '" onclick=userActivate(this,0) class="btn" style="border-radius: 5px !important;background-color: red !important;color: white !important;" type="button">Deactivate</button>';
 						} else {
-							$buttons =  $buttons . ' <button data-id="' . $row->id . '" onclick=userActivate(this,1) class="btn" style="border-radius: 5px !important;background-color: green !important;color: white !important;" type="button">Activate</button>';
+							$buttons =  $buttons . ' <button data-id="' . $row['id'] . '" onclick=userActivate(this,1) class="btn" style="border-radius: 5px !important;background-color: green !important;color: white !important;" type="button">Activate</button>';
 						}
 					}
 					
@@ -69,7 +139,6 @@ class UserController extends Controller
 				->make(true);
 		}
 
-		// dd($url);
 		$roles =  Role::where('user_id')->get();
 		return view('superadmin.users.index', compact('roles'));
 	}

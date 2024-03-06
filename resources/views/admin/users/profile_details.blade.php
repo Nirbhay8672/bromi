@@ -157,7 +157,7 @@
                                                 <li>
                                                     <div class="icon"><i data-feather="heart"></i></div>
                                                     <div>
-                                                        <h5>{{ isset($user->City->name) ? $user->City->name : '' }}</h5>
+                                                        <h5>{{ isset($user->city_name) ? $user->city_name : '' }}</h5>
                                                     </div>
                                                 </li>
                                                 <li>
