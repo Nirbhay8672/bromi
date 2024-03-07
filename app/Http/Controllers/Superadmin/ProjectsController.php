@@ -23,53 +23,87 @@ use Yajra\DataTables\DataTables;
 
 class ProjectsController extends Controller
 {
+	public function customFilter($item, $searchTerm) {
+		if (isset($item)) {
+			return stripos($item, $searchTerm) !== false;
+		}
+		return false;
+	}
+
 	public function projects(Request $request)
 	{
 		if ($request->ajax()) {
 
 			$data = Projects::with('Area', 'Builder', 'City', 'State')->orderBy('id','desc')->get();
 
+			if($request->filter_value) {
+				$value = $request->filter_value;
+				if($request->filter_type == 'state') {
+					$data = array_filter($data->toArray(), function ($item) use ($value) {
+						if($item['state']) {
+							return $this->customFilter($item['state']['name'], $value);
+						}
+					});
+				}
+				if($request->filter_type == 'city') {
+					$data = array_filter($data->toArray(), function ($item) use ($value) {
+						if($item['city']){
+							return $this->customFilter($item['city']['name'], $value);
+						}
+					});
+				}
+			} else {
+				$data = $data->toArray();
+			}
+
 			return DataTables::of($data)
-				->editColumn('area', function ($row) {
-					if (isset($row->Area->name)) {
-						return $row->Area->name;
-					}
-					return '';
-				})
 				->editColumn('auth_id', function ($row) {
 					return Auth::user()->id;
 				})
+				->editColumn('state_name', function ($row) {
+					if (isset($row['state'])) {
+						return $row['state']['name'];
+					}
+					return '';
+				})
+				->editColumn('city_name', function ($row) {
+					if (isset($row['city'])) {
+						return $row['city']['name'];
+					}
+					return '';
+
+				})
 				->editColumn('builder_id', function ($row) {
-					if (isset($row->Builder->name)) {
-						return $row->Builder->name;
+					if (isset($row['builder']['name'])) {
+						return $row['builder']['name'];
 					}
 					return '';
 				})
 				->editColumn('select_checkbox', function ($row) {
 					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
-					<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
-					<label class="form-check-label" for="checkbox-primary-' . $row->id . '"></label>
+					<input class="form-check-input table_checkbox" data-id="' . $row['id'] . '" name="select_row[]" id="checkbox-primary-' . $row['id'] . '" type="checkbox">
+					<label class="form-check-label" for="checkbox-primary-' . $row['id'] . '"></label>
 					  </div>';
 					return $abc;
 				})
 				->editColumn('property_type', function ($row) {
-					if (!empty($row->property_type)) {
-						$drops = DropdownSettings::where('id', $row->property_type)->pluck('name')->toArray();
+					if (!empty($row['property_type'])) {
+						$drops = DropdownSettings::where('id', $row['property_type'])->pluck('name')->toArray();
 						return implode(',', $drops);
 					}
 					return '';
 				})
 				->editColumn('modified_at', function ($row) {
-					return Carbon::parse($row->updated_at)->format('d/m/Y');
+					return Carbon::parse($row['updated_at'])->format('d/m/Y');
 				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
 
-					if($row->user_id == Auth::user()->id) {
-						$buttons =  $buttons . '<a href="'.route('superadmin.project.edit',$row->id).'"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+					if($row['user_id'] == Auth::user()->id) {
+						$buttons =  $buttons . '<a href="'.route('superadmin.project.edit',$row['id']).'"><i role="button" title="Edit" data-id="' . $row['id'] . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
 					}
 
-					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProject(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';					
+					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row['id'] . '" onclick=deleteProject(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';					
 
 					return $buttons;
 				})

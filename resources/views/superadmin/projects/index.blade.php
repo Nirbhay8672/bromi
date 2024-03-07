@@ -13,26 +13,58 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Projects</h5>
-
-                            <div class="col">
-
-                                <a  
-                                    class="btn custom-icon-theme-button"
-                                    href="{{route('superadmin.project.add')}}"
-                                    title="Add Project"
-                                >
-                                    <i class="fa fa-plus"></i>
-                                </a>
-
-                                <button
-                                    class="btn text-white delete_table_row ms-3"
-                                    style="border-radius: 5px;display: none;background-color:red"
-                                    onclick="deleteTableRow()"
-                                    type="button"
-                                    title="Delete"
-                                ><i class="fa fa-trash"></i></button>
+                            
+                            <div class="row mt-3 mb-3 gy-3">
+                                <div style="width: 70px;">
+                                    <a  
+                                        class="btn custom-icon-theme-button"
+                                        href="{{route('superadmin.project.add')}}"
+                                        title="Add Project"
+                                    >
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                </div>
+                                <div class="col-12 col-lg-2 col-md-2">
+                                    <select
+                                        id="filter_type"
+                                        class="form-control"
+                                        style="border: 1px solid black;"
+                                        onchange="updateFilter()"
+                                    >
+                                        <option value="">-- Select filter --</option>
+                                        <option value="state">State</option>
+                                        <option value="city">City</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-lg-2 col-md-2">
+                                    <div class="fname">
+                                        <input
+                                            type="text"
+                                            id="filter_value"
+                                            class="form-control"
+                                            placeholder="Search ...."
+                                            onkeyup="filter()"
+                                            readonly
+                                        >
+                                    </div>
+                                </div>
+                                <div style="width: 150px;">
+                                    <button
+                                        class="btn custom-icon-theme-button"
+                                        type="button"
+                                        title="reset"
+                                        onclick="reset()"
+                                    ><i class="fa fa-recycle"></i>
+                                    </button>
+                                    <button
+                                        class="btn text-white delete_table_row ms-3"
+                                        style="border-radius: 5px;display: none;background-color:red"
+                                        onclick="deleteTableRow()"
+                                        type="button"
+                                        title="Delete"
+                                    ><i class="fa fa-trash"></i></button>
+                                </div>
                             </div>
-
                         </div>
                         <div class="card-body">
                             @if(Session::has('message'))
@@ -52,6 +84,8 @@
                                             </th>
                                             <th>Project</th>
                                             <th>Address</th>
+                                            <th>State</th>
+                                            <th>City</th>
                                             <th>Builder Name</th>
                                             <th>Property Type</th>
                                             <th>Modified On</th>
@@ -293,6 +327,39 @@
         <script>
             var shouldchangecity = 1;
             var building_image_show_url = "{{ asset('upload/building_images') }}";
+
+            function updateFilter() {
+                let filterOn = document.getElementById('filter_type');
+                let search_input = document.getElementById('filter_value');
+                search_input.value = '';
+
+                if(filterOn.value != '')
+                {
+                    search_input.readOnly = false;
+                    search_input.placeholder = `Search ${filterOn.value}`;
+                } else {
+                    search_input.readOnly = true;
+                    search_input.placeholder = 'Search ....';
+                }
+            }
+
+            function delayedFunction() {
+                $('#projectTable').DataTable().draw();
+            }
+
+            function filter() {
+                setTimeout(delayedFunction, 1000);
+            }
+
+            function reset() {
+                let filterOn = document.getElementById('filter_type');
+                let search_input = document.getElementById('filter_value');
+
+                search_input.value = '';
+                filterOn.value = '';
+                $('#projectTable').DataTable().draw();
+            }
+
             $(document).ready(function() {
 
                 var queryString = window.location.search;
@@ -316,7 +383,10 @@
                         }
                         $('#city_id').select2();
                     }
-                })
+                });
+
+                let filterOn = document.getElementById('filter_type');
+                let search_input = document.getElementById('filter_value');
 
                 $('#projectTable').DataTable({
                     processing: true,
@@ -326,6 +396,8 @@
                         data: function(d) {
                             d.go_data_id = go_data_id;
                             d.location = window.location.href;
+                            d.filter_type = filterOn.value;
+                            d.filter_value = search_input.value;
                         }
                     },
                     columns: [
@@ -339,11 +411,6 @@
                             name: 'project_name',
                             render : function ( data, type, row, meta ) {
                                 let project_data = row;
-                                
-                                // if(project_data.user_id == project_data.auth_id) {
-                                // } else {
-                                //     return data;    
-                                // }
 
                                 if(project_data.is_indirectly_store > 0) {
                                     return `<span style="cursor: pointer;" title="View after fill all data">${data}</span>`;
@@ -357,7 +424,14 @@
                         {
                             data: 'address',
                             name: 'address'
-                            
+                        },
+                        {
+                            data: 'state_name',
+                            name: 'state_name'
+                        },
+                        {
+                            data: 'city_name',
+                            name: 'city_name'
                         },
                         {
                             data: 'builder_id',
@@ -522,20 +596,6 @@
                 })
 				}
 			}
-
-
-
-            var uploadField = document.getElementById("building_images");
-
-            uploadField.onchange = function() {
-                if (this.files[0].size > 2097152) {
-                    uploadField.value = '';
-                    Swal.fire({
-                        title: "Maximum file size limit is 2MB",
-                        icon: "warning",
-                    })
-                };
-            };
 
             function deleteProject(data) {
                 Swal.fire({
