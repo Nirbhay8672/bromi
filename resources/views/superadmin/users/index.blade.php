@@ -54,9 +54,9 @@
                                 <button
                                     class="btn custom-icon-theme-button"
                                     type="button"
-                                    title="Filter"
+                                    title="reset"
                                     onclick="reset()"
-                                ><i class="fa fa-filter"></i>
+                                ><i class="fa fa-recycle"></i>
                                 </button>
                             </div>
                         </div>
