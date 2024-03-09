@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Builders;
 use App\Models\District;
 use App\Models\Projects;
+use App\Models\State;
 use App\Models\Taluka;
 use App\Models\TpScheme;
 use App\Models\User;
 use App\Models\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 use Throwable;
 use Yajra\DataTables\Facades\DataTables;
@@ -117,13 +116,24 @@ class Homecontroller extends Controller
 					'users.mobile_number',
 					'users.first_name AS builder_name',
 					'roles.name AS role_name',
+					'state.name AS state_name',
+					'super_cities.name AS city_name',
 				])
 				->where('roles.name', 'like', '%Builder%')
-				->get();
+				->join('state','state.id', 'users.state_id')
+				->join('super_cities','super_cities.id', 'users.city_id');
+
+			if($request->state_id > 0) {
+				$data->where('state.id', $request->state_id);
+			}
+
+			if($request->city_id > 0) {
+				$data->where('state.id', $request->city_id);
+			}
 			
 			$new_array = [];
 
-			foreach ($data as $user) {
+			foreach ($data->get() as $user) {
 				$project_count = Projects::where('user_id',$user['id'])->count();
 				$user['projects_count'] = $project_count;
 
@@ -133,6 +143,8 @@ class Homecontroller extends Controller
 			return DataTables::of($new_array)->make(true);
 		}
 
-		return view('superadmin.builder.index');
+		$states = State::with(['cities'])->where('user_id',6)->get();
+		
+		return view('superadmin.builder.index',compact('states'));
 	}
 }
