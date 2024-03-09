@@ -1,6 +1,6 @@
 @extends('superadmin.layouts.superapp')
 @section('content')
-    <div class="page-body">
+    <div class="page-body" x-data="area_index">
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
@@ -16,11 +16,68 @@
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Locality</h5>
 
-                            <button class="btn custom-icon-theme-button open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#areaModal"><i class="fa fa-plus"></i></button>
+                            <div class="row mt-3 mb-3 gy-3">
+                                <div style="width: 150px;">
+                                    <button
+                                        class="btn custom-icon-theme-button open_modal_with_this"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#areaModal"
+                                    ><i class="fa fa-plus"></i>
+                                    </button>
 
-                            <button class="btn delete_table_row ms-3" style="display: none;background-color:red;border-radius:5px;color:white;"
-                                onclick="deleteTableRow()" type="button"><i class="fa fa-trash"></i></button>
+                                    <button
+                                        class="btn delete_table_row ms-3"
+                                        style="display: none;background-color:red;border-radius:5px;color:white;"
+                                        onclick="deleteTableRow()"
+                                        type="button"
+                                    ><i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="col-12 col-lg-3 col-md-3">
+                                    <select
+                                        id="filter_state_id"
+                                        class="form-control"
+                                        style="border: 1px solid black;"
+                                        x-model="selected_state"
+                                        @change="selectState()"
+                                    >
+                                        <option value="">-- Select State --</option>
+                                        <template x-for="(state, index) in states" :key="`state_${index}`">
+                                            <option :value="state.id"><span x-text="state.name"></span></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-lg-3 col-md-3">
+                                    <select
+                                        id="filter_city_id"
+                                        class="form-control"
+                                        style="border: 1px solid black;"
+                                        x-model="selected_city"
+                                    >
+                                        <option value="">-- Select City --</option>
+                                        <template x-for="(city, index) in cities" :key="`city_${index}`">
+                                            <option :value="city.id"><span x-text="city.name"></span></option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div style="width: 150px;">
+                                    <button
+                                        class="btn custom-icon-theme-button"
+                                        type="button"
+                                        title="filter"
+                                        @click="filter()"
+                                    ><i class="fa fa-filter"></i>
+                                    </button>
+                                    <button
+                                        class="btn custom-icon-theme-button ms-2"
+                                        type="button"
+                                        title="reset"
+                                        @click="reset()"
+                                    ><i class="fa fa-recycle"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -112,6 +169,9 @@
         @endphp
     @endsection
     @push('scripts')
+
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        
         <script>
             var shouldchangecity = 1;
 
@@ -121,8 +181,11 @@
                 var states = @Json($state_encoded);
 
 				$("select").each(function(index) {
-					$(this).select2()
-				})
+					$(this).select2();
+				});
+
+                $('#filter_city_id').select2('destroy');
+                $('#filter_state_id').select2('destroy');
 
                 $(document).on('change', '#state_id', function(e) {
                     if (shouldchangecity) {
@@ -142,8 +205,10 @@
 
                 var queryString = window.location.search;
                 var urlParams = new URLSearchParams(queryString);
-                var go_data_id = urlParams.get('data_id')
+                var go_data_id = urlParams.get('data_id');
 
+                let state_id = document.getElementById('filter_state_id');
+                let city_id = document.getElementById('filter_city_id');
 
                 $('#areaTable').DataTable({
                     processing: true,
@@ -153,6 +218,8 @@
                         url: "{{ route('superadmin.settings.area') }}",
                         data: function(d) {
                             d.go_data_id = go_data_id;
+                            d.state_id = state_id.value ?? '';
+                            d.city_id = city_id.value ?? '';
                         },
                     },
                     columns: [{
@@ -206,7 +273,6 @@
                     }
                 });
             }
-
 
             $(document).on('change', '#select_all_checkbox', function(e) {
                 if ($(this).prop('checked')) {
@@ -270,7 +336,6 @@
                 }
             }
 
-
             function deleteArea(data) {
                 Swal.fire({
                     title: "Are you sure?",
@@ -322,5 +387,54 @@
                     }
                 });
             })
+
+            document.addEventListener('alpine:init', () => {
+
+                Alpine.data('area_index', () => ({
+
+                    init() {
+                        this.states = JSON.parse(@JSON(json_encode($states)));
+
+                        console.log(this.states);
+                    },
+
+                    states : [],
+                    cities : [],
+                    selected_state : null,
+                    selected_city : null,
+
+                    selectState() {
+                        
+                        this.selected_city = null;
+
+                        if(this.selected_state) {
+                            let obj = this.states.filter(state => state.id == this.selected_state);
+                            this.cities = obj[0].cities;
+                        } else {
+                            this.cities = [];
+                            this.selected_city = null;
+                        }
+                    },
+
+                    filter() {
+                        $('#areaTable').DataTable().draw();
+                    },
+
+                    reset() {
+                        this.cities = [];
+                        this.selected_state = null;
+                        this.selected_city = null;
+
+                        let state_id = document.getElementById('filter_state_id');
+                        let city_id = document.getElementById('filter_city_id');
+
+                        state_id.value = '';
+                        city_id.value = '';
+
+                        $('#areaTable').DataTable().draw();
+                    }
+                }));
+            });
+
         </script>
     @endpush

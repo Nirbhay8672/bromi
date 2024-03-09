@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Areas;
 use App\Models\State;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class SuperSettingController extends Controller
@@ -21,8 +20,19 @@ class SuperSettingController extends Controller
 	public function cities_index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = SuperCity::with('State')->orderBy('id','desc')->get();
-			return DataTables::of($data)
+
+			$data = SuperCity::join('state','state.id','super_cities.state_id')
+				->select([
+					'super_cities.id',
+					'super_cities.name',
+					'state.name AS state_name',
+				])->orderBy('super_cities.id','desc');
+
+			if($request->state_id > 0) {
+				$data->where('state.id', $request->state_id);
+			}
+
+			return DataTables::of($data->get())
 			->editColumn('select_checkbox', function ($row) {
 				$abc = '<div class="form-check checkbox checkbox-primary mb-0">
 				<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
@@ -31,8 +41,8 @@ class SuperSettingController extends Controller
 				return $abc;
 			})
 				->editColumn('state_id', function ($row) {
-					if (!empty($row->State->name)) {
-						return $row->State->name;
+					if (!empty($row->state_name)) {
+						return $row->state_name;
 					}
 					return '';
 				})
@@ -45,7 +55,9 @@ class SuperSettingController extends Controller
 				->rawColumns(['Actions','select_checkbox'])
 				->make(true);
 		}
-		$states = State::orderBy('name')->get();;
+
+		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
+
 		return view('superadmin.supersettings.super_city_index',compact('states'));
 	}
 
@@ -85,7 +97,25 @@ class SuperSettingController extends Controller
 	public function area_index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = SuperAreas::with('City', 'State')->orderBy('id','desc')->get();
+
+			$data = SuperAreas::join('super_cities','super_cities.id','super_areas.super_city_id')
+				->select([
+					'super_areas.id',
+					'super_areas.pincode',
+					'super_areas.name',
+					'state.name AS state_name',
+					'super_cities.name AS city_name',
+				])
+				->join('state','state.id', 'super_areas.state_id')
+				->orderBy('super_areas.id','desc');
+
+			if($request->state_id > 0) {
+				$data->where('state.id', $request->state_id);
+			}
+
+			if($request->city_id > 0) {
+				$data->where('super_cities.id', $request->city_id);
+			}
 
 			return DataTables::of($data)
 			->editColumn('select_checkbox', function ($row) {
@@ -96,14 +126,14 @@ class SuperSettingController extends Controller
 				return $abc;
 			})
 				->editColumn('city', function ($row) {
-					if (isset($row->City->name)) {
-						return $row->City->name;
+					if (isset($row->city_name)) {
+						return $row->city_name;
 					}
 					return '';
 				})
 				->editColumn('state', function ($row) {
-					if (isset($row->State->name)) {
-						return $row->State->name;
+					if (isset($row->state_name)) {
+						return $row->state_name;
 					}
 					return '';
 				})
@@ -118,7 +148,9 @@ class SuperSettingController extends Controller
 				->make(true);
 		}
 		$cities = SuperCity::orderBy('name')->get()->toArray();
-		$states = State::orderBy('name')->get()->toArray();
+
+		$states = State::with(['cities'])->where('user_id',Auth::user()->id)->get();
+		
 		return view('superadmin.supersettings.super_area_index', compact('cities', 'states'));
 	}
 

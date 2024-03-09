@@ -128,7 +128,7 @@ class Homecontroller extends Controller
 			}
 
 			if($request->city_id > 0) {
-				$data->where('state.id', $request->city_id);
+				$data->where('super_cities.id', $request->city_id);
 			}
 			
 			$new_array = [];

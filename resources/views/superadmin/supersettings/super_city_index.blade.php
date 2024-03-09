@@ -15,11 +15,40 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Cities</h5>
-                            <button class="btn custom-icon-theme-button open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#cityModal"><i class="fa fa-plus"></i></button>
 
-                            <button class="btn delete_table_row ms-3" style="display: none;background-color:red;border-radius:5px;color:white;"
-                                onclick="deleteTableRow()" type="button"><i class="fa fa-trash"></i></button>
+                            <div class="row mt-3 mb-3 gy-3">
+                                <div style="width: 70px;">
+                                    <button
+                                        class="btn custom-icon-theme-button open_modal_with_this"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cityModal"
+                                    ><i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="col-12 col-lg-3 col-md-3">
+                                    <select
+                                        id="state_id"
+                                        class="form-control"
+                                        style="border: 1px solid black;"
+                                        onclick="filter()"
+                                    >
+                                        <option value="">-- Select State --</option>
+                                        @foreach($states as $state)
+                                            <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div style="width: 70px;">
+                                    <button
+                                        class="btn delete_table_row ms-3"
+                                        style="display: none;background-color:red;border-radius:5px;color:white;"
+                                        onclick="deleteTableRow()"
+                                        type="button"
+                                    ><i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -92,10 +121,18 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
+
+                let state_id = document.getElementById('state_id');
+
                 $('#cityTable').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('superadmin.settings.city') }}",
+                    ajax: {
+                        url: "{{ route('superadmin.settings.city') }}",
+                        data: function(d) {
+                            d.state_id = state_id.value ?? '';
+                        }
+                    },
                     columns: [{
                             data: 'select_checkbox',
                             name: 'select_checkbox',
@@ -121,6 +158,11 @@
                     }],
                 });
             });
+
+
+            function filter() {
+                $('#cityTable').DataTable().draw();
+            }
 
             function getCity(data) {
                 $('#modal_form').trigger("reset");
