@@ -26,7 +26,7 @@ class SuperSettingController extends Controller
 					'super_cities.id',
 					'super_cities.name',
 					'state.name AS state_name',
-				])->orderBy('super_cities.id','desc');
+				])->orderBy('super_cities.id','desc')->where('user_id',Auth::user()->id);
 
 			if($request->state_id > 0) {
 				$data->where('state.id', $request->state_id);
@@ -107,7 +107,7 @@ class SuperSettingController extends Controller
 					'super_cities.name AS city_name',
 				])
 				->join('state','state.id', 'super_areas.state_id')
-				->orderBy('super_areas.id','desc');
+				->orderBy('super_areas.id','desc')->where('user_id',Auth::user()->id);
 
 			if($request->state_id > 0) {
 				$data->where('state.id', $request->state_id);
