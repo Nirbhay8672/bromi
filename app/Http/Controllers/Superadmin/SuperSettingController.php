@@ -117,7 +117,7 @@ class SuperSettingController extends Controller
 				$data->where('super_cities.id', $request->city_id);
 			}
 
-			return DataTables::of($data)
+			return DataTables::of($data->get())
 			->editColumn('select_checkbox', function ($row) {
 				$abc = '<div class="form-check checkbox checkbox-primary mb-0">
 				<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
