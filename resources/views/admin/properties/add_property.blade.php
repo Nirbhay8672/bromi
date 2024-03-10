@@ -2112,8 +2112,8 @@
                                                             <div>
                                                                 <label for="Email">Email</label>
                                                                 <input class="form-control" name="property_email"
-                                                                    id="property_email" type="email"
-                                                                    autocomplete="off">
+                                                                    id="property_email" type="text"
+                                                                    autocomplete="off" style="text-transform: lowercase;">
                                                             </div>
                                                             <div class="invalid-feedback" id="property_email_error"
                                                                 style="display: none;color:red;"></div>
@@ -2646,10 +2646,8 @@
 
 
             let isValid = true;
-            let penthouseConf,farmConf, plotConf,VillaCategory, villaConfiguration, flateConfiguration, landConfiguration,
-                    officeConf,
-                    retailConfiguration, storageConfiguration,
-                    theFor;
+            let penthouseConf, farmConf, landConfiguration, plotConf, VillaCategory, LandCategory, villaConfiguration,
+                flateConfiguration, officeConf, retailConfiguration, storageConfiguration, theFor;
             $(document).ready(function() {
                 // Initialize Select2 for all dropdowns
                 $('#project_id, #state_id, #area_id, #zone, #village_id, #taluka_id, #district_id, #state-dropdown')
@@ -2674,8 +2672,6 @@
                     $(errorSelector).toggle(!isValid).text(errorMessage);
                     return isValid;
                 }
-
-                
 
                 //office_type
                 $(document).on('change', 'input[name=office_type]', function() {
@@ -2710,6 +2706,12 @@
                     }
                 });
 
+                //strg cat
+                $(document).on('change', '[name="property_category"]', function(e) {
+                    storageCategory = $(this).attr('data-val') === 'Storage/industrial'
+                    console.log("storageCategory ==", storageCategory);
+                });
+
                 // Land.
                 $(document).on('change', 'input[name=plot_type]', function() {
                     plot_type_val = $(this).attr('data-val');
@@ -2718,6 +2720,12 @@
                         landConfiguration = $('input[name=plot_type]:checked').val();
                         console.log("landConfiguration ==", landConfiguration);
                     }
+                });
+
+                //land cat
+                $(document).on('change', '[name="property_category"]', function(e) {
+                    LandCategory = $(this).attr('data-val') === 'Land'
+                    console.log("LandCategory ==", LandCategory);
                 });
 
                 // Flate and Penthouse
@@ -2741,8 +2749,8 @@
                     }
                 });
 
-                 //villa cat
-                 $(document).on('change', '[name="property_category"]', function(e) {
+                //villa cat
+                $(document).on('change', '[name="property_category"]', function(e) {
                     VillaCategory = $(this).attr('data-val') === 'Vila/Bunglow'
                     console.log("VillaCategory ==", VillaCategory);
                 });
@@ -2773,6 +2781,12 @@
                                 'Salable Area filed is required') &&
                             isValid;
                     }
+                    if (VillaCategory || farmConf) {
+                        isValid = validateField('#constructed_salable_area', '#constructed_salable_area_error',
+                            'constructed salable area field is required') && isValid;
+                        isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
+                            'Salable plot area field is required') && isValid;
+                    }
                     // if (officeConf || flateConfiguration) {
                     //     isValid = validateField('#property_on_floors', '#property_on_floors_error',
                     //         'units floor field is required') && isValid;
@@ -2787,12 +2801,7 @@
                     //     isValid = validateField('#entrance_width', '#entrance_width_error',
                     //         'entrance width field is required') && isValid;
                     // }
-                    if (villaConfiguration || farmConf) {
-                        isValid = validateField('#constructed_salable_area', '#constructed_salable_area_error',
-                            'constructed salable area field is required') && isValid;
-                        isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
-                            'Salable plot area field is required') && isValid;
-                    }
+                   
                     // if (storageConfiguration == '7' || storageConfiguration == '8' || storageConfiguration == '9') {
                     //     isValid = validateField('#constructed_salable_area', '#constructed_salable_area_error',
                     //         'constructed salable area field is required') && isValid;
@@ -4494,7 +4503,8 @@
                         furnisheditem2.push(Number($(this).prop('checked')));
                     })
 
-                    if (pricerent.trim() === "") {
+                    if (!plotConf && (!LandCategory && pricerent.trim() === "")) {
+                        console.log("44");
                         $("#price_rent_error_" + unique_id).text("price rent field is required").show();
                         allFieldsValid = false;
                     } else {
@@ -4502,30 +4512,33 @@
                         console.log("4");
                     }
 
-                    if (furnished.trim() === "") {
+                    if (!plotConf && !storageCategory && !LandCategory && furnished.trim() === "") {
+                        console.log("55");
                         $("#furnished_status_error_" + unique_id).text("furnished field is required").show();
                         allFieldsValid = false;
                     } else {
                         $("#furnished_status_error_" + unique_id).hide();
                         console.log("5");
-
                     }
-                    if (!farmConf || VillaCategory === false || !plotConf) {
-                        console.log(":is not farm, vila, plot");
+
+                    if (penthouseConf || retailConfiguration || flateConfiguration || officeConf ||
+                        storageConfiguration) {
+                        console.log(":is not farm, vila, plot", penthouseConf, retailConfiguration,
+                            flateConfiguration, officeConf, LandCategory);
                         if (wing.trim() === "") {
+                            console.log("66");
                             $("#wing_no_error_" + unique_id).text("Wing field is required").show();
                             allFieldsValid = false;
                         } else {
                             $("#wing_no_error_" + unique_id).hide();
                             console.log("6");
-
                         }
                     } else {
-                        console.log(":is farm, villa, plot",);
+                        console.log("wing else  :");
                     }
 
-
-                    if (unit.trim() === "") {
+                    if (!LandCategory && unit.trim() === "") {
+                        console.log("77");
                         $("#unit_no__error_" + unique_id).text("unit field is required").show();
                         allFieldsValid = false;
                     } else {
@@ -4533,6 +4546,7 @@
                         console.log("7");
 
                     }
+
 
                     cona_arr.push(wing)
                     cona_arr.push(name)
@@ -4601,7 +4615,6 @@
                     .map(function() {
                         return $(this).val();
                     }).get();
-                console.log("other_contact :".other_contact);
                 var position = $("input[id='position']")
                     .map(function() {
                         return $(this).val();

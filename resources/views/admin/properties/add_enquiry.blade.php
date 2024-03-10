@@ -81,8 +81,7 @@
                                                             <div class="fname">
                                                                 <label for="Email">Email</label>
                                                                 <input class="form-control" name="client_email"
-                                                                    id="client_email" type="email" autocomplete="off"
-                                                                    required>
+                                                                    id="client_email" type="text" autocomplete="off" style="text-transform: lowercase;">
                                                             </div>
                                                             <div class="invalid-feedback" id="client_email_error"
                                                                 style="display: block;color:red;"></div>
@@ -212,7 +211,7 @@
                                                                 @endforelse
                                                             </div>
                                                             <div class="invalid-feedback" id="property_category_error"
-                                                            style="display: block;color:red;"></div>
+                                                                style="display: block;color:red;"></div>
                                                         </div>
                                                     </div>
 
@@ -1019,54 +1018,59 @@
             function validateForm() {
                 isValid = true;
                 isValid = validateField('#client_name', '#client_name_error', 'client name field is required') && isValid;
-                validateMobileNumber('#client_mobile', '#client_mobile_error', 'Client mobile field is required', 'Invalid mobile number format');
-
+                validateMobileNumber('#client_mobile', '#client_mobile_error', 'Client mobile field is required',
+                    'Invalid mobile number format');
                 // isValid = validateField('#client_email', '#client_email_error', 'client email field is required') && isValid;
-                isValid = validateEmail('#client_email', '#client_email_error', 'client email field is required') && isValid;
-   
+                isValid = validateEmail('#client_email', '#client_email_error', 'Client email field is required',
+                    'Invalid email format') && isValid;
+
                 return isValid;
             }
 
             function validateMobileNumber(field, errorField, requiredErrorMessage, invalidErrorMessage) {
-    var value = $(field).val().trim();
-    var isValidMobileNumber = /^\d{10}$/.test(value);
+                var value = $(field).val().trim();
+                var isValidMobileNumber = /^\d{10}$/.test(value);
 
-    if (value === '') {
-        $(errorField).text(requiredErrorMessage);
-    } else if (!isValidMobileNumber) {
-        $(errorField).text(invalidErrorMessage);
-    } else {
-        $(errorField).text('');
-    }
+                if (value === '') {
+                    $(errorField).text(requiredErrorMessage);
+                } else if (!isValidMobileNumber) {
+                    $(errorField).text(invalidErrorMessage);
+                } else {
+                    $(errorField).text('');
+                }
 
-    $(field).toggleClass('is-invalid', value === '' || !isValidMobileNumber);
-    return value !== '' && isValidMobileNumber;
-}
+                $(field).toggleClass('is-invalid', value === '' || !isValidMobileNumber);
+                return value !== '' && isValidMobileNumber;
+            }
 
 
-            function validateEmail(field, errorField, errorMessage) {
-    var value = $(field).val().trim();
-    var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    $(errorField).text(isValidEmail ? '' : errorMessage);
-    $(field).toggleClass('is-invalid', !isValidEmail);
-    return isValidEmail;
-}
+            function validateEmail(field, errorField, requiredMessage, invalidFormatMessage) {
+                var value = $(field).val().trim();
+                var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                if (value === "") {
+                    $(errorField).text(requiredMessage);
+                } else {
+                    $(errorField).text(isValidEmail ? '' : invalidFormatMessage);
+                }
+                $(field).toggleClass('is-invalid', (!isValidEmail || value === ""));
+                return (value === "" || isValidEmail);
+            }
 
-function validateNumericField(field, errorField, errorMessage) {
-    var value = $(field).val().trim();
-    var isValidNumeric = /^\d+$/.test(value);
+            function validateNumericField(field, errorField, errorMessage) {
+                var value = $(field).val().trim();
+                var isValidNumeric = /^\d+$/.test(value);
 
-    if (value === '') {
-        $(errorField).text(errorMessage);
-    } else if (!isValidNumeric) {
-        $(errorField).text('Please enter a valid numeric value');
-    } else {
-        $(errorField).text('');
-    }
+                if (value === '') {
+                    $(errorField).text(errorMessage);
+                } else if (!isValidNumeric) {
+                    $(errorField).text('Please enter a valid numeric value');
+                } else {
+                    $(errorField).text('');
+                }
 
-    $(field).toggleClass('is-invalid', value === '' || !isValidNumeric);
-    return value !== '' && isValidNumeric;
-}
+                $(field).toggleClass('is-invalid', value === '' || !isValidNumeric);
+                return value !== '' && isValidNumeric;
+            }
 
             function validateStep2Form() {
                 isValid = true;
@@ -1077,7 +1081,7 @@ function validateNumericField(field, errorField, errorMessage) {
                 // isValid = validateField('#area_to', '#area_to_error', 'area to field is required') && isValid;
                 isValid = validateNumericField('#area_from', '#area_from_error', 'Area from field is required') && isValid;
                 isValid = validateNumericField('#area_to', '#area_to_error', 'Area to field is required') && isValid;
-   
+
                 isValid = validateField('#budget_from', '#budget_from_error', 'budget from field is required') && isValid;
                 isValid = validateField('#budget_to', '#budget_to_error', 'budget to field is required') && isValid;
                 // isValid = validateSelect2('#purpose', '#purpose_error', 'purpose field is required') && isValid;
@@ -1128,13 +1132,13 @@ function validateNumericField(field, errorField, errorMessage) {
                     if ($('input[name="property_type"]:checked').length > 0) {
                         $("#property_type_error").hide().text("requirement field is requierd");
 
-                    }else{
+                    } else {
                         $("#property_type_error").show().text("requirement field is requierd");
                     }
 
                     if ($('input[name="property_category"]:checked').length > 0) {
                         $("#property_category_error").hide().text("category field is requierd");
-                    }else{
+                    } else {
                         $("#property_category_error").show().text("category field is requierd");
                     }
 
@@ -2106,12 +2110,6 @@ function validateNumericField(field, errorField, errorMessage) {
 
             $('#modal_form').validate({ // initialize the plugin
                 rules: {
-                    client_name: {
-                        required: true,
-                    },
-                    client_email: {
-                        email: true,
-                    },
                     area_size_from: {
                         digits: true,
                     },
