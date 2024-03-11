@@ -2646,8 +2646,8 @@
 
 
             let isValid = true;
-            let penthouseConf, farmConf, landConfiguration, plotConf, VillaCategory, LandCategory, villaConfiguration,
-                flateConfiguration, officeConf, retailConfiguration, storageConfiguration, theFor;
+            let penthouseConf, farmConf, landConfiguration, plotConf, VillaCategory, landCategory, villaConfiguration,
+                flateConfiguration, officeConf, retailConfiguration, storageConfiguration, theForLand;
             $(document).ready(function() {
                 // Initialize Select2 for all dropdowns
                 $('#project_id, #state_id, #area_id, #zone, #village_id, #taluka_id, #district_id, #state-dropdown')
@@ -2724,8 +2724,8 @@
 
                 //land cat
                 $(document).on('change', '[name="property_category"]', function(e) {
-                    LandCategory = $(this).attr('data-val') === 'Land'
-                    console.log("LandCategory ==", LandCategory);
+                    landCategory = $(this).attr('data-val') === 'Land'
+                    console.log("landCategory ==", landCategory);
                 });
 
                 // Flate and Penthouse
@@ -2777,11 +2777,13 @@
                     isValid = true;
 
                     if (flateConfiguration || plotConf || officeConf || retailConfiguration) {
+                        console.log("enter in salable area ==");
                         isValid = validateField('#salable_area', '#salable_area_error',
                                 'Salable Area filed is required') &&
                             isValid;
                     }
                     if (VillaCategory || farmConf) {
+                        console.log("enter in const salable ==");
                         isValid = validateField('#constructed_salable_area', '#constructed_salable_area_error',
                             'constructed salable area field is required') && isValid;
                         isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
@@ -2829,6 +2831,7 @@
 
                     // }
                     if (storageConfiguration) {
+                        console.log("enter in storage center ==");
                         // isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
                         //     'Salable plot area field is required') && isValid;
                         isValid = validateField('#storage_centre_height', '#storage_centre_height_error',
@@ -2871,10 +2874,10 @@
                     return isValid;
                 }
 
-                // Update theFor when plot_type is clicked
+                // Update theForLand when plot_type is clicked
                 $(document).on('change', 'input[name=plot_type]', function() {
-                    theFor = $(this).attr('data-val');
-                    console.log("theFor select dropdown val ==", theFor);
+                    theForLand = $(this).attr('data-val');
+                    console.log("theForLand select dropdown val ==", theForLand);
                 });
 
                 // Validation on 2ndstep submit
@@ -2884,10 +2887,12 @@
                     // var isValid = true;
                     var isValid = validateForm();
                     if (stateLength > 2) {
+                        console.log("enter in state ==");
                         isValid = validateDropdown($('#state_id'), $('#state_id_error'),
                             'State field is required.') && isValid;
                     }
-                    if (theFor !== 'commercial' || theFor !== 'agriculture') {
+                    if (!landCategory) {
+                        console.log("enter in project ==");
                         isValid = validateDropdown($('#project_id'), $('#project_id_error'),
                             'project field is required.') && isValid;
                     }
@@ -2901,7 +2906,8 @@
                     // isValid = validateDropdown($('#Property_priority'), $('#Property_priority_error'),
                     //     'property priority field is required.') && isValid;
 
-                    if (theFor === 'commercial' || theFor === 'agriculture' || farmConf) {
+                    if (theForLand === 'commercial' || theForLand === 'agriculture' || farmConf) {
+                        console.log("enter in zone-vlg-taluka-dist ==");
                         isValid = validateDropdown($('#zone'), $('#zone_id_error'),
                             'Zone field is required') && isValid;
                         isValid = validateDropdown($('#village_id'), $('#village_id_error'),
@@ -4503,7 +4509,7 @@
                         furnisheditem2.push(Number($(this).prop('checked')));
                     })
 
-                    if (!plotConf && (!LandCategory && pricerent.trim() === "")) {
+                    if (!plotConf && (!landCategory && pricerent.trim() === "")) {
                         console.log("44");
                         $("#price_rent_error_" + unique_id).text("price rent field is required").show();
                         allFieldsValid = false;
@@ -4512,7 +4518,7 @@
                         console.log("4");
                     }
 
-                    if (!plotConf && !storageCategory && !LandCategory && furnished.trim() === "") {
+                    if (!plotConf && !storageCategory && !landCategory && furnished.trim() === "") {
                         console.log("55");
                         $("#furnished_status_error_" + unique_id).text("furnished field is required").show();
                         allFieldsValid = false;
@@ -4524,7 +4530,7 @@
                     if (penthouseConf || retailConfiguration || flateConfiguration || officeConf ||
                         storageConfiguration) {
                         console.log(":is not farm, vila, plot", penthouseConf, retailConfiguration,
-                            flateConfiguration, officeConf, LandCategory);
+                            flateConfiguration, officeConf, landCategory);
                         if (wing.trim() === "") {
                             console.log("66");
                             $("#wing_no_error_" + unique_id).text("Wing field is required").show();
@@ -4537,7 +4543,7 @@
                         console.log("wing else  :");
                     }
 
-                    if (!LandCategory && unit.trim() === "") {
+                    if (!landCategory && unit.trim() === "") {
                         console.log("77");
                         $("#unit_no__error_" + unique_id).text("unit field is required").show();
                         allFieldsValid = false;
