@@ -3,9 +3,40 @@
 @endphp
 <?php
 use Illuminate\Support\Facades\DB;
-    $str = $property->salable_area;
-    $salableArray=explode("_-||-_",$str);
-    $land_units=DB::table('land_units')->where('id',$salableArray[1])->first();
+       $units=DB::table('land_units')->get();
+    
+    $salableArray=explode("_-||-_",$property->salable_area);
+    $land_units=$units->where('id',$salableArray[1])->first();
+    
+    
+    $carpetArray=explode("_-||-_",$property->carpet_area);
+    $carpet_units=$units->where('id',$carpetArray[1])->first();
+    
+    $carpet_plotArray=explode("_-||-_",$property->carpet_plot_area);
+    $carpet_plot_units=$units->where('id',$carpet_plotArray[1])->first();
+ 
+    $salable_plotArray=explode("_-||-_",$property->salable_plot_area);
+    $salable_plot_units=$units->where('id',$salable_plotArray[1])->first();
+    
+    $constructed_salableArray=explode("_-||-_",$property->constructed_salable_area);
+    $constructed_salable_units=$units->where('id',$constructed_salableArray[1])->first();
+    
+    $constructed_carpetArray=explode("_-||-_",$property->constructed_carpet_area);
+    $constructed_carpet_units=$units->where('id',$constructed_carpetArray[1])->first();
+    
+    $constructed_builtupArray=explode("_-||-_",$property->constructed_builtup_area);
+    $constructed_builtup_units=$units->where('id',$constructed_builtupArray[1])->first();
+    
+    $builtupArray=explode("_-||-_",$property->builtup_area);
+    $builtup_units=$units->where('id',$builtupArray[1])->first();
+    $getBuiltup=$builtupArray[0].' ' .$builtup_units->unit_name;
+    // dd($builtupArray[0],$builtup_units->unit_name);
+    
+    $terrace_carpetArray=explode("_-||-_",$property->terrace_carpet_area);
+    $terrace_carpet_units=$units->where('id',$terrace_carpetArray[1])->first();
+    
+    $terrace_salableArray=explode("_-||-_",$property->terrace_salable_area);
+    $terrace_salable_units=$units->where('id',$terrace_salableArray[1])->first();
 
 ?>
 @extends('admin.layouts.app')
@@ -211,7 +242,7 @@ use Illuminate\Support\Facades\DB;
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_53">
 
-                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                <div>:{{$carpetArray[0]}} {{ $carpet_units->unit_name}}
                                                                     {{-- @if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name']))
                                                                         {{ explode('_-||-_', $property->carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name'] }}
                                                                     @endif --}}
@@ -235,7 +266,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Carpet Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_55">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$carpet_plotArray[0]}} {{ $carpet_plot_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -246,7 +277,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Salable Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_56">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$salable_plotArray[0]}} {{ $salable_plot_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -257,7 +288,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Constructed Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_57">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$constructed_salableArray[0]}} {{ $constructed_salable_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -268,7 +299,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Constructed Carpet Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_58">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$constructed_carpetArray[0]}} {{ $constructed_carpet_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -279,7 +310,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Constructed Builtup Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_59">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$constructed_builtupArray[0]}} {{ $constructed_builtup_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -290,7 +321,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Builtup Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_60">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$builtupArray[0]}}   {{$builtup_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -302,7 +333,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Terrace Carpet Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_61">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$terrace_carpetArray[0]}} {{ $terrace_carpet_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -313,7 +344,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Terrace Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_62">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$terrace_salableArray[0]}} {{ $terrace_salable_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -1479,7 +1510,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Carpet Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_55">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$carpet_plotArray[0]}} {{ $carpet_plot_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -1490,7 +1521,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Salable Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_56">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$salable_plotArray[0]}} {{ $salable_plot_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -1501,7 +1532,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Constructed Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_57">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$constructed_salableArray[0]}} {{ $constructed_salable_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -1512,7 +1543,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Constructed Carpet Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_58">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$constructed_carpetArray[0]}} {{ $constructed_carpet_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -1523,7 +1554,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Constructed Builtup Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_59">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$constructed_builtupArray[0]}} {{ $constructed_builtup_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -1534,7 +1565,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Builtup Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_60">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$builtupArray[0]}}  {{$builtup_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -1546,7 +1577,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Terrace Carpet Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_61">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$terrace_carpetArray[0]}} {{ $terrace_carpet_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name'] }}
                                                                 @endif --}}
@@ -1557,7 +1588,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Terrace Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_62">:
-                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{$terrace_salableArray[0]}} {{ $terrace_salable_units->unit_name}}
                                                                 {{-- @if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name'] }}
                                                                 @endif --}}
