@@ -74,7 +74,7 @@ class EnquiriesController extends Controller
 				return ($var['name'] == 'only-assigned');
 			});
 			
-			if (count($new) > 0 &&  $user->role_id !== '1') {
+			if (count($new) > 0 &&  $user->role_id !== 1) {
                 // dd("0nn");
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {

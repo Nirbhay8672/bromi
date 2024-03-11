@@ -1,3 +1,9 @@
+
+<?php
+use Illuminate\Support\Facades\DB;
+    $measurement=DB::table('land_units')->where('id',$data->area_from_measurement)->first();
+
+?>
 @extends('admin.layouts.app')
 @section('content')
     <div class="page-body">
@@ -239,11 +245,15 @@
                                                         <div class="form-group col-4 m-b-10 data_conent_11">
                                                             <h6><b>Area</b></h6>
                                                         </div>
+                                                        {{-- @dd($data); --}}
                                                         <div class="form-group col-8 m-b-10 data_conent_11">
                                                             <div>:
                                                                 {{ $data->area_from . ' to' }}
 
-                                                                {{ $data->area_to . ' ' . (isset($dropdowns[$data->area_to_measurement]['name']) ? $dropdowns[$data->area_to_measurement]['name'] : '') }}
+                                                                {{ $data->area_to . ' '}} {{$measurement->unit_name}}
+                                                                {{-- {{ $data->area_from . ' to' }}
+
+                                                                {{ $data->area_to . ' ' . (isset($dropdowns[$data->area_to_measurement]['name']) ? $dropdowns[$data->area_to_measurement]['name'] : '') }} --}}
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_12">

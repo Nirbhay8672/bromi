@@ -1,6 +1,13 @@
 @php
     $type = isset($dropdowns[$property->property_category]['name']) ? $dropdowns[$property->property_category]['name'] : '';
 @endphp
+<?php
+use Illuminate\Support\Facades\DB;
+    $str = $property->salable_area;
+    $salableArray=explode("_-||-_",$str);
+    $land_units=DB::table('land_units')->where('id',$salableArray[1])->first();
+
+?>
 @extends('admin.layouts.app')
 @section('content')
     <div class="page-body">
@@ -204,10 +211,10 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_53">
 
-                                                                <div>:
-                                                                    @if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name']))
+                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                    {{-- @if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name']))
                                                                         {{ explode('_-||-_', $property->carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name'] }}
-                                                                    @endif
+                                                                    @endif --}}
                                                                 </div>
                                                             </div>
                                                         @endif
@@ -216,10 +223,11 @@
                                                                 <h6><b>Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_54">:
-
-                                                                @if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name']))
+                                                               
+                                                               {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Plot' || $type == 'Farmhouse')
@@ -227,10 +235,10 @@
                                                                 <h6><b>Carpet Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_55">:
-
-                                                                @if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
@@ -238,9 +246,10 @@
                                                                 <h6><b>Salable Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_56">:
-                                                                @if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
@@ -248,10 +257,10 @@
                                                                 <h6><b>Constructed Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_57">:
-
-                                                                @if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
@@ -259,10 +268,10 @@
                                                                 <h6><b>Constructed Carpet Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_58">:
-
-                                                                @if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Vila/Bunglow' || $type == 'Farmhouse')
@@ -270,10 +279,10 @@
                                                                 <h6><b>Constructed Builtup Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_59">:
-
-                                                                @if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Penthouse' || $type == 'Flat')
@@ -281,10 +290,10 @@
                                                                 <h6><b>Builtup Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_60">:
-
-                                                                @if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
 
@@ -293,10 +302,10 @@
                                                                 <h6><b>Terrace Carpet Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_61">:
-
-                                                                @if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Penthouse' || ($type == 'Flat' && $property->is_terrace != 0))
@@ -304,10 +313,10 @@
                                                                 <h6><b>Terrace Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_62">:
-
-                                                                @if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Farmhouse' || $type == 'Land')
@@ -725,10 +734,10 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_45">
 
-                                                                <div>:
-                                                                    @if (!empty(explode('_-||-_', $property->survey_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name']))
+                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                    {{-- @if (!empty(explode('_-||-_', $property->survey_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name']))
                                                                         {{ explode('_-||-_', $property->survey_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name'] }}
-                                                                    @endif
+                                                                    @endif --}}
                                                                 </div>
                                                             </div>
 
@@ -764,10 +773,10 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_49">
 
-                                                                <div>:
-                                                                    @if (!empty(explode('_-||-_', $property->fp_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name']))
-                                                                        {{ explode('_-||-_', $property->fp_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name'] }}
-                                                                    @endif
+                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                    {{-- @if (!empty(explode('_-||-_', $property->fp_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name']))
+                                                                        {{ explode('_-||-_', $property->fp_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name'] }} --}}
+                                                                    {{-- @endif --}}
                                                                 </div>
                                                             </div>
 
@@ -1447,10 +1456,10 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_53">
 
-                                                                <div>:
-                                                                    @if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name']))
+                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                    {{-- @if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name']))
                                                                         {{ explode('_-||-_', $property->carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name'] }}
-                                                                    @endif
+                                                                    @endif --}}
                                                                 </div>
                                                             </div>
                                                         @endif
@@ -1459,10 +1468,10 @@
                                                                 <h6><b>Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_54">:
-
-                                                                @if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Plot' || $type == 'Farmhouse')
@@ -1470,10 +1479,10 @@
                                                                 <h6><b>Carpet Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_55">:
-
-                                                                @if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
@@ -1481,10 +1490,10 @@
                                                                 <h6><b>Salable Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_56">:
-
-                                                                @if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
@@ -1492,10 +1501,10 @@
                                                                 <h6><b>Constructed Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_57">:
-
-                                                                @if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
@@ -1503,10 +1512,10 @@
                                                                 <h6><b>Constructed Carpet Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_58">:
-
-                                                                @if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Vila/Bunglow' || $type == 'Farmhouse')
@@ -1514,10 +1523,10 @@
                                                                 <h6><b>Constructed Builtup Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_59">:
-
-                                                                @if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Penthouse' || $type == 'Flat')
@@ -1525,10 +1534,10 @@
                                                                 <h6><b>Builtup Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_60">:
-
-                                                                @if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
 
@@ -1537,10 +1546,10 @@
                                                                 <h6><b>Terrace Carpet Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_61">:
-
-                                                                @if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Penthouse' || ($type == 'Flat' && $property->is_terrace != 0))
@@ -1548,10 +1557,10 @@
                                                                 <h6><b>Terrace Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_62">:
-
-                                                                @if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name']))
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                {{-- @if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name']))
                                                                     {{ explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name'] }}
-                                                                @endif
+                                                                @endif --}}
                                                             </div>
                                                         @endif
                                                         @if ($type == 'Farmhouse' || $type == 'Land')
@@ -1949,10 +1958,10 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_45">
 
-                                                                <div>:
-                                                                    @if (!empty(explode('_-||-_', $property->survey_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name']))
+                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                    {{-- @if (!empty(explode('_-||-_', $property->survey_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name']))
                                                                         {{ explode('_-||-_', $property->survey_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name'] }}
-                                                                    @endif
+                                                                    @endif --}}
                                                                 </div>
                                                             </div>
 
@@ -1988,10 +1997,10 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_49">
 
-                                                                <div>:
-                                                                    @if (!empty(explode('_-||-_', $property->fp_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name']))
+                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                    {{-- @if (!empty(explode('_-||-_', $property->fp_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name']))
                                                                         {{ explode('_-||-_', $property->fp_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name'] }}
-                                                                    @endif
+                                                                    @endif --}}
                                                                 </div>
                                                             </div>
 
