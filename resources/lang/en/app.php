@@ -112,8 +112,6 @@ return [
 
     "Please_enter_a_email_address" => "Please enter a email address",
 
-    'Please_enter_a_valid_email_address' => "Please enter a valid email address",
-
     "This_email_is_already_taken" => "This email address is already exists",
 
     "Please_enter_a_password" => "Please enter a password",
