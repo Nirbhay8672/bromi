@@ -14,12 +14,39 @@
                 <div class="card">
                     <div class="card-header pb-0">
                         <h5 class="mb-3">List of Talukas</h5>
-
-                        <button class="btn custom-icon-theme-button open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#talukaModal"><i class="fa fa-plus"></i></button>
-
-                        <button class="btn delete_table_row ms-3" style="display: none;background-color:red;border-radius:5px;color:white;"
-                                onclick="deleteTableRow()" type="button"><i class="fa fa-trash"></i></button>
+                        <div class="row mt-3 mb-3 gy-3">
+                            <div style="width: 70px;">
+                                <button
+                                    class="btn custom-icon-theme-button open_modal_with_this"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#talukaModal"
+                                ><i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="col-12 col-lg-3 col-md-3">
+                                <select
+                                    id="district_id"
+                                    class="form-control"
+                                    style="border: 1px solid black;"
+                                    onclick="filter()"
+                                >
+                                    <option value="">-- Select District --</option>
+                                    @foreach($districts as $district)
+                                        <option value="{{ $district->id }}">{{ $district->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div style="width: 70px;">
+                                <button
+                                    class="btn delete_table_row ms-3"
+                                    style="display: none;background-color:red;border-radius:5px;color:white;"
+                                    onclick="deleteTableRow()"
+                                    type="button"
+                                ><i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -86,10 +113,18 @@
     @push('scripts')
     <script>
         $(document).ready(function() {
+
+            let district_id = document.getElementById('district_id');
+
             $('#talukaTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('superadmin.settings.taluka') }}",
+                ajax: {
+                    url: "{{ route('superadmin.settings.taluka') }}",
+                    data: function(d) {
+                        d.district_id = district_id.value ?? '';
+                    }
+                },
                 columns: [{
                         data: 'select_checkbox',
                         name: 'select_checkbox',
@@ -115,6 +150,11 @@
                 }],
             });
         });
+
+        function filter() {
+            $('#talukaTable').DataTable().draw();
+        }
+
 
         function getCity(data) {
             $('#modal_form').trigger("reset");

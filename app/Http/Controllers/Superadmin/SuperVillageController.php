@@ -19,7 +19,16 @@ class SuperVillageController extends Controller
 	public function village_index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = SuperVillages::with('Taluka', 'District')->orderBy('id', 'desc')->get();
+
+			$data = SuperVillages::join('super_talukas','super_talukas.id','super_villages.super_taluka_id')
+				->select([
+					'super_villages.id',
+					'super_villages.name',
+					'super_talukas.name AS taluka_name',
+					'district.name AS district_name',
+				])
+				->join('district','district.id', 'super_talukas.district_id')
+				->orderBy('super_villages.id','desc');
 
 			return DataTables::of($data)
 				->editColumn('select_checkbox', function ($row) {
@@ -30,14 +39,14 @@ class SuperVillageController extends Controller
 					return $abc;
 				})
 				->editColumn('taluka', function ($row) {
-					if (isset($row->Taluka->name)) {
-						return $row->Taluka->name;
+					if (isset($row->taluka_name)) {
+						return $row->taluka_name;
 					}
 					return '';
 				})
 				->editColumn('district', function ($row) {
-					if (isset($row->District->name)) {
-						return $row->District->name;
+					if (isset($row->district_name)) {
+						return $row->district_name;
 					}
 					return '';
 				})
