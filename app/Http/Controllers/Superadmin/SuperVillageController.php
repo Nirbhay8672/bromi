@@ -30,7 +30,15 @@ class SuperVillageController extends Controller
 				->join('district','district.id', 'super_talukas.district_id')
 				->orderBy('super_villages.id','desc');
 
-			return DataTables::of($data)
+			if($request->district_id > 0) {
+				$data->where('district.id', $request->district_id);
+			}
+
+			if($request->taluka_id > 0) {
+				$data->where('super_talukas.id', $request->taluka_id);
+			}
+
+			return DataTables::of($data->get())
 				->editColumn('select_checkbox', function ($row) {
 					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
 				<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
@@ -60,8 +68,10 @@ class SuperVillageController extends Controller
 				->rawColumns(['Actions', 'select_checkbox'])
 				->make(true);
 		}
+
 		$talukas = SuperTaluka::orderBy('name')->get()->toArray();
-		$districts = District::orderBy('name')->get()->toArray();
+		$districts = District::with(['talukas'])->orderBy('name')->get()->toArray();
+		
 		return view('superadmin.supersettings.super_village_index', compact('talukas', 'districts'));
 	}
 
