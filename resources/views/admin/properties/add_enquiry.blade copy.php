@@ -849,7 +849,7 @@
                                                         </div>
 
                                                         <div
-                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20">
+                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20 ">
                                                             <input class="form-check-input" id="is_preleased"
                                                                 type="checkbox">
                                                             <label class="form-check-label"

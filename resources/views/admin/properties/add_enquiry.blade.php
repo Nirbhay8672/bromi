@@ -81,7 +81,8 @@
                                                             <div class="fname">
                                                                 <label for="Email">Email</label>
                                                                 <input class="form-control" name="client_email"
-                                                                    id="client_email" type="text" autocomplete="off" style="text-transform: lowercase;">
+                                                                    id="client_email" type="text" autocomplete="off"
+                                                                    style="text-transform: lowercase;">
                                                             </div>
                                                             <div class="invalid-feedback" id="client_email_error"
                                                                 style="display: block;color:red;"></div>
@@ -907,7 +908,7 @@
                                                                 style="display: block;color:red;"></div>
                                                         </div>
                                                         <div
-                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20">
+                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20 is-preleased">
                                                             <input class="form-check-input" id="is_preleased"
                                                                 type="checkbox">
                                                             <label class="form-check-label"
@@ -999,6 +1000,19 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
         <script>
+            $(document).ready(function() {
+                $(document).on('change', 'input[name="office_type\\[\\]"]', function() {
+                    var office_type_val = $(this).val(); 
+                    console.log("office_type ==", office_type_val);
+                    if (office_type_val === '1') {
+                        $('.is-preleased').hide(); 
+                    } else {
+                        $('.is-preleased').show(); 
+                    }
+                });
+            });
+
+
             let isValid = true;
 
             function validateField(inputSelector, errorSelector, errorMessage) {
