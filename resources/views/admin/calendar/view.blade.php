@@ -234,7 +234,7 @@
                                                     var idNewEnq = {{ $data->id }};
                                                     localStorage.setItem('enq_id', idNewEnq);
                                                 </script>
-                                                {{-- @dd($data->id); --}}
+                                                 
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card-body h-100">
                                                         <div class="row">
@@ -309,14 +309,14 @@
                                                                 <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
                                                                     to {{ $data->budget_to }}</div>
                                                             </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <h6><b>Enquiry Source</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <div>:
-                                                                    {{ isset($dropdowns[$data->enquiry_source]['name']) ? $dropdowns[$data->enquiry_source]['name'] : '' }}
-                                                                </div>
-                                                            </div>
+                                                            <!--<div class="form-group col-6 m-b-5">-->
+                                                            <!--    <h6><b>Enquiry Source</b></h6>-->
+                                                            <!--</div>-->
+                                                            <!--<div class="form-group col-6 m-b-5">-->
+                                                            <!--    <div>:-->
+                                                            <!--        {{ isset($dropdowns[$data->enquiry_source]['name']) ? $dropdowns[$data->enquiry_source]['name'] : '' }}-->
+                                                            <!--    </div>-->
+                                                            <!--</div>-->
 
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Furnished Status</b></h6>
@@ -534,14 +534,14 @@
                                                             <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
                                                                 to {{ $data->budget_to }}</div>
                                                         </div>
-                                                        <div class="form-group col-6 m-b-5">
-                                                            <h6><b>Enquiry Source</b></h6>
-                                                        </div>
-                                                        <div class="form-group col-6 m-b-5">
-                                                            <div>:
-                                                                {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
-                                                            </div>
-                                                        </div>
+                                                        <!--<div class="form-group col-6 m-b-5">-->
+                                                        <!--    <h6><b>Enquiry Source</b></h6>-->
+                                                        <!--</div>-->
+                                                        <!--<div class="form-group col-6 m-b-5">-->
+                                                        <!--    <div>:-->
+                                                        <!--        {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}-->
+                                                        <!--    </div>-->
+                                                        <!--</div>-->
 
                                                         <div class="form-group col-6 m-b-5">
                                                             <h6><b>Furnished Status</b></h6>
@@ -721,14 +721,14 @@
                                                             <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
                                                                 to {{ $data->budget_to }}</div>
                                                         </div>
-                                                        <div class="form-group col-6 m-b-5">
-                                                            <h6><b>Enquiry Source</b></h6>
-                                                        </div>
-                                                        <div class="form-group col-6 m-b-5">
-                                                            <div>:
-                                                                {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
-                                                            </div>
-                                                        </div>
+                                                        <!--<div class="form-group col-6 m-b-5">-->
+                                                        <!--    <h6><b>Enquiry Source</b></h6>-->
+                                                        <!--</div>-->
+                                                        <!--<div class="form-group col-6 m-b-5">-->
+                                                        <!--    <div>:-->
+                                                        <!--        {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}-->
+                                                        <!--    </div>-->
+                                                        <!--</div>-->
 
                                                         <div class="form-group col-6 m-b-5">
                                                             <h6><b>Furnished Status</b></h6>
@@ -920,14 +920,14 @@
                                                                 <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
                                                                     to {{ $data->budget_to }}</div>
                                                             </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <h6><b>Enquiry Source</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <div>:
-                                                                    {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
-                                                                </div>
-                                                            </div>
+                                                            <!--<div class="form-group col-6 m-b-5">-->
+                                                            <!--    <h6><b>Enquiry Source</b></h6>-->
+                                                            <!--</div>-->
+                                                            <!--<div class="form-group col-6 m-b-5">-->
+                                                            <!--    <div>:-->
+                                                            <!--        {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}-->
+                                                            <!--    </div>-->
+                                                            <!--</div>-->
 
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Furnished Status</b></h6>
@@ -1115,14 +1115,14 @@
                                                                 <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
                                                                     to {{ $data->budget_to }}</div>
                                                             </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <h6><b>Enquiry Source</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <div>:
-                                                                    {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
-                                                                </div>
-                                                            </div>
+                                                            <!--<div class="form-group col-6 m-b-5">-->
+                                                            <!--    <h6><b>Enquiry Source</b></h6>-->
+                                                            <!--</div>-->
+                                                            <!--<div class="form-group col-6 m-b-5">-->
+                                                            <!--    <div>:-->
+                                                            <!--        {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}-->
+                                                            <!--    </div>-->
+                                                            <!--</div>-->
 
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Furnished Status</b></h6>
@@ -1315,14 +1315,14 @@
                                                                 <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
                                                                     to {{ $data->budget_to }}</div>
                                                             </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <h6><b>Enquiry Source</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <div>:
-                                                                    {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
-                                                                </div>
-                                                            </div>
+                                                            <!--<div class="form-group col-6 m-b-5">-->
+                                                            <!--    <h6><b>Enquiry Source</b></h6>-->
+                                                            <!--</div>-->
+                                                            <!--<div class="form-group col-6 m-b-5">-->
+                                                            <!--    <div>:-->
+                                                            <!--        {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}-->
+                                                            <!--    </div>-->
+                                                            <!--</div>-->
 
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Furnished Status</b></h6>
@@ -1515,14 +1515,14 @@
                                                                 <div>: {{ $data->budget_from ? $data->budget_from : '0' }}
                                                                     to {{ $data->budget_to }}</div>
                                                             </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <h6><b>Enquiry Source</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-6 m-b-5">
-                                                                <div>:
-                                                                    {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}
-                                                                </div>
-                                                            </div>
+                                                            <!--<div class="form-group col-6 m-b-5">-->
+                                                            <!--    <h6><b>Enquiry Source</b></h6>-->
+                                                            <!--</div>-->
+                                                            <!--<div class="form-group col-6 m-b-5">-->
+                                                            <!--    <div>:-->
+                                                            <!--        {{ isset($dropdowns[$data->Enquiry->enquiry_source]['name']) ? $dropdowns[$data->Enquiry->enquiry_source]['name'] : '' }}-->
+                                                            <!--    </div>-->
+                                                            <!--</div>-->
 
                                                             <div class="form-group col-6 m-b-5">
                                                                 <h6><b>Furnished Status</b></h6>
@@ -1766,7 +1766,7 @@
         }
 
         $(document).on('click', '#saveProgress', function(e) {
-            console.log("saved progress 2 ==");
+            // console.log("edit modal data ==");
             e.preventDefault();
             $(this).prop('disabled', true);
             var id = $('#progress_enquiry_id').val()

@@ -1,9 +1,3 @@
-
-<?php
-use Illuminate\Support\Facades\DB;
-    $measurement=DB::table('land_units')->where('id',$data->area_from_measurement)->first();
-
-?>
 @extends('admin.layouts.app')
 @section('content')
     <div class="page-body">
@@ -245,15 +239,11 @@ use Illuminate\Support\Facades\DB;
                                                         <div class="form-group col-4 m-b-10 data_conent_11">
                                                             <h6><b>Area</b></h6>
                                                         </div>
-                                                        {{-- @dd($data); --}}
                                                         <div class="form-group col-8 m-b-10 data_conent_11">
                                                             <div>:
                                                                 {{ $data->area_from . ' to' }}
 
-                                                                {{ $data->area_to . ' '}} {{$measurement->unit_name}}
-                                                                {{-- {{ $data->area_from . ' to' }}
-
-                                                                {{ $data->area_to . ' ' . (isset($dropdowns[$data->area_to_measurement]['name']) ? $dropdowns[$data->area_to_measurement]['name'] : '') }} --}}
+                                                                {{ $data->area_to . ' ' . (isset($dropdowns[$data->area_to_measurement]['name']) ? $dropdowns[$data->area_to_measurement]['name'] : '') }}
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_12">
@@ -343,14 +333,14 @@ use Illuminate\Support\Facades\DB;
                                                             <h6><b>Created Date</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_16">
-                                                            <div>: {{ date('Y-m-d', strtotime($data->created_at)) }}</div>
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($data->created_at)) }}</div>
                                                         </div>
 
                                                         <div class="form-group col-4 m-b-10 data_conent_16">
                                                             <h6><b>Last Modified Date</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_16">
-                                                            <div>: {{ date('Y-m-d', strtotime($data->updated_at)) }}</div>
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($data->updated_at)) }}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -995,7 +985,7 @@ use Illuminate\Support\Facades\DB;
             </div>
         </div>
         <!-- schedule visit modal -->
-        <div class="modal fade" id="schedulemodal" role="dialog" aria-labelledby="exampleModalLabel"
+       <div class="modal fade" id="schedulemodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
@@ -1105,146 +1095,9 @@ use Illuminate\Support\Facades\DB;
                 </div>
             </div>
         </div>
-
         <!-- progress modal -->
-        {{-- <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add Progress</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form"
-                            novalidate="">
-                            <input type="hidden" name="progress_enquiry_id" id="progress_enquiry_id">
-                            @forelse ($configuration_settings as $progs)
-                                @if ($progs['dropdown_for'] == 'enquiry_progress')
-                                    @php
-                                        $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
-                                    @endphp
-                                    <!-- Testing disaplyed -->
-                                    <!-- <option value="{{ $progs['id'] }}"> {{ $namee }}</option> -->
-                                @endif
-                            @empty
-                            @endforelse
-
-                            <div class="row">
-                                <div class="form-group col-md-4 m-b-20">
-                                    <label class="mb-0">Enquiry Progress: </label>
-                                    <select class="form-select" id="progress_enquiry_progress">
-                                        <option value="">Enquiry Progress </option>
-                                        <option value="New Lead">New Lead</option>
-                                        <option value="Lead Confirmed"> Lead Confirmed</option>
-                                        <option value="Discussion"> Discussion</option>
-                                        <option value="Booked"> Booked</option>
-                                        <option value="Lost"> Lost</option>
-                                        @forelse ($configuration_settings as $progs)
-                                            @if ($progs['dropdown_for'] == 'enquiry_progress')
-                                                @php
-                                                    $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
-                                                @endphp
-                                                <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
-                                            @endif
-                                        @empty
-                                        @endforelse
-
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4 m-b-4 mb-3">
-                                    <label class="mb-0">Comments:</label>
-                                    <select class="form-select" id="progress_sales_comment">
-                                        <option value="">Sales Comments</option>
-                                        @forelse ($configuration_settings as $props)
-                                            @if ($props['dropdown_for'] == 'enquiry_sales_comment')
-                                                <option data-parent_id="{{ $props['parent_id'] }}"
-                                                    value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                </option>
-                                            @endif
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4 m-b-20">
-                                    <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
-                                    <div class="form-group">
-                                        <div class="fname">
-                                            <select class="form-select" id="reminider_before_minute" multiple="multiple">
-                                                <option value="" disabled>Select Minutes </option>
-                                                <option value="30 mins">30 mins</option>
-                                                <option value="1 hour">1 hour</option>
-                                                <option value="90 mins">90 mins</option>
-                                                <option value="120 mins">120 mins</option>
-                                                <option value="24 hour">24 hour</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
-                                        type="remarks" autocomplete="off">
-                                </div>
-                                <div class="form-group col-md-6 m-b-20">
-                                    <div class="col-12">
-                                        <div class="m-checkbox-inline custom-radio-ml">
-                                            <div class="form-check form-check-inline radio radio-primary">
-                                                <input class="form-check-input" id="progress_lead_type_1" type="radio"
-                                                    name="progress_lead_type" value="Hot Lead">
-                                                <label class="form-check-label mb-0" for="progress_lead_type_1">Hot
-                                                    Lead</label>
-                                            </div>
-                                            <div class="form-check form-check-inline radio radio-primary">
-                                                <input class="form-check-input" type="radio" id="progress_lead_type_2"
-                                                    name="progress_lead_type" value="Warm Lead">
-                                                <label class="form-check-label mb-0" for="progress_lead_type_2"> Warm
-                                                    Lead</label>
-                                            </div>
-                                            <div class="form-check form-check-inline radio radio-primary">
-                                                <input class="form-check-input" id="progress_lead_type_3" type="radio"
-                                                    name="progress_lead_type" value="Cold Lead">
-                                                <label class="form-check-label mb-0" for="progress_lead_type_3">Cold
-                                                    Lead</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-3 m-b-20">
-                                    <label for="nfdDate" class="mb-0">NFD:</label>
-                                    <input class="form-control" id="site_visit_date" name="nfdDate" max='31-12-2050'
-                                        type="date" oninput="limitYearTo4Digits()">
-                                </div>
-                                <div class="form-group col-md-3 m-b-20">
-                                    <label for="nfdTime" class="mb-0">Site Visit Time:</label>
-                                    <input class="form-control" id="site_visit_time" name="nfdTime" type="time">
-                                </div>
-                                <div class="form-group col-md-12 m-b-20">
-                                    <label for="remarks" class="mb-0">Remarks:</label>
-                                    <input class="form-control" name="progress_remarks" id="progress_remarks"
-                                        type="remarks" autocomplete="off">
-                                </div>
-                                <div class="row">
-                                    <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="email_reminder_progress" type="checkbox"
-                                            value="">
-                                        <label class="form-check-label" for="email_reminder_progress">Email
-                                            Reminder</label>
-                                    </div>
-
-                                    <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="sms_reminder_progress" type="checkbox"
-                                            value="">
-                                        <label class="form-check-label" for="sms_reminder_progress">SMS Reminder</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="btn btn-secondary" id="saveProgress">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
         <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+            aria-hidden="true">
             <div class="modal-dialog" style="width:30rem" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1373,7 +1226,7 @@ use Illuminate\Support\Facades\DB;
                 </div>
             </div>
         </div>
-
+  
     @endsection
     @push('scripts')
         <script>
@@ -1663,12 +1516,11 @@ use Illuminate\Support\Facades\DB;
 
             // save progress
             $(document).on('click', '#saveProgress', function(e) {
-                console.log("saved progress 4 ==");
-                var email_reminder = document.getElementById("email_reminder_progress");
-                var sms_reminder = document.getElementById("sms_reminder_progress");
+                // var email_reminder = document.getElementById("email_reminder_progress");
+                // var sms_reminder = document.getElementById("sms_reminder_progress");
 
-                var email = email_reminder.checked == true ? 1 : 0;
-                var sms = sms_reminder.checked == true ? 1 : 0;
+                // var email = email_reminder.checked == true ? 1 : 0;
+                // var sms = sms_reminder.checked == true ? 1 : 0;
                 e.preventDefault();
                 $(this).prop('disabled', true);
                 $.ajax({
@@ -1681,8 +1533,8 @@ use Illuminate\Support\Facades\DB;
                         sales_comment_id: $('#progress_sales_comment').val(),
                         nfd: $('#site_visit_date').val() + ' ' + $('#site_visit_time').val(),
                         remarks: $('#progress_remarks').val(),
-                        email_reminder: email,
-                        sms_reminder: sms,
+                        // email_reminder: email,
+                        // sms_reminder: sms,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
@@ -1695,8 +1547,6 @@ use Illuminate\Support\Facades\DB;
 
             // bharat filter
             $(document).on('click', '#save_enquiry_progress_status', function(e) {
-                console.log("saved progress 5 ==");
-
                 if ($('#enquiry_progress_status').val() == "") {
                     alert('Please select the status.');
                     return;
@@ -1791,8 +1641,8 @@ use Illuminate\Support\Facades\DB;
             // save schedule
             $(document).on('click', '#saveSchedule', function(e) {
                 console.log("reminider_before_minute clicked 00777 ==");
-                var email = email_reminder.checked == true ? 1 : 0;
-                var sms = sms_reminder.checked == true ? 1 : 0;
+                // var email = email_reminder.checked == true ? 1 : 0;
+                // var sms = sms_reminder.checked == true ? 1 : 0;
                 e.preventDefault();
                 $(this).prop('disabled', true);
                 $.ajax({
@@ -1807,8 +1657,8 @@ use Illuminate\Support\Facades\DB;
                         schedule_remind: $('#schedule_remind').val(),
                         property_list: JSON.stringify($('#property_list').val()),
                         time_before: JSON.stringify($('#reminider_before_minute').val()),
-                        email_reminder: email,
-                        sms_reminder: sms,
+                        // email_reminder: email,
+                        // sms_reminder: sms,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {

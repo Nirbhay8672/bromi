@@ -511,17 +511,19 @@ class EnquiriesController extends Controller
 					</td>';
 					}
 					return $bud;
-				})->editColumn('telephonic_discussion', function ($row) {
-					if (isset($row->activeProgress)) {
-						$pro = $row->activeProgress;
-						$remark_data = "";
-						if (!empty($pro->remarks)) {
-							$remark_data = $pro->remarks;
-						}
-						return '<small style="font-style:italic; font-size:89% !important"><b></b>' . Carbon::parse($pro->nfd)->format('d-m-Y g:i A') . '<br>' . $remark_data . '</small>';
-					}
-					return $row->telephonic_discussion;
 				})
+				->editColumn('telephonic_discussion', function ($row) {
+                    if (isset($row->activeProgress)) {
+                        $pro = $row->activeProgress;
+                        $remark_data = "";
+                        if (!empty($pro->remarks)) {
+                            $remark_data = $pro->remarks;
+                        }
+                        return '<small style="font-style:italic; font-size:89% !important"><b></b>' . Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') . '<br>' . $remark_data . '</small>';
+                    }
+                    return $row->telephonic_discussion;
+                })
+
 				//transfer date
 				->editColumn('assigned_to', function ($row) {
 					if (!empty($row->Employee)) {
@@ -822,7 +824,7 @@ class EnquiriesController extends Controller
 		}
 		$user = Auth::user();
 		$nfDate = Carbon::parse($request->nfd)->format('Y-m-d H:i:s');
-		$message = "There an update on enquiry for the client `$enq->client_name`: The next follow up date is " . $nfDate;
+		$message = "There an update on enquiry for the client `$enq->client_name`: The next follow up date is " . Carbon::parse($nfDate)->format('d-m-Y');
 
 		if (!empty($notif)) {
 			// notify user for next follow up date
@@ -911,7 +913,7 @@ class EnquiriesController extends Controller
 			$user = Auth::user();
 
 			// notify user for next schedule visit date
-			$message = $the_progress . ' for client ' . $enq->client_name . ' at ' . $request->visit_date;
+			$message = $the_progress . ' for client ' . $enq->client_name . ' at ' . Carbon::parse($request->visit_date)->format('d-m-Y');
 			if (!empty($notif)) {
 				$userNotification = UserNotifications::create([
 					"user_id" => (int) $notif->user_id,
@@ -1265,7 +1267,11 @@ class EnquiriesController extends Controller
 	public function transferNow(Request $request)
 	{
 		if (!empty($request->employee) && !empty($request->enquiry_id)) {
-			Enquiries::where('id', $request->enquiry_id)->update(['employee_id' => $request->employee], ['transfer_date' => Carbon::now()->format('Y-m-d H:i:s')]);
+// 			Enquiries::where('id', $request->enquiry_id)->update(['employee_id' => $request->employee], ['transfer_date' => Carbon::now()->format('Y-m-d H:i:s')]);
+$dataEnq = Enquiries::where('id', $request->enquiry_id)->update([
+				'employee_id' => $request->employee,
+				'transfer_date' => Carbon::now()->format('Y-m-d H:i:s')
+			]);
 			/* Stored Assign Enquiry History */
 			AssignHistory::create(['enquiry_id' => $request->enquiry_id, 'user_id' => Auth::user()->id, 'assign_id' => $request->employee]);
 

@@ -81,8 +81,7 @@
                                                             <div class="fname">
                                                                 <label for="Email">Email</label>
                                                                 <input class="form-control" name="client_email"
-                                                                    id="client_email" type="text" autocomplete="off"
-                                                                    style="text-transform: lowercase;">
+                                                                    id="client_email" type="text" autocomplete="off" style="text-transform: lowercase;">
                                                             </div>
                                                             <div class="invalid-feedback" id="client_email_error"
                                                                 style="display: block;color:red;"></div>
@@ -908,7 +907,7 @@
                                                                 style="display: block;color:red;"></div>
                                                         </div>
                                                         <div
-                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20 is-preleased">
+                                                            class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20">
                                                             <input class="form-check-input" id="is_preleased"
                                                                 type="checkbox">
                                                             <label class="form-check-label"
@@ -1000,19 +999,6 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
         <script>
-            $(document).ready(function() {
-                $(document).on('change', 'input[name="office_type\\[\\]"]', function() {
-                    var office_type_val = $(this).val(); 
-                    console.log("office_type ==", office_type_val);
-                    if (office_type_val === '1') {
-                        $('.is-preleased').hide(); 
-                    } else {
-                        $('.is-preleased').show(); 
-                    }
-                });
-            });
-
-
             let isValid = true;
 
             function validateField(inputSelector, errorSelector, errorMessage) {
@@ -1296,12 +1282,16 @@
                 resetallfields()
                 if (category_type == 'Flat') {
                     $('.div_flat_type').show()
+                     $(".f-status").show();
                     $('.the_1rk').show()
                 } else if (category_type == 'Penthouse') {
+                     $(".f-status").show();
                     $('.div_flat_type').show()
                 } else if (category_type == 'Office') {
+                     $(".f-status").show();
                     $('.div_office_type').show()
                 } else if (category_type == 'Retail') {
+                     $(".f-status").show();
                     $('.div_retail_type').show()
                 } else if (category_type == 'Storage/industrial') {
                     $(".f-status").hide();
@@ -1312,8 +1302,10 @@
                 } else if (category_type == 'Farmhouse') {
                     $('.div_farm_house').show()
                 } else if (category_type == 'Plot') {
+                     $(".f-status").show();
                     $('.div_land_plot').show()
                 } else if (category_type == 'Vila/Bunglow') {
+                     $(".f-status").show();
                     $('.div_vila_type').show()
                 }
             })
@@ -2299,7 +2291,7 @@
                         if (parentId.find('label').length > 0) {
                             $(this).remove();
                             var currenthtml = $(parentId).html()
-                            $(parentId).html('<div class="fname">' + currenthtml + '<div class="fvalue">' + inputhtml[0]
+                            $(parentId).html('<div class="fname focused">' + currenthtml + '<div class="fvalue">' + inputhtml[0]
                                 .outerHTML + '</div>' + '</div>')
                         }
                     }

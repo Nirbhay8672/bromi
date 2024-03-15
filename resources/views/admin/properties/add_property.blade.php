@@ -567,7 +567,7 @@
                                                             <div class="invalid-feedback" id="address_error"
                                                                 style="display: none;color:red;"></div>
                                                         </div>
-                                                        <div class="row col-md-7 div_flat_details_7 mb-3">
+                                                        <div class="row col-md-7 div_flat_details_7 mb-3 location_link_cls">
                                                             <div class="form-group col-md-9">
                                                                 <label for="Link">Location Link</label>
                                                                 <input class="form-control" name="property_link"
@@ -1949,7 +1949,7 @@
                                                         style="border-radius: 5px;">Previous</button>
                                                     <button class="btn btn-primary ms-3 nextBtn submitClick"
                                                         style="border-radius: 5px;" id="nextButtonSecond"
-                                                        type="button">Next2</button>
+                                                        type="button">Next</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2719,6 +2719,8 @@
                     if ($('input[name=property_category]:checked').attr('data-val') == 'Land') {
                         landConfiguration = $('input[name=plot_type]:checked').val();
                         console.log("landConfiguration ==", landConfiguration);
+                        
+                        
                     }
                 });
 
@@ -2878,6 +2880,14 @@
                 $(document).on('change', 'input[name=plot_type]', function() {
                     theForLand = $(this).attr('data-val');
                     console.log("theForLand select dropdown val ==", theForLand);
+                    
+                    if (theForLand === 'agriculture') {
+                        console.log("location show ==")
+                        $(".location_link_cls").show();
+                    } else {
+                        console.log("location hide ==")
+                        $(".location_link_cls").hide();
+                    }
                 });
 
                 // Validation on 2ndstep submit
@@ -3879,98 +3889,180 @@
                 return str;
             }
 
+            // function generate_unit_detail(id, plus = 0) {
+            //     var myvar = '<div class="row"><div  data-unit_id= ' +
+            //         id + ' class="form-group the_wing col-md-2 m-b-20">' +
+            //         '<div><label>Wing</label>' +
+            //         '            <input class="form-control" name="wing" ' +
+            //         '                type="text"  autocomplete="off">' +
+            //         '</div><div id="wing_no_error_' + id +
+            //         '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+            //         '</div>' +
+            //         '<div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-20">' +
+            //         '<div><label>Unit No</label>' +
+            //         '            <input class="form-control" name="unit_unit_no" ' +
+            //         '                type="text"  autocomplete="off">' +
+            //         '</div><div id="unit_no__error_' + id +
+            //         '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+            //         '</div>' +
+            //         '        <div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-4 mb-3">' +
+            //         '            <select class="form-select" name="unit_status">' +
+            //         '                <option value="Available">Available</option>' +
+            //         '                <option value="Rent Out">Rent Out</option>' +
+            //         '                <option value="Sold Out">Sold Out</option>' +
+            //         '            </select>' +
+            //         '        </div>' +
+
+            //         '<div  data-unit_id= ' + id + ' class="the_price_rent form-group col-md-2 m-b-20">' +
+            //         '<div><label>Price Rent</label>' +
+            //         '            <input class="form-control indian_currency_amount" name="price_rent" ' +
+            //         '                type="text"  autocomplete="off">' +
+            //         '</div><div id="price_rent_error_' + id +
+            //         '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+            //         '        </div>' +
+
+            //         '<div  data-unit_id= ' + id + ' class="the_price form-group col-md-2 m-b-20">' +
+            //         '<div><label>Price</label>' +
+            //         '            <input class="form-control indian_currency_amount" name="price" ' +
+            //         '                type="text"  autocomplete="off">' +
+            //         '</div><div id="price_error_' + id +
+            //         '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+            //         '        </div>' +
+
+            //         '<div class="the_constructed_plot_price row"><div  data-unit_id= ' + id +
+            //         ' class=" form-group col-md-2 m-b-20">' +
+            //         '<div><label class="price_constructed_label"> Construction Price</label>' +
+            //         '            <input class="form-control indian_currency_amount" data-unit_id= ' + id +
+            //         ' name="price_constructed" ' +
+            //         '                type="text"  autocomplete="off">' +
+            //         '</div><div id="price_constructed_error_' + id +
+            //         '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+            //         '        </div>' +
+
+            //         '<div  data-unit_id= ' + id + ' class="col-md-2 m-b-20">' +
+            //         '<div class=" form-group">' +
+            //         '<div><label class="price_plot_label"> Plot Price</label>' +
+            //         '            <input class="form-control indian_currency_amount" data-unit_id= ' + id +
+            //         ' name="price_plot" ' +
+            //         '                type="text"  autocomplete="off">' +
+            //         '</div><div id="price_plot_error_' + id +
+            //         '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+            //         '        </div>' +
+
+            //         '</div>' +
+            //         '<div  data-unit_id= ' + id + ' class=" form-group col-md-2 m-b-20">' +
+            //         '<div class=" form-group">' +
+            //         '<div><label>Price</label>' +
+            //         '            <input class="form-control indian_currency_amount" data-unit_id= ' + id +
+            //         ' name="price_total" ' +
+            //         '                type="text"  autocomplete="off" disabled>' +
+            //         '</div><div id="price_total_error_' + id +
+            //         '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+            //         '        </div>' +
+            //         '<small style="display:none"  class="text-secondary ps-1 converted_value"></small>' +
+            //         '</div></div>' +
+            //         '        <div  data-unit_id= ' + id + ' class="the_furnished_status form-group col-md-3 m-b-4 mb-3">' +
+            //         '            <select class="form-select" name="furnished_status">' +
+            //         '                <option value="">Furnished Status</option>' +
+            //                             @forelse ($property_configuration_settings as $props)
+            //                                 @if ($props['dropdown_for'] == 'property_furniture_type')
+            //                                     '<option data-val="{{ $props['name'] }}" value="{{ $props['id'] }}">{{ $props['name'] }}</option>' +
+            //                                 @endif
+            //                             @empty
+            //                             @endforelse
+            //                         '</select>' +
+                                    
+            //                             '</div>' +
+            //                             '<div data-unit_id= ' + id +
+            //                             ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
+            //                             ' class="' + ((plus) ? "add_units" : "remove_units") +
+            //                             ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((
+            //                                 plus) ? "+" : "-") + '</button>  </div>' +
+            //                             '</div>';
+            //                         return myvar;
+            //                     }
+
             function generate_unit_detail(id, plus = 0) {
-                var myvar = '<div class="row"><div  data-unit_id= ' +
-                    id + ' class="form-group the_wing col-md-2 m-b-20">' +
-                    '<div><label>Wing</label>' +
-                    '            <input class="form-control" name="wing" ' +
-                    '                type="text"  autocomplete="off">' +
-                    '</div><div id="wing_no_error_' + id +
-                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+            var myvar = '<div class="row">' +
+                    '<div data-unit_id="' + id + '" class="form-group the_wing col-md-2 m-b-20">' +
+                        '<div>' +
+                            '<label>Wing</label>' +
+                            '<input class="form-control" name="wing" type="text" autocomplete="off">' +
+                        '</div>' +
+                        '<div id="wing_no_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '</div>' +
-                    '<div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-20">' +
-                    '<div><label>Unit No</label>' +
-                    '            <input class="form-control" name="unit_unit_no" ' +
-                    '                type="text"  autocomplete="off">' +
-                    '</div><div id="unit_no__error_' + id +
-                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-20">' +
+                        '<div>' +
+                            '<label>Unit No</label>' +
+                            '<input class="form-control" name="unit_unit_no" type="text" autocomplete="off">' +
+                        '</div>' +
+                        '<div id="unit_no__error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '</div>' +
-                    '        <div  data-unit_id= ' + id + ' class="form-group col-md-2 m-b-4 mb-3">' +
-                    '            <select class="form-select" name="unit_status">' +
-                    '                <option value="Available">Available</option>' +
-                    '                <option value="Rent Out">Rent Out</option>' +
-                    '                <option value="Sold Out">Sold Out</option>' +
-                    '            </select>' +
-                    '        </div>' +
-
-                    '<div  data-unit_id= ' + id + ' class="the_price_rent form-group col-md-2 m-b-20">' +
-                    '<div><label>Price Rent</label>' +
-                    '            <input class="form-control indian_currency_amount" name="price_rent" ' +
-                    '                type="text"  autocomplete="off">' +
-                    '</div><div id="price_rent_error_' + id +
-                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
-                    '        </div>' +
-
-                    '<div  data-unit_id= ' + id + ' class="the_price form-group col-md-2 m-b-20">' +
-                    '<div><label>Price</label>' +
-                    '            <input class="form-control indian_currency_amount" name="price" ' +
-                    '                type="text"  autocomplete="off">' +
-                    '</div><div id="price_error_' + id +
-                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
-                    '        </div>' +
-
-                    '<div class="the_constructed_plot_price row"><div  data-unit_id= ' + id +
-                    ' class=" form-group col-md-2 m-b-20">' +
-                    '<div><label class="price_constructed_label"> Construction Price</label>' +
-                    '            <input class="form-control indian_currency_amount" data-unit_id= ' + id +
-                    ' name="price_constructed" ' +
-                    '                type="text"  autocomplete="off">' +
-                    '</div><div id="price_constructed_error_' + id +
-                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
-                    '        </div>' +
-
-                    '<div  data-unit_id= ' + id + ' class="col-md-2 m-b-20">' +
-                    '<div class=" form-group">' +
-                    '<div><label class="price_plot_label"> Plot Price</label>' +
-                    '            <input class="form-control indian_currency_amount" data-unit_id= ' + id +
-                    ' name="price_plot" ' +
-                    '                type="text"  autocomplete="off">' +
-                    '</div><div id="price_plot_error_' + id +
-                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
-                    '        </div>' +
-
+                    '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-4 mb-3">' +
+                        '<select class="form-select" name="unit_status">' +
+                            '<option value="Available">Available</option>' +
+                            '<option value="Rent Out">Rent Out</option>' +
+                            '<option value="Sold Out">Sold Out</option>' +
+                        '</select>' +
                     '</div>' +
-                    '<div  data-unit_id= ' + id + ' class=" form-group col-md-2 m-b-20">' +
-                    '<div class=" form-group">' +
-                    '<div><label>Price</label>' +
-                    '            <input class="form-control indian_currency_amount" data-unit_id= ' + id +
-                    ' name="price_total" ' +
-                    '                type="text"  autocomplete="off" disabled>' +
-                    '</div><div id="price_total_error_' + id +
-                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
-                    '        </div>' +
-                    '<small style="display:none"  class="text-secondary ps-1 converted_value"></small>' +
-                    '</div></div>' +
-                    '        <div  data-unit_id= ' + id + ' class="the_furnished_status form-group col-md-3 m-b-4 mb-3">' +
-                    '            <div><select class="form-select" name="furnished_status">' +
-                    '                <option value="">Furnished Status</option>' +
-                    @forelse ($property_configuration_settings as $props)
-                        @if ($props['dropdown_for'] == 'property_furniture_type')
-                            '<option data-val="{{ $props['name'] }}" value="{{ $props['id'] }}">{{ $props['name'] }}</option>' +
-                        @endif
-                    @empty
-                    @endforelse
-                '</select>' +
-                '</div><div id="furnished_status_error_' + id +
-                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '<div data-unit_id="' + id + '" class="the_price_rent form-group col-md-2 m-b-20">' +
+                        '<div>' +
+                            '<label>Price Rent</label>' +
+                            '<input class="form-control indian_currency_amount" name="price_rent" type="text" autocomplete="off">' +
+                        '</div>' +
+                        '<div id="price_rent_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '</div>' +
-                    '<div data-unit_id= ' + id +
-                    ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
-                    ' class="' + ((plus) ? "add_units" : "remove_units") +
-                    ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((
-                        plus) ? "+" : "-") + '</button>  </div>' +
-                    '</div>';
-                return myvar;
+                    '<div data-unit_id="' + id + '" class="the_price form-group col-md-2 m-b-20">' +
+                        '<div>' +
+                            '<label>Price</label>' +
+                            '<input class="form-control indian_currency_amount" name="price" type="text" autocomplete="off">' +
+                        '</div>' +
+                        '<div id="price_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
+                     '<div class="the_constructed_plot_price row">' +
+                        '<div data-unit_id="' + id + '" class="col-md-2 m-b-20">' +
+                            '<div class="form-group">' +
+                                '<div>' +
+                                    '<label class="price_plot_label">Plot Price</label>' +
+                                    '<input class="form-control indian_currency_amount" data-unit_id="' + id + '" name="price_plot" type="text" autocomplete="off">' +
+                                '</div>' +
+                                '<div id="price_plot_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                            '</div>' +
+                        '</div>' +
+                         '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-20">' +
+                            '<div>' +
+                                '<label class="price_constructed_label">Construction Price</label>' +
+                                '<input class="form-control indian_currency_amount" data-unit_id="' + id + '" name="price_constructed" type="text" autocomplete="off">' +
+                            '</div>' +
+                            '<div id="price_constructed_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                        '</div>' +
+                        '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-20">' +
+                            '<div class="form-group">' +
+                                '<div>' +
+                                    '<label>Price</label>' +
+                                    '<input class="form-control indian_currency_amount" data-unit_id="' + id + '" name="price_total" type="text" autocomplete="off" disabled>' +
+                                '</div>' +
+                                '<div id="price_total_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                            '</div>' +
+                            '<small style="display:none" class="text-secondary ps-1 converted_value"></small>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div data-unit_id="' + id + '" class="the_furnished_status form-group col-md-3 m-b-4 mb-3">' +
+                        '<select class="form-select" name="furnished_status">' +
+                            '<option value="">Furnished Status</option>';
+                            @forelse ($property_configuration_settings as $props)
+                                @if ($props['dropdown_for'] == 'property_furniture_type')
+                                    myvar += '<option data-val="{{ $props['name'] }}" value="{{ $props['id'] }}">{{ $props['name'] }}</option>';
+                                @endif
+                            @empty
+                            @endforelse
+                        myvar += '</select>' +
+                    '</div>' +
+                    '<div data-unit_id="' + id + '" class="form-group col-md-1 m-b-4 mb-3">' +
+                        '<button data-unit_id="' + id + '" class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((plus) ? "+" : "-") + '</button>' +
+                    '</div>' +
+                '</div>';
+            return myvar;
             }
 
 
@@ -4509,14 +4601,14 @@
                         furnisheditem2.push(Number($(this).prop('checked')));
                     })
 
-                    if (!plotConf && (!landCategory && pricerent.trim() === "")) {
-                        console.log("44");
-                        $("#price_rent_error_" + unique_id).text("price rent field is required").show();
-                        allFieldsValid = false;
-                    } else {
-                        $("#price_rent_error_" + unique_id).hide();
-                        console.log("4");
-                    }
+                    // if (!plotConf && (!landCategory && pricerent.trim() === "")) {
+                    //     console.log("44");
+                    //     $("#price_rent_error_" + unique_id).text("price rent field is required").show();
+                    //     allFieldsValid = false;
+                    // } else {
+                    //     $("#price_rent_error_" + unique_id).hide();
+                    //     console.log("4");
+                    // }
 
                     if (!plotConf && !storageCategory && !landCategory && furnished.trim() === "") {
                         console.log("55");
@@ -4649,19 +4741,25 @@
                 }
 
                 if ($("#property_email").val().trim() === "") {
-                    $("#property_email_error").text("email field is required").show();
+                    $("#property_email_error").text("Email field is required").show();
                     allFieldsValid = false;
-
                 } else {
-                    $("#property_email_error").hide();
-                    // allFieldsValid = true;
+                    // Check if the entered email format is valid
+                    var email = $("#property_email").val().trim();
+                    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(email)) {
+                        $("#property_email_error").text("Please enter a valid email address").show();
+                        allFieldsValid = false;
+                    } else {
+                        $("#property_email_error").hide();
+                    }
                 }
 
-                if ($("#key_arrangement").val().trim() === "") {
-                    $("#key_arrangement_error").text("key field is required").show();
-                } else {
-                    $("#key_arrangement_error").hide();
-                }
+                // if ($("#key_arrangement").val().trim() === "") {
+                //     $("#key_arrangement_error").text("key field is required").show();
+                // } else {
+                //     $("#key_arrangement_error").hide();
+                // }
 
                 if (!allFieldsValid) {
                     console.log("error validation on all field :", allFieldsValid);
