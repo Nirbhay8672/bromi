@@ -653,7 +653,28 @@ class HomeController extends Controller
 		$user_count =  User::where('parent_id',Auth::User()->id)->orWhere('id',Auth::User()->id)->get()->count();
 		$cities = City::orderBy('name')->get()->toArray();
 		$states = State::orderBy('name')->get()->toArray();
-		return view('admin.users.profile_details',compact('user','plans','user_count','cities','states'));
+
+		$total_property = Properties::select('id')->where('user_id', Auth::user()->id)->count();
+		$total_enquiry = Enquiries::select('id')->where('user_id', Auth::user()->id)->count();
+		$total_project = Projects::select('id')->where('user_id', Auth::user()->id)->count();
+
+		$transactions = DB::table('payments')
+			->join('subplans','subplans.id','payments.plan_id')
+			->select([
+				'payments.*',
+				'subplans.name AS plan_name',
+			])->where('payments.user_id',Auth::user()->id)->get();
+
+		$tickets = DB::table('tickets')
+			->join('categories','categories.id','tickets.id')
+			->select([
+				'tickets.*',
+				'categories.name AS category_name',
+			])->where('tickets.user_id',Auth::user()->id)->orderBy('tickets.created_at', 'asc')
+			->take(10)
+			->get();
+
+		return view('admin.users.profile_details',compact('user','tickets','transactions','plans','user_count','cities','states','total_property','total_enquiry','total_project'));
 	}
 
 	public function Settings(Request $request){

@@ -187,8 +187,12 @@ class AdminLoginController extends Controller
 		$user  = User::find($request->user_id);
 		Auth::login($user);
 
+		$plan_detail = Subplans::find(intval($request->plan_id));
+
 		$user->fill([
 			'plan_id' => $request->plan_id,
+			'total_user_limit' => $plan_detail->user_limit,
+			'subscribed_on' => Carbon::now()->format('Y-m-d')
 		])->save();
 
 		Session::put('plan_id', $request->plan_id);
