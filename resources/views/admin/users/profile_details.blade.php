@@ -51,12 +51,12 @@
                 <div class="row">
                     <div class="form-group col-md-6 m-b-4 mb-3">
                         <div class="fname">
-                            <input type="text" placeholder="First name" name="firstname" class="form-control" id="firstname" value="{{ $user->first_name }}" style="text-transform:none;">
+                            <input type="text" placeholder="First name" name="firstname" class="form-control" id="firstname" value="{{ $user->first_name }}">
                         </div>
                     </div>
                     <div class="form-group col-md-6 m-b-4 mb-3">
                         <div class="fname">
-                            <input type="text" placeholder="Last name" name="lastname" class="form-control" id="lastname" value="{{ $user->last_name }}" style="text-transform:none;">
+                            <input type="text" placeholder="Last name" name="lastname" class="form-control" id="lastname" value="{{ $user->last_name }}">
                         </div>
                     </div>
                     <div class="form-group col-md-6 m-b-4 mb-3">
@@ -66,17 +66,27 @@
                     </div>
                     <div class="form-group col-md-6 m-b-4 mb-3">
                         <div class="fname">
-                            <input type="text" placeholder="Mobile Number" name="mobile_number" class="form-control" id="mobile_number" value="{{ $user->mobile_number }}" style="text-transform:none;">
+                            <input type="text" placeholder="Mobile Number" name="mobile_number" class="form-control" id="mobile_number" value="{{ $user->mobile_number }}">
                         </div>
                     </div>
                     <div class="form-group col-md-6 m-b-4 mb-3">
                         <div class="fname">
-                            <input type="text" placeholder="Company Name" name="company_name" class="form-control" id="company_name" value="{{ $user->company_name }}" style="text-transform:none;">
+                            <input type="text" placeholder="Company Name" name="company_name" class="form-control" id="company_name" value="{{ $user->company_name }}">
                         </div>
                     </div>
                     <div class="form-group col-md-6 m-b-4 mb-3">
                         <div class="fname">
-                            <input type="text" placeholder="Address" name="address" class="form-control" id="address" value="{{ $user->address }}" style="text-transform:none;">
+                            <input type="text" placeholder="Address" name="address" class="form-control" id="address" value="{{ $user->address }}">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 m-b-4 mb-3">
+                        <div class="fname">
+                            <input type="text" placeholder="Gst Number" name="gst" class="form-control" id="gst" value="{{ $user->gst }}">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 m-b-4 mb-3">
+                        <div class="fname">
+                            <input type="text" placeholder="Rera Number" name="rera" class="form-control" id="rera" value="{{ $user->rera }}">
                         </div>
                     </div>
                     <div class="form-group col-md-6 m-b-4 mb-3">
@@ -117,10 +127,9 @@
                 <div class="user-profile">
                     <div class="row p-2">
                         <div class="col-sm-12">
-                            <div class="card profile-header" style="height:500px;background-image: url(&quot;../assets/images/user-profile/bg-profile.jpg&quot;); background-size: cover; background-position: center center; display: block;"><img class="img-fluid bg-img-cover" src="../assets/images/user-profile/bg-profile.jpg" alt="" style="display: none;">
-                                <div class="profile-img-wrrap" style="background-image: url(&quot;../assets/images/user-profile/bg-profile.jpg&quot;); background-size: cover; background-position: center center; display: block;"><img class="img-fluid bg-img-cover" src="../assets/images/user-profile/bg-profile.jpg" alt="" style="display: none;"></div>
+                            <div class="card profile-header" style="height:auto;background-image: url(&quot;../assets/images/user-profile/bg-profile.jpg&quot;); background-size: cover; background-position: center center; display: block;">
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-12 col-sm-4 col-md-4 col-lg-4">
                                         <div class="userpro-box" style="background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
                                             <div class="img-wrraper">
                                                 <img src="{{ Auth::user()->company_logo ? asset('storage/file_image'.'/'.Auth::user()->company_logo) : asset('Bromi-Logo-card.png')}}" alt="Avatar" style="width:150px;height:150px;">
@@ -154,48 +163,79 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-8">
+                                    <div class="col-12 col-sm-8 col-md-8 col-lg-8">
                                         <div class="bg-white p-3 post-about h-100" style="background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
-                                            <ul>
-                                                <li>
-                                                    <div class="icon"><i data-feather="briefcase"></i></div>
-                                                    <div>
-                                                        <h5>{{ $user->company_name }}</h5>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon"><i data-feather="phone"></i></div>
-                                                    <div>
-                                                        <h5>{{ $user->mobile_number }}
-                                                        </h5>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon"><i data-feather="map-pin"></i></div>
-                                                    <div>
-                                                        <h5>{{ isset($user->city_name) ? $user->city_name : '' }}</h5>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon"><i data-feather="map-pin"></i></div>
-                                                    <div>
-                                                        <h5>{{ isset($user->State->name) ? $user->State->name : '' }}
-                                                        </h5>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon"><i data-feather="user"></i></div>
-                                                    <div>
-                                                        <h5>{{ $user->first_name }} {{ $user->last_name }} </h5>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon"><i data-feather="mail"></i></div>
-                                                    <div>
-                                                        <h5>{{ $user->email }} </h5>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                                            <div class="row">
+                                                <div class="col-xxl-6">
+                                                    <ul>
+                                                        <li>
+                                                            <div class="icon"><i data-feather="user"></i></div>
+                                                            <div>
+                                                                <h5>{{ $user->first_name }} {{ $user->last_name }} </h5>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><i data-feather="mail"></i></div>
+                                                            <div>
+                                                                <h5 style="text-transform: none;">{{ $user->email }} </h5>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><i data-feather="phone"></i></div>
+                                                            <div>
+                                                                <h5>{{ $user->mobile_number }}
+                                                                </h5>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><i data-feather="map-pin"></i></div>
+                                                            <div>
+                                                                <h5>{{ isset($user->State->name) ? $user->State->name : '' }}
+                                                                </h5> <small class="text-muted">( State )</small>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><i data-feather="map-pin"></i></div>
+                                                            <div>
+                                                                <h5>{{ isset($user->city_name) ? $user->city_name : '' }}</h5>
+                                                                <small class="text-muted">( City )</small>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><i data-feather="map-pin"></i></div>
+                                                            <div>
+                                                                <h5>{{ isset($user->address) ? $user->address : '' }}
+                                                                </h5>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-xxl-6">
+                                                    <ul>
+                                                        <li>
+                                                            <div class="icon"><i data-feather="briefcase"></i></div>
+                                                            <div>
+                                                                <h5>{{ $user->company_name }}</h5>
+                                                                <small class="text-muted">( Company Name )</small>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><i data-feather="briefcase"></i></div>
+                                                            <div>
+                                                                <h5>{{ $user->rera }}</h5>
+                                                                <small class="text-muted">( Rera Number )</small>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><i data-feather="briefcase"></i></div>
+                                                            <div>
+                                                                <h5>{{ $user->gst }}</h5>
+                                                                <small class="text-muted">( Gst Number )</small>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -302,20 +342,20 @@
                                                     </thead>
                                                     <tbody>
                                                         @if(count($transactions) > 0)
-                                                            @foreach($transactions as $transaction)
-                                                            <tr>
-                                                                <td>{{ $transaction->payment_completion_time }}</td>
-                                                                <td>{{ $transaction->order_id }}</td>
-                                                                <td>{{ $transaction->payment_amount }}</td>
-                                                                <td>{{ $transaction->payment_currency }}</td>
-                                                                <td>{{ $transaction->plan_name }}</td>
-                                                                <td>{{ $transaction->payment_status }}</td>
-                                                            </tr>
-                                                            @endforeach
+                                                        @foreach($transactions as $transaction)
+                                                        <tr>
+                                                            <td>{{ $transaction->payment_completion_time }}</td>
+                                                            <td>{{ $transaction->order_id }}</td>
+                                                            <td>{{ $transaction->payment_amount }}</td>
+                                                            <td>{{ $transaction->payment_currency }}</td>
+                                                            <td>{{ $transaction->plan_name }}</td>
+                                                            <td>{{ $transaction->payment_status }}</td>
+                                                        </tr>
+                                                        @endforeach
                                                         @else
-                                                            <tr>
-                                                                <td colspan="6" class="text-center">No record found</td>
-                                                            </tr>
+                                                        <tr>
+                                                            <td colspan="6" class="text-center">No record found</td>
+                                                        </tr>
                                                         @endif
                                                     </tbody>
                                                 </table>
@@ -340,19 +380,19 @@
                                                     </thead>
                                                     <tbody>
                                                         @if(count($tickets) > 0)
-                                                            @foreach($tickets as $ticket)
-                                                            <tr>
-                                                                <td>{{ $ticket->ticket_id }}</td>
-                                                                <td>{{ $ticket->title }}</td>
-                                                                <td>{{ $ticket->category_name }}</td>
-                                                                <td>{{ $ticket->priority }}</td>
-                                                                <td>{{ $ticket->message }}</td>
-                                                            </tr>
-                                                            @endforeach
+                                                        @foreach($tickets as $ticket)
+                                                        <tr>
+                                                            <td>{{ $ticket->ticket_id }}</td>
+                                                            <td>{{ $ticket->title }}</td>
+                                                            <td>{{ $ticket->category_name }}</td>
+                                                            <td>{{ $ticket->priority }}</td>
+                                                            <td>{{ $ticket->message }}</td>
+                                                        </tr>
+                                                        @endforeach
                                                         @else
-                                                            <tr>
-                                                                <td colspan="5" class="text-center">No record found</td>
-                                                            </tr>
+                                                        <tr>
+                                                            <td colspan="5" class="text-center">No record found</td>
+                                                        </tr>
                                                         @endif
                                                     </tbody>
                                                 </table>
@@ -444,8 +484,10 @@
                 var mobile_number = $("#mobile_number").val();
                 var company_name = $("#company_name").val();
                 var address = $("#address").val();
+                var rera = $("#rera").val();
+                var gst = $("#gst").val();
 
-                var isValid = checkProfileDetails(firstname, lastname, mobile_number, company_name, address);
+                var isValid = checkProfileDetails(firstname, lastname, mobile_number, company_name, address, rera);
 
                 let form_data = new FormData();
                 let profile_image = document.getElementById('profile_image');
@@ -460,6 +502,8 @@
                 form_data.set('mobile_number', mobile_number);
                 form_data.set('company_name', company_name);
                 form_data.set('address', address);
+                form_data.set('gst', gst);
+                form_data.set('rera', rera);
 
                 let settings = {
                     headers: {
@@ -472,10 +516,6 @@
 
                 if (isValid) {
                     axios.post(url, form_data, settings).then(response => {
-                        // $("#userpfmodel").modal('hide');
-                        // Swal.fire({
-                        //     title: "Your Profile Updated Successfully!!"
-                        // });
                         window.location.href = "{{ route('admin.profile.details') }}";
                     });
                 }

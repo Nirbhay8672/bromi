@@ -47,6 +47,8 @@ class User extends Authenticatable
 		'id_type',
 		'id_file',
 		'mobile_number',
+		'rera',
+		'gst',
 		'office_number',
 		'home_number',
 		'position',

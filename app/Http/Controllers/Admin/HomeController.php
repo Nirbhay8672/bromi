@@ -721,9 +721,9 @@ class HomeController extends Controller
     }
     
 	public function chnageProfile(Request $request){
-
 		$params = $request->all();
 		$user_id =  Auth::user()->id;
+
 		$user = User::select('id','email','password')->where('id',$user_id)->first();
 		if(!$user)
 		{
@@ -731,11 +731,13 @@ class HomeController extends Controller
 
 		}
 		$profile_details = array(
-			'first_name'    =>  $params['firstname'],   
+			'first_name'    =>  $params['firstname'],
 			'last_name'     =>  $params['lastname'],   
 			'mobile_number' =>  $params['mobile_number'],   
 			'company_name'  =>  $params['company_name'],
 			'address'  =>  $params['address'],
+			'rera'  =>  $params['rera'],
+			'gst'  =>  $params['gst'],
 		);
 
 		if($request->profile_image) {
