@@ -4971,14 +4971,14 @@
                             if (filesImages.length == 0 || construction_docs
                                 .length == 0) {
                                 let propertyCategory = data.data.property_category;
-                                // if (propertyCategory === '262' || propertyCategory === '256') {
-                                //     window.location.href = "{{ route('admin.land.properties') }}";
-                                // } else if (propertyCategory === '261') {
-                                //     window.location.href = "{{ route('admin.industrial.properties') }}";
-                                // } else {
-                                //     window.location.href = "{{ route('admin.properties') }}";
-                                // } 
-                                // property_image.innerHTML = 'Property Image is required.';
+                                if (propertyCategory === '262' || propertyCategory === '256') {
+                                    window.location.href = "{{ route('admin.land.properties') }}";
+                                } else if (propertyCategory === '261') {
+                                    window.location.href = "{{ route('admin.industrial.properties') }}";
+                                } else {
+                                    window.location.href = "{{ route('admin.properties') }}";
+                                } 
+                                property_image.innerHTML = 'Property Image is required.';
                             }
                             if (filesImages.length > 0) {
                                 for (let i = 0; i < filesImages.length; i++) {
@@ -5023,17 +5023,17 @@
                                         setTimeout(function() {
                                             let propertyCategory = data.data
                                                 .property_category;
-                                            // if (propertyCategory === '262' ||
-                                            //     propertyCategory === '256') {
-                                            //     window.location.href =
-                                            //         "{{ route('admin.land.properties') }}";
-                                            // } else if (propertyCategory === '261') {
-                                            //     window.location.href =
-                                            //         "{{ route('admin.industrial.properties') }}";
-                                            // } else {
-                                            //     window.location.href =
-                                            //         "{{ route('admin.properties') }}";
-                                            // }
+                                            if (propertyCategory === '262' ||
+                                                propertyCategory === '256') {
+                                                window.location.href =
+                                                    "{{ route('admin.land.properties') }}";
+                                            } else if (propertyCategory === '261') {
+                                                window.location.href =
+                                                    "{{ route('admin.industrial.properties') }}";
+                                            } else {
+                                                window.location.href =
+                                                    "{{ route('admin.properties') }}";
+                                            }
                                         }, 2000);
                                     }
                                 },

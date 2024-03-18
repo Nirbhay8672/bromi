@@ -257,6 +257,7 @@
     'temp_file_url' => '/upload/temp/',
     'building_images_url' => '/upload/building_images/',
     'land_images_url' => '/upload/land_images/',
+    'construction_images_url' => '/upload/construction_images/',
     'tp_images_url' => '/upload/tp_images/',
     'property_configuration' => 
     array (
@@ -324,7 +325,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'bromi_mb_16_03',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
@@ -334,7 +335,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'bromi_mb_16_03',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -354,7 +355,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'bromi_mb_16_03',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -369,7 +370,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'bromi_mb_16_03',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
