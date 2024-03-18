@@ -235,42 +235,43 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <hr>
-                                                        <div>
-                                                            <label><b>Images/Documents</b></label>
-                                                        </div>
-                                                        <div id="uploadImageBox" class="row">
-                                                            <div class="form-group col-md-4 m-b-4 mt-1">
-                                                                <select class="form-select" id="image_category" :class="errors.hasOwnProperty('document_category') ? 'is-invalid' : ''">
-                                                                    <option value=""> Category</option>
-                                                                    <option value="1">Building Elevation</option>
-                                                                    <option value="2">Common Amenities Photos</option>
-                                                                    <option value="3">Master Layout Of Building
-                                                                    </option>
-                                                                    <option value="4">Brochure</option>
-                                                                    <option value="5">Cost Sheet</option>
-                                                                    <option value="6">Other</option>
-                                                                </select>
-                                                                <div class="invalid-feedback">
-                                                                    <span x-text="errors.document_category"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-6 m-b-4 mb-3">
-                                                                <div class="fname">
-                                                                    <div class="fvalue">
-                                                                        <input class="form-control" :class="errors.hasOwnProperty('document_image') ? 'is-invalid' : ''" accept="image/*,.pdf" type="file" id="document_image" name="document_image">
-                                                                        <div class="invalid-feedback">
-                                                                            <span x-text="errors.document_image"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-1 m-b-4 mb-3">
-                                                                <button class="btn btn-primary" style="border-radius:5px;" type="button" @click="addOtherImageOrDoc()" title="">+</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <!-- image_upload.blade.php -->
+<div class="row">
+    <hr>
+    <div>
+        <label><b>Images/Documents</b></label>
+    </div>
+    <div class="uploadImageBoxContainer">
+        <div class="uploadImageBox row">
+            <div class="form-group col-md-4 m-b-4 mt-1">
+                <select class="form-select image-category">
+                    <option value=""> Category</option>
+                    <option value="1">Building Elevation</option>
+                    <option value="2">Common Amenities Photos</option>
+                    <option value="3">Master Layout Of Building</option>
+                    <option value="4">Brochure</option>
+                    <option value="5">Cost Sheet</option>
+                    <option value="6">Other</option>
+                </select>
+                <div class="invalid-feedback">
+                    <span x-text="errors.document_category"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6 m-b-4 mb-3">
+                <div class="fname">
+                    <div class="fvalue">
+                        <input class="form-control document-image" accept="image/*,.pdf" type="file" name="document_image[]">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-1 m-b-4 mb-3">
+                <button class="btn btn-primary add-row" style="border-radius:5px;" type="button" title="">+</button>
+                <button class="btn btn-danger remove-row" style="border-radius:5px;display:none;" type="button" title="">-</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
                                                     <div class="row">
                                                     <template x-for="(other_doc, index) in other_documents">

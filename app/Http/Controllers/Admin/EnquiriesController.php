@@ -469,7 +469,7 @@ class EnquiriesController extends Controller
 					if ($row->property_type == '256') {
 						$fstatus  = '';
 					} else {
-						$fstatus  = 'Unfurnished';
+						$fstatus  = '';
 						if (!empty($row->furnished_status) && !empty(json_decode($row->furnished_status))) {
 							$vv = json_decode($row->furnished_status);
 							if (isset($vv[0])) {

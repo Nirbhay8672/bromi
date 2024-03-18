@@ -45,15 +45,6 @@
                                 <div class="col-md-4 mt-1 m-b-20">
                                     <select class="form-select" id="year_id">
                                         <option value=""> Year</option>
-                                        <option value="2023">2023</option>
-                                        <option value="2022">2022</option>
-                                        <option value="2021">2021</option>
-                                        <option value="2020">2020</option>
-                                        <option value="2019">2019</option>
-                                        <option value="2018">2018</option>
-                                        <option value="2017">2017</option>
-                                        <option value="2016">2016</option>
-                                        <option value="2015">2015</option>
                                     </select>
                                 </div>
 
@@ -121,6 +112,20 @@
     @push('scripts')
         <script>
             $(document).ready(function() {
+                var selectElement = document.getElementById("year_id");
+
+                // Set the range of years
+                var startYear = 2015; // Change this to the start year of your range
+                var endYear = 2030; // Change this to the end year of your range
+
+                // Loop through the range of years and add options to the select element
+                for (var year = endYear; year >= startYear; year--) {
+                    var option = document.createElement("option");
+                    option.text = year;
+                    option.value = year;
+                    selectElement.add(option);
+                }
+
                 setTimeout(() => {
                     $('#enquiry_all').click()
                 }, 500);
