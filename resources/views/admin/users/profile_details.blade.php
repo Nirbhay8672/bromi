@@ -140,16 +140,6 @@
                                                         <h6>( Company )</h6>
                                                     </a>
                                                 </div>
-                                                <div class="follow">
-                                                    <ul class="follow-list">
-                                                        <li>
-                                                            <div class="follow-num">{{ $user_count }}</div><span>Total Sub Users</span>
-                                                        </li>
-                                                        <li>
-                                                            <div class="follow-num">{{ $user->total_user_limit ? $user->total_user_limit - $user_count : 0 }}</div><span>Remaining Users</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
                                             </div>
                                             <div class="row mt-5 text-center">
                                                 <div class="col">
@@ -297,33 +287,79 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-xl-12 col-lg-6 col-md-12 col-sm-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5 class="p-0">
-                                                    <button class="btn btn-link ps-0" data-bs-toggle="collapse" data-bs-target="#collapseicon8" aria-expanded="true" aria-controls="collapseicon8">Totals</button>
-                                                </h5>
-                                            </div>
-                                            <div class="collapse show" id="collapseicon8" aria-labelledby="collapseicon8" data-parent="#accordion">
-                                                <div class="card-body social-list filter-cards-view">
-                                                    <div class="media"><img class="img-30 img-fluid m-r-20" alt="" src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/property.png">
-                                                        <div class="media-body"><span class="d-block">Total Properties - {{ $total_property }}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 col-lg-12 col-md-7 xl-65">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row p-2">
+                                                <div class="col-4">
+                                                    <div class="card o-hidden">
+                                                        <div class="card-body bg-light-green">
+                                                            <div class="media static-widget my-3">
+                                                                <div class="media-body text-center">
+                                                                    <h1 class="font-roboto">{{ $user_count }}</h1>
+                                                                    <h3 class="mb-0">Total Sub Users</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="media"><img class="img-30 img-fluid m-r-20" alt="" src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/property.png">
-                                                        <div class="media-body"><span class="d-block">Total Projects - {{ $total_project }}</span></div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="card o-hidden">
+                                                        <div class="card-body bg-light-orange">
+                                                            <div class="media static-widget my-3">
+                                                                <div class="media-body text-center">
+                                                                    <h1 class="font-roboto">{{ $user->total_user_limit ? $user->total_user_limit - $user_count : 0 }} / {{ $user->total_user_limit ??  0 }}</h1>
+                                                                    <h3 class="mb-0">Remaining Users</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="media mb-3"><img class="img-30 img-fluid m-r-20" alt="" src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/icons/enquiry.png">
-                                                        <div class="media-body"><span class="d-block">Total Enquiries - {{ $total_enquiry }}</span></div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="card o-hidden">
+                                                        <div class="card-body bg-info">
+                                                            <div class="media static-widget my-3">
+                                                                <div class="media-body text-center">
+                                                                    <h1 class="font-roboto">{{ $total_property }}</h1>
+                                                                    <h3 class="mb-0">Total Properties</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="card o-hidden">
+                                                        <div class="card-body bg-light-purpel">
+                                                            <div class="media static-widget my-3">
+                                                                <div class="media-body text-center">
+                                                                    <h1 class="font-roboto">{{ $total_project }}</h1>
+                                                                    <h3 class="mb-0">Total Projects</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="card o-hidden">
+                                                        <div class="card-body bg-secondary">
+                                                            <div class="media static-widget my-3">
+                                                                <div class="media-body text-center">
+                                                                    <h1 class="font-roboto">{{ $total_enquiry }}</h1>
+                                                                    <h3 class="mb-0">Total Enquiries</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-8 col-lg-12 col-md-7 xl-65">
-                            <div class="row">
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-body">

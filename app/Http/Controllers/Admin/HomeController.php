@@ -638,6 +638,7 @@ class HomeController extends Controller
 	}
     
 	public function ProfileDetails(){
+		
 		$login_user = Auth::user();
 
 		$plans = Subplans::get();
@@ -670,7 +671,9 @@ class HomeController extends Controller
 			->select([
 				'tickets.*',
 				'categories.name AS category_name',
-			])->where('tickets.user_id',Auth::user()->id)->orderBy('tickets.created_at', 'asc')
+			])->where('tickets.user_id',Auth::user()->id)
+			->where('status', 'Open')
+			->orderBy('tickets.created_at', 'asc')
 			->take(10)
 			->get();
 
