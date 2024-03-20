@@ -23,12 +23,15 @@
                 <div class="user-profile">
                     <div class="row p-2">
                         <div class="col-sm-12">
-                            <div class="card profile-header" style="height:auto;background-image: url(&quot;../assets/images/user-profile/bg-profile.jpg&quot;); background-size: cover; background-position: center center; display: block;">
+                            <div class="card profile-header"
+                                style="height:auto;background-image: url(&quot;../assets/images/user-profile/bg-profile.jpg&quot;); background-size: cover; background-position: center center; display: block;">
                                 <div class="row">
                                     <div class="col-12 col-sm-4 col-md-4 col-lg-4">
-                                        <div class="userpro-box" style="background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
+                                        <div class="userpro-box"
+                                            style="background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
                                             <div class="img-wrraper">
-                                                <img src="{{ Auth::user()->company_logo ? asset('storage/file_image'.'/'.Auth::user()->company_logo) : asset('Bromi-Logo-card.png')}}" alt="Avatar" style="width:150px;height:150px;">
+                                                <img src="{{ Auth::user()->company_logo ? asset('storage/file_image'.'/'.Auth::user()->company_logo) : asset('Bromi-Logo-card.png')}}"
+                                                    alt="Avatar" style="width:150px;height:150px;">
                                             </div>
                                             <div class="user-designation">
                                                 <div class="title"><a target="_blank" href="">
@@ -37,20 +40,11 @@
                                                     </a>
                                                 </div>
                                             </div>
-                                            <div class="row mt-5 text-center">
-                                                <div class="col">
-                                                    <button tabindex="0" data-toggle="tooltip" class="btn btn-secondary btn-sm btn-edit" style="border-radius: 5px;width:42px;" title="Edit Profile">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </button>
-                                                    <button class="btn btn-secondary text-center changepwd ms-4" style="border-radius: 5px;width:42px;" title="Update Password">
-                                                        <i class="fa fa-lock"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-8 col-md-8 col-lg-8">
-                                        <div class="bg-white p-3 post-about h-100" style="background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
+                                        <div class="bg-white p-3 post-about h-100"
+                                            style="background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
                                             <div class="row">
                                                 <div class="col-xxl-6">
                                                     <ul>
@@ -63,7 +57,8 @@
                                                         <li>
                                                             <div class="icon"><i data-feather="mail"></i></div>
                                                             <div>
-                                                                <h5 style="text-transform: none;">{{ $user->email }} </h5>
+                                                                <h5 style="text-transform: none;">{{ $user->email }}
+                                                                </h5>
                                                             </div>
                                                         </li>
                                                         <li>
@@ -83,7 +78,8 @@
                                                         <li>
                                                             <div class="icon"><i data-feather="map-pin"></i></div>
                                                             <div>
-                                                                <h5>{{ isset($user->city_name) ? $user->city_name : '' }}</h5>
+                                                                <h5>{{ isset($user->city_name) ? $user->city_name : '' }}
+                                                                </h5>
                                                                 <small class="text-muted">( City )</small>
                                                             </div>
                                                         </li>
@@ -135,11 +131,14 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5 class="p-0">
-                                                    <button class="btn btn-link ps-0" data-bs-toggle="collapse" data-bs-target="#collapseicon2" aria-expanded="true" aria-controls="collapseicon2">Plan Details</button>
+                                                    <button class="btn btn-link ps-0" data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseicon2" aria-expanded="true"
+                                                        aria-controls="collapseicon2">Plan Details</button>
                                                 </h5>
                                             </div>
                                             @if($user->plan_id > 0)
-                                            <div class="collapse show h-100" id="collapseicon2" aria-labelledby="collapseicon2" data-parent="#accordion">
+                                            <div class="collapse show h-100" id="collapseicon2"
+                                                aria-labelledby="collapseicon2" data-parent="#accordion">
                                                 <div class="card-body post-about h-100">
                                                     @foreach ($plans as $plan)
                                                     @if ($user->plan_id == $plan->id)
@@ -157,14 +156,14 @@
                                                                 </div>
                                                             </div>
                                                             <div class="pricing-list h-100">
-                                                                @if (!empty($plan->details) && !empty(explode('_---_', json_decode($plan->details, true))))
+                                                                @if (!empty($plan->details) && !empty(explode('_---_',
+                                                                json_decode($plan->details, true))))
                                                                 <h3>Features</h3>
-                                                                @foreach (explode('_---_', json_decode($plan->details, true)) as $feature)
+                                                                @foreach (explode('_---_', json_decode($plan->details,
+                                                                true)) as $feature)
                                                                 <p>{{ $feature }}</p>
                                                                 @endforeach
                                                                 @endif
-                                                                <a href="{{ route('admin.plans') }}" class="btn btn-secondary mt-2" style="border-radius: 5px;width:42px;" tabindex="0" data-toggle="tooltip" title="Upgrade"><i class="fa fa-wrench"></i>
-                                                                </a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -209,7 +208,9 @@
                                                         <div class="card-body bg-light-orange">
                                                             <div class="media static-widget my-3">
                                                                 <div class="media-body text-center">
-                                                                    <h1 class="font-roboto">{{ $user->total_user_limit ? $user->total_user_limit - $user_count : 0 }} / {{ $user->total_user_limit ??  0 }}</h1>
+                                                                    <h1 class="font-roboto">
+                                                                        {{ $user->total_user_limit ? $user->total_user_limit - $user_count : 0 }}
+                                                                        / {{ $user->total_user_limit ??  0 }}</h1>
                                                                     <h3 class="mb-0">Remaining Users</h3>
                                                                 </div>
                                                             </div>
@@ -339,4 +340,3 @@
             </div>
         </div>
         @endsection
-
