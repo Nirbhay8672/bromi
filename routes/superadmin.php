@@ -40,6 +40,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 	Route::group(['middleware' => ['auth', 'superadmin']], function () {
 		Route::get('/', [HomeController::class, 'index'])->name('superadmin');
 		Route::any('/Users', [UserController::class, 'index'])->name('superadmin.users');
+		Route::get('/user-profile/{id}', [UserController::class, 'profile'])->name('superadmin.user-profile');
 		Route::post('/get-user', [UserController::class, 'getSpecificUser'])->name('superadmin.getUser');
 		Route::post('/delete-user', [UserController::class, 'destroy'])->name('superadmin.deleteUser');
 		Route::post('/save-user', [UserController::class, 'saveUser'])->name('superadmin.saveUser');
