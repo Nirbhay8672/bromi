@@ -68,6 +68,13 @@ Route::group(['middleware' => 'revalidate'], function () {
 
 	// });
 	Route::get('logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+	
+	Route::group(['middleware' => ['auth']], function () {
+        Route::any('/Plans', [HomeController::class, 'plan_index'])->name('admin.plans');
+        Route::post('/save-plan-user', [HomeController::class, 'plan_save'])->name('admin.savePlan');
+        Route::any('cashfree/payments/success', [HomeController::class, 'payment_success'])->name('admin.paymentSuccess');
+    });
+    
 	Route::group(['middleware' => ['auth']], function () {
 		Route::get('/', [HomeController::class, 'index'])->name('admin');
 		Route::post('/save-onesignal-id', function(Request $request) {
@@ -163,8 +170,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-role', [RoleController::class, 'destroy'])->name('admin.deleteRole');
 		Route::post('/save-role', [RoleController::class, 'saveRole'])->name('admin.saveRole');
 		Route::any('/Activity-Logs', [HomeController::class, 'getActivityLogs'])->name('admin.logs');
-		Route::any('/Plans', [HomeController::class, 'plan_index'])->name('admin.plans');
-		Route::post('/save-plan-user', [HomeController::class, 'plan_save'])->name('admin.savePlan');
+		// Route::any('/Plans', [HomeController::class, 'plan_index'])->name('admin.plans');
+		// Route::post('/save-plan-user', [HomeController::class, 'plan_save'])->name('admin.savePlan');
 		Route::post('/upgrade-user-limit', [HomeController::class, 'upgrade_user_limit'])->name('admin.upgradeUserLimit');
 		Route::post('/upgrade-plan-user', [HomeController::class, 'upgrade_plan'])->name('admin.upgradePlan');
 		Route::post('/search', [HomeController::class, 'search'])->name('admin.search');

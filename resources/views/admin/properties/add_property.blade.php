@@ -567,7 +567,8 @@
                                                             <div class="invalid-feedback" id="address_error"
                                                                 style="display: none;color:red;"></div>
                                                         </div>
-                                                        <div class="row col-md-7 div_flat_details_7 mb-3 location_link_cls">
+                                                        <div
+                                                            class="row col-md-7 div_flat_details_7 mb-3 location_link_cls">
                                                             <div class="form-group col-md-9">
                                                                 <label for="Link">Location Link</label>
                                                                 <input class="form-control" name="property_link"
@@ -657,33 +658,6 @@
                                                             </div>
                                                         </div>
                                                         <!------------------------------------------------>
-                                                        <div class="col-md-4 the_constructed_carpet_area">
-                                                            <div class="input-group">
-                                                                <div class="form-group col-md-7 m-b-20">
-                                                                    <label for="Constructed Carpet Area">Constructed Carpet
-                                                                        Area</label>
-                                                                    <input class="form-control"
-                                                                        name="constructed_carpet_area"
-                                                                        id="constructed_carpet_area" type="text"
-                                                                        autocomplete="off">
-                                                                </div>
-
-                                                                <div class="input-group-append col-md-5 m-b-20">
-                                                                    <div class="form-group form_measurement">
-                                                                        <select
-                                                                            class="form-select measure_select measure_square"
-                                                                            id="constructed_carpet_area_measurement">
-                                                                            @foreach ($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}"
-                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
-                                                                                    {{ $land_unit->unit_name }}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
                                                         <div class="col-md-3 the_salable_plot_area">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
@@ -768,33 +742,6 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-3 the_carpet_plot_area">
-                                                            <div class="input-group">
-                                                                <div class="form-group col-md-7 m-b-20">
-                                                                    <label for="Carpet Plot Area">Carpet Plot Area</label>
-                                                                    <input class="form-control" name="carpet_plot_area"
-                                                                        id="carpet_plot_area" type="text"
-                                                                        autocomplete="off">
-                                                                </div>
-
-                                                                <div class="input-group-append col-md-5 m-b-20">
-                                                                    <div class="form-group form_measurement">
-                                                                        <select
-                                                                            class="form-select measure_select measure_square"
-                                                                            id="carpet_plot_area_measurement">
-                                                                            @foreach ($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}"
-                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
-                                                                                    {{ $land_unit->unit_name }}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-
                                                         <div class="col-md-3 the_centre_height">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
@@ -820,6 +767,59 @@
                                                             </div>
                                                             <div class="invalid-feedback" id="storage_centre_height_error"
                                                                 style="display: none;color:red;"></div>
+                                                        </div>
+                                                        
+                                                          <div class="col-md-4 the_constructed_carpet_area">
+                                                            <div class="input-group">
+                                                                <div class="form-group col-md-7 m-b-20">
+                                                                    <label for="Constructed Carpet Area">Constructed Carpet
+                                                                        Area</label>
+                                                                    <input class="form-control"
+                                                                        name="constructed_carpet_area"
+                                                                        id="constructed_carpet_area" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="constructed_carpet_area_measurement">
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-3 the_carpet_plot_area">
+                                                            <div class="input-group">
+                                                                <div class="form-group col-md-7 m-b-20">
+                                                                    <label for="Carpet Plot Area">Carpet Plot Area</label>
+                                                                    <input class="form-control" name="carpet_plot_area"
+                                                                        id="carpet_plot_area" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="carpet_plot_area_measurement">
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
                                                         </div>
 
                                                         <div class="col-md-3 the_salable_area">
@@ -904,29 +904,29 @@
                                                             <div class="invalid-feedback" id="width_of_plot_error"
                                                                 style="display: none;color:red;"></div>
                                                         </div>
-                                                        <div class="col-md-3 the_carpet_area">
-                                                            <div class="input-group">
-                                                                <div class="form-group col-md-7 m-b-20">
-                                                                    <label for="Carpet Area">Carpet Area</label>
-                                                                    <input class="form-control" name="carpet_area"
-                                                                        id="carpet_area" type="text"
-                                                                        autocomplete="off">
-                                                                </div>
-                                                                <div class="input-group-append col-md-5 m-b-20">
-                                                                    <div class="form-group form_measurement">
-                                                                        <select
-                                                                            class="form-select measure_select measure_square"
-                                                                            id="carpet_area_measurement">
-                                                                            @foreach ($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}"
-                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
-                                                                                    {{ $land_unit->unit_name }}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        <!--<div class="col-md-3 the_carpet_area">-->
+                                                        <!--    <div class="input-group">-->
+                                                        <!--        <div class="form-group col-md-7 m-b-20">-->
+                                                        <!--            <label for="Carpet Area">Carpet Area</label>-->
+                                                        <!--            <input class="form-control" name="carpet_area"-->
+                                                        <!--                id="carpet_area" type="text"-->
+                                                        <!--                autocomplete="off">-->
+                                                        <!--        </div>-->
+                                                        <!--        <div class="input-group-append col-md-5 m-b-20">-->
+                                                        <!--            <div class="form-group form_measurement">-->
+                                                        <!--                <select-->
+                                                        <!--                    class="form-select measure_select measure_square"-->
+                                                        <!--                    id="carpet_area_measurement">-->
+                                                        <!--                    @foreach ($land_units as $land_unit)-->
+                                                        <!--                        <option value="{{ $land_unit->id }}"-->
+                                                        <!--                            {{ $land_unit->id == 1 ? 'selected' : '' }}>-->
+                                                        <!--                            {{ $land_unit->unit_name }}</option>-->
+                                                        <!--                    @endforeach-->
+                                                        <!--                </select>-->
+                                                        <!--            </div>-->
+                                                        <!--        </div>-->
+                                                        <!--    </div>-->
+                                                        <!--</div>-->
                                                         <div class="col-md-3 the_opening_width">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
@@ -957,7 +957,7 @@
                                                                 <div class="form-group col-md-7 m-b-20">
                                                                     <label for="Ceiling Height">Ceiling Height</label>
                                                                     <input class="form-control" name="ceiling_height"
-                                                                        id="ceiling_height" type="text"
+                                                                        id="ceiling_height" type="text" value="0.00"
                                                                         autocomplete="off">
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
@@ -978,7 +978,29 @@
                                                                 style="display: none;color:red;">Please enter ceiling
                                                                 height</div>
                                                         </div>
-
+                                                        <div class="col-md-3 the_carpet_area">
+                                                            <div class="input-group">
+                                                                <div class="form-group col-md-7 m-b-20">
+                                                                    <label for="Carpet Area">Carpet Area</label>
+                                                                    <input class="form-control" name="carpet_area"
+                                                                        id="carpet_area" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="carpet_area_measurement">
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                         <div class="col-md-3 the_builtup_area">
                                                             <div class="input-group">
@@ -1439,7 +1461,7 @@
                                                                 <option value="industrial">Industrial </option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group col-md-3 m-b-4 mb-3">
+                                                        {{-- <div class="form-group col-md-3 m-b-4 mb-3">
                                                             <label class="select2_label"
                                                                 for="Select Construction Documents"> Construction
                                                                 Documents</label>
@@ -1450,39 +1472,62 @@
                                                                         {{ $document->name }}</option>
                                                                 @endforeach
                                                             </select>
-                                                        </div>
-
+                                                        </div> --}}
                                                     </div>
 
-                                                    <div class="mb-4 div_construction_documents">
-                                                        <label><b>Construction Documents :</b></label>
-                                                        <div class="input-group control-group increment">
-                                                            <input type="file" id="const_documents"
-                                                                name="const_documents[]" class="form-control">
-                                                            <div class="input-group-btn"
-                                                                style="margin-right: 31%;margin-left: 6%;">
-                                                                <button class="btn btn-primary btn-air-primary add-docs"
-                                                                    style="width: 90px;" type="button"><i
-                                                                        class="glyphicon glyphicon-plus"></i>Add</button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="clone hide">
-                                                            <div class="control-group input-group"
-                                                                style="margin-top:10px">
-                                                                <input type="file" name="const_documents[]"
-                                                                    class="form-control">
-                                                                <div class="input-group-btn"
-                                                                    style="margin-right: 31%;margin-left: 6%;">
-                                                                    <button
-                                                                        class="btn btn-primary btn-air-primary rem-docs"
-                                                                        type="button"><i
-                                                                            class="glyphicon glyphicon-remove"></i>Remove</button>
+                                                    <div class="row">
+                                                        <div class="mb-4 div_construction_documents">
+                                                            <label><b>Construction Documents :</b></label>
+                                                            <div class="input-group control-group increment">
+                                                                <div class="input-group-prepend col-md-3" 
+                                                                    style="margin-right: 2%">
+                                                                    <select class="custom-select" name="const_doc_type[]">
+                                                                        <option value=""> Category</option>
+                                                                        <option value="1">Building Elevation</option>
+                                                                        <option value="2">Common Amenities Photos</option>
+                                                                        <option value="3">Master Layout Of Building</option>
+                                                                        <option value="4">Brochure</option>
+                                                                        <option value="5">Cost Sheet</option>
+                                                                        <option value="6">Other</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                <input type="file" id="const_documents"
+                                                                    name="const_documents[]" class="form-control col-md-4"
+                                                                    style="margin-right: 2%">
+                                                                </div>
+                                                                <div class="input-group-btn" style="margin-left: 2%">
+                                                                    <div class="form-group col-md-1">
+                                                                        <button class="btn btn-primary add-docs"
+                                                                            style="border-radius:5px;" type="button"
+                                                                            title="">+</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="clone hide">
+                                                                {{-- <div class="control-group input-group"
+                                                                    style="margin-top:10px">
+                                                                    <div class="input-group-prepend">
+                                                                        <select class="custom-select">
+                                                                            <option selected>Select Type</option>
+                                                                            <option value="1">Type 1</option>
+                                                                            <option value="2">Type 2</option>
+                                                                            <option value="3">Type 3</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <input type="file" name="const_documents[]"
+                                                                        class="form-control">
+                                                                    <div class="input-group-btn">
+                                                                        <button
+                                                                            class="btn btn-primary btn-air-primary rem-docs"
+                                                                            type="button">
+                                                                            <i
+                                                                                class="glyphicon glyphicon-remove"></i>Remove
+                                                                        </button>
+                                                                    </div>
+                                                                </div> --}}
+                                                            </div>
                                                         </div>
-                                                        {{-- <button type="button"
-                                                            class="btn mb-2 btn-primary btn-air-primary upload-btn"
-                                                            style="margin-left: 10px;width:8rem;">Upload</button> --}}
                                                     </div>
 
                                                     <div class="row div_plot_ind_common" id="">
@@ -2113,7 +2158,8 @@
                                                                 <label for="Email">Email</label>
                                                                 <input class="form-control" name="property_email"
                                                                     id="property_email" type="text"
-                                                                    autocomplete="off" style="text-transform: lowercase;">
+                                                                    autocomplete="off"
+                                                                    style="text-transform: lowercase;">
                                                             </div>
                                                             <div class="invalid-feedback" id="property_email_error"
                                                                 style="display: none;color:red;"></div>
@@ -2719,8 +2765,8 @@
                     if ($('input[name=property_category]:checked').attr('data-val') == 'Land') {
                         landConfiguration = $('input[name=plot_type]:checked').val();
                         console.log("landConfiguration ==", landConfiguration);
-                        
-                        
+
+
                     }
                 });
 
@@ -2805,7 +2851,7 @@
                     //     isValid = validateField('#entrance_width', '#entrance_width_error',
                     //         'entrance width field is required') && isValid;
                     // }
-                   
+
                     // if (storageConfiguration == '7' || storageConfiguration == '8' || storageConfiguration == '9') {
                     //     isValid = validateField('#constructed_salable_area', '#constructed_salable_area_error',
                     //         'constructed salable area field is required') && isValid;
@@ -2880,7 +2926,7 @@
                 $(document).on('change', 'input[name=plot_type]', function() {
                     theForLand = $(this).attr('data-val');
                     console.log("theForLand select dropdown val ==", theForLand);
-                    
+
                     if (theForLand === 'agriculture') {
                         console.log("location show ==")
                         $(".location_link_cls").show();
@@ -2958,6 +3004,7 @@
             citiesar = JSON.parse(cities);
             areass = JSON.parse(areas);
             $(document).ready(function() {
+
                 //#B Project default Open on add Prop first - time
                 $('#project_id').select2().select2('open');
                 $('#nextButton').click(function() {
@@ -2989,13 +3036,8 @@
                 //#B This function used for in input textbox only numeric value enter not string 
                 function restrictToNumeric(inputSelectors) {
                     $(inputSelectors.join(',')).on('input', function() {
-                        // Get the current value of the input
                         let inputValue = $(this).val();
-
-                        // Remove any non-numeric characters using a regular expression
                         let numericValue = inputValue.replace(/[^0-9]/g, '');
-
-                        // Update the input value with the numeric-only value
                         $(this).val(numericValue);
                     });
                 }
@@ -3005,31 +3047,40 @@
                     '#constructed_salable_area', '#salable_plot_area', '#constructed_carpet_area'
                 ]);
 
-                //Add multiple Constructin Docs 
+
                 $(".add-docs").click(function() {
-                    var html = $(".clone").html();
-                    $(".increment").after(html);
+                    var cloneHtml = '<div class="clone hide">' +
+                        '<div class="control-group input-group" style="margin-top:10px">' +
+                        '<div class="input-group-prepend col-md-3" style="margin-right: 2%">' +
+                        '<select class="custom-select select2-hidden-accessible" name="const_doc_type[]" tabindex="-1" aria-hidden="true">' +
+                        '<option value=""> Category</option>'+
+                        '<option value="1">Building Elevation</option>'+
+                        '<option value="2">Common Amenities Photos</option>'+
+                        '<option value="3">Master Layout Of Building</option>'+
+                        '<option value="4">Brochure</option>'+
+                        '<option value="5">Cost Sheet</option>'+
+                        '<option value="6">Other</option>'+
+                        '</select>' +
+                        '</div>' +
+                        '<div class="col-md-4" style="margin-right: 2%">'+
+                        '<input type="file" name="const_documents[]" class="form-control" data-bs-original-title="" title="">' +
+                        '</div>'+
+                        '<div class="form-group col-md-1">' +
+                        '<button class="btn btn-primary rem-docs" style="border-radius:5px;" type="button" title="">-</button>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                    $(".increment").after(cloneHtml);
+
+                    // Reinitialize Select2
+                    $(".custom-select").select2();
                 });
+
                 $("body").on("click", ".rem-docs", function() {
                     $(this).parents(".control-group").remove();
                 });
 
-                // $(".add-more").click(function() {
-                //     var fileUploadGroup = $(".file-upload-group:first").clone();
-                //     fileUploadGroup.find("input[type='file']").val('');
-                //     fileUploadGroup.find('.add-more').remove();
-                //     $(".file-upload-container").append(fileUploadGroup);
-                // });
 
-                // // Remove the last file upload section
-                // $(".file-upload-container").on('click', '.remove-file', function() {
-                //     $(this).closest('.file-upload-group').remove();
-                // });
-
-                // // Handle file upload logic here
-                // $(".file-upload-container").on('click', '.upload-btn', function() {
-                //     // Implement your file upload logic here
-                // });
 
             });
 
@@ -3971,7 +4022,7 @@
             //                             @empty
             //                             @endforelse
             //                         '</select>' +
-                                    
+
             //                             '</div>' +
             //                             '<div data-unit_id= ' + id +
             //                             ' class="form-group col-md-1 m-b-4 mb-3"><button data-unit_id=' + id +
@@ -3983,86 +4034,93 @@
             //                     }
 
             function generate_unit_detail(id, plus = 0) {
-            var myvar = '<div class="row">' +
+                var myvar = '<div class="row">' +
                     '<div data-unit_id="' + id + '" class="form-group the_wing col-md-2 m-b-20">' +
-                        '<div>' +
-                            '<label>Wing</label>' +
-                            '<input class="form-control" name="wing" type="text" autocomplete="off">' +
-                        '</div>' +
-                        '<div id="wing_no_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '<div>' +
+                    '<label>Wing</label>' +
+                    '<input class="form-control" name="wing" type="text" autocomplete="off">' +
+                    '</div>' +
+                    '<div id="wing_no_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '</div>' +
                     '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-20">' +
-                        '<div>' +
-                            '<label>Unit No</label>' +
-                            '<input class="form-control" name="unit_unit_no" type="text" autocomplete="off">' +
-                        '</div>' +
-                        '<div id="unit_no__error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '<div>' +
+                    '<label>Unit No</label>' +
+                    '<input class="form-control" name="unit_unit_no" type="text" autocomplete="off">' +
+                    '</div>' +
+                    '<div id="unit_no__error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '</div>' +
                     '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-4 mb-3">' +
-                        '<select class="form-select" name="unit_status">' +
-                            '<option value="Available">Available</option>' +
-                            '<option value="Rent Out">Rent Out</option>' +
-                            '<option value="Sold Out">Sold Out</option>' +
-                        '</select>' +
+                    '<select class="form-select" name="unit_status">' +
+                    '<option value="Available">Available</option>' +
+                    '<option value="Rent Out">Rent Out</option>' +
+                    '<option value="Sold Out">Sold Out</option>' +
+                    '</select>' +
                     '</div>' +
                     '<div data-unit_id="' + id + '" class="the_price_rent form-group col-md-2 m-b-20">' +
-                        '<div>' +
-                            '<label>Price Rent</label>' +
-                            '<input class="form-control indian_currency_amount" name="price_rent" type="text" autocomplete="off">' +
-                        '</div>' +
-                        '<div id="price_rent_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '<div>' +
+                    '<label>Price Rent</label>' +
+                    '<input class="form-control indian_currency_amount" name="price_rent" type="text" autocomplete="off">' +
+                    '</div>' +
+                    '<div id="price_rent_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '</div>' +
                     '<div data-unit_id="' + id + '" class="the_price form-group col-md-2 m-b-20">' +
-                        '<div>' +
-                            '<label>Price</label>' +
-                            '<input class="form-control indian_currency_amount" name="price" type="text" autocomplete="off">' +
-                        '</div>' +
-                        '<div id="price_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '<div>' +
+                    '<label>Price</label>' +
+                    '<input class="form-control indian_currency_amount" name="price" type="text" autocomplete="off">' +
                     '</div>' +
-                     '<div class="the_constructed_plot_price row">' +
-                        '<div data-unit_id="' + id + '" class="col-md-2 m-b-20">' +
-                            '<div class="form-group">' +
-                                '<div>' +
-                                    '<label class="price_plot_label">Plot Price</label>' +
-                                    '<input class="form-control indian_currency_amount" data-unit_id="' + id + '" name="price_plot" type="text" autocomplete="off">' +
-                                '</div>' +
-                                '<div id="price_plot_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
-                            '</div>' +
-                        '</div>' +
-                         '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-20">' +
-                            '<div>' +
-                                '<label class="price_constructed_label">Construction Price</label>' +
-                                '<input class="form-control indian_currency_amount" data-unit_id="' + id + '" name="price_constructed" type="text" autocomplete="off">' +
-                            '</div>' +
-                            '<div id="price_constructed_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
-                        '</div>' +
-                        '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-20">' +
-                            '<div class="form-group">' +
-                                '<div>' +
-                                    '<label>Price</label>' +
-                                    '<input class="form-control indian_currency_amount" data-unit_id="' + id + '" name="price_total" type="text" autocomplete="off" disabled>' +
-                                '</div>' +
-                                '<div id="price_total_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
-                            '</div>' +
-                            '<small style="display:none" class="text-secondary ps-1 converted_value"></small>' +
-                        '</div>' +
+                    '<div id="price_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
+                    '<div class="the_constructed_plot_price row">' +
+                    '<div data-unit_id="' + id + '" class="col-md-2 m-b-20">' +
+                    '<div class="form-group">' +
+                    '<div>' +
+                    '<label class="price_plot_label">Plot Price</label>' +
+                    '<input class="form-control indian_currency_amount" data-unit_id="' + id +
+                    '" name="price_plot" type="text" autocomplete="off">' +
+                    '</div>' +
+                    '<div id="price_plot_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-20">' +
+                    '<div>' +
+                    '<label class="price_constructed_label">Construction Price</label>' +
+                    '<input class="form-control indian_currency_amount" data-unit_id="' + id +
+                    '" name="price_constructed" type="text" autocomplete="off">' +
+                    '</div>' +
+                    '<div id="price_constructed_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
+                    '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-20">' +
+                    '<div class="form-group">' +
+                    '<div>' +
+                    '<label>Price</label>' +
+                    '<input class="form-control indian_currency_amount" data-unit_id="' + id +
+                    '" name="price_total" type="text" autocomplete="off" disabled>' +
+                    '</div>' +
+                    '<div id="price_total_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
+                    '<small style="display:none" class="text-secondary ps-1 converted_value"></small>' +
+                    '</div>' +
                     '</div>' +
                     '<div data-unit_id="' + id + '" class="the_furnished_status form-group col-md-3 m-b-4 mb-3">' +
-                        '<select class="form-select" name="furnished_status">' +
-                            '<option value="">Furnished Status</option>';
-                            @forelse ($property_configuration_settings as $props)
-                                @if ($props['dropdown_for'] == 'property_furniture_type')
-                                    myvar += '<option data-val="{{ $props['name'] }}" value="{{ $props['id'] }}">{{ $props['name'] }}</option>';
-                                @endif
-                            @empty
-                            @endforelse
-                        myvar += '</select>' +
+                    '<select class="form-select" name="furnished_status">' +
+                    '<option value="">Furnished Status</option>';
+                @forelse ($property_configuration_settings as $props)
+                    @if ($props['dropdown_for'] == 'property_furniture_type')
+                        myvar +=
+                            '<option data-val="{{ $props['name'] }}" value="{{ $props['id'] }}">{{ $props['name'] }}</option>';
+                    @endif
+                @empty
+                @endforelse
+                myvar += '</select>' +
                     '</div>' +
                     '<div data-unit_id="' + id + '" class="form-group col-md-1 m-b-4 mb-3">' +
-                        '<button data-unit_id="' + id + '" class="' + ((plus) ? "add_units" : "remove_units") + ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((plus) ? "+" : "-") + '</button>' +
+                    '<button data-unit_id="' + id + '" class="' + ((plus) ? "add_units" : "remove_units") +
+                    ' btn btn-primary" type="button" style="border-radius: 5px;">' + ((plus) ? "+" : "-") + '</button>' +
                     '</div>' +
-                '</div>';
-            return myvar;
+                    '</div>';
+                return myvar;
             }
 
 
@@ -4610,14 +4668,14 @@
                     //     console.log("4");
                     // }
 
-                    if (!plotConf && !storageCategory && !landCategory && furnished.trim() === "") {
-                        console.log("55");
-                        $("#furnished_status_error_" + unique_id).text("furnished field is required").show();
-                        allFieldsValid = false;
-                    } else {
-                        $("#furnished_status_error_" + unique_id).hide();
-                        console.log("5");
-                    }
+                    // if (!plotConf && !storageCategory && !landCategory && furnished.trim() === "") {
+                    //     console.log("55");
+                    //     $("#furnished_status_error_" + unique_id).text("furnished field is required").show();
+                    //     allFieldsValid = false;
+                    // } else {
+                    //     $("#furnished_status_error_" + unique_id).hide();
+                    //     console.log("5");
+                    // }
 
                     if (penthouseConf || retailConfiguration || flateConfiguration || officeConf ||
                         storageConfiguration) {
@@ -4894,12 +4952,9 @@
                             let fd = new FormData();
                             let filesImages = $('#land_images')[0].files;
                             let filesDocuments = $('#land_document')[0].files;
-                            // let construction_docs = $('#const_documents')[0].files;
-
                             let construction_docs = document.getElementsByName("const_documents[]");
                             let files = [];
 
-                            // Loop through all const_documents inputs to collect files
                             for (let i = 0; i < construction_docs.length; i++) {
                                 if (construction_docs[i].files.length > 0) {
                                     for (let j = 0; j < construction_docs[i].files.length; j++) {
@@ -4907,6 +4962,11 @@
                                     }
                                 }
                             }
+
+                            $("select[name='const_doc_type[]']").each(function() {
+                                var selectedValue = $(this).val();
+                                fd.append('const_doc_type[]', selectedValue);
+                            });
 
                             if (filesImages.length == 0 || construction_docs
                                 .length == 0) {
@@ -4917,7 +4977,8 @@
                                     window.location.href = "{{ route('admin.industrial.properties') }}";
                                 } else {
                                     window.location.href = "{{ route('admin.properties') }}";
-                                } // property_image.innerHTML = 'Property Image is required.';
+                                } 
+                                property_image.innerHTML = 'Property Image is required.';
                             }
                             if (filesImages.length > 0) {
                                 for (let i = 0; i < filesImages.length; i++) {
@@ -4959,8 +5020,6 @@
                                             return imageExtensions.includes(fileType);
                                         }
                                         $('#propertyModal').modal('hide');
-
-                                        // Redirect to different routes based on property_category after a delay
                                         setTimeout(function() {
                                             let propertyCategory = data.data
                                                 .property_category;
@@ -5006,14 +5065,6 @@
             };
 
             uploadDocumentField.onchange = function() {
-                // if (this.files.length > 1) {
-                //     this.value = '';
-                //     Swal.fire({
-                //         title: "Only one document is allowed at a time.",
-                //         icon: "warning",
-                //     });
-                //     return;
-                // }
                 var totalSize = 0;
                 for (var i = 0; i < this.files.length; i++) {
                     totalSize += this.files[i].size;
@@ -5115,7 +5166,7 @@
                         if (parentId.find('label').length > 0) {
                             $(this).remove();
                             var currenthtml = $(parentId).html()
-                            $(parentId).html('<div class="fname">' + currenthtml + '<div class="fvalue">' + inputhtml[0]
+                            $(parentId).html('<div class="fname focused">' + currenthtml + '<div class="fvalue">' + inputhtml[0]
                                 .outerHTML + '</div>' + '</div>')
                         }
                     }

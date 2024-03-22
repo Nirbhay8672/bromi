@@ -453,25 +453,52 @@ class LandPropertyController extends Controller
 		$landId = $request->input('land_id');
 		$proId = $request->input('pro_id');
 		$images = $request->file('images');
-		$construction_documents = $request->file('construction_docs');
+		$const_doc_types = ($request->input('const_doc_type')); 
+		$construction_documents = ($request->file('construction_docs'));
 		$documents = $request->file('documents');
 
-		if (!empty($construction_documents)) {
+		// if (!empty($construction_documents)) {
+		// 	foreach ($construction_documents as $key => $constDocs) {
+		// 		$ext = $constDocs->getClientOriginalExtension();
+		// 		$fileName = str_replace('.' . $ext, '', $constDocs->getClientOriginalName()) . "-" . time() . '.' . $ext;
+		// 		$fileName = str_replace('#', '', $fileName);
+		// 		$path = public_path() . config('constant.construction_images_url');
+		// 		File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
+		// 		$moved = $constDocs->move($path, $fileName);
+		// 		if ($moved) {
+		// 			$land_image = new LandImages();
+		// 			$land_image->land_id = $landId;
+		// 			$land_image->construction_documents = $fileName;
+		// 			$land_image->user_id = Auth::user()->id;
+		// 			$land_image->pro_id = $proId;
+		// 			$land_image->const_doc_type = $const_doc_types;
+		// 			$land_image->save();
+		// 		}
+		// 	}
+		// }
+		if (!empty($construction_documents) && is_array($construction_documents)) {
+			// Iterate through each construction document
 			foreach ($construction_documents as $key => $constDocs) {
-				$ext = $constDocs->getClientOriginalExtension();
-				$fileName = str_replace('.' . $ext, '', $constDocs->getClientOriginalName()) . "-" . time() . '.' . $ext;
-				$fileName = str_replace('#', '', $fileName);
-				$path = public_path() . config('constant.land_images_url');
-				File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
-				$moved = $constDocs->move($path, $fileName);
-
-				if ($moved) {
-					$land_image = new LandImages();
-					$land_image->land_id = $landId;
-					$land_image->construction_documents = $fileName;
-					$land_image->user_id = Auth::user()->id;
-					$land_image->pro_id = $proId;
-					$land_image->save();
+				// Check if the corresponding type exists
+				if (isset($const_doc_types[$key])) {
+					// Process the document
+					$ext = $constDocs->getClientOriginalExtension();
+					$fileName = str_replace('.' . $ext, '', $constDocs->getClientOriginalName()) . "-" . time() . '.' . $ext;
+					$fileName = str_replace('#', '', $fileName);
+					$path = public_path() . config('constant.construction_images_url');
+					File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
+					$moved = $constDocs->move($path, $fileName);
+					
+					// Store the document details in the database
+					if ($moved) {
+						$land_image = new LandImages();
+						$land_image->land_id = $landId;
+						$land_image->construction_documents = $fileName;
+						$land_image->user_id = Auth::user()->id;
+						$land_image->pro_id = $proId;
+						$land_image->const_doc_type = $const_doc_types[$key]; // Assign the corresponding type
+						$land_image->save();
+					}
 				}
 			}
 		}

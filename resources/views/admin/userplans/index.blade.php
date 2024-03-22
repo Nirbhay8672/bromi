@@ -27,7 +27,7 @@
                                             <div class="price-box">
                                                 <div>
                                                     <h3>{{$plan->price}}</h3>
-                                                    <p>/ month</p>
+                                                    <p>/ Year</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -46,6 +46,9 @@
                                             </ul>
 											<form action="{{route('admin.savePlan')}}" method="post">
 												@csrf
+												@if ($t_goal = Session::get('transaction_goal'))
+                                                    <input type="hidden" name="transaction_goal", value={{ $t_goal ?? 'new_subscription' }}>
+                                                @endif
 												<input type="hidden" name="plan_id" value="{{$plan->id}}">
 												<button class="btn btn-primary btn-lg" type="submit"
                                                 data-original-title="btn btn-primary btn-lg"

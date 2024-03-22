@@ -1201,7 +1201,25 @@
                                         </div>
 
                                     </div>
-                                    <div class="col-md-12 mt-2">
+                                    <div class="col-md-6 mt-2">
+                                        <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
+                                        <div class="form-group">
+                                            <div class="fname">
+                                                <select class="form-select" id="reminider_before_minute"
+                                                    multiple="multiple">
+                                                    <option value="" disabled>Select Minutes </option>
+                                                    <option value="30 mins">30 mins</option>
+                                                    <option value="1 hour">1 hour</option>
+                                                    <option value="90 mins">90 mins</option>
+                                                    <option value="120 mins">120 mins</option>
+                                                    <option value="24 hour">24 hour</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
+                                            type="remarks" autocomplete="off">
+                                    </div>
+                                    <div class="col-md-6 mt-2">
                                         <div class="form-group">
                                             <label for="progress_remarks">Remarks:</label>
                                             <input class="form-control" name="progress_remarks" id="progress_remarks"

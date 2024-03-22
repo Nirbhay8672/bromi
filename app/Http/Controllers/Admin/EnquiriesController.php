@@ -75,7 +75,7 @@ class EnquiriesController extends Controller
 			});
 			
 			if (count($new) > 0 &&  $user->role_id !== '1') {
-                // dd("0nn");
+                // dd("0nn",$user->role_id);
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
 						$query->where('assign_id', '=', Auth::user()->id);
@@ -83,7 +83,7 @@ class EnquiriesController extends Controller
 					->orderBy('id', 'desc')
 					->get();
 			} else {
-			    
+			 //   dd("02");
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->when($request->filter_by, function ($query) use ($request) {
 						if ($request->filter_by == 'new') {
@@ -469,7 +469,7 @@ class EnquiriesController extends Controller
 					if ($row->property_type == '256') {
 						$fstatus  = '';
 					} else {
-						$fstatus  = 'Unfurnished';
+						$fstatus  = '';
 						if (!empty($row->furnished_status) && !empty(json_decode($row->furnished_status))) {
 							$vv = json_decode($row->furnished_status);
 							if (isset($vv[0])) {

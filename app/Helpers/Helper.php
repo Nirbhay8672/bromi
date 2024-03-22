@@ -476,4 +476,36 @@ class Helper
             return substr($phoneNumber, 0, 10);
         }
     }
+    
+    public static function calculatePlanPrice($currentPrice)
+    {
+        $user = Auth::user();
+        if (empty($user->plan_expire_on)) {
+            return $currentPrice;
+        } else {
+            $planExpiry = Carbon::parse($user->plan_expire_on);
+            $currentDate = Carbon::parse(now()->toDateString());
+            // if the plan has expired..return the full price (current price).
+            if ($currentDate->gt($planExpiry)) {
+                return $currentPrice;
+            } else {
+                // load current plan
+                $user->load('plan');
+                $existingPlan = $user->plan;
+                $perDayPrice = intval(($existingPlan->price/12)/30);
+
+                // now check how many days the existing plan has been used for
+                $existingPlanSubscribedOn = $planExpiry->subYear(1);
+                $existingPlanUsedForDays = $currentDate->diffInDays($existingPlanSubscribedOn);
+                $existingPlanUsedPriceTillDate = $existingPlanUsedForDays * $perDayPrice;
+
+                // chargable price after upgrade plan
+                $price =  $currentPrice - $existingPlanUsedPriceTillDate;
+                if ($price <= 0) {
+                    return $currentPrice;
+                }
+                return $price;
+            }
+        }
+    }
 }

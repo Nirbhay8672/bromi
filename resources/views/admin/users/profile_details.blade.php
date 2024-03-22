@@ -279,7 +279,7 @@
                                                             {{ \Carbon\Carbon::parse($user->subscribed_on)->format('d-m-Y') }}
                                                         </h5>
                                                         <h5>Renewal On :
-                                                            {{ \Carbon\Carbon::parse($user->subscribed_on)->addMonth()->format('d-m-Y') }}
+                                                            {{ \Carbon\Carbon::parse($user->plan_expire_on)->format('d-m-Y') }}
                                                         </h5>
                                                     </div>
                                                 </div>

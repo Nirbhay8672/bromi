@@ -527,7 +527,9 @@
                                             @forelse ($configuration_settings as $progs)
                                                 @if ($progs['dropdown_for'] == 'enquiry_progress')
                                                     @php
-                                                        $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
+                                                        $namee = isset(explode('___', $progs['name'])[0])
+                                                            ? explode('___', $progs['name'])[0]
+                                                            : '';
                                                     @endphp
                                                     <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
                                                 @endif
@@ -749,7 +751,9 @@
                                 @forelse ($configuration_settings as $progs)
                                     @if ($progs['dropdown_for'] == 'enquiry_progress')
                                         @php
-                                            $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
+                                            $namee = isset(explode('___', $progs['name'])[0])
+                                                ? explode('___', $progs['name'])[0]
+                                                : '';
                                         @endphp
                                         <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
                                     @endif
@@ -770,7 +774,9 @@
                                                 @forelse ($configuration_settings as $progs)
                                                     @if ($progs['dropdown_for'] == 'enquiry_progress')
                                                         @php
-                                                            $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
+                                                            $namee = isset(explode('___', $progs['name'])[0])
+                                                                ? explode('___', $progs['name'])[0]
+                                                                : '';
                                                         @endphp
                                                         <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
                                                     @endif
@@ -784,7 +790,7 @@
                                             <input class="form-control limitYear4digits" id="site_visit_date1"
                                                 name="nfdDate" max='31-12-2050' type="date"
                                                 oninput="limitYearTo4Digits1()">
-                                        </div>                                        
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -806,7 +812,7 @@
                                             <input class="form-control" id="site_visit_time1" name="nfdTime"
                                                 type="time">
                                         </div>
-                                       
+
                                     </div>
                                     <div class="col-md-12 mt-2">
                                         <div class="form-group">
@@ -832,18 +838,35 @@
                                                 <label class="form-check-label mb-0" for="progress_lead_type_3">Cold
                                                     Lead</label>
                                             </div>
-                                            <!-- Add other Lead Type checkboxes similarly -->
                                         </div>
 
                                     </div>
-                                    <div class="col-md-12 mt-2">
+                                    <div class="col-md-6 mt-2">
+                                        <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
+                                        <div class="form-group">
+                                            <div class="fname">
+                                                <select class="form-select" id="reminider_before_minute"
+                                                    multiple="multiple">
+                                                    <option value="" disabled>Select Minutes </option>
+                                                    <option value="30 mins">30 mins</option>
+                                                    <option value="1 hour">1 hour</option>
+                                                    <option value="90 mins">90 mins</option>
+                                                    <option value="120 mins">120 mins</option>
+                                                    <option value="24 hour">24 hour</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
+                                            type="remarks" autocomplete="off">
+                                    </div>
+                                    <div class="col-md-6 mt-2">
                                         <div class="form-group">
                                             <label for="progress_remarks">Remarks:</label>
                                             <input class="form-control" name="progress_remarks" id="progress_remarks"
                                                 type="remarks" autocomplete="off">
                                         </div>
                                     </div>
-                                   
+
                                 </div>
                                 <div class="text-center mt-3">
                                     <button class="btn custom-theme-button" type="button"
@@ -861,14 +884,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
 
         <div class="modal fade" id="showprogressmodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -889,7 +904,7 @@
                                     <th scope="col">Added On</th>
                                     <th scope="col">Enquiry Progress</th>
                                     <th scope="col">Sales Comments</th>
-                                    <th scope="col">Follow Up</th>
+                                    <th scope="col">NFD</th>
                                     <th scope="col">Remarks </th>
                                     <th scope="col">Type of Lead</th>
                                     <th scope="col">Added By</th>
@@ -904,7 +919,7 @@
             </div>
         </div>
 
-         <!-- Schedule Modal -->
+        <!-- Schedule Modal -->
         <div class="modal fade" id="showschedulemodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -1133,8 +1148,12 @@
                     @forelse ($configuration_settings as $progs)
                         @if ($progs['dropdown_for'] == 'enquiry_progress')
                             @php
-                                $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
-                                $colorr = isset(explode('___', $progs['name'])[1]) ? explode('___', $progs['name'])[1] : '';
+                                $namee = isset(explode('___', $progs['name'])[0])
+                                    ? explode('___', $progs['name'])[0]
+                                    : '';
+                                $colorr = isset(explode('___', $progs['name'])[1])
+                                    ? explode('___', $progs['name'])[1]
+                                    : '';
                                 $class_namee = Helper::cleanString($namee);
 
                             @endphp
@@ -1457,7 +1476,10 @@
                 var queryString = window.location.search;
                 var urlParams = new URLSearchParams(queryString);
                 var go_data_id = urlParams.get('data_id')
-                $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source').prop('checked', true);
+
+                $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                    .prop('checked', true);
+
                 $('#match_enquiry_all').on('change', function() {
                     let isChecked = $(this).prop('checked');
                     $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')

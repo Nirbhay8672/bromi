@@ -264,6 +264,7 @@
     'temp_file_url' => '/upload/temp/',
     'building_images_url' => '/upload/building_images/',
     'land_images_url' => '/upload/land_images/',
+    'construction_images_url' => '/upload/construction_images/',
     'tp_images_url' => '/upload/tp_images/',
     'property_configuration' => 
     array (

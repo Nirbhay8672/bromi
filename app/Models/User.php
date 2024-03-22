@@ -69,9 +69,12 @@ class User extends Authenticatable
 		'total_user_limit',
 		'driving_license',
 		'company_name',
+		 'plan_type',
+		 'plan_expire_on',
 		'subscribed_on',
 		'verification_token',
 		'is_verified',
+		'payment_id'
 
 	];
 

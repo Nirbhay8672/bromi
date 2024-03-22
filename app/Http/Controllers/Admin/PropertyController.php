@@ -1347,36 +1347,36 @@ class PropertyController extends Controller
             if (!empty($property->servant_room)) {
                 $arr['Servant Room'] = $property->servant_room ? 'Yes' : 'No';
             }
-            if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty(explode('_-||-_', $property->carpet_area)[1])) {
-                $arr['Carpet Area'] = (explode('_-||-_', $property->carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_area)[1]]['name']);
-            }
-            if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty(explode('_-||-_', $property->salable_area)[1])) {
-                $arr['Salable Area'] = (explode('_-||-_', $property->salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_area)[1]]['name']);
-            }
-            if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty(explode('_-||-_', $property->carpet_plot_area)[1])) {
-                $arr['Carpet Plot Area'] = (explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_plot_area)[1]]['name']);
-            }
-            if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty(explode('_-||-_', $property->salable_plot_area)[1])) {
-                $arr['Salable Plot Area'] = (explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_plot_area)[1]]['name']);
-            }
-            if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty(explode('_-||-_', $property->constructed_salable_area)[1])) {
-                $arr['Constructed Salable Area'] = (explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_salable_area)[1]]['name']);
-            }
-            if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty(explode('_-||-_', $property->constructed_carpet_area)[1])) {
-                $arr['Constructed Carpet Area'] = (explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_carpet_area)[1]]['name']);
-            }
-            if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty(explode('_-||-_', $property->constructed_builtup_area)[1])) {
-                $arr['Constructed Builtup Area'] = (explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_builtup_area)[1]]['name']);
-            }
-            if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty(explode('_-||-_', $property->builtup_area)[1])) {
-                $arr['Builtup Area'] = (explode('_-||-_', $property->builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->builtup_area)[1]]['name']);
-            }
+            // if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty(explode('_-||-_', $property->carpet_area)[1])) {
+            //     $arr['Carpet Area'] = (explode('_-||-_', $property->carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_area)[1]]['name']);
+            // }
+            // if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty(explode('_-||-_', $property->salable_area)[1])) {
+            //     $arr['Salable Area'] = (explode('_-||-_', $property->salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_area)[1]]['name']);
+            // }
+            // if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty(explode('_-||-_', $property->carpet_plot_area)[1])) {
+            //     $arr['Carpet Plot Area'] = (explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_plot_area)[1]]['name']);
+            // }
+            // if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty(explode('_-||-_', $property->salable_plot_area)[1])) {
+            //     $arr['Salable Plot Area'] = (explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_plot_area)[1]]['name']);
+            // }
+            // if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty(explode('_-||-_', $property->constructed_salable_area)[1])) {
+            //     $arr['Constructed Salable Area'] = (explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_salable_area)[1]]['name']);
+            // }
+            // if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty(explode('_-||-_', $property->constructed_carpet_area)[1])) {
+            //     $arr['Constructed Carpet Area'] = (explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_carpet_area)[1]]['name']);
+            // }
+            // if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty(explode('_-||-_', $property->constructed_builtup_area)[1])) {
+            //     $arr['Constructed Builtup Area'] = (explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_builtup_area)[1]]['name']);
+            // }
+            // if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty(explode('_-||-_', $property->builtup_area)[1])) {
+            //     $arr['Builtup Area'] = (explode('_-||-_', $property->builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->builtup_area)[1]]['name']);
+            // }
             if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty(explode('_-||-_', $property->terrace_carpet_area)[1])) {
                 $arr['Terrace Carpet Area'] = (explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_carpet_area)[1]]['name']);
             }
-            if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty(explode('_-||-_', $property->terrace_salable_area)[1])) {
-                $arr['Terrace Salable Area'] = (explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_salable_area)[1]]['name']);
-            }
+            // if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty(explode('_-||-_', $property->terrace_salable_area)[1])) {
+            //     $arr['Terrace Salable Area'] = (explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_salable_area)[1]]['name']);
+            // }
             if (!empty($property->hot_property)) {
                 $arr['Hot Property'] = $property->hot_property ? 'Yes' : 'No';
             }
@@ -2093,7 +2093,7 @@ class PropertyController extends Controller
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units','configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
 
     // public function downloadZip($type, $prop)
@@ -2135,38 +2135,43 @@ class PropertyController extends Controller
     public function downloadZip($type, $prop)
     {
         $selectedFiles = $this->getSelectedFiles($type, $prop);
-
+        // dd("selectedFiles",$selectedFiles,$type);
         if (count($selectedFiles) === 1) {
-            // If only one file, directly download the document
             $file = reset($selectedFiles); // Get the first element of the array
-            $path = public_path('upload/land_images/' . $file->image);
-
+            if ($type === 'images' || $type === 'documents') {
+                $path = public_path('upload/land_images/' . $file->image);
+            } else {
+                $path = public_path('upload/construction_images/' . $file->construction_documents);
+            }
             if (file_exists($path)) {
                 return response()->download($path)->deleteFileAfterSend(true);
             } else {
                 return response('File not found', 404);
             }
         } else {
-            // If more than one file, create a zip
             $zipFileName = 'bromi_' . $type . '_files.zip';
             $zip = new ZipArchive();
-
             if ($zip->open($zipFileName, ZipArchive::CREATE) !== true) {
                 return response('Error opening the ZIP file', 500);
             }
-
             foreach ($selectedFiles as $file) {
-                $path = public_path('upload/land_images/' . $file->image);
+                if ($type === 'images' || $type === 'documents') {
+                    $path = public_path('upload/land_images/' . $file->image);
+                } else {
+                    $path = public_path('upload/construction_images/' . $file->construction_documents);
+                }
                 if (file_exists($path)) {
                     $zip->addFile($path, $file->image);
                 } else {
                     return response('File not found: ' . $path, 404);
                 }
+                if (file_exists($path)) {
+                    $zip->addFile($path, $file->construction_documents);
+                } else {
+                    return response('File not found: ' . $path, 404);
+                }
             }
-
             $zip->close();
-
-            // Create a BinaryFileResponse to send the ZIP file.
             return response()->download($zipFileName)->deleteFileAfterSend(true);
         }
     }
@@ -2207,14 +2212,12 @@ class PropertyController extends Controller
     {
         $propertyId = $prop;
         $files = LandImages::where('pro_id', $propertyId)->get();
-        // dd($propertyId,$files);
         $selectedFiles = [];
 
         foreach ($files as $file) {
             $path = pathinfo($file->image, PATHINFO_EXTENSION);
 
-            if (($type === 'images' && in_array($path, ['jpg', 'jpeg', 'png'])) ||
-                ($type === 'documents' && !in_array($path, ['jpg', 'jpeg', 'png']))
+            if (($type === 'images' && in_array($path, ['jpg', 'jpeg', 'png'])) || ($type === 'construction_land_images' && in_array($path, ['jpg', 'jpeg', 'png'])) || ($type === 'documents' && !in_array($path, ['jpg', 'jpeg', 'png']))
             ) {
                 $selectedFiles[] = $file;
             }

@@ -42,6 +42,11 @@
                                             </ul>
 											<form action="{{route('savePlan')}}" method="post">
 												@csrf
+												
+												@if ($t_goal = Session::get('transaction_goal'))
+                                                    <input type="hidden" name="transaction_goal", value={{ $t_goal ?? 'new_subscription' }}>
+                                                @endif
+                                                
 												<input type="hidden" name="plan_id" value="{{$plan->id}}">
                                                 @if ($user_id = Session::get('user_id'))
     												<input type="hidden" name="user_id" value="{{ $user_id }}">

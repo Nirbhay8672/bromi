@@ -66,10 +66,12 @@
 <body>
     <div class="invoice">
         <div class="invoice-header">
-            <h1>Invoice</h1>
+            <div style="max-width:100px;margin: 0 auto;">
+                <img src="https://updates.mrweb.co.in/bromi/public/admins/assets/images/logo/Bromi-Logo.png" alt="Logo" style=" max-width: 100%;">
+            </div> 
         </div>
         <div class="invoice-body">
-
+            
             <div id="invoice-head">
                 <div class="invoice-details">
                     <h2>Invoice Details</h2>
@@ -87,6 +89,9 @@
                     <p><strong> Email:</strong> {{ $user->email }}</p>
                 </div>
             </div>
+
+            <p style="margin:30px 0;"> <strong>Description: </strong> <u> {{ $description }}  </u> </p>
+            
             <table class="invoice-table">
                 <thead>
                     <tr>
@@ -113,11 +118,10 @@
             </div>
         </div>
     </div>
-    <p></p>
-    <p></p>
-    <p style="padding-left: 20px;">
+    <p style="margin-top: 100px;"></p>
+    <p style="padding-left: 20px; text-align:center;">
         Thanks,<br>
-        {{ config('app.name') }}
+        For your business!
     </p>
 </body>
 
