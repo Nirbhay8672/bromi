@@ -15,19 +15,22 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of States</h5>
+                            <div style="width: 70px;">
+                                <button
+                                    class="btn custom-icon-theme-button open_modal_with_this"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#stateModal"
+                                ><i class="fa fa-plus"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="display" id="stateTable">
                                     <thead>
                                         <tr>
-                                            <th>
-                                                <div class="form-check form-check-inline checkbox checkbox-dark mb-0 me-0">
-                                                    <input class="form-check-input" id="select_all_checkbox"
-                                                        name="selectrows" type="checkbox">
-                                                    <label class="form-check-label" for="select_all_checkbox"></label>
-                                                </div>
-                                            </th>
+                                            <th style="min-width: 80px;">Sr No.</th>
                                             <th>State Name</th>
                                             <th>Action</th>
                                         </tr>
@@ -38,6 +41,42 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="stateModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New State</h5>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
+                            novalidate="">
+                            <div class="form-row mb-2">
+                                <div>
+                                    <div class="form-group col-md-12 mb-1">
+                                        <label for="State">State</label>
+                                        <input
+                                            class="form-control"
+                                            name="state_name"
+                                            id="state_name"
+                                            type="text"
+                                            required=""
+                                            autocomplete="off"
+                                        >
+                                    </div>
+                                    <label id="state_name-error" class="error" for="state_name"></label>
+                                </div>
+                                <input type="hidden" name="this_data_id" id="this_data_id">
+                            </div>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" id="saveState">Save</button>
+                                <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -54,9 +93,8 @@
                         url: "{{ route('superadmin.settings.state') }}",
                     },
                     columns: [{
-                            data: 'select_checkbox',
-                            name: 'select_checkbox',
-                            orderable: false
+                            data: 'id',
+                            name: 'id',
                         },
                         {
                             data: 'name',
@@ -75,12 +113,12 @@
                 });
             });
 
-            function getCity(data) {
+            function getState(data) {
                 $('#modal_form').trigger("reset");
                 var id = $(data).attr('data-id');
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('superadmin.settings.getcity') }}",
+                    url: "{{ route('superadmin.settings.getState') }}",
                     data: {
                         id: id,
                         _token: '{{ csrf_token() }}'
@@ -88,78 +126,14 @@
                     success: function(data) {
                         data = JSON.parse(data)
                         $('#this_data_id').val(data.id)
-                        $('#city_name').val(data.name).trigger('change');
-                        $('#state_id').val(data.state_id).trigger('change');
-                        $('#cityModal').modal('show');
-                        triggerChangeinput()
+                        $('#state_name').val(data.name).trigger('change');
+                        $('#stateModal').modal('show');
+						triggerChangeinput()
                     }
                 });
             }
 
-
-            $(document).on('change', '#select_all_checkbox', function(e) {
-                if ($(this).prop('checked')) {
-                    $('.delete_table_row').show();
-
-                    $(".table_checkbox").each(function(index) {
-                        $(this).prop('checked', true)
-                    })
-                } else {
-                    $('.delete_table_row').hide();
-                    $(".table_checkbox").each(function(index) {
-                        $(this).prop('checked', false)
-                    })
-                }
-            })
-
-            $(document).on('change', '.table_checkbox', function(e) {
-                var rowss = [];
-                $(".table_checkbox").each(function(index) {
-                    if ($(this).prop('checked')) {
-                        rowss.push($(this).attr('data-id'))
-                    }
-                })
-                if (rowss.length > 0) {
-                    $('.delete_table_row').show();
-                } else {
-                    $('.delete_table_row').hide();
-                }
-            })
-
-            function deleteTableRow(params) {
-                var rowss = [];
-                $(".table_checkbox").each(function(index) {
-                    if ($(this).prop('checked')) {
-                        rowss.push($(this).attr('data-id'))
-                    }
-                })
-                if (rowss.length > 0) {
-                    Swal.fire({
-                        title: "Are you sure?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes',
-                    }).then(function(isConfirm) {
-                        if (isConfirm.isConfirmed) {
-                            $.ajax({
-                                type: "POST",
-                                url: "{{ route('superadmin.settings.deletecity') }}",
-                                data: {
-                                    allids: JSON.stringify(rowss),
-                                    _token: '{{ csrf_token() }}'
-                                },
-                                success: function(data) {
-                                    $('.delete_table_row').hide();
-                                    $('#stateTable').DataTable().draw();
-                                }
-                            });
-                        }
-                    })
-                }
-            }
-
-
-            function deleteCity(data) {
+            function deleteState(data) {
                 Swal.fire({
                     title: "Are you sure?",
                     icon: "warning",
@@ -170,7 +144,7 @@
                         var id = $(data).attr('data-id');
                         $.ajax({
                             type: "POST",
-                            url: "{{ route('superadmin.settings.deletecity') }}",
+                            url: "{{ route('superadmin.settings.deleteState') }}",
                             data: {
                                 id: id,
                                 _token: '{{ csrf_token() }}'
@@ -183,29 +157,32 @@
                 })
             }
 
-            $(document).on('click', '#saveCity', function(e) {
+            $(document).on('click', '#saveState', function(e) {
                 e.preventDefault();
-                $("#modal_form").validate();
+				$("#modal_form").validate();
+
                 if (!$("#modal_form").valid()) {
-                    return
+					return
                 }
-                $(this).prop('disabled', true);
-                var id = $('#this_data_id').val()
+
+                $(this).prop('disabled',true);
+                var id = $('#this_data_id').val();
+
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('superadmin.settings.savecity') }}",
+                    url: "{{ route('superadmin.settings.saveState') }}",
                     data: {
                         id: id,
-                        name: $('#city_name').val(),
-                        state_id: $('#state_id').val(),
+                        name: $('#state_name').val(),
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
                         $('#stateTable').DataTable().draw();
-                        $('#cityModal').modal('hide');
-                        $('#saveCity').prop('disabled', false);
+                        $('#stateModal').modal('hide');
+						$('#saveState').prop('disabled',false);
                     }
                 });
             })
+
         </script>
     @endpush

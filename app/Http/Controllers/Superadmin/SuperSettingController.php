@@ -22,20 +22,20 @@ class SuperSettingController extends Controller
 	{
 		if ($request->ajax()) {
 
-			$data = District::where('user_id', Auth::user()->id)->get();
+			$data = District::join('state','state.id','district.state_id')
+				->select([
+					'district.name',
+					'district.id',
+					'state.name AS state_name',
+				])
+				->where('district.user_id', Auth::user()->id)
+				->get();
 
 			return DataTables::of($data)
-				->editColumn('select_checkbox', function ($row) {
-					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
-					<input disabled class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
-					<label class="form-check-label" for="checkbox-primary-' . $row->id . '"></label>
-					</div>';
-					return $abc;
-				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Edit" class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
-					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Delete" class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Edit" onclick=getDistrict(this) class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
+					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Delete" onclick=deleteDistrict(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
 					return $buttons;
 				})
 				->rawColumns(['Actions', 'select_checkbox'])
@@ -47,6 +47,37 @@ class SuperSettingController extends Controller
 		return view('superadmin.supersettings.super_district_index', compact('states'));
 	}
 
+	public function get_district(Request $request)
+	{
+		if (!empty($request->id)) {
+			$data = District::where('id', $request->id)->first()->toArray();
+			return json_encode($data);
+		}
+	}
+
+	public function district_store(Request $request)
+	{
+		if (!empty($request->id) && $request->id != '') {
+			$data = District::find($request->id);
+			if (empty($data)) {
+				$data =  new District();
+			}
+		} else {
+			$data =  new District();
+		}
+		$data->name = $request->name;
+		$data->state_id = $request->state_id;
+		$data->user_id = Auth::user()->id;
+		$data->save();
+	}
+
+	public function destroy_district(Request $request)
+	{
+		if (!empty($request->id)) {
+			$data = District::where('id', $request->id)->delete();
+		}
+	}
+
 	public function states_index(Request $request)
 	{
 		if ($request->ajax()) {
@@ -54,17 +85,10 @@ class SuperSettingController extends Controller
 			$data = State::where('user_id', Auth::user()->id)->get();
 
 			return DataTables::of($data)
-				->editColumn('select_checkbox', function ($row) {
-					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
-					<input disabled class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
-					<label class="form-check-label" for="checkbox-primary-' . $row->id . '"></label>
-					</div>';
-					return $abc;
-				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
-					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Edit" class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
-					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Delete" class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Edit" onclick=getState(this) class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
+					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Delete" onclick=deleteState(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
 					return $buttons;
 				})
 				->rawColumns(['Actions', 'select_checkbox'])
@@ -72,6 +96,50 @@ class SuperSettingController extends Controller
 		}
 
 		return view('superadmin.supersettings.super_state_index');
+	}
+
+	public function get_state(Request $request)
+	{
+		if (!empty($request->id)) {
+			$data =  State::where('id', $request->id)->first()->toArray();
+			return json_encode($data);
+		}
+	}
+
+	public function state_store(Request $request)
+	{
+		if (!empty($request->id) && $request->id != '') {
+			$data = State::find($request->id);
+			if (empty($data)) {
+				$data =  new State();
+
+				$state = State::where('name',$request->name)->where('id','!=',$data->id)->where('user_id',Auth::user()->id)->first();
+
+				if(!$state) {
+					$data->name = $request->name;
+					$data->save();
+				}
+			} else  {
+				$data->name = $request->name;
+				$data->save();
+			}
+		} else {
+			$state = State::where('name',$request->name)->where('user_id',Auth::user()->id)->first();
+
+			if(!$state) {
+				$data =  new State();
+				$data->user_id = Auth::user()->id;
+				$data->name = $request->name;
+				$data->save();
+			}
+		}
+	}
+
+	public function destroy_state(Request $request)
+	{
+		if (!empty($request->id)) {
+			State::where('id', $request->id)->delete();
+		}
 	}
 
 	public function cities_index(Request $request)
@@ -113,7 +181,6 @@ class SuperSettingController extends Controller
 				->make(true);
 		}
 
-		$states = State::orderBy('name')->where('user_id', Auth::user()->id)->get();
 		$states = State::orderBy('name')->where('user_id', Auth::user()->id)->get();
 
 		return view('superadmin.supersettings.super_city_index', compact('states'));

@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="col-12 col-lg-3 col-md-3">
                                     <select
-                                        id="state_id"
+                                        id="filter_state_id"
                                         class="form-control"
                                         style="border: 1px solid black;"
                                         onclick="filter()"
@@ -122,7 +122,7 @@
         <script>
             $(document).ready(function() {
 
-                let state_id = document.getElementById('state_id');
+                let state_id = document.getElementById('filter_state_id');
 
                 $('#cityTable').DataTable({
                     processing: true,

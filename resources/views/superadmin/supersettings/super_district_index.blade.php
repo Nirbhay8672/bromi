@@ -15,20 +15,22 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of District</h5>
+
                             <div class="row mt-3 mb-3 gy-3">
-                                <div class="col-12 col-lg-3 col-md-3">
-                                    <select id="filter_district_id" class="form-control" style="border: 1px solid black;" x-model="selected_district" @change="selectDistrict()">
-                                        <option value="">-- Select State --</option>
-                                        @foreach($states as $state)
-                                            <option value="{{$state->id}}">{{ $state->name }}</option>
-                                        @endforeach
-                                    </select>
+                                <div style="width: 70px;">
+                                    <button
+                                        class="btn custom-icon-theme-button open_modal_with_this"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cityModal"
+                                    ><i class="fa fa-plus"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="display" id="districtTable">
+                                <table class="display" id="cityTable">
                                     <thead>
                                         <tr>
                                             <th>
@@ -38,7 +40,8 @@
                                                     <label class="form-check-label" for="select_all_checkbox"></label>
                                                 </div>
                                             </th>
-                                            <th>District Name</th>
+                                            <th>District</th>
+                                            <th>State</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -52,25 +55,71 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="cityModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New District</h5>
+                        <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
+                            novalidate="">
+                            <div class="form-row">
+                                <div class="form-group col-md-7 d-inline-block m-b-20">
+                                    <label for="City">District</label>
+                                    <input class="form-control" name="city_name" id="city_name" type="text"
+                                        required="" autocomplete="off">
+                                </div>
+                                <div class="form-group col-md-4 d-inline-block m-b-4 mt-1">
+                                    <label class="mb-0">State</label>
+                                    <select class="form-select" id="state_id">
+                                        <option value="">State</option>
+                                        @forelse ($states as $state)
+                                            <option value="{{ $state->id }}">{{ $state->name }}
+                                            @empty
+                                        @endforelse
+                                    </select>
+                                </div>
+                                <input type="hidden" name="this_data_id" id="this_data_id">
+                            </div>
+                            <div class="text-center">
+                                <button class="btn custom-theme-button" id="saveCity">Save</button>
+                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endsection
     @push('scripts')
         <script>
             $(document).ready(function() {
 
-                $('#districtTable').DataTable({
+                let state_id = document.getElementById('state_id');
+
+                $('#cityTable').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
                         url: "{{ route('superadmin.settings.district') }}",
+                        data: function(d) {
+                            d.state_id = state_id.value ?? '';
+                        }
                     },
                     columns: [{
-                            data: 'select_checkbox',
-                            name: 'select_checkbox',
+                            data: 'id',
+                            name: 'id',
                             orderable: false
                         },
                         {
                             data: 'name',
                             name: 'name'
+                        },
+                        {
+                            data: 'state_name',
+                            name: 'state_name',
                         },
                         {
                             data: 'Actions',
@@ -85,12 +134,17 @@
                 });
             });
 
-            function getCity(data) {
+
+            function filter() {
+                $('#cityTable').DataTable().draw();
+            }
+
+            function getDistrict(data) {
                 $('#modal_form').trigger("reset");
                 var id = $(data).attr('data-id');
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('superadmin.settings.getcity') }}",
+                    url: "{{ route('superadmin.settings.getDistrict') }}",
                     data: {
                         id: id,
                         _token: '{{ csrf_token() }}'
@@ -106,70 +160,7 @@
                 });
             }
 
-
-            $(document).on('change', '#select_all_checkbox', function(e) {
-                if ($(this).prop('checked')) {
-                    $('.delete_table_row').show();
-
-                    $(".table_checkbox").each(function(index) {
-                        $(this).prop('checked', true)
-                    })
-                } else {
-                    $('.delete_table_row').hide();
-                    $(".table_checkbox").each(function(index) {
-                        $(this).prop('checked', false)
-                    })
-                }
-            })
-
-            $(document).on('change', '.table_checkbox', function(e) {
-                var rowss = [];
-                $(".table_checkbox").each(function(index) {
-                    if ($(this).prop('checked')) {
-                        rowss.push($(this).attr('data-id'))
-                    }
-                })
-                if (rowss.length > 0) {
-                    $('.delete_table_row').show();
-                } else {
-                    $('.delete_table_row').hide();
-                }
-            })
-
-            function deleteTableRow(params) {
-                var rowss = [];
-                $(".table_checkbox").each(function(index) {
-                    if ($(this).prop('checked')) {
-                        rowss.push($(this).attr('data-id'))
-                    }
-                })
-                if (rowss.length > 0) {
-                    Swal.fire({
-                        title: "Are you sure?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes',
-                    }).then(function(isConfirm) {
-                        if (isConfirm.isConfirmed) {
-                            $.ajax({
-                                type: "POST",
-                                url: "{{ route('superadmin.settings.deletecity') }}",
-                                data: {
-                                    allids: JSON.stringify(rowss),
-                                    _token: '{{ csrf_token() }}'
-                                },
-                                success: function(data) {
-                                    $('.delete_table_row').hide();
-                                    $('#districtTable').DataTable().draw();
-                                }
-                            });
-                        }
-                    })
-                }
-            }
-
-
-            function deleteCity(data) {
+            function deleteDistrict(data) {
                 Swal.fire({
                     title: "Are you sure?",
                     icon: "warning",
@@ -180,13 +171,13 @@
                         var id = $(data).attr('data-id');
                         $.ajax({
                             type: "POST",
-                            url: "{{ route('superadmin.settings.deletecity') }}",
+                            url: "{{ route('superadmin.settings.deleteDistrict') }}",
                             data: {
                                 id: id,
                                 _token: '{{ csrf_token() }}'
                             },
                             success: function(data) {
-                                $('#districtTable').DataTable().draw();
+                                $('#cityTable').DataTable().draw();
                             }
                         });
                     }
@@ -203,7 +194,7 @@
                 var id = $('#this_data_id').val()
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('superadmin.settings.savecity') }}",
+                    url: "{{ route('superadmin.settings.saveDistrict') }}",
                     data: {
                         id: id,
                         name: $('#city_name').val(),
@@ -211,7 +202,7 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
-                        $('#districtTable').DataTable().draw();
+                        $('#cityTable').DataTable().draw();
                         $('#cityModal').modal('hide');
                         $('#saveCity').prop('disabled', false);
                     }
