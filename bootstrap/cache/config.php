@@ -23,7 +23,7 @@
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:dEVA702oEdkjz3EEROPU8LsXBNKxea2Qup9DhDax20g=',
+    'key' => 'base64:4kWaQEh6gs2e0GLQJwDLGpwxqe/OQBFX9cDHhi/wWFQ=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (
@@ -332,7 +332,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'bromi',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
@@ -342,7 +342,7 @@
         'url' => NULL,
         'host' => 'localhost',
         'port' => '3306',
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'bromi',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -362,7 +362,7 @@
         'url' => NULL,
         'host' => 'localhost',
         'port' => '3306',
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'bromi',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -377,7 +377,7 @@
         'url' => NULL,
         'host' => 'localhost',
         'port' => '3306',
-        'database' => 'mrwebcoi_bromi',
+        'database' => 'bromi',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -547,11 +547,11 @@
       'smtp' => 
       array (
         'transport' => 'smtp',
-        'host' => 'smtp.example.com',
-        'port' => '587',
-        'encryption' => 'tls',
-        'username' => 'user@example.com',
-        'password' => 'your_password',
+        'host' => 'mailhog',
+        'port' => '1025',
+        'encryption' => NULL,
+        'username' => NULL,
+        'password' => NULL,
         'timeout' => NULL,
         'auth_mode' => NULL,
       ),
@@ -593,8 +593,8 @@
     ),
     'from' => 
     array (
-      'address' => 'hello@example.com',
-      'name' => 'example',
+      'address' => NULL,
+      'name' => 'Laravel',
     ),
     'markdown' => 
     array (
@@ -789,7 +789,7 @@
     array (
       'font_dir' => 'C:\\laragon\\www\\bromi\\storage\\fonts',
       'font_cache' => 'C:\\laragon\\www\\bromi\\storage\\fonts',
-      'temp_dir' => 'C:\\Users\\Dell\\AppData\\Local\\Temp',
+      'temp_dir' => 'C:\\Users\\CODEAN~1\\AppData\\Local\\Temp',
       'chroot' => 'C:\\laragon\\www\\bromi',
       'allowed_protocols' => 
       array (
@@ -927,6 +927,12 @@
         'manager' => '',
         'company' => '',
       ),
+      'cells' => 
+      array (
+        'middleware' => 
+        array (
+        ),
+      ),
     ),
     'extension_detector' => 
     array (
@@ -962,6 +968,7 @@
       array (
         'store' => NULL,
       ),
+      'default_ttl' => 10800,
     ),
     'transactions' => 
     array (
@@ -974,6 +981,9 @@
     'temporary_files' => 
     array (
       'local_path' => 'C:\\laragon\\www\\bromi\\storage\\framework/cache/laravel-excel',
+      'local_permissions' => 
+      array (
+      ),
       'remote_disk' => NULL,
       'remote_prefix' => NULL,
       'force_resync_remote' => NULL,

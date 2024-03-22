@@ -15,6 +15,16 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of District</h5>
+                            <div class="row mt-3 mb-3 gy-3">
+                                <div class="col-12 col-lg-3 col-md-3">
+                                    <select id="filter_district_id" class="form-control" style="border: 1px solid black;" x-model="selected_district" @change="selectDistrict()">
+                                        <option value="">-- Select State --</option>
+                                        @foreach($states as $state)
+                                            <option value="{{$state->id}}">{{ $state->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

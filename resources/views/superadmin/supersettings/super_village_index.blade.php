@@ -16,30 +16,14 @@
                         <h5 class="mb-3">List of Village</h5>
                         <div class="row mt-3 mb-3 gy-3">
                             <div style="width: 150px;">
-                                <button
-                                    class="btn custom-icon-theme-button open_modal_with_this"
-                                    type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#villageModal"
-                                ><i class="fa fa-plus"></i>
+                                <button class="btn custom-icon-theme-button open_modal_with_this" type="button" data-bs-toggle="modal" data-bs-target="#villageModal"><i class="fa fa-plus"></i>
                                 </button>
 
-                                <button
-                                    class="btn delete_table_row ms-3"
-                                    style="display: none;background-color:red;border-radius:5px;color:white;"
-                                    onclick="deleteTableRow()"
-                                    type="button"
-                                ><i class="fa fa-trash"></i>
+                                <button class="btn delete_table_row ms-3" style="display: none;background-color:red;border-radius:5px;color:white;" onclick="deleteTableRow()" type="button"><i class="fa fa-trash"></i>
                                 </button>
                             </div>
                             <div class="col-12 col-lg-3 col-md-3">
-                                <select
-                                    id="filter_district_id"
-                                    class="form-control"
-                                    style="border: 1px solid black;"
-                                    x-model="selected_district"
-                                    @change="selectDistrict()"
-                                >
+                                <select id="filter_district_id" class="form-control" style="border: 1px solid black;" x-model="selected_district" @change="selectDistrict()">
                                     <option value="">-- Select District --</option>
                                     <template x-for="(district, index) in districts" :key="`district_${index}`">
                                         <option :value="district.id"><span x-text="district.name"></span></option>
@@ -47,12 +31,7 @@
                                 </select>
                             </div>
                             <div class="col-12 col-lg-3 col-md-3">
-                                <select
-                                    id="filter_taluka_id"
-                                    class="form-control"
-                                    style="border: 1px solid black;"
-                                    x-model="selected_taluka"
-                                >
+                                <select id="filter_taluka_id" class="form-control" style="border: 1px solid black;" x-model="selected_taluka">
                                     <option value="">-- Select Taluka --</option>
                                     <template x-for="(taluka, index) in talukas" :key="`taluka_${index}`">
                                         <option :value="taluka.id"><span x-text="taluka.name"></span></option>
@@ -60,19 +39,9 @@
                                 </select>
                             </div>
                             <div style="width: 150px;">
-                                <button
-                                    class="btn custom-icon-theme-button"
-                                    type="button"
-                                    title="filter"
-                                    @click="filter()"
-                                ><i class="fa fa-filter"></i>
+                                <button class="btn custom-icon-theme-button" type="button" title="filter" @click="filter()"><i class="fa fa-filter"></i>
                                 </button>
-                                <button
-                                    class="btn custom-icon-theme-button ms-2"
-                                    type="button"
-                                    title="reset"
-                                    @click="reset()"
-                                ><i class="fa fa-recycle"></i>
+                                <button class="btn custom-icon-theme-button ms-2" type="button" title="reset" @click="reset()"><i class="fa fa-recycle"></i>
                                 </button>
                             </div>
                         </div>
@@ -110,7 +79,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add New Village</h5>
-                    <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form class="form-bookmark needs-validation " method="post" id="modal_form" novalidate="">
@@ -160,11 +130,10 @@
 
     @endsection
     @push('scripts')
-    
+
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <script>
-        
         var shouldchangecity = 1;
 
         $(document).ready(function() {
@@ -173,8 +142,11 @@
             var states = @Json($distrct_encoded);
 
             $("select").each(function(index) {
-                $(this).select2()
+                $(this).select2();
             })
+
+            $("#filter_district_id").select2('destroy');
+            $("#filter_taluka_id").select2('destroy');
 
             $(document).on('change', '#district_id', function(e) {
                 if (shouldchangecity) {
@@ -183,7 +155,8 @@
                     $('#taluka_id').html('');
                     for (let i = 0; i < citiesar.length; i++) {
                         if (citiesar[i]['district_id'] == $("#district_id").val()) {
-                            $('#taluka_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[i][
+                            $('#taluka_id').append('<option value="' + citiesar[i]['id'] + '">' + citiesar[
+                                i][
                                 'name'
                             ] + '</option>')
                         }
@@ -375,49 +348,49 @@
 
         document.addEventListener('alpine:init', () => {
 
-        Alpine.data('area_index', () => ({
+            Alpine.data('area_index', () => ({
 
-            init() {
-                this.districts = JSON.parse(@JSON(json_encode($districts)));
-            },
+                init() {
+                    this.districts = JSON.parse(@JSON(json_encode($districts)));
+                },
 
-            districts : [],
-            talukas : [],
-            selected_district : null,
-            selected_taluka : null,
+                districts: [],
+                talukas: [],
+                selected_district: null,
+                selected_taluka: null,
 
-            selectDistrict() {
-                
-                this.selected_taluka = null;
+                selectDistrict() {
 
-                if(this.selected_district) {
-                    let obj = this.districts.filter(district => district.id == this.selected_district);
-                    this.talukas = obj[0].talukas;
-                } else {
-                    this.talukas = [];
                     this.selected_taluka = null;
+
+                    if (this.selected_district) {
+                        let obj = this.districts.filter(district => district.id == this
+                            .selected_district);
+                        this.talukas = obj[0].talukas;
+                    } else {
+                        this.talukas = [];
+                        this.selected_taluka = null;
+                    }
+                },
+
+                filter() {
+                    $('#villageTable').DataTable().draw();
+                },
+
+                reset() {
+                    this.talukas = [];
+                    this.selected_district = null;
+                    this.selected_taluka = null;
+
+                    let district_id = document.getElementById('filter_district_id');
+                    let taluka_id = document.getElementById('filter_taluka_id');
+
+                    district_id.value = '';
+                    taluka_id.value = '';
+
+                    $('#villageTable').DataTable().draw();
                 }
-            },
-
-            filter() {
-                $('#villageTable').DataTable().draw();
-            },
-
-            reset() {
-                this.talukas = [];
-                this.selected_district = null;
-                this.selected_taluka = null;
-
-                let district_id = document.getElementById('filter_district_id');
-                let taluka_id = document.getElementById('filter_taluka_id');
-
-                district_id.value = '';
-                taluka_id.value = '';
-
-                $('#villageTable').DataTable().draw();
-            }
-        }));
+            }));
         });
-
     </script>
     @endpush
