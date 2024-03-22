@@ -90,7 +90,9 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/superadmin/delete-projects', [ProjectsController::class, 'destroy'])->name('superadmin.deleteProject');
 		Route::any('/superadmin/project/view/{id}', [ProjectsController::class, 'viewProject'])->name('superadmin.viewProject');
 
-		//
+		Route::get('/settings-state', [SuperSettingController::class, 'states_index'])->name('superadmin.settings.state');
+		Route::get('/settings-district', [SuperSettingController::class, 'district_index'])->name('superadmin.settings.district');
+
 		Route::get('/settings-city', [SuperSettingController::class, 'cities_index'])->name('superadmin.settings.city');
 		Route::post('/settings-get-city', [SuperSettingController::class, 'get_city'])->name('superadmin.settings.getcity');
 		Route::post('/settings-save-city', [SuperSettingController::class, 'cities_store'])->name('superadmin.settings.savecity');

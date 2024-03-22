@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\District;
 use App\Models\State;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
@@ -15,6 +16,60 @@ class SuperSettingController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth');
+	}
+
+	public function district_index(Request $request)
+	{
+		if ($request->ajax()) {
+
+			$data = District::where('user_id',Auth::user()->id)->get();
+
+			return DataTables::of($data)
+				->editColumn('select_checkbox', function ($row) {
+					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
+					<input disabled class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
+					<label class="form-check-label" for="checkbox-primary-' . $row->id . '"></label>
+					</div>';
+					return $abc;
+				})
+				->editColumn('Actions', function ($row) {
+					$buttons = '';
+					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Edit" class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
+					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Delete" class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+					return $buttons;
+				})
+				->rawColumns(['Actions','select_checkbox'])
+				->make(true);
+		}
+
+		return view('superadmin.supersettings.super_district_index');
+	}
+
+	public function states_index(Request $request)
+	{
+		if ($request->ajax()) {
+
+			$data = State::where('user_id',Auth::user()->id)->get();
+
+			return DataTables::of($data)
+				->editColumn('select_checkbox', function ($row) {
+					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
+					<input disabled class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
+					<label class="form-check-label" for="checkbox-primary-' . $row->id . '"></label>
+					</div>';
+					return $abc;
+				})
+				->editColumn('Actions', function ($row) {
+					$buttons = '';
+					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Edit" class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
+					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Delete" class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+					return $buttons;
+				})
+				->rawColumns(['Actions','select_checkbox'])
+				->make(true);
+		}
+
+		return view('superadmin.supersettings.super_state_index');
 	}
 
 	public function cities_index(Request $request)
