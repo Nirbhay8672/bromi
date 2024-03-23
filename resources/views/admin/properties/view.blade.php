@@ -2652,7 +2652,6 @@ use Illuminate\Support\Facades\DB;
                                                                 @if (in_array($path, $documentExtensions))
                                                                     <div class="slide">
                                                                         <img src="{{ asset('/upload/construction_images/' . $const_image->construction_documents) }}" class="d-block"  alt="Image">
-                                                                        <img src="{{ asset('/upload/construction_images/' . $const_image->construction_documents) }}" class="d-block"  alt="Image">
                                                                     </div>
                                                                     @php
                                                                         $hasConstDocuments = true;
