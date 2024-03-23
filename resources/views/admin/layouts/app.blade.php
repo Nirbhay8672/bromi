@@ -1005,7 +1005,7 @@ Helper::set_default_measuerement();
                   })
                   .then(data => {
                     // console.log(data);
-                    console.log('User ID sent to server successfully :',data);
+                    console.log('User ID sent to server successfully');
                   })
                   .catch(error => {
                     console.error('Error sending user ID to server:', error);

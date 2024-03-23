@@ -8,20 +8,8 @@
                 $class_namee = Helper::cleanString($class_namee);
             @endphp
             <style>
-                . {
-                        {
-                        $class_namee
-                    }
-                }
-
-                .fa-square {
-                    color: {
-                            {
-                            $class_colorr
-                        }
-                    }
-
-                    ;
+                .{{ $class_namee }} .fa-square {
+                    color: {{ $class_colorr }};
                 }
             </style>
         @endpush
@@ -44,33 +32,21 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of Enquiries</h5>
+                            <a class="btn btn-primary btn-air-primary" href="{{ route('admin.enquiry.add') }}">Add New
+                                Enquiry</a>
+                            <button class="btn btn-primary btn-air-primary" type="button" data-bs-toggle="modal"
+                                data-bs-target="#filtermodal">Filter</button>
+                            <button style="display:none" class="btn btn-primary btn-air-primary" id="resetfilter">Clear
+                                Filter</button>
+                            <button class="btn btn-primary btn-air-primary matchbutton" type="button"
+                                data-bs-toggle="modal" data-bs-target="#matchModal">Matching</button>
+                            <button class="btn btn-primary btn-air-primary" onclick="exportEnquiry()"
+                                type="button">Export</button>
+                            <button class="btn btn-primary btn-air-primary" onclick="importEnquiries()"
+                                type="button">Import</button>
+                            <button class="btn btn-primary btn-air-primary delete_table_row" style="display: none"
+                                onclick="deleteTableRow()" type="button">Delete</button>
 
-                            <div class="col">
-                                <a class="btn custom-icon-theme-button" href="{{ route('admin.enquiry.add') }}"
-                                    title="Add Enquiry">
-                                    <i class="fa fa-plus"></i>
-                                </a>
-
-                                <button class="btn ms-3 custom-icon-theme-button" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#filtermodal" title="Filter"><i class="fa fa-filter"></i></button>
-
-                                <button class="btn ms-3 custom-icon-theme-button" type="button" title="Clear Filter"
-                                    id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
-
-                                <button class="btn matchbutton ms-3 custom-icon-theme-button" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#matchModal" title="Matching"><i
-                                        class="fa fa-random"></i></button>
-
-                                <button class="btn ms-3 custom-icon-theme-button" onclick="exportEnquiry()" type="button"
-                                    title="Export"><i class="fa fa-download"></i></button>
-
-                                <button class="btn ms-3 custom-icon-theme-button" onclick="importEnquiries()" type="button"
-                                    title="Import"><i class="fa fa-upload"></i></button>
-
-                                <button class="btn text-white delete_table_row ms-3"
-                                    style="border-radius: 5px;display: none;background-color:red" onclick="deleteTableRow()"
-                                    type="button" title="Delete"><i class="fa fa-trash"></i></button>
-                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -87,11 +63,11 @@
                                             <th>Name</th>
                                             <th>Requirement</th>
                                             <th>Price</th>
-                                            <th>Follow Up & Remarks</th>
+                                            <th>Remark</th>
                                             <th>Assigned</th>
                                             <th>Action</th>
                                         </tr>
-                                        <!-- {{-- <div class="col-sm-10 tab-info">
+                                        {{-- <div class="col-sm-10 tab-info">
 											<span class="blue-inq"><i class="fa fa-square" style="color:#1d2848"></i> New Lead</span>
 											<span class="org-inq"><i class="fa fa-square" style="color:#ff7e00"></i> Lead Confirmed</span>
 											<span class="purple-inq"><i class="fa fa-square" style="color:#a200ff"></i> Site Visit Scheduled</span>
@@ -100,7 +76,7 @@
 											<span class="yellow-inq"><i class="fa fa-square" style="color:#fff600"></i>Booked</span>
 											<span class="green-inq"><i class="fa fa-square" style="color:#0d8c07"></i>Lost</span>
 
-										</div> --}} -->
+										</div> --}}
                                     </thead>
                                     <tbody>
 
@@ -112,6 +88,8 @@
 
                 </div>
             </div>
+
+
         </div>
         <div class="modal fade" id="enquiryModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -286,14 +264,8 @@
                                 <div class="form-group col-md-4 m-b-20 mb-3">
                                     <label class="select2_label" for="Select Project"> Project</label>
                                     <select class="form-select" id="building_id" multiple>
-                                        {{-- @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}">{{ $project->project_name }}</option>
-                                    @endforeach --}}
-                                        @foreach ($projects as $property)
-                                            @if ($property->Projects && $property->Projects->project_name)
-                                                <option value="{{ $property->project_id }}">
-                                                    {{ $property->Projects->project_name }}</option>
-                                            @endif
+                                        @foreach ($projects as $project)
+                                            <option value="{{ $project->id }}">{{ $project->project_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -364,8 +336,7 @@
                                         <option value=""> branch</option>
                                         @foreach ($branches as $branch)
                                             <option value="{{ $branch->id }}">
-                                                {{ $branch->name }}
-                                            </option>
+                                                {{ $branch->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -375,11 +346,11 @@
                                         <option value=""> Employee</option>
                                         @foreach ($employees as $employee)
                                             <option value="{{ $employee->id }}">
-                                                {{ $employee->first_name . ' ' . $employee->last_name }}
-                                            </option>
+                                                {{ $employee->first_name . ' ' . $employee->last_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
+
                             </div>
                             @if (Auth::user()->can('enquiry-edit') || Auth::user()->can('enquiry-create'))
                                 <button class="btn btn-secondary" id="saveEnquiry">Save</button>
@@ -402,20 +373,38 @@
                             @csrf
                             <div>
                                 <div class="row">
-                                    <div class="form-group col-md-3 m-b-4 mb-4">
-                                        <select class="form-select" id="filter_enquiry_for">
-                                            <option value="">Enquiry For</option>
-                                            <option value="Rent">Rent</option>
-                                            <option value="Buy">Buy</option>
-                                            <option value="Both">Both</option>
+                                    <div class="form-group col-md-4 m-b-4 mb-4">
+                                        <select class="form-select" id="filter_city_id">
+                                            <option value=""> city</option>
+                                            @foreach ($cities as $city)
+                                                <option value="{{ $city->id }}">
+                                                    {{ $city->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
-
-                                    <div class="form-group col-md-3 m-b-4 mb-4">
+                                    <div class="form-group col-md-4 m-b-4 mb-4">
+                                        <select class="form-select" id="filter_enquiry_branch_id">
+                                            <option value=""> branch</option>
+                                            @foreach ($branches as $branch)
+                                                <option value="{{ $branch->id }}">
+                                                    {{ $branch->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4 m-b-4 mb-4">
+                                        <select class="form-select" id="filter_employee_id">
+                                            <option value=""> Employee</option>
+                                            @foreach ($employees as $employee)
+                                                <option value="{{ $employee->id }}">
+                                                    {{ $employee->first_name . ' ' . $employee->last_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4 m-b-4 mb-4">
                                         <select class="form-select" id="filter_property_type">
-                                            <option value="">Requirement Type</option>
+                                            <option value="">Property Type</option>
                                             @forelse ($configuration_settings as $props)
-                                                @if ($props['dropdown_for'] == 'property_construction_type' && in_array($props['id'], $prop_type))
+                                                @if ($props['dropdown_for'] == 'property_construction_type')
                                                     <option data-parent_id="{{ $props['parent_id'] }}"
                                                         value="{{ $props['id'] }}">{{ $props['name'] }}
                                                     </option>
@@ -425,8 +414,18 @@
                                             @endforelse
                                         </select>
                                     </div>
-
                                     <div class="form-group col-md-3 m-b-4 mb-4">
+                                        <select class="form-select" id="filter_configuration">
+                                            <option value="">Configuration</option>
+                                            @forelse (config('constant.property_configuration') as $key=>$props)
+                                                <option value="{{ $key }}">{{ $props }}
+                                                </option>
+                                            @empty
+                                            @endforelse
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-5 m-b-4 mb-4">
                                         <label class="select2_label" for="Specific Property">Category</label>
                                         <select class="form-select" id="filter_specific_type" multiple>
                                             @forelse ($configuration_settings as $props)
@@ -441,56 +440,8 @@
                                         </select>
                                     </div>
 
-                                    {{-- <div class="form-group col-md-3 m-b-4 mb-4">
-                                        <select class="form-select" id="filter_configuration">
-                                            <option value="">Sub Category</option>
-                                            @forelse (config('constant.property_configuration') as $key=>$props)
-                                                <option value="{{ $key }}">{{ $props }}
-                                </option>
-                                @empty
-                                @endforelse
-                                </select>
-                            </div> --}}
-                                    <div class="form-group col-md-3 m-b-4 mb-3">
-                                        <select class="form-select" id="filter_configuration">
-                                            <option value="">Sub Category</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group col-md-3 m-b-4 mb-4">
-                                        <select class="form-select" id="filter_employee_id">
-                                            <option value=""> Employee</option>
-                                            @foreach ($employees as $employee)
-                                                <option value="{{ $employee->id }}">
-                                                    {{ $employee->first_name . ' ' . $employee->last_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group col-md-3 m-b-4 mb-4">
-                                        <select class="form-select" id="filter_city_id">
-                                            <option value=""> city</option>
-                                            @foreach ($cities as $city)
-                                                <option value="{{ $city->id }}">
-                                                    {{ $city->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3 m-b-4 mb-4">
-                                        <select class="form-select" id="filter_enquiry_branch_id">
-                                            <option value=""> branch</option>
-                                            @foreach ($branches as $branch)
-                                                <option value="{{ $branch->id }}">
-                                                    {{ $branch->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group col-md-3 m-b-4 mb-4">
-                                        <label class="select2_label" for="Select Area"> Locality</label>
+                                    <div class="form-group col-md-4 m-b-4 mb-4">
+                                        <label class="select2_label" for="Select Area"> Area</label>
                                         <select class="form-select" id="filter_area_id" multiple>
                                             @foreach ($areas as $area)
                                                 <option value="{{ $area->id }}">{{ $area->name }}</option>
@@ -498,7 +449,16 @@
                                         </select>
                                     </div>
 
-                                    <div class="form-group col-md-3 m-b-4 mb-4">
+                                    <div class="form-group col-md-4 m-b-4 mb-4">
+                                        <select class="form-select" id="filter_enquiry_for">
+                                            <option value="">Enquiry For</option>
+                                            <option value="Rent">Rent</option>
+                                            <option value="Buy">Buy</option>
+                                            <option value="Both">Both</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-4 m-b-4 mb-4">
                                         <select class="form-select" id="filter_enquiry_source">
                                             <option value="">Enquiry Source</option>
                                             @forelse ($configuration_settings as $props)
@@ -513,8 +473,7 @@
                                         </select>
                                     </div>
 
-                                    <!-- Filter Progress -->
-                                    <div class="form-group col-md-3 m-b-20 mb-4">
+                                    <div class="form-group col-md-4 m-b-20 mb-4">
                                         <select class="form-select" id="filter_enquiry_progress">
                                             <option value="">Enquiry Progress </option>
                                             <option value="New Lead">New Lead</option>
@@ -527,9 +486,7 @@
                                             @forelse ($configuration_settings as $progs)
                                                 @if ($progs['dropdown_for'] == 'enquiry_progress')
                                                     @php
-                                                        $namee = isset(explode('___', $progs['name'])[0])
-                                                            ? explode('___', $progs['name'])[0]
-                                                            : '';
+                                                        $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
                                                     @endphp
                                                     <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
                                                 @endif
@@ -539,7 +496,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="form-group col-md-3 m-b-4 mb-3">
+                                    <div class="form-group col-md-4 m-b-4 mb-3">
                                         <select class="form-select" id="filter_enquiry_status">
                                             <option value="">Status</option>
                                             <option value="1">Active</option>
@@ -547,7 +504,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="form-group col-md-3 m-b-4 mb-3">
+                                    <div class="form-group col-md-4 m-b-4 mb-3">
                                         <select class="form-select" id="filter_sales_comment">
                                             <option value="">Sales Comments</option>
                                             @forelse ($configuration_settings as $props)
@@ -561,7 +518,9 @@
                                             @endforelse
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-5 m-b-20">
+
+                                    <div class="form-group col-md-4 m-b-20">
+
                                         <div class="col-12">
                                             <div class="m-checkbox-inline custom-radio-ml">
                                                 <input type="hidden" name="filter_lead_type" value="" />
@@ -588,9 +547,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-4 m-b-20">
-                                    </div>
-                                    <div class="form-group col-md-3 m-b-4 mb-3">
+
+                                    <div class="form-group col-md-4 m-b-4 mb-3">
                                         <select class="form-select" id="filter_purpose">
                                             <option value="">Purpose</option>
                                             <option value="Investment">Investment</option>
@@ -598,6 +556,7 @@
                                         </select>
                                     </div>
                                     <hr class="color-hr">
+
                                     <div class="form-group col-md-6 m-b-4 mb-3 ">
                                         <label for="NFD From">NFD From: </label>
                                         <div class="input-group">
@@ -612,6 +571,7 @@
                                                 data-language="en">
                                         </div>
                                     </div>
+
                                     <div class="form-group col-md-6 m-b-4 mb-3">
                                         <label for="From Date">From Date</label>
                                         <div class="input-group">
@@ -641,21 +601,24 @@
                                         <input class="form-check-input" id="filter_favourite" type="checkbox">
                                         <label class="form-check-label" for="filter_favourite">Favourite Enquiry</label>
                                     </div>
+
                                     <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_new_enquiry" type="checkbox">
                                         <label class="form-check-label" for="filter_new_enquiry">New Enquiry</label>
                                     </div>
-                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_draft" type="checkbox">
                                         <label class="form-check-label" for="filter_draft">Draft Enquiry</label>
-                                    </div> --}}
-                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    </div>
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_prospect" type="checkbox">
                                         <label class="form-check-label" for="filter_prospect">Potential Prospect</label>
-                                    </div> --}}
+                                    </div>
+
                                 </div>
                             </div>
                             <button class="btn btn-secondary" id="filtersearch">Filter</button>
+
                             <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
                     </div>
@@ -682,6 +645,7 @@
                                 <div class="form-group col-md-5 m-b-10">
                                     <a href="{{ route('admin.importenquiryTemplate') }}">Download Sample file</a>
                                 </div>
+
                                 <br>
                             </div>
                             <button class="btn btn-secondary" id="importFile">Save</button>
@@ -691,7 +655,6 @@
                 </div>
             </div>
         </div>
-        {{-- enq assign  --}}
         <div class="modal fade" id="transfermodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -717,16 +680,15 @@
                                 <div class="form-group col-md-3 m-b-4 mb-3">
                                     <input type="hidden" name="transfer_form_id" id="transfer_form_id">
                                     <select class="form-select" id="transfer_employee_id">
-                                        <option value=""> Employee </option>
+                                        <option value=""> Employee</option>
                                         @foreach ($employees as $employee)
                                             <option value="{{ $employee->id }}">
-                                                {{ $employee->first_name . ' ' . $employee->last_name }}
-                                            </option>
+                                                {{ $employee->first_name . ' ' . $employee->last_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <button class="btn btn-secondary" id="transferNow">Save</button>
+                            <button class="btn btn-secondary" id="transferNow">Savee</button>
                             <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
                     </div>
@@ -735,172 +697,102 @@
         </div>
         <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog" style="width:30rem" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add Progress</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
-
                     <div class="modal-body">
-                        <div class="container-fluid">
-                            <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form"
-                                novalidate="">
-                                <input type="hidden" name="progress_enquiry_id" id="progress_enquiry_id">
-                                @forelse ($configuration_settings as $progs)
-                                    @if ($progs['dropdown_for'] == 'enquiry_progress')
-                                        @php
-                                            $namee = isset(explode('___', $progs['name'])[0])
-                                                ? explode('___', $progs['name'])[0]
-                                                : '';
-                                        @endphp
-                                        <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
-                                    @endif
-                                @empty
-                                @endforelse
+                        <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form"
+                            novalidate="">
+                            <input type="hidden" name="progress_enquiry_id" id="progress_enquiry_id">
+                            <div class="row">
+                                <div class="form-group col-md-4 m-b-20">
+                                    <label class="mb-0">Enquiry Progress:</label>
+                                    <select class="form-select" id="progress_enquiry_progress">
+                                        <option value="">Enquiry Progress </option>
+                                        <option value="New Lead">New Lead</option>
+                                        <option value="Lead Confirmed"> Lead Confirmed</option>
+                                        <option value="Discussion"> Discussion</option>
+                                        <option value="Booked"> Booked</option>
+                                        <option value="Lost"> Lost</option>
+                                        @forelse ($configuration_settings as $progs)
+                                            @if ($progs['dropdown_for'] == 'enquiry_progress')
+                                                @php
+                                                    $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
+                                                @endphp
+                                                <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
+                                            @endif
+                                        @empty
+                                        @endforelse
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="mb-0">Enquiry Progress: </label>
-                                            <select class="form-select" id="progress_enquiry_progress">
-                                                <option value="">Enquiry Progress </option>
-                                                <option value="New Lead">New Lead</option>
-                                                <option value="Lead Confirmed"> Lead Confirmed</option>
-                                                <option value="Discussion"> Discussion</option>
-                                                <option value="Booked"> Booked</option>
-                                                <option value="Lost"> Lost</option>
-                                                @forelse ($configuration_settings as $progs)
-                                                    @if ($progs['dropdown_for'] == 'enquiry_progress')
-                                                        @php
-                                                            $namee = isset(explode('___', $progs['name'])[0])
-                                                                ? explode('___', $progs['name'])[0]
-                                                                : '';
-                                                        @endphp
-                                                        <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
-                                                    @endif
-                                                @empty
-                                                @endforelse
-
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="site_visit_date1" style="margin-top: 10px">NFD Date:</label>
-                                            <input class="form-control limitYear4digits" id="site_visit_date1"
-                                                name="nfdDate" max='31-12-2050' type="date"
-                                                oninput="limitYearTo4Digits1()">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="mb-0">Comments:</label>
-                                            <select class="form-select" id="progress_sales_comment">
-                                                <option value="">Sales Comments</option>
-                                                @forelse ($configuration_settings as $props)
-                                                    @if ($props['dropdown_for'] == 'enquiry_sales_comment')
-                                                        <option data-parent_id="{{ $props['parent_id'] }}"
-                                                            value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                        </option>
-                                                    @endif
-                                                @empty
-                                                @endforelse
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="nfdTime" style="margin-top: 10px">NFD Time:</label>
-                                            <input class="form-control" id="site_visit_time1" name="nfdTime"
-                                                type="time">
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label>Lead Type:</label><br>
-                                            <div class="form-check form-check-inline radio radio-primary"
-                                                style="margin-right:3rem">
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-8 m-b-20">
+                                    <div class="col-12">
+                                        <div class="m-checkbox-inline custom-radio-ml">
+                                            <div class="form-check form-check-inline radio radio-primary">
                                                 <input class="form-check-input" id="progress_lead_type_1" type="radio"
                                                     name="progress_lead_type" value="Hot Lead">
                                                 <label class="form-check-label mb-0" for="progress_lead_type_1">Hot
                                                     Lead</label>
                                             </div>
-                                            <div class="form-check form-check-inline radio radio-primary"
-                                                style="margin-right:3rem">
+                                            <div class="form-check form-check-inline radio radio-primary">
                                                 <input class="form-check-input" type="radio" id="progress_lead_type_2"
                                                     name="progress_lead_type" value="Warm Lead">
                                                 <label class="form-check-label mb-0" for="progress_lead_type_2"> Warm
                                                     Lead</label>
                                             </div>
-                                            <div class="form-check form-check-inline radio radio-primary"
-                                                style="margin-right:3rem">
+                                            <div class="form-check form-check-inline radio radio-primary">
                                                 <input class="form-check-input" id="progress_lead_type_3" type="radio"
                                                     name="progress_lead_type" value="Cold Lead">
                                                 <label class="form-check-label mb-0" for="progress_lead_type_3">Cold
                                                     Lead</label>
                                             </div>
                                         </div>
-
                                     </div>
-                                    <div class="col-md-6 mt-2">
-                                        <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
-                                        <div class="form-group">
-                                            <div class="fname">
-                                                <select class="form-select" id="reminider_before_minute"
-                                                    multiple="multiple">
-                                                    <option value="" disabled>Select Minutes </option>
-                                                    <option value="30 mins">30 mins</option>
-                                                    <option value="1 hour">1 hour</option>
-                                                    <option value="90 mins">90 mins</option>
-                                                    <option value="120 mins">120 mins</option>
-                                                    <option value="24 hour">24 hour</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
-                                            type="remarks" autocomplete="off">
-                                    </div>
-                                    <div class="col-md-6 mt-2">
-                                        <div class="form-group">
-                                            <label for="progress_remarks">Remarks:</label>
-                                            <input class="form-control" name="progress_remarks" id="progress_remarks"
-                                                type="remarks" autocomplete="off">
-                                        </div>
-                                    </div>
-
                                 </div>
-                                <div class="text-center mt-3">
-                                    <button class="btn custom-theme-button" type="button"
-                                        id="saveProgress">Save</button>
-                                    <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
-                                        data-bs-dismiss="modal">Cancel</button>
+                                <div class="form-group col-md-4 m-b-4 mb-3">
+                                    <label class="mb-0">Comments:</label>
+                                    <select class="form-select" id="progress_sales_comment">
+                                        <option value="">Sales Comments</option>
+                                        @forelse ($configuration_settings as $props)
+                                            @if ($props['dropdown_for'] == 'enquiry_sales_comment')
+                                                <option data-parent_id="{{ $props['parent_id'] }}"
+                                                    value="{{ $props['id'] }}">{{ $props['name'] }}
+                                                </option>
+                                            @endif
+                                        @empty
+                                        @endforelse
+                                    </select>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="form-group col-md-6 m-b-20">
+                                    <label for="nfd" class="mb-0">NFD:</label>
+                                    <input class="form-control " id="nfdDateTime" max='31-10-2050' name="nfdDateTime"
+                                        type="datetime-local">
+                                </div>
+
+                                <div class="form-group col-md-12 m-b-20">
+                                    <label for="remarks" class="mb-0">Remarks:</label>
+                                    <input class="form-control" name="progress_remarks" id="progress_remarks"
+                                        type="remarks" autocomplete="off">
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" id="saveProgress">Save</button>
+                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </form>
                     </div>
-
-
-
-
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
-
         <div class="modal fade" id="showprogressmodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Progress</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <button class="btn btn-secondary" id="addProgressButton" data-id=""
@@ -912,7 +804,7 @@
                                     <th scope="col">Added On</th>
                                     <th scope="col">Enquiry Progress</th>
                                     <th scope="col">Sales Comments</th>
-                                    <th scope="col">Follow Up</th>
+                                    <th scope="col">NFD</th>
                                     <th scope="col">Remarks </th>
                                     <th scope="col">Type of Lead</th>
                                     <th scope="col">Added By</th>
@@ -926,16 +818,13 @@
                 </div>
             </div>
         </div>
-
-         <!-- Schedule Modal -->
         <div class="modal fade" id="showschedulemodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Show Schedule Visit</h5>
-                        <button class="btn-close btn-close btn-light" type="button" data-bs-dismiss="modal"
-                            aria-label="Close"> </button>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="schedule_form"
@@ -946,12 +835,19 @@
                                     <label class="mb-0">&nbsp;</label>
                                     <label class="select2_label" for="Property list">Property</label>
                                     <select class="form-select" id="property_list" multiple>
-                                        @foreach ($projects as $property)
-                                            @if ($property->Projects && $property->Projects->project_name)
-                                                <option value="{{ $property->id }}">
-                                                    {{ $property->Projects->project_name }}</option>
-                                            @endif
-                                        @endforeach
+                                        @forelse ($prop_list as $list)
+                                            @php
+                                                $theprop = !empty(explode(' - ', $list)[0]) ? explode(' - ', $list)[0] : '';
+                                                if (empty($theprop)) {
+                                                    continue;
+                                                }
+                                                $real_list = explode(' - ', $list);
+                                                unset($real_list[0]);
+                                                $real_list = implode(' - ', $real_list);
+                                            @endphp
+                                            <option value="{{ $theprop }}">{{ $real_list }}</option>
+                                        @empty
+                                        @endforelse
                                     </select>
                                 </div>
                                 <div class="form-group col-md-2 m-b-20">
@@ -970,64 +866,25 @@
                                         <option value=""> Assigned To</option>
                                         @foreach ($employees as $employee)
                                             <option value="{{ $employee->id }}">
-                                                {{ $employee->first_name . ' ' . $employee->last_name }}
-                                            </option>
+                                                {{ $employee->first_name . ' ' . $employee->last_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group col-md-4 m-b-20">
-                                    <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
-                                    <div class="form-group">
-                                        <div class="fname">
-                                            <select class="form-select" id="reminider_before_minute" multiple="multiple">
-                                                <option value="" disabled>Select Minutes </option>
-                                                <option value="30 mins">30 mins</option>
-                                                <option value="1 hour">1 hour</option>
-                                                <option value="90 mins">90 mins</option>
-                                                <option value="120 mins">120 mins</option>
-                                                <option value="24 hour">24 hour</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
-                                        type="remarks" autocomplete="off">
-                                </div>
-                                {{-- <div class="form-group col-md-3 m-b-20">
+                                <div class="form-group col-md-3 m-b-20">
                                     <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
                                     <input class="form-control " id="site_visit_time" max='31-10-2050'
-                                        name="site_visit_time" type="datetime-local" oninput="limitYearTo4Digits()">
-                                </div> --}}
-                                {{-- bharat date --}}
-                                <div class="form-group col-md-3 m-b-20">
-                                    <label for="site_visit_date" class="mb-0">Site Visit Date:</label>
-                                    <input class="form-control limitYear4digits" id="site_visit_date"
-                                        name="site_visit_date" type="date" oninput="limitYearTo4Digits()">
+                                        name="site_visit_time" type="datetime-local">
                                 </div>
-                                <div class="form-group col-md-3 m-b-20">
-                                    <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
-                                    <input class="form-control" id="site_visit_time" name="site_visit_time"
-                                        type="time">
+                                <div class="form-group col-md-2 m-b-20">
+                                    <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
+                                    <input class="form-control" name="schedule_remind" id="schedule_remind"
+                                        type="remarks" autocomplete="off">
                                 </div>
-                                <div class="form-group col-md-6 m-b-20">
+                                <div class="form-group col-md-8 m-b-20">
                                     <label for="Site Visit Time" class="mb-0">Description:</label>
                                     <input class="form-control" name="schedule_description" id="schedule_description"
                                         type="remarks" autocomplete="off">
                                 </div>
-                                <div class="row">
-                                    <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="email_reminder_schedule" type="checkbox"
-                                            value="">
-                                        <label class="form-check-label" for="email_reminder_schedule">Email
-                                            Reminder</label>
-                                    </div>
-
-                                    <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="sms_reminder_schedule" type="checkbox"
-                                            value="">
-                                        <label class="form-check-label" for="sms_reminder_schedule">SMS Reminder</label>
-                                    </div>
-                                </div>
-
                             </div>
                         </form>
                         <button class="btn btn-secondary" id="saveSchedule" data-id="">Save</button>
@@ -1076,70 +933,49 @@
             </div>
         </div>
         <div class="modal fade" id="matchModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Match By</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
-                        <form class="form-bookmark needs-validation" method="post" id="match_modal" novalidate="">
+                        <form class="form-bookmark needs-validation " method="post" id="match_modal" novalidate="">
                             @csrf
                             <div>
                                 <div class="row" id="matchbyfield">
-                                    <div class="col-md-6">
-                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
-                                            <input class="form-check-input" id="match_enquiry_all" type="checkbox">
-                                            <label class="form-check-label" for="match_enquiry_all">Select All</label>
-                                        </div>
-                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
-                                            <input class="form-check-input" checked id="match_enquiry_for"
-                                                type="checkbox">
-                                            <label class="form-check-label" for="match_enquiry_for">Enquiry For</label>
-                                        </div>
-                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
-                                            <input class="form-check-input" checked id="match_specific_sub_type"
-                                                type="checkbox">
-                                            <label class="form-check-label" for="match_specific_sub_type">Enquiry Sub
-                                                Category</label>
-                                        </div>
-                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
-                                            <input class="form-check-input" checked id="match_budget_from_type"
-                                                type="checkbox">
-                                            <label class="form-check-label" for="match_budget_from_type">Enquiry
-                                                Budget</label>
-                                        </div>
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                        <input class="form-check-input" checked id="match_property_type" type="checkbox">
+                                        <label class="form-check-label" for="match_property_type">Property Type</label>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
-                                            <input class="form-check-input" checked id="match_property_type"
-                                                type="checkbox">
-                                            <label class="form-check-label" for="match_property_type">Enquiry
-                                                Requirement</label>
-                                        </div>
-                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
-                                            <input class="form-check-input" checked id="match_specific_type"
-                                                type="checkbox">
-                                            <label class="form-check-label" for="match_specific_type">Enquiry
-                                                Category</label>
-                                        </div>
-                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
-                                            <input class="form-check-input" checked id="match_enquiry_size"
-                                                type="checkbox">
-                                            <label class="form-check-label" for="match_enquiry_size">Enquiry Size</label>
-                                        </div>
+
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                        <input class="form-check-input" checked id="match_specific_type" type="checkbox">
+                                        <label class="form-check-label" for="match_specific_type">Specific Type</label>
                                     </div>
+
+
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                        <input class="form-check-input" id="match_building" type="checkbox">
+                                        <label class="form-check-label" for="match_building">Project</label>
+                                    </div>
+
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                        <input class="form-check-input" id="match_enquiry_for" type="checkbox">
+                                        <label class="form-check-label" for="match_enquiry_for">Enquiry For</label>
+                                    </div>
+
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
+                                        <input class="form-check-input" id="match_inquiry_source" type="checkbox">
+                                        <label class="form-check-label" for="match_inquiry_source">Enquiry Source</label>
+                                    </div>
+
                                 </div>
                             </div>
-                            <div class="text-center mt-3">
-                                <button class="btn custom-theme-button" type="button" id="matchagain">Match</button>
-                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
-                                    data-bs-dismiss="modal">Cancel</button>
-                            </div>
+                            <button class="btn btn-secondary" type="button" id="matchagain">Match</button>
+                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -1156,180 +992,24 @@
                     @forelse ($configuration_settings as $progs)
                         @if ($progs['dropdown_for'] == 'enquiry_progress')
                             @php
-                                $namee = isset(explode('___', $progs['name'])[0])
-                                    ? explode('___', $progs['name'])[0]
-                                    : '';
-                                $colorr = isset(explode('___', $progs['name'])[1])
-                                    ? explode('___', $progs['name'])[1]
-                                    : '';
+                                $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
+                                $colorr = isset(explode('___', $progs['name'])[1]) ? explode('___', $progs['name'])[1] : '';
                                 $class_namee = Helper::cleanString($namee);
 
                             @endphp
                             <div class="d-block w-100 {{ $class_namee }}"><i class="fa fa-square"></i>
-                                {{ $namee }}
-                            </div>
+                                {{ $namee }}</div>
                         @endif
                     @empty
                     @endforelse
                 </div>
             </div>
         </div>
-
-        <?php
-        $matchEnquiryFor = isset($_GET['match_enquiry_for']) ? $_GET['match_enquiry_for'] : null;
-        $matchPropertyType = isset($_GET['match_property_type']) ? $_GET['match_property_type'] : null;
-        $matchSpecificType = isset($_GET['match_specific_type']) ? $_GET['match_specific_type'] : null;
-        $matchSpecificSubType = isset($_GET['match_specific_sub_type']) ? $_GET['match_specific_sub_type'] : null;
-        $matchBudgetType = isset($_GET['match_budget_from_type']) ? $_GET['match_budget_from_type'] : null;
-        $matchEnqSize = isset($_GET['match_enquiry_size']) ? $_GET['match_enquiry_size'] : null;
-        $matchEnqSource = isset($_GET['match_inquiry_source']) ? $_GET['match_inquiry_source'] : null;
-        // dd($matchEnquiryFor,$matchPropertyType,$matchBudgetType,$matchSpecificType,$matchEnqSize,$matchEnqSource);
-        ?>
     @endsection
     @push('scripts')
         <script>
-            function limitYearTo4Digits1() {
-                const dateInput = document.getElementById('site_visit_date1');
-                const inputValue = dateInput.value;
-                // Split the input by the hyphen separator
-                const parts = inputValue.split('-');
-                if (parts.length === 3) {
-                    // Ensure the year part has 4 digits
-                    const year = parts[0].trim();
-                    if (year.length > 4) {
-                        parts[0] = year.slice(-4); // Keep only the last 4 digits
-                    }
-                    // Reconstruct the formatted date
-                    const formattedDate = parts.join('-');
-                    // Update the input value with the modified date
-                    dateInput.value = formattedDate;
-                }
-            }
-
-            function limitYearTo4Digits() {
-                const dateInput = document.getElementById('site_visit_date');
-                const inputValue = dateInput.value;
-
-                console.log("inputValue", inputValue);
-                // Split the input by the hyphen separator
-                const parts = inputValue.split('-');
-
-                if (parts.length === 3) {
-                    // Ensure the year part has 4 digits
-                    const year = parts[0].trim();
-                    if (year.length > 4) {
-                        parts[0] = year.slice(-4); // Keep only the last 4 digits
-                    }
-
-                    // Reconstruct the formatted date
-                    const formattedDate = parts.join('-');
-
-                    // Update the input value with the modified date
-                    dateInput.value = formattedDate;
-                }
-            }
-        </script>
-
-        {{-- <script>
-            $(document).ready(function() {
-                $('#progress_enquiry_progress').on('change', function() {
-                    alert("clicekd bhrt")
-                    var selectedValue = $(this).val();
-                    if (selectedValue === 'Lead Confirmed') {
-                        $('#progress_enquiry_progress option[value="New Lead"]').prop('disabled', true);
-                    } else {
-                        $('#progress_enquiry_progress option[value="New Lead"]').prop('disabled', false);
-                    }
-                });
-            });
-        </script> --}}
-        <script>
-            $(document).ready(function() {
-                // Check or uncheck checkboxes based on PHP variables
-                $('#match_enquiry_for').prop('checked', <?= $matchEnquiryFor === '1' ? 'true' : 'false' ?>);
-                $('#match_property_type').prop('checked', <?= $matchPropertyType === '1' ? 'true' : 'false' ?>);
-                $('#match_specific_type').prop('checked', <?= $matchSpecificType === '1' ? 'true' : 'false' ?>);
-                $('#match_specific_sub_type').prop('checked', <?= $matchSpecificSubType === '1' ? 'true' : 'false' ?>);
-                $('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
-                $('#match_enquiry_size').prop('checked', <?= $matchEnqSize === '1' ? 'true' : 'false' ?>);
-                $('#match_inquiry_source').prop('checked', <?= $matchEnqSource === '1' ? 'true' : 'false' ?>);
-
-            });
-            // progress disable
-            $(document).ready(function() {
-                const enquiryProgressDropdown = document.getElementById('progress_enquiry_progress');
-                $('#progress_enquiry_progress').on('change', function() {
-                    const selectedValue = this.value;
-                    const options = enquiryProgressDropdown.options;
-
-                    // Remove specific options based on the selected value
-                    if (selectedValue === 'Lead Confirmed') {
-                        removeOption('New Lead');
-                    } else if (selectedValue === 'Discussion') {
-                        removeOption('New Lead');
-                        removeOption('Lead Confirmed');
-                    } else if (selectedValue === 'Booked') {
-                        removeOption('New Lead');
-                        removeOption('Lead Confirmed');
-                        removeOption('Discussion');
-                    } else if (selectedValue === 'Lost') {
-                        removeOption('New Lead');
-                        removeOption('Lead Confirmed');
-                        removeOption('Discussion');
-                        removeOption('Booked');
-                    }
-                });
-
-                function removeOption(value) {
-                    for (let i = 0; i < enquiryProgressDropdown.options.length; i++) {
-                        if (enquiryProgressDropdown.options[i].value === value) {
-                            enquiryProgressDropdown.remove(i);
-                            break;
-                        }
-                    }
-                }
-                //
-            });
-            // category to sub category on change filter
-            $('#filter_specific_type').on('change', function() {
-                let selectedCategory = this.options[this.selectedIndex].text.trim();
-                let url = "{{ route('admin.getEnquiryConfiguration') }}";
-
-                try {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("GET", `${url}?selectedCategory=${encodeURIComponent(selectedCategory)}`, true);
-
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState === XMLHttpRequest.DONE) {
-                            if (xhr.status === 200) {
-                                var data = JSON.parse(xhr.responseText);
-                                console.log("data", data);
-
-                                var subCategorySelect = document.getElementById('filter_configuration');
-                                subCategorySelect.innerHTML = '<option value="">Sub Category</option>';
-
-                                for (var key in data) {
-                                    if (data.hasOwnProperty(key)) {
-                                        var option = document.createElement('option');
-                                        option.value = key;
-                                        option.text = data[key];
-                                        option.dataset.category = data[key];
-                                        subCategorySelect.appendChild(option);
-                                    }
-                                }
-                            } else {
-                                console.error("An error occurred:", xhr.statusText);
-                            }
-                        }
-                    };
-
-                    xhr.send();
-                } catch (error) {
-                    console.error("An error occurred:", error);
-                }
-            });
-
             matching_property_url = "{{ route('admin.properties') }}";
+
 
             var search_enq = '';
             var queryString = window.location.search;
@@ -1348,53 +1028,14 @@
                     $('.matchbutton').hide()
                 }
             } catch (error) {
-                console.log("error :", error);
+
             }
-
-            // matching popup
-            // $(document).on('click', '#matchagain', function(e) {
-            //     e.preventDefault();
-            //     $('#enquiryTable').DataTable().draw();
-            //     $('#matchModal').modal('hide');
-            // })
-
-            // $(document).on('click', '#matchagain', function(e) {
-            //         console.log("Matching 1");
-            //         e.preventDefault();
-            //         let dataId = $(this).attr('data-id');
-            //         urll = matching_property_url + '?enq=' + encryptSimpleString(dataId);
-            //         window.location = urll;
-            //         $('#enquiryTable').DataTable().draw();
-            //         $('#matchModal').modal('hide');
-            // });
 
             $(document).on('click', '#matchagain', function(e) {
                 e.preventDefault();
-
-                // Gather selected checkbox values
-                let selectedCheckboxes = {
-                    match_enquiry_for: $('#match_enquiry_for').prop('checked') ? 1 : 0,
-                    match_property_type: $('#match_property_type').prop('checked') ? 1 : 0,
-                    match_specific_type: $('#match_specific_type').prop('checked') ? 1 : 0,
-                    match_specific_sub_type: $('#match_specific_sub_type').prop('checked') ? 1 : 0,
-                    match_budget_from_type: $('#match_budget_from_type').prop('checked') ? 1 : 0,
-                    match_enquiry_size: $('#match_enquiry_size').prop('checked') ? 1 : 0,
-                    match_inquiry_source: $('#match_inquiry_source').prop('checked') ? 1 : 0,
-                };
-
-                // Construct the URL with selected checkbox values
-                let queryString = Object.entries(selectedCheckboxes)
-                    .filter(([key, value]) => value === 1)
-                    .map(([key, value]) => `${key}=${value}`)
-                    .join('&');
-
-                let dataId = $(this).attr('data-id');
-                let url = matching_property_url + '?' + queryString + '&enq=' + encryptSimpleString(dataId);
-
-                // Redirect to the new URL
-                window.location = url;
-            });
-
+                $('#enquiryTable').DataTable().draw();
+                $('#matchModal').modal('hide');
+            })
 
             $(document).on('change', '#select_all_checkbox', function(e) {
                 if ($(this).prop('checked')) {
@@ -1484,13 +1125,6 @@
                 var queryString = window.location.search;
                 var urlParams = new URLSearchParams(queryString);
                 var go_data_id = urlParams.get('data_id')
-                $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source').prop('checked', true);
-                $('#match_enquiry_all').on('change', function() {
-                    let isChecked = $(this).prop('checked');
-                    $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
-                        .prop('checked', isChecked);
-                });
-
 
                 $('#enquiryTable').DataTable({
                     processing: true,
@@ -1520,20 +1154,15 @@
                             d.filter_to_budget = $('#filter_to_budget').val();
                             d.filter_favourite = Number($('#filter_favourite').prop('checked'));
                             d.filter_new_enquiry = Number($('#filter_new_enquiry').prop('checked'));
-                            // d.filter_draft = Number($('#filter_draft').prop('checked'));
-                            // d.filter_prospect = Number($('#filter_prospect').prop('checked'));
+                            d.filter_draft = Number($('#filter_draft').prop('checked'));
+                            d.filter_prospect = Number($('#filter_prospect').prop('checked'));
                             d.go_data_id = go_data_id;
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
-                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop(
-                                'checked'));
-                            d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
                             d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
                             d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
-                            // d.match_budget_to_type = Number($('#match_budget_to_type').prop('checked'));
-                            d.match_enquiry_size = Number($('#match_enquiry_size').prop('checked'));
-                            // d.match_building = Number($('#match_building').prop('checked'));
+                            d.match_building = Number($('#match_building').prop('checked'));
                             d.filter_by = filter_by
                             d.calendar_date = calendar_date
                             d.calendar_type = calendar_type
@@ -1578,11 +1207,11 @@
                             "targets": 1
                         },
                         {
-                            "width": "20%",
+                            "width": "23%",
                             "targets": 2
                         },
                         {
-                            "width": "13%",
+                            "width": "10%",
                             "targets": 3
                         },
                         {
@@ -1598,12 +1227,6 @@
                             "targets": 6
                         }
                     ],
-                    //#B To Change Background when enquiry_status = 0. 
-                    "createdRow": function(row, data, dataIndex) {
-                        if (data['enq_status'] == 0) {
-                            $(row).addClass('important-row');
-                        }
-                    },
                     "drawCallback": function(settings, json) {
                         $('.color-code-popover').attr('data-bs-content', $('#mypopover-content').html());
                         setTimeout(() => {
@@ -1620,12 +1243,9 @@
                 });
             });
 
-            //matching popup
             function matchingProperty(data) {
-                $('#matchModal').modal('show');
-                $('#matchagain').attr('data-id', $(data).attr('data-id'));
-                // urll = matching_property_url + '?enq=' + matching_property_url($(data).attr('data-id'));
-                // window.location = urll;
+                urll = matching_property_url + '?enq=' + encryptSimpleString($(data).attr('data-id'));
+                window.location = urll;
             }
 
             $(document).on('click', '#filtersearch', function(e) {
@@ -1642,8 +1262,8 @@
                 $('#filter_form').trigger("reset");
                 $('#enquiryTable').DataTable().draw();
                 $('#filtermodal').modal('hide');
-                // $('#filter_specific_type').val([]).trigger('change');
-                // $('#filter_area_id').val([]).trigger('change');
+                $('#filter_specific_type').val([]).trigger('change');
+                $('#filter_area_id').val([]).trigger('change');
                 triggerResetFilter()
             });
 
@@ -1795,165 +1415,32 @@
                 })
             }
 
-            // date disbale via type
-            // $(document).ready(function() {
-            //     // Get the input element
-            //     var nfdDateTimeInput = $("#nfdDateTime");
-
-            //     // Function to check if the input is typed or selected using the mouse
-            //     function isInputTyped() {
-            //         var inputValue = nfdDateTimeInput.val();
-            //         return inputValue !== '';
-            //     }
-
-            //     // Disable the input when typed manually
-            //     nfdDateTimeInput.on('keydown', function() {
-            //         nfdDateTimeInput.data('isTyped', true);
-            //         nfdDateTimeInput.prop("disabled", true);
-            //         $("#err_date").html("Please select a date instead of typing.");
-
-            //     });
-
-            //     // Check if the input was typed and show error
-            //     nfdDateTimeInput.on('click', function() {
-            //         if (!isInputTyped()) {
-            //             nfdDateTimeInput.data('isTyped', false);
-            //             nfdDateTimeInput.prop("disabled", false);
-            //         }
-            //     });
-
-            //     // Trigger validation on form submit
-            //     $("#progress_form").on('submit', function() {
-            //         nfdDateTimeInput.data('isTyped', isInputTyped());
-            //         $("#progress_form").valid();
-            //     });
-            // });
-
-            // $(document).ready(function() {
-            //     // Get the input element
-            //     var nfdDateTimeInput = $("#nfdDateTime");
-
-            //     // Function to check if the input is typed or selected using the mouse
-            //     function isInputTyped() {
-            //         var inputValue = nfdDateTimeInput.val();
-            //         return inputValue !== '';
-            //     }
-
-            //     // Disable the input when typed manually
-            //     nfdDateTimeInput.on('keydown', function() {
-            //         nfdDateTimeInput.data('isTyped', true);
-            //         $("#err_date").html("Please select a date instead of typing.");
-
-            //     });
-
-            //     // Check if the input was typed and show error
-            //     nfdDateTimeInput.on('click', function() {
-            //         if (!isInputTyped()) {
-            //             nfdDateTimeInput.data('isTyped', false);
-            //         }
-            //     });
-
-            //     // Trigger validation on form submit
-            //     $("#progress_form").on('submit', function() {
-            //         nfdDateTimeInput.data('isTyped', isInputTyped());
-            //         $("#progress_form").valid();
-            //     });
-            // });
-
-
             $.validator.addMethod("maxDate", function(value, element) {
                 var curDate = new Date("2050-12-31");
                 var inputDate = new Date(value);
-                var isTyped = $(element).data('isTyped');
-
-                if (value === '') {
+                if (value == '')
                     return true;
-                }
+                if (inputDate < curDate)
+                    return true;
+                return false;
+            }, "Invalid Date!"); // error message
 
-                if (inputDate < curDate) {
-                    if (isTyped) {
-                        return false; // Typed date is invalid
+            $("#progress_form").validate({
+                rules: {
+                    nfdDateTime: {
+                        date: true,
+                        maxDate: true
                     }
-                    return true;
                 }
-
-                return false; // Invalid date
-            }, function(params, element) {
-                var isTyped = $(element).data('isTyped');
-
-                if (isTyped) {
-                    return ""; // Error message for typed date
-                }
-                return "Invalid Date!"; // Default error message
             });
 
-            // $("#progress_form").validate({
-            //     rules: {
-            //         nfdDateTime: {
-            //             date: true,
-            //             maxDate: true
-            //         }
-            //     }
-            // });
-
-            // $(document).ready(function() {
-            //     // Get the input element
-            //     var nfdDateTimeInput = $("#nfdDateTime");
-
-            //     // Function to check if the input is typed or selected using the mouse
-            //     function isInputTyped() {
-            //         var inputValue = nfdDateTimeInput.val();
-            //         return inputValue !== '';
-            //     }
-
-            //     // Disable the input when typed manually
-            //     nfdDateTimeInput.on('keydown', function() {
-            //         nfdDateTimeInput.prop("disabled", true);
-            //     });
-
-            //     // Enable the input when selected via mouse
-            //     nfdDateTimeInput.on('click', function() {
-            //         if (!isInputTyped()) {
-            //             nfdDateTimeInput.prop("disabled", false);
-            //         }
-            //     });
-            // });
-
-            // $.validator.addMethod("maxDate", function(value, element) {
-            //     var curDate = new Date("2050-12-31");
-            //     var inputDate = new Date(value);
-            //     if (value == '')
-            //         return true;
-            //     if (inputDate < curDate)
-            //         return true;
-            //     return false;
-            // }, "Invalid Date!"); // error message
-
-            // $("#progress_form").validate({
-            //     rules: {
-            //         nfdDateTime: {
-            //             date: true,
-            //             maxDate: true
-            //         }
-            //     }
-            // });
-
-            // save progress
             $(document).on('click', '#saveProgress', function(e) {
-                console.log("saved progress 3 ==");
                 e.preventDefault();
-                console.log("Saved Progressgggg ==");
                 if (!$('#progress_form').valid()) {
-                    dd("onnnnnnnnnnn");
                     return;
                 }
                 $(this).prop('disabled', true);
                 var id = $('#progress_enquiry_id').val()
-                // var email_reminder = document.getElementById("email_reminder");
-                // var sms_reminder = document.getElementById("sms_reminder");
-                // var email = email_reminder.checked == true ? 1 : 0;
-                // var sms = sms_reminder.checked == true ? 1 : 0;
-
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.saveProgress') }}",
@@ -1962,37 +1449,35 @@
                         progress: $('#progress_enquiry_progress').val(),
                         lead_type: $('input[name="progress_lead_type"]:checked').val(),
                         sales_comment_id: $('#progress_sales_comment').val(),
-                        nfd: $('#site_visit_date1').val() + ' ' + $('#site_visit_time1').val(),
+                        nfd: $('#nfdDateTime').val(),
                         remarks: $('#progress_remarks').val(),
-                        time_before: JSON.stringify($('#reminider_before_minute').val()),
-                        // email_reminder: email,
-                        // sms_reminder: sms,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
-                        console.log("progres add sucess ==", data);
                         $('#enquiryTable').DataTable().draw();
                         $('#progressmodal').modal('hide');
                         $('#saveProgress').prop('disabled', false);
                     }
                 });
             });
-            console.log("NFD Schedule:", $('#site_visit_date').val(), $('#site_visit_time').val());
 
-            // save Schedule Visit
+
+            $("#schedule_form").validate({
+                rules: {
+                    site_visit_time: {
+                        date: true,
+                        maxDate: true
+                    }
+                }
+            });
+
             $(document).on('click', '#saveSchedule', function(e) {
                 e.preventDefault();
                 if (!$('#schedule_form').valid()) {
-                    return
+                    return;
                 }
                 $(this).prop('disabled', true);
                 var id = $('#schedule_visit_id').val()
-                reminder_time_before = $('#reminider_before_minute').val();
-                var email_reminder = document.getElementById("email_reminder_schedule");
-                var sms_reminder = document.getElementById("sms_reminder_schedule");
-                var email = email_reminder.checked == true ? 1 : 0;
-                var sms = sms_reminder.checked == true ? 1 : 0;
-
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.saveSchedule') }}",
@@ -2000,23 +1485,17 @@
                         enquiry_id: id,
                         visit_status: $('#schedule_visit_status').val(),
                         description: $('#schedule_description').val(),
-                        visit_date: $('#site_visit_date').val() + ' ' + $('#site_visit_time').val(),
+                        visit_date: $('#site_visit_time').val(),
                         assigned_to: $('#schedule_assigned_to').val(),
                         schedule_remind: $('#schedule_remind').val(),
                         property_list: JSON.stringify($('#property_list').val()),
-                        time_before: JSON.stringify(reminder_time_before),
-                        email_reminder: email,
-                        sms_reminder: sms,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
-                        console.log("data save schedule 1 ==", data);
                         $('#enquiryTable').DataTable().draw();
-                        $('#showschedulemodal').modal('hide');
                         $('#saveSchedule').prop('disabled', false);
                     },
                     error: function(data) {
-                        console.log("err ==", data);
                         $('#saveSchedule').prop('disabled', false);
                     }
                 });
@@ -2050,26 +1529,56 @@
                 });
             }
 
+            // $(document).on('click', '#transferNow', function(e) {
+            //     e.preventDefault();
+            //     var id = $('#transfer_form_id').val()
+            //     var employee = $('#transfer_employee_id').val()
+            //     $.ajax({
+            //         type: "POST",
+            //         url: "{{ route('admin.transferEnquiry') }}",
+            //         data: {
+            //             enquiry_id: id,
+            //             employee: employee,
+            //             _token: '{{ csrf_token() }}'
+            //         },
+            //         success: function(data) {
+            //             console.log("dataaa ==",data);
+            //             $('#enquiryTable').DataTable().draw();
+            //             $('#transfermodal').modal('hide');
+            //         }
+            //     });
+            // });
             $(document).on('click', '#transferNow', function(e) {
-                e.preventDefault();
-                var id = $('#transfer_form_id').val()
-                var employee = $('#transfer_employee_id').val()
-                if (employee) {
-                    $('#transfermodal').modal('hide');
-                }
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('admin.transferEnquiry') }}",
-                    data: {
-                        enquiry_id: id,
-                        employee: employee,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        $('#enquiryTable').DataTable().draw();
-                        $('#transfermodal').modal('hide');
-                    }
-                });
+                console.log("tetsttt transfer ==");
+                // e.preventDefault();
+                // var id = $('#transfer_form_id').val();
+                // var employee = $('#transfer_employee_id').val();
+                // console.log("emp ==",employee, id);
+                // var transferButton = $(this); // Store the button element
+
+                // // Disable the button to prevent multiple clicks
+                // transferButton.prop('disabled', true);
+
+                // $.ajax({
+                //     type: "POST",
+                //     url: "{{ route('admin.transferEnquiry') }}",
+                //     data: {
+                //         enquiry_id: id,
+                //         employee: employee,
+                //         _token: '{{ csrf_token() }}'
+                //     },
+                //     success: function(data) {
+                //         console.log("dataaa ==", data);
+                //         $('#enquiryTable').DataTable().draw();
+                //         $('#transfermodal').modal('hide');
+                //         transferButton.prop('disabled', false);
+                //     },
+                //     error: function(xhr, status, error) {
+                //         // In case of error, enable the button again
+                //         transferButton.prop('disabled', false);
+                //         console.error(xhr.responseText);
+                //     }
+                // });
             });
 
             $(document).on('click', '.showNumberNow', function(e) {
@@ -2369,7 +1878,7 @@
                         return true;
                     }
                 }
-            }, 'Budget To Must be greater than budget from hereeee');
+            }, 'Budget To Must be greater than budget from');
 
             $.validator.addMethod("checkArea", function(value, element) {
                 val2 = $('#area_size_from').val()

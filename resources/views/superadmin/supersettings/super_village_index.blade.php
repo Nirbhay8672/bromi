@@ -1,6 +1,6 @@
 @extends('superadmin.layouts.superapp')
 @section('content')
-<div class="page-body">
+<div class="page-body" x-data="area_index">
     <div class="container-fluid">
         <div class="page-title">
             <div class="row">
@@ -14,12 +14,68 @@
                 <div class="card">
                     <div class="card-header pb-0">
                         <h5 class="mb-3">List of Village</h5>
+                        <div class="row mt-3 mb-3 gy-3">
+                            <div style="width: 150px;">
+                                <button
+                                    class="btn custom-icon-theme-button open_modal_with_this"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#villageModal"
+                                ><i class="fa fa-plus"></i>
+                                </button>
 
-                        <button class="btn custom-icon-theme-button open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#villageModal"><i class="fa fa-plus"></i></button>
-
-                        <button class="btn delete_table_row ms-3" style="display: none;background-color:red;border-radius:5px;color:white;"
-                                onclick="deleteTableRow()" type="button"><i class="fa fa-trash"></i></button>
+                                <button
+                                    class="btn delete_table_row ms-3"
+                                    style="display: none;background-color:red;border-radius:5px;color:white;"
+                                    onclick="deleteTableRow()"
+                                    type="button"
+                                ><i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="col-12 col-lg-3 col-md-3">
+                                <select
+                                    id="filter_district_id"
+                                    class="form-control"
+                                    style="border: 1px solid black;"
+                                    x-model="selected_district"
+                                    @change="selectDistrict()"
+                                >
+                                    <option value="">-- Select District --</option>
+                                    <template x-for="(district, index) in districts" :key="`district_${index}`">
+                                        <option :value="district.id"><span x-text="district.name"></span></option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div class="col-12 col-lg-3 col-md-3">
+                                <select
+                                    id="filter_taluka_id"
+                                    class="form-control"
+                                    style="border: 1px solid black;"
+                                    x-model="selected_taluka"
+                                >
+                                    <option value="">-- Select Taluka --</option>
+                                    <template x-for="(taluka, index) in talukas" :key="`taluka_${index}`">
+                                        <option :value="taluka.id"><span x-text="taluka.name"></span></option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div style="width: 150px;">
+                                <button
+                                    class="btn custom-icon-theme-button"
+                                    type="button"
+                                    title="filter"
+                                    @click="filter()"
+                                ><i class="fa fa-filter"></i>
+                                </button>
+                                <button
+                                    class="btn custom-icon-theme-button ms-2"
+                                    type="button"
+                                    title="reset"
+                                    @click="reset()"
+                                ><i class="fa fa-recycle"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -104,7 +160,11 @@
 
     @endsection
     @push('scripts')
+    
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <script>
+        
         var shouldchangecity = 1;
 
         $(document).ready(function() {
@@ -134,8 +194,10 @@
 
             var queryString = window.location.search;
             var urlParams = new URLSearchParams(queryString);
-            var go_data_id = urlParams.get('data_id')
+            var go_data_id = urlParams.get('data_id');
 
+            let district_id = document.getElementById('filter_district_id');
+            let taluka_id = document.getElementById('filter_taluka_id');
 
             $('#villageTable').DataTable({
                 processing: true,
@@ -145,6 +207,8 @@
                     url: "{{ route('superadmin.settings.village') }}",
                     data: function(d) {
                         d.go_data_id = go_data_id;
+                        d.district_id = district_id.value ?? '';
+                        d.taluka_id = taluka_id.value ?? '';
                     },
                 },
                 columns: [{
@@ -307,6 +371,53 @@
                     $('#saveVillage').prop('disabled', false);
                 }
             });
-        })
+        });
+
+        document.addEventListener('alpine:init', () => {
+
+        Alpine.data('area_index', () => ({
+
+            init() {
+                this.districts = JSON.parse(@JSON(json_encode($districts)));
+            },
+
+            districts : [],
+            talukas : [],
+            selected_district : null,
+            selected_taluka : null,
+
+            selectDistrict() {
+                
+                this.selected_taluka = null;
+
+                if(this.selected_district) {
+                    let obj = this.districts.filter(district => district.id == this.selected_district);
+                    this.talukas = obj[0].talukas;
+                } else {
+                    this.talukas = [];
+                    this.selected_taluka = null;
+                }
+            },
+
+            filter() {
+                $('#villageTable').DataTable().draw();
+            },
+
+            reset() {
+                this.talukas = [];
+                this.selected_district = null;
+                this.selected_taluka = null;
+
+                let district_id = document.getElementById('filter_district_id');
+                let taluka_id = document.getElementById('filter_taluka_id');
+
+                district_id.value = '';
+                taluka_id.value = '';
+
+                $('#villageTable').DataTable().draw();
+            }
+        }));
+        });
+
     </script>
     @endpush

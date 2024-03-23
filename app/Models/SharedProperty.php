@@ -28,4 +28,9 @@ class SharedProperty extends Model
 	{
 		return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
 	}
+	
+	public function Partner()
+	{
+		return $this->belongsTo(User::class, 'partner_id', 'id');
+	}
 }

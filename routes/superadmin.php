@@ -72,6 +72,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/get-notification', [NotificationController::class, 'getSpecificNotification'])->name('superadmin.getNotification');
 		Route::post('/delete-notification', [NotificationController::class, 'destroy'])->name('superadmin.deleteNotification');
 		Route::post('/save-notification', [NotificationController::class, 'saveNotification'])->name('superadmin.saveNotification');
+		Route::post('/city-state-wise', [NotificationController::class, 'getCityByState'])->name('superadmin.cityByState');
 		Route::any('/tp-scheme', [HomeController::class, 'tpSchemeIndex'])->name('superadmin.tpscheme');
 		Route::post('/tp-schemes', [HomeController::class, 'getTpScheme'])->name('superadmin.getTpScheme');
 		Route::post('/delete-schemes', [HomeController::class, 'deleteScheme'])->name('superadmin.deleteScheme');

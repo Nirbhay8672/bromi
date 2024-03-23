@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\District;
 use App\Models\SuperTaluka;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class SuperTalukaController extends Controller
@@ -18,8 +19,19 @@ class SuperTalukaController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = SuperTaluka::with('district')->orderBy('id', 'desc')->get();
-			return DataTables::of($data)
+
+			$data = SuperTaluka::join('district','district.id','super_talukas.district_id')
+				->select([
+					'super_talukas.id',
+					'super_talukas.name',
+					'district.name AS district_name',
+				])->orderBy('super_talukas.id','desc');
+
+			if($request->district_id > 0) {
+				$data->where('district.id', $request->district_id);
+			}
+
+			return DataTables::of($data->get())
 				->editColumn('select_checkbox', function ($row) {
 					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
 				<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
@@ -28,8 +40,8 @@ class SuperTalukaController extends Controller
 					return $abc;
 				})
 				->editColumn('district_id', function ($row) {
-					if (!empty($row->district->name)) {
-						return $row->district->name;
+					if (!empty($row->district_name)) {
+						return $row->district_name;
 					}
 					return '';
 				})
@@ -43,7 +55,8 @@ class SuperTalukaController extends Controller
 				->make(true);
 		}
 
-		$districts = District::orderBy('name')->where('user_id', 6)->get();
+		$districts = District::orderBy('name')->get();
+
 		return view('superadmin.supersettings.super_taluka_index', compact('districts'));
 	}
 

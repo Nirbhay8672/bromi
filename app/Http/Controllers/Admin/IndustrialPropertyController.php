@@ -9,8 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Areas;
 use App\Models\City;
 use App\Models\DropdownSettings;
-use App\Models\LandUnit;
 use App\Models\Projects;
+use App\Models\LandUnit;
 use App\Models\Properties;
 use App\Models\State;
 use Carbon\Carbon;
@@ -121,8 +121,8 @@ class IndustrialPropertyController extends Controller
 				// 	return $row->property_for;
 				// })
 				->editColumn('property_for', function ($row) use ($dropdowns, $land_units) {
-					// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk');
-					$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk', 'Plotting', 'Test', 'testw');
+					// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
+				$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk', 'Plotting', 'Test', 'testw');
 					if ($row->property_for == 'Both') {
 						$forr = 'Rent & Sell';
 					} else {
@@ -170,8 +170,7 @@ class IndustrialPropertyController extends Controller
 							}
 						}
 					}
-					$salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
-					// $salable_area_print = $this->generateAreaDetails($row, $dropdowns[$row->property_category]['name'], $dropdowns);
+                    $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
 					if (empty($salable_area_print)) {
 						$salable_area_print = "Area Not Available";
 					}
@@ -192,7 +191,7 @@ class IndustrialPropertyController extends Controller
 				})
 
 				// ->editColumn('configuration', function ($row) use ($dropdowns) {
-				// 	$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', 'test', 'Plotting');
+				// 	$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk', 'test', 'Plotting');
 				// 	$sub_cat = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | ' . $dropdowns[$row->property_category]['name'] : '');
 				// 	if (!is_null($row->configuration)) {
 				// 		$catId = (int)$row->configuration;
@@ -382,39 +381,6 @@ class IndustrialPropertyController extends Controller
 		return view('admin.properties.industrial_index', compact('projects', 'property_configuration_settings', 'areas', 'cities', 'states', 'prop_type'));
 	}
 	
-	public function generateAreaDetails($row, $type, $dropdowns)
-	{
-		$area = '';
-		$measure = '';
-
-		if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
-			$area = explode('_-||-_', $row->salable_area)[0];
-			$measure = explode('_-||-_', $row->salable_area)[1];
-		} elseif ($type == 'Storage/industrial') {
-			$area = explode('_-||-_', $row->salable_plot_area)[0];
-			$measure = explode('_-||-_', $row->salable_plot_area)[1];
-		} elseif ($type == 'Vila/Bunglow') {
-			$salable = explode('_-||-_', $row->salable_plot_area)[0];
-			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
-			$measure = explode('_-||-_', $row->constructed_salable_area)[1];
-			if (empty($salable)) {
-				$salable = '';
-			}
-			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-			$area = "P:" . $salable . ' - C: ' . $constructed;
-		} elseif ($type == 'Farmhouse') {
-			$area = explode('_-||-_', $row->salable_plot_area)[0];
-			$measure = explode('_-||-_', $row->salable_plot_area)[1];
-		}
-
-		if (!empty($area) && !empty($measure)) {
-			$formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
-			return $formattedArea;
-		} else {
-			return "Area Not Available";
-		}
-	}
-
 	public function generateAreaUnitDetails($row, $type, $land_units)
     {
         $area = '';
@@ -455,6 +421,40 @@ class IndustrialPropertyController extends Controller
             return "Area Not Available";
         }
     }
+    
+	public function generateAreaDetails($row, $type, $dropdowns)
+	{
+		$area = '';
+		$measure = '';
+
+		if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+			$area = explode('_-||-_', $row->salable_area)[0];
+			$measure = explode('_-||-_', $row->salable_area)[1];
+		} elseif ($type == 'Storage/industrial') {
+			$area = explode('_-||-_', $row->salable_plot_area)[0];
+			$measure = explode('_-||-_', $row->salable_plot_area)[1];
+		} elseif ($type == 'Vila/Bunglow') {
+			$salable = explode('_-||-_', $row->salable_plot_area)[0];
+			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+			$measure = explode('_-||-_', $row->constructed_salable_area)[1];
+			if (empty($salable)) {
+				$salable = '';
+			}
+			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+			$area = "P:" . $salable . ' - C: ' . $constructed;
+		} elseif ($type == 'Farmhouse') {
+			$area = explode('_-||-_', $row->salable_plot_area)[0];
+			$measure = explode('_-||-_', $row->salable_plot_area)[1];
+		}
+
+		if (!empty($area) && !empty($measure)) {
+			$formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
+			return $formattedArea;
+		} else {
+			return "Area Not Available";
+		}
+	}
+
 
 	public function saveProperty(Request $request)
 	{
@@ -759,7 +759,6 @@ class IndustrialPropertyController extends Controller
 		$areas = '"' . implode(",", $areas) . '"';
 
 		$dropdowns = DropdownSettings::get()->toArray();
-		$land_units = LandUnit::all();
 		$dropdownsarr = [];
 		foreach ($dropdowns as $key => $value) {
 			$dropdownsarr[$value['dropdown_for']][] = $value['name'];

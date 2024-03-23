@@ -43,6 +43,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 
 Route::get('/subscription', [AdminLoginController::class, 'subscription'])->name('subscription');
 Route::post('/save-plan', [AdminLoginController::class, 'savePlan'])->name('savePlan');
+Route::any('cashfree/payments/success', [AdminLoginController::class, 'paymentSuccess'])->name('payment-success');
 
 Route::prefix('builder')->as('builder.')->middleware(['auth'])->group(function () {
     Route::get('/index', [HomeController::class, 'index'])->name('home');

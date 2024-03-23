@@ -19,9 +19,26 @@ class SuperVillageController extends Controller
 	public function village_index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = SuperVillages::with('Taluka', 'District')->orderBy('id', 'desc')->get();
 
-			return DataTables::of($data)
+			$data = SuperVillages::join('super_talukas','super_talukas.id','super_villages.super_taluka_id')
+				->select([
+					'super_villages.id',
+					'super_villages.name',
+					'super_talukas.name AS taluka_name',
+					'district.name AS district_name',
+				])
+				->join('district','district.id', 'super_talukas.district_id')
+				->orderBy('super_villages.id','desc');
+
+			if($request->district_id > 0) {
+				$data->where('district.id', $request->district_id);
+			}
+
+			if($request->taluka_id > 0) {
+				$data->where('super_talukas.id', $request->taluka_id);
+			}
+
+			return DataTables::of($data->get())
 				->editColumn('select_checkbox', function ($row) {
 					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
 				<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
@@ -30,14 +47,14 @@ class SuperVillageController extends Controller
 					return $abc;
 				})
 				->editColumn('taluka', function ($row) {
-					if (isset($row->Taluka->name)) {
-						return $row->Taluka->name;
+					if (isset($row->taluka_name)) {
+						return $row->taluka_name;
 					}
 					return '';
 				})
 				->editColumn('district', function ($row) {
-					if (isset($row->District->name)) {
-						return $row->District->name;
+					if (isset($row->district_name)) {
+						return $row->district_name;
 					}
 					return '';
 				})
@@ -51,8 +68,10 @@ class SuperVillageController extends Controller
 				->rawColumns(['Actions', 'select_checkbox'])
 				->make(true);
 		}
+
 		$talukas = SuperTaluka::orderBy('name')->get()->toArray();
-		$districts = District::orderBy('name')->get()->toArray();
+		$districts = District::with(['talukas'])->orderBy('name')->get()->toArray();
+		
 		return view('superadmin.supersettings.super_village_index', compact('talukas', 'districts'));
 	}
 

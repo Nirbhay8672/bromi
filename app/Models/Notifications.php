@@ -16,5 +16,12 @@ use SoftDeletes;
 	protected $fillable = [
 		'message',
 		'status',
+    	'schedule_date',
+        'state',
+        'city'
 	];
+
+    public function city() {
+        return $this->belongsTo(SuperCity::class, 'city', 'id');
+    }
 }

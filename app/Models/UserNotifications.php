@@ -18,7 +18,17 @@ class UserNotifications extends Model
         'enquiry_id',
         'by_user',
         'new_user_id',
+        'general_notif_status',
         'schedule_date',
+        'notification_id',
+        'first_notification',
+        'second_notification',
+        'state',
+        'city'
         
 	];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

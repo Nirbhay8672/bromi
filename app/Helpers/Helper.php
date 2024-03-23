@@ -288,7 +288,7 @@ class Helper
 	{
 		try {
 			$count = UserNotifications::where('user_id', Auth::User()->id)->where('seen', 0)->count();
-			$notifications = UserNotifications::where('user_id', Auth::User()->id)->orderBy('id', 'DESC')->take(3)->get()->toArray();
+			$notifications = UserNotifications::where('user_id', Auth::User()->id)->orderBy('id', 'DESC')->get()->toArray();
 			foreach ($notifications as $key => $value) {
 				$notifications[$key]['created_at'] = Carbon::parse($value['created_at'])->format('d-m-Y');
 			}
@@ -455,4 +455,25 @@ class Helper
 			return NULL;
 		}
 	}
+	
+    public static function formatPhoneNumber($phoneNumber)
+    {
+        if (empty($phoneNumber)) {
+            return 1234567890;
+        }
+
+        // Remove any non-numeric characters from the phone number
+        $phoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+
+        // Check if the phone number has exactly 10 digits
+        if (strlen($phoneNumber) === 10) {
+            return $phoneNumber; // Return the original phone number
+        } elseif (strlen($phoneNumber) < 10) {
+            // Pad the phone number with leading zeros until it has 10 digits
+            return str_pad($phoneNumber, 10, '1', STR_PAD_LEFT);
+        } else {
+            // If the phone number has more than 10 digits, trim it to 10 digits
+            return substr($phoneNumber, 0, 10);
+        }
+    }
 }

@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\Constants;
 use App\Http\Controllers\Controller;
 use App\Models\DropdownSettings;
-use App\Models\LandUnit;
 use App\Models\ShareProperty;
 use App\Models\SharedProperty;
 use App\Models\User;
+use App\Models\UserNotifications;
+use App\Traits\HelperFn;
 use Illuminate\Http\Request;
+use App\Models\LandUnit;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
 class ShareController extends Controller
 {
+    use HelperFn;
     //
     // shared 4
     public function acceptRequest(Request $request)
@@ -22,10 +27,38 @@ class ShareController extends Controller
         if ($request->ajax()) {
             if (!empty($request->id)) {
                 // $dataa = SharedProperty::find($request->id)->update(['accepted' => 1]);
-                $dataa = DB::table('share_property')
+                /* $dataa = DB::table('share_property')
                     ->where('id', $request->id)
-                    ->update(['accepted' => 1]);
-                return redirect()->route('admin.shared.properties');
+                    ->update(['accepted' => 1]); */
+                $sharedProp = SharedProperty::find($request->id)->load(['Partner', 'User']);
+                $sharedProp->update(['accepted' => 1]);
+                $receiver = $sharedProp->Partner;
+                $sender = $sharedProp->User;
+
+                // send notification to the sending user about the acceptance of the request.
+                $message = "$receiver->first_name $receiver->last_name has accepted your request regarding property share.";
+                # code...
+                try {
+                    UserNotifications::create([
+                        "user_id" => (int) $sender->id,
+                        "notification" => $message,
+                        "notification_type" => Constants::PROPERTY_REQUEST_ACCEPTED,
+                        'by_user' => (int) $receiver->id,
+                    ]);
+                    if (!empty($sender->onesignal_token)) {
+                        HelperFn::sendPushNotification($sender->onesignal_token, $message);
+                    } else {
+                        Log::error("Accept Property Share Request Error: ");
+                        Log::error("User id: $sender->id does not have onesignal token");
+                        Log::error("That's why notification not sent.");
+                    }
+                    return redirect()->route('admin.shared.properties');
+                } catch (\Throwable $th) {
+                    // if notificaton creation failed.
+                    Log::error("On Accept property share request attempt failed by user Id: $receiver->id");
+                    Log::error("Error Message: $th->getMessage()");
+                    return redirect()->route('admin.shared.properties');
+                }
             }
         }
     }
@@ -111,7 +144,7 @@ class ShareController extends Controller
         //   dd("shared-properties Me working done  ===>");
         if ($request->ajax()) {
             $dropdowns = DropdownSettings::get()->toArray();
-            $land_units = LandUnit::all();
+             $land_units = LandUnit::all();
             $dropdownsarr = [];
             foreach ($dropdowns as $key => $value) {
                 $dropdownsarr[$value['id']] = $value;
@@ -203,7 +236,7 @@ class ShareController extends Controller
                         }
                     }
 
-                    $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
+                   $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
                     if (empty($salable_area_print)) {
                         $salable_area_print = "Area Not Available";
                     }
@@ -332,41 +365,8 @@ class ShareController extends Controller
 
         return view('admin.properties.shared_index');
     }
-
-    public function generateAreaDetails($row, $type, $dropdowns)
-    {
-        $area = '';
-        $measure = '';
-
-        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
-            $area = explode('_-||-_', $row->salable_area)[0];
-            $measure = explode('_-||-_', $row->salable_area)[1];
-        } elseif ($type == 'Storage/industrial') {
-            $area = explode('_-||-_', $row->salable_plot_area)[0];
-            $measure = explode('_-||-_', $row->salable_plot_area)[1];
-        } elseif ($type == 'Vila/Bunglow') {
-            $salable = explode('_-||-_', $row->salable_plot_area)[0];
-            $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
-            $measure = explode('_-||-_', $row->constructed_salable_area)[1];
-            if (empty($salable)) {
-                $salable = '';
-            }
-            // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-            $area = "P:" . $salable . ' - C: ' . $constructed;
-        } elseif ($type == 'Farmhouse') {
-            $area = explode('_-||-_', $row->salable_plot_area)[0];
-            $measure = explode('_-||-_', $row->salable_plot_area)[1];
-        }
-
-        if (!empty($area) && !empty($measure)) {
-            $formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
-            return $formattedArea;
-        } else {
-            return "Area Not Available";
-        }
-    }
-
-    public function generateAreaUnitDetails($row, $type, $land_units)
+    
+     public function generateAreaUnitDetails($row, $type, $land_units)
     {
         $area = '';
         $measure = '';
@@ -401,6 +401,39 @@ class ShareController extends Controller
 
         if (!empty($area) && !empty($unit_name)) {
             $formattedArea = $area . ' ' . $unit_name;
+            return $formattedArea;
+        } else {
+            return "Area Not Available";
+        }
+    }
+
+    public function generateAreaDetails($row, $type, $dropdowns)
+    {
+        $area = '';
+        $measure = '';
+
+        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+            $area = explode('_-||-_', $row->salable_area)[0];
+            $measure = explode('_-||-_', $row->salable_area)[1];
+        } elseif ($type == 'Storage/industrial') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+        } elseif ($type == 'Vila/Bunglow') {
+            $salable = explode('_-||-_', $row->salable_plot_area)[0];
+            $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+            $measure = explode('_-||-_', $row->constructed_salable_area)[1];
+            if (empty($salable)) {
+                $salable = '';
+            }
+            // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+            $area = "P:" . $salable . ' - C: ' . $constructed;
+        } elseif ($type == 'Farmhouse') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+        }
+
+        if (!empty($area) && !empty($measure)) {
+            $formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
             return $formattedArea;
         } else {
             return "Area Not Available";

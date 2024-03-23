@@ -49,7 +49,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add Partner</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close" id="btnClose">
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" id="btnClose">
                         </button>
                     </div>
                     <div class="modal-body">

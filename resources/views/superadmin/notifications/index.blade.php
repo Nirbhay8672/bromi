@@ -57,6 +57,39 @@
                                     placeholder="Notification" required="" autocomplete="off">
                                 </div>
                             </div>
+                             <div class="form-group col-md-6 m-b-20">
+                                <div class="fname">
+                                    <input class="form-control" name="date" id="date" type="date"
+                                    placeholder="Date" required autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 m-b-20">
+                                <div class="fname">
+                                    <input class="form-control" name="time" id="time" type="time"
+                                    placeholder="Time" required autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 m-b-20">
+                                <div class="fname">
+                                    <div class="state-box">
+                                        <select name="state" id="state" class="form-control" required>
+                                            <option value="">Selecte State</option>
+                                            @foreach ($states as $state )
+                                                <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 m-b-20">
+                                <div class="fname">
+                                    <div class="city-box">
+                                        <select name="city" id="city" class="form-control" required>
+                                            <option value="">Selecte City</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 							<div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
 								<input class="form-check-input" id="status" type="checkbox">
 								<label class="form-check-label" for="status">Active</label>
@@ -86,10 +119,22 @@
                 },
                 success: function(data) {
                     dataa = JSON.parse(data);
+                    let sch = ['', ''];
+                    if (dataa.schedule_date) {
+                        sch = dataa.schedule_date.split(' ');
+                    }
                     $('#this_data_id').val(dataa.id);
                     $('#notification').val(dataa.message);
 					$('#status').prop('checked', Number(dataa.status));
+                    $('#date').val(sch[0]);
+                    $('#time').val(sch[1]);
+                    $('#state').val(dataa.state).trigger('change');
+                    $('#city').append(new Option(dataa.city?.name ?? '', dataa.city?.id ?? ''));
+                    $('#city').val(dataa.city?.id ?? '').trigger('change');
                     $('#notificationModal').modal('show');
+                    $('#notificationModal').on('shown.bs.modal', function () {
+                        $('#city').val(dataa.city?.id ?? '').trigger('change');
+                    });
                 }
             });
         }
@@ -139,6 +184,9 @@
                     data: {
                         id: id,
                         message: $('#notification').val(),
+                        schedule_date: $('#date').val() +' '+ $('#time').val(),
+						state: $('#state').val(),
+						city: $('#city').val(),
 						status: Number($('#status').prop('checked')),
                         _token: '{{ csrf_token() }}',
                     },
@@ -149,6 +197,25 @@
                 });
             })
 
+        });
+        
+        // bind the event after the modal is shown
+        $('#notificationModal').on('shown.bs.modal', function () {
+            $(document).on('change', '#state', function(e) {
+                var stateId = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('superadmin.cityByState') }}",
+                    data: {
+                        id: stateId,
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(data) {
+                        $('#city').html('');
+                        $('#city').html(data.data);
+                    }
+                });
+            })
         });
     </script>
 @endpush

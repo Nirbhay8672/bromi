@@ -24,4 +24,8 @@ use HasFactory;
         return $this->belongsTo(User::class, 'partner_id');
     }
 
+    public function requestSendingUser()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

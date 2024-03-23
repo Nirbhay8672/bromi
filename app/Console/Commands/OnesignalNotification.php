@@ -8,6 +8,7 @@ use App\Models\UserNotifications;
 use App\Traits\HelperFn;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class OnesignalNotification extends Command
 {
@@ -53,7 +54,10 @@ class OnesignalNotification extends Command
         );
         
         // Find records in the database where the schedule_date matches the current time and 30 minutes before
-        $notifications = UserNotifications::whereDate('schedule_date', $currentDateTime)->get();
+        $notifications = UserNotifications::whereDate('schedule_date', $currentDateTime)
+            ->where('notification_type', Constants::SCHEDULE_VISIT)
+            ->orWhere('notification_type', Constants::ENQUIRY_FOLLOWUP)
+            ->get();
         
         // Process the notifications for schedule visit & enquiry NFD
         foreach ($notifications as $notification) {

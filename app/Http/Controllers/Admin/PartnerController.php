@@ -145,12 +145,12 @@ class PartnerController extends Controller
 			// $sharedproperty2 = SharedProperty::with('Property_details', 'User')->where('partner_id', Auth::user()->id)->withTrashed()->get();
 
 			// $mergedData = $sharedproperty->concat($sharedproperty2);
-			// dd(Auth::user()->id,"shared",$mergedData);
+// 			dd(Auth::user()->id,"shared",$sharedproperty);
 			return DataTables::of($sharedproperty)
 				// ->editColumn('project_name', function ($sharedproperty) use ($request) {
 				// 	// dd($row->Property_details,"prj");
 				// 	$first =  '<td style="vertical-align:top">
-				// 	<font size="3"><a href="#" style="font-weight: bold;">' . ((isset($sharedproperty->Property_details->Projects->project_name)) ? $sharedproperty->Property_details->Projects->project_name : '') . '</a>';
+				// 	<font size="3"><a href="#" style="font-weight: bold;">' . ((isset($sharedproperty->User->Projects->project_name)) ? $sharedproperty->Property_details->Projects->project_name : '') . '</a>';
 				// 	$first_middle = '';
 					
 				// 	$first_end = '</font>';
@@ -210,7 +210,7 @@ class PartnerController extends Controller
 				// 	$action .= '<i role="button" title="Delete" data-id=' . $SharedProperty->id . ' onclick="deletePartner(this)" class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
 				// 	return $action;
 				// })
-				->rawColumns(['partner_name', 'partner_number','company_name', 'partner_email',   'status'])
+				->rawColumns(['partner_name','partner_number', 'company_name', 'partner_email',   'status'])
 				->make(true);
 		}
 		return view('admin.partner.partner_req');
@@ -318,7 +318,32 @@ class PartnerController extends Controller
 	{
 		if ($request->ajax()) {
 			if (!empty($request->id)) {
-				Partner::find($request->id)->update(['status' => 'Active']);
+                $partnerReq = Partner::find($request->id)->load(['requestSendingUser', 'user']);
+                $partnerReq->update(['status' => 'Active']);
+                $receiver = $partnerReq->user;
+                $sender = $partnerReq->requestSendingUser;
+                // send notification to the sending user about the acceptance of the request.
+                $message = "$receiver->first_name $receiver->last_name has accepted your request regarding adding as partner.";
+                # code...
+                try {
+                    UserNotifications::create([
+                        "user_id" => (int) $sender->id,
+                        "notification" => $message,
+                        "notification_type" => Constants::PARTNER_REQUEST_ACCEPTED,
+                        'by_user' => (int) $receiver->id,
+                    ]);
+                    if (!empty($sender->onesignal_token)) {
+                        HelperFn::sendPushNotification($sender->onesignal_token, $message);
+                    } else {
+                        Log::error("Accept Add Partner Request Error: ");
+                        Log::error("User id: $sender->id does not have onesignal token");
+                        Log::error("That's why notification not sent.");
+                    }
+                } catch (\Throwable $th) {
+                    // if notificaton creation failed.
+                    Log::error("On Accept add partner request attempt failed by user Id: $receiver->id");
+                    Log::error("Error Message: $th->getMessage()");
+                }
 			}
 		}
 	}
