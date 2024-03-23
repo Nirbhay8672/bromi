@@ -439,6 +439,15 @@ Helper::set_default_measuerement();
                                                     class="lan-3">Rera</span></a>
                                         </li>
                                     @endif
+
+                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::STATE))
+                                        <li class="sidebar-list"><a
+                                                class="sidebar-link @if ($route == 'superadmin.settings.state') active @endif"
+                                                href="{{ route('superadmin.settings.state') }}"><i
+                                                    class="fa fa-map-marker"></i><span class="lan-3">State</span></a>
+                                        </li>
+                                    @endif
+
                                     @if ($permissions->contains(\App\Constants\SupAdminPermissions::CITY))
                                         <li class="sidebar-list"><a
                                                 class="sidebar-link @if ($route == 'superadmin.settings.city') active @endif"
@@ -454,6 +463,15 @@ Helper::set_default_measuerement();
                                                     class="fa fa-map-marker"></i><span class="lan-3">Area</span></a>
                                         </li>
                                     @endif
+
+                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::DISTRICT))
+                                        <li class="sidebar-list"><a
+                                                class="sidebar-link @if ($route == 'superadmin.settings.district') active @endif"
+                                                href="{{ route('superadmin.settings.district') }}"><i
+                                                    class="fa fa-map-marker"></i><span class="lan-3">District</span></a>
+                                        </li>
+                                    @endif
+
                                     @if ($permissions->contains(\App\Constants\SupAdminPermissions::TALUKA))
                                         <li class="sidebar-list">
                                             <a

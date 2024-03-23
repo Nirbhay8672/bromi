@@ -2652,6 +2652,7 @@ use Illuminate\Support\Facades\DB;
                                                                 @if (in_array($path, $documentExtensions))
                                                                     <div class="slide">
                                                                         <img src="{{ asset('/upload/construction_images/' . $const_image->construction_documents) }}" class="d-block"  alt="Image">
+                                                                        <img src="{{ asset('/upload/construction_images/' . $const_image->construction_documents) }}" class="d-block"  alt="Image">
                                                                     </div>
                                                                     @php
                                                                         $hasConstDocuments = true;
@@ -2662,7 +2663,7 @@ use Illuminate\Support\Facades\DB;
                                                     </div>
                                                     @if ($hasConstDocuments)
                                                         <div class="modal-footer">
-                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'construction_land_images', 'prop' => $property->id]) }}">Download Zip</a>
+                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'construction_documents', 'prop' => $property->id]) }}">Download Zip</a>
                                                         </div>
                                                     @else
                                                         <center><h4>No Construction Documents Found</h4></center>

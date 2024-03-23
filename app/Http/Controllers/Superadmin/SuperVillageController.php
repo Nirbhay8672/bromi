@@ -20,21 +20,21 @@ class SuperVillageController extends Controller
 	{
 		if ($request->ajax()) {
 
-			$data = SuperVillages::join('super_talukas','super_talukas.id','super_villages.super_taluka_id')
+			$data = SuperVillages::join('super_talukas', 'super_talukas.id', 'super_villages.super_taluka_id')
 				->select([
 					'super_villages.id',
 					'super_villages.name',
 					'super_talukas.name AS taluka_name',
 					'district.name AS district_name',
 				])
-				->join('district','district.id', 'super_talukas.district_id')
-				->orderBy('super_villages.id','desc');
+				->join('district', 'district.id', 'super_talukas.district_id')
+				->orderBy('super_villages.id', 'desc');
 
-			if($request->district_id > 0) {
+			if ($request->district_id > 0) {
 				$data->where('district.id', $request->district_id);
 			}
 
-			if($request->taluka_id > 0) {
+			if ($request->taluka_id > 0) {
 				$data->where('super_talukas.id', $request->taluka_id);
 			}
 
@@ -71,7 +71,7 @@ class SuperVillageController extends Controller
 
 		$talukas = SuperTaluka::orderBy('name')->get()->toArray();
 		$districts = District::with(['talukas'])->orderBy('name')->get()->toArray();
-		
+
 		return view('superadmin.supersettings.super_village_index', compact('talukas', 'districts'));
 	}
 

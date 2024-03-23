@@ -885,14 +885,6 @@
             </div>
         </div>
 
-
-
-
-
-
-
-
-
         <div class="modal fade" id="showprogressmodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -912,7 +904,7 @@
                                     <th scope="col">Added On</th>
                                     <th scope="col">Enquiry Progress</th>
                                     <th scope="col">Sales Comments</th>
-                                    <th scope="col">Follow Up</th>
+                                    <th scope="col">NFD</th>
                                     <th scope="col">Remarks </th>
                                     <th scope="col">Type of Lead</th>
                                     <th scope="col">Added By</th>
@@ -927,7 +919,7 @@
             </div>
         </div>
 
-         <!-- Schedule Modal -->
+        <!-- Schedule Modal -->
         <div class="modal fade" id="showschedulemodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -1484,7 +1476,10 @@
                 var queryString = window.location.search;
                 var urlParams = new URLSearchParams(queryString);
                 var go_data_id = urlParams.get('data_id')
-                $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source').prop('checked', true);
+
+                $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                    .prop('checked', true);
+
                 $('#match_enquiry_all').on('change', function() {
                     let isChecked = $(this).prop('checked');
                     $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')

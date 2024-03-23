@@ -14,7 +14,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">List of Cities</h5>
+                            <h5 class="mb-3">List of District</h5>
 
                             <div class="row mt-3 mb-3 gy-3">
                                 <div style="width: 70px;">
@@ -24,28 +24,6 @@
                                         data-bs-toggle="modal"
                                         data-bs-target="#cityModal"
                                     ><i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                                <div class="col-12 col-lg-3 col-md-3">
-                                    <select
-                                        id="filter_state_id"
-                                        class="form-control"
-                                        style="border: 1px solid black;"
-                                        onclick="filter()"
-                                    >
-                                        <option value="">-- Select State --</option>
-                                        @foreach($states as $state)
-                                            <option value="{{ $state->id }}">{{ $state->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div style="width: 70px;">
-                                    <button
-                                        class="btn delete_table_row ms-3"
-                                        style="display: none;background-color:red;border-radius:5px;color:white;"
-                                        onclick="deleteTableRow()"
-                                        type="button"
-                                    ><i class="fa fa-trash"></i>
                                     </button>
                                 </div>
                             </div>
@@ -62,7 +40,7 @@
                                                     <label class="form-check-label" for="select_all_checkbox"></label>
                                                 </div>
                                             </th>
-                                            <th>City</th>
+                                            <th>District</th>
                                             <th>State</th>
                                             <th>Action</th>
                                         </tr>
@@ -74,17 +52,14 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
         </div>
         <div class="modal fade" id="cityModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Add New City</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Add New District</h5>
                         <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
@@ -92,7 +67,7 @@
                             novalidate="">
                             <div class="form-row">
                                 <div class="form-group col-md-7 d-inline-block m-b-20">
-                                    <label for="City">City</label>
+                                    <label for="City">District</label>
                                     <input class="form-control" name="city_name" id="city_name" type="text"
                                         required="" autocomplete="off">
                                 </div>
@@ -122,20 +97,20 @@
         <script>
             $(document).ready(function() {
 
-                let state_id = document.getElementById('filter_state_id');
+                let state_id = document.getElementById('state_id');
 
                 $('#cityTable').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: "{{ route('superadmin.settings.city') }}",
+                        url: "{{ route('superadmin.settings.district') }}",
                         data: function(d) {
                             d.state_id = state_id.value ?? '';
                         }
                     },
                     columns: [{
-                            data: 'select_checkbox',
-                            name: 'select_checkbox',
+                            data: 'id',
+                            name: 'id',
                             orderable: false
                         },
                         {
@@ -143,8 +118,8 @@
                             name: 'name'
                         },
                         {
-                            data: 'state_id',
-                            name: 'state_id',
+                            data: 'state_name',
+                            name: 'state_name',
                         },
                         {
                             data: 'Actions',
@@ -164,12 +139,12 @@
                 $('#cityTable').DataTable().draw();
             }
 
-            function getCity(data) {
+            function getDistrict(data) {
                 $('#modal_form').trigger("reset");
                 var id = $(data).attr('data-id');
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('superadmin.settings.getcity') }}",
+                    url: "{{ route('superadmin.settings.getDistrict') }}",
                     data: {
                         id: id,
                         _token: '{{ csrf_token() }}'
@@ -185,70 +160,7 @@
                 });
             }
 
-
-            $(document).on('change', '#select_all_checkbox', function(e) {
-                if ($(this).prop('checked')) {
-                    $('.delete_table_row').show();
-
-                    $(".table_checkbox").each(function(index) {
-                        $(this).prop('checked', true)
-                    })
-                } else {
-                    $('.delete_table_row').hide();
-                    $(".table_checkbox").each(function(index) {
-                        $(this).prop('checked', false)
-                    })
-                }
-            })
-
-            $(document).on('change', '.table_checkbox', function(e) {
-                var rowss = [];
-                $(".table_checkbox").each(function(index) {
-                    if ($(this).prop('checked')) {
-                        rowss.push($(this).attr('data-id'))
-                    }
-                })
-                if (rowss.length > 0) {
-                    $('.delete_table_row').show();
-                } else {
-                    $('.delete_table_row').hide();
-                }
-            })
-
-            function deleteTableRow(params) {
-                var rowss = [];
-                $(".table_checkbox").each(function(index) {
-                    if ($(this).prop('checked')) {
-                        rowss.push($(this).attr('data-id'))
-                    }
-                })
-                if (rowss.length > 0) {
-                    Swal.fire({
-                        title: "Are you sure?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes',
-                    }).then(function(isConfirm) {
-                        if (isConfirm.isConfirmed) {
-                            $.ajax({
-                                type: "POST",
-                                url: "{{ route('superadmin.settings.deletecity') }}",
-                                data: {
-                                    allids: JSON.stringify(rowss),
-                                    _token: '{{ csrf_token() }}'
-                                },
-                                success: function(data) {
-                                    $('.delete_table_row').hide();
-                                    $('#cityTable').DataTable().draw();
-                                }
-                            });
-                        }
-                    })
-                }
-            }
-
-
-            function deleteCity(data) {
+            function deleteDistrict(data) {
                 Swal.fire({
                     title: "Are you sure?",
                     icon: "warning",
@@ -259,7 +171,7 @@
                         var id = $(data).attr('data-id');
                         $.ajax({
                             type: "POST",
-                            url: "{{ route('superadmin.settings.deletecity') }}",
+                            url: "{{ route('superadmin.settings.deleteDistrict') }}",
                             data: {
                                 id: id,
                                 _token: '{{ csrf_token() }}'
@@ -282,7 +194,7 @@
                 var id = $('#this_data_id').val()
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('superadmin.settings.savecity') }}",
+                    url: "{{ route('superadmin.settings.saveDistrict') }}",
                     data: {
                         id: id,
                         name: $('#city_name').val(),

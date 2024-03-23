@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\Helper;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Rules\MatchOldPassword;
 use App\Http\Controllers\Controller;
+use App\Mail\InvoiceEmail;
 use App\Models\Api\Properties as ApiProperties;
 use App\Models\Areas;
 use App\Models\Branches;
@@ -17,6 +19,8 @@ use App\Models\District;
 use App\Models\DropdownSettings;
 use App\Models\Enquiries;
 use App\Models\EnquiryProgress;
+use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Projects;
 use App\Models\Properties;
 use App\Models\State;
@@ -38,13 +42,25 @@ use Throwable;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
 
+    protected $cashfreeBaseUrl;
+    protected $cashfreeKey;
+    protected $cashfreeSecret;
+    protected $apiVersion;
+    
 	public function __construct()
 	{
 		$this->middleware('auth');
+		
+		$this->cashfreeBaseUrl = config('cashfree.test');
+        $this->cashfreeKey = config('cashfree.api_key');
+        $this->cashfreeSecret = config('cashfree.api_secret');
+        $this->apiVersion = '2022-01-01';
 	}
 
 
@@ -561,6 +577,13 @@ class HomeController extends Controller
 
 	public function plan_index(Request $request)
 	{
+	    $transactionGoal = Session::get('trans_action'); // this will set on checkPlanExpiry middleware check
+        
+        if (!empty($transactionGoal)) {
+            Session::put('transaction_goal', $transactionGoal);
+        } else {
+            Session::put('transaction_goal', 'upgrade');
+        }
 		$plans = Subplans::get();
 		return view('admin.userplans.index', compact('plans'));
 	}
@@ -588,7 +611,7 @@ class HomeController extends Controller
 		}
 	}
 
-	public function plan_save(Request $request)
+	/*public function plan_save(Request $request)
 	{
 		Subplans::get();
 		
@@ -603,7 +626,238 @@ class HomeController extends Controller
 		Session::put('plan_id', $request->plan_id);
 		
 		return redirect()->route('admin');
-	}
+	}*/
+	
+	public function plan_save(Request $request)
+    {
+        try {
+            $transaction_goal = Session::get('transaction_goal') ?? 'new_subscription';;
+            $planDetails = Subplans::find($request->plan_id);
+            if (!$planDetails) {
+                Session::put('message', 'Invalid Plan.');
+                return redirect('/admin');
+            }
+            $user  = Auth::user();
+            $usersLimit = $planDetails->user_limit ?? 1;
+            $planPrice = Helper::calculatePlanPrice($planDetails->price);
+            
+            /* $user->fill([
+                'plan_id' => $request->plan_id,
+                'total_user_limit' => $planDetails->user_limit,
+                'subscribed_on' => Carbon::now()->format('Y-m-d')
+            ])->save(); */
+
+            // process payment
+            $url = $this->cashfreeBaseUrl . "/orders";
+
+            $headers = array(
+                "Content-Type: application/json",
+                'Accept: application/json',
+                "x-api-version: " . $this->apiVersion,
+                "x-client-id: " . $this->cashfreeKey,
+                "x-client-secret: " . $this->cashfreeSecret,
+            );
+            $userPhone = Helper::formatPhoneNumber($user->mobile_number);
+            
+            $data = json_encode([
+                'order_id' =>  'order_' . time(),
+                'order_amount' => $planPrice,
+                "order_currency" => "INR",
+                "customer_details" => [
+                    "customer_id" => 'USER_' . $user->id,
+                    "customer_name" => $user->first_name . ' ' . $user->last_name,
+                    "customer_email" => $user->email,
+                    "customer_phone" => $userPhone,
+                ],
+                "order_tags" => [
+                    "plan_id" => "$planDetails->id",
+                    "plan_type" => "$planDetails->plan_type",
+                    "user_limit" => "$usersLimit",
+                    "user_id" => "$user->id",
+                    "transaction_goal" => "$transaction_goal",
+                ],
+                "order_meta" => [
+                    "return_url" => route('admin.paymentSuccess') . '?order_id={order_id}&order_token={order_token}'
+                ]
+            ]);
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+            $resp = curl_exec($curl);
+            if (curl_errno($curl)) {
+                $error_msg = curl_error($curl);
+                dd($error_msg);
+            }
+            curl_close($curl);
+
+            return redirect()->to(json_decode($resp)->payment_link);
+        } catch (\Throwable $th) {
+            //throw $th;
+            dd($th);
+            Session::put('message', $th->getMessage());
+            return redirect()->route('admin.plans');
+        }
+    }
+
+    public function payment_success(Request $request)
+    {
+        try {
+
+            # process payment
+            $headers = array(
+                "Content-Type" => "application/json",
+                "x-api-version" => $this->apiVersion,
+                "x-client-id" => $this->cashfreeKey,
+                "x-client-secret" => $this->cashfreeSecret,
+            );
+            // get payment
+            $client = new \GuzzleHttp\Client();
+            $url = $this->cashfreeBaseUrl . '/orders/' . $request->order_id . '/payments';
+            $response = $client->request('GET', $url, ["headers" => $headers]);
+            $paymentInstance = json_decode($response->getBody(), true)[0];
+
+            // get order details
+            $url = $this->cashfreeBaseUrl . "/orders/" . $paymentInstance['order_id'];
+            $orderInstance = $client->request('GET', $url, ["headers" => $headers]);
+            $order = json_decode($orderInstance->getBody(), true);
+            // #bc0
+            $orderTags =  $order['order_tags'];
+
+            // remove unwanted keys
+            unset(
+                $paymentInstance['auth_id'],
+                $paymentInstance['authorization'],
+                $paymentInstance['bank_reference'],
+                $paymentInstance['payment_offers'],
+            );
+
+            $paymentInstance['error_details'] = !empty($paymentInstance['error_details']) ? json_encode($paymentInstance['error_details']) : null;
+            $paymentInstance['payment_method'] = !empty($paymentInstance['payment_method']) ? json_encode($paymentInstance['payment_method']) : null;
+
+            // prepare data
+            $paymentDetails['cf_payment_id'] = $paymentInstance['cf_payment_id'];
+            $paymentDetails['user_id'] = $orderTags['user_id'];
+            $paymentDetails['plan_id'] = $orderTags['plan_id'];
+            $paymentDetails['entity'] = $paymentInstance['entity'];
+            $paymentDetails['error_details'] = $paymentInstance['error_details'];
+            $paymentDetails['is_captured'] = $paymentInstance['is_captured'];
+            $paymentDetails['order_amount'] = $paymentInstance['order_amount'];
+            $paymentDetails['order_id'] = $paymentInstance['order_id'];
+            $paymentDetails['payment_amount'] = $paymentInstance['payment_amount'];
+            $paymentDetails['payment_completion_time'] = Carbon::parse($paymentInstance['payment_completion_time'])->format('Y-m-d h:i:s');
+            $paymentDetails['payment_currency'] = $paymentInstance['payment_currency'];
+            $paymentDetails['payment_group'] = $paymentInstance['payment_group'];
+            $paymentDetails['payment_message'] = $paymentInstance['payment_message'];
+            $paymentDetails['payment_method'] = $paymentInstance['payment_method'];
+            $paymentDetails['payment_status'] = $paymentInstance['payment_status'];
+            $paymentDetails['payment_time'] = Carbon::parse($paymentInstance['payment_time'])->format('Y-m-d h:i:s');
+            $paymentDetails['transaction_goal'] = $orderTags['transaction_goal'] ?? Null;
+
+            // check record
+            $paymentInDb = Payment::where('cf_payment_id', $paymentInstance['cf_payment_id'])->first();
+            if (empty($paymentInDb->id)) {
+                $paymentInDb = Payment::create($paymentDetails);
+            } else {
+                Log::error("Payment for user id: " . $orderTags['user_id'] . " already exist in the DB.");
+                Log::error("Payment id: " . $paymentInDb->cf_payment_id);
+                $paymentInDb->update($paymentDetails);
+            }
+
+            // save payment details in 'payments' table
+            if ($paymentInstance['is_captured'] && $paymentInstance['payment_status'] == 'SUCCESS') {
+                // on successfull payment update user for selected plan
+                $user = User::find($orderTags['user_id']);
+
+                switch ($orderTags['transaction_goal']) {
+                    case 'renew_subscription':
+                    case 'upgrade':
+                    case 'add_user':
+                        $lastPaymentId = $user->payment_id;
+                        break;
+                    default:
+                        $lastPaymentId = null;
+                }
+
+                // desciption for email template.
+                 switch ($orderTags['transaction_goal']) {
+                    case 'renew_subscription': 
+                        $description = "Plan Renewed.";
+                        break;
+                    case 'upgrade':
+                        $description = "Plan Upgraded.";
+                        break;
+                    case 'add_user':
+                        $description = "More User Added.";
+                        break;
+                    default:
+                        $description = "New Subscription.";
+                }
+                
+                // record last payment id in the payments table.
+                $paymentInDb->update(['subscription_payment_id' => $lastPaymentId]);
+
+                // Auth::login($user);
+                $planExpiry = today()->addYear(1);
+
+                $allowedCases = ['new_subscription', 'renew_subscription', 'upgrade'];
+                // if user purchases new subscription or user renew/upgrade a subscription
+                // then only update in the users table that user record.
+                if (in_array($orderTags['transaction_goal'], $allowedCases)) {
+                    $user->fill([
+                        'plan_id' => $orderTags['plan_id'],
+                        'plan_type' => $orderTags['plan_type'],
+                        'plan_expire_on' => $planExpiry,
+                        'payment_id' => $paymentInDb->id,
+                        'total_user_limit' => $orderTags['user_limit'],
+                        'subscribed_on' => Carbon::now()->format('Y-m-d')
+                    ])->save();
+                }
+
+                // send invoice over user email
+                $user->load('Plan');
+                // Generate the invoice number before creating the invoice record
+                $companyInitials = 'BR'; // Bromi initials
+                $invoiceCount = Invoice::count() + 1;
+                if ($invoiceCount < 100) {
+                    # if number is less than 100 then pad it left side with '00'
+                    $futureInvoiceNumber = $companyInitials . '-' . $user->id . '-' . str_pad($invoiceCount, 3, '0', STR_PAD_LEFT);
+                } else {
+                    $futureInvoiceNumber = $companyInitials . '-' . $user->id . '-' . $invoiceCount;
+                }
+
+                if (in_array($orderTags['transaction_goal'], $allowedCases)) {
+                    # code...
+                    $eTemplate = view('emails.invoiceTemplate', ['user' => $user, 'sequence' => $futureInvoiceNumber, 'description' => $description])->render();
+                } else {
+                    // add more users template
+                    dd('add more users.');
+                }
+
+                // create invoice record
+                Invoice::create([
+                    'user_id' => $user->id,
+                    'payment_id' => $paymentInDb->id,
+                    'invoice_number' => $futureInvoiceNumber,
+                    'invoice_template' => $eTemplate
+                ]);
+                // Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
+                Session::put('plan_id', $orderTags['plan_id']);
+                return redirect('/admin');
+            } else {
+                dd('paymetsudd');
+                Session::put('message', 'Payment failed.');
+                return redirect()->route('admin.plans');
+            }
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect()->route('admin.plans');
+        }
+    }
 
 	public function upgrade_plan(Request $request)
 	{
@@ -644,7 +898,7 @@ class HomeController extends Controller
 
 		if($login_user->parent_id) {
 			$user = User::with('Branch','State','city')->where('id',$login_user->id)->first();
-			$user->city_name = $user->city->name;
+			$user->city_name = @$user->city->name;
 		} else {
 			$user = User::with('Branch','State','superCity')->where('id',$login_user->id)->first();
 			$user->city_name = $user->superCity->name;
@@ -670,7 +924,9 @@ class HomeController extends Controller
 			->select([
 				'tickets.*',
 				'categories.name AS category_name',
-			])->where('tickets.user_id',Auth::user()->id)->orderBy('tickets.created_at', 'asc')
+			])->where('tickets.user_id',Auth::user()->id)
+			->where('status', 'Open')
+			->orderBy('tickets.created_at', 'asc')
 			->take(10)
 			->get();
 
@@ -721,9 +977,9 @@ class HomeController extends Controller
     }
     
 	public function chnageProfile(Request $request){
-
 		$params = $request->all();
 		$user_id =  Auth::user()->id;
+
 		$user = User::select('id','email','password')->where('id',$user_id)->first();
 		if(!$user)
 		{
@@ -731,11 +987,13 @@ class HomeController extends Controller
 
 		}
 		$profile_details = array(
-			'first_name'    =>  $params['firstname'],   
+			'first_name'    =>  $params['firstname'],
 			'last_name'     =>  $params['lastname'],   
 			'mobile_number' =>  $params['mobile_number'],   
 			'company_name'  =>  $params['company_name'],
 			'address'  =>  $params['address'],
+			'rera'  =>  $params['rera'],
+			'gst'  =>  $params['gst'],
 		);
 
 		if($request->profile_image) {

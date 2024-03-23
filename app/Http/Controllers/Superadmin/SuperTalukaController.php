@@ -20,14 +20,14 @@ class SuperTalukaController extends Controller
 	{
 		if ($request->ajax()) {
 
-			$data = SuperTaluka::join('district','district.id','super_talukas.district_id')
+			$data = SuperTaluka::join('district', 'district.id', 'super_talukas.district_id')
 				->select([
 					'super_talukas.id',
 					'super_talukas.name',
 					'district.name AS district_name',
-				])->orderBy('super_talukas.id','desc');
+				])->orderBy('super_talukas.id', 'desc');
 
-			if($request->district_id > 0) {
+			if ($request->district_id > 0) {
 				$data->where('district.id', $request->district_id);
 			}
 

@@ -40,6 +40,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 	Route::group(['middleware' => ['auth', 'superadmin']], function () {
 		Route::get('/', [HomeController::class, 'index'])->name('superadmin');
 		Route::any('/Users', [UserController::class, 'index'])->name('superadmin.users');
+		Route::get('/user-profile/{id}', [UserController::class, 'profile'])->name('superadmin.user-profile');
 		Route::post('/get-user', [UserController::class, 'getSpecificUser'])->name('superadmin.getUser');
 		Route::post('/delete-user', [UserController::class, 'destroy'])->name('superadmin.deleteUser');
 		Route::post('/save-user', [UserController::class, 'saveUser'])->name('superadmin.saveUser');
@@ -89,7 +90,16 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/superadmin/delete-projects', [ProjectsController::class, 'destroy'])->name('superadmin.deleteProject');
 		Route::any('/superadmin/project/view/{id}', [ProjectsController::class, 'viewProject'])->name('superadmin.viewProject');
 
-		//
+		Route::get('/settings-state', [SuperSettingController::class, 'states_index'])->name('superadmin.settings.state');
+		Route::post('/settings-get-state', [SuperSettingController::class, 'get_state'])->name('superadmin.settings.getState');
+		Route::post('/settings-save-state', [SuperSettingController::class, 'state_store'])->name('superadmin.settings.saveState');
+		Route::post('/settings-delete-state', [SuperSettingController::class, 'destroy_state'])->name('superadmin.settings.deleteState');
+
+		Route::get('/settings-district', [SuperSettingController::class, 'district_index'])->name('superadmin.settings.district');
+		Route::post('/settings-get-district', [SuperSettingController::class, 'get_district'])->name('superadmin.settings.getDistrict');
+		Route::post('/settings-save-district', [SuperSettingController::class, 'district_store'])->name('superadmin.settings.saveDistrict');
+		Route::post('/settings-delete-district', [SuperSettingController::class, 'district_destroy'])->name('superadmin.settings.deleteDistrict');
+
 		Route::get('/settings-city', [SuperSettingController::class, 'cities_index'])->name('superadmin.settings.city');
 		Route::post('/settings-get-city', [SuperSettingController::class, 'get_city'])->name('superadmin.settings.getcity');
 		Route::post('/settings-save-city', [SuperSettingController::class, 'cities_store'])->name('superadmin.settings.savecity');

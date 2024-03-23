@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\Api\Properties;
+use App\Models\City;
 use App\Models\Enquiries;
 use App\Models\Projects;
+use App\Models\Subplans;
 use ArrayObject;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -123,6 +125,8 @@ class UserController extends Controller
 				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
+					
+					$buttons =  $buttons . '<a href="'.route('superadmin.user-profile',$row['id']).'"><i role="button" title="view profile" class="fs-22 py-2 mx-2 fa-eye pointer fa" type="button"></i></a>';
 					$buttons =  $buttons . '<i role="button" data-id="' . $row['id'] . '" onclick=getUser(this) class="fa fa-pencil pointer fa fs-22 py-2 mx-2"></i>';
 
 					if ($row['role_id'] != 3) {
@@ -141,6 +145,47 @@ class UserController extends Controller
 
 		$roles =  Role::where('user_id')->get();
 		return view('superadmin.users.index', compact('roles'));
+	}
+
+	public function profile($id){
+		
+		$login_user = User::find($id);
+
+		$plans = Subplans::get();
+
+		if($login_user->parent_id) {
+			$user = User::with('Branch','State','city')->where('id',$login_user->id)->first();
+			$user->city_name = $user->city->name;
+		} else {
+			$user = User::with('Branch','State','superCity')->where('id',$login_user->id)->first();
+			$user->city_name = $user->superCity->name;
+		}
+
+		$user_count =  User::where('parent_id',$id)->orWhere('id',$id)->get()->count();
+
+		$total_property = Properties::select('id')->where('user_id', $id)->count();
+		$total_enquiry = Enquiries::select('id')->where('user_id', $id)->count();
+		$total_project = Projects::select('id')->where('user_id', $id)->count();
+
+		$transactions = DB::table('payments')
+			->join('subplans','subplans.id','payments.plan_id')
+			->select([
+				'payments.*',
+				'subplans.name AS plan_name',
+			])->where('payments.user_id',$id)->get();
+
+		$tickets = DB::table('tickets')
+			->join('categories','categories.id','tickets.id')
+			->select([
+				'tickets.*',
+				'categories.name AS category_name',
+			])->where('tickets.user_id',$id)
+			->where('status', 'Open')
+			->orderBy('tickets.created_at', 'asc')
+			->take(10)
+			->get();
+
+		return view('superadmin.users.user_profile',compact('user','tickets', 'plans','transactions','user_count','total_property','total_enquiry','total_project'));
 	}
 
     public function membersList(Request $request)

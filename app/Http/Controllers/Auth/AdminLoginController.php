@@ -191,8 +191,9 @@ class AdminLoginController extends Controller
 		return $this->loggedOut($request) ?: redirect($this->redirectTo);
 	}
 	
-		public function subscription()
+	public function subscription()
 	{
+	    Session::put('transaction_goal', 'new_subscription');
 		return view('guest.plan')->with([
 			'plans' =>  Subplans::all(),
 		]);
@@ -215,7 +216,7 @@ class AdminLoginController extends Controller
 	public function savePlan(Request $request)
 	{
         try {
-            
+            $transaction_goal = Session::get('transaction_goal') ?? 'new_subscription'; 
             $planDetails = Subplans::find($request->plan_id);
             if (!$planDetails) {
                 Session::put('message', 'Invalid Plan.');
@@ -224,11 +225,11 @@ class AdminLoginController extends Controller
             $user  = User::find($request->user_id);
             $usersLimit = $planDetails->user_limit ?? 1;
             
-            $user->fill([
+            /*$user->fill([
     			'plan_id' => $request->plan_id,
     			'total_user_limit' => $planDetails->user_limit,
     			'subscribed_on' => Carbon::now()->format('Y-m-d')
-    		])->save();
+    		])->save();*/
 		
             // process payment
             $url = $this->cashfreeBaseUrl . "/orders";
@@ -256,6 +257,7 @@ class AdminLoginController extends Controller
                     "plan_type" => "$planDetails->plan_type",
                     "user_limit" => "$usersLimit",
                     "user_id" => "$user->id",
+                    "transaction_goal" => "$transaction_goal",
                 ],
                 "order_meta" => [
                     "return_url" => route('payment-success') . '?order_id={order_id}&order_token={order_token}'
@@ -319,42 +321,88 @@ class AdminLoginController extends Controller
             
             $paymentInstance['error_details'] = !empty($paymentInstance['error_details']) ? json_encode($paymentInstance['error_details']) : null;
             $paymentInstance['payment_method'] = !empty($paymentInstance['payment_method']) ? json_encode($paymentInstance['payment_method']) : null;
-            $paymentInDb = Payment::where('cf_payment_id', $paymentInstance['cf_payment_id'])->get();
-            if ($paymentInDb->isEmpty()) {
-                $paymentDetails['cf_payment_id'] = $paymentInstance['cf_payment_id'];
-                $paymentDetails['user_id'] = $orderTags['user_id'];
-                $paymentDetails['plan_id'] = $orderTags['plan_id'];
-                $paymentDetails['entity'] = $paymentInstance['entity'];
-                $paymentDetails['error_details'] = $paymentInstance['error_details'];
-                $paymentDetails['is_captured'] = $paymentInstance['is_captured'];
-                $paymentDetails['order_amount'] = $paymentInstance['order_amount'];
-                $paymentDetails['order_id'] = $paymentInstance['order_id'];
-                $paymentDetails['payment_amount'] = $paymentInstance['payment_amount'];
-                $paymentDetails['payment_completion_time'] = Carbon::parse($paymentInstance['payment_completion_time'])->format('Y-m-d h:i:s');
-                $paymentDetails['payment_currency'] = $paymentInstance['payment_currency'];
-                $paymentDetails['payment_group'] = $paymentInstance['payment_group'];
-                $paymentDetails['payment_message'] = $paymentInstance['payment_message'];
-                $paymentDetails['payment_method'] = $paymentInstance['payment_method'];
-                $paymentDetails['payment_status'] = $paymentInstance['payment_status'];
-                $paymentDetails['payment_time'] = Carbon::parse($paymentInstance['payment_time'])->format('Y-m-d h:i:s');
-                Payment::create($paymentDetails);
+
+            // prepare data
+            $paymentDetails['cf_payment_id'] = $paymentInstance['cf_payment_id'];
+            $paymentDetails['user_id'] = $orderTags['user_id'];
+            $paymentDetails['plan_id'] = $orderTags['plan_id'];
+            $paymentDetails['entity'] = $paymentInstance['entity'];
+            $paymentDetails['error_details'] = $paymentInstance['error_details'];
+            $paymentDetails['is_captured'] = $paymentInstance['is_captured'];
+            $paymentDetails['order_amount'] = $paymentInstance['order_amount'];
+            $paymentDetails['order_id'] = $paymentInstance['order_id'];
+            $paymentDetails['payment_amount'] = $paymentInstance['payment_amount'];
+            $paymentDetails['payment_completion_time'] = Carbon::parse($paymentInstance['payment_completion_time'])->format('Y-m-d h:i:s');
+            $paymentDetails['payment_currency'] = $paymentInstance['payment_currency'];
+            $paymentDetails['payment_group'] = $paymentInstance['payment_group'];
+            $paymentDetails['payment_message'] = $paymentInstance['payment_message'];
+            $paymentDetails['payment_method'] = $paymentInstance['payment_method'];
+            $paymentDetails['payment_status'] = $paymentInstance['payment_status'];
+            $paymentDetails['payment_time'] = Carbon::parse($paymentInstance['payment_time'])->format('Y-m-d h:i:s');
+            $paymentDetails['transaction_goal'] = $orderTags['transaction_goal'] ?? Null;
+            
+            // check record
+            $paymentInDb = Payment::where('cf_payment_id', $paymentInstance['cf_payment_id'])->first();
+            if (empty($paymentInDb->id)) {
+                $paymentInDb = Payment::create($paymentDetails);
             } else {
                 Log::error("Payment for user id: " . $orderTags['user_id'] . " already exist in the DB.");
-                Log::error("Payment id: " . $paymentInDb->first()->cf_payment_id);
+                Log::error("Payment id: " . $paymentInDb->cf_payment_id);
+                $paymentInDb->update($paymentDetails);
             }
     
             // save payment details in 'payments' table
             if ($paymentInstance['is_captured'] && $paymentInstance['payment_status'] == 'SUCCESS') {
                 // on successfull payment update user for selected plan
-                $user  = User::find($orderTags['user_id']);
+                $user = User::find($orderTags['user_id']);
+
+                switch ($orderTags['transaction_goal']) {
+                    case 'renew_subscription':
+                    case 'upgrade':
+                    case 'add_user':
+                        $lastPaymentId = $user->payment_id;
+                        break;
+                    default:
+                        $lastPaymentId = null;
+                }
+                // record last payment id in the payments table.
+                $paymentInDb->update(['subscription_payment_id' => $lastPaymentId]);
+                
+                // if it's new subscripton then $lastPaymentId will be empty. So, store payment id to users table.
+                if (empty($lastPaymentId)) {
+                    $lastPaymentId = $paymentInDb->id;
+                }
+                
                 Auth::login($user);
                 $planExpiry = today()->addYear(1);
-                $user->fill([
-                    'plan_id' => $orderTags['plan_id'],
-                    'plan_type' => $orderTags['plan_type'],
-                    'plan_expire_on' => $planExpiry,
-                    'total_user_limit' => $orderTags['user_limit'],
-                ])->save();
+                // if user purchases new subscription or user renew/upgrade a subscription
+                // then only update in the users table that user record.
+                $allowedCases = ['new_subscription', 'renew_subscription', 'upgrade'];
+                if (in_array($orderTags['transaction_goal'], $allowedCases)) {
+                    $user->fill([
+                        'plan_id' => $orderTags['plan_id'],
+                        'plan_type' => $orderTags['plan_type'],
+                        'plan_expire_on' => $planExpiry,
+                        'payment_id' => $lastPaymentId,
+                        'total_user_limit' => $orderTags['user_limit'],
+                        'subscribed_on' => Carbon::now()->format('Y-m-d')
+                    ])->save();
+                }
+
+                // desciption for email template.
+                switch ($orderTags['transaction_goal']) {
+                    case 'renew_subscription':
+                        $description = "Plan Renewed.";
+                        break;
+                    case 'upgrade':
+                        $description = "Plan Upgraded.";
+                        break;
+                    case 'add_user':
+                        $description = "More User Added.";
+                        break;
+                    default:
+                        $description = "New Subscription.";
+                }
     
                 // send invoice over user email
                 $user->load('Plan');
@@ -367,23 +415,31 @@ class AdminLoginController extends Controller
                 } else {
                     $futureInvoiceNumber = $companyInitials . '-' . $user->id . '-' .$invoiceCount;
                 }
-                $eTemplate = view('emails.invoiceTemplate', ['user' => $user, 'sequence' => $futureInvoiceNumber])->render();
+
+                if (in_array($orderTags['transaction_goal'], $allowedCases)) {
+                    # code...
+                    $eTemplate = view('emails.invoiceTemplate', ['user' => $user, 'sequence' => $futureInvoiceNumber, 'description' => $description])->render();
+                } else {
+                    // add more users template
+                    dd('add more users.');
+                }
     
                 // create invoice record
                 Invoice::create([
                     'user_id' => $user->id,
+                    'payment_id' => $paymentInDb->id,
                     'invoice_number' => $futureInvoiceNumber,
                     'invoice_template' => $eTemplate
                 ]);
-                Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
+                // Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
                 Session::put('plan_id', $orderTags['plan_id']);
                 Session::put('parent_id', $user->id);
                 return redirect('/admin');
             } else {
-                return redirect()->rotue('subscription');
+                return redirect()->route('subscription');
             }
         } catch (\Throwable $th) {
-            return redirect()->rotue('subscription');
+            return redirect()->route('subscription');
         }
 	}
 }

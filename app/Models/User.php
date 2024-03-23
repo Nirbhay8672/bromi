@@ -47,6 +47,8 @@ class User extends Authenticatable
 		'id_type',
 		'id_file',
 		'mobile_number',
+		'rera',
+		'gst',
 		'office_number',
 		'home_number',
 		'position',
@@ -67,9 +69,12 @@ class User extends Authenticatable
 		'total_user_limit',
 		'driving_license',
 		'company_name',
+		 'plan_type',
+		 'plan_expire_on',
 		'subscribed_on',
 		'verification_token',
 		'is_verified',
+		'payment_id'
 
 	];
 

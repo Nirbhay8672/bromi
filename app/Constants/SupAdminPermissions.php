@@ -14,8 +14,10 @@ class SupAdminPermissions
     const NOTIFICATIONS = 'notifications';
     const TP_SCHEME = 'tp-scheme';
     const RERA = 'rera';
+    const STATE = 'state';
     const CITY = 'city';
     const AREA = 'area';
+    const DISTRICT = 'district';
     const TALUKA = 'taluka';
     const VILLAGE = 'village';
     const EMAIL_TEMPLATE = 'email-template';
