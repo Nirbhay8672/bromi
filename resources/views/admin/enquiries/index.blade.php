@@ -733,7 +733,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
+        {{-- <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" style="width:30rem" role="document">
                 <div class="modal-content">
@@ -883,6 +883,131 @@
 
                 </div>
             </div>
+        </div> --}}
+
+        <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Progress</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form" novalidate="">
+                            <input type="hidden" name="progress_enquiry_id" id="progress_enquiry_id">
+                            @forelse ($configuration_settings as $progs)
+                            @if ($progs['dropdown_for'] == 'enquiry_progress')
+                            @php
+                            $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
+                            @endphp
+                            <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
+                            @endif
+                            @empty
+                            @endforelse
+        
+                            <div class="row">
+                                <div class="form-group col-md-4 m-b-20">
+                                    <label class="mb-0">Enquiry Progress: </label>
+                                    <select class="form-select" id="progress_enquiry_progress">
+                                        <option value="">Enquiry Progress </option>
+                                        <option value="New Lead">New Lead</option>
+                                        <option value="Lead Confirmed"> Lead Confirmed</option>
+                                        <option value="Discussion"> Discussion</option>
+                                        <option value="Booked"> Booked</option>
+                                        <option value="Lost"> Lost</option>
+                                        @forelse ($configuration_settings as $progs)
+                                            @if ($progs['dropdown_for'] == 'enquiry_progress')
+                                                @php
+                                                    $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
+                                                @endphp
+                                                    <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
+                                                @endif
+                                                @empty
+                                        @endforelse
+        
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4 m-b-4 mb-3">
+                                    <label class="mb-0">Comments:</label>
+                                    <select class="form-select" id="progress_sales_comment">
+                                        <option value="">Sales Comments</option>
+                                        @forelse ($configuration_settings as $props)
+                                        @if ($props['dropdown_for'] == 'enquiry_sales_comment')
+                                        <option data-parent_id="{{ $props['parent_id'] }}" value="{{ $props['id'] }}">{{ $props['name'] }}
+                                        </option>
+                                        @endif
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4 m-b-20">
+                                    <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
+                                    <div class="form-group">
+                                        <div class="fname">
+                                            <select class="form-select" id="reminider_before_minute" multiple="multiple">
+                                                <option value="" disabled>Select Minutes </option>
+                                                <option value="30 mins">30 mins</option>
+                                                <option value="1 hour">1 hour</option>
+                                                <option value="90 mins">90 mins</option>
+                                                <option value="120 mins">120 mins</option>
+                                                <option value="24 hour">24 hour</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <input class="form-control d-none" name="schedule_remind" id="schedule_remind" type="remarks" autocomplete="off">
+                                </div>
+                                <div class="form-group col-md-6 m-b-20">
+                                    <div class="col-12">
+                                        <div class="m-checkbox-inline custom-radio-ml">
+                                            <div class="form-check form-check-inline radio radio-primary">
+                                                <input class="form-check-input" id="progress_lead_type_1" type="radio" name="progress_lead_type" value="Hot Lead">
+                                                <label class="form-check-label mb-0" for="progress_lead_type_1">Hot
+                                                    Lead</label>
+                                            </div>
+                                            <div class="form-check form-check-inline radio radio-primary">
+                                                <input class="form-check-input" type="radio" id="progress_lead_type_2" name="progress_lead_type" value="Warm Lead">
+                                                <label class="form-check-label mb-0" for="progress_lead_type_2"> Warm
+                                                    Lead</label>
+                                            </div>
+                                            <div class="form-check form-check-inline radio radio-primary">
+                                                <input class="form-check-input" id="progress_lead_type_3" type="radio" name="progress_lead_type" value="Cold Lead">
+                                                <label class="form-check-label mb-0" for="progress_lead_type_3">Cold
+                                                    Lead</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- bharat date --}}
+                                {{-- <div class="form-group col-md-6 m-b-20">
+                                            <label for="nfd" class="mb-0">NFD:</label>
+                                            <input class="form-control " id="nfdDateTime" max='31-12-2050' name="nfdDateTime"
+                                                type="datetime-local">
+                                            <span style="color: red" id="err_date"></span>
+                                        </div> --}}
+                                <div class="form-group col-md-3 m-b-20">
+                                    <label for="nfdDate" class="mb-0">Site Visit Date:</label>
+                                    <input class="form-control limitYear4digits" id="site_visit_date1" name="nfdDate" max='31-12-2050' type="date" oninput="limitYearTo4Digits1()">
+                                </div>
+                                <div class="form-group col-md-3 m-b-20">
+                                    <label for="nfdTime" class="mb-0">Site Visit Time:</label>
+                                    <input class="form-control" id="site_visit_time1" name="nfdTime" type="time">
+                                </div>
+        
+                                <div class="form-group col-md-12 m-b-20">
+                                    <label for="remarks" class="mb-0">Remarks:</label>
+                                    <input class="form-control" name="progress_remarks" id="progress_remarks" type="remarks" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="text-center mt-3">
+                                <button class="btn custom-theme-button" type="button"
+                                    id="saveProgress">Save</button>
+                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
+                                    data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="modal fade" id="showprogressmodal" role="dialog" aria-labelledby="exampleModalLabel"
@@ -1012,11 +1137,15 @@
                                         <label class="form-check-label" for="email_reminder_schedule">Email
                                             Reminder</label>
                                     </div>
-
                                     <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="sms_reminder_schedule" type="checkbox"
                                             value="">
                                         <label class="form-check-label" for="sms_reminder_schedule">SMS Reminder</label>
+                                    </div>
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                        <input class="form-check-input" id="wp_reminder" type="checkbox"
+                                            value="">
+                                        <label class="form-check-label" for="wp_reminder">Whatsapp Reminder</label>
                                     </div>
                                 </div>
 
@@ -1477,14 +1606,14 @@
                 var urlParams = new URLSearchParams(queryString);
                 var go_data_id = urlParams.get('data_id')
 
-                $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
-                    .prop('checked', true);
+                // $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                //     .prop('checked', true);
 
-                $('#match_enquiry_all').on('change', function() {
-                    let isChecked = $(this).prop('checked');
-                    $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
-                        .prop('checked', isChecked);
-                });
+                // $('#match_enquiry_all').on('change', function() {
+                //     let isChecked = $(this).prop('checked');
+                //     $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                //         .prop('checked', isChecked);
+                // });
 
 
                 $('#enquiryTable').DataTable({

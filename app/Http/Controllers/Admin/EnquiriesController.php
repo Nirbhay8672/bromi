@@ -233,23 +233,25 @@ class EnquiriesController extends Controller
 
 							// Property For = Enquiry for
 							if ($request->match_enquiry_for) {
-								// dd("match_enquiry_for", $enquiry_for);
+								// dd("match_enquiry_for", $request->match_enquiry_for);
 								$enquiry_for = ($pro->property_for == 'Sell') ? 'Buy' : $pro->property_for;
 								$query->where('enquiry_for', $enquiry_for);
 							}
 
 							// budget from - budget to
 							if ($request->match_budget_from_type) {
-								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $pro->survey_price, "...", $unit_price);
 								$value = $pro->survey_price; // Get the value from the request
 								$unitDetails = json_decode($pro->unit_details, true);
-								$unit_price = $unitDetails[0][7];
-								if ($value != '') {
-									$query->where('budget_from', '<=', $pro->survey_price)
+								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $value,$unitDetails[0][4]);
+								$unit_price = $unitDetails[0][4];
+								if ($value != '' || $value !== null) {
+									$query
+									// ->where('budget_from', '<=', $pro->survey_price)
 										->where('budget_to', '>=', $pro->survey_price);
 								} else if ($unit_price != '') {
-									$query->where('budget_from', '<=', $unit_price)
-										->where('budget_to', '>=', $unit_price);
+									$query
+									// ->where('budget_from', '<=', $unit_price)
+										->where('budget_to', '>=', '22,222');
 								}
 							}
 
