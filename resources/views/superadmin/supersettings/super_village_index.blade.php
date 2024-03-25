@@ -114,7 +114,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button class="btn custom-theme-button" id="saveVillage">Save</button>
+                            <button class="btn custom-theme-button" type="button" id="saveVillage">Save</button>
                             <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                         </div>
                     </form>
