@@ -443,7 +443,7 @@ class PropertyController extends Controller
                     if ($row->property_category == '256') {
                         $fstatus = '';
                     } else {
-                        $fstatus = 'Unfurnished';
+                        $fstatus = '';
                         if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
                             $vv = json_decode($row->unit_details);
                             if (isset($vv[0][8])) {
@@ -738,7 +738,7 @@ class PropertyController extends Controller
                 ->make(true);
         }
         $projects = Projects::whereNotNull('project_name')->where('id', '!=', 261)->get();
-        $areas = Areas::whereNotNull('name')->get();
+        $areas = Areas::where('user_id', Auth::user()->id)->get();
         $conatcts_numbers = [];
         $contacts = Enquiries::get();
 
@@ -2081,7 +2081,7 @@ class PropertyController extends Controller
         $visits = QuickSiteVisit::with('Enquiry')->where('property_list', 'like', '%"' . $property->id . '"%')->whereNotNull('visit_status')->orderBy('id', 'DESC')->get();
 
         $projects = Projects::all();
-        $areas = Areas::all();
+        $areas = Areas::where('user_id', Auth::user()->id)->get();
 
         $multiple_image = LandImages::where('pro_id', $property->id)->get();
         $construction_docs_list = LandImages::where('pro_id', $property->id)
