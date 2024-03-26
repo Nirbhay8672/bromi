@@ -2503,7 +2503,7 @@ use Illuminate\Support\Facades\DB;
                                                     <div class="modal-content" style="max-height: 80%; height: auto; width: 40%;">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="imageLabel">Property Images</h5>
-                                                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div id="imageSlider" class="image-slider">
@@ -2547,7 +2547,7 @@ use Illuminate\Support\Facades\DB;
                                             <div class="modal-dialog modal-fullscreen">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <img src="" alt="" id="fullScreenImageView" class="" height="100%" width="100%">
@@ -2561,7 +2561,7 @@ use Illuminate\Support\Facades\DB;
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="imageLabel">Property Images</h5>
-                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div id="imageSlider" class="image-slider">
@@ -2600,7 +2600,7 @@ use Illuminate\Support\Facades\DB;
                                             <div class="modal-dialog modal-fullscreen">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <img src="" alt="" id="fullScreenImageView" class="img-fluid">
@@ -2797,7 +2797,7 @@ use Illuminate\Support\Facades\DB;
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add New Property</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"

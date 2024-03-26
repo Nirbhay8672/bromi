@@ -118,7 +118,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add New Enquiry</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
@@ -395,7 +395,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Filter</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="filter_form" novalidate="">
@@ -667,7 +667,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Import Enquiries</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
@@ -698,7 +698,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Transfer Enquiry</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="transfer_form" novalidate="">
@@ -890,7 +890,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add Progress</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form" novalidate="">
@@ -1051,7 +1051,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Show Schedule Visit</h5>
-                        <button class="btn-close btn-close btn-light" type="button" data-bs-dismiss="modal"
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal"
                             aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
@@ -1178,7 +1178,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Contact List</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="contact_list_form"

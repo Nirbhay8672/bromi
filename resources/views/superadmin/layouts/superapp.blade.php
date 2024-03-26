@@ -550,7 +550,7 @@ Helper::set_default_measuerement();
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Search</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
                     <div class="modal-body" id="serach_bar_body">
@@ -584,7 +584,7 @@ Helper::set_default_measuerement();
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabels">Capital Gain Calculator</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
                     <div class="modal-body">
@@ -666,7 +666,7 @@ Helper::set_default_measuerement();
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabels">Whole Unit Calculator</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
                     <div class="modal-body">
@@ -779,7 +779,7 @@ Helper::set_default_measuerement();
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabels">Emi Calculator</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
                     <div class="modal-body">
