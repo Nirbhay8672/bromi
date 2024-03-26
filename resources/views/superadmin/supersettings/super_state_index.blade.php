@@ -73,7 +73,7 @@
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
                             <div class="text-center">
-                                <button class="btn custom-theme-button" id="saveState">Save</button>
+                                <button class="btn custom-theme-button" type="button" id="saveState">Save</button>
                                 <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </form>

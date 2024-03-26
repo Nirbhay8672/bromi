@@ -152,7 +152,7 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button class="btn custom-theme-button" id="saveArea">Save</button>
+                                <button class="btn custom-theme-button" type="button" id="saveArea">Save</button>
                                 <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </form>
@@ -206,7 +206,7 @@
                                 </div>
                             </template>
                             <div class="text-center">
-                                <button class="btn custom-theme-button" @click="importArea">Save</button>
+                                <button class="btn custom-theme-button" type="button" @click="importArea">Save</button>
                                 <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </form>

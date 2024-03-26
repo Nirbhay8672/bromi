@@ -4040,7 +4040,7 @@
                     '<label>Wing</label>' +
                     '<input class="form-control" name="wing" type="text" autocomplete="off">' +
                     '</div>' +
-                    '<div id="wing_no_error_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '<div id="wing_' + id + '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '</div>' +
                     '<div data-unit_id="' + id + '" class="form-group col-md-2 m-b-20">' +
                     '<div>' +
@@ -4677,21 +4677,21 @@
                     //     console.log("5");
                     // }
 
-                    if (penthouseConf || retailConfiguration || flateConfiguration || officeConf ||
-                        storageConfiguration) {
-                        console.log(":is not farm, vila, plot", penthouseConf, retailConfiguration,
-                            flateConfiguration, officeConf, landCategory);
-                        if (wing.trim() === "") {
-                            console.log("66");
-                            $("#wing_no_error_" + unique_id).text("Wing field is required").show();
-                            allFieldsValid = false;
-                        } else {
-                            $("#wing_no_error_" + unique_id).hide();
-                            console.log("6");
-                        }
-                    } else {
-                        console.log("wing else  :");
-                    }
+                    // if (penthouseConf || retailConfiguration || flateConfiguration || officeConf ||
+                    //     storageConfiguration) {
+                    //     console.log(":is not farm, vila, plot", penthouseConf, retailConfiguration,
+                    //         flateConfiguration, officeConf, landCategory);
+                    //     if (wing.trim() === "") {
+                    //         console.log("66");
+                    //         $("#wing_no_error_" + unique_id).text("Wing field is required").show();
+                    //         allFieldsValid = false;
+                    //     } else {
+                    //         $("#wing_no_error_" + unique_id).hide();
+                    //         console.log("6");
+                    //     }
+                    // } else {
+                    //     console.log("wing else  :");
+                    // }
 
                     if (!landCategory && unit.trim() === "") {
                         console.log("77");
@@ -4800,18 +4800,7 @@
 
                 if ($("#property_email").val().trim() === "") {
                     $("#property_email_error").text("Email field is required").show();
-                    $("#property_email_error").text("Email field is required").show();
                     allFieldsValid = false;
-                } else {
-                    // Check if the entered email format is valid
-                    var email = $("#property_email").val().trim();
-                    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailPattern.test(email)) {
-                        $("#property_email_error").text("Please enter a valid email address").show();
-                        allFieldsValid = false;
-                    } else {
-                        $("#property_email_error").hide();
-                    }
                 } else {
                     // Check if the entered email format is valid
                     var email = $("#property_email").val().trim();

@@ -92,7 +92,7 @@ class AreaController extends Controller
 				->rawColumns(['Actions','select_checkbox'])
 				->make(true);
 		}
-		$cities = City::orderBy('name')->get()->toArray();
+		$cities = City::orderBy('name')->where('user_id', Auth::user()->id)->get()->toArray();
 		$states = State::orderBy('name')->get()->toArray();
 		$supercities = SuperCity::orderBy('name')->get()->toArray();
 		return view('admin.areas.index', compact('cities', 'states','supercities'));

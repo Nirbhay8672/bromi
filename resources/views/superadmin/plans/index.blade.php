@@ -25,6 +25,7 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Price</th>
+                                            <th>Extra User Price</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -93,6 +94,20 @@
                                     >
                                 </div>
                             </div>
+                            
+                            <div class="form-group col-md-4 m-b-20">
+                                <div class="fname">
+                                    <input
+                                        class="form-control"
+                                        name="extra_user_price"
+                                        id="extra_user_price"
+                                        type="text"
+                                        placeholder="Extra User Price"
+                                        required=""
+                                        autocomplete="off"
+                                    >
+                                </div>
+                            </div>
 
                             <div class="col-md-5 m-b-20">
                                 <button onclick=addFeature() class="btn btn-pill btn-primary" type="button">Add
@@ -132,6 +147,7 @@
                     $('#plan_name').val(dataa.name);
                     $('#plan_price').val(dataa.price);
                     $('#user_limit').val(dataa.user_limit);
+                    $('#extra_user_price').val(dataa.extra_user_price);
                     if (featurestring != '') {
                         features = featurestring.split('_---_')
                         $('#feature-container').html('');
@@ -231,6 +247,10 @@
                         name: 'price'
                     },
                     {
+                        data: 'extra_user_price',
+                        name: 'Extra User Price'
+                    },
+                    {
                         data: 'Actions',
                         name: 'Actions'
                     },
@@ -252,6 +272,7 @@
                         name: $('#plan_name').val(),
                         price: $('#plan_price').val(),
                         user_limit: $('#user_limit').val(),
+                        extra_user_price: $('#extra_user_price').val(),
                         features: features,
                         _token: '{{ csrf_token() }}',
                     },

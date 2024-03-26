@@ -44,7 +44,7 @@
                                     >
                                         <option value="">-- Select State --</option>
                                         <template x-for="(state, index) in states" :key="`state_${index}`">
-                                            <option :value="state.id"><span x-text="state.name"></span></option>
+                                            <option :value="state.id" style="text-transform: capitalize !important;"><span x-text="state.name"></span></option>
                                         </template>
                                     </select>
                                 </div>
@@ -57,7 +57,7 @@
                                     >
                                         <option value="">-- Select City --</option>
                                         <template x-for="(city, index) in cities" :key="`city_${index}`">
-                                            <option :value="city.id"><span x-text="city.name"></span></option>
+                                            <option :value="city.id" style="text-transform: capitalize !important;"><span x-text="city.name"></span></option>
                                         </template>
                                     </select>
                                 </div>
@@ -154,7 +154,7 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button class="btn custom-theme-button" id="saveArea">Save</button>
+                                <button class="btn custom-theme-button" type="button" id="saveArea">Save</button>
                                 <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </form>

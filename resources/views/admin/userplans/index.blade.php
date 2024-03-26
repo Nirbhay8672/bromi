@@ -14,6 +14,9 @@
 
                 <div class="col-sm-12">
                     <div class="card">
+                        @if (Session::get('plan_expired_redirection'))
+                            <div style="border-radius: 12px 12px 0 0;text-align: center;" class="alert alert-danger">{{ Session::get('plan_expired_redirection') }}</div>
+                        @endif
                         <div class="card-header pb-0">
                             <h5>Pricing</h5>
                         </div>
