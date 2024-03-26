@@ -481,7 +481,7 @@ class PropertyController extends Controller
                             <br>
                             ' . $salable_area_print . '
                             </font>
-                            <br>' . $fstatus . '.' . $row->image_path . '
+                            <br>' . $fstatus . $row->image_path . '
                         </td>';
                     } catch (\Throwable $th) {
                         dd($th);
@@ -1679,7 +1679,7 @@ class PropertyController extends Controller
                     if ($row->Property->property_category == '256') {
                         $fstatus = '';
                     } else {
-                        $fstatus = 'Unfurnished';
+                        $fstatus = '';
                         if (!empty($row->Property->unit_details) && !empty(json_decode($row->Property->unit_details)[0])) {
                             $vv = json_decode($row->Property->unit_details);
                             if (isset($vv[0][8])) {
@@ -2081,7 +2081,7 @@ class PropertyController extends Controller
         $visits = QuickSiteVisit::with('Enquiry')->where('property_list', 'like', '%"' . $property->id . '"%')->whereNotNull('visit_status')->orderBy('id', 'DESC')->get();
 
         $projects = Projects::all();
-        $areas = Areas::where('user_id', Auth::user()->id)->get();
+       $areas = Areas::where('user_id', Auth::user()->id)->get();
 
         $multiple_image = LandImages::where('pro_id', $property->id)->get();
         $construction_docs_list = LandImages::where('pro_id', $property->id)

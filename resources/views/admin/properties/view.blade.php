@@ -1030,6 +1030,19 @@ use Illuminate\Support\Facades\DB;
 																</div>
 															</div>
 														@endif
+														 <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Created Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($property->created_at)) }}</div>
+                                                        </div>
+
+                                                        <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Last Modified Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($property->updated_at)) }}</div>
+                                                        </div>
                                                     </div>
 
 													@if ($type === "Land")
@@ -2201,6 +2214,19 @@ use Illuminate\Support\Facades\DB;
 																</div>
 															</div>
 														@endif
+														 <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Created Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($property->created_at)) }}</div>
+                                                        </div>
+
+                                                        <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Last Modified Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($property->updated_at)) }}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
 											</div>
@@ -2503,7 +2529,7 @@ use Illuminate\Support\Facades\DB;
                                                     <div class="modal-content" style="max-height: 80%; height: auto; width: 40%;">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="imageLabel">Property Images</h5>
-                                                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div id="imageSlider" class="image-slider">
@@ -2547,7 +2573,7 @@ use Illuminate\Support\Facades\DB;
                                             <div class="modal-dialog modal-fullscreen">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <img src="" alt="" id="fullScreenImageView" class="" height="100%" width="100%">
@@ -2561,7 +2587,7 @@ use Illuminate\Support\Facades\DB;
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="imageLabel">Property Images</h5>
-                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div id="imageSlider" class="image-slider">
@@ -2600,7 +2626,7 @@ use Illuminate\Support\Facades\DB;
                                             <div class="modal-dialog modal-fullscreen">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <img src="" alt="" id="fullScreenImageView" class="img-fluid">
@@ -2797,7 +2823,7 @@ use Illuminate\Support\Facades\DB;
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add New Property</h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
