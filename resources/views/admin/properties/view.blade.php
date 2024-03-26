@@ -236,119 +236,107 @@ use Illuminate\Support\Facades\DB;
                                                             </div>
                                                         @endif
 
-														@if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse')
-                                                            <div class="form-group col-4 m-b-10 data_conent_53">
-                                                                <h6><b>Carpet Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_53">
-
-                                                                <div>:{{$carpetArray[0]}} {{ $carpet_units->unit_name}}
-                                                                    {{-- @if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name']))
-                                                                        {{ explode('_-||-_', $property->carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name'] }}
-                                                                    @endif --}}
+                                                        @if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse')
+                                                            @if($carpetArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_53">
+                                                                    <h6><b>Carpet Area</b></h6>
                                                                 </div>
-                                                            </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_53">
+                                                                    <div>:{{$carpetArray[0]}} {{ $carpet_units->unit_name}}</div>
+                                                                </div>
+                                                            @endif
                                                         @endif
+
                                                         @if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Plot' || $type == 'Penthouse')
-                                                            <div class="form-group col-4 m-b-10 data_conent_54">
-                                                                <h6><b>Salable Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_54">:
-                                                               
-                                                               {{$salableArray[0]}} {{ $land_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($salableArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_54">
+                                                                    <h6><b>Salable Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_54">:
+                                                                {{$salableArray[0]}} {{ $land_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Plot' || $type == 'Farmhouse')
-                                                            <div class="form-group col-4 m-b-10 data_conent_55">
-                                                                <h6><b>Carpet Plot Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_55">:
-                                                                {{$carpet_plotArray[0]}} {{ $carpet_plot_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($carpet_plotArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_55">
+                                                                    <h6><b>Carpet Plot Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_55">:
+                                                                    {{$carpet_plotArray[0]}} {{ $carpet_plot_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
-                                                            <div class="form-group col-4 m-b-10 data_conent_56">
-                                                                <h6><b>Salable Plot Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_56">:
-                                                                {{$salable_plotArray[0]}} {{ $salable_plot_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($salable_plotArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_56">
+                                                                    <h6><b>Salable Plot Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_56">:
+                                                                    {{$salable_plotArray[0]}} {{ $salable_plot_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
-                                                            <div class="form-group col-4 m-b-10 data_conent_57">
-                                                                <h6><b>Constructed Salable Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_57">:
-                                                                {{$constructed_salableArray[0]}} {{ $constructed_salable_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($constructed_salableArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_57">
+                                                                    <h6><b>Constructed Salable Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_57">:
+                                                                    {{$constructed_salableArray[0]}} {{ $constructed_salable_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
-                                                            <div class="form-group col-4 m-b-10 data_conent_58">
-                                                                <h6><b>Constructed Carpet Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_58">:
-                                                                {{$constructed_carpetArray[0]}} {{ $constructed_carpet_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($constructed_carpetArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_58">
+                                                                    <h6><b>Constructed Carpet Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_58">:
+                                                                    {{$constructed_carpetArray[0]}} {{ $constructed_carpet_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Vila/Bunglow' || $type == 'Farmhouse')
-                                                            <div class="form-group col-4 m-b-10 data_conent_59">
-                                                                <h6><b>Constructed Builtup Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_59">:
-                                                                {{$constructed_builtupArray[0]}} {{ $constructed_builtup_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($builtupArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_59">
+                                                                    <h6><b>Constructed Builtup Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_59">:
+                                                                    {{$constructed_builtupArray[0]}} {{ $constructed_builtup_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Penthouse' || $type == 'Flat')
-                                                            <div class="form-group col-4 m-b-10 data_conent_60">
-                                                                <h6><b>Builtup Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_60">:
-                                                                {{$builtupArray[0]}}   {{$builtup_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($builtupArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_60">
+                                                                    <h6><b>Builtup Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_60">:
+                                                                    {{$builtupArray[0]}}   {{$builtup_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
 
                                                         @if ($type == 'Penthouse' || ($type == 'Flat' && $property->is_terrace != 0))
-                                                            <div class="form-group col-4 m-b-10 data_conent_61">
-                                                                <h6><b>Terrace Carpet Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_61">:
-                                                                {{$terrace_carpetArray[0]}} {{ $terrace_carpet_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($terrace_builtupArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_61">
+                                                                    <h6><b>Terrace Carpet Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_61">:
+                                                                    {{$terrace_carpetArray[0]}} {{ $terrace_carpet_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Penthouse' || ($type == 'Flat' && $property->is_terrace != 0))
-                                                            <div class="form-group col-4 m-b-10 data_conent_62">
-                                                                <h6><b>Terrace Salable Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_62">:
-                                                                {{$terrace_salableArray[0]}} {{ $terrace_salable_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($terrace_salableArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_62">
+                                                                    <h6><b>Terrace Salable Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_62">:
+                                                                    {{$terrace_salableArray[0]}} {{ $terrace_salable_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Farmhouse' || $type == 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_6">
@@ -1482,117 +1470,107 @@ use Illuminate\Support\Facades\DB;
                                                             </div>
                                                         @endif
 														@if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse')
-                                                            <div class="form-group col-4 m-b-10 data_conent_53">
-                                                                <h6><b>Carpet Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_53">
-
-                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
-                                                                    {{-- @if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name']))
-                                                                        {{ explode('_-||-_', $property->carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_area)[1]]['unit_name'] }}
-                                                                    @endif --}}
+                                                            @if($carpetArray[0] !== "")
+                                                                <div class="form-group col-4 m-b-10 data_conent_53">
+                                                                    <h6><b>Carpet Area</b></h6>
                                                                 </div>
-                                                            </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_53">
+
+                                                                    <div>:{{$carpetArray[0]}} {{ $carpet_units->unit_name}}
+                                                                    </div>
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Plot' || $type == 'Penthouse')
+                                                            @if($salableArray[0] !== "")                                                                
                                                             <div class="form-group col-4 m-b-10 data_conent_54">
                                                                 <h6><b>Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_54">:
                                                                 {{$salableArray[0]}} {{ $land_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_area)[1]]['unit_name'] }}
-                                                                @endif --}}
                                                             </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Plot' || $type == 'Farmhouse')
+                                                            @if($carpet_plotArray[0] !== "")                                                                
                                                             <div class="form-group col-4 m-b-10 data_conent_55">
                                                                 <h6><b>Carpet Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_55">:
                                                                 {{$carpet_plotArray[0]}} {{ $carpet_plot_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->carpet_plot_area)[1]]['unit_name'] }}
-                                                                @endif --}}
                                                             </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
+                                                            @if($salable_plotArray[0] !== "")                                                                
                                                             <div class="form-group col-4 m-b-10 data_conent_56">
                                                                 <h6><b>Salable Plot Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_56">:
                                                                 {{$salable_plotArray[0]}} {{ $salable_plot_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $land_units[explode('_-||-_', $property->salable_plot_area)[1]]['unit_name'] }}
-                                                                @endif --}}
                                                             </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
+                                                            @if($constructed_salableArray[0] !== "")
                                                             <div class="form-group col-4 m-b-10 data_conent_57">
                                                                 <h6><b>Constructed Salable Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_57">:
                                                                 {{$constructed_salableArray[0]}} {{ $constructed_salable_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_salable_area)[1]]['unit_name'] }}
-                                                                @endif --}}
                                                             </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Storage/industrial' || $type == 'Vila/Bunglow' || $type == 'Farmhouse')
+                                                            @if($constructed_carpetArray[0] !== "")  
                                                             <div class="form-group col-4 m-b-10 data_conent_58">
                                                                 <h6><b>Constructed Carpet Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_58">:
                                                                 {{$constructed_carpetArray[0]}} {{ $constructed_carpet_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_carpet_area)[1]]['unit_name'] }}
-                                                                @endif --}}
                                                             </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Vila/Bunglow' || $type == 'Farmhouse')
+                                                            @if($constructed_builtupArray[0] !== "")  
                                                             <div class="form-group col-4 m-b-10 data_conent_59">
                                                                 <h6><b>Constructed Builtup Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_59">:
                                                                 {{$constructed_builtupArray[0]}} {{ $constructed_builtup_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->constructed_builtup_area)[1]]['unit_name'] }}
-                                                                @endif --}}
                                                             </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Penthouse' || $type == 'Flat')
+                                                            @if($builtupArray[0] !== "")  
                                                             <div class="form-group col-4 m-b-10 data_conent_60">
                                                                 <h6><b>Builtup Area</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_60">:
-                                                                {{$builtupArray[0]}}  {{$builtup_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->builtup_area)[0] . ' ' . $land_units[explode('_-||-_', $property->builtup_area)[1]]['unit_name'] }}
-                                                                @endif --}}
+                                                                 {{$builtupArray[0]}}   {{$builtup_units->unit_name}}
                                                             </div>
+                                                            @endif
                                                         @endif
 
                                                         @if ($type == 'Penthouse' || ($type == 'Flat' && $property->is_terrace != 0))
-                                                            <div class="form-group col-4 m-b-10 data_conent_61">
-                                                                <h6><b>Terrace Carpet Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_61">:
-                                                                {{$terrace_carpetArray[0]}} {{ $terrace_carpet_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_carpet_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($terrace_carpetArray[0] !== "")  
+                                                                <div class="form-group col-4 m-b-10 data_conent_61">
+                                                                    <h6><b>Terrace Carpet Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_61">:
+                                                                    {{$terrace_carpetArray[0]}} {{ $terrace_carpet_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Penthouse' || ($type == 'Flat' && $property->is_terrace != 0))
-                                                            <div class="form-group col-4 m-b-10 data_conent_62">
-                                                                <h6><b>Terrace Salable Area</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_62">:
-                                                                {{$terrace_salableArray[0]}} {{ $terrace_salable_units->unit_name}}
-                                                                {{-- @if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name']))
-                                                                    {{ explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $land_units[explode('_-||-_', $property->terrace_salable_area)[1]]['unit_name'] }}
-                                                                @endif --}}
-                                                            </div>
+                                                            @if($terrace_salableArray[0] !== "")     
+                                                                <div class="form-group col-4 m-b-10 data_conent_62">
+                                                                    <h6><b>Terrace Salable Area</b></h6>
+                                                                </div>
+                                                                <div class="form-group col-8 m-b-10 data_conent_62">:
+                                                                    {{$terrace_salableArray[0]}} {{ $terrace_salable_units->unit_name}}
+                                                                </div>
+                                                            @endif
                                                         @endif
                                                         @if ($type == 'Farmhouse' || $type == 'Land')
                                                             <div class="form-group col-4 m-b-10 data_conent_6">
@@ -2662,7 +2640,8 @@ use Illuminate\Support\Facades\DB;
                                                     </div>
                                                     @if ($hasConstDocuments)
                                                         <div class="modal-footer">
-                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'construction_documents', 'prop' => $property->id]) }}">Download Zip</a>
+                                                            <a class="btn btn-primary" href="{{ route('download.zip', ['type' => 'construction_land_images', 'prop' => $property->id]) }}">Download Zip</a>
+                                                        
                                                         </div>
                                                     @else
                                                         <center><h4>No Construction Documents Found</h4></center>

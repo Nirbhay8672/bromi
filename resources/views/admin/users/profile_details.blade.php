@@ -152,6 +152,62 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <style>
+                                            .qty-box {
+                                                width: 130px;
+                                                margin: 0 auto;
+                                                border-radius: 5px;
+                                                overflow: hidden;
+                                            }
+                                            input.total-price {
+                                                width: 70px;
+                                                text-align: center;
+                                                background-color: #bbb;
+                                                border-radius: 4px;
+                                                border: 0;
+                                            }
+                                            .value-box {
+                                                border: 1px solid blue;
+                                            }
+                                            .pay-now {
+                                                padding: 4px 10px;
+                                                border-radius: 4px;
+                                                font-size: 12px;
+                                                margin-top: 10px;
+                                            }
+                                        </style>
+                                        @if (Auth::user()->role_id == 1)
+                                            <div class="userpro-box" style="margin-top:10px;background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
+                                                <div class="">
+                                                    <p class="mb-0">
+                                                        <strong>Add More Users</strong>
+                                                        
+                                                        <p><small>(Per User Price: <span id="perUserPrice">{{$user->Plan->extra_user_price ?? '0' }}</span>/-)</small></p>
+                                                        @if (empty($user->Plan->extra_user_price))
+                                                            <p class="m-0 text-danger" style="font-size:10px;">Extra user price not available.</p>
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                                <fieldset class="qty-box">
+                                                    <div class="input-group bootstrap-touchspin">
+                                                        <input id="valueBox" readonly class="touchspin text-center form-control value-box" type="text" value="0" style="display: block;">
+                                                    </div>
+                                                </fieldset>
+
+                                                <form action="{{route('admin.increaseUserLimit')}}" method="post">
+                                                    <p class="price-section mt-2 mb-0"> 
+                                                        <strong>Total: <input type="text" id="usersLimitPrice" name="users_limit_price" readonly class="total-price" value="0"></strong>
+                                                    </p>
+                                                    @csrf
+                                                    @php
+                                                        Session::put('transaction_goal', 'add_user');
+                                                    @endphp
+                                                    <input type="hidden" name="transaction_goal", value='add_user'>
+                                                    <input type="hidden" id="userLimit" name="users_limit" value="0">
+                                                    <button style="display: none;" class="btn btn-primary btn-lg pay-now" id="pay-now-btn" type="submit">Pay Now</button>
+                                                </form>
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="col-12 col-sm-8 col-md-8 col-lg-8">
                                         <div class="bg-white p-3 post-about h-100" style="background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
@@ -447,6 +503,48 @@
         $state_encoded = json_encode($states);
         @endphp
         @endsection
+        
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function() {
+
+                // Get references to the elements
+                const valueBox = document.getElementById('valueBox');
+                const perUserPrice = document.getElementById('perUserPrice');
+                const usersLimitPrice = document.getElementById('usersLimitPrice');
+
+                // Attach an event listener to the value box
+                $(".touchspin").on("touchspin.on.startspin", function() {
+                    // Code to be executed when the spinner starts spinning upwards or downwards
+                
+                    // Get the value entered in the value box
+                    const value = parseInt($('#valueBox').val());
+
+                    if (value <= 0 || (value > 3 && usersLimitPrice.value <= 0)) {
+                        $('#pay-now-btn').hide();
+                    } else {
+                        $('#pay-now-btn').show();
+                    }
+                    if (value > 3) {
+                        $('#valueBox').val(value - 1); 
+                        return false;
+                    }
+                    $('#userLimit').val(value);
+                    // Get the per user price
+                    const pricePerUser = parseInt(perUserPrice.textContent);
+                    
+                    // Calculate the total price
+                    const totalPrice = value * pricePerUser;
+                    console.log(totalPrice, value);
+                    if (totalPrice == 0) {
+                        $('#pay-now-btn').hide();
+                    }
+                    // Update the value of the users limit price input
+                    usersLimitPrice.value = totalPrice;
+                });
+            });                                        
+        </script>
+        
         @push('scripts')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js" integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
