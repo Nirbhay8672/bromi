@@ -1745,12 +1745,40 @@
             });
 
             //matching popup
+            // function matchingProperty(data) {
+            //     $('#matchModal').modal('show');
+            //     $('#matchagain').attr('data-id', $(data).attr('data-id'));
+            //     let propertyId = $(this).data('id');
+            //     alert("prop ID :",propertyId);
+            //     console.log("property id :",propertyId);
+            //     // urll = matching_property_url + '?enq=' + matching_property_url($(data).attr('data-id'));
+            //     // window.location = urll;
+            // }
+
             function matchingProperty(data) {
                 $('#matchModal').modal('show');
-                $('#matchagain').attr('data-id', $(data).attr('data-id'));
-                // urll = matching_property_url + '?enq=' + matching_property_url($(data).attr('data-id'));
-                // window.location = urll;
+                let enquiryId = $(data).attr('data-id'); // Retrieve data-id attribute from 'data' parameter
+                $('#matchagain').attr('data-id', enquiryId); // Set data-id attribute for #matchagain button
+                console.log("enq in id: ", enquiryId); // Output property id to console
+                getEnquiryCategory(enquiryId);
             }
+
+            function getEnquiryCategory(enquiryID) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('admin.enquiry.category') }}",
+                    data: {
+                        id: enquiryID, // Pass the enquiryID directly
+                    },
+                    success: function(data) {
+                        console.log("Dataaaa :", data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
+            }
+
 
             $(document).on('click', '#filtersearch', function(e) {
                 e.preventDefault();

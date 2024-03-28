@@ -1686,4 +1686,18 @@ $dataEnq = Enquiries::where('id', $request->enquiry_id)->update([
 		$vv = Enquiries::where('id', $request->id)->update(['enq_status' => $status]);
 		return redirect('admin/Enquiries');
 	}
+
+	public function getEnquiryCategory(Request $request) {
+		$enquiryID = $request->query('id');
+    
+    // Fetch the enquiry record based on the ID
+    $enquiry = Enquiries::find($enquiryID);
+
+    // Retrieve the property_category value from the enquiry record
+    $penquiryCategory = $enquiry->pluck('requirement_type')->first();
+
+    // Return the property_category value as JSON response
+    // return response()->json(['category' => $enquiry]);
+        return response()->json($enquiry);
+    }
 }

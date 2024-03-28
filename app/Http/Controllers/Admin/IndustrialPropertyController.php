@@ -10,10 +10,12 @@ use App\Models\Areas;
 use App\Models\City;
 use App\Models\DropdownSettings;
 use App\Models\Projects;
+use App\Models\Enquiries;
 use App\Models\LandUnit;
 use App\Models\Properties;
 use App\Models\State;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
@@ -99,7 +101,7 @@ class IndustrialPropertyController extends Controller
 					// $second = '<br> <a href="' . $row->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '    </font> </a>';
 					$second = '<br>Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font>';
 					$third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a>' : "");
-					$third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->created_at)->format('d-m-Y') . '</font>';
+				// 	$third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->created_at)->format('d-m-Y') . '</font>';
 					$last = '</td>';
 					'</td>';
 					return
@@ -152,7 +154,7 @@ class IndustrialPropertyController extends Controller
 					if ($row->property_category == '256') {
 						$fstatus = '';
 					} else {
-						$fstatus = 'Unfurnished';
+						$fstatus = '';
 						if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
 							$vv = json_decode($row->unit_details);
 							if (isset($vv[0][8])) {
@@ -352,18 +354,102 @@ class IndustrialPropertyController extends Controller
 					}
 					return;
 				})
-				->addColumn('actions', function ($row) {
+				->addColumn('actions', function ($row) use($land_units) {
 					$buttons = '';
+					$building_name = '';
+                    $area = '';
+                    $config = '';
+                    $super_built_area = '';
+                    $super_built_measure = '';
+                    $carpet_area = '';
+                    $carpet_measure = '';
+                    $furniture = '';
+					$vvv = '';
+					$user = User::with(['roles', 'roles.permissions'])
+                        ->where('id', Auth::user()->id)
+                        ->first();
+					$permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
+
+					if (isset($row->Projects->project_name)) {
+                        $building_name = $row->Projects->project_name;
+                    }
+                    if (isset($row->Projects->Area->name)) {
+                        $area = $row->Projects->Area->name;
+                    }
+                    if (isset($dropdowns[$row->property_category]['name'])) {
+                        $config = $dropdowns[$row->property_category]['name'];
+                    }
+
+                    if (isset($row->carpet_area)) {
+                        $carpet_area = $row->carpet_area;
+                    }
+                    if (isset($dropdowns[$row->carpet_measurement]['name'])) {
+                        $carpet_measure = $dropdowns[$row->carpet_measurement]['name'];
+                    }
+                    if (isset($dropdowns[$row->furnished_status]['name'])) {
+                        $furniture = $dropdowns[$row->furnished_status]['name'];
+                    }
+
+					$building_name = urlencode($building_name);
+                    $area = urlencode($area);
+                    $config = urlencode($config);
+                    $price = urlencode($row->price);
+                    $property_for = urlencode(($row->property_for == 'Both') ? 'Rent & Sell' : '');
+                    $details = urlencode($this->generateAreaUnitDetails($row, $config, $land_units));
+                    $location_link = urlencode($row->location_link);
+					$message = "$building_name | $area \n $config | $details | $price \n Available For : $property_for\n\n | Link: $location_link";
+                    $sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
+                    $buttons = $buttons . '<i title="Send On Whatsapp" data-share_string="' . $sharestring . '"  onclick=openwamodel(this)  class="fa fs-22 py-2 mx-2 fa-whatsapp text-success"></i><br>';
+					$buttons = $buttons . '<i title="Matching Enquiry" data-id="' . $row->id . '" onclick=matchingEnquiry(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
+					if (in_array('shared-property', $permissions)) {
+                        $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
+                    }
+                    if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
+                        $cd = json_decode($row->other_contact_details);
+                        foreach ($cd as $key => $value) {
+                            if ($vvv == '') {
+                                $space = '';
+                            } else {
+                                $space = '<br> ';
+                            }
+                            // $vvv = $vvv . $space . $value[0] . ' : ' . $value[1];
+                            $vvv = $vvv . $space . $value[1];
+                        }
+                        // if ($vvv) {
+                        //     $vvv = $vvv . '<br> ' . $row->care_taker_name . ' : ' . $row->care_taker_contact;
+                        // }
+                    }
+                    $contact_info = ($vvv != "") ? $vvv : ' ';
 					$buttons =  $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
-
-
 					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
 
+					$buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : 'No Contacts') . '" data-bs-trigger="hover focus"></i>';
+                   
 					return $buttons;
 				})
 				->rawColumns(['project_id', 'contact_details', 'price', 'property_for', 'unit_details', 'actions', 'select_checkbox'])
 				->make(true);
 		}
+		$conatcts_numbers = [];
+        $contacts = Enquiries::get();
+
+        foreach ($contacts as $key => $value) {
+            if (!empty($value->client_mobile) && !empty($value->client_name)) {
+                $arr = [];
+                $arr['name'] = $value->client_name;
+                $arr['number'] = $value->client_mobile;
+                array_push($conatcts_numbers, $arr);
+            }
+            if (!empty($value->other_contacts)) {
+                $val = json_decode($value->other_contacts);
+                foreach ($val as $key1 => $value1) {
+                    $arr = [];
+                    $arr['name'] = $value1[0];
+                    $arr['number'] = $value1[1];
+                    array_push($conatcts_numbers, $arr);
+                }
+            }
+        }
 		$projects = Projects::orderBy('project_name')->get();
 		$areas = Areas::orderBy('name')->get();
 		$cities = City::orderBy('name')->get();
@@ -378,7 +464,7 @@ class IndustrialPropertyController extends Controller
 				array_push($prop_type, $value['id']);
 			}
 		}
-		return view('admin.properties.industrial_index', compact('projects', 'property_configuration_settings', 'areas', 'cities', 'states', 'prop_type'));
+		return view('admin.properties.industrial_index', compact('projects','conatcts_numbers', 'property_configuration_settings', 'areas', 'cities', 'states', 'prop_type'));
 	}
 	
 	public function generateAreaUnitDetails($row, $type, $land_units)
@@ -389,8 +475,13 @@ class IndustrialPropertyController extends Controller
             $area = explode('_-||-_', $row->salable_area)[0];
             $measure = explode('_-||-_', $row->salable_area)[1];
         } elseif ($type == 'Storage/industrial') {
-            $area = explode('_-||-_', $row->salable_plot_area)[0];
+             $area = explode('_-||-_', $row->salable_plot_area)[0];
+			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
             $measure = explode('_-||-_', $row->salable_plot_area)[1];
+			if (empty($salable)) {
+                $salable = '';
+            }
+            $area = "P:" . $area . ' - C: ' . $constructed;
         } elseif ($type == 'Vila/Bunglow') {
             $salable = explode('_-||-_', $row->salable_plot_area)[0];
             $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
@@ -421,6 +512,47 @@ class IndustrialPropertyController extends Controller
             return "Area Not Available";
         }
     }
+    
+// 	public function generateAreaUnitDetails($row, $type, $land_units)
+//     {
+//         $area = '';
+//         $measure = '';
+//         if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+//             $area = explode('_-||-_', $row->salable_area)[0];
+//             $measure = explode('_-||-_', $row->salable_area)[1];
+//         } elseif ($type == 'Storage/industrial') {
+//             $area = explode('_-||-_', $row->salable_plot_area)[0];
+//             $measure = explode('_-||-_', $row->salable_plot_area)[1];
+//         } elseif ($type == 'Vila/Bunglow') {
+//             $salable = explode('_-||-_', $row->salable_plot_area)[0];
+//             $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+//             $measure = explode('_-||-_', $row->constructed_salable_area)[1];
+//             if (empty($salable)) {
+//                 $salable = '';
+//             }
+//             // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+//             $area = "P:" . $salable . ' - C: ' . $constructed;
+//         } elseif ($type == 'Farmhouse') {
+//             $area = explode('_-||-_', $row->salable_plot_area)[0];
+//             $measure = explode('_-||-_', $row->salable_plot_area)[1];
+//         }
+
+//         // Find the land unit name corresponding to the measure
+//         $unit_name = '';
+//         foreach ($land_units as $unit) {
+//             if ($unit->id == $measure) {
+//                 $unit_name = $unit->unit_name;
+//                 break;
+//             }
+//         }
+
+//         if (!empty($area) && !empty($unit_name)) {
+//             $formattedArea = $area . ' ' . $unit_name;
+//             return $formattedArea;
+//         } else {
+//             return "Area Not Available";
+//         }
+//     }
     
 	public function generateAreaDetails($row, $type, $dropdowns)
 	{
