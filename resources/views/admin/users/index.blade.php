@@ -66,7 +66,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Upgrade Plan</h5>
-                    <button class="btn-close text-white" onclick="reset" type="button" data-bs-dismiss="modal" aria-label="Close">X</button>
+                    <button class="btn-close btn-light" onclick="reset" type="button" data-bs-dismiss="modal" aria-label="Close">X</button>
                 </div>
                 <div class="modal-body">
                     <div class="row mt-3 mb-4">
