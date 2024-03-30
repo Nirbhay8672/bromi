@@ -25,7 +25,7 @@ class SuperTalukaController extends Controller
 					'super_talukas.id',
 					'super_talukas.name',
 					'district.name AS district_name',
-				])->orderBy('super_talukas.id', 'desc')->where('super_talukas.user_id', Auth::user()->id);
+				])->orderBy('super_talukas.id', 'desc')->where('district.user_id', Auth::user()->id);
 
 			if ($request->district_id > 0) {
 				$data->where('district.id', $request->district_id);

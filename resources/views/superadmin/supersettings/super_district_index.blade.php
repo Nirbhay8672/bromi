@@ -75,10 +75,9 @@
                                     <label class="mb-0">State</label>
                                     <select class="form-select" id="state_id">
                                         <option value="">State</option>
-                                        @forelse ($states as $state)
-                                            <option value="{{ $state->id }}">{{ $state->name }}
-                                            @empty
-                                        @endforelse
+                                        @foreach ($states as $state)
+                                            <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
