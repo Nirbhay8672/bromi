@@ -47,6 +47,21 @@
                                     ><i class="fa fa-refresh"></i></button>
 
                                     <button
+                                    class="btn ms-3 custom-icon-theme-button"
+                                    onclick="importProperties()"
+                                    type="button"
+                                    title="Import"
+                                ><i class="fa fa-upload"></i></button>
+
+                                <button class="btn ms-3 custom-icon-theme-button" onclick="exportProperties()"
+                                    type="button" title="Export"><i class="fa fa-download"></i></button>
+
+                                <button class="btn share_table_row ms-3"
+                                    style="border-radius: 5px;display: none;background-color:#25d366;color:white;"
+                                    onclick="shareTableRow()" type="button" title="Share"><i
+                                        class="fa fa-whatsapp"></i></button>
+
+                                    <button
                                         class="btn text-white delete_table_row ms-3"
                                         style="border-radius: 5px;display: none;background-color:red"
                                         onclick="deleteTableRow()"
@@ -194,6 +209,37 @@
                                     </div>
                                 </div>
                                 <button class="btn btn-secondary" id="filtersearch">Filter</button>
+                                <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="importmodal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Import Property</h5>
+                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
+                                @csrf
+                                <div class="form-row">
+                                    <div class="form-group col-md-5 m-b-20">
+                                        <label for="Choose File">File</label>
+                                        <input class="form-control" type="file" accept=".xlsx" name="import_file"
+                                            id="import_file">
+                                    </div>
+                                    <br>
+                                    <div class="form-group col-md-5 m-b-10">
+                                        <a href="{{ route('admin.importindustrialpropertyTemplate') }}">Download Sample
+                                            file</a>
+                                    </div>
+    
+                                    <br>
+                                </div>
+                                <button class="btn btn-secondary" id="importFile">Save</button>
                                 <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
                             </form>
                         </div>
@@ -417,6 +463,48 @@
                     });
                 }
 
+                function importProperties(params) {
+                $('#importmodal').modal('show');
+            }
+
+            function exportProperties(params) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('admin.export.property') }}",
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                         category: "landProp"
+                    },
+                    success: function(data) {
+                        window.open(data)
+                    }
+                });
+            }
+
+            $(document).on('click', '#importFile', function(e) {
+                e.preventDefault();
+                var formData = new FormData();
+                var files = $('#import_file')[0].files[0];
+                if (files == '') {
+                    return;
+                }
+                formData.append('csv_file', files);
+                formData.append('_token', '{{ csrf_token() }}');
+                $.ajax({
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    url: "{{ route('admin.importIndustrialproperty') }}",
+                    data: formData,
+                    success: function(data) {
+                        $('#propertyTable').DataTable().draw();
+                        $('#importmodal').modal('hide');
+                        $('#import_form')[0].reset();
+                    }
+                });
+            })
+
+
                 $(document).on("click", ".open_modal_with_this", function(e) {
                     $('#all_owner_contacts').html('')
                     $('#all_images').html('');
@@ -454,19 +542,21 @@
 
 
                 $(document).on('change', '#select_all_checkbox', function(e) {
-                    if ($(this).prop('checked')) {
-                        $('.delete_table_row').show();
+                if ($(this).prop('checked')) {
+                    $('.delete_table_row').show();
+                    $('.share_table_row').show();
 
-                        $(".table_checkbox").each(function(index) {
-                            $(this).prop('checked', true)
-                        })
-                    } else {
-                        $('.delete_table_row').hide();
-                        $(".table_checkbox").each(function(index) {
-                            $(this).prop('checked', false)
-                        })
-                    }
-                })
+                    $(".table_checkbox").each(function(index) {
+                        $(this).prop('checked', true)
+                    })
+                } else {
+                    $('.share_table_row').hide();
+                    $('.delete_table_row').hide();
+                    $(".table_checkbox").each(function(index) {
+                        $(this).prop('checked', false)
+                    })
+                }
+            })
 
                 $(document).on('change', '.table_checkbox', function(e) {
                     var rowss = [];

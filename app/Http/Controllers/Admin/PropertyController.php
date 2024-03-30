@@ -73,6 +73,7 @@ class PropertyController extends Controller
         }
 
         if ($request->ajax()) {
+            dd("REQ :",$request->all());
             $dropdowns = DropdownSettings::get()->toArray();
             $land_units = LandUnit::all();
 
@@ -481,7 +482,7 @@ class PropertyController extends Controller
                             <br>
                             ' . $salable_area_print . '
                             </font>
-                            <br>' . $fstatus . $row->image_path . '
+                            <br>' . $fstatus . '.' . $row->image_path . '
                         </td>';
                     } catch (\Throwable $th) {
                         dd($th);
@@ -1129,7 +1130,14 @@ class PropertyController extends Controller
 
     public function exportProperty(Request $request)
     {
-        $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->get();
+        $properties = "";
+        if($request->category === 'landProp'){
+            $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->where('property_category', ['262', '256'])->whereNull('deleted_at')->get();
+        }elseif($request->category === 'indProp'){
+            $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->where('property_category','261')->whereNull('deleted_at')->get();
+        }else{
+            $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->where('property_category', '!=', ['261', '262', '256'])->whereNull('deleted_at')->get();
+        }
 
         $dropdowns = DropdownSettings::get()->toArray();
         $dropdownsarr = [];
@@ -1679,7 +1687,7 @@ class PropertyController extends Controller
                     if ($row->Property->property_category == '256') {
                         $fstatus = '';
                     } else {
-                        $fstatus = '';
+                        $fstatus = 'Unfurnished';
                         if (!empty($row->Property->unit_details) && !empty(json_decode($row->Property->unit_details)[0])) {
                             $vv = json_decode($row->Property->unit_details);
                             if (isset($vv[0][8])) {
@@ -2081,7 +2089,7 @@ class PropertyController extends Controller
         $visits = QuickSiteVisit::with('Enquiry')->where('property_list', 'like', '%"' . $property->id . '"%')->whereNotNull('visit_status')->orderBy('id', 'DESC')->get();
 
         $projects = Projects::all();
-       $areas = Areas::where('user_id', Auth::user()->id)->get();
+        $areas = Areas::where('user_id', Auth::user()->id)->get();
 
         $multiple_image = LandImages::where('pro_id', $property->id)->get();
         $construction_docs_list = LandImages::where('pro_id', $property->id)
