@@ -31,6 +31,7 @@
                                         data-bs-toggle="modal"
                                         data-bs-target="#stateModal"
                                         title="Add District"
+                                        onclick="reset()"
                                     ><i class="fa fa-plus"></i></button>
                                 </div>
                             </div>
@@ -38,7 +39,8 @@
                                 <table class="display" id="stateTable">
                                     <thead>
                                         <tr>
-                                            <th>State</th>
+                                            <th>District Name</th>
+                                            <th>State Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -62,15 +64,23 @@
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
                             novalidate="">
-                            <div class="form-row">
-                                <div class="form-group col-md-12 m-b-20">
+                            <div class="row">
+                                <div class="form-group col-md-6 m-b-20">
 									<label for="State">District</label>
                                     <input class="form-control" name="district_name" id="district_name" type="text"
                                         required="" autocomplete="off" >
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
+                                <div class="form-group col-md-6 d-inline-block m-b-4">
+                                    <select class="form-select" id="state_id">
+                                        <option value="">State</option>
+                                        @foreach ($states as $state)
+                                            <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                            <div class="text-center">
+                            <div class="text-center mt-2">
                                 <button class="btn custom-theme-button" id="saveDistrict">Save</button>
                                 <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                             </div>
@@ -101,6 +111,10 @@
                         name: 'name'
                     },
                     {
+                        data: 'state_name',
+                        name: 'state_name',
+                    },
+                    {
                         data: 'Actions',
                         name: 'Actions',
                         orderable: false
@@ -108,6 +122,12 @@
                 ]
             });
         });
+
+        function reset(data) {
+            $('#this_data_id').val('');
+            $('#district_name').val('');
+            $('#state_id').val('').trigger('change');
+        }
 
         function getState(data) {
             $('#modal_form').trigger("reset");
@@ -123,6 +143,7 @@
                     data = JSON.parse(data)
                     $('#this_data_id').val(data.id)
                     $('#district_name').val(data.name).trigger('change');
+                    $('#state_id').val(data.state_id).trigger('change');
                     $('#stateModal').modal('show');
                     triggerChangeinput()
                 }
@@ -167,6 +188,7 @@
                 data: {
                     id: id,
                     name: $('#district_name').val(),
+                    state_id: $('#state_id').val(),
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {

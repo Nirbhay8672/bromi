@@ -36,9 +36,16 @@ class IndustrialPropertyController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
+			
+				// dd("2342423");
 			$dropdowns = DropdownSettings::get()->toArray();
 			$land_units = LandUnit::all();
 			$dropdownsarr = [];
+			$enq = '';
+            if (!empty($request->search_enq)) {
+                $enq = Enquiries::find($request->search_enq);
+            }
+			
 			foreach ($dropdowns as $key => $value) {
 				$dropdownsarr[$value['id']] = $value;
 			}
@@ -76,6 +83,58 @@ class IndustrialPropertyController extends Controller
 				return $query->where(function ($query) use ($request) {
 					$query->where('properties.source_of_property', $request->filter_source_of_property);
 				});
+			})
+			->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
+				if (!empty($enq)) {
+					// property for
+					if ($request->match_enquiry_for) {
+						$property_for = ($enq->enquiry_for == 'Buy') ? 'Sell' : $enq->enquiry_for;
+						// dd("match_enquiry_for", $enq->enquiry_for, "..", $property_for);
+						// dd($request->all(), $enq);
+						$query->where('properties.property_for', $property_for);
+					}
+					//requirement ytpe
+					if ($request->match_property_type && !empty($enq->requirement_type)) {
+						// dd("match_property_type", $enq->requirement_type, "..", $request->match_property_type);
+						$query->where('properties.property_type', $enq->requirement_type);
+					}
+					//property category
+					if ($request->match_specific_type && !empty($enq->property_type)) {
+						// dd("match_specific_type", $enq->property_type, "..", $request->match_specific_type);
+						$query->where('properties.property_category', $enq->property_type);
+					}
+					// property Sub Category
+					if ($request->match_specific_sub_type && !empty($enq->configuration)) {
+						// dd("match_specific_sub_type", $enq->configuration, "..", $request->match_specific_sub_type);
+						$query->where('properties.configuration', json_decode($enq->configuration));
+					}
+					//property price & unit_price
+					if ($request->match_budget_from_type) {
+						// dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
+						$budgetFrom = str_replace(',', '', $enq->budget_from);
+						$budgetTo = str_replace(',', '', $enq->budget_to);
+						$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+							$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+								$query->where('properties.survey_price', '>=', $budgetFrom)
+									->where('properties.survey_price', '<=', $budgetTo);
+							})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+								$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+									->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+							})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+								$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+									->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+							});
+						});
+					}
+
+					if ($request->match_enquiry_size) {
+						$query->where(function ($query) use ($enq) {
+							$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+								->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+								->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
+						});
+					}
+				}
 			})
 			
 			->orderBy('id', 'desc')->get();
@@ -359,11 +418,6 @@ class IndustrialPropertyController extends Controller
 					$building_name = '';
                     $area = '';
                     $config = '';
-                    $super_built_area = '';
-                    $super_built_measure = '';
-                    $carpet_area = '';
-                    $carpet_measure = '';
-                    $furniture = '';
 					$vvv = '';
 					$user = User::with(['roles', 'roles.permissions'])
                         ->where('id', Auth::user()->id)
@@ -380,16 +434,6 @@ class IndustrialPropertyController extends Controller
                         $config = $dropdowns[$row->property_category]['name'];
                     }
 
-                    if (isset($row->carpet_area)) {
-                        $carpet_area = $row->carpet_area;
-                    }
-                    if (isset($dropdowns[$row->carpet_measurement]['name'])) {
-                        $carpet_measure = $dropdowns[$row->carpet_measurement]['name'];
-                    }
-                    if (isset($dropdowns[$row->furnished_status]['name'])) {
-                        $furniture = $dropdowns[$row->furnished_status]['name'];
-                    }
-
 					$building_name = urlencode($building_name);
                     $area = urlencode($area);
                     $config = urlencode($config);
@@ -399,6 +443,8 @@ class IndustrialPropertyController extends Controller
                     $location_link = urlencode($row->location_link);
 					$message = "$building_name | $area \n $config | $details | $price \n Available For : $property_for\n\n | Link: $location_link";
                     $sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
+					$buttons =  $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
                     $buttons = $buttons . '<i title="Send On Whatsapp" data-share_string="' . $sharestring . '"  onclick=openwamodel(this)  class="fa fs-22 py-2 mx-2 fa-whatsapp text-success"></i><br>';
 					$buttons = $buttons . '<i title="Matching Enquiry" data-id="' . $row->id . '" onclick=matchingEnquiry(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
 					if (in_array('shared-property', $permissions)) {
@@ -412,16 +458,10 @@ class IndustrialPropertyController extends Controller
                             } else {
                                 $space = '<br> ';
                             }
-                            // $vvv = $vvv . $space . $value[0] . ' : ' . $value[1];
                             $vvv = $vvv . $space . $value[1];
                         }
-                        // if ($vvv) {
-                        //     $vvv = $vvv . '<br> ' . $row->care_taker_name . ' : ' . $row->care_taker_contact;
-                        // }
                     }
                     $contact_info = ($vvv != "") ? $vvv : ' ';
-					$buttons =  $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
-					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
 
 					$buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : 'No Contacts') . '" data-bs-trigger="hover focus"></i>';
                    

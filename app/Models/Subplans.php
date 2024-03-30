@@ -15,5 +15,6 @@ use SoftDeletes;
 		'name',
 		'details',
 		'price',
+		'extra_user_price',
 	];
 }

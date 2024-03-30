@@ -1450,7 +1450,7 @@
                 }
             });
 
-            matching_property_url = "{{ route('admin.properties') }}";
+           
 
             var search_enq = '';
             var queryString = window.location.search;
@@ -1472,26 +1472,8 @@
                 console.log("error :", error);
             }
 
-            // matching popup
-            // $(document).on('click', '#matchagain', function(e) {
-            //     e.preventDefault();
-            //     $('#enquiryTable').DataTable().draw();
-            //     $('#matchModal').modal('hide');
-            // })
-
-            // $(document).on('click', '#matchagain', function(e) {
-            //         console.log("Matching 1");
-            //         e.preventDefault();
-            //         let dataId = $(this).attr('data-id');
-            //         urll = matching_property_url + '?enq=' + encryptSimpleString(dataId);
-            //         window.location = urll;
-            //         $('#enquiryTable').DataTable().draw();
-            //         $('#matchModal').modal('hide');
-            // });
-
             $(document).on('click', '#matchagain', function(e) {
                 e.preventDefault();
-
                 // Gather selected checkbox values
                 let selectedCheckboxes = {
                     match_enquiry_for: $('#match_enquiry_for').prop('checked') ? 1 : 0,
@@ -1510,12 +1492,42 @@
                     .join('&');
 
                 let dataId = $(this).attr('data-id');
-                let url = matching_property_url + '?' + queryString + '&enq=' + encryptSimpleString(dataId);
 
-                // Redirect to the new URL
-                window.location = url;
+                // let url = matching_property_url + '?' + queryString + '&enq=' + encryptSimpleString(dataId);
+                // console.log("url redirect", url);
+                // window.location = url;
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('admin.enquiry.category') }}",
+                    data: { id: dataId },
+                    success: function(data) {
+                        console.log("Dataaaa Matching Category :", data.property_type);
+                        // let redirectUrl = (data.property_type == 261) ? "{{ route('admin.industrial.properties') }}" :
+                        //      (data.property_category == 262) ? "{{ route('admin.land.properties') }}" :
+                        //      "{{ route('admin.properties') }}";
+                        let redirectUrl;
+                        if (data.property_type == 261) {
+                            redirectUrl = "{{ route('admin.industrial.properties') }}";
+                        } else if (data.property_category == 262) {
+                            redirectUrl = "{{ route('admin.land.properties') }}";
+                        } else {
+                            redirectUrl = "{{ route('admin.properties') }}";
+                        }
+                        let url = redirectUrl + '?' + queryString + '&enq=' + encryptSimpleString(dataId);
+                        // Redirect to the new URL
+                        window.location = url;
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error Matching Category :", error);
+                    }
+                });
             });
 
+            function matchingProperty(data) {
+                $('#matchModal').modal('show');
+                let enquiryId = $(data).attr('data-id'); 
+                $('#matchagain').attr('data-id', enquiryId); 
+            }
 
             $(document).on('change', '#select_all_checkbox', function(e) {
                 if ($(this).prop('checked')) {

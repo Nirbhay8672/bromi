@@ -73,6 +73,7 @@ Route::group(['middleware' => 'revalidate'], function () {
         Route::any('/Plans', [HomeController::class, 'plan_index'])->name('admin.plans');
         Route::post('/save-plan-user', [HomeController::class, 'plan_save'])->name('admin.savePlan');
         Route::any('cashfree/payments/success', [HomeController::class, 'payment_success'])->name('admin.paymentSuccess');
+        Route::post('/increase-user-limit', [HomeController::class, 'increaseUserLimit'])->name('admin.increaseUserLimit');
     });
     
 	Route::group(['middleware' => ['auth']], function () {
@@ -132,6 +133,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/import-IndustrialProperty', [IndustrialPropertyController::class, 'importProperty'])->name('admin.importIndustrialproperty');
 		Route::get('/import-property-template', [PropertyController::class, 'importPropertyTemplate'])->name('admin.importpropertyTemplate');
 		Route::get('/import-industrialproperty-template', [IndustrialPropertyController::class, 'importPropertyTemplate'])->name('admin.importindustrialpropertyTemplate');
+		Route::get('/admin/enquiry/category', [EnquiriesController::class, 'getEnquiryCategory'])->name('admin.enquiry.category');
 		Route::get('/import-enquiry-template', [EnquiriesController::class, 'importEnquiryTemplate'])->name('admin.importenquiryTemplate');
 		Route::any('/Enquiries', [EnquiriesController::class, 'index'])->name('admin.enquiries');
 		Route::any('/Enquiries-Calendar', [EnquiriesController::class, 'enquiryCalendar'])->name('admin.enquiries.calendar');
