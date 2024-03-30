@@ -233,7 +233,7 @@ class EnquiriesController extends Controller
 
 							// Property For = Enquiry for
 							if ($request->match_enquiry_for) {
-								// dd("match_enquiry_for", $request->match_enquiry_for);
+								// dd("match_enquiry_for", $enquiry_for);
 								$enquiry_for = ($pro->property_for == 'Sell') ? 'Buy' : $pro->property_for;
 								$query->where('enquiry_for', $enquiry_for);
 							}
@@ -1686,4 +1686,11 @@ $dataEnq = Enquiries::where('id', $request->enquiry_id)->update([
 		$vv = Enquiries::where('id', $request->id)->update(['enq_status' => $status]);
 		return redirect('admin/Enquiries');
 	}
+	
+	public function getEnquiryCategory(Request $request) {
+    	$enquiryID = $request->query('id');
+        $enquiry = Enquiries::find($enquiryID);
+        $penquiryCategory = $enquiry->pluck('requirement_type')->first();
+        return response()->json($enquiry);
+    }
 }

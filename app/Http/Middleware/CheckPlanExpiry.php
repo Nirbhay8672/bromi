@@ -25,12 +25,14 @@ class CheckPlanExpiry
 
             // Check if the user's plan has expired
             if ($user->plan_expire_on <= now()) {
+                // Plan has expired, set a session flash message
+                Session::put('plan_expired_redirection', 'Your plan has expired. Please renew your subscription.');
                 // Plan has expired, redirect to subscription page
                 Session::put('trans_action', 'renew_subscription');
                 return redirect()->route('admin.plans');
             }
         }
-
+        Session::forget('plan_expired_redirection');
         // User's plan is active, allow the request to proceed
         return $next($request);
     }

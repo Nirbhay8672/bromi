@@ -414,7 +414,7 @@ use Illuminate\Support\Facades\DB;
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Retail')
+                                                         @if($type == 'Retail' || $type == 'Penthouse' || $type == 'Office' || $type == 'Flat')
                                                             <div class="form-group col-4 m-b-10 data_conent_13">
                                                                 <h6><b>Entrance Width</b></h6>
                                                             </div>
@@ -1030,6 +1030,19 @@ use Illuminate\Support\Facades\DB;
 																</div>
 															</div>
 														@endif
+														 <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Created Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($property->created_at)) }}</div>
+                                                        </div>
+
+                                                        <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Last Modified Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($property->updated_at)) }}</div>
+                                                        </div>
                                                     </div>
 
 													@if ($type === "Land")
@@ -1646,7 +1659,7 @@ use Illuminate\Support\Facades\DB;
                                                                 </div>
                                                             </div>
                                                         @endif
-                                                        @if ($type == 'Retail')
+                                                        @if ($type == 'Retail' || $type == 'Penthouse' || $type == 'Office' || $type == 'Flat')
                                                             <div class="form-group col-4 m-b-10 data_conent_13">
                                                                 <h6><b>Entrance Width</b></h6>
                                                             </div>
@@ -2201,6 +2214,19 @@ use Illuminate\Support\Facades\DB;
 																</div>
 															</div>
 														@endif
+														 <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Created Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($property->created_at)) }}</div>
+                                                        </div>
+
+                                                        <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Last Modified Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($property->updated_at)) }}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
 											</div>

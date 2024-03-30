@@ -10,10 +10,12 @@ use App\Models\Areas;
 use App\Models\City;
 use App\Models\DropdownSettings;
 use App\Models\Projects;
+use App\Models\Enquiries;
 use App\Models\LandUnit;
 use App\Models\Properties;
 use App\Models\State;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
@@ -34,9 +36,16 @@ class IndustrialPropertyController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
+			
+				// dd("2342423");
 			$dropdowns = DropdownSettings::get()->toArray();
 			$land_units = LandUnit::all();
 			$dropdownsarr = [];
+			$enq = '';
+            if (!empty($request->search_enq)) {
+                $enq = Enquiries::find($request->search_enq);
+            }
+			
 			foreach ($dropdowns as $key => $value) {
 				$dropdownsarr[$value['id']] = $value;
 			}
@@ -75,6 +84,58 @@ class IndustrialPropertyController extends Controller
 					$query->where('properties.source_of_property', $request->filter_source_of_property);
 				});
 			})
+			->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
+				if (!empty($enq)) {
+					// property for
+					if ($request->match_enquiry_for) {
+						$property_for = ($enq->enquiry_for == 'Buy') ? 'Sell' : $enq->enquiry_for;
+						// dd("match_enquiry_for", $enq->enquiry_for, "..", $property_for);
+						// dd($request->all(), $enq);
+						$query->where('properties.property_for', $property_for);
+					}
+					//requirement ytpe
+					if ($request->match_property_type && !empty($enq->requirement_type)) {
+						// dd("match_property_type", $enq->requirement_type, "..", $request->match_property_type);
+						$query->where('properties.property_type', $enq->requirement_type);
+					}
+					//property category
+					if ($request->match_specific_type && !empty($enq->property_type)) {
+						// dd("match_specific_type", $enq->property_type, "..", $request->match_specific_type);
+						$query->where('properties.property_category', $enq->property_type);
+					}
+					// property Sub Category
+					if ($request->match_specific_sub_type && !empty($enq->configuration)) {
+						// dd("match_specific_sub_type", $enq->configuration, "..", $request->match_specific_sub_type);
+						$query->where('properties.configuration', json_decode($enq->configuration));
+					}
+					//property price & unit_price
+					if ($request->match_budget_from_type) {
+						// dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
+						$budgetFrom = str_replace(',', '', $enq->budget_from);
+						$budgetTo = str_replace(',', '', $enq->budget_to);
+						$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+							$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+								$query->where('properties.survey_price', '>=', $budgetFrom)
+									->where('properties.survey_price', '<=', $budgetTo);
+							})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+								$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+									->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+							})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+								$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+									->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+							});
+						});
+					}
+
+					if ($request->match_enquiry_size) {
+						$query->where(function ($query) use ($enq) {
+							$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+								->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+								->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
+						});
+					}
+				}
+			})
 			
 			->orderBy('id', 'desc')->get();
 
@@ -99,7 +160,7 @@ class IndustrialPropertyController extends Controller
 					// $second = '<br> <a href="' . $row->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '    </font> </a>';
 					$second = '<br>Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font>';
 					$third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a>' : "");
-					$third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->created_at)->format('d-m-Y') . '</font>';
+				// 	$third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->created_at)->format('d-m-Y') . '</font>';
 					$last = '</td>';
 					'</td>';
 					return
@@ -152,7 +213,7 @@ class IndustrialPropertyController extends Controller
 					if ($row->property_category == '256') {
 						$fstatus = '';
 					} else {
-						$fstatus = 'Unfurnished';
+						$fstatus = '';
 						if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
 							$vv = json_decode($row->unit_details);
 							if (isset($vv[0][8])) {
@@ -352,18 +413,83 @@ class IndustrialPropertyController extends Controller
 					}
 					return;
 				})
-				->addColumn('actions', function ($row) {
+				->addColumn('actions', function ($row) use($land_units) {
 					$buttons = '';
+					$building_name = '';
+                    $area = '';
+                    $config = '';
+					$vvv = '';
+					$user = User::with(['roles', 'roles.permissions'])
+                        ->where('id', Auth::user()->id)
+                        ->first();
+					$permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
+
+					if (isset($row->Projects->project_name)) {
+                        $building_name = $row->Projects->project_name;
+                    }
+                    if (isset($row->Projects->Area->name)) {
+                        $area = $row->Projects->Area->name;
+                    }
+                    if (isset($dropdowns[$row->property_category]['name'])) {
+                        $config = $dropdowns[$row->property_category]['name'];
+                    }
+
+					$building_name = urlencode($building_name);
+                    $area = urlencode($area);
+                    $config = urlencode($config);
+                    $price = urlencode($row->price);
+                    $property_for = urlencode(($row->property_for == 'Both') ? 'Rent & Sell' : '');
+                    $details = urlencode($this->generateAreaUnitDetails($row, $config, $land_units));
+                    $location_link = urlencode($row->location_link);
+					$message = "$building_name | $area \n $config | $details | $price \n Available For : $property_for\n\n | Link: $location_link";
+                    $sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
 					$buttons =  $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
-
-
 					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+                    $buttons = $buttons . '<i title="Send On Whatsapp" data-share_string="' . $sharestring . '"  onclick=openwamodel(this)  class="fa fs-22 py-2 mx-2 fa-whatsapp text-success"></i><br>';
+					$buttons = $buttons . '<i title="Matching Enquiry" data-id="' . $row->id . '" onclick=matchingEnquiry(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
+					if (in_array('shared-property', $permissions)) {
+                        $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
+                    }
+                    if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
+                        $cd = json_decode($row->other_contact_details);
+                        foreach ($cd as $key => $value) {
+                            if ($vvv == '') {
+                                $space = '';
+                            } else {
+                                $space = '<br> ';
+                            }
+                            $vvv = $vvv . $space . $value[1];
+                        }
+                    }
+                    $contact_info = ($vvv != "") ? $vvv : ' ';
 
+					$buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : 'No Contacts') . '" data-bs-trigger="hover focus"></i>';
+                   
 					return $buttons;
 				})
 				->rawColumns(['project_id', 'contact_details', 'price', 'property_for', 'unit_details', 'actions', 'select_checkbox'])
 				->make(true);
 		}
+		$conatcts_numbers = [];
+        $contacts = Enquiries::get();
+
+        foreach ($contacts as $key => $value) {
+            if (!empty($value->client_mobile) && !empty($value->client_name)) {
+                $arr = [];
+                $arr['name'] = $value->client_name;
+                $arr['number'] = $value->client_mobile;
+                array_push($conatcts_numbers, $arr);
+            }
+            if (!empty($value->other_contacts)) {
+                $val = json_decode($value->other_contacts);
+                foreach ($val as $key1 => $value1) {
+                    $arr = [];
+                    $arr['name'] = $value1[0];
+                    $arr['number'] = $value1[1];
+                    array_push($conatcts_numbers, $arr);
+                }
+            }
+        }
 		$projects = Projects::orderBy('project_name')->get();
 		$areas = Areas::orderBy('name')->get();
 		$cities = City::orderBy('name')->get();
@@ -378,7 +504,7 @@ class IndustrialPropertyController extends Controller
 				array_push($prop_type, $value['id']);
 			}
 		}
-		return view('admin.properties.industrial_index', compact('projects', 'property_configuration_settings', 'areas', 'cities', 'states', 'prop_type'));
+		return view('admin.properties.industrial_index', compact('projects','conatcts_numbers', 'property_configuration_settings', 'areas', 'cities', 'states', 'prop_type'));
 	}
 	
 	public function generateAreaUnitDetails($row, $type, $land_units)
@@ -389,8 +515,13 @@ class IndustrialPropertyController extends Controller
             $area = explode('_-||-_', $row->salable_area)[0];
             $measure = explode('_-||-_', $row->salable_area)[1];
         } elseif ($type == 'Storage/industrial') {
-            $area = explode('_-||-_', $row->salable_plot_area)[0];
+             $area = explode('_-||-_', $row->salable_plot_area)[0];
+			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
             $measure = explode('_-||-_', $row->salable_plot_area)[1];
+			if (empty($salable)) {
+                $salable = '';
+            }
+            $area = "P:" . $area . ' - C: ' . $constructed;
         } elseif ($type == 'Vila/Bunglow') {
             $salable = explode('_-||-_', $row->salable_plot_area)[0];
             $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
@@ -421,6 +552,47 @@ class IndustrialPropertyController extends Controller
             return "Area Not Available";
         }
     }
+    
+// 	public function generateAreaUnitDetails($row, $type, $land_units)
+//     {
+//         $area = '';
+//         $measure = '';
+//         if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+//             $area = explode('_-||-_', $row->salable_area)[0];
+//             $measure = explode('_-||-_', $row->salable_area)[1];
+//         } elseif ($type == 'Storage/industrial') {
+//             $area = explode('_-||-_', $row->salable_plot_area)[0];
+//             $measure = explode('_-||-_', $row->salable_plot_area)[1];
+//         } elseif ($type == 'Vila/Bunglow') {
+//             $salable = explode('_-||-_', $row->salable_plot_area)[0];
+//             $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+//             $measure = explode('_-||-_', $row->constructed_salable_area)[1];
+//             if (empty($salable)) {
+//                 $salable = '';
+//             }
+//             // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+//             $area = "P:" . $salable . ' - C: ' . $constructed;
+//         } elseif ($type == 'Farmhouse') {
+//             $area = explode('_-||-_', $row->salable_plot_area)[0];
+//             $measure = explode('_-||-_', $row->salable_plot_area)[1];
+//         }
+
+//         // Find the land unit name corresponding to the measure
+//         $unit_name = '';
+//         foreach ($land_units as $unit) {
+//             if ($unit->id == $measure) {
+//                 $unit_name = $unit->unit_name;
+//                 break;
+//             }
+//         }
+
+//         if (!empty($area) && !empty($unit_name)) {
+//             $formattedArea = $area . ' ' . $unit_name;
+//             return $formattedArea;
+//         } else {
+//             return "Area Not Available";
+//         }
+//     }
     
 	public function generateAreaDetails($row, $type, $dropdowns)
 	{

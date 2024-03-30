@@ -2239,7 +2239,7 @@
                                                                     <input class="form-control furnished_type_item"
                                                                         name="retail_furnished_remarks"
                                                                         id="retail_furnished_remarks" type="text"
-                                                                        autocomplete="off" style="display: none">
+                                                                        autocomplete="off">
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -628,6 +628,80 @@ class HomeController extends Controller
 		return redirect()->route('admin');
 	}*/
 	
+	public function increaseUserLimit(Request $request)
+    {
+        try {
+            $user  = Auth::user();
+            $transaction_goal = $request->transaction_goal;
+            $planPrice = $request->users_limit_price;
+            $usersLimit = $request->users_limit;
+            
+            if (empty($planPrice) || $planPrice <= 0) {
+                Session::put('message', 'Amount is required.');
+                return redirect()->back();
+            }
+            
+            // process payment
+            $url = $this->cashfreeBaseUrl . "/orders";
+
+            $headers = array(
+                "Content-Type: application/json",
+                'Accept: application/json',
+                "x-api-version: " . $this->apiVersion,
+                "x-client-id: " . $this->cashfreeKey,
+                "x-client-secret: " . $this->cashfreeSecret,
+            );
+            $userPhone = Helper::formatPhoneNumber($user->mobile_number);
+
+            $data = json_encode([
+                'order_id' =>  'order_' . time(),
+                'order_amount' => $planPrice,
+                "order_currency" => "INR",
+                "customer_details" => [
+                    "customer_id" => 'USER_' . $user->id,
+                    "customer_name" => $user->first_name . ' ' . $user->last_name,
+                    "customer_email" => $user->email,
+                    "customer_phone" => $userPhone,
+                ],
+                "order_tags" => [
+                    "plan_id" => "$user->plan_id",
+                    "user_limit" => "$usersLimit",
+                    "user_id" => "$user->id",
+                    "transaction_goal" => "$transaction_goal",
+                ],
+                "order_meta" => [
+                    "return_url" => route('admin.paymentSuccess') . '?order_id={order_id}&order_token={order_token}'
+                ]
+            ]);
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL,
+                $url
+            );
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($curl,
+                CURLOPT_POSTFIELDS,
+                $data
+            );
+
+            $resp = curl_exec($curl);
+            if (curl_errno($curl)) {
+                $error_msg = curl_error($curl);
+                dd($error_msg);
+            }
+            curl_close($curl);
+
+            return redirect()->to(json_decode($resp)->payment_link);
+        } catch (\Throwable $th) {
+            //throw $th;
+            dd($th);
+            Session::put('message', $th->getMessage());
+            return redirect()->route('admin.plans');
+        }
+    }
+	
 	public function plan_save(Request $request)
     {
         try {
@@ -784,8 +858,8 @@ class HomeController extends Controller
                 }
 
                 // desciption for email template.
-                 switch ($orderTags['transaction_goal']) {
-                    case 'renew_subscription': 
+                switch ($orderTags['transaction_goal']) {
+                    case 'renew_subscription':
                         $description = "Plan Renewed.";
                         break;
                     case 'upgrade':
@@ -797,7 +871,7 @@ class HomeController extends Controller
                     default:
                         $description = "New Subscription.";
                 }
-                
+
                 // record last payment id in the payments table.
                 $paymentInDb->update(['subscription_payment_id' => $lastPaymentId]);
 
@@ -813,11 +887,15 @@ class HomeController extends Controller
                         'plan_type' => $orderTags['plan_type'],
                         'plan_expire_on' => $planExpiry,
                         'payment_id' => $paymentInDb->id,
-                        'total_user_limit' => $orderTags['user_limit'],
+                        // 'total_user_limit' => $orderTags['user_limit'],
                         'subscribed_on' => Carbon::now()->format('Y-m-d')
                     ])->save();
                 }
-
+                $totalUserLimit = $user->total_user_limit ?? 0 ;
+                $totalUserLimit = $totalUserLimit + $orderTags['user_limit'];
+                $user->fill([
+                    'total_user_limit' => $totalUserLimit,
+                ])->save();
                 // send invoice over user email
                 $user->load('Plan');
                 // Generate the invoice number before creating the invoice record
@@ -835,7 +913,14 @@ class HomeController extends Controller
                     $eTemplate = view('emails.invoiceTemplate', ['user' => $user, 'sequence' => $futureInvoiceNumber, 'description' => $description])->render();
                 } else {
                     // add more users template
-                    dd('add more users.');
+                    $eTemplate = view('emails.extraUsersTemplate', [
+                        'user' => $user,
+                        'sequence' => $futureInvoiceNumber,
+                        'description' => $description,
+                        'extraUserAdded' => $orderTags['user_limit'],
+                        'extraUserPrice' => $paymentInDb->payment_amount,
+                    ])->render();
+                    // dd('add more users.');
                 }
 
                 // create invoice record

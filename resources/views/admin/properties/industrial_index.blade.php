@@ -59,6 +59,10 @@
                                         style="border-radius: 5px;display: none;background-color:#25d366;color:white;"
                                         onclick="shareTableRow()" type="button" title="Share"><i
                                             class="fa fa-whatsapp"></i></button>
+
+                                    <button class="btn matchbutton ms-3 custom-icon-theme-button" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#matchModal" title="Matching"><i
+                                            class="fa fa-random"></i></button>
                                         
                                     <button
                                         class="btn text-white delete_table_row ms-3"
@@ -106,7 +110,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add New Industrial Property</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         @include('admin.properties.add_industrial_property')
@@ -119,7 +123,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Filter</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="filter_form" novalidate="">
@@ -285,7 +289,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Import Property</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
@@ -595,10 +599,123 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="matchModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Match By</h5>
+                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal"
+                                aria-label="Close"> </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-bookmark needs-validation " method="post" id="match_modal"
+                                novalidate="">
+                                @csrf
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" id="match_enquiry_all"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_enquiry_all">Select All</label>
+                                            </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_enquiry_for"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_enquiry_for">Property
+                                                    For</label>
+                                            </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_property_type"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_property_type">Property
+                                                    Requirement</label>
+                                            </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_specific_type"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_specific_type">Property
+                                                    Category</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_specific_sub_type"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_specific_sub_type">Property Sub
+                                                    Category</label>
+                                            </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_budget_from_type"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_budget_from_type">Property
+                                                    Budget</label>
+                                            </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_enquiry_size"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_enquiry_size">Property
+                                                    Size</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <button class="btn custom-theme-button" type="button" id="matchagain">Match</button>
+                                    <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="sharedModelId" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-l" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Users</h5>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-bookmark needs-validation modal_form" route="" id="userRecordForm"
+                            novalidate="">
+                            <div class="row">
+                                <div class="form-group col-md-12 m-b-4 mb-5 mt-2">
+                                    <label class="select2_label" for="Property list">Select User </label>
+                                    <select class="form-select" id="users_list" multiple>
+                                    </select>
+                                </div>
+                                <span style="color: #FF0000" id="err_partner"></span>
+                                <div class="form-group m-b-4 mb-3 text-center">
+                                    <button class="btn custom-theme-button" id="shareData" data-id=""
+                                        type="button">Share
+                                        Property</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         {{-- @php
 		$city_encoded = json_encode($cities);
 		$state_encoded = json_encode($states);
 		@endphp --}}
+        <?php
+        $matchEnquiryFor = isset($_GET['match_enquiry_for']) ? $_GET['match_enquiry_for'] : null;
+        $matchPropertyType = isset($_GET['match_property_type']) ? $_GET['match_property_type'] : null;
+        $matchSpecificType = isset($_GET['match_specific_type']) ? $_GET['match_specific_type'] : null;
+        $matchSpecificSubType = isset($_GET['match_specific_sub_type']) ? $_GET['match_specific_sub_type'] : null;
+        $matchBudgetType = isset($_GET['match_budget_from_type']) ? $_GET['match_budget_from_type'] : null;
+        $matchEnqSize = isset($_GET['match_enquiry_size']) ? $_GET['match_enquiry_size'] : null;
+        // dd($matchEnquiryFor,$matchPropertyType,$matchBudgetType,$matchSpecificType,$matchEnqSize);
+        ?>
     @endsection
     @push('scripts')
         @include('admin.properties.industrial_property_javascript', [
@@ -606,6 +723,78 @@
             'states' => $states,
         ])
         <script>
+             var search_enq = '';
+            $(document).ready(function() {
+                // var queryString = window.location.search;
+                var queryString = window.location.search;
+                var urlParams = new URLSearchParams(queryString);
+                var enqq = urlParams.get('enq')
+                var filter_by = urlParams.get('filter_by')
+                $('.matchbutton').hide()
+                try {
+                    search_enq = decryptSimpleString(enqq);
+                    console.log("search_enq industrial ......",search_enq);
+
+                    if (search_enq != '') {
+                        console.log("show searchenqq");
+                        $('.matchbutton').show()
+                    } else {
+                        console.log("hide searchenqq");
+                        $('.matchbutton').hide()
+                    }
+                } catch (error) {
+
+                }
+
+                $(document).on('click', '#shareonwhatsapp', function(e) {
+                    var url = $('#shar_string').val()
+                    console.log("ulr1 ==>", url);
+                    url = url.replace('the_phone_number_to_send', $('#CountryCode').val() + $(
+                        '#whatsapp_number').val().toString())
+                    console.log("ulr2 ==>", url);
+                    window.open(url, '_blank').focus();
+                })
+            });
+
+            $(document).ready(function() {
+                // Check or uncheck checkboxes based on PHP variables
+                $('#match_enquiry_for').prop('checked', <?= $matchEnquiryFor === '1' ? 'true' : 'false' ?>);
+                $('#match_property_type').prop('checked', <?= $matchPropertyType === '1' ? 'true' : 'false' ?>);
+                $('#match_specific_type').prop('checked', <?= $matchSpecificType === '1' ? 'true' : 'false' ?>);
+                $('#match_specific_sub_type').prop('checked', <?= $matchSpecificSubType === '1' ? 'true' : 'false' ?>);
+                $('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
+                $('#match_enquiry_size').prop('checked', <?= $matchEnqSize === '1' ? 'true' : 'false' ?>);
+
+            });
+            
+            matching_enquiry_url = "{{ route('admin.enquiries') }}";
+            
+            $(document).on('click', '#matchagain', function(e) {
+                e.preventDefault();
+
+                // Gather selected checkbox values
+                let selectedCheckboxes = {
+                    match_enquiry_for: $('#match_enquiry_for').prop('checked') ? 1 : 0,
+                    match_property_type: $('#match_property_type').prop('checked') ? 1 : 0,
+                    match_specific_type: $('#match_specific_type').prop('checked') ? 1 : 0,
+                    match_specific_sub_type: $('#match_specific_sub_type').prop('checked') ? 1 : 0,
+                    match_budget_from_type: $('#match_budget_from_type').prop('checked') ? 1 : 0,
+                    match_enquiry_size: $('#match_enquiry_size').prop('checked') ? 1 : 0,
+                };
+
+                // Construct the URL with selected checkbox values
+                let queryString = Object.entries(selectedCheckboxes)
+                    .filter(([key, value]) => value === 1)
+                    .map(([key, value]) => `${key}=${value}`)
+                    .join('&');
+
+                let dataId = $(this).attr('data-id');
+                let url = matching_enquiry_url + '?' + queryString + '&pro=' + encryptSimpleString(dataId);
+
+                // Redirect to the new URL
+                window.location = url;
+            });
+
             $(document).on('change', '#filter_property_type', function(e) {
                 var parent_value = $(this).val();
                 console.log("type changed", parent_value);
@@ -624,6 +813,13 @@
                     }
                 });
             });
+            function matchingEnquiry(data) {
+                $('#matchModal').modal('show');
+                $('#matchagain').attr('data-id', $(data).attr('data-id'));
+            }
+            
+
+           
 
             function shareTableRow() {
                 var msg = '';
@@ -643,15 +839,7 @@
                 $('#shar_string').val('https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' + msg)
                 $('#whatsappModal').modal('show');
             }
-            $(document).on('click', '#shareonwhatsapp', function(e) {
-                    var url = $('#shar_string').val()
-                    console.log("ulr1 ==>", url);
-                    url = url.replace('the_phone_number_to_send', $('#CountryCode').val() + $(
-                        '#whatsapp_number').val().toString())
-                    console.log("ulr2 ==>", url);
-                    window.open(url, '_blank').focus();
-                })
-                
+            
             function openwamodel(params) {
                 $('#shar_string').val($(params).attr('data-share_string'))
                 $('#whatsappModal').modal('show');
@@ -699,7 +887,7 @@
 
             var shouldchangecity = 1;
 
-            $(document).ready(function() {
+            $(document).ready(function() { 
                 $('#propertyTable').DataTable({
                     processing: true,
                     serverSide: true,
@@ -721,6 +909,14 @@
                             // d.filter_from_area = $('#filter_from_area').val()
                             // d.filter_to_area = $('#filter_to_area').val()
                             // d.filter_measurement = $('#filter_measurement').val()
+                            d.match_property_type = Number($('#match_property_type').prop('checked'));
+                            d.match_specific_type = Number($('#match_specific_type').prop('checked'));
+                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop(
+                                'checked'));
+                            d.search_enq = search_enq;
+                            d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
+                            d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
+                            d.match_enquiry_size = Number($('#match_enquiry_size').prop('checked'));
                             d.filter_from_price = $('#filter_from_price').val()
                             d.filter_to_price = $('#filter_to_price').val()
                         },
@@ -804,7 +1000,6 @@
                 });
             });
 
-
             $(document).on('click', '#filtersearch', function(e) {
                 e.preventDefault();
                 search_enq = '';
@@ -812,6 +1007,70 @@
                 $('#propertyTable').DataTable().draw();
                 $('#filtermodal').modal('hide');
             });
+           
+            //Share Property
+            function shareUserModal(clickedElement) {
+                $('#users_list').val("");
+                $('#sharedModelId').modal('show');
+                // Add User Partner
+                const dataId = $(clickedElement).data("id");
+                $('#shareData').data('data-id', dataId);
+            }
+             // Get record Users
+             $(document).ready(function() {
+                try {
+                    axios.get("{{ route('admin.partnerUsers') }}")
+                        .then(function(response) {
+                            response.data.forEach(function(user) {
+                                const option = document.createElement("option");
+                                const selectElement = document.getElementById("users_list");
+                                option.value = user.partner_id;
+                                option.textContent = user.user.first_name + ' ' + user.user.last_name;
+                                selectElement.appendChild(option);
+                            });
+                        })
+                        .catch(function(error) {
+                            console.log("Error: ", error);
+                        });
+                } catch (error) {
+                    console.log("err", error)
+                }
+            });
+            // Add User Partner
+            $('#shareData').on('click', function() {
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                const selectedUserId = $('#users_list').val();
+                const property_id = $(this).data('data-id');
+                console.log("selectedUserId", selectedUserId);
+                console.log("property_id", property_id);
+                axios({
+                    method: 'post',
+                    url: "{{ route('admin.sharePartner') }}",
+                    data: {
+                        partner_id: selectedUserId,
+                        property_id: property_id,
+                        _token: csrfToken, // Include the CSRF token
+                    },
+                }).then(response => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Property Shared Successfully.',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    }).then(function() {
+                        window.location.href = "{{ route('admin.properties') }}";
+                    });
+                }).catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error occurred',
+                        text: 'An error occurred while sharing data.',
+                    });
+                });
+            });
+            
+
+          
 
             $(document).on('click', '#resetfilter', function(e) {
                 e.preventDefault();
