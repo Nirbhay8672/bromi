@@ -541,6 +541,52 @@ class LandPropertyController extends Controller
 		}
 	}
 
+	public function generateAreaUnitDetails($row, $type, $land_units)
+    {
+        $area = '';
+        $measure = '';
+        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+            $area = explode('_-||-_', $row->salable_area)[0];
+            $measure = explode('_-||-_', $row->salable_area)[1];
+        } elseif ($type == 'Storage/industrial') {
+             $area = explode('_-||-_', $row->salable_plot_area)[0];
+			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+			if (empty($salable)) {
+                $salable = '';
+            }
+            $area = "P:" . $area . ' - C: ' . $constructed;
+        } elseif ($type == 'Vila/Bunglow') {
+            $salable = explode('_-||-_', $row->salable_plot_area)[0];
+            $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+            $measure = explode('_-||-_', $row->constructed_salable_area)[1];
+            if (empty($salable)) {
+                $salable = '';
+            }
+            // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+            $area = "P:" . $salable . ' - C: ' . $constructed;
+        } elseif ($type == 'Farmhouse') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+        }
+
+        // Find the land unit name corresponding to the measure
+        $unit_name = '';
+        foreach ($land_units as $unit) {
+            if ($unit->id == $measure) {
+                $unit_name = $unit->unit_name;
+                break;
+            }
+        }
+
+        if (!empty($area) && !empty($unit_name)) {
+            $formattedArea = $area . ' ' . $unit_name;
+            return $formattedArea;
+        } else {
+            return "Area Not Available";
+        }
+    }
+
 	public function generateLandAreaDetails($row, $type, $dropdowns)
 	{
 		$area = '';
