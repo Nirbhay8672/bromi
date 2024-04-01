@@ -26,6 +26,7 @@
                                             <th>Name</th>
                                             <th>Code</th>
                                             <th>Amount Off</th>
+                                            <th>Is Active</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -124,6 +125,22 @@
             });
         }
 
+        function updateStatus(element, id) {
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('superadmin.update_coupon') }}",
+                data: {
+                    id: id,
+                    status : element.checked ? 1 : 0,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    $('#couponTable').DataTable().draw();
+                }
+            });
+        }
+
         $(document).ready(function() {
             $('#couponTable').DataTable({
                 processing: true,
@@ -140,6 +157,10 @@
                     {
                         data: 'amount_off',
                         name: 'amount_off'
+                    },
+                    {
+                        data: 'is_active',
+                        name: 'is_active'
                     },
                     {
                         data: 'Actions',

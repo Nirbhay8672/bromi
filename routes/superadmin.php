@@ -66,6 +66,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-plan', [PlanController::class, 'destroy'])->name('superadmin.deletePlan');
 		Route::post('/save-plan', [PlanController::class, 'savePlan'])->name('superadmin.savePlan');
 		Route::any('/Coupons', [CouponController::class, 'index'])->name('superadmin.coupons');
+		Route::any('/update-coupon-status', [CouponController::class, 'updateStatus'])->name('superadmin.update_coupon');
 		Route::post('/get-coupon', [CouponController::class, 'getSpecificCoupon'])->name('superadmin.getCoupon');
 		Route::post('/delete-coupon', [CouponController::class, 'destroy'])->name('superadmin.deleteCoupon');
 		Route::post('/save-coupon', [CouponController::class, 'saveCoupon'])->name('superadmin.saveCoupon');
