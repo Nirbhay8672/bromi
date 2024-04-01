@@ -161,7 +161,9 @@ class UserController extends Controller
 			$user->city_name = $user->superCity->name;
 		}
 
-		$user_count =  User::where('parent_id',$id)->orWhere('id',$id)->get()->count();
+		$sub_users = User::where('parent_id',$id)->whereNull('users.vendor_id')->get();
+
+		$user_count = $sub_users->count();
 
 		$total_property = Properties::select('id')->where('user_id', $id)->count();
 		$total_enquiry = Enquiries::select('id')->where('user_id', $id)->count();
@@ -185,7 +187,7 @@ class UserController extends Controller
 			->take(10)
 			->get();
 
-		return view('superadmin.users.user_profile',compact('user','tickets', 'plans','transactions','user_count','total_property','total_enquiry','total_project'));
+		return view('superadmin.users.user_profile',compact('user','sub_users','tickets', 'plans','transactions','user_count','total_property','total_enquiry','total_project'));
 	}
 
     public function membersList(Request $request)

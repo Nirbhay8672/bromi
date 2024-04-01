@@ -92,7 +92,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
                 <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div class="modal-body">
@@ -308,6 +308,9 @@
     function resetData() {
         document.getElementById('total-card').classList.add('d-none');
         document.getElementById('user_table').classList.add('d-none');
+
+        let modal_title = document.getElementById('exampleModalLabel');
+        modal_title.innerHTML = 'Add New User';
     }
 
     function getUser(data) {
@@ -350,6 +353,9 @@
                 total_property.innerHTML = data.total_property;
                 total_project.innerHTML = data.total_project;
                 total_inquiry.innerHTML = data.total_enquiry;
+
+                let modal_title = document.getElementById('exampleModalLabel');
+                modal_title.innerHTML = 'Update User';
 
                 if (data.sub_user.length > 0) {
                     table.classList.remove('d-none');

@@ -16,7 +16,7 @@
                 <div class="page-title mb-3" style="margin-left: 10px;">
                     <div class="row">
                         <div class="col-12 col-sm-6">
-                            <h3 class="text-white">Profile Details</h3>
+                            <h3 class="text-white">User Profile Details</h3>
                         </div>
                     </div>
                 </div>
@@ -253,6 +253,41 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h3 class="text-center mb-3">Sub Users</h3>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead style="background-color: rgba(223, 223, 223, 0.804)">
+                                                        <tr>
+                                                            <th>First Name</th>
+                                                            <th>Last Name</th>
+                                                            <th>Email</th>
+                                                            <th>Phone</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if(count($sub_users) > 0)
+                                                        @foreach($sub_users as $user)
+                                                        <tr>
+                                                            <td>{{ $user->first_name ?? '-' }}</td>
+                                                            <td>{{ $user->last_name ?? '-' }}</td>
+                                                            <td>{{ $user->email ?? '-' }}</td>
+                                                            <td>{{ $user->mobile_number ?? '-' }}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                        @else
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">No record found</td>
+                                                        </tr>
+                                                        @endif
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
