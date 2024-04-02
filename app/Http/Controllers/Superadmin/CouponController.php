@@ -20,6 +20,10 @@ class CouponController extends Controller
 		if ($request->ajax()) {
 			$data = Coupons::get();
 			return DataTables::of($data)
+				->editColumn('discount_flag', function ($row) {
+					$discount_flag = $row->discount_type == 1 ? '% Off' : 'Flat amount off';	
+					return $discount_flag;
+				})
 				->editColumn('is_active', function ($row) {
 
 					$status = $row->status == 1 ? 'checked' : '';
@@ -65,9 +69,13 @@ class CouponController extends Controller
 		} else {
 			$data =  new Coupons();
 		}
+
 		$data->name = $request->name;
 		$data->code = $request->code;
 		$data->amount_off = $request->amount_off;
+		$data->discount_type = $request->discount_type;
+		$data->date_from = $request->date_from;
+		$data->date_to = $request->date_to;
 		$data->status = $request->status;
 		$data->save();
 	}
