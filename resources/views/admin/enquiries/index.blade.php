@@ -391,7 +391,7 @@
             </div>
         </div>
         <div class="modal fade" id="filtermodal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Filter</h5>
@@ -561,7 +561,7 @@
                                             @endforelse
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-5 m-b-20">
+                                    <div class="form-group col-md-7 m-b-20">
                                         <div class="col-12">
                                             <div class="m-checkbox-inline custom-radio-ml">
                                                 <input type="hidden" name="filter_lead_type" value="" />
@@ -588,7 +588,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-4 m-b-20">
+                                    <div class="form-group col-md-2 m-b-20">
                                     </div>
                                     <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_purpose">
@@ -599,14 +599,14 @@
                                     </div>
                                     <hr class="color-hr">
                                     <div class="form-group col-md-6 m-b-4 mb-3 ">
-                                        <label for="NFD From">NFD From: </label>
+                                        <label for="NFD From">Followup Date From: </label>
                                         <div class="input-group">
                                             <input class="form-control " id="filter_nfd_from" type="date"
                                                 data-language="en">
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6 m-b-4 mb-3 ">
-                                        <label for="NFD To">NFD To: </label>
+                                        <label for="NFD To">Followup Date To: </label>
                                         <div class="input-group">
                                             <input class="form-control " id="filter_nfd_to" type="date"
                                                 data-language="en">
@@ -655,8 +655,12 @@
                                     </div> --}}
                                 </div>
                             </div>
-                            <button class="btn btn-secondary" id="filtersearch">Filter</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+
+                            <div class="text-center mt-3">
+                                <button class="btn custom-theme-button" type="button" id="filtersearch">Filter</button>
+                                <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
+                                    data-bs-dismiss="modal">Cancel</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -1197,7 +1201,7 @@
             </div>
         </div>
         <div class="modal fade" id="matchModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Match By</h5>
@@ -1694,7 +1698,17 @@
                         },
                         {
                             data: 'telephonic_discussion',
-                            name: 'telephonic_discussion'
+                            name: 'telephonic_discussion',
+                            render: function(data, type, full, meta) {
+                                // Check if the length of the text exceeds 20 characters
+                                if (data.length > 20) {
+                                    // If it does, truncate the text and add a "Read More" link
+                                    return '<span class="truncated">' + data.substr(0, 20) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span>';
+                                } else {
+                                    // If not, return the text as is
+                                    return data;
+                                }
+                            }
                         },
                         {
                             data: 'assigned_to',
@@ -1755,7 +1769,18 @@
                     }
                 });
             });
-
+            //Read more / Read less
+            $('#enquiryTable .read-more, #enquiryTable .read-less').css('cursor', 'pointer');
+            $('#enquiryTable').on('click', '.read-more', function() {
+                $(this).siblings('.truncated').hide();
+                $(this).siblings('.full').show();
+                $(this).text(' ...Read Less').removeClass('read-more').addClass('read-less');
+            });
+            $('#enquiryTable').on('click', '.read-less', function() {
+                $(this).siblings('.full').hide();
+                $(this).siblings('.truncated').show();
+                $(this).text('Read More').removeClass('read-less').addClass('read-more');
+            });
             //matching popup
             // function matchingProperty(data) {
             //     $('#matchModal').modal('show');

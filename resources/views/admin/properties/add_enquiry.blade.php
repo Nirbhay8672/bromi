@@ -1093,26 +1093,26 @@
             //     return isValid;
             // }
             function validateStep2Form() {
-    var isValid = true;
+                var isValid = true;
 
-    // Validate area fields
-    isValid = validateNumericField('#area_from', '#area_from_error', 'Area from field is required') && isValid;
-    isValid = validateNumericField('#area_to', '#area_to_error', 'Area to field is required') && isValid;
+                // Validate area fields
+                isValid = validateNumericField('#area_from', '#area_from_error', 'Area from field is required') && isValid;
+                isValid = validateNumericField('#area_to', '#area_to_error', 'Area to field is required') && isValid;
 
-    // Validate budget fields
-    isValid = validateField('#budget_from', '#budget_from_error', 'Budget from field is required') && isValid;
-    isValid = validateField('#budget_to', '#budget_to_error', 'Budget to field is required') && isValid;
-    var budgetFrom = parseFloat($('#budget_from').val());
-    var budgetTo = parseFloat($('#budget_to').val());
-    if (!isNaN(budgetFrom) && !isNaN(budgetTo) && budgetFrom <= budgetTo) {
-        $('#budget_to_error').text('Budget To must be greater than Budget From').show();
-        isValid = false;
-    } else {
-        $('#budget_to_error').hide();
-    }
+                // Validate budget fields
+                isValid = validateField('#budget_from', '#budget_from_error', 'Budget from field is required') && isValid;
+                isValid = validateField('#budget_to', '#budget_to_error', 'Budget to field is required') && isValid;
+                var budgetFrom = parseFloat($('#budget_from').val());
+                var budgetTo = parseFloat($('#budget_to').val());
+                if (!isNaN(budgetFrom) && !isNaN(budgetTo) && budgetFrom >= budgetTo) {
+                    $('#budget_to_error').text('Budget To must be greater than Budget From').show();
+                    isValid = false;
+                } else {
+                    $('#budget_to_error').hide();
+                }
 
-    return isValid;
-}
+                return isValid;
+            }
             // function validateStep3Form() {
             //     isValid = true;
             //     const selectedValues = $('#furnished_status').val();
