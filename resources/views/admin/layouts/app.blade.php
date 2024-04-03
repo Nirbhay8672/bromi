@@ -62,6 +62,18 @@ Helper::set_default_measuerement();
     <link href="{{ asset('admins/assets/css/fullcalendar.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admins/assets/css/custom.css?v='.time()) }}" rel="stylesheet" type="text/css" />
     <style>
+        /* Enq read more-read less */
+        #enquiryTable .read-more,
+        #enquiryTable .read-less {
+            cursor: pointer;
+        }
+        #enquiryTable .read-more:hover {
+            color: #7fb927;
+        }
+        #enquiryTable .read-less:hover {
+            color: #7fb927;
+        }
+
         /* Added Custom Style For Property Status */
         table.dataTable.stripe tbody tr.odd.important-row,
         table.dataTable.display tbody tr.odd.important-row {

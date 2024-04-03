@@ -37,7 +37,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Yajra\DataTables\DataTables;
 use ZipArchive;
-
+use Illuminate\Support\Facades\DB;
 class PropertyController extends Controller
 {
 
@@ -1129,7 +1129,14 @@ class PropertyController extends Controller
 
     public function exportProperty(Request $request)
     {
-        $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->get();
+        $properties = "";
+        if($request->category === 'landProp'){
+            $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->where('property_category', ['262', '256'])->whereNull('deleted_at')->get();
+        }elseif($request->category === 'indProp'){
+            $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->where('property_category','261')->whereNull('deleted_at')->get();
+        }else{
+            $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->where('property_category', '!=', ['261', '262', '256'])->whereNull('deleted_at')->get();
+        }
 
         $dropdowns = DropdownSettings::get()->toArray();
         $dropdownsarr = [];
@@ -1212,6 +1219,40 @@ class PropertyController extends Controller
             $arr['Is Pre Leased'] = '';
             $arr['Pre Leased Remarks'] = '';
             $arr['Location Link'] = '';
+
+            $units=DB::table('land_units')->get();
+    
+            $salableArray=explode("_-||-_",$property->salable_area);
+            $land_units=$units->where('id',$salableArray[1])->first();
+
+            $carpetArray=explode("_-||-_",$property->carpet_area);
+            $carpet_units=$units->where('id',$carpetArray[1])->first();
+            
+            $carpet_plotArray=explode("_-||-_",$property->carpet_plot_area);
+            $carpet_plot_units=$units->where('id',$carpet_plotArray[1])->first();
+        
+            $salable_plotArray=explode("_-||-_",$property->salable_plot_area);
+            $salable_plot_units=$units->where('id',$salable_plotArray[1])->first();
+            
+            $constructed_salableArray=explode("_-||-_",$property->constructed_salable_area);
+            $constructed_salable_units=$units->where('id',$constructed_salableArray[1])->first();
+            
+            $constructed_carpetArray=explode("_-||-_",$property->constructed_carpet_area);
+            $constructed_carpet_units=$units->where('id',$constructed_carpetArray[1])->first();
+            
+            $constructed_builtupArray=explode("_-||-_",$property->constructed_builtup_area);
+            $constructed_builtup_units=$units->where('id',$constructed_builtupArray[1])->first();
+            
+            $builtupArray=explode("_-||-_",$property->builtup_area);
+            $builtup_units=$units->where('id',$builtupArray[1])->first();
+            $getBuiltup=$builtupArray[0].' ' .$builtup_units->unit_name;
+            // dd($builtupArray[0],$builtup_units->unit_name);
+            
+            $terrace_carpetArray=explode("_-||-_",$property->terrace_carpet_area);
+            $terrace_carpet_units=$units->where('id',$terrace_carpetArray[1])->first();
+            
+            $terrace_salableArray=explode("_-||-_",$property->terrace_salable_area);
+            $terrace_salable_units=$units->where('id',$terrace_salableArray[1])->first();
 
             if (!empty($property->property_for)) {
                 $arr['Property For'] = $property->property_for ? $property->property_for : '';
@@ -1347,36 +1388,37 @@ class PropertyController extends Controller
             if (!empty($property->servant_room)) {
                 $arr['Servant Room'] = $property->servant_room ? 'Yes' : 'No';
             }
-            // if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty(explode('_-||-_', $property->carpet_area)[1])) {
-            //     $arr['Carpet Area'] = (explode('_-||-_', $property->carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_area)[1]]['name']);
-            // }
-            // if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty(explode('_-||-_', $property->salable_area)[1])) {
-            //     $arr['Salable Area'] = (explode('_-||-_', $property->salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_area)[1]]['name']);
-            // }
-            // if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty(explode('_-||-_', $property->carpet_plot_area)[1])) {
-            //     $arr['Carpet Plot Area'] = (explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->carpet_plot_area)[1]]['name']);
-            // }
-            // if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty(explode('_-||-_', $property->salable_plot_area)[1])) {
-            //     $arr['Salable Plot Area'] = (explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->salable_plot_area)[1]]['name']);
-            // }
-            // if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty(explode('_-||-_', $property->constructed_salable_area)[1])) {
-            //     $arr['Constructed Salable Area'] = (explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_salable_area)[1]]['name']);
-            // }
-            // if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty(explode('_-||-_', $property->constructed_carpet_area)[1])) {
-            //     $arr['Constructed Carpet Area'] = (explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_carpet_area)[1]]['name']);
-            // }
-            // if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty(explode('_-||-_', $property->constructed_builtup_area)[1])) {
-            //     $arr['Constructed Builtup Area'] = (explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->constructed_builtup_area)[1]]['name']);
-            // }
-            // if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty(explode('_-||-_', $property->builtup_area)[1])) {
-            //     $arr['Builtup Area'] = (explode('_-||-_', $property->builtup_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->builtup_area)[1]]['name']);
-            // }
-            if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty(explode('_-||-_', $property->terrace_carpet_area)[1])) {
+            if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($carpet_units->unit_name)) {
+                $arr['Carpet Area'] = (explode('_-||-_', $property->carpet_area)[0] . ' ' . $carpet_units->unit_name);
+            }
+           
+            if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty($land_units->unit_name)) {
+                $arr['Salable Area'] = (explode('_-||-_', $property->salable_area)[0] . ' ' . $land_units->unit_name);
+            }
+            if (!empty(explode('_-||-_', $property->carpet_plot_area)[0]) && !empty($carpet_plot_units->unit_name)) {
+                $arr['Carpet Plot Area'] = (explode('_-||-_', $property->carpet_plot_area)[0] . ' ' . $carpet_plot_units->unit_name);
+            }
+            if (!empty(explode('_-||-_', $property->salable_plot_area)[0]) && !empty($salable_plot_units->unit_name)) {
+                $arr['Salable Plot Area'] = (explode('_-||-_', $property->salable_plot_area)[0] . ' ' . $salable_plot_units->unit_name);
+            }
+            if (!empty(explode('_-||-_', $property->constructed_salable_area)[0]) && !empty($constructed_salable_units->unit_name)) {
+                $arr['Constructed Salable Area'] = (explode('_-||-_', $property->constructed_salable_area)[0] . ' ' . $constructed_salable_units->unit_name);
+            }
+            if (!empty(explode('_-||-_', $property->constructed_carpet_area)[0]) && !empty($constructed_carpet_units->unit_name)) {
+                $arr['Constructed Carpet Area'] = (explode('_-||-_', $property->constructed_carpet_area)[0] . ' ' . $constructed_carpet_units->unit_name);
+            }
+            if (!empty(explode('_-||-_', $property->constructed_builtup_area)[0]) && !empty($constructed_builtup_units->unit_name)) {
+                $arr['Constructed Builtup Area'] = (explode('_-||-_', $property->constructed_builtup_area)[0] . ' ' . $constructed_builtup_units->unit_name);
+            }
+            if (!empty(explode('_-||-_', $property->builtup_area)[0]) && !empty($builtup_units->unit_name)) {
+                $arr['Builtup Area'] = (explode('_-||-_', $property->builtup_area)[0] . ' ' . $builtup_units->unit_name);
+            }
+            if (!empty(explode('_-||-_', $property->terrace_carpet_area)[0]) && !empty($property->terrace_carpet_area)) {
                 $arr['Terrace Carpet Area'] = (explode('_-||-_', $property->terrace_carpet_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_carpet_area)[1]]['name']);
             }
-            // if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty(explode('_-||-_', $property->terrace_salable_area)[1])) {
-            //     $arr['Terrace Salable Area'] = (explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $dropdowns[explode('_-||-_', $property->terrace_salable_area)[1]]['name']);
-            // }
+            if (!empty(explode('_-||-_', $property->terrace_salable_area)[0]) && !empty($terrace_salable_units->unit_name)) {
+                $arr['Terrace Salable Area'] = (explode('_-||-_', $property->terrace_salable_area)[0] . ' ' . $terrace_salable_units->unit_name);
+            }
             if (!empty($property->hot_property)) {
                 $arr['Hot Property'] = $property->hot_property ? 'Yes' : 'No';
             }

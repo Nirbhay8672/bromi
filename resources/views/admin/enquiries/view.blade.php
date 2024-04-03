@@ -143,7 +143,7 @@
                                                         <div class="form-group col-4 m-b-10 data_conent_3">
                                                             <h6><b>Email</b></h6>
                                                         </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_3">
+                                                        <div style="text-transform: lowercase;" class="form-group col-8 m-b-10 data_conent_3">
                                                             <div>: {{ $data->client_email }}</div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_4">
@@ -580,7 +580,7 @@
                                                         <div class="form-group col-4 m-b-10 data_conent_23">
                                                             <h6><b>Email</b></h6>
                                                         </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_23">
+                                                        <div style="text-transform: lowercase;" class="form-group col-8 m-b-10 data_conent_23">
                                                             <div>: {{ $data->client_email }}</div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_24">
@@ -755,6 +755,20 @@
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_40">
                                                             <div>: {{ $data->is_preleased ? 'Yes' : 'No' }}</div>
+                                                        </div>
+
+                                                        <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Created Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($data->created_at)) }}</div>
+                                                        </div>
+
+                                                        <div class="form-group col-4 m-b-10 data_conent_16">
+                                                            <h6><b>Last Modified Date</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_16">
+                                                            <div>: {{ date('Y-m-d h:i A', strtotime($data->updated_at)) }}</div>
                                                         </div>
                                                     </div>
                                                 </div>

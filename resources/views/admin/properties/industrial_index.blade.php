@@ -50,10 +50,10 @@
                                         onclick="importProperties()"
                                         type="button"
                                         title="Import"
-                                    ><i class="fa fa-upload"></i></button>
+                                    ><i class="fa fa-download"></i></button>
 
                                     <button class="btn ms-3 custom-icon-theme-button" onclick="exportProperties()"
-                                        type="button" title="Export"><i class="fa fa-download"></i></button>
+                                        type="button" title="Export"><i class="fa fa-upload"></i></button>
 
                                     <button class="btn share_table_row ms-3"
                                         style="border-radius: 5px;display: none;background-color:#25d366;color:white;"
@@ -1090,7 +1090,8 @@
                     type: "POST",
                     url: "{{ route('admin.export.property') }}",
                     data: {
-                        _token: '{{ csrf_token() }}'
+                        _token: '{{ csrf_token() }}',
+                         category: "indProp"
                     },
                     success: function(data) {
                         window.open(data)
@@ -1245,11 +1246,13 @@
             $(document).on('change', '#select_all_checkbox', function(e) {
                 if ($(this).prop('checked')) {
                     $('.delete_table_row').show();
+                    $('.share_table_row').show();
 
                     $(".table_checkbox").each(function(index) {
                         $(this).prop('checked', true)
                     })
                 } else {
+                    $('.share_table_row').hide();
                     $('.delete_table_row').hide();
                     $(".table_checkbox").each(function(index) {
                         $(this).prop('checked', false)
