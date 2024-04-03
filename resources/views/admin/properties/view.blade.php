@@ -3,7 +3,7 @@
 @endphp
 <?php
 use Illuminate\Support\Facades\DB;
-       $units=DB::table('land_units')->get();
+    $units=DB::table('land_units')->get();
     
     $salableArray=explode("_-||-_",$property->salable_area);
     $land_units=$units->where('id',$salableArray[1])->first();
@@ -29,8 +29,6 @@ use Illuminate\Support\Facades\DB;
     
     $builtupArray=explode("_-||-_",$property->builtup_area);
     $builtup_units=$units->where('id',$builtupArray[1])->first();
-    $getBuiltup=$builtupArray[0].' ' .$builtup_units->unit_name;
-    // dd($builtupArray[0],$builtup_units->unit_name);
     
     $terrace_carpetArray=explode("_-||-_",$property->terrace_carpet_area);
     $terrace_carpet_units=$units->where('id',$terrace_carpetArray[1])->first();

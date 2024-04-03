@@ -688,8 +688,6 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <div class="invalid-feedback" id="district_id_error"
-                                                            style="display: block;color:red;">validate here</div>
                                                         <div class="form-group col-md-2 mb-3 div_extra_land_details">
                                                             <select class="form-select" id="taluka_id">
                                                                 <option value=""> Taluka</option>
@@ -700,8 +698,6 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <div class="invalid-feedback" id="taluka_id_error"
-                                                            style="display: block;color:red;">validate here</div>
                                                         <div class="form-group col-md-2 m-b-4 mb-3 div_extra_land_details">
                                                             <label class="select2_label" for="Area">Village</label>
                                                             <select class="form-select" id="village_id" multiple>
@@ -868,8 +864,6 @@
                                                                 <input class="form-control" name="refrence"
                                                                     id="refrence" type="text" autocomplete="off">
                                                             </div>
-                                                            <div class="invalid-feedback" id="refrence_error"
-                                                                style="display: block;color:red;">validate here</div>
                                                         </div>
                                                         <div class="form-group col-md-3 m-b-4 mb-3 cat-zone">
                                                             <div>
@@ -1072,33 +1066,53 @@
                 return value !== '' && isValidNumeric;
             }
 
+            // function validateStep2Form() {
+            //     isValid = true;
+            //     // const selectedValues = $('#furnished_status').val();
+            //     // isValid = selectedValues && selectedValues.length > 0 && isValid;
+            //     // $('#furnished_status_error').toggle(!isValid).text(isValid ? '' : 'furnished status field is required');
+            //     // isValid = validateField('#area_from', '#area_from_error', 'area from field is required') && isValid;
+            //     // isValid = validateField('#area_to', '#area_to_error', 'area to field is required') && isValid;
+            //     isValid = validateNumericField('#area_from', '#area_from_error', 'Area from field is required') && isValid;
+            //     isValid = validateNumericField('#area_to', '#area_to_error', 'Area to field is required') && isValid;
+
+            //     isValid = validateField('#budget_from', '#budget_from_error', 'budget from field is required') && isValid;
+            //     isValid = validateField('#budget_to', '#budget_to_error', 'budget to field is required') && isValid;
+            //     // isValid = validateSelect2('#purpose', '#purpose_error', 'purpose field is required') && isValid;
+            //     // isValid = validateSelect2('#project_status', '#project_status_error', 'project status field is required') &&
+            //     //     isValid;
+            //     // isValid = validateSelect2('#enquiry_source', '#enquiry_source_error', 'enquiry source field is required') &&
+            //     //     isValid;
+            //     // isValid = validateSelect2('#zone', '#zone_error', 'zone field is required') && isValid;
+            //     // const selectedArea = $('#area_ids').val();
+            //     // isValid = selectedArea && selectedArea.length > 0 && isValid;
+            //     // $('#area_ids_error').toggle(!isValid).text(isValid ? '' : 'area field field is required');
+            //     // const selectedBuilding = $('#building_id').val();
+            //     // isValid = selectedBuilding && selectedBuilding.length > 0 && isValid;
+            //     // $('#building_id_error').toggle(!isValid).text(isValid ? '' : 'project field field is required');
+            //     return isValid;
+            // }
             function validateStep2Form() {
-                isValid = true;
-                // const selectedValues = $('#furnished_status').val();
-                // isValid = selectedValues && selectedValues.length > 0 && isValid;
-                // $('#furnished_status_error').toggle(!isValid).text(isValid ? '' : 'furnished status field is required');
-                // isValid = validateField('#area_from', '#area_from_error', 'area from field is required') && isValid;
-                // isValid = validateField('#area_to', '#area_to_error', 'area to field is required') && isValid;
-                isValid = validateNumericField('#area_from', '#area_from_error', 'Area from field is required') && isValid;
-                isValid = validateNumericField('#area_to', '#area_to_error', 'Area to field is required') && isValid;
+    var isValid = true;
 
-                isValid = validateField('#budget_from', '#budget_from_error', 'budget from field is required') && isValid;
-                isValid = validateField('#budget_to', '#budget_to_error', 'budget to field is required') && isValid;
-                // isValid = validateSelect2('#purpose', '#purpose_error', 'purpose field is required') && isValid;
-                // isValid = validateSelect2('#project_status', '#project_status_error', 'project status field is required') &&
-                //     isValid;
-                // isValid = validateSelect2('#enquiry_source', '#enquiry_source_error', 'enquiry source field is required') &&
-                //     isValid;
-                // isValid = validateSelect2('#zone', '#zone_error', 'zone field is required') && isValid;
-                // const selectedArea = $('#area_ids').val();
-                // isValid = selectedArea && selectedArea.length > 0 && isValid;
-                // $('#area_ids_error').toggle(!isValid).text(isValid ? '' : 'area field field is required');
-                // const selectedBuilding = $('#building_id').val();
-                // isValid = selectedBuilding && selectedBuilding.length > 0 && isValid;
-                // $('#building_id_error').toggle(!isValid).text(isValid ? '' : 'project field field is required');
-                return isValid;
-            }
+    // Validate area fields
+    isValid = validateNumericField('#area_from', '#area_from_error', 'Area from field is required') && isValid;
+    isValid = validateNumericField('#area_to', '#area_to_error', 'Area to field is required') && isValid;
 
+    // Validate budget fields
+    isValid = validateField('#budget_from', '#budget_from_error', 'Budget from field is required') && isValid;
+    isValid = validateField('#budget_to', '#budget_to_error', 'Budget to field is required') && isValid;
+    var budgetFrom = parseFloat($('#budget_from').val());
+    var budgetTo = parseFloat($('#budget_to').val());
+    if (!isNaN(budgetFrom) && !isNaN(budgetTo) && budgetFrom <= budgetTo) {
+        $('#budget_to_error').text('Budget To must be greater than Budget From').show();
+        isValid = false;
+    } else {
+        $('#budget_to_error').hide();
+    }
+
+    return isValid;
+}
             // function validateStep3Form() {
             //     isValid = true;
             //     const selectedValues = $('#furnished_status').val();
@@ -2123,9 +2137,9 @@
                         digits: true,
                         checkArea: true,
                     },
-                    budget_to: {
-                        checkBudget: true,
-                    },
+                    // budget_to: {
+                    //     checkBudget: true,
+                    // },
                 },
                 submitHandler: function(form) { // for demo
                     alert('valid form submitted'); // for demo

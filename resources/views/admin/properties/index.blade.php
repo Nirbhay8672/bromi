@@ -37,10 +37,10 @@
                                             class="fa fa-random"></i></button>
 
                                     <button class="btn ms-3 custom-icon-theme-button" onclick="exportProperties()"
-                                        type="button" title="Export"><i class="fa fa-download"></i></button>
+                                        type="button" title="Export"><i class="fa fa-upload"></i></button>
 
                                     <button class="btn ms-3 custom-icon-theme-button" onclick="importProperties()"
-                                        type="button" title="Import"><i class="fa fa-upload"></i></button>
+                                        type="button" title="Import"><i class="fa fa-download"></i></button>
 
                                     <button class="btn text-white delete_table_row ms-3"
                                         style="border-radius: 5px;display: none;background-color:red"
