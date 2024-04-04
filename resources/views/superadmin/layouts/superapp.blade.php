@@ -460,7 +460,7 @@ Helper::set_default_measuerement();
                                         <li class="sidebar-list"><a
                                                 class="sidebar-link @if ($route == 'superadmin.settings.area') active @endif"
                                                 href="{{ route('superadmin.settings.area') }}"><i
-                                                    class="fa fa-map-marker"></i><span class="lan-3">Area</span></a>
+                                                    class="fa fa-map-marker"></i><span class="lan-3">Locality</span></a>
                                         </li>
                                     @endif
 
