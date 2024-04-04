@@ -10,6 +10,7 @@ use App\Models\Taluka;
 use App\Models\TpScheme;
 use App\Models\User;
 use App\Models\Village;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
@@ -45,8 +46,19 @@ class Homecontroller extends Controller
 						->rawColumns(['Actions'])
 						->make(true);
 				}
-				$roles =  Role::where('user_id')->get();
-				return view('superadmin.users.index', compact('roles'));
+
+				$total_active_users = User::where('status',1)->get()->count();
+
+				$total_builder = User::join('roles','users.role_id','roles.id')
+				->select(['users.id'])
+				->where('roles.name', 'like', '%Builder%')->get()->count();
+
+				$total_members = User::where('role_id', 3)->get()->count();
+
+				$date= Carbon::now()->addDays(30);
+				$total_ex_users = User::whereDate('plan_expire_on','<=', $date)->get()->count();
+
+				return view('superadmin.dashboard',compact('total_active_users', 'total_ex_users', 'total_builder', 'total_members'));
 			}
 			return redirect()->route('admin.login');
 		} catch (Throwable $e) {

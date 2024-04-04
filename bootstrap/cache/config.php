@@ -23,7 +23,7 @@
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:lH05AKg8CDEfGOPoAvujtjuHRMqPjE3cR522UdgzmjY=',
+    'key' => 'base64:dEVA702oEdkjz3EEROPU8LsXBNKxea2Qup9DhDax20g=',
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (
@@ -202,7 +202,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'F:\\BROMI_MAIN\\bromi\\storage\\framework/cache/data',
+        'path' => 'C:\\laragon\\www\\bromi\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -332,7 +332,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'bromi_mb_16_03',
+        'database' => 'mrwebcoi_bromi',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
@@ -340,9 +340,9 @@
       array (
         'driver' => 'mysql',
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'localhost',
         'port' => '3306',
-        'database' => 'bromi_mb_16_03',
+        'database' => 'mrwebcoi_bromi',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -360,9 +360,9 @@
       array (
         'driver' => 'pgsql',
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'localhost',
         'port' => '3306',
-        'database' => 'bromi_mb_16_03',
+        'database' => 'mrwebcoi_bromi',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -375,9 +375,9 @@
       array (
         'driver' => 'sqlsrv',
         'url' => NULL,
-        'host' => '127.0.0.1',
+        'host' => 'localhost',
         'port' => '3306',
-        'database' => 'bromi_mb_16_03',
+        'database' => 'mrwebcoi_bromi',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -420,12 +420,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'F:\\BROMI_MAIN\\bromi\\storage\\app',
+        'root' => 'C:\\laragon\\www\\bromi\\storage\\app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'F:\\BROMI_MAIN\\bromi\\storage\\app/public',
+        'root' => 'C:\\laragon\\www\\bromi\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
       ),
@@ -443,7 +443,7 @@
     ),
     'links' => 
     array (
-      'F:\\BROMI_MAIN\\bromi\\public\\storage' => 'F:\\BROMI_MAIN\\bromi\\storage\\app/public',
+      'C:\\laragon\\www\\bromi\\public\\storage' => 'C:\\laragon\\www\\bromi\\storage\\app/public',
     ),
   ),
   'hashing' => 
@@ -478,13 +478,13 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'F:\\BROMI_MAIN\\bromi\\storage\\logs/laravel.log',
+        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'F:\\BROMI_MAIN\\bromi\\storage\\logs/laravel.log',
+        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
@@ -535,7 +535,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'F:\\BROMI_MAIN\\bromi\\storage\\logs/laravel.log',
+        'path' => 'C:\\laragon\\www\\bromi\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -547,11 +547,11 @@
       'smtp' => 
       array (
         'transport' => 'smtp',
-        'host' => 'mailhog',
-        'port' => '1025',
-        'encryption' => NULL,
-        'username' => NULL,
-        'password' => NULL,
+        'host' => 'smtp.example.com',
+        'port' => '587',
+        'encryption' => 'tls',
+        'username' => 'user@example.com',
+        'password' => 'your_password',
         'timeout' => NULL,
         'auth_mode' => NULL,
       ),
@@ -593,15 +593,15 @@
     ),
     'from' => 
     array (
-      'address' => NULL,
-      'name' => 'Laravel',
+      'address' => 'hello@example.com',
+      'name' => 'example',
     ),
     'markdown' => 
     array (
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'F:\\BROMI_MAIN\\bromi\\resources\\views/vendor/mail',
+        0 => 'C:\\laragon\\www\\bromi\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -756,7 +756,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'F:\\BROMI_MAIN\\bromi\\storage\\framework/sessions',
+    'files' => 'C:\\laragon\\www\\bromi\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -776,9 +776,9 @@
   array (
     'paths' => 
     array (
-      0 => 'F:\\BROMI_MAIN\\bromi\\resources\\views',
+      0 => 'C:\\laragon\\www\\bromi\\resources\\views',
     ),
-    'compiled' => 'F:\\BROMI_MAIN\\bromi\\storage\\framework\\views',
+    'compiled' => 'C:\\laragon\\www\\bromi\\storage\\framework\\views',
   ),
   'dompdf' => 
   array (
@@ -787,10 +787,10 @@
     'convert_entities' => true,
     'options' => 
     array (
-      'font_dir' => 'F:\\BROMI_MAIN\\bromi\\storage\\fonts',
-      'font_cache' => 'F:\\BROMI_MAIN\\bromi\\storage\\fonts',
-      'temp_dir' => 'C:\\Users\\makva\\AppData\\Local\\Temp',
-      'chroot' => 'F:\\BROMI_MAIN\\bromi',
+      'font_dir' => 'C:\\laragon\\www\\bromi\\storage\\fonts',
+      'font_cache' => 'C:\\laragon\\www\\bromi\\storage\\fonts',
+      'temp_dir' => 'C:\\Users\\Dell\\AppData\\Local\\Temp',
+      'chroot' => 'C:\\laragon\\www\\bromi',
       'allowed_protocols' => 
       array (
         'file://' => 
@@ -927,12 +927,6 @@
         'manager' => '',
         'company' => '',
       ),
-      'cells' => 
-      array (
-        'middleware' => 
-        array (
-        ),
-      ),
     ),
     'extension_detector' => 
     array (
@@ -968,7 +962,6 @@
       array (
         'store' => NULL,
       ),
-      'default_ttl' => 10800,
     ),
     'transactions' => 
     array (
@@ -980,10 +973,7 @@
     ),
     'temporary_files' => 
     array (
-      'local_path' => 'F:\\BROMI_MAIN\\bromi\\storage\\framework/cache/laravel-excel',
-      'local_permissions' => 
-      array (
-      ),
+      'local_path' => 'C:\\laragon\\www\\bromi\\storage\\framework/cache/laravel-excel',
       'remote_disk' => NULL,
       'remote_prefix' => NULL,
       'force_resync_remote' => NULL,
@@ -1064,7 +1054,7 @@
       'local' => 
       array (
         'type' => 'city',
-        'path' => 'F:\\BROMI_MAIN\\bromi\\database\\maxmind/GeoLite2-City.mmdb',
+        'path' => 'C:\\laragon\\www\\bromi\\database\\maxmind/GeoLite2-City.mmdb',
       ),
     ),
     'ip_api' => 
