@@ -63,6 +63,9 @@ class UserController extends Controller
 					'state_id',
 					'role_id',
 					'status',
+					'company_name',
+					'subscribed_on',
+					'plan_expire_on',
 				])
 				->whereNotNull('parent_id')
 				->where('role_id','!=',3)
@@ -80,6 +83,9 @@ class UserController extends Controller
 					'state_id',
 					'role_id',
 					'status',
+					'company_name',
+					'subscribed_on',
+					'plan_expire_on',
 				])
 				->where('role_id','!=',3)
 				->whereNull('parent_id')
@@ -115,6 +121,7 @@ class UserController extends Controller
 			}
 
 			return DataTables::of($final_array)
+				->addIndexColumn()
 				->editColumn('plan', function ($row) {
 					if (!empty($row['plan']['name'])) {
 						return $row['plan']['name'];

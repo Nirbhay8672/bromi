@@ -66,6 +66,7 @@
                             <table class="display" id="userTable">
                                 <thead>
                                     <tr>
+                                        <th>Sr No.</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>State</th>
@@ -73,6 +74,9 @@
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Plan</th>
+                                        <th>Subscribed On</th>
+                                        <th>Expired On</th>
+                                        <th>Company Name</th>
                                         <th>Users</th>
                                         <th>Actions</th>
                                     </tr>
@@ -154,14 +158,15 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Sr No.</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Email</th>
-                                        <th>Phone</th>
+                                        <th>Phone</th>  
+                                        <th>Company Name</th>
                                     </tr>
                                 </thead>
                                 <tbody id="user_data">
-
                                 </tbody>
                             </table>
                         </div>
@@ -245,7 +250,9 @@
                     d.filter_value = search_input.value;
                 }
             },
-            columns: [{
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                {
                     data: 'first_name',
                     name: 'first_name'
                 },
@@ -273,6 +280,18 @@
                 {
                     data: 'plan',
                     name: 'plan'
+                },
+                {
+                    data: 'subscribed_on',
+                    name: 'subscribed_on'
+                },
+                {
+                    data: 'plan_expire_on',
+                    name: 'plan_expire_on'
+                },
+                {
+                    data: 'company_name',
+                    name: 'company_name',
                 },
                 {
                     data: 'users',
@@ -361,13 +380,19 @@
                     table.classList.remove('d-none');
                     table_data.innerHTML = '';
 
-                    data.sub_user.forEach((user) => {
+                    data.sub_user.forEach((user, index) => {
+
+                        let subrouteUrl = `{{ route('login_as_user', ['id' => ':id']) }}`.replace(':id', user.id);
+                        
                         table_data.innerHTML += `<tr>
-                                <td>${user.first_name}</td>
-                                <td>${user.last_name}</td>
-                                <td>${user.email}</td>
-                                <td>${user.mobile_number}</td>
-                            </tr>`;
+                            <td>${index + 1}</td>
+                            <td>${user.first_name}</td>
+                            <td>${user.last_name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.mobile_number}</td>
+                            <td>${user.company_name}</td>
+                            <td><a class="btn btn-primary" href="${subrouteUrl}">Login As User</a></td>
+                        </tr>`;
                     });
 
                 } else {

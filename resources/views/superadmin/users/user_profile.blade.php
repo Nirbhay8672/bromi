@@ -265,20 +265,24 @@
                                                 <table class="table table-bordered">
                                                     <thead style="background-color: rgba(223, 223, 223, 0.804)">
                                                         <tr>
+                                                            <th>Sr No.</th>
                                                             <th>First Name</th>
                                                             <th>Last Name</th>
                                                             <th>Email</th>
                                                             <th>Phone</th>
+                                                            <th>Company Name</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @if(count($sub_users) > 0)
-                                                        @foreach($sub_users as $user)
+                                                        @foreach($sub_users as $index => $user)
                                                         <tr>
+                                                            <td>{{ $index + 1 }}</td>
                                                             <td>{{ $user->first_name ?? '-' }}</td>
                                                             <td>{{ $user->last_name ?? '-' }}</td>
                                                             <td>{{ $user->email ?? '-' }}</td>
                                                             <td>{{ $user->mobile_number ?? '-' }}</td>
+                                                            <td>{{ $user->company_name ?? '-' }}</td>
                                                         </tr>
                                                         @endforeach
                                                         @else
