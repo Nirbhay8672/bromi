@@ -36,8 +36,6 @@ class IndustrialPropertyController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			
-				// dd("2342423");
 			$dropdowns = DropdownSettings::get()->toArray();
 			$land_units = LandUnit::all();
 			$dropdownsarr = [];
@@ -78,6 +76,15 @@ class IndustrialPropertyController extends Controller
 					$query->where('properties.configuration', $request->filter_configuration);
 				});
 			})
+			// ->when(($request->filter_area_id), function ($query) use ($request) {
+			// 	// dd($request->filter_area_id);
+			// 	return $query->whereIn('projects.area_id', '3812');
+			// })
+			->when(($request->filter_area_id), function ($query) use ($request) {
+				// Assuming $request->filter_area_id is a string
+				return $query->where('projects.area_id', '3812');
+			})
+			
 			->when($request->filter_source_of_property && empty(Auth::user()->source_of_property), function ($query) use ($request) {
 				// dd($request->filter_source_of_property,"...",Auth::user()->source_of_property);
 				return $query->where(function ($query) use ($request) {
@@ -491,7 +498,7 @@ class IndustrialPropertyController extends Controller
             }
         }
 		$projects = Projects::orderBy('project_name')->get();
-		$areas = Areas::orderBy('name')->get();
+		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
 		$cities = City::orderBy('name')->get();
 		$states = State::orderBy('name')->get();
 		$property_configuration_settings = DropdownSettings::get()->toArray();

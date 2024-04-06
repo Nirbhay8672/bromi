@@ -2695,6 +2695,7 @@
             let penthouseConf, farmConf, landConfiguration, plotConf, VillaCategory, landCategory, villaConfiguration,
                 flateConfiguration, officeConf, retailConfiguration, storageConfiguration, theForLand;
             $(document).ready(function() {
+                
                 // Initialize Select2 for all dropdowns
                 $('#project_id, #state_id, #area_id, #zone, #village_id, #taluka_id, #district_id, #state-dropdown')
                     .select2();
@@ -3004,7 +3005,7 @@
             citiesar = JSON.parse(cities);
             areass = JSON.parse(areas);
             $(document).ready(function() {
-
+                floatingField();
                 //#B Project default Open on add Prop first - time
                 $('#project_id').select2().select2('open');
                 $('#nextButton').click(function() {
