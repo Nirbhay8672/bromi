@@ -116,6 +116,12 @@
                                                             </div>
                                                         </li>
                                                     </ul>
+
+                                                    <div class="row">
+                                                        <div class="col text-center">
+                                                            <a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary" style="border-radius:5px;">Login as user</a>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -271,6 +277,7 @@
                                                             <th>Email</th>
                                                             <th>Phone</th>
                                                             <th>Company Name</th>
+                                                            <th class="text-center">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -283,6 +290,7 @@
                                                             <td>{{ $user->email ?? '-' }}</td>
                                                             <td>{{ $user->mobile_number ?? '-' }}</td>
                                                             <td>{{ $user->company_name ?? '-' }}</td>
+                                                            <td class="text-center"><a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary" style="border-radius:5px;">Login as user</a></td>
                                                         </tr>
                                                         @endforeach
                                                         @else
