@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\InvoiceEmail;
+use App\Models\Coupons;
 use App\Models\Invoice;
 use App\Models\LoggedIn;
 use App\Models\Payment;
@@ -16,6 +17,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 use App\Models\Subplans;
+use Exception;
 use Illuminate\Support\Facades\Log;
 use PgSql\Lob;
 use Illuminate\Support\Facades\DB;
@@ -198,7 +200,52 @@ class AdminLoginController extends Controller
 			'plans' =>  Subplans::all(),
 		]);
 	}
+	
+    public function applyCoupuonCode(Request $request)
+    {
+        try {
+            $currentDate = Carbon::now()->toDateString();
+            $validCoupon = Coupons::where('code', $request->coupon_code)
+                ->where('date_from', '<=', $currentDate)
+                ->where('date_to', '>=', $currentDate)
+                ->first();
+            if (!$validCoupon || null == $validCoupon) {
+                throw new Exception ("Invalide coupon Code.", 400);
+            }
+            // check if user has already used the code
+            $usedCoupon = Payment::where('coupon_applied', $request->coupon_code)
+                ->where('user_id', $request->user_id)
+                ->first();
+            if ($usedCoupon) {
+                throw new Exception("Coupon Code alreay used.", 400);
+            }
+            // get plan and give discount price
+            $planPrice = Subplans::find($request->plan_id)->price;
+            if ($validCoupon->discount_type == 1) {
+                $percent = (((int) $validCoupon->amount_off) / 100);
+                $discount = $planPrice * $percent;
+            }
+            $priceAfterDiscount = $planPrice - $discount;
 
+            return response()->json([
+                'error' => false,
+                'message' => 'Coupon applied successfully.',
+                'data' => [
+                    'acutal_price' => $planPrice,
+                    'discount' => $discount,
+                    'price_after_discount' => $priceAfterDiscount,
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            $msg = $th->getCode() == 400 ? $th->getMessage() : 'Something went wrong.';
+            return response()->json([
+                'error' => true,
+                'message' => $msg,
+                'data' => null
+            ]);
+        }
+    }
+    
 	/* public function savePlan(Request $request)
 	{
 		$user  = User::find($request->user_id);
@@ -225,6 +272,15 @@ class AdminLoginController extends Controller
             $user  = User::find($request->user_id);
             $usersLimit = $planDetails->user_limit ?? 1;
             
+            $amountToPay = $planDetails->price;
+            $couponCode = null;
+            $discount = 0;
+            if (!empty($request->discounted_price)) {
+                $amountToPay = $request->discounted_price;
+                $couponCode = $request->coupon_code;
+                $discount = $request->discount;
+            }
+            
             /*$user->fill([
     			'plan_id' => $request->plan_id,
     			'total_user_limit' => $planDetails->user_limit,
@@ -244,7 +300,7 @@ class AdminLoginController extends Controller
             $userPhone = Helper::formatPhoneNumber($user->mobile_number);
             $data = json_encode([
                 'order_id' =>  'order_' . time(),
-                'order_amount' => $planDetails->price,
+                'order_amount' => $amountToPay,
                 "order_currency" => "INR",
                 "customer_details" => [
                     "customer_id" => 'USER_'. $user->id,
@@ -258,6 +314,8 @@ class AdminLoginController extends Controller
                     "user_limit" => "$usersLimit",
                     "user_id" => "$user->id",
                     "transaction_goal" => "$transaction_goal",
+                    "couponCode" => "$couponCode",
+                    "discount" => "$discount",
                 ],
                 "order_meta" => [
                     "return_url" => route('payment-success') . '?order_id={order_id}&order_token={order_token}'
@@ -375,6 +433,15 @@ class AdminLoginController extends Controller
                 
                 Auth::login($user);
                 $planExpiry = today()->addYear(1);
+                
+                // adjust coupon details
+                if (!empty($orderTags['couponCode']) && !empty($orderTags['discount'])) {
+                    $paymentInDb->update([
+                        'coupon_applied' => $orderTags['couponCode'],
+                        'discount' => $orderTags['discount']
+                    ]);
+                }
+                
                 // if user purchases new subscription or user renew/upgrade a subscription
                 // then only update in the users table that user record.
                 $allowedCases = ['new_subscription', 'renew_subscription', 'upgrade'];

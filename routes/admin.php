@@ -127,8 +127,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-property', [PropertyController::class, 'destroy'])->name('admin.deleteProperty');
 		Route::post('/save-property', [PropertyController::class, 'saveProperty'])->name('admin.saveProperty');
         Route::get('/download-zip/{type}/{prop}', [PropertyController::class,'downloadZip'])->name('download.zip');
-		
-		Route::get('/admin/enquiry/category', [EnquiriesController::class, 'getEnquiryCategory'])->name('admin.enquiry.category');
+
 		Route::post('/import-property', [PropertyController::class, 'importProperty'])->name('admin.importproperty');
 		Route::post('/import-IndustrialProperty', [IndustrialPropertyController::class, 'importProperty'])->name('admin.importIndustrialproperty');
 		Route::get('/import-property-template', [PropertyController::class, 'importPropertyTemplate'])->name('admin.importpropertyTemplate');
@@ -175,6 +174,10 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::any('/Activity-Logs', [HomeController::class, 'getActivityLogs'])->name('admin.logs');
 		// Route::any('/Plans', [HomeController::class, 'plan_index'])->name('admin.plans');
 		// Route::post('/save-plan-user', [HomeController::class, 'plan_save'])->name('admin.savePlan');
+		
+		// apply coupon
+        Route::any('apply-coupon-code', [HomeController::class, 'applyCoupuonCode'])->name('admin.apply-coupon');
+        
 		Route::post('/upgrade-user-limit', [HomeController::class, 'upgrade_user_limit'])->name('admin.upgradeUserLimit');
 		Route::post('/upgrade-plan-user', [HomeController::class, 'upgrade_plan'])->name('admin.upgradePlan');
 		Route::post('/search', [HomeController::class, 'search'])->name('admin.search');
