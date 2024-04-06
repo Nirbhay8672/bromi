@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BromiEnquiry;
 use App\Models\District;
+use App\Models\Notifications;
 use App\Models\Projects;
 use App\Models\State;
 use App\Models\Taluka;
@@ -24,7 +26,6 @@ class Homecontroller extends Controller
 		$this->middleware('auth');
 	}
 
-
 	/**
 	 * Show the application dashboard.
 	 *
@@ -32,38 +33,69 @@ class Homecontroller extends Controller
 	 */
 	public function index(Request $request)
 	{
-		try {
-			if (Auth::check()) {
-				if ($request->ajax()) {
-					$data = User::get();
-					return DataTables::of($data)
-						->editColumn('Actions', function ($row) {
-							$buttons = '';
-							$buttons =  $buttons . '<button data-id="' . $row->id . '" onclick=getUser(this) class="btn btn-pill btn-primary" type="button">View</button>';
-							$buttons =  $buttons . ' <button data-id="' . $row->id . '" onclick=deleteUser(this) class="btn btn-pill btn-danger" type="button">Delete</button>';
-							return $buttons;
-						})
-						->rawColumns(['Actions'])
-						->make(true);
+		if (Auth::check()) {	
+			$start_date = null;
+			$end_date = Carbon::now()->format('Y-m-d 23:59:59');
+
+			if($request->filled('date_range')){
+				if($request->date_range == 'last_month' || $request->date_range == 'this_month'){
+					$start_date = Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00');
+				}elseif($request->date_range == '6month'){
+					$start_date = Carbon::now()->startOfMonth()->subMonth(6)->format('Y-m-d 00:00:00');
+				}elseif($request->date_range == '3month'){
+					$start_date = Carbon::now()->startOfMonth()->subMonth(3)->format('Y-m-d 00:00:00');
+				}elseif($request->date_range == 'yearly'){
+					$start_date = Carbon::now()->startOfMonth()->subMonth(12)->format('Y-m-d 00:00:00');
+				}elseif($request->date_range == 'today'){
+					$start_date = Carbon::now()->format('Y-m-d 00:00:00');
+				}elseif($request->date_range == 'yesterday'){
+					$start_date = Carbon::now()->subDay()->format('Y-m-d 00:00:00');
+				}elseif($request->date_range == 'this_week'){
+					$start_date = Carbon::now()->subDays(7)->format('Y-m-d 00:00:00');
 				}
-
-				$total_active_users = User::where('status',1)->get()->count();
-
-				$total_builder = User::join('roles','users.role_id','roles.id')
-				->select(['users.id'])
-				->where('roles.name', 'like', '%Builder%')->get()->count();
-
-				$total_members = User::where('role_id', 3)->get()->count();
-
-				$date= Carbon::now()->addDays(30);
-				$total_ex_users = User::whereDate('plan_expire_on','<=', $date)->get()->count();
-
-				return view('superadmin.dashboard',compact('total_active_users', 'total_ex_users', 'total_builder', 'total_members'));
 			}
-			return redirect()->route('admin.login');
-		} catch (Throwable $e) {
-			return redirect()->back()->with('error', trans('app.something_went_wrong'));
+
+			$total_builder = User::join('roles','users.role_id','roles.id')
+			->select(['users.id'])
+			->where('roles.name', 'like', '%Builder%');
+
+			$total_members = User::where('role_id', 3);
+			$total_requests = BromiEnquiry::query();
+			$total_projects = Projects::query();
+
+			if(!is_null($start_date)){
+				$total_builder = $total_builder->whereBetween('users.created_at',[$start_date,$end_date]);
+				$total_members = $total_members->whereBetween('created_at',[$start_date,$end_date]);
+				$total_requests = $total_requests->whereBetween('created_at',[$start_date,$end_date]);
+				$total_projects = $total_projects->whereBetween('created_at',[$start_date,$end_date]);
+			} else {
+				$total_builder = $total_builder->whereBetween('users.created_at',[Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date]);
+				$total_members = $total_members->whereBetween('created_at',[Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date]);
+				$total_requests = $total_requests->whereBetween('created_at',[Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date]);
+				$total_projects = $total_projects->whereBetween('created_at',[Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date]);
+			}
+
+			$total_builder = $total_builder->get()->count();
+			$total_members = $total_members->get()->count();
+			$total_requests = $total_requests->get()->count();
+			$total_projects = $total_projects->get()->count();
+
+			$total_active_users = User::where('status',1)->get()->count();
+			
+			$date= Carbon::now()->addDays(30);
+			$total_ex_users = User::whereDate('plan_expire_on','<=', $date)->get()->count();
+
+			return view('superadmin.dashboard')->with([
+				'total_active_users' => $total_active_users,
+				'total_ex_users' => $total_ex_users,
+				'total_builder' => $total_builder,
+				'total_members' => $total_members,
+				'total_requests' => $total_requests,
+				'total_projects' => $total_projects,
+				'filter_value' => $request->date_range ?? 'this_month',
+			]);
 		}
+		return redirect()->route('admin.login');
 	}
 
 	public function tpSchemeIndex(Request $request)
