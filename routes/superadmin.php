@@ -91,6 +91,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/superadmin/delete-projects', [ProjectsController::class, 'destroy'])->name('superadmin.deleteProject');
 		Route::any('/superadmin/project/view/{id}', [ProjectsController::class, 'viewProject'])->name('superadmin.viewProject');
 
+		Route::get('/settings', [SuperSettingController::class, 'index'])->name('superadmin.settings');
+
 		Route::get('/settings-state', [SuperSettingController::class, 'states_index'])->name('superadmin.settings.state');
 		Route::post('/settings-get-state', [SuperSettingController::class, 'get_state'])->name('superadmin.settings.getState');
 		Route::post('/settings-save-state', [SuperSettingController::class, 'state_store'])->name('superadmin.settings.saveState');
