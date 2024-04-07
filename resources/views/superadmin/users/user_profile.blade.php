@@ -314,8 +314,10 @@
                                                         <tr>
                                                             <th>Transaction Date Time</th>
                                                             <th>Order Id</th>
+                                                            <td>Transaction Goal</td>
                                                             <th>Amount</th>
                                                             <th>Currency</th>
+                                                            <th>Coupon Code</th>
                                                             <th>Plan Name</th>
                                                             <th>Status</th>
                                                         </tr>
@@ -326,8 +328,10 @@
                                                         <tr>
                                                             <td>{{ $transaction->payment_completion_time }}</td>
                                                             <td>{{ $transaction->order_id }}</td>
+                                                            <td>{{ $transaction->transaction_goal_flag }}</td>
                                                             <td>{{ $transaction->payment_amount }}</td>
                                                             <td>{{ $transaction->payment_currency }}</td>
+                                                            <td>{{ $transaction->coupon_applied ?? '-' }}</td>
                                                             <td>{{ $transaction->plan_name }}</td>
                                                             <td>{{ $transaction->payment_status }}</td>
                                                         </tr>
