@@ -181,6 +181,7 @@ class UserController extends Controller
 			->select([
 				'payments.*',
 				'subplans.name AS plan_name',
+				DB::raw("CASE WHEN payments.transaction_goal = 'new_subscription' THEN 'New Subscription' WHEN payments.transaction_goal = 'add_user' THEN 'Add User' WHEN payments.transaction_goal = 'upgrade' THEN 'Upgrade' ELSE '-' END AS transaction_goal_flag")
 			])->where('payments.user_id',$id)->get();
 
 		$tickets = DB::table('tickets')
