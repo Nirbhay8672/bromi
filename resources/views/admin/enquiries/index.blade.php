@@ -1416,13 +1416,56 @@
                 //
             });
             // category to sub category on change filter
+            // $('#filter_specific_type').on('change', function() {
+            //     let selectedCategory = this.options[this.selectedIndex].text.trim();
+            //     let url = "{{ route('admin.getEnquiryConfiguration') }}";
+
+            //     try {
+            //         var xhr = new XMLHttpRequest();
+            //         xhr.open("GET", `${url}?selectedCategory=${encodeURIComponent(selectedCategory)}`, true);
+
+            //         xhr.onreadystatechange = function() {
+            //             if (xhr.readyState === XMLHttpRequest.DONE) {
+            //                 if (xhr.status === 200) {
+            //                     var data = JSON.parse(xhr.responseText);
+            //                     console.log("data", data);
+
+            //                     var subCategorySelect = document.getElementById('filter_configuration');
+            //                     subCategorySelect.innerHTML = '<option value="">Sub Category</option>';
+
+            //                     for (var key in data) {
+            //                         if (data.hasOwnProperty(key)) {
+            //                             var option = document.createElement('option');
+            //                             option.value = key;
+            //                             option.text = data[key];
+            //                             option.dataset.category = data[key];
+            //                             subCategorySelect.appendChild(option);
+            //                         }
+            //                     }
+            //                 } else {
+            //                     console.error("An error occurred:", xhr.statusText);
+            //                 }
+            //             }
+            //         };
+
+            //         xhr.send();
+            //     } catch (error) {
+            //         console.error("An error occurred:", error);
+            //     }
+            // });
+
             $('#filter_specific_type').on('change', function() {
-                let selectedCategory = this.options[this.selectedIndex].text.trim();
-                let url = "{{ route('admin.getEnquiryConfiguration') }}";
+                var selectedCategories = [];
+                $('#filter_specific_type option:selected').each(function() {
+                    selectedCategories.push($(this).text().trim());
+                });
+                
+                console.log('selectedCategories ==', selectedCategories);
+                var url = "{{ route('admin.getEnquiryConfiguration') }}";
 
                 try {
                     var xhr = new XMLHttpRequest();
-                    xhr.open("GET", `${url}?selectedCategory=${encodeURIComponent(selectedCategory)}`, true);
+                    xhr.open("GET", `${url}?selectedCategories=${encodeURIComponent(JSON.stringify(selectedCategories))}`, true);
 
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -1453,6 +1496,7 @@
                     console.error("An error occurred:", error);
                 }
             });
+
 
            
 
@@ -1700,12 +1744,9 @@
                             data: 'telephonic_discussion',
                             name: 'telephonic_discussion',
                             render: function(data, type, full, meta) {
-                                // Check if the length of the text exceeds 20 characters
-                                if (data.length > 20) {
-                                    // If it does, truncate the text and add a "Read More" link
-                                    return '<span class="truncated">' + data.substr(0, 20) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span>';
+                                if (data.length > 56) {
+                                    return '<span class="truncated">' + data.substr(0, 56) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span>';
                                 } else {
-                                    // If not, return the text as is
                                     return data;
                                 }
                             }

@@ -2527,7 +2527,8 @@ use Illuminate\Support\Facades\DB;
                                                     <div class="modal-content" style="max-height: 80%; height: auto; width: 40%;">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="imageLabel">Property Images</h5>
-                                                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal"
+                                aria-label="Close"> </button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div id="imageSlider" class="image-slider">
@@ -2639,6 +2640,8 @@ use Illuminate\Support\Facades\DB;
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="documentLabel">Property Construction Documents</h5>
+                                                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal"
+                                aria-label="Close"> </button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div id="documentBanner" class="image-slider">
@@ -2654,6 +2657,9 @@ use Illuminate\Support\Facades\DB;
                                                                 @if (in_array($path, $documentExtensions))
                                                                     <div class="slide">
                                                                         <img src="{{ asset('/upload/construction_images/' . $const_image->construction_documents) }}" class="d-block"  alt="Image">
+                                                                        <span class="remove-icon" data-image-id="{{ $image->id }}" onclick="removeImage(this)" style="position: absolute; top: 0; right: 0; cursor: pointer;">
+                                                                            <i class="fa fa-trash"></i>
+                                                                        </span>        
                                                                     </div>
                                                                     @php
                                                                         $hasConstDocuments = true;
@@ -2681,6 +2687,8 @@ use Illuminate\Support\Facades\DB;
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="documentLabel">Property Documents</h5>
+                                                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal"
+                                aria-label="Close"> </button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <div id="documentBanner">
@@ -2696,6 +2704,9 @@ use Illuminate\Support\Facades\DB;
                                                                 @if (in_array($path, $documentExtensions))
                                                                     <div class="zoom">
                                                                         <a href="{{ asset('/upload/land_images/' . $image->image) }}" target="_blank">{{ $image->image }}</a>
+                                                                        <span class="remove-icon" data-image-id="{{ $image->id }}" onclick="removeDocs(this)" style="position: absolute; top: 16px; right: 45px; cursor: pointer;">
+                                                                            <i class="fa fa-trash"></i>
+                                                                        </span>
                                                                     </div>
                                                                     @php $hasDocuments = true; @endphp
                                                                 @endif
@@ -3207,6 +3218,12 @@ use Illuminate\Support\Facades\DB;
             var imageId = element.getAttribute('data-image-id');
             var slideElement = element.closest('.slide');
             slideElement.remove();
+        }
+
+        function removeDocs(element) {
+            var imageId = element.getAttribute('data-image-id');
+            var zoomContainer = element.closest('.zoom');
+            zoomContainer.remove();
         }
         
         $('#fullScreenImage').on('show.bs.modal', function (event) {

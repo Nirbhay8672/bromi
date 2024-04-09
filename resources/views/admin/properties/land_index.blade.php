@@ -141,8 +141,6 @@
                                                 <option value="Both">Both</option>
                                             </select>
                                         </div>
-                                    {{-- @dd($property_configuration_settings); --}}
-
                                         <div class="form-group col-md-3 m-b-4 mb-3">
                                             <select class="form-select" id="filter_property_type">
                                                 <option value="">Property Type</option>
@@ -151,7 +149,6 @@
                                                         <option data-parent_id="{{ $props['parent_id'] }}"
                                                             value="{{ $props['id'] }}">{{ $props['name'] }}
                                                         </option>
-                                                        {{-- @dd($props['name']); --}}
                                                     @endif
                                                 @empty
                                                 @endforelse
@@ -209,7 +206,6 @@
                                                 <option value="2">Sold Out</option>
                                             </select>
                                         </div> --}}
-
                                     </div>
                                 </div>
                                 <button class="btn btn-secondary" id="filtersearch">Filter</button>
