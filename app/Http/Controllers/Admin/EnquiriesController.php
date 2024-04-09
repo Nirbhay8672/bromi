@@ -1602,8 +1602,10 @@ class EnquiriesController extends Controller
 		$talukas   = Taluka::orderBy('name')->get();
 		$villages  = Village::orderBy('name')->get();
 		$land_units = DB::table('land_units')->get();
+		$country_codes  = DB::table('countries')->get();
 
-		return view('admin.properties.add_enquiry', compact('enquiry_list', 'land_units', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
+
+		return view('admin.properties.add_enquiry', compact('country_codes','enquiry_list', 'land_units', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
 	}
 
 	public function editEnquiry(Request $request)
@@ -1636,41 +1638,78 @@ class EnquiriesController extends Controller
 
 		return view('admin.properties.add_enquiry', compact('edit_configuration', 'land_units', 'edit_category', 'enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'current_id', 'districts', 'talukas', 'villages'));
 	}
-	public function getEnquiryConfiguration(Request $request)
+	// public function getEnquiryConfiguration(Request $request)
+	// {
+	// 	$selectedCategory = $request->query('selectedCategory');
+	// 	$filteredConfig = [];
+	// 	if ($selectedCategory === 'Flat' || $selectedCategory === 'Penthouse') {
+	// 		$filteredKeys = ['13', '14', '15', '16', '17', '18'];
+	// 	}
+	// 	if ($selectedCategory === 'Vila/Bunglow') {
+	// 		// $filteredKeys = ['21', '22', '23', '24', '25'];
+	// 		$filteredKeys = ['14', '15', '16', '17', '18'];
+	// 	}
+	// 	if ($selectedCategory === 'Plot' || $selectedCategory === 'Land') {
+	// 		$filteredKeys = ['10', '11', '12'];
+	// 	}
+	// 	if ($selectedCategory === 'Farmhouse') {
+	// 		$filteredKeys = [];
+	// 	}
+	// 	if ($selectedCategory === 'Office') {
+	// 		$filteredKeys = ['1', '2'];
+	// 	}
+	// 	if ($selectedCategory === 'Retail') {
+	// 		$filteredKeys = ['3', '4', '5', '6'];
+	// 	}
+	// 	if ($selectedCategory === 'Storage/industrial') {
+	// 		$filteredKeys = ['7', '8', '9', '20'];
+	// 	}
+	// 	$propertyConfiguration = config('constant.property_configuration');
+	// 	foreach ($filteredKeys as $key) {
+	// 		if (isset($propertyConfiguration[$key])) {
+	// 			$filteredConfig[$key] = $propertyConfiguration[$key];
+	// 		}
+	// 	}
+	// 	return response()->json($filteredConfig);
+	// }
+
+
+    public function getEnquiryConfiguration(Request $request)
 	{
-		$selectedCategory = $request->query('selectedCategory');
+		$selectedCategories = json_decode($request->query('selectedCategories'), true);
 		$filteredConfig = [];
-		if ($selectedCategory === 'Flat' || $selectedCategory === 'Penthouse') {
-			$filteredKeys = ['13', '14', '15', '16', '17', '18'];
-		}
-		if ($selectedCategory === 'Vila/Bunglow') {
-			// $filteredKeys = ['21', '22', '23', '24', '25'];
-			$filteredKeys = ['14', '15', '16', '17', '18'];
-		}
-		if ($selectedCategory === 'Plot' || $selectedCategory === 'Land') {
-			$filteredKeys = ['10', '11', '12'];
-		}
-		if ($selectedCategory === 'Farmhouse') {
-			$filteredKeys = [];
-		}
-		if ($selectedCategory === 'Office') {
-			$filteredKeys = ['1', '2'];
-		}
-		if ($selectedCategory === 'Retail') {
-			$filteredKeys = ['3', '4', '5', '6'];
-		}
-		if ($selectedCategory === 'Storage/industrial') {
-			$filteredKeys = ['7', '8', '9', '20'];
-		}
-		$propertyConfiguration = config('constant.property_configuration');
-		foreach ($filteredKeys as $key) {
-			if (isset($propertyConfiguration[$key])) {
-				$filteredConfig[$key] = $propertyConfiguration[$key];
+
+		foreach ($selectedCategories as $selectedCategory) {
+			switch ($selectedCategory) {
+				case 'Flat':
+				case 'Penthouse':
+					$filteredConfig = array_merge($filteredConfig, ['13' => '1 rk', '14' => '1bhk', '15' => '2bhk', '16' => '3bhk', '17' => '4bhk', '18' => '5bhk']);
+					break;
+				case 'Vila/Bunglow':
+					$filteredConfig = array_merge($filteredConfig, ['14' => '1bhk', '15' => '2bhk', '16' => '3bhk', '17' => '4bhk', '18' => '5bhk']);
+					break;
+				case 'Plot':
+				case 'Land':
+					$filteredConfig = array_merge($filteredConfig, ['10' => 'Commercial Land', '11' => 'Agricultural/Farm Land', '12' => 'Industrial Land']);
+					break;
+				case 'Farmhouse':
+					break;
+				case 'Office':
+					$filteredConfig = array_merge($filteredConfig, ['1' => 'office space', '2' => 'Co-working']);
+					break;
+				case 'Retail':
+					$filteredConfig = array_merge($filteredConfig, ['3' => 'Ground floor', '4' => '1st floor', '5' => '2nd floor', '6' => '3rd floor']);
+					break;
+				case 'Storage/industrial':
+					$filteredConfig = array_merge($filteredConfig, ['7' => 'Warehouse', '8' => 'Cold Storage', '9' => 'ind. shed', '20' => 'Plotting']);
+					break;
+				default:
+					break;
 			}
 		}
+
 		return response()->json($filteredConfig);
 	}
-
 	public function deleteRecord($id)
 	{
 		$record = EnquiryProgress::find($id);

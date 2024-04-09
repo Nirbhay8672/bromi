@@ -77,40 +77,18 @@
                                                             <div class="invalid-feedback" id="client_mobile_error"
                                                                 style="display: block;color:red;"></div>
                                                         </div> --}}
-                                                        {{-- <div class="col-md-6 the_constructed_carpet_area" style="display: flex">
-                                                            <div class="col-md-3 m-b-20">
-                                                                <div class="fname">
-                                                                    <label for="CountryCode">Country Code</label>
-                                                                    <select class="form-control" name="country_code"
-                                                                        id="country_code">
-                                                                        <option value="+1">+1 (USA)</option>
-                                                                        <option value="+44">+44 (UK)</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6 m-b-20">
-                                                                <div class="fname">
-                                                                    <label for="Mobile">Mobile</label>
-                                                                    <input class="form-control" name="client_mobile"
-                                                                        id="client_mobile" type="text"
-                                                                        autocomplete="off">
-                                                                </div>
-                                                                <div class="invalid-feedback" id="client_mobile_error"
-                                                                    style="display: block;color:red;">
-                                                                </div>
-                                                            </div>
-                                                        </div> --}}
-                                                        <div class="col-md-3 the_constructed_carpet_area">
+                                                        <div class="col-md-3 country_code_area">
                                                             <div class="input-group">
-                                                                <div class="input-group-append col-md-5 m-b-20">
-                                                                    <div class="form-group form_measurement">
+                                                                <div class="input-group-append col-md-4 m-b-20">
+                                                                    <div class="form-group country_code">
                                                                         <div
+                                                                            style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important" class="divSelect">
+                                                                            <select class="form-control countries_list" name="country_code"
+                                                                            id="country_code"
                                                                             style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">
-                                                                            <select class="form-control" name="country_code"
-                                                                                id="country_code"
-                                                                                style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">
-                                                                                <option value="+1">+1 (USA)</option>
-                                                                                <option value="+44">+44 (UK)</option>
+                                                                            @foreach ($country_codes as $country_code)
+                                                                                <option value={{$country_code->id}}>+{{$country_code->country_iso}} ({{$country_code->country_code}})</option>
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -1143,6 +1121,11 @@
             function validateBudgetFields() {
                 var budgetFrom = parseFloat($('#budget_from').val());
                 var budgetTo = parseFloat($('#budget_to').val());
+                if (isNaN(budgetFrom) || isNaN(budgetTo)) {
+                    $('#budget_to_error').text('Please enter numeric values').show();
+                    return false;
+                }
+                
                 if (isNaN(budgetFrom) || isNaN(budgetTo) || budgetFrom >= budgetTo) {
                     $('#budget_to_error').text('Budget To must be greater than Budget From').show();
                     return false;
@@ -1155,6 +1138,11 @@
             function validateAreaFields() {
                 var areaFrom = parseFloat($('#area_from').val());
                 var areaTo = parseFloat($('#area_to').val());
+                if (isNaN(areaFrom) || isNaN(areaTo)) {
+                    $('#area_to_error').text('Please enter numeric values').show();
+                    return false;
+                }
+
                 if (isNaN(areaFrom) || isNaN(areaTo) || areaTo <= areaFrom) {
                     $('#area_to_error').text('Area To must be greater than Area From').show();
                     return false;
