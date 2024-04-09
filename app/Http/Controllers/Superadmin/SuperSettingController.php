@@ -7,6 +7,8 @@ use App\Models\District;
 use App\Models\State;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
+use App\Models\SuperTaluka;
+use App\Models\SuperVillages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -16,6 +18,25 @@ class SuperSettingController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth');
+	}
+
+	public function index()
+	{
+		$total_state = State::where('user_id',Auth::user()->id)->get()->count();
+		$total_city = SuperCity::get()->count();
+		$total_locality = SuperAreas::get()->count();
+		$total_dist = District::where('user_id',Auth::user()->id)->get()->count();
+		$total_taluka = SuperTaluka::get()->count();
+		$total_village = SuperVillages::get()->count();
+
+		return view('superadmin.supersettings.index')->with([
+			'total_state' => $total_state,
+			'total_city' => $total_city,
+			'total_locality' => $total_locality,
+			'total_dist' => $total_dist,
+			'total_taluka' => $total_taluka,
+			'total_village' => $total_village
+		]); 
 	}
 
 	public function district_index(Request $request)

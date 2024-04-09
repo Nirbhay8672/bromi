@@ -14,6 +14,7 @@ use App\Models\Branches;
 use App\Models\Builders;
 use App\Models\City;
 use App\Models\CompanyDetails;
+use App\Models\Coupons;
 use App\Models\DashboardWidget;
 use App\Models\District;
 use App\Models\DropdownSettings;
@@ -32,6 +33,7 @@ use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
 use DateTime;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -474,8 +476,10 @@ class HomeController extends Controller
 					->whereNull('deleted_at')
 					->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 					->count();
+
+				$filter_value = $request->date_range ?? 'this_month';
 				
-				return view('admin.dashboard', compact('total_property','total_prop_for_sell','total_prop_for_rent', 'total_prop_for_comm', 'total_prop_for_rec', 'total_enquiry','first_chart', 'second_chart' , 'third_chart', 'fifth_chart', 'seventh_chart', 'properties_tyeps_enquries', 'enqs', 'props', 'progess', 'todayEnquiry', 'disschedule', 'sitevisit', 'recentproperty', 'enqchart', 'chart1data', 'dropdownsarr', 'enqlatest', 'prop_added_for_rent', 'prop_added_for_sell', 'prop_rented', 'prop_sold','totalSource','total_project','total_win','total_lost','total_active_leads','totalsales','dashboard_widget_positions'));
+				return view('admin.dashboard', compact('filter_value', 'total_property','total_prop_for_sell','total_prop_for_rent', 'total_prop_for_comm', 'total_prop_for_rec', 'total_enquiry','first_chart', 'second_chart' , 'third_chart', 'fifth_chart', 'seventh_chart', 'properties_tyeps_enquries', 'enqs', 'props', 'progess', 'todayEnquiry', 'disschedule', 'sitevisit', 'recentproperty', 'enqchart', 'chart1data', 'dropdownsarr', 'enqlatest', 'prop_added_for_rent', 'prop_added_for_sell', 'prop_rented', 'prop_sold','totalSource','total_project','total_win','total_lost','total_active_leads','totalsales','dashboard_widget_positions'));
 			}
 			return redirect()->route('admin.login');
 		} catch (Throwable $e) {
@@ -483,6 +487,50 @@ class HomeController extends Controller
 		}
 	}
 
+    public function applyCoupuonCode(Request $request) {
+        try {
+            $currentDate = Carbon::now()->toDateString();
+            $validCoupon = Coupons::where('code', $request->coupon_code)
+                ->where('date_from', '<=', $currentDate)
+                ->where('date_to', '>=', $currentDate)
+                ->first();
+            if (!$validCoupon || null == $validCoupon) {
+                throw new Exception("Invalide coupon Code.", 400);
+            }
+            // check if user has already used the code
+            $usedCoupon = Payment::where('coupon_applied', $request->coupon_code)
+            ->where('user_id', $request->user()->id)
+            ->first();
+            if ($usedCoupon) {
+                throw new Exception("Coupon Code alreay used.", 400);
+            }
+            // get plan and give discount price
+            $planPrice = Subplans::find($request->plan_id)->price; 
+            if ($validCoupon->discount_type == 1) {
+                $percent = (((int) $validCoupon->amount_off) /100);
+                $discount = $planPrice*$percent;
+            }
+            $priceAfterDiscount = $planPrice - $discount;
+            
+            return response()->json([
+                'error' => false,
+                'message' => 'Coupon applied successfully.',
+                'data' => [
+                    'acutal_price' => $planPrice,
+                    'discount' => $discount,
+                    'price_after_discount' => $priceAfterDiscount,
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            $msg = $th->getCode() == 400 ? $th->getMessage() : 'Something went wrong.';
+            return response()->json([
+                'error' => true,
+                'message' => $msg,
+                'data' => null
+            ]);
+        }
+    }
+    
 	public function getCities(Request $request)
 	{
 		if ($request->ajax()) {
@@ -713,7 +761,15 @@ class HomeController extends Controller
             }
             $user  = Auth::user();
             $usersLimit = $planDetails->user_limit ?? 1;
-            $planPrice = Helper::calculatePlanPrice($planDetails->price);
+            $amountToPay = $planDetails->price;
+            $couponCode = null;
+            $discount = 0;
+            if (!empty($request->discounted_price)) {
+                $amountToPay = $request->discounted_price;
+                $couponCode = $request->coupon_code;
+                $discount = $request->discount;
+            }
+            $planPrice = Helper::calculatePlanPrice($amountToPay);
             
             /* $user->fill([
                 'plan_id' => $request->plan_id,
@@ -749,6 +805,8 @@ class HomeController extends Controller
                     "user_limit" => "$usersLimit",
                     "user_id" => "$user->id",
                     "transaction_goal" => "$transaction_goal",
+                    "couponCode" => "$couponCode",
+                    "discount" => "$discount",
                 ],
                 "order_meta" => [
                     "return_url" => route('admin.paymentSuccess') . '?order_id={order_id}&order_token={order_token}'
@@ -874,7 +932,15 @@ class HomeController extends Controller
 
                 // record last payment id in the payments table.
                 $paymentInDb->update(['subscription_payment_id' => $lastPaymentId]);
-
+                
+                // adjust coupon details
+                if (!empty($orderTags['couponCode']) && !empty($orderTags['discount'])) {
+                    $paymentInDb->update([
+                        'coupon_applied' => $orderTags['couponCode'],
+                        'discount' => $orderTags['discount']
+                    ]);
+                }
+                
                 // Auth::login($user);
                 $planExpiry = today()->addYear(1);
 

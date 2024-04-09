@@ -22,7 +22,6 @@
                                     data-bs-toggle="modal"
                                     data-bs-target="#userModal"
                                     title="Add User"
-                                    onclick="resetData()"
                                 ><i class="fa fa-plus"></i>
                                 </button>
                             </div>
@@ -66,6 +65,7 @@
                             <table class="display" id="userTable">
                                 <thead>
                                     <tr>
+                                        <th>Sr No.</th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>State</th>
@@ -73,6 +73,9 @@
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Plan</th>
+                                        <th>Subscribed On</th>
+                                        <th>Expired On</th>
+                                        <th>Company Name</th>
                                         <th>Users</th>
                                         <th>Actions</th>
                                     </tr>
@@ -117,57 +120,6 @@
                         <div class="form-group col-md-4 m-b-20">
                             <div class="fname">
                                 <input class="form-control" name="password" id="password" type="text" autocomplete="off" placeholder="Password">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row" id="total-card">
-                        <div class="col-sm-4">
-                            <div class="card bg-white" style="border-style: groove;">
-                                <div class="card-body shadow-none">
-                                    <h6 class="text-center">Total Property</h6>
-                                    <h5 class="text-center mt-3" id="total_property"></h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="card bg-white" style="border-style: groove;">
-                                <div class="card-body shadow-none">
-                                    <h6 class="text-center">Total Project</h6>
-                                    <h5 class="text-center mt-3" id="total_project">25</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="card bg-white" style="border-style: groove;">
-                                <div class="card-body shadow-none">
-                                    <h6 class="text-center">Total Inquiry</h6>
-                                    <h5 class="text-center mt-3" id="total_enquiry">45</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3" id="user_table">
-                        <h4 class="text-center">Sub Users</h4>
-                        <div class="col p-2">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="user_data">
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="row mt-3 mb-3">
-                            <div class="col" id="login_as_user">
                             </div>
                         </div>
                     </div>
@@ -245,7 +197,9 @@
                     d.filter_value = search_input.value;
                 }
             },
-            columns: [{
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                {
                     data: 'first_name',
                     name: 'first_name'
                 },
@@ -273,6 +227,18 @@
                 {
                     data: 'plan',
                     name: 'plan'
+                },
+                {
+                    data: 'subscribed_on',
+                    name: 'subscribed_on'
+                },
+                {
+                    data: 'plan_expire_on',
+                    name: 'plan_expire_on'
+                },
+                {
+                    data: 'company_name',
+                    name: 'company_name',
                 },
                 {
                     data: 'users',
@@ -304,15 +270,6 @@
         }
     });
 
-
-    function resetData() {
-        document.getElementById('total-card').classList.add('d-none');
-        document.getElementById('user_table').classList.add('d-none');
-
-        let modal_title = document.getElementById('exampleModalLabel');
-        modal_title.innerHTML = 'Add New User';
-    }
-
     function getUser(data) {
         $('#modal_form').trigger("reset");
         var id = $(data).attr('data-id');
@@ -324,56 +281,11 @@
                 _token: '{{ csrf_token() }}'
             },
             success: function(data) {
-
-                document.getElementById('total-card').classList.remove('d-none');
-
                 $('#this_data_id').val(data.main_user.id)
                 $('#first_name').val(data.main_user.first_name)
                 $('#last_name').val(data.main_user.last_name)
                 $('#email').val(data.main_user.email)
                 $('#userModal').modal('show');
-
-                let table = document.getElementById('user_table');
-                let table_data = document.getElementById('user_data');
-                let total_property = document.getElementById('total_property');
-                let total_project = document.getElementById('total_project');
-                let total_inquiry = document.getElementById('total_enquiry');
-
-                let routeUrl = `{{ route('login_as_user', ['id' => ':id']) }}`.replace(':id', data.main_user.id);
-
-                var anchorTag = document.createElement('a');
-                anchorTag.href = routeUrl;
-                anchorTag.className = "btn btn-primary";
-                anchorTag.innerText = 'Login As User';
-
-                let login = document.getElementById('login_as_user');
-                login.innerHTML = '';
-                login.appendChild(anchorTag);
-
-                total_property.innerHTML = data.total_property;
-                total_project.innerHTML = data.total_project;
-                total_inquiry.innerHTML = data.total_enquiry;
-
-                let modal_title = document.getElementById('exampleModalLabel');
-                modal_title.innerHTML = 'Update User';
-
-                if (data.sub_user.length > 0) {
-                    table.classList.remove('d-none');
-                    table_data.innerHTML = '';
-
-                    data.sub_user.forEach((user) => {
-                        table_data.innerHTML += `<tr>
-                                <td>${user.first_name}</td>
-                                <td>${user.last_name}</td>
-                                <td>${user.email}</td>
-                                <td>${user.mobile_number}</td>
-                            </tr>`;
-                    });
-
-                } else {
-                    table.classList.add('d-none');
-                    table_data.innerHTML = '';
-                }
             }
         });
     }

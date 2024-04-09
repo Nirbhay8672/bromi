@@ -63,6 +63,9 @@ class UserController extends Controller
 					'state_id',
 					'role_id',
 					'status',
+					'company_name',
+					'subscribed_on',
+					'plan_expire_on',
 				])
 				->whereNotNull('parent_id')
 				->where('role_id','!=',3)
@@ -80,6 +83,9 @@ class UserController extends Controller
 					'state_id',
 					'role_id',
 					'status',
+					'company_name',
+					'subscribed_on',
+					'plan_expire_on',
 				])
 				->where('role_id','!=',3)
 				->whereNull('parent_id')
@@ -115,6 +121,7 @@ class UserController extends Controller
 			}
 
 			return DataTables::of($final_array)
+				->addIndexColumn()
 				->editColumn('plan', function ($row) {
 					if (!empty($row['plan']['name'])) {
 						return $row['plan']['name'];
@@ -174,6 +181,7 @@ class UserController extends Controller
 			->select([
 				'payments.*',
 				'subplans.name AS plan_name',
+				DB::raw("CASE WHEN payments.transaction_goal = 'new_subscription' THEN 'New Subscription' WHEN payments.transaction_goal = 'add_user' THEN 'Add User' WHEN payments.transaction_goal = 'upgrade' THEN 'Upgrade' ELSE '-' END AS transaction_goal_flag")
 			])->where('payments.user_id',$id)->get();
 
 		$tickets = DB::table('tickets')
