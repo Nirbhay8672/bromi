@@ -1700,12 +1700,9 @@
                             data: 'telephonic_discussion',
                             name: 'telephonic_discussion',
                             render: function(data, type, full, meta) {
-                                // Check if the length of the text exceeds 20 characters
-                                if (data.length > 20) {
-                                    // If it does, truncate the text and add a "Read More" link
-                                    return '<span class="truncated">' + data.substr(0, 20) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span>';
+                                if (data.length > 56) {
+                                    return '<span class="truncated">' + data.substr(0, 56) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span>';
                                 } else {
-                                    // If not, return the text as is
                                     return data;
                                 }
                             }
