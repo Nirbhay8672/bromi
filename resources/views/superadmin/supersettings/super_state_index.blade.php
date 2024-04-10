@@ -15,13 +15,21 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of States</h5>
-                            <div style="width: 70px;">
+                            <div style="width: 150px;">
                                 <button
                                     class="btn custom-icon-theme-button open_modal_with_this"
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#stateModal"
                                 ><i class="fa fa-plus"></i>
+                                </button>
+                                <button
+                                    class="btn custom-icon-theme-button open_modal_with_this ms-2"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#importModal"
+                                    title="Import CSV"
+                                ><i class="fa fa-download"></i>
                                 </button>
                             </div>
                         </div>
@@ -41,6 +49,40 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="importModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import State</h5>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-bookmark" action="{{ route('superadmin.stateImport') }}" method="POST" enctype="multipart/form-data">
+                            @csrf    
+                            <div class="form-row mb-2 mt-2">
+                                <div>
+                                    <div class="form-group col-md-12 mb-1">
+                                        <label for="State">CSV File</label>
+                                        <input
+                                            class="form-control"
+                                            name="csv_file"
+                                            id="csv_file"
+                                            accept=".csv"
+                                            type="file"
+                                            style="border:1px solid black"
+                                            required
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-5">
+                                <button class="btn custom-theme-button" type="submit">Import</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
