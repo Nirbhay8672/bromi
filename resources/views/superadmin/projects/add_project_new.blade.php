@@ -3226,10 +3226,10 @@
                     areass = JSON.parse(areas);
                     $('#area_id').append('<option value="" selected disabled>Locality</option>');
                     for (let i = 0; i < areass.length; i++) {
-                        if (areass[i]['city_id'] == $("#city_id").val()) {
+                        if (areass[i]['super_city_id'] == $("#city_id").val()) {
                             $('#area_id').append(`<option value="${areass[i]['id']}"
                                 data-pincode="${areass[i]['pincode']}"
-                                data-city_id="${areass[i]['city_id']}"
+                                data-city_id="${areass[i]['super_city_id']}"
                                 data-state_id="${areass[i]['state_id']}">
                                 ${areass[i]['name']}
                             </option>`);
