@@ -148,8 +148,11 @@ Route::group(['middleware' => 'revalidate'], function () {
 		
 		Route::any('/users-login-activity', [UserController::class, 'loginActivity'])->name('superadmin.usersLoginActivity');
 
-
 		Route::post('/state-import', [ImportController::class, 'stateImport'])->name('superadmin.stateImport');
 		Route::post('/city-import', [ImportController::class, 'cityImport'])->name('superadmin.cityImport');
+		Route::post('/locality-import', [ImportController::class, 'localityImport'])->name('superadmin.areaImport');
+		Route::post('/district-import', [ImportController::class, 'districtImport'])->name('superadmin.districtImport');
+		Route::post('/taluka-import', [ImportController::class, 'talukaImport'])->name('superadmin.talukaImport');
+		Route::post('/village-import', [ImportController::class, 'villageImport'])->name('superadmin.villageImport');
 	});
 });
