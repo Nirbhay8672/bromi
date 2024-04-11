@@ -77,7 +77,7 @@
                                                             <div class="invalid-feedback" id="client_mobile_error"
                                                                 style="display: block;color:red;"></div>
                                                         </div> --}}
-                                                        <div class="col-md-3 country_code_area">
+                                                        <div class="col-md-3 country_code_area" style="width: 25% !important">
                                                             <div class="input-group">
                                                                 <div class="input-group-append col-md-4 m-b-20">
                                                                     <div class="form-group country_code">
@@ -93,7 +93,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-md-7 m-b-20">
+                                                                <div class="form-group col-md-8 m-b-20">
                                                                     <div class="fname">
                                                                         <label for="Mobile">Mobile</label>
                                                                         <input class="form-control" name="client_mobile"
@@ -1018,8 +1018,15 @@
             </div>
         </div>
     @endsection
+    
+<style>
+    .select2-dropdown.select2-dropdown--below {
+        width: 7rem !important; 
+    }
+</style>
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
+        
         <script>
             let isValid = true;
 
