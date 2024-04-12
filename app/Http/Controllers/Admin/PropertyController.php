@@ -1619,6 +1619,8 @@ class PropertyController extends Controller
         $data->owner_is = $request->owner_is;
         $data->owner_name = $request->owner_name;
         $data->owner_contact = $request->owner_contact;
+        $data->contact_country_code = $request->contact_country_code;
+        $data->country_code = $request->country_code;
         $data->owner_email = $request->owner_email;
         $data->owner_nri = $request->owner_nri;
         $data->contact_details = $request->contact_details;
@@ -2381,6 +2383,8 @@ class PropertyController extends Controller
         $edit_category = Properties::where('id', $request->id)->pluck('property_category');
         $data['property_const_docs'] = PropertyConstructionDocs::all();
         $data['land_units'] = FacadesDB::table('land_units')->get();
+		$data['country_codes']  = DB::table('countries')->get();
+
         return view('admin.properties.add_property', $data, compact('edit_category', 'edit_configuration'));
     }
 
@@ -2434,6 +2438,8 @@ class PropertyController extends Controller
         $data['amenities'] = $amenities;
         $data['property_const_docs'] = PropertyConstructionDocs::all();
         $data['land_units'] = FacadesDB::table('land_units')->get();
+		$data['country_codes']  = DB::table('countries')->get();
+
         return view('admin.properties.add_property', $data);
     }
 
