@@ -77,9 +77,9 @@
                                                             <div class="invalid-feedback" id="client_mobile_error"
                                                                 style="display: block;color:red;"></div>
                                                         </div> --}}
-                                                        <div class="col-md-3 country_code_area">
+                                                        <div class="col-md-9 country_code_area">
                                                             <div class="input-group">
-                                                                <div class="input-group-append col-md-4 m-b-20">
+                                                                <div class="input-group-append col-md-3 m-b-20">
                                                                     <div class="form-group country_code">
                                                                         <div
                                                                             style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important" class="divSelect">
@@ -93,7 +93,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-md-7 m-b-20">
+                                                                <div class="form-group col-md-5 m-b-20">
                                                                     <div class="fname">
                                                                         <label for="Mobile">Mobile</label>
                                                                         <input class="form-control" name="client_mobile"
@@ -106,7 +106,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group col-md-4 m-b-20">
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-3 m-b-20">
                                                             <div class="fname">
                                                                 <label for="Email">Email</label>
                                                                 <input class="form-control" name="client_email"
