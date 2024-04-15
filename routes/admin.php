@@ -74,9 +74,11 @@ Route::group(['middleware' => 'revalidate'], function () {
         Route::post('/save-plan-user', [HomeController::class, 'plan_save'])->name('admin.savePlan');
         Route::any('cashfree/payments/success', [HomeController::class, 'payment_success'])->name('admin.paymentSuccess');
         Route::post('/increase-user-limit', [HomeController::class, 'increaseUserLimit'])->name('admin.increaseUserLimit');
+        // apply coupon
+        Route::any('apply-coupon-code', [HomeController::class, 'applyCoupuonCode'])->name('admin.apply-coupon');
     });
     
-	Route::group(['middleware' => ['auth']], function () {
+	Route::group(['middleware' => ['auth', 'checkPlanExpiry']], function () {
 		Route::get('/', [HomeController::class, 'index'])->name('admin');
 		Route::post('/save-onesignal-id', function(Request $request) {
             try {
@@ -175,8 +177,6 @@ Route::group(['middleware' => 'revalidate'], function () {
 		// Route::any('/Plans', [HomeController::class, 'plan_index'])->name('admin.plans');
 		// Route::post('/save-plan-user', [HomeController::class, 'plan_save'])->name('admin.savePlan');
 		
-		// apply coupon
-        Route::any('apply-coupon-code', [HomeController::class, 'applyCoupuonCode'])->name('admin.apply-coupon');
         
 		Route::post('/upgrade-user-limit', [HomeController::class, 'upgrade_user_limit'])->name('admin.upgradeUserLimit');
 		Route::post('/upgrade-plan-user', [HomeController::class, 'upgrade_plan'])->name('admin.upgradePlan');

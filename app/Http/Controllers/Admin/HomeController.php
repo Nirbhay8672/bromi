@@ -511,6 +511,9 @@ class HomeController extends Controller
                 $discount = $planPrice*$percent;
             }
             $priceAfterDiscount = $planPrice - $discount;
+
+            $gstType = Auth::user()->gst_type;
+            $gst = $priceAfterDiscount * 0.18;
             
             return response()->json([
                 'error' => false,
@@ -519,6 +522,8 @@ class HomeController extends Controller
                     'acutal_price' => $planPrice,
                     'discount' => $discount,
                     'price_after_discount' => $priceAfterDiscount,
+                    'gst_type' => $gstType,
+                    'gst' => $gst,
                 ]
             ]);
         } catch (\Throwable $th) {
@@ -681,7 +686,7 @@ class HomeController extends Controller
         try {
             $user  = Auth::user();
             $transaction_goal = $request->transaction_goal;
-            $planPrice = $request->users_limit_price;
+            $planPrice = ($request->users_limit_price + $request->gst_amt);
             $usersLimit = $request->users_limit;
             
             if (empty($planPrice) || $planPrice <= 0) {
@@ -716,6 +721,9 @@ class HomeController extends Controller
                     "user_limit" => "$usersLimit",
                     "user_id" => "$user->id",
                     "transaction_goal" => "$transaction_goal",
+                    "order_amount" => "$request->users_limit_price",
+                    "gst_amt" => "$request->gst_amt",
+                    "gst_type" => "$request->gst_amt_type",
                 ],
                 "order_meta" => [
                     "return_url" => route('admin.paymentSuccess') . '?order_id={order_id}&order_token={order_token}'
@@ -768,14 +776,11 @@ class HomeController extends Controller
                 $amountToPay = $request->discounted_price;
                 $couponCode = $request->coupon_code;
                 $discount = $request->discount;
+            } else {
+                // in case of no coupon just add gst to plan price.
+                $amountToPay += $request->gst_amt; 
             }
             $planPrice = Helper::calculatePlanPrice($amountToPay);
-            
-            /* $user->fill([
-                'plan_id' => $request->plan_id,
-                'total_user_limit' => $planDetails->user_limit,
-                'subscribed_on' => Carbon::now()->format('Y-m-d')
-            ])->save(); */
 
             // process payment
             $url = $this->cashfreeBaseUrl . "/orders";
@@ -788,7 +793,7 @@ class HomeController extends Controller
                 "x-client-secret: " . $this->cashfreeSecret,
             );
             $userPhone = Helper::formatPhoneNumber($user->mobile_number);
-            
+
             $data = json_encode([
                 'order_id' =>  'order_' . time(),
                 'order_amount' => $planPrice,
@@ -806,7 +811,10 @@ class HomeController extends Controller
                     "user_id" => "$user->id",
                     "transaction_goal" => "$transaction_goal",
                     "couponCode" => "$couponCode",
+                    "order_amount" => "$planDetails->price",
                     "discount" => "$discount",
+                    "gst_amt" => "$request->gst_amt",
+                    "gst_type" => "$request->gst_amt_type",
                 ],
                 "order_meta" => [
                     "return_url" => route('admin.paymentSuccess') . '?order_id={order_id}&order_token={order_token}'
@@ -823,7 +831,7 @@ class HomeController extends Controller
             $resp = curl_exec($curl);
             if (curl_errno($curl)) {
                 $error_msg = curl_error($curl);
-                dd($error_msg);
+                dd('order_create', $error_msg);
             }
             curl_close($curl);
 
@@ -878,7 +886,7 @@ class HomeController extends Controller
             $paymentDetails['entity'] = $paymentInstance['entity'];
             $paymentDetails['error_details'] = $paymentInstance['error_details'];
             $paymentDetails['is_captured'] = $paymentInstance['is_captured'];
-            $paymentDetails['order_amount'] = $paymentInstance['order_amount'];
+            $paymentDetails['order_amount'] = $orderTags['order_amount'];
             $paymentDetails['order_id'] = $paymentInstance['order_id'];
             $paymentDetails['payment_amount'] = $paymentInstance['payment_amount'];
             $paymentDetails['payment_completion_time'] = Carbon::parse($paymentInstance['payment_completion_time'])->format('Y-m-d h:i:s');
@@ -890,6 +898,13 @@ class HomeController extends Controller
             $paymentDetails['payment_time'] = Carbon::parse($paymentInstance['payment_time'])->format('Y-m-d h:i:s');
             $paymentDetails['transaction_goal'] = $orderTags['transaction_goal'] ?? Null;
 
+            if ($orderTags['gst_type'] == 'intra_state') {
+                $paymentDetails['cgst'] = $orderTags['gst_amt']/2;
+                $paymentDetails['sgst'] = $orderTags['gst_amt']/2;
+            } else {
+                $paymentDetails['igst'] = $orderTags['gst_amt'];
+            }
+
             // check record
             $paymentInDb = Payment::where('cf_payment_id', $paymentInstance['cf_payment_id'])->first();
             if (empty($paymentInDb->id)) {
@@ -897,7 +912,7 @@ class HomeController extends Controller
             } else {
                 Log::error("Payment for user id: " . $orderTags['user_id'] . " already exist in the DB.");
                 Log::error("Payment id: " . $paymentInDb->cf_payment_id);
-                $paymentInDb->update($paymentDetails);
+                // $paymentInDb->update($paymentDetails);
             }
 
             // save payment details in 'payments' table
@@ -915,7 +930,7 @@ class HomeController extends Controller
                         $lastPaymentId = null;
                 }
 
-                // desciption for email template.
+               /*  // desciption for email template.
                 switch ($orderTags['transaction_goal']) {
                     case 'renew_subscription':
                         $description = "Plan Renewed.";
@@ -928,7 +943,7 @@ class HomeController extends Controller
                         break;
                     default:
                         $description = "New Subscription.";
-                }
+                } */
 
                 // record last payment id in the payments table.
                 $paymentInDb->update(['subscription_payment_id' => $lastPaymentId]);
@@ -941,12 +956,11 @@ class HomeController extends Controller
                     ]);
                 }
                 
-                // Auth::login($user);
                 $planExpiry = today()->addYear(1);
 
                 $allowedCases = ['new_subscription', 'renew_subscription', 'upgrade'];
                 // if user purchases new subscription or user renew/upgrade a subscription
-                // then only update in the users table that user record.
+                // then only update in the users table of that user record.
                 if (in_array($orderTags['transaction_goal'], $allowedCases)) {
                     $user->fill([
                         'plan_id' => $orderTags['plan_id'],
@@ -956,12 +970,26 @@ class HomeController extends Controller
                         // 'total_user_limit' => $orderTags['user_limit'],
                         'subscribed_on' => Carbon::now()->format('Y-m-d')
                     ])->save();
+
+                    $totalUserCreated = $user->total_user_created ?? 0;
+                    $extraUsers = $user->total_extra_users_added ?? 0;
+    
+                    $totalUserLimit = $user->total_user_limit + $extraUsers ;
+                    $totalUserLimit = $totalUserLimit - $totalUserCreated ;
+    
+                    $totalUserLimit = $totalUserLimit + $orderTags['user_limit'];
+                    $user->fill([
+                        'total_user_limit' => $totalUserLimit,
+                    ])->save();
+                    
+                } else {
+                    // add more users template
+                    $extraUsers = $user->total_extra_users_added ?? 0;
+                    $user->fill([
+                        'total_extra_users_added' => $extraUsers + $orderTags['user_limit'],
+                    ])->save();
+                    $paymentInDb->update(['extra_users_added' => $orderTags['user_limit']]);
                 }
-                $totalUserLimit = $user->total_user_limit ?? 0 ;
-                $totalUserLimit = $totalUserLimit + $orderTags['user_limit'];
-                $user->fill([
-                    'total_user_limit' => $totalUserLimit,
-                ])->save();
                 // send invoice over user email
                 $user->load('Plan');
                 // Generate the invoice number before creating the invoice record
@@ -976,15 +1004,25 @@ class HomeController extends Controller
 
                 if (in_array($orderTags['transaction_goal'], $allowedCases)) {
                     # code...
-                    $eTemplate = view('emails.invoiceTemplate', ['user' => $user, 'sequence' => $futureInvoiceNumber, 'description' => $description])->render();
-                } else {
-                    // add more users template
-                    $eTemplate = view('emails.extraUsersTemplate', [
+                    $eTemplate = view('emails.invoiceTemplate', [
                         'user' => $user,
                         'sequence' => $futureInvoiceNumber,
-                        'description' => $description,
+                        // 'description' => $description,
+                        'discount' =>  $orderTags['discount'],
+                        'gst_type' => $orderTags['gst_type'],
+                        'gst' => $orderTags['gst_amt'],
+                    ])->render();
+                } else {
+                    // add more users template
+                    // $eTemplate = view('emails.extraUsersTemplate', [
+                    $eTemplate = view('emails.invoiceTemplate', [
+                        'user' => $user,
+                        'sequence' => $futureInvoiceNumber,
+                        // 'description' => $description,
                         'extraUserAdded' => $orderTags['user_limit'],
-                        'extraUserPrice' => $paymentInDb->payment_amount,
+                        'extraUserPrice' => $paymentInDb->order_amount,
+                        'gst_type' => $orderTags['gst_type'],
+                        'gst' => $orderTags['gst_amt'],
                     ])->render();
                     // dd('add more users.');
                 }
@@ -996,7 +1034,10 @@ class HomeController extends Controller
                     'invoice_number' => $futureInvoiceNumber,
                     'invoice_template' => $eTemplate
                 ]);
-                // Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
+                if (!empty(config('mail.mailers.smtp.password'))) {
+                    # code...
+                    Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
+                }
                 Session::put('plan_id', $orderTags['plan_id']);
                 return redirect('/admin');
             } else {

@@ -1,5 +1,41 @@
 @extends('admin.layouts.app')
 @section('content')
+<style>
+    .qty-box {
+        width: 130px;
+        margin: 0 auto;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    input.total-price {
+        width: 70px;
+        text-align: center;
+        background-color: #bbb;
+        border-radius: 4px;
+        border: 0;
+    }
+    .value-box {
+        border: 1px solid blue;
+    }
+    .pay-now {
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        margin-top: 10px;
+    }
+    .plan-column {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    #plan-details {
+        width: 320px;
+        margin: 0 auto;
+    }
+    .plan-label {
+        font-weight: bold;
+    }
+</style>
 <!-------------Change Password Model----------------->
 <div class="modal fade" id="changepwModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -152,30 +188,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <style>
-                                            .qty-box {
-                                                width: 130px;
-                                                margin: 0 auto;
-                                                border-radius: 5px;
-                                                overflow: hidden;
-                                            }
-                                            input.total-price {
-                                                width: 70px;
-                                                text-align: center;
-                                                background-color: #bbb;
-                                                border-radius: 4px;
-                                                border: 0;
-                                            }
-                                            .value-box {
-                                                border: 1px solid blue;
-                                            }
-                                            .pay-now {
-                                                padding: 4px 10px;
-                                                border-radius: 4px;
-                                                font-size: 12px;
-                                                margin-top: 10px;
-                                            }
-                                        </style>
+                                        
                                         @if (Auth::user()->role_id == 1)
                                             <div class="userpro-box" style="margin-top:10px;background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
                                                 <div class="">
@@ -194,17 +207,35 @@
                                                     </div>
                                                 </fieldset>
 
-                                                <form action="{{route('admin.increaseUserLimit')}}" method="post">
+                                                <form id="userLimitForm" action="{{route('admin.increaseUserLimit')}}" method="post">
                                                     <p class="price-section mt-2 mb-0"> 
                                                         <strong>Total: <input type="text" id="usersLimitPrice" name="users_limit_price" readonly class="total-price" value="0"></strong>
                                                     </p>
                                                     @csrf
                                                     @php
+                                                        $gst_type = Auth::user()->gst_type;
                                                         Session::put('transaction_goal', 'add_user');
                                                     @endphp
                                                     <input type="hidden" name="transaction_goal", value='add_user'>
                                                     <input type="hidden" id="userLimit" name="users_limit" value="0">
-                                                    <button style="display: none;" class="btn btn-primary btn-lg pay-now" id="pay-now-btn" type="submit">Pay Now</button>
+                                                    <input type="hidden" name="gst_amt" value="" class="form-control mt-2" id="gstAmt">
+                                                    <input type="hidden" name="gst_amt_type" class="form-control mt-2" value="{{ $gst_type }}" id="gstAmtType">
+                                                    
+                                                    <button style="display: none;"
+                                                        class="btn btn-primary btn-lg pay-now" 
+                                                        id="pay-now-btn" 
+                                                        type="button"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#userLimitModal"
+                                                        onclick="setDetails('{{ $gst_type }}')"
+                                                    >Pay Now</button>
+                                                    <br/>
+                                                    <button style="visibility:hidden;"
+                                                        class="btn btn-primary btn-lg pay-now" 
+                                                        id="payment-btn" 
+                                                        type="submit"
+                                                    >Continue</button>
+                                                    
                                                 </form>
                                             </div>
                                         @endif
@@ -502,11 +533,94 @@
         $city_encoded = json_encode($cities);
         $state_encoded = json_encode($states);
         @endphp
+        {{-- increase user limit modal --}}
+        <div class="modal fade" id="userLimitModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-l" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Summary</h5>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="plan-details" class="m-b-20">
+                            <div class="plan-row">
+                                <div class="plan-column">
+                                    <span class="plan-label">Users Count</span>
+                                    <span id="user-count-col">0</span>
+                                </div>
+                                <div class="plan-column">
+                                    <span class="plan-label">Gross</span>
+                                    <span id="plan-price-col">0</span>
+                                </div>
+                                <div class="plan-column d-none" id="cgst">
+                                    <span class="plan-label">cgst(9%)</span>
+                                    <span id="cgst-col">0</span>
+                                </div>
+                                <div class="plan-column d-none" id="sgst">
+                                    <span class="plan-label">sgst(9%)</span>
+                                    <span id="sgst-col">0</span>
+                                </div>
+                                <div class="plan-column d-none" id="igst">
+                                    <span class="plan-label">igst(18%)</span>
+                                    <span id="igst-col">0</span>
+                                </div>
+                            </div>
+                            <div class="plan-row">
+                                <div class="plan-column m-t-10 border-top">
+                                    <span class="plan-label">Grand Total</span>
+                                    <span id="plan-price-amt">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3 text-center">
+                            <div class="col">
+                                <button class="btn btn-sm btn-primary custom-theme-button me-3" id="pay_for_users" type="button">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- increase user limit modal End --}}
         @endsection
+
         
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script>
+            function setDetails(gstType) {
+                let amount = $('#usersLimitPrice').val();
+                let userCount = $('#valueBox').val();
+                if (!amount) {
+                    console.log('Amount not found.');
+                    return;
+                }
+                let gst = amount * 0.18;
+                let gstAMT = document.getElementById('gstAmt');
+                let igst = document.getElementById('igst-col');
+                let sgst = document.getElementById('sgst-col');
+                let cgst = document.getElementById('cgst-col');
+                let planPriceAmt = document.getElementById('plan-price-amt');
+                if (gstType == 'intra_state') {
+                    sgst.textContent = parseFloat(gst/2).toFixed(2);
+                    cgst.textContent = parseFloat(gst/2).toFixed(2);
+                    $('#sgst').removeClass('d-none');
+                    $('#cgst').removeClass('d-none');
+                } else {
+                    igst.textContent = parseFloat(gst).toFixed(2);
+                    $('#igst').removeClass('d-none');
+                }
+                let totalAmt = parseFloat(gst) + parseFloat(amount);
+                gstAMT.value = gst;
+                $('#plan-price-col').text(parseFloat(amount).toFixed(2));
+                $('#user-count-col').text(userCount);
+                planPriceAmt.textContent  = (totalAmt).toFixed(2);
+            }
             $(document).ready(function() {
+
+                $(document).on('click', '#pay_for_users', function() {
+                    $('#payment-btn').trigger('click');
+                })
 
                 // Get references to the elements
                 const valueBox = document.getElementById('valueBox');

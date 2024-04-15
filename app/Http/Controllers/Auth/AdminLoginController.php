@@ -195,9 +195,11 @@ class AdminLoginController extends Controller
 	
 	public function subscription()
 	{
+        $gstType = User::find(Session::get('user_id'))->gst_type;
 	    Session::put('transaction_goal', 'new_subscription');
 		return view('guest.plan')->with([
 			'plans' =>  Subplans::all(),
+            'gstType' => $gstType
 		]);
 	}
 	
@@ -227,6 +229,9 @@ class AdminLoginController extends Controller
             }
             $priceAfterDiscount = $planPrice - $discount;
 
+            $gstType = User::find($request->user_id)->gst_type;
+            $gst = $priceAfterDiscount * 0.18;
+
             return response()->json([
                 'error' => false,
                 'message' => 'Coupon applied successfully.',
@@ -234,6 +239,8 @@ class AdminLoginController extends Controller
                     'acutal_price' => $planPrice,
                     'discount' => $discount,
                     'price_after_discount' => $priceAfterDiscount,
+                    'gst_type' => $gstType,
+                    'gst' => $gst,
                 ]
             ]);
         } catch (\Throwable $th) {
@@ -241,6 +248,7 @@ class AdminLoginController extends Controller
             return response()->json([
                 'error' => true,
                 'message' => $msg,
+                'error_details' => $th->getMessage(),
                 'data' => null
             ]);
         }
@@ -272,21 +280,18 @@ class AdminLoginController extends Controller
             $user  = User::find($request->user_id);
             $usersLimit = $planDetails->user_limit ?? 1;
             
-            $amountToPay = $planDetails->price;
+            $amountToPay = (int) $planDetails->price;
             $couponCode = null;
             $discount = 0;
             if (!empty($request->discounted_price)) {
                 $amountToPay = $request->discounted_price;
                 $couponCode = $request->coupon_code;
                 $discount = $request->discount;
+            } else {
+                // in case of no coupon just add gst to main price.
+                $amountToPay = $amountToPay + $request->gst_amt;
             }
             
-            /*$user->fill([
-    			'plan_id' => $request->plan_id,
-    			'total_user_limit' => $planDetails->user_limit,
-    			'subscribed_on' => Carbon::now()->format('Y-m-d')
-    		])->save();*/
-		
             // process payment
             $url = $this->cashfreeBaseUrl . "/orders";
 
@@ -300,7 +305,7 @@ class AdminLoginController extends Controller
             $userPhone = Helper::formatPhoneNumber($user->mobile_number);
             $data = json_encode([
                 'order_id' =>  'order_' . time(),
-                'order_amount' => $amountToPay,
+                'order_amount' => (float) $amountToPay,
                 "order_currency" => "INR",
                 "customer_details" => [
                     "customer_id" => 'USER_'. $user->id,
@@ -315,7 +320,10 @@ class AdminLoginController extends Controller
                     "user_id" => "$user->id",
                     "transaction_goal" => "$transaction_goal",
                     "couponCode" => "$couponCode",
+                    "order_amount" => "$planDetails->price",
                     "discount" => "$discount",
+                    "gst_amt" => "$request->gst_amt",
+                    "gst_type" => "$request->gst_amt_type",
                 ],
                 "order_meta" => [
                     "return_url" => route('payment-success') . '?order_id={order_id}&order_token={order_token}'
@@ -332,7 +340,7 @@ class AdminLoginController extends Controller
             $resp = curl_exec($curl);
             if (curl_errno($curl)) {
                 $error_msg = curl_error($curl);
-                dd($error_msg);
+                dd('order_create', $error_msg);
             }
             curl_close($curl);
 
@@ -340,6 +348,7 @@ class AdminLoginController extends Controller
 
         } catch (\Throwable $th) {
             //throw $th;
+            dd('Exception: ', $th);
             Session::put('message', $th->getMessage());
             return redirect()->route('subscription');
         }
@@ -387,7 +396,7 @@ class AdminLoginController extends Controller
             $paymentDetails['entity'] = $paymentInstance['entity'];
             $paymentDetails['error_details'] = $paymentInstance['error_details'];
             $paymentDetails['is_captured'] = $paymentInstance['is_captured'];
-            $paymentDetails['order_amount'] = $paymentInstance['order_amount'];
+            $paymentDetails['order_amount'] = $orderTags['order_amount'];
             $paymentDetails['order_id'] = $paymentInstance['order_id'];
             $paymentDetails['payment_amount'] = $paymentInstance['payment_amount'];
             $paymentDetails['payment_completion_time'] = Carbon::parse($paymentInstance['payment_completion_time'])->format('Y-m-d h:i:s');
@@ -398,6 +407,13 @@ class AdminLoginController extends Controller
             $paymentDetails['payment_status'] = $paymentInstance['payment_status'];
             $paymentDetails['payment_time'] = Carbon::parse($paymentInstance['payment_time'])->format('Y-m-d h:i:s');
             $paymentDetails['transaction_goal'] = $orderTags['transaction_goal'] ?? Null;
+
+            if ($orderTags['gst_type'] == 'intra_state') {
+                $paymentDetails['cgst'] = $orderTags['gst_amt'] / 2;
+                $paymentDetails['sgst'] = $orderTags['gst_amt'] / 2;
+            } else {
+                $paymentDetails['igst'] = $orderTags['gst_amt'];
+            }
             
             // check record
             $paymentInDb = Payment::where('cf_payment_id', $paymentInstance['cf_payment_id'])->first();
@@ -406,7 +422,7 @@ class AdminLoginController extends Controller
             } else {
                 Log::error("Payment for user id: " . $orderTags['user_id'] . " already exist in the DB.");
                 Log::error("Payment id: " . $paymentInDb->cf_payment_id);
-                $paymentInDb->update($paymentDetails);
+                // $paymentInDb->update($paymentDetails);
             }
     
             // save payment details in 'payments' table
@@ -485,10 +501,17 @@ class AdminLoginController extends Controller
 
                 if (in_array($orderTags['transaction_goal'], $allowedCases)) {
                     # code...
-                    $eTemplate = view('emails.invoiceTemplate', ['user' => $user, 'sequence' => $futureInvoiceNumber, 'description' => $description])->render();
+                    $eTemplate = view('emails.invoiceTemplate', [
+                        'user' => $user,
+                        'sequence' => $futureInvoiceNumber,
+                        'description' => $description,
+                        'discount' => $orderTags['discount'],
+                        'gst_type' => $orderTags['gst_type'],
+                        'gst' => $orderTags['gst_amt'],
+                    ])->render();
                 } else {
                     // add more users template
-                    dd('add more users.');
+                    dd('Error: add_more_users_BR.');
                 }
     
                 // create invoice record
@@ -498,14 +521,18 @@ class AdminLoginController extends Controller
                     'invoice_number' => $futureInvoiceNumber,
                     'invoice_template' => $eTemplate
                 ]);
-                // Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
+                if (!empty(config('mail.mailers.smtp.password'))) {
+                    Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
+                }
                 Session::put('plan_id', $orderTags['plan_id']);
                 Session::put('parent_id', $user->id);
                 return redirect('/admin');
             } else {
+                dd('payment failed.');
                 return redirect()->route('subscription');
             }
         } catch (\Throwable $th) {
+            dd($th);
             return redirect()->route('subscription');
         }
 	}
