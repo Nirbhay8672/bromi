@@ -12,21 +12,21 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 class AreaImport implements ToModel, WithHeadingRow
 {
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
-        $area = SuperAreas::where('name',$row['name'])->first();
+        $area = SuperAreas::where('name', $row['name'])->first();
 
         $state_id = '';
         $city_id = '';
 
-        if(! $area) {
-            $state = State::where('name',$row['state_name'])->where('user_id', Auth::user()->id)->first();
+        if (!$area) {
+            $state = State::where('name', $row['state_name'])->where('user_id', Auth::user()->id)->first();
 
-            if($state) {
+            if ($state) {
                 $state_id = $state->id;
             } else {
                 $new_state = new State();
@@ -39,15 +39,16 @@ class AreaImport implements ToModel, WithHeadingRow
                 $state_id = $new_state->id;
             }
 
-            $city = SuperCity::where('name',$row['city_name'])->first();
+            $city = SuperCity::where('name', $row['city_name'])->first();
 
-            if($city) {
+            if ($city) {
                 $city_id = $city->id;
             } else {
                 $new_city = new SuperCity();
 
                 $new_city->fill([
                     'name' => $row['city_name'],
+                    'state_id' => $state_id,
                 ])->save();
 
                 $city_id = $new_city->id;
