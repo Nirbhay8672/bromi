@@ -21,36 +21,19 @@
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col-md-8">
-                                    <a
-                                        class="btn custom-icon-theme-button"
-                                        href="{{ route('admin.property.add') }}"
-                                        title="Add Property"
-                                    >
+                                    <a class="btn custom-icon-theme-button" href="{{ route('admin.property.add') }}"
+                                        title="Add Property">
                                         <i class="fa fa-plus"></i>
                                     </a>
 
-                                    <button
-                                        class="btn ms-3 custom-icon-theme-button"
-                                        type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#filtermodal"
-                                        title="Filter"
-                                    ><i class="fa fa-filter"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#filtermodal" title="Filter"><i class="fa fa-filter"></i></button>
 
-                                    <button
-                                        class="btn ms-3 custom-icon-theme-button"
-                                        type="button"
-                                        title="Clear Filter"
-                                        id="resetfilter"
-                                        style="display: none;"
-                                    ><i class="fa fa-refresh"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button" type="button" title="Clear Filter"
+                                        id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
 
-                                    <button
-                                        class="btn ms-3 custom-icon-theme-button"
-                                        onclick="importProperties()"
-                                        type="button"
-                                        title="Import"
-                                    ><i class="fa fa-download"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button" onclick="importProperties()"
+                                        type="button" title="Import"><i class="fa fa-download"></i></button>
 
                                     <button class="btn ms-3 custom-icon-theme-button" onclick="exportProperties()"
                                         type="button" title="Export"><i class="fa fa-upload"></i></button>
@@ -63,14 +46,11 @@
                                     <button class="btn matchbutton ms-3 custom-icon-theme-button" type="button"
                                         data-bs-toggle="modal" data-bs-target="#matchModal" title="Matching"><i
                                             class="fa fa-random"></i></button>
-                                        
-                                    <button
-                                        class="btn text-white delete_table_row ms-3"
+
+                                    <button class="btn text-white delete_table_row ms-3"
                                         style="border-radius: 5px;display: none;background-color:red"
-                                        onclick="deleteTableRow()"
-                                        type="button"
-                                        title="Delete"
-                                    ><i class="fa fa-trash"></i></button>
+                                        onclick="deleteTableRow()" type="button" title="Delete"><i
+                                            class="fa fa-trash"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +118,7 @@
                                             @endforeach
                                         </select>
                                     </div> --}}
-                                    
+
                                     <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_property_for">
                                             <option value="">Property For</option>
@@ -202,7 +182,7 @@
                                             <option value="SoldOut">Sold Out</option>
                                         </select>
                                     </div> --}}
-                                    <div class="form-group col-md-4 m-b-4 mb-3">
+                                    <div class="form-group col-md-3 m-b-4 mb-3">
                                         <label class="select2_label" for="Select Project"> Project</label>
                                         <select class="form-select" id="filter_building_id" multiple>
                                             @foreach ($projects as $building)
@@ -211,7 +191,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-4 m-b-4 mb-3">
+                                    <div class="form-group col-md-3 m-b-4 mb-3">
                                         {{-- <label class="select2_label" for="Select Project"> Source Of Property</label> --}}
                                         <select class="form-select" id="filter_source_of_property">
                                             <option value="">Source Of Property</option>
@@ -226,7 +206,7 @@
                                             @endforelse
                                         </select>
                                     </div>
-                                    <div class="form-group col-md-4 m-b-4 mb-3">
+                                    <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_area_id">
                                             <option value=""> Area</option>
                                             @foreach ($areas as $area)
@@ -235,18 +215,18 @@
                                         </select>
                                     </div>
 
-                                    <hr class="color-hr">
+                                    {{-- <hr class="color-hr"> --}}
 
-                                    {{-- <div class="form-group col-md-4 m-b-20">
+                                    <div class="form-group col-md-3 m-b-20">
                                         <label for="From Area">From Area</label>
                                         <input class="form-control" name="filter_from_area" id="filter_from_area"
                                             type="text" autocomplete="off">
                                     </div>
-                                    <div class="form-group col-md-4 m-b-20">
+                                    <div class="form-group col-md-3 m-b-20">
                                         <label for="To Area">To Area</label>
                                         <input class="form-control" name="filter_to_area" id="filter_to_area"
                                             type="text" autocomplete="off">
-                                    </div> --}}
+                                    </div>
                                     {{-- <div class="form-group col-md-2 m-b-4 mb-3">
                                         <select class="form-select form_measurement measure_select"
                                             id="filter_measurement">
@@ -262,18 +242,16 @@
                                             @endforelse
                                         </select>
                                     </div> --}}
-                                    {{-- <div class="form-group col-md-4 m-b-20">
+                                    <div class="form-group col-md-3 m-b-20">
                                         <label for="From Price">From Price</label>
                                         <input class="form-control indian_currency_amount" name="filter_from_price"
                                             id="filter_from_price" type="text" autocomplete="off">
-                                    </div> --}}
-                                    {{-- <div class="form-group col-md-4 m-b-20">
+                                    </div>
+                                    <div class="form-group col-md-3 m-b-20">
                                         <label for="To Price">To Price</label>
                                         <input class="form-control indian_currency_amount" name="filter_to_price"
                                             id="filter_to_price" type="text" autocomplete="off">
-                                    </div> --}}
-
-
+                                    </div>
 
                                 </div>
                             </div>
@@ -315,7 +293,8 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="whatsappModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="whatsappModal" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -616,8 +595,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
-                                                <input class="form-check-input" id="match_enquiry_all"
-                                                    type="checkbox">
+                                                <input class="form-check-input" id="match_enquiry_all" type="checkbox">
                                                 <label class="form-check-label" for="match_enquiry_all">Select All</label>
                                             </div>
                                             <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
@@ -723,7 +701,7 @@
             'states' => $states,
         ])
         <script>
-             var search_enq = '';
+            var search_enq = '';
             $(document).ready(function() {
                 // var queryString = window.location.search;
                 var queryString = window.location.search;
@@ -733,7 +711,7 @@
                 $('.matchbutton').hide()
                 try {
                     search_enq = decryptSimpleString(enqq);
-                    console.log("search_enq industrial ......",search_enq);
+                    console.log("search_enq industrial ......", search_enq);
 
                     if (search_enq != '') {
                         console.log("show searchenqq");
@@ -766,9 +744,9 @@
                 $('#match_enquiry_size').prop('checked', <?= $matchEnqSize === '1' ? 'true' : 'false' ?>);
 
             });
-            
+
             matching_enquiry_url = "{{ route('admin.enquiries') }}";
-            
+
             $(document).on('click', '#matchagain', function(e) {
                 e.preventDefault();
 
@@ -813,13 +791,14 @@
                     }
                 });
             });
+
             function matchingEnquiry(data) {
                 $('#matchModal').modal('show');
                 $('#matchagain').attr('data-id', $(data).attr('data-id'));
             }
-            
 
-           
+
+
 
             function shareTableRow() {
                 var msg = '';
@@ -839,7 +818,7 @@
                 $('#shar_string').val('https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' + msg)
                 $('#whatsappModal').modal('show');
             }
-            
+
             function openwamodel(params) {
                 $('#shar_string').val($(params).attr('data-share_string'))
                 $('#whatsappModal').modal('show');
@@ -887,7 +866,7 @@
 
             var shouldchangecity = 1;
 
-            $(document).ready(function() { 
+            $(document).ready(function() {
                 $('#propertyTable').DataTable({
                     processing: true,
                     serverSide: true,
@@ -1007,7 +986,7 @@
                 $('#propertyTable').DataTable().draw();
                 $('#filtermodal').modal('hide');
             });
-           
+
             //Share Property
             function shareUserModal(clickedElement) {
                 $('#users_list').val("");
@@ -1016,8 +995,8 @@
                 const dataId = $(clickedElement).data("id");
                 $('#shareData').data('data-id', dataId);
             }
-             // Get record Users
-             $(document).ready(function() {
+            // Get record Users
+            $(document).ready(function() {
                 try {
                     axios.get("{{ route('admin.partnerUsers') }}")
                         .then(function(response) {
@@ -1068,9 +1047,9 @@
                     });
                 });
             });
-            
 
-          
+
+
 
             $(document).on('click', '#resetfilter', function(e) {
                 e.preventDefault();
@@ -1091,7 +1070,7 @@
                     url: "{{ route('admin.export.property') }}",
                     data: {
                         _token: '{{ csrf_token() }}',
-                         category: "indProp"
+                        category: "indProp"
                     },
                     success: function(data) {
                         window.open(data)

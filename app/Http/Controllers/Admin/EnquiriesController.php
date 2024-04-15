@@ -73,9 +73,9 @@ class EnquiriesController extends Controller
 			$new = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
 				return ($var['name'] == 'only-assigned');
 			});
-			
+
 			if (count($new) > 0 &&  $user->role_id !== '1') {
-                // dd("0nn",$user->role_id);
+				// dd("0nn",$user->role_id);
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
 						$query->where('assign_id', '=', Auth::user()->id);
@@ -83,7 +83,7 @@ class EnquiriesController extends Controller
 					->orderBy('id', 'desc')
 					->get();
 			} else {
-			 //   dd("02");
+				//   dd("02");
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->when($request->filter_by, function ($query) use ($request) {
 						if ($request->filter_by == 'new') {
@@ -246,11 +246,11 @@ class EnquiriesController extends Controller
 								$unit_price = $unitDetails[0][4];
 								if ($value != '' || $value !== null) {
 									$query
-									// ->where('budget_from', '<=', $pro->survey_price)
+										// ->where('budget_from', '<=', $pro->survey_price)
 										->where('budget_to', '>=', $pro->survey_price);
 								} else if ($unit_price != '') {
 									$query
-									// ->where('budget_from', '<=', $unit_price)
+										// ->where('budget_from', '<=', $unit_price)
 										->where('budget_to', '>=', '22,222');
 								}
 							}
@@ -407,16 +407,20 @@ class EnquiriesController extends Controller
 					// 	dd($configuration_name);
 
 					$sub_cat = ((!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '');
-
 					$configurationArray = json_decode($row->configuration);
+					// dd("sub ",$configurationArray);
 					if (!empty($configurationArray) && isset($configurationArray[0])) {
-						$configurationKey = $configurationArray[0];
+						$configuration_names = []; // Initialize an empty array to store configuration names
 
-						if (!empty(config('constant.property_configuration')[$configurationKey])) {
-							$configuration_name = config('constant.property_configuration')[$configurationKey];
-						} else {
-							$configuration_name = "Null";
+						foreach ($configurationArray as $configurationKey) {
+							if (!empty(config('constant.property_configuration')[$configurationKey])) {
+								$configuration_names[] = config('constant.property_configuration')[$configurationKey];
+							} else {
+								$configuration_names[] = "Null";
+							}
 						}
+
+						$configuration_display = implode(', ', $configuration_names); // Join configuration names with a comma and space
 					} else {
 						$category = $sub_cat;
 					}
@@ -490,7 +494,7 @@ class EnquiriesController extends Controller
 						}
 					}
 
-					$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_name)) ? ' | ' : $category) . $configuration_name . '</div>';
+					$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_display)) ? ' | ' : $category) . $configuration_display . '</div>';
 					//	$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " " . $area_form_m . " - " . $row->area_to . " " . $area_form_t : "") . '</div>';
 					$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " - " . $row->area_to . " " . $area_form_m : "") . '</div>';
 					$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"></small></div>';
@@ -515,16 +519,16 @@ class EnquiriesController extends Controller
 					return $bud;
 				})
 				->editColumn('telephonic_discussion', function ($row) {
-                    if (isset($row->activeProgress)) {
-                        $pro = $row->activeProgress;
-                        $remark_data = "";
-                        if (!empty($pro->remarks)) {
-                            $remark_data = $pro->remarks;
-                        }
-                        return '<small style="font-style:italic; font-size:89% !important"><b></b>' . Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') . '<br>' . $remark_data . '</small>';
-                    }
-                    return $row->telephonic_discussion;
-                })
+					if (isset($row->activeProgress)) {
+						$pro = $row->activeProgress;
+						$remark_data = "";
+						if (!empty($pro->remarks)) {
+							$remark_data = $pro->remarks;
+						}
+						return '<small style="font-style:italic; font-size:89% !important"><b></b>' . Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') . '<br>' . $remark_data . '</small>';
+					}
+					return $row->telephonic_discussion;
+				})
 
 				//transfer date
 				->editColumn('assigned_to', function ($row) {
@@ -1269,8 +1273,8 @@ class EnquiriesController extends Controller
 	public function transferNow(Request $request)
 	{
 		if (!empty($request->employee) && !empty($request->enquiry_id)) {
-// 			Enquiries::where('id', $request->enquiry_id)->update(['employee_id' => $request->employee], ['transfer_date' => Carbon::now()->format('Y-m-d H:i:s')]);
-$dataEnq = Enquiries::where('id', $request->enquiry_id)->update([
+			// 			Enquiries::where('id', $request->enquiry_id)->update(['employee_id' => $request->employee], ['transfer_date' => Carbon::now()->format('Y-m-d H:i:s')]);
+			$dataEnq = Enquiries::where('id', $request->enquiry_id)->update([
 				'employee_id' => $request->employee,
 				'transfer_date' => Carbon::now()->format('Y-m-d H:i:s')
 			]);
@@ -1598,8 +1602,10 @@ $dataEnq = Enquiries::where('id', $request->enquiry_id)->update([
 		$talukas   = Taluka::orderBy('name')->get();
 		$villages  = Village::orderBy('name')->get();
 		$land_units = DB::table('land_units')->get();
+		$country_codes  = DB::table('countries')->get();
 
-		return view('admin.properties.add_enquiry', compact('enquiry_list', 'land_units', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
+
+		return view('admin.properties.add_enquiry', compact('country_codes','enquiry_list', 'land_units', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
 	}
 
 	public function editEnquiry(Request $request)
@@ -1632,41 +1638,78 @@ $dataEnq = Enquiries::where('id', $request->enquiry_id)->update([
 
 		return view('admin.properties.add_enquiry', compact('edit_configuration', 'land_units', 'edit_category', 'enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'current_id', 'districts', 'talukas', 'villages'));
 	}
-	public function getEnquiryConfiguration(Request $request)
+	// public function getEnquiryConfiguration(Request $request)
+	// {
+	// 	$selectedCategory = $request->query('selectedCategory');
+	// 	$filteredConfig = [];
+	// 	if ($selectedCategory === 'Flat' || $selectedCategory === 'Penthouse') {
+	// 		$filteredKeys = ['13', '14', '15', '16', '17', '18'];
+	// 	}
+	// 	if ($selectedCategory === 'Vila/Bunglow') {
+	// 		// $filteredKeys = ['21', '22', '23', '24', '25'];
+	// 		$filteredKeys = ['14', '15', '16', '17', '18'];
+	// 	}
+	// 	if ($selectedCategory === 'Plot' || $selectedCategory === 'Land') {
+	// 		$filteredKeys = ['10', '11', '12'];
+	// 	}
+	// 	if ($selectedCategory === 'Farmhouse') {
+	// 		$filteredKeys = [];
+	// 	}
+	// 	if ($selectedCategory === 'Office') {
+	// 		$filteredKeys = ['1', '2'];
+	// 	}
+	// 	if ($selectedCategory === 'Retail') {
+	// 		$filteredKeys = ['3', '4', '5', '6'];
+	// 	}
+	// 	if ($selectedCategory === 'Storage/industrial') {
+	// 		$filteredKeys = ['7', '8', '9', '20'];
+	// 	}
+	// 	$propertyConfiguration = config('constant.property_configuration');
+	// 	foreach ($filteredKeys as $key) {
+	// 		if (isset($propertyConfiguration[$key])) {
+	// 			$filteredConfig[$key] = $propertyConfiguration[$key];
+	// 		}
+	// 	}
+	// 	return response()->json($filteredConfig);
+	// }
+
+
+    public function getEnquiryConfiguration(Request $request)
 	{
-		$selectedCategory = $request->query('selectedCategory');
+		$selectedCategories = json_decode($request->query('selectedCategories'), true);
 		$filteredConfig = [];
-		if ($selectedCategory === 'Flat' || $selectedCategory === 'Penthouse') {
-			$filteredKeys = ['13', '14', '15', '16', '17', '18'];
-		}
-		if ($selectedCategory === 'Vila/Bunglow') {
-			// $filteredKeys = ['21', '22', '23', '24', '25'];
-			$filteredKeys = ['14', '15', '16', '17', '18'];
-		}
-		if ($selectedCategory === 'Plot' || $selectedCategory === 'Land') {
-			$filteredKeys = ['10', '11', '12'];
-		}
-		if ($selectedCategory === 'Farmhouse') {
-			$filteredKeys = [];
-		}
-		if ($selectedCategory === 'Office') {
-			$filteredKeys = ['1', '2'];
-		}
-		if ($selectedCategory === 'Retail') {
-			$filteredKeys = ['3', '4', '5', '6'];
-		}
-		if ($selectedCategory === 'Storage/industrial') {
-			$filteredKeys = ['7', '8', '9', '20'];
-		}
-		$propertyConfiguration = config('constant.property_configuration');
-		foreach ($filteredKeys as $key) {
-			if (isset($propertyConfiguration[$key])) {
-				$filteredConfig[$key] = $propertyConfiguration[$key];
+
+		foreach ($selectedCategories as $selectedCategory) {
+			switch ($selectedCategory) {
+				case 'Flat':
+				case 'Penthouse':
+					$filteredConfig = array_merge($filteredConfig, ['13' => '1 rk', '14' => '1bhk', '15' => '2bhk', '16' => '3bhk', '17' => '4bhk', '18' => '5bhk']);
+					break;
+				case 'Vila/Bunglow':
+					$filteredConfig = array_merge($filteredConfig, ['14' => '1bhk', '15' => '2bhk', '16' => '3bhk', '17' => '4bhk', '18' => '5bhk']);
+					break;
+				case 'Plot':
+				case 'Land':
+					$filteredConfig = array_merge($filteredConfig, ['10' => 'Commercial Land', '11' => 'Agricultural/Farm Land', '12' => 'Industrial Land']);
+					break;
+				case 'Farmhouse':
+					break;
+				case 'Office':
+					$filteredConfig = array_merge($filteredConfig, ['1' => 'office space', '2' => 'Co-working']);
+					break;
+				case 'Retail':
+					$filteredConfig = array_merge($filteredConfig, ['3' => 'Ground floor', '4' => '1st floor', '5' => '2nd floor', '6' => '3rd floor']);
+					break;
+				case 'Storage/industrial':
+					$filteredConfig = array_merge($filteredConfig, ['7' => 'Warehouse', '8' => 'Cold Storage', '9' => 'ind. shed', '20' => 'Plotting']);
+					break;
+				default:
+					break;
 			}
 		}
+
 		return response()->json($filteredConfig);
 	}
-
 	public function deleteRecord($id)
 	{
 		$record = EnquiryProgress::find($id);
@@ -1686,11 +1729,12 @@ $dataEnq = Enquiries::where('id', $request->enquiry_id)->update([
 		$vv = Enquiries::where('id', $request->id)->update(['enq_status' => $status]);
 		return redirect('admin/Enquiries');
 	}
-	
-	public function getEnquiryCategory(Request $request) {
-    	$enquiryID = $request->query('id');
-        $enquiry = Enquiries::find($enquiryID);
-        $penquiryCategory = $enquiry->pluck('requirement_type')->first();
-        return response()->json($enquiry);
-    }
+
+	public function getEnquiryCategory(Request $request)
+	{
+		$enquiryID = $request->query('id');
+		$enquiry = Enquiries::find($enquiryID);
+		$penquiryCategory = $enquiry->pluck('requirement_type')->first();
+		return response()->json($enquiry);
+	}
 }

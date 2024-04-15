@@ -10,6 +10,7 @@ use App\Http\Controllers\Superadmin\SuperSettingController;
 use App\Http\Controllers\Superadmin\UserController;
 use App\Http\Controllers\Superadmin\TicketsController;
 use App\Http\Controllers\Superadmin\CommentsController;
+use App\Http\Controllers\Superadmin\ImportController;
 use App\Http\Controllers\Superadmin\ProjectsController;
 use App\Http\Controllers\Superadmin\SuperTalukaController;
 use App\Http\Controllers\Superadmin\SuperVillageController;
@@ -146,5 +147,12 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/settings-delete-village', [SuperVillageController::class, 'village_delete'])->name('superadmin.settings.deletevillage');
 		
 		Route::any('/users-login-activity', [UserController::class, 'loginActivity'])->name('superadmin.usersLoginActivity');
+
+		Route::post('/state-import', [ImportController::class, 'stateImport'])->name('superadmin.stateImport');
+		Route::post('/city-import', [ImportController::class, 'cityImport'])->name('superadmin.cityImport');
+		Route::post('/locality-import', [ImportController::class, 'localityImport'])->name('superadmin.areaImport');
+		Route::post('/district-import', [ImportController::class, 'districtImport'])->name('superadmin.districtImport');
+		Route::post('/taluka-import', [ImportController::class, 'talukaImport'])->name('superadmin.talukaImport');
+		Route::post('/village-import', [ImportController::class, 'villageImport'])->name('superadmin.villageImport');
 	});
 });

@@ -68,7 +68,7 @@
                                                             <div class="invalid-feedback" id="client_name_error"
                                                                 style="display: block;color:red;"></div>
                                                         </div>
-                                                        <div class="form-group col-md-3 m-b-20">
+                                                        {{-- <div class="form-group col-md-3 m-b-20">
                                                             <div class="fname">
                                                                 <label for="Mobile">Mobile</label>
                                                                 <input class="form-control" name="client_mobile"
@@ -76,12 +76,44 @@
                                                             </div>
                                                             <div class="invalid-feedback" id="client_mobile_error"
                                                                 style="display: block;color:red;"></div>
+                                                        </div> --}}
+                                                        <div class="col-md-9 country_code_area">
+                                                            <div class="input-group">
+                                                                <div class="input-group-append col-md-3 m-b-20">
+                                                                    <div class="form-group country_code">
+                                                                        <div
+                                                                            style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important" class="divSelect">
+                                                                            <select class="form-control countries_list" name="country_code"
+                                                                            id="country_code"
+                                                                            style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">
+                                                                            @foreach ($country_codes as $country_code)
+                                                                                <option value={{$country_code->id}}>+{{$country_code->country_iso}} ({{$country_code->country_code}})</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group col-md-5 m-b-20">
+                                                                    <div class="fname">
+                                                                        <label for="Mobile">Mobile</label>
+                                                                        <input class="form-control" name="client_mobile"
+                                                                            style="border-right:2px solid #1d2848 !important; border-top-right-radius: 5px;border-bottom-right-radius: 5px"
+                                                                            id="client_mobile" type="text"
+                                                                            autocomplete="off">
+                                                                    </div>
+                                                                    <div class="invalid-feedback" id="client_mobile_error"
+                                                                        style="display: block;color:red;"></div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-group col-md-4 m-b-20">
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-3 m-b-20">
                                                             <div class="fname">
                                                                 <label for="Email">Email</label>
                                                                 <input class="form-control" name="client_email"
-                                                                    id="client_email" type="text" autocomplete="off" style="text-transform: lowercase;">
+                                                                    id="client_email" type="text" autocomplete="off"
+                                                                    style="text-transform: lowercase;">
                                                             </div>
                                                             <div class="invalid-feedback" id="client_email_error"
                                                                 style="display: block;color:red;"></div>
@@ -774,9 +806,8 @@
                                                         <div class="form-group col-md-2 m-b-20">
                                                             <div>
                                                                 <label for="Budget From">Budget From</label>
-                                                                <input class="form-control indian_currency_amount"
-                                                                    name="budget" value="0" id="budget_from"
-                                                                    type="text" autocomplete="off">
+                                                                <input class="form-control" name="budget" value=""
+                                                                    id="budget_from" type="text" autocomplete="off">
                                                             </div>
                                                             <div class="invalid-feedback" id="budget_from_error"
                                                                 style="display: block;color:red;"></div>
@@ -785,9 +816,8 @@
                                                         <div class="form-group col-md-2 m-b-20">
                                                             <div>
                                                                 <label for="Budget To">Budget To</label>
-                                                                <input class="form-control indian_currency_amount"
-                                                                    name="budget_to" id="budget_to" type="text"
-                                                                    autocomplete="off">
+                                                                <input class="form-control" name="budget_to"
+                                                                    id="budget_to" type="text" autocomplete="off">
                                                             </div>
                                                             <div class="invalid-feedback" id="budget_to_error"
                                                                 style="display: block;color:red;"></div>
@@ -1009,18 +1039,6 @@
                 return isValid;
             }
 
-            function validateForm() {
-                isValid = true;
-                isValid = validateField('#client_name', '#client_name_error', 'client name field is required') && isValid;
-                validateMobileNumber('#client_mobile', '#client_mobile_error', 'Client mobile field is required',
-                    'Invalid mobile number format');
-                // isValid = validateField('#client_email', '#client_email_error', 'client email field is required') && isValid;
-                isValid = validateEmail('#client_email', '#client_email_error', 'Client email field is required',
-                    'Invalid email format') && isValid;
-
-                return isValid;
-            }
-
             function validateMobileNumber(field, errorField, requiredErrorMessage, invalidErrorMessage) {
                 var value = $(field).val().trim();
                 var isValidMobileNumber = /^\d{10}$/.test(value);
@@ -1037,6 +1055,16 @@
                 return value !== '' && isValidMobileNumber;
             }
 
+            function validateForm() {
+                isValid = true;
+                isValid = validateField('#client_name', '#client_name_error', 'client name field is required') && isValid;
+                isValid = validateMobileNumber('#client_mobile', '#client_mobile_error', 'Client mobile field is required',
+                    'Invalid mobile number format') && isValid;
+                // isValid = validateField('#client_email', '#client_email_error', 'client email field is required') && isValid;
+                isValid = validateEmail('#client_email', '#client_email_error', 'Client email field is required',
+                    'Invalid email format') && isValid;
+                return isValid;
+            }
 
             function validateEmail(field, errorField, requiredMessage, invalidFormatMessage) {
                 var value = $(field).val().trim();
@@ -1092,6 +1120,40 @@
             //     // $('#building_id_error').toggle(!isValid).text(isValid ? '' : 'project field field is required');
             //     return isValid;
             // }
+            function validateBudgetFields() {
+                var budgetFrom = parseFloat($('#budget_from').val());
+                var budgetTo = parseFloat($('#budget_to').val());
+                if (isNaN(budgetFrom) || isNaN(budgetTo)) {
+                    $('#budget_to_error').text('Please enter numeric values').show();
+                    return false;
+                }
+                
+                if (isNaN(budgetFrom) || isNaN(budgetTo) || budgetFrom >= budgetTo) {
+                    $('#budget_to_error').text('Budget To must be greater than Budget From').show();
+                    return false;
+                } else {
+                    $('#budget_to_error').hide();
+                    return true;
+                }
+            }
+
+            function validateAreaFields() {
+                var areaFrom = parseFloat($('#area_from').val());
+                var areaTo = parseFloat($('#area_to').val());
+                if (isNaN(areaFrom) || isNaN(areaTo)) {
+                    $('#area_to_error').text('Please enter numeric values').show();
+                    return false;
+                }
+
+                if (isNaN(areaFrom) || isNaN(areaTo) || areaTo <= areaFrom) {
+                    $('#area_to_error').text('Area To must be greater than Area From').show();
+                    return false;
+                } else {
+                    $('#area_to_error').hide();
+                    return true;
+                }
+            }
+
             function validateStep2Form() {
                 var isValid = true;
 
@@ -1099,17 +1161,12 @@
                 isValid = validateNumericField('#area_from', '#area_from_error', 'Area from field is required') && isValid;
                 isValid = validateNumericField('#area_to', '#area_to_error', 'Area to field is required') && isValid;
 
+                isValid = validateAreaFields() && isValid;
                 // Validate budget fields
                 isValid = validateField('#budget_from', '#budget_from_error', 'Budget from field is required') && isValid;
                 isValid = validateField('#budget_to', '#budget_to_error', 'Budget to field is required') && isValid;
-                var budgetFrom = parseFloat($('#budget_from').val());
-                var budgetTo = parseFloat($('#budget_to').val());
-                if (!isNaN(budgetFrom) && !isNaN(budgetTo) && budgetFrom >= budgetTo) {
-                    $('#budget_to_error').text('Budget To must be greater than Budget From').show();
-                    isValid = false;
-                } else {
-                    $('#budget_to_error').hide();
-                }
+
+                isValid = validateBudgetFields() && isValid;
 
                 return isValid;
             }
@@ -1296,16 +1353,16 @@
                 resetallfields()
                 if (category_type == 'Flat') {
                     $('.div_flat_type').show()
-                     $(".f-status").show();
+                    $(".f-status").show();
                     $('.the_1rk').show()
                 } else if (category_type == 'Penthouse') {
-                     $(".f-status").show();
+                    $(".f-status").show();
                     $('.div_flat_type').show()
                 } else if (category_type == 'Office') {
-                     $(".f-status").show();
+                    $(".f-status").show();
                     $('.div_office_type').show()
                 } else if (category_type == 'Retail') {
-                     $(".f-status").show();
+                    $(".f-status").show();
                     $('.div_retail_type').show()
                 } else if (category_type == 'Storage/industrial') {
                     $(".f-status").hide();
@@ -1316,10 +1373,10 @@
                 } else if (category_type == 'Farmhouse') {
                     $('.div_farm_house').show()
                 } else if (category_type == 'Plot') {
-                     $(".f-status").show();
+                    $(".f-status").show();
                     $('.div_land_plot').show()
                 } else if (category_type == 'Vila/Bunglow') {
-                     $(".f-status").show();
+                    $(".f-status").show();
                     $('.div_vila_type').show()
                 }
             })
@@ -2305,7 +2362,8 @@
                         if (parentId.find('label').length > 0) {
                             $(this).remove();
                             var currenthtml = $(parentId).html()
-                            $(parentId).html('<div class="fname focused">' + currenthtml + '<div class="fvalue">' + inputhtml[0]
+                            $(parentId).html('<div class="fname focused">' + currenthtml + '<div class="fvalue">' +
+                                inputhtml[0]
                                 .outerHTML + '</div>' + '</div>')
                         }
                     }
