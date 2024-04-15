@@ -68,13 +68,18 @@
                                                 @endif
 												<input type="hidden" name="plan_id" value="{{$plan->id}}">
 
+                                                <?php
+                                                $gstType = Auth::user()->gst_type; // gst_type
+                                                $gst = $plan->price * 0.18;
+                                                ?>
+
 												<button
                                                     class="btn btn-primary btn-lg"
                                                     type="button"
                                                     data-original-title="btn btn-primary btn-lg"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#couponModal"
-                                                    onclick="setDetails({{ $plan->id }})"
+                                                    onclick="setDetails({{ $plan->id }}, {{ $plan->price }}, '{{ $plan->name }}', '{{ $gstType }}', '{{ $gst }}')"
                                                 >Subscribe</button>
 											</form>
                                         </div>
@@ -123,6 +128,8 @@
                                         <input type="hidden" name="plan_id" class="form-control mt-2" id="plan_id">
                                         <input type="hidden" name="discounted_price" value="" class="form-control mt-2" id="discounted_price">
                                         <input type="hidden" name="discount" value="" class="form-control mt-2" id="discount">
+                                        <input type="hidden" name="gst_amt" value="" class="form-control mt-2" id="gstAmt">
+                                        <input type="hidden" name="gst_amt_type" value="" class="form-control mt-2" id="gstAmtType">
                                     </div>
                                 </div>
                             </div>
@@ -142,8 +149,20 @@
                                         <span id="plan-discount-col">0</span>
                                     </div>
                                     <div class="plan-column">
-                                        <span class="plan-label">Amount</span>
+                                        <span class="plan-label">Subtotal</span>
                                         <span id="plan-price-gross">0</span>
+                                    </div>
+                                    <div class="plan-column d-none" id="cgst">
+                                        <span class="plan-label">cgst(9%)</span>
+                                        <span id="cgst-col">0</span>
+                                    </div>
+                                    <div class="plan-column d-none" id="sgst">
+                                        <span class="plan-label">sgst(9%)</span>
+                                        <span id="sgst-col">0</span>
+                                    </div>
+                                    <div class="plan-column d-none" id="igst">
+                                        <span class="plan-label">igst(18%)</span>
+                                        <span id="igst-col">0</span>
                                     </div>
                                 </div>
                                 <div class="plan-row">
@@ -180,16 +199,36 @@
         button_without.disabled = code.value != '' ? true : false;
     }
 
-    function setDetails(value, planPrice, planName) {
+    function setDetails(value, planPrice, planName, gstType, gst) {
+        // console.log(value, planPrice, planName, gstType, gst);return;
         let plan_id = document.getElementById('plan_id');
+        let gstAMT = document.getElementById('gstAmt');
+        let gstAMTTYPE = document.getElementById('gstAmtType');
+
         let planPriceCol = document.getElementById('plan-price-col');
         let planPriceGross = document.getElementById('plan-price-gross');
         let planPriceAmt = document.getElementById('plan-price-amt');
         let planSelectedName = document.getElementById('plan-selected-name');
+        let igst = document.getElementById('igst-col');
+        let sgst = document.getElementById('sgst-col');
+        let cgst = document.getElementById('cgst-col');
+
+        if (gstType == 'intra_state') {
+            sgst.textContent = parseFloat(gst/2).toFixed(2);
+            cgst.textContent = parseFloat(gst/2).toFixed(2);
+            $('#sgst').removeClass('d-none');
+            $('#cgst').removeClass('d-none');
+        } else {
+            igst.textContent = parseFloat(gst).toFixed(2);
+            $('#igst').removeClass('d-none');
+        }
+        let totalAmt = parseFloat(gst) + parseFloat(planPrice);
         plan_id.value = value;
+        gstAMT.value = gst;
+        gstAMTTYPE.value = gstType;
         planPriceCol.textContent  = parseFloat(planPrice).toFixed(2);
-        planPriceGross.textContent  = parseFloat(planPrice).toFixed(2);
-        planPriceAmt.textContent  = parseFloat(planPrice).toFixed(2);
+        planPriceGross.textContent  = (planPrice).toFixed(2);
+        planPriceAmt.textContent  = (totalAmt).toFixed(2);
         planSelectedName.textContent  = planName;
         code.value = '';
         // button.disabled = true;
@@ -224,13 +263,25 @@
                     $('#coupon_code_msg').text(response.message);
                     return;
                 }
+                if (response.data.gst_type == 'intra_state') {
+                    $('#cgst-col').text(parseFloat(response.data.gst/2).toFixed(2))
+                    $('#sgst-col').text(parseFloat(response.data.gst/2).toFixed(2))
+                    $('#sgst').removeClass('d-none');
+                    $('#cgst').removeClass('d-none');
+                } else {
+                    $('#igst-col').text(parseFloat(response.data.gst).toFixed(2))
+                    $('#igst').removeClass('d-none');
+                }
+                let totalAmt = parseFloat(response.data.gst) + parseFloat(response.data.price_after_discount);
                 $('#coupon_code_msg').text(response.message);
                 $('#pay_without_coupon').text('Proceed to pay');
                 $('#plan-discount-col').text(parseFloat(response.data.discount).toFixed(2));
-                $('#plan-price-gross').html(parseFloat(response.data.price_after_discount).toFixed(2));
-                $('#plan-price-amt').html(parseFloat(response.data.price_after_discount).toFixed(2));
-                $('#discounted_price').val(parseFloat(response.data.price_after_discount).toFixed(2));
+                $('#plan-price-gross').html(response.data.price_after_discount.toFixed(2));
+                $('#plan-price-amt').html(totalAmt.toFixed(2));
+                $('#discounted_price').val(totalAmt.toFixed(2));
                 $('#discount').val(parseFloat(response.data.discount).toFixed(2));
+                $('#gstAmt').val(parseFloat(response.data.gst).toFixed(2));
+                $('#gstAmtType').val(response.data.gst_type);
             },
             error: (error) => console.log(error)
         });
