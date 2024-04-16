@@ -957,7 +957,7 @@
                                                                 <div class="form-group col-md-7 m-b-20">
                                                                     <label for="Ceiling Height">Ceiling Height</label>
                                                                     <input class="form-control" name="ceiling_height"
-                                                                        id="ceiling_height" type="text" value="0.00"
+                                                                        id="ceiling_height" maxlength="2"  type="text" 
                                                                         autocomplete="off">
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
@@ -2700,6 +2700,7 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/property_wizard.js') }}"></script>
         <script>
+           
             // Hide State dropdown
 
             //#B 5+BHK then add txtbox
@@ -2723,6 +2724,13 @@
             let penthouseConf, farmConf, landConfiguration, plotConf, VillaCategory, landCategory, villaConfiguration,
                 flateConfiguration, officeConf, retailConfiguration, storageConfiguration, theForLand;
             $(document).ready(function() {
+                 //only 2 digits add
+                 $('#ceiling_height').on('input', function() {
+            var currentValue = $(this).val();
+            if (currentValue.length > 2) {
+                $(this).val(currentValue.slice(0, 2));
+            }
+        });
                 
                 // Initialize Select2 for all dropdowns
                 $('#project_id, #state_id, #area_id, #zone, #village_id, #taluka_id, #district_id, #state-dropdown')
@@ -4342,9 +4350,6 @@
                         $('#taluka_id').val(data.taluka_id);
                         $('#village_id').val(data.village_id);
                         $('#zone').val(data.zone_id);
-                        console.log("data.other details...",data.other_contact_details);
-                        // $('#contact_country_code').val(data.contact_country_code).trigger('change');
-
                         $('#constructed_carpet_area').val(setSplitedValue(data.constructed_carpet_area, 1));
                         $('#constructed_carpet_area_measurement').val(setSplitedValue(data.constructed_carpet_area,
                             2));
@@ -4527,7 +4532,6 @@
                         //bharat other contact
                         if (data.other_contact_details != '') {
                             details = JSON.parse(data.other_contact_details);
-                            console.log("details =====",details);
                             if ((details != null) && (details.length > 0)) {
                                 for (let i = 0; i < details.length; i++) {
                                     id = makeid(10);
@@ -4685,7 +4689,6 @@
                     //     console.log("3");
 
                     // }
-                    console.log("otherContactCode =++++++++++",otherContactCode);
                     cona_arr.push(otherName)
                     cona_arr.push(otherContact)
                     cona_arr.push(otherContactCode)
@@ -4696,7 +4699,7 @@
                 });
                 other_contact_details = JSON.stringify(other_contact_details);
 
-console.log("other_contact_details ...............",other_contact_details);
+
 
                 $("#modal_form [name=unit_unit_no]").each(function(index) {
                     let cona_arr = [];
@@ -5296,3 +5299,8 @@ console.log("other_contact_details ...............",other_contact_details);
             });
         </script>
     @endpush
+
+
+
+
+{{-- addproppp --}}

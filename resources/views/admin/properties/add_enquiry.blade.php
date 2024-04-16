@@ -71,10 +71,10 @@
                                                         <div class="col-md-4 country_code_area">
                                                             <div class="input-group">
                                                                 <div class="input-group-append col-md-4 m-b-20">
-                                                                    <div class="form-group country_codee">
+                                                                    <div class="form-group country_code">
                                                                         <div
                                                                             style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important" class="divSelect">
-                                                                            <select class="form-control countries_list" id="country_code" 
+                                                                            <select class="form-control countries_list" id="country_code" name="country_code"
                                                                             style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">
                                                                             @foreach ($country_codes as $country_code)
                                                                                 <option data-parent_id="{{ $country_code->id }}" value={{$country_code->id}}>+{{$country_code->country_iso}}({{$country_code->country_code}})</option>
@@ -1008,15 +1008,8 @@
             </div>
         </div>
     @endsection
-    
-<style>
-    /* .select2-dropdown.select2-dropdown--below {
-        width: auto !important; 
-    } */
-</style>
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
-        
         <script>
             let isValid = true;
 
@@ -1050,6 +1043,23 @@
                 return value !== '' && isValidMobileNumber;
             }
 
+            function validateEmail(field, errorField, requiredMessage, invalidFormatMessage) {
+                var value = $(field).val().trim();
+                var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+                if (value === '') {
+                    $(errorField).text(requiredMessage);
+                } else if (!isValidEmail) {
+                    $(errorField).text(invalidFormatMessage);
+                } else {
+                    $(errorField).text('');
+                }
+
+                $(field).toggleClass('is-invalid', value === '' || !isValidEmail);
+                return value !== '' && isValidEmail;
+            }
+
+
             function validateForm() {
                 isValid = true;
                 isValid = validateField('#client_name', '#client_name_error', 'client name field is required') && isValid;
@@ -1060,19 +1070,7 @@
                     'Invalid email format') && isValid;
                 return isValid;
             }
-
-            function validateEmail(field, errorField, requiredMessage, invalidFormatMessage) {
-                var value = $(field).val().trim();
-                var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-                if (value === "") {
-                    $(errorField).text(requiredMessage);
-                } else {
-                    $(errorField).text(isValidEmail ? '' : invalidFormatMessage);
-                }
-                $(field).toggleClass('is-invalid', (!isValidEmail || value === ""));
-                return (value === "" || isValidEmail);
-            }
-
+            
             function validateNumericField(field, errorField, errorMessage) {
                 var value = $(field).val().trim();
                 var isValidNumeric = /^\d+$/.test(value);
@@ -1195,31 +1193,39 @@
                 });
 
                 $('#nextSecond').click(function() {
-                    if ($('input[name="property_type"]:checked').length > 0) {
-                        $("#property_type_error").hide().text("requirement field is requierd");
+                    var isValid = true; // Initialize isValid to true
 
+                    if ($('input[name="property_type"]:checked').length === 0) {
+                        isValid = false;
+                        $("#property_type_error").show().text("Requirement field is required");
                     } else {
-                        $("#property_type_error").show().text("requirement field is requierd");
+                        $("#property_type_error").hide();
                     }
 
-                    if ($('input[name="property_category"]:checked').length > 0) {
-                        $("#property_category_error").hide().text("category field is requierd");
+                    if ($('input[name="property_category"]:checked').length === 0) {
+                        isValid = false;
+                        $("#property_category_error").show().text("Category field is required");
                     } else {
-                        $("#property_category_error").show().text("category field is requierd");
+                        $("#property_category_error").hide();
                     }
 
-
-                    if (validateStep2Form()) {
-                        console.log("All second fields are valid");
-                        $("#other-contact").show();
-                    } else {
-                        console.log("Some second fields are invalid");
-                        $("#customer-requirement").show();
-                        $("#step1").addClass("btn-primary");
-                        $("#step2").removeClass("btn-primary");
-                        $("#other-contact").hide();
+                    if (!validateStep2Form()) {
+                        isValid = false;
                     }
-                });
+
+                        // If isValid is true, all validations passed, proceed to the next step
+                        if (isValid) {
+                            console.log("All second fields are valid");
+                            $("#other-contact").show();
+                        } else {
+                            console.log("Some second fields are invalid");
+                            $("#customer-requirement").show();
+                            $("#step1").addClass("btn-primary");
+                            $("#step2").removeClass("btn-primary");
+                            $("#other-contact").hide();
+                        }
+                    });
+
 
                 // $('#saveEnquiry').click(function() {
                 //     if (validateStep3Form()) {
@@ -1672,8 +1678,6 @@
                         // edit enquiry
                         data = JSON.parse(data);
 
-                        console.log('data enq get ==', data.country_id)
-
                         // Requirement Type
                         if (data.requirement_type != null) {
                             $('input[name=property_type][value=' + data.requirement_type + ']').prop('checked',
@@ -1686,12 +1690,15 @@
                             $('input[name=property_category][value=' + data.property_type + ']').prop('checked',
                                 true).trigger('change')
                         }
+                        console.log("data.country_id",data.country_code);
                         $('#this_data_id').val(data.id);
                         $('#client_name').val(data.client_name);
                         $('#client_mobile').val(data.client_mobile);
+                        // $('#country_code').val(data.country_code);
                         $('#client_email').val(data.client_email);
                         $('#is_nri').prop('checked', Number(data.is_nri));
                         $('#enquiry_for').val(data.enquiry_for).trigger('change');
+                        $('#country_code').val(data.country_code).trigger('change');
                         // if ($('[name=configuration][value=' + data.configuration + ']').length > 0) {
                         //     $('[name=configuration][value=' + data.configuration + ']').prop('checked', true)
                         //         .trigger('change');
@@ -1728,7 +1735,6 @@
 
                         if (data.other_contacts != '') {
                             details = JSON.parse(data.other_contacts);
-                            console.log('details details details ==', details)
                             try {
                                 for (let i = 0; i < details.length; i++) {
                                     id = makeid(10);
@@ -2506,3 +2512,7 @@
             });
         </script>
     @endpush
+
+
+
+    {{-- addneq --}}
