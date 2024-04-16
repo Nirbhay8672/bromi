@@ -957,7 +957,7 @@
                                                                 <div class="form-group col-md-7 m-b-20">
                                                                     <label for="Ceiling Height">Ceiling Height</label>
                                                                     <input class="form-control" name="ceiling_height"
-                                                                        id="ceiling_height" type="text" value="0.00"
+                                                                        id="ceiling_height" maxlength="2"  type="text" 
                                                                         autocomplete="off">
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
@@ -2131,7 +2131,7 @@
                                                             <div class="invalid-feedback" id="owner_is_error"
                                                                 style="display: none;color:red;"></div>
                                                         </div>
-                                                        <div class="form-group col-md-3">
+                                                        <div class="form-group col-md-2">
                                                             <div>
                                                                 <label for="Owner Name">Name</label>
                                                                 <input class="form-control" name="owner_info_name"
@@ -2141,7 +2141,7 @@
                                                             <div class="invalid-feedback" id="owner_info_name_error"
                                                                 style="display: none;color:red;"></div>
                                                         </div>
-                                                        <div class="form-group col-md-2">
+                                                        {{-- <div class="form-group col-md-2">
                                                             <div>
                                                                 <label for="Owner Contact Specific No">Contact</label>
                                                                 <input class="form-control"
@@ -2152,6 +2152,34 @@
                                                             <div class="invalid-feedback"
                                                                 id="owner_contact_specific_no_error"
                                                                 style="display: none;color:red;"></div>
+                                                        </div> --}}
+                                                        <div class="col-md-4 country_code_area">
+                                                            <div class="input-group">
+                                                                <div class="input-group-append col-md-4 m-b-20">
+                                                                    <div class="form-group country_code">
+                                                                        <div
+                                                                            style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important" class="divSelect">
+                                                                            <select class="form-control countries_list" id="country_code" name="country_code"
+                                                                            style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">
+                                                                            @foreach ($country_codes as $country_code)
+                                                                                <option data-parent_id="{{ $country_code->id }}" value={{$country_code->id}}>+{{$country_code->country_iso}}({{$country_code->country_code}})</option>
+                                                                            @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group col-md-8 m-b-20">
+                                                                    <div class="fname">
+                                                                        <label for="Mobile">Contact</label>
+                                                                        <input class="form-control" name="owner_contact_specific_no"
+                                                                            style="border-right:2px solid #1d2848 !important; border-top-right-radius: 5px;border-bottom-right-radius: 5px"
+                                                                            id="owner_contact_specific_no" type="text"
+                                                                            autocomplete="off">
+                                                                    </div>
+                                                                    <div class="invalid-feedback" id="owner_contact_specific_no_error"
+                                                                        style="display: block;color:red;"></div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="form-group col-md-3">
                                                             <div>
@@ -2672,6 +2700,7 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/property_wizard.js') }}"></script>
         <script>
+           
             // Hide State dropdown
 
             //#B 5+BHK then add txtbox
@@ -2695,6 +2724,13 @@
             let penthouseConf, farmConf, landConfiguration, plotConf, VillaCategory, landCategory, villaConfiguration,
                 flateConfiguration, officeConf, retailConfiguration, storageConfiguration, theForLand;
             $(document).ready(function() {
+                 //only 2 digits add
+                 $('#ceiling_height').on('input', function() {
+            var currentValue = $(this).val();
+            if (currentValue.length > 2) {
+                $(this).val(currentValue.slice(0, 2));
+            }
+        });
                 
                 // Initialize Select2 for all dropdowns
                 $('#project_id, #state_id, #area_id, #zone, #village_id, #taluka_id, #district_id, #state-dropdown')
@@ -3863,14 +3899,36 @@
                     '</div><div id="other_name_error_' + id +
                     '" class="invalid-feedback" style="display: none; color: red;"></div>' +
                     '</div>' +
-                    '     <div data-contact_id= ' + id +
-                    ' class="form-group col-md-2 m-b-20">' +
-                    '<div><label>Contact No</label>' +
-                    '       <input class="form-control" name="other_contact" id="other_contact"' +
-                    '           type="text"  autocomplete="off">' +
-                    '</div><div id="other_contact_error_' + id +
-                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '<div  data-contact_id= ' + id + ' class="col-md-4 country_code_area">' +
+                    '   <div class="input-group">' +
+                    '       <div class="input-group-append col-md-4 m-b-20">' +
+                    '           <div class="form-group country_code">' +
+                    '               <div style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important" class="divSelect">' +
+                    '                   <select class="form-control countries_list" id="contact_country_code" name="other_contact_country_code" style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">' +
+                    '                       @foreach ($country_codes as $country_code)' +
+                    '                           <option data-parent_id="{{ $country_code->id }}" value={{$country_code->id}}>+{{$country_code->country_iso}} ({{$country_code->country_code}})</option>' +
+                    '                       @endforeach' +
+                    '                   </select>' +
+                    '               </div>' +
+                    '           </div>' +
+                    '       </div>' +
+                    '       <div class="form-group col-md-8 m-b-20">' +
+                    '           <div class="fname">' +
+                    '               <label for="Mobile">Contact No</label>' +
+                    '               <input class="form-control" name="other_contact" style="border-right:2px solid #1d2848 !important; border-top-right-radius: 5px;border-bottom-right-radius: 5px" id="other_contact" type="text" autocomplete="off">' +
+                    '           </div>' +
+                    '           <div class="invalid-feedback" id="other_contact_error" style="display: block;color:red;"></div>' +
+                    '       </div>' +
+                    '   </div>' +
                     '</div>' +
+                    // '     <div data-contact_id= ' + id +
+                    // ' class="form-group col-md-2 m-b-20">' +
+                    // '<div><label>Contact No</label>' +
+                    // '       <input class="form-control" name="other_contact" id="other_contact"' +
+                    // '           type="text"  autocomplete="off">' +
+                    // '</div><div id="other_contact_error_' + id +
+                    // '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    // '</div>' +
                     '     <div data-contact_id= ' + id +
                     ' class="form-group col-md-2 m-b-20">' +
                     '<div><label>Position</label>' +
@@ -4383,6 +4441,8 @@
                         $('#owner_is').val(data.owner_is);
                         $('#owner_info_name').val(data.owner_name);
                         $('#owner_contact_specific_no').val(data.owner_contact);
+                        $('#contact_country_code').val(data.contact_country_code);
+                        $('#country_code').val(data.country_code);
                         $('#property_email').val(data.owner_email);
                         $('#is_nri').prop('checked', Number(data.owner_nri)).trigger('change');
                         $('#care_take_name').val(data.care_taker_name);
@@ -4484,6 +4544,8 @@
                                     $("[data-contact_id=" + id + "] input[name=other_name]").val(details[i][0]);
                                     $("[data-contact_id=" + id + "] input[name=other_contact]").val(details[i][1]);
                                     $("[data-contact_id=" + id + "] input[name=position]").val(details[i][2]);
+                                    $("[data-contact_id=" + id + "] input[name=other_contact_country_code]").val(details[i][3]);
+                                    
                                 }
                             } else {
                                 generate_contact_detail_click(1)
@@ -4598,6 +4660,7 @@
                     name = $(this).val();
                     otherName = $("[data-contact_id=" + unique_id + "] input[name=other_name]").val();
                     otherContact = $("[data-contact_id=" + unique_id + "] input[name=other_contact]").val();
+                    otherContactCode = $("[data-contact_id=" + unique_id + "] input[name=other_contact_country_code]").val();
                     position = $("[data-contact_id=" + unique_id + "] input[name=position]").val();
                     // if (otherName.trim() === "") {
                     //     $("#other_name_error_" + unique_id).text("other name field is required").show();
@@ -4628,6 +4691,7 @@
                     // }
                     cona_arr.push(otherName)
                     cona_arr.push(otherContact)
+                    cona_arr.push(otherContactCode)
                     cona_arr.push(position)
                     if (filtercona_arr(cona_arr)) {
                         other_contact_details.push(cona_arr);
@@ -4772,6 +4836,12 @@
                     .map(function() {
                         return $(this).val();
                     }).get();
+                    
+                var other_contact_code = $("input[id='contact_country_code']")
+                    .map(function() {
+                        return $(this).val();
+                    }).get();
+                    
                 var position = $("input[id='position']")
                     .map(function() {
                         return $(this).val();
@@ -4929,6 +4999,8 @@
                         other_industrial_fields: JSON.stringify(all_extra_industrial_fields),
                         owner_name: $('#owner_info_name').val(),
                         owner_contact: $('#owner_contact_specific_no').val(),
+                        country_code: $('#country_code').val(),
+                        contact_country_code: $('#contact_country_code').val(),
                         owner_email: $('#property_email').val(),
                         owner_nri: Number($('#is_nri').prop('checked')),
                         contact_details: owner_details,
@@ -5227,3 +5299,8 @@
             });
         </script>
     @endpush
+
+
+
+
+{{-- addproppp --}}

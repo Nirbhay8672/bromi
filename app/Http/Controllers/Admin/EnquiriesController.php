@@ -1146,6 +1146,7 @@ class EnquiriesController extends Controller
 		$data->user_id = Session::get('parent_id');
 		$data->client_name = $request->client_name;
 		$data->client_mobile = $request->client_mobile;
+		$data->country_code = $request->country_code;
 		$data->client_email = $request->client_email;
 		$data->is_nri = $request->is_nri;
 		$data->enquiry_for = $request->enquiry_for;
@@ -1635,8 +1636,9 @@ class EnquiriesController extends Controller
 		$edit_configuration = Enquiries::where('id', $request->id)->pluck('configuration');
 		$edit_category = Enquiries::where('id', $request->id)->pluck('property_type');
 		$land_units = DB::table('land_units')->get();
+		$country_codes  = DB::table('countries')->get();
 
-		return view('admin.properties.add_enquiry', compact('edit_configuration', 'land_units', 'edit_category', 'enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'current_id', 'districts', 'talukas', 'villages'));
+		return view('admin.properties.add_enquiry', compact('country_codes','edit_configuration', 'land_units', 'edit_category', 'enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'current_id', 'districts', 'talukas', 'villages'));
 	}
 	// public function getEnquiryConfiguration(Request $request)
 	// {

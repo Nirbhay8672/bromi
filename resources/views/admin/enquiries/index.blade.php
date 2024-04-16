@@ -1744,7 +1744,7 @@
                             data: 'telephonic_discussion',
                             name: 'telephonic_discussion',
                             render: function(data, type, full, meta) {
-                                if (data.length > 56) {
+                                if (data && data.length > 56) {
                                     return '<span class="truncated">' + data.substr(0, 56) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span>';
                                 } else {
                                     return data;
