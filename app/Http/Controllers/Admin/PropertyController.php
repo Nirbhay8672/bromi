@@ -966,23 +966,23 @@ class PropertyController extends Controller
         }
 
         if ($type == 'Flat') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Builtup Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Two wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'zone', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Builtup Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Two wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
         } else if ($type == 'Vila,Bunglow') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'zone', 'locality', 'address', 'location link', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
         } else if ($type == 'Land,Plot') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Carpet Plot Area', 'Salable Area', 'Length of plot', 'Width of plot', 'Total No. of units', 'No Of Floors Allowed', 'No Of Side Open', 'Hot', 'Favourite', 'Pre Leased', 'Pre leased remarks', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'zone', 'locality', 'address', 'location link', 'Carpet Plot Area', 'Salable Area', 'Length of plot', 'Width of plot', 'Total No. of units', 'No Of Floors Allowed', 'No Of Side Open', 'Hot', 'Favourite', 'Pre Leased', 'Pre leased remarks', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3'];
         } else if ($type == 'Penthouse') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Builtup Area', 'Terrace Carpet Area', 'Terrace Salable Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Balcony', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'zone', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Builtup Area', 'Terrace Carpet Area', 'Terrace Salable Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Balcony', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
         } else if ($type == 'Farmhouse') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'district', 'taluka', 'village', 'zone', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'zone', 'locality', 'address', 'location link', 'district', 'taluka', 'village', 'zone', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Amenities', 'Swimming Pool', 'Club house', 'Passenger Lift', 'Garden & Children Play Area', 'Service Lift', 'Streature Lift', 'Central AC', 'Gym', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
         } else if ($type == 'Office') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Washrooms', 'Four Wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'zone', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Washrooms', 'Four Wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
         } else if ($type == 'Retail') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Opening Width', 'Ceiling Height', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'No Of Elavators', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Washrooms', 'Four Wheeler Parking', 'Two wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Two Road Corner', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'zone', 'locality', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Opening Width', 'Ceiling Height', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'No Of Elavators', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Washrooms', 'Four Wheeler Parking', 'Two wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Two Road Corner', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
         } else if ($type == 'Storage,industrial') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'location link', 'Constructed Carpet Area', 'Constructed Salable Area', 'Salable Plot Area', 'Carpet Plot Area', 'Centre Height', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Two wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Pollution Control Board', 'EC NOC', 'Bail Membership', 'Discharge', 'Gas', 'Power', 'Water', 'Machinery', 'ETL CEPT NLTL', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Care Taker Name', 'Care Taker Contact', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'zone', 'locality', 'address', 'location link', 'Constructed Carpet Area', 'Constructed Salable Area', 'Salable Plot Area', 'Carpet Plot Area', 'Centre Height', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Two wheeler Parking', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Pollution Control Board', 'EC NOC', 'Bail Membership', 'Discharge', 'Gas', 'Power', 'Water', 'Machinery', 'ETL CEPT NLTL', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3'];
         } else if ($type == 'Plot,Land') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'district', 'taluka', 'village', 'zone', 'Length of plot', 'Width of plot', 'No Of Floors Allowed', 'Hot', 'Favourite', 'Road width of front side', 'constructed allowed for', 'Fsi', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Survey Number ', 'Plot Size', 'Survey Price', 'TP Number', 'FP Number', 'Plot Size', 'FP Price ', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'zone', 'locality', 'address', 'district', 'taluka', 'village', 'zone', 'Length of plot', 'Width of plot', 'No Of Floors Allowed', 'Hot', 'Favourite', 'Road width of front side', 'constructed allowed for', 'Fsi', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Survey Number ', 'Plot Size', 'Survey Price', 'TP Number', 'FP Number', 'Plot Size', 'FP Price ', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.'];
         }
 
         $allCells2 = [];
@@ -1000,50 +1000,50 @@ class PropertyController extends Controller
             $spreadsheet->getActiveSheet()->getColumnDimension($value)->setWidth(15);
         }
 
-        $dd1 = Projects::whereNotNull('project_name')->with('Area')->get()->toArray();
+        $dd1 = Projects::whereNotNull('project_name')->where('user_id',Auth::user()->id)->with('Area')->get()->toArray();
         $projects = [];
         foreach ($dd1 as $key => $value) {
             $projects[] = $value['project_name'] . ((isset($value['area']['name'])) ? ' - ' . $value['area']['name'] : '');
         }
         $projects = '"' . implode(",", $projects) . '"';
 
-        $dd1 = City::whereNotNull('name')->get()->toArray();
+        $dd1 = City::whereNotNull('name')->where('user_id',Auth::user()->id)->get()->toArray();
         $cities = [];
         foreach ($dd1 as $key => $value) {
             $cities[] = $value['name'];
         }
         $cities = '"' . implode(",", $cities) . '"';
 
-        $dd1 = Areas::whereNotNull('name')->get()->toArray();
+        $dd1 = Areas::whereNotNull('name')->where('user_id',Auth::user()->id)->get()->toArray();
         $localities = [];
         foreach ($dd1 as $key => $value) {
             $localities[] = $value['name'];
         }
         $localities = '"' . implode(",", $localities) . '"';
 
-        $dd1 = District::whereNotNull('name')->get()->toArray();
+        $dd1 = District::whereNotNull('name')->where('user_id',Auth::user()->id)->get()->toArray();
         $districts = [];
         foreach ($dd1 as $key => $value) {
             $districts[] = $value['name'];
         }
         $districts = '"' . implode(",", $districts) . '"';
 
-        $dd1 = Taluka::whereNotNull('name')->get()->toArray();
+        $dd1 = Taluka::whereNotNull('name')->where('user_id',Auth::user()->id)->get()->toArray();
         $talukas = [];
         foreach ($dd1 as $key => $value) {
             $talukas[] = $value['name'];
         }
         $talukas = '"' . implode(",", $talukas) . '"';
 
-        $dd1 = Village::whereNotNull('name')->get()->toArray();
+        $dd1 = Village::whereNotNull('name')->where('user_id',Auth::user()->id)->get()->toArray();
         $villages = [];
         foreach ($dd1 as $key => $value) {
             $villages[] = $value['name'];
         }
         $villages = '"' . implode(",", $villages) . '"';
 
-        $dropdowns = DropdownSettings::get()->toArray();
         $dropdownsarr = [];
+        $dropdowns = DropdownSettings::get()->toArray();
         foreach ($dropdowns as $key => $value) {
             $dropdownsarr[$value['dropdown_for']][] = $value['name'];
         }
@@ -1066,13 +1066,15 @@ class PropertyController extends Controller
         $property_age = '"0-1 years,1-5 years,5-10 years,10+ years"';
         $yes_no = '"Yes,No"';
         $owner_is = '"Builder,Individual Owner,Investor"';
-        $key_available_at = '"Office,Owner,Care Taker"';
+        $key_available_at = '"Office,Owner"';
 
         $arrDetails['Property For'] = $propertyFor;
         $arrDetails['Property Type'] = $PropertyType;
         $arrDetails['Category'] = $specificType;
         $arrDetails['Subcategory'] = $configuaration;
         $arrDetails['Project'] = $projects;
+        $arrDetails['city'] = $cities;
+        $arrDetails['localities'] = $localities;
         $arrDetails['zone'] = $zone;
         $arrDetails['Service Elavator'] = $yes_no;
         $arrDetails['Servant Room'] = $yes_no;
@@ -1102,7 +1104,7 @@ class PropertyController extends Controller
         $arrDetails['Furnished Status 2'] = $furnishedStatus;
         $arrDetails['Available Status 3'] = $unit_available;
         $arrDetails['Furnished Status 3'] = $furnishedStatus;
-
+        
         foreach ($allCells as $key => $value) {
             if (isset($arrDetails[$allFields[$key]])) {
                 $validation = $spreadsheet->getActiveSheet()->getcell($value . '1')->getDataValidation();
