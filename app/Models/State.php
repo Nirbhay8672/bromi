@@ -21,10 +21,7 @@ class State extends Model
 
 	protected $table = 'state';
 
-	protected $fillable = [
-		'user_id',
-		'name',
-	];
+	protected $guarded = [];
 
 	public function cities()
 	{

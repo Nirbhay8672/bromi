@@ -563,6 +563,7 @@ class HomeController extends Controller
 						$new_state->fill([
 							'name' => $state->name,
 							'user_id' => Auth::user()->id,
+							'gst_type' => $state->gst_type,
 						])->save();
 						
 						$new_state_id = $new_state->id;

@@ -22,6 +22,7 @@ class StateImport implements ToModel, WithHeadingRow
             return new State([
                 'name' => $row['name'],
                 'user_id' => Auth::user()->id,
+                'gst_type' => strtolower($row['name']) == 'gujarat' ? 'intra_state' : 'inter_state',
             ]);
         }
     }
