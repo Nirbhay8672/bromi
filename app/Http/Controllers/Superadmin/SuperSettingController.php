@@ -106,6 +106,20 @@ class SuperSettingController extends Controller
 			$data = State::where('user_id', Auth::user()->id)->get();
 
 			return DataTables::of($data)
+				->editColumn('gst_type', function ($row) {
+
+					$gst_type_case = '';
+
+					if($row->gst_type == 'inter_state') {
+						$gst_type_case = 'Inter State'; 
+					}
+
+					if($row->gst_type == 'intra_state') {
+						$gst_type_case = 'Intra State'; 
+					}
+
+					return $gst_type_case;
+				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
 					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Edit" onclick=getState(this) class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
@@ -153,6 +167,7 @@ class SuperSettingController extends Controller
 				$data =  new State();
 				$data->user_id = Auth::user()->id;
 				$data->name = $request->name;
+				$data->gst_type = $request->gst_type;
 				$data->save();
 			}
 		}

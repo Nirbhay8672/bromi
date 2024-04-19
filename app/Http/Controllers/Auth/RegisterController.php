@@ -221,6 +221,7 @@ class RegisterController extends Controller
         $new_state->fill([
             'name' => $state->name,
             'user_id' => $user->id,
+            'gst_type' => $state->gst_type,
         ])->save();
 
         $new_city = new City();

@@ -40,6 +40,7 @@
                                         <tr>
                                             <th style="min-width: 80px;">Sr No.</th>
                                             <th>State Name</th>
+                                            <th>Gst Type</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -145,6 +146,10 @@
                         {
                             data: 'name',
                             name: 'name'
+                        },
+                        {
+                            data: 'gst_type',
+                            name: 'gst_type'
                         },
                         {
                             data: 'Actions',

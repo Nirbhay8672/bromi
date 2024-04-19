@@ -145,6 +145,7 @@ class AreaController extends Controller
 					$new_state->fill([
 						'name' => $state_obj->name,
 						'user_id' => Auth::user()->id,
+						'gst_type' => $state_obj->gst_type,
 					])->save();
 
 					$state_id = $new_state->id;
