@@ -248,7 +248,7 @@
                                                         <h6><b>Total Land Area</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_4">
-                                                        <div style="text-transform: none !important;">: {{ $project->land_area }}</div>
+                                                        <div style="text-transform: none !important;">: {{ $project->land_area }} {{ $map_unit[$project->land_size_unit] ?? '-' }}</div>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Remark</b></h6>
@@ -348,10 +348,11 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Contact Details</h5>
                                             </div>
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mb-2">
+                                                <table class="table custom-table-design" style="border: 1px solid blue;">
                                                     <thead>
                                                         <tr>
+                                                            <th scope="col">Sr No.</th>
                                                             <th scope="col">Name</th>
                                                             <th scope="col">Mobile</th>
                                                             <th scope="col">Email</th>
@@ -359,8 +360,9 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($project->contacts as $contact)
+                                                        @foreach ($project->contacts as $index => $contact)
                                                             <tr>
+                                                                <td>{{$index + 1}}</td>
                                                                 <td>{{$contact['name']}}</td>
                                                                 <td>{{$contact['mobile']}}</td>
                                                                 <td style="text-transform: none !important;">{{$contact['email']}}</td>
@@ -379,8 +381,8 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Tower Details</h5>
                                             </div>
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mb-3">
+                                                <table class="table custom-table-design" style="border: 1px solid blue;">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Number Of Tower</th>
@@ -416,28 +418,34 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mb-3">
+                                                <table class="table custom-table-design" style="border: 1px solid blue;">
                                                     <thead>
                                                         <tr>
+                                                            <th scope="col">Sr No.</th>
                                                             <th scope="col">Tower Name</th>
                                                             <th scope="col">Saleable</th>
+                                                            <th scope="col">Ceilling Height</th>
                                                             <th scope="col">Carpet</th>
                                                             <th scope="col">Built Up</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($project->if_office as $office_tower)
+                                                        @foreach ($project->if_office as $index => $office_tower)
                                                         <tr>
+                                                            <td>{{$index + 1}}</td>
                                                             <td>{{$office_tower['tower_name']}}</td>
                                                             <td>
-                                                                {{$office_tower['saleable']}} - {{ $office_tower['saleable_to'] }}
+                                                                {{$office_tower['saleable']}} - {{ $office_tower['saleable_to'] }} {{ $office_tower['saleable_from_to_map_unit'] > 0 ? $map_unit[$office_tower['saleable_from_to_map_unit']] : '' }}
                                                             </td>
                                                             <td>
-                                                                {{$office_tower['carpet']}}
+                                                                {{$office_tower['ceiling_height']}} {{ $office_tower['ceiling_height_map_unit'] > 0 ? $map_unit[$office_tower['ceiling_height_map_unit']] : '' }}
                                                             </td>
                                                             <td>
-                                                                {{$office_tower['built_up']}} - {{ $office_tower['built_up_to'] }}
+                                                                {{$office_tower['carpet']}} - {{ $office_tower['carpet_to'] }} {{ $office_tower['carpet_from_to_map_unit'] > 0 ? $map_unit[$office_tower['carpet_from_to_map_unit']] : '' }}
+                                                            </td>
+                                                            <td>
+                                                                {{$office_tower['built_up']}} - {{ $office_tower['built_up_to'] }} {{ $office_tower['built_from_to_map_unit'] > 0 ? $map_unit[$office_tower['built_from_to_map_unit']] : '' }}
                                                             </td>
                                                         </tr>
                                                         @endforeach
