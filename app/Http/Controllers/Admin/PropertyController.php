@@ -38,6 +38,7 @@ use Rap2hpoutre\FastExcel\FastExcel;
 use Yajra\DataTables\DataTables;
 use ZipArchive;
 use Illuminate\Support\Facades\DB;
+
 class PropertyController extends Controller
 {
 
@@ -985,6 +986,37 @@ class PropertyController extends Controller
             $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'locality', 'address', 'district', 'taluka', 'village', 'zone', 'Length of plot', 'Width of plot', 'No Of Floors Allowed', 'Hot', 'Favourite', 'Road width of front side', 'constructed allowed for', 'Fsi', 'Pre Leased', 'Pre leased remarks', 'Availability', 'Age of Property', 'Survey Number ', 'Plot Size', 'Survey Price', 'TP Number', 'FP Number', 'Plot Size', 'FP Price ', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.'];
         }
 
+        $subcategoryOptions = [];
+        $categoryOptions = [];
+        if ($type == 'Flat') {
+            $subcategoryOptions = ['1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
+            $categoryOptions = ['Flat'];
+        } elseif ($type == 'Vila,Bunglow') {
+            $subcategoryOptions = ['1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
+            $categoryOptions = ['Vila,Bunglow'];
+        } elseif ($type == 'Land') {
+            $subcategoryOptions = ['Commercial Land', 'Agricultural/Farm Land'];
+            $categoryOptions = ['Land'];
+        } elseif ($type == 'Penthouse') {
+            $subcategoryOptions = ['1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
+            $categoryOptions = ['Penthouse'];
+        } elseif ($type == 'Farmhouse') {
+            $subcategoryOptions = [''];
+            $categoryOptions = ['Farmhouse'];
+        } elseif ($type == 'Office') {
+            $subcategoryOptions = ['office space', 'Co-working'];
+            $categoryOptions = ['Office'];
+        } elseif ($type == 'Retail') {
+            $subcategoryOptions = ['Ground floor', '1st floor', '2st floor', '3rd floor'];
+            $categoryOptions = ['Retail'];
+        } elseif ($type == 'Storage,industrial') {
+            $subcategoryOptions = ['Warehouse', 'Cold Storage', 'ind. shed', 'Plotting'];
+            $categoryOptions = ['Storage,industrial'];
+        } elseif ($type == 'Plot') {
+            $subcategoryOptions = [''];
+            $categoryOptions = ['Plot'];
+        }
+
         $allCells2 = [];
         foreach ($allFields as $key => $value) {
             $allCells2[] = $allCells[$key];
@@ -1053,10 +1085,8 @@ class PropertyController extends Controller
             array_push($property_configuration, $value);
         }
 
-        $configuaration = '"' . implode(",", $property_configuration) . '"';
         $propertyFor = '"Rent, Sell , Both"';
         $PropertyType = '"' . implode(",", $dropdownsarr['property_construction_type']) . '"';
-        $specificType = '"' . implode(",", $dropdownsarr['property_specific_type']) . '"';
         $zone = '"' . implode(",", $dropdownsarr['property_zone']) . '"';
         $furnishedStatus = '"' . implode(",", $dropdownsarr['property_furniture_type']) . '"';
         $constructedallowed = '"Commercial, Industrial, Residential"';
@@ -1070,8 +1100,8 @@ class PropertyController extends Controller
 
         $arrDetails['Property For'] = $propertyFor;
         $arrDetails['Property Type'] = $PropertyType;
-        $arrDetails['Category'] = $specificType;
-        $arrDetails['Subcategory'] = $configuaration;
+        $arrDetails['Category'] = '"' . implode(",", $categoryOptions) . '"';
+        $arrDetails['Subcategory'] = '"' . implode(",", $subcategoryOptions) . '"';
         $arrDetails['Project'] = $projects;
         $arrDetails['zone'] = $zone;
         $arrDetails['Service Elavator'] = $yes_no;
@@ -1130,11 +1160,11 @@ class PropertyController extends Controller
     public function exportProperty(Request $request)
     {
         $properties = "";
-        if($request->category === 'landProp'){
+        if ($request->category === 'landProp') {
             $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->where('property_category', ['262', '256'])->whereNull('deleted_at')->get();
-        }elseif($request->category === 'indProp'){
-            $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->where('property_category','261')->whereNull('deleted_at')->get();
-        }else{
+        } elseif ($request->category === 'indProp') {
+            $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->where('property_category', '261')->whereNull('deleted_at')->get();
+        } else {
             $properties = Properties::select('*')->with('Projects', 'District', 'Taluka', 'Village')->where('property_category', '!=', ['261', '262', '256'])->whereNull('deleted_at')->get();
         }
 
@@ -1220,39 +1250,39 @@ class PropertyController extends Controller
             $arr['Pre Leased Remarks'] = '';
             $arr['Location Link'] = '';
 
-            $units=DB::table('land_units')->get();
-    
-            $salableArray=explode("_-||-_",$property->salable_area);
-            $land_units=$units->where('id',$salableArray[1])->first();
+            $units = DB::table('land_units')->get();
 
-            $carpetArray=explode("_-||-_",$property->carpet_area);
-            $carpet_units=$units->where('id',$carpetArray[1])->first();
-            
-            $carpet_plotArray=explode("_-||-_",$property->carpet_plot_area);
-            $carpet_plot_units=$units->where('id',$carpet_plotArray[1])->first();
-        
-            $salable_plotArray=explode("_-||-_",$property->salable_plot_area);
-            $salable_plot_units=$units->where('id',$salable_plotArray[1])->first();
-            
-            $constructed_salableArray=explode("_-||-_",$property->constructed_salable_area);
-            $constructed_salable_units=$units->where('id',$constructed_salableArray[1])->first();
-            
-            $constructed_carpetArray=explode("_-||-_",$property->constructed_carpet_area);
-            $constructed_carpet_units=$units->where('id',$constructed_carpetArray[1])->first();
-            
-            $constructed_builtupArray=explode("_-||-_",$property->constructed_builtup_area);
-            $constructed_builtup_units=$units->where('id',$constructed_builtupArray[1])->first();
-            
-            $builtupArray=explode("_-||-_",$property->builtup_area);
-            $builtup_units=$units->where('id',$builtupArray[1])->first();
-            $getBuiltup=$builtupArray[0].' ' .$builtup_units->unit_name;
+            $salableArray = explode("_-||-_", $property->salable_area);
+            $land_units = $units->where('id', $salableArray[1])->first();
+
+            $carpetArray = explode("_-||-_", $property->carpet_area);
+            $carpet_units = $units->where('id', $carpetArray[1])->first();
+
+            $carpet_plotArray = explode("_-||-_", $property->carpet_plot_area);
+            $carpet_plot_units = $units->where('id', $carpet_plotArray[1])->first();
+
+            $salable_plotArray = explode("_-||-_", $property->salable_plot_area);
+            $salable_plot_units = $units->where('id', $salable_plotArray[1])->first();
+
+            $constructed_salableArray = explode("_-||-_", $property->constructed_salable_area);
+            $constructed_salable_units = $units->where('id', $constructed_salableArray[1])->first();
+
+            $constructed_carpetArray = explode("_-||-_", $property->constructed_carpet_area);
+            $constructed_carpet_units = $units->where('id', $constructed_carpetArray[1])->first();
+
+            $constructed_builtupArray = explode("_-||-_", $property->constructed_builtup_area);
+            $constructed_builtup_units = $units->where('id', $constructed_builtupArray[1])->first();
+
+            $builtupArray = explode("_-||-_", $property->builtup_area);
+            $builtup_units = $units->where('id', $builtupArray[1])->first();
+            $getBuiltup = $builtupArray[0] . ' ' . $builtup_units->unit_name;
             // dd($builtupArray[0],$builtup_units->unit_name);
-            
-            $terrace_carpetArray=explode("_-||-_",$property->terrace_carpet_area);
-            $terrace_carpet_units=$units->where('id',$terrace_carpetArray[1])->first();
-            
-            $terrace_salableArray=explode("_-||-_",$property->terrace_salable_area);
-            $terrace_salable_units=$units->where('id',$terrace_salableArray[1])->first();
+
+            $terrace_carpetArray = explode("_-||-_", $property->terrace_carpet_area);
+            $terrace_carpet_units = $units->where('id', $terrace_carpetArray[1])->first();
+
+            $terrace_salableArray = explode("_-||-_", $property->terrace_salable_area);
+            $terrace_salable_units = $units->where('id', $terrace_salableArray[1])->first();
 
             if (!empty($property->property_for)) {
                 $arr['Property For'] = $property->property_for ? $property->property_for : '';
@@ -1391,7 +1421,7 @@ class PropertyController extends Controller
             if (!empty(explode('_-||-_', $property->carpet_area)[0]) && !empty($carpet_units->unit_name)) {
                 $arr['Carpet Area'] = (explode('_-||-_', $property->carpet_area)[0] . ' ' . $carpet_units->unit_name);
             }
-           
+
             if (!empty(explode('_-||-_', $property->salable_area)[0]) && !empty($land_units->unit_name)) {
                 $arr['Salable Area'] = (explode('_-||-_', $property->salable_area)[0] . ' ' . $land_units->unit_name);
             }
@@ -1744,7 +1774,7 @@ class PropertyController extends Controller
 
                     // $salable_area_print = $this->generateAreaDetails($row->Property, $dropdowns[$row->Property->property_category]['name'], $dropdowns);
                     $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
-                   
+
                     if (empty($salable_area_print)) {
                         $salable_area_print = "Area Not Available";
                     }
@@ -1901,12 +1931,12 @@ class PropertyController extends Controller
                 $carpet_measurement_id = $carpet_measurement->id;
             }
 
-            $super_measurement_id = null;
-            $super_measurement = DropdownSettings::where('name', 'like', '%' . $value['Builtup Area'] . '%')->first();
+            // $super_measurement_id = null;
+            // $super_measurement = DropdownSettings::where('name', 'like', '%' . $value['Builtup Area'] . '%')->first();
 
-            if (!empty($super_measurement->id) && !empty($value['Builtup Area'])) {
-                $super_measurement_id = $super_measurement->id;
-            }
+            // if (!empty($super_measurement->id) && !empty($value['Builtup Area'])) {
+            //     $super_measurement_id = $super_measurement->id;
+            // }
             $furnished_status_id[] = null;
             $arr = [];
             $array = [1 => 'Furnished Status 1', 2 => 'Furnished Status 2', 3 => 'Furnished Status 3'];
@@ -2014,7 +2044,7 @@ class PropertyController extends Controller
                     'carpet_area' => $value['Carpet Area'] . '_-||-_117',
                     'carpet_measurement' => $carpet_measurement_id . '_-||-_117',
                     'super_builtup_area' => $value['Salable Area'],
-                    'super_builtup_measurement' => $super_measurement_id . '_-||-_117',
+                    // 'super_builtup_measurement' => $super_measurement_id . '_-||-_117',
                     'hot_property' => $hot_property,
                     'furnished_status' => $furnished_status_id,
                     // 'price' => $value['Price'] . ' ' . $value['Price Unit'],
@@ -2125,7 +2155,7 @@ class PropertyController extends Controller
         $visits = QuickSiteVisit::with('Enquiry')->where('property_list', 'like', '%"' . $property->id . '"%')->whereNotNull('visit_status')->orderBy('id', 'DESC')->get();
 
         $projects = Projects::all();
-       $areas = Areas::where('user_id', Auth::user()->id)->get();
+        $areas = Areas::where('user_id', Auth::user()->id)->get();
 
         $multiple_image = LandImages::where('pro_id', $property->id)->get();
         $construction_docs_list = LandImages::where('pro_id', $property->id)
@@ -2383,7 +2413,7 @@ class PropertyController extends Controller
         $edit_category = Properties::where('id', $request->id)->pluck('property_category');
         $data['property_const_docs'] = PropertyConstructionDocs::all();
         $data['land_units'] = FacadesDB::table('land_units')->get();
-		$data['country_codes']  = DB::table('countries')->get();
+        $data['country_codes']  = DB::table('countries')->get();
 
         return view('admin.properties.add_property', $data, compact('edit_category', 'edit_configuration'));
     }
@@ -2438,7 +2468,7 @@ class PropertyController extends Controller
         $data['amenities'] = $amenities;
         $data['property_const_docs'] = PropertyConstructionDocs::all();
         $data['land_units'] = FacadesDB::table('land_units')->get();
-		$data['country_codes']  = DB::table('countries')->get();
+        $data['country_codes']  = DB::table('countries')->get();
 
         return view('admin.properties.add_property', $data);
     }
