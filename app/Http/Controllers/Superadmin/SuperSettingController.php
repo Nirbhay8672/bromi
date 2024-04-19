@@ -138,10 +138,12 @@ class SuperSettingController extends Controller
 
 				if(!$state) {
 					$data->name = $request->name;
+					$data->gst_type = $request->gst_type;
 					$data->save();
 				}
 			} else  {
 				$data->name = $request->name;
+				$data->gst_type = $request->gst_type;
 				$data->save();
 			}
 		} else {
