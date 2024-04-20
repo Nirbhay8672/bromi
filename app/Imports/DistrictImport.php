@@ -32,6 +32,7 @@ class DistrictImport implements ToModel, WithHeadingRow
                 $new->fill([
                     'name' => $row['state_name'],
                     'user_id' => Auth::user()->id,
+                    'gst_type' => strtolower($row['state_name']) == 'gujarat' ? 'intra_state' : 'inter_state',
                 ])->save();
 
                 $state_id = $new->id;

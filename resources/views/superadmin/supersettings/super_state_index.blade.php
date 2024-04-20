@@ -40,6 +40,7 @@
                                         <tr>
                                             <th style="min-width: 80px;">Sr No.</th>
                                             <th>State Name</th>
+                                            <th>Gst Type</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -112,6 +113,10 @@
                                     </div>
                                     <label id="state_name-error" class="error" for="state_name"></label>
                                 </div>
+                                <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    <input class="form-check-input" id="is_inter_state" type="checkbox">
+                                    <label class="form-check-label" for="is_inter_state">Is Inter State</label>
+                                </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
                             <div class="text-center">
@@ -143,6 +148,10 @@
                             name: 'name'
                         },
                         {
+                            data: 'gst_type',
+                            name: 'gst_type'
+                        },
+                        {
                             data: 'Actions',
                             name: 'Actions',
                             orderable: false
@@ -169,6 +178,16 @@
                         data = JSON.parse(data)
                         $('#this_data_id').val(data.id)
                         $('#state_name').val(data.name).trigger('change');
+
+                        if(data.gst_type) {
+
+                            if(data.gst_type == 'inter_state') {
+                                $('#is_inter_state').prop('checked', true);
+                            } else {
+                                $('#is_inter_state').prop('checked', false);
+                            }
+                        }
+
                         $('#stateModal').modal('show');
 						triggerChangeinput()
                     }
@@ -210,12 +229,15 @@
                 $(this).prop('disabled',true);
                 var id = $('#this_data_id').val();
 
+                var getVal=document.getElementById("is_inter_state").checked;
+
                 $.ajax({
                     type: "POST",
                     url: "{{ route('superadmin.settings.saveState') }}",
                     data: {
                         id: id,
                         name: $('#state_name').val(),
+                        gst_type: getVal ? 'inter_state' : 'intra_state',
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
