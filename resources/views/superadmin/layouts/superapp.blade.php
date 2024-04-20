@@ -475,14 +475,14 @@ Helper::set_default_measuerement();
                                         </li>
                                     @endif
 
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::BROMI_REQUESTS))
+                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::LEADS))
                                         <li class="sidebar-list">
                                             <a
                                                 class="sidebar-link"
                                                 href="{{ route('superadmin.adminEnquiries') }}"
                                             >
                                                 <i class="fa fa-comments"></i>
-                                                <span class="lan-3">Bromi Requests</span>
+                                                <span class="lan-3">Leads</span>
                                             </a>
                                         </li>   
                                     @endif

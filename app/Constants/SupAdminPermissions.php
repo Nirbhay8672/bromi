@@ -24,5 +24,5 @@ class SupAdminPermissions
     const EMAIL_TEMPLATE = 'email-template';
     const SMS_TEMPLATE = 'sms-template';
     const REQUESTS = 'requests';
-    const BROMI_REQUESTS = 'bromi-requests';
+    const LEADS = 'leads';
 }

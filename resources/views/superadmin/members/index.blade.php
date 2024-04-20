@@ -14,14 +14,16 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Members </h5>
-                            <button
-                                class="btn custom-icon-theme-button"
-                                type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#userModal"
-                                title="Add Member"
-                                onclick="resetData()"
-                            ><i class="fa fa-plus"></i></button>
+                            @if(empty(Auth::user()->parent_id))
+                                <button
+                                    class="btn custom-icon-theme-button"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#userModal"
+                                    title="Add Member"
+                                    onclick="resetData()"
+                                ><i class="fa fa-plus"></i></button>
+                            @endif
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -155,6 +157,13 @@
                                             </label>
                                             <label class="d-flex">
                                                 <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="requests_" value="requests"> Requests
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="d-flex flex-column justify-content-start">
+                                            <label class="d-flex">
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="leads_" value="leads"> Leads
                                             </label>
                                         </div>
                                     </div>
