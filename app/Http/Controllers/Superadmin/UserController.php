@@ -210,9 +210,13 @@ class UserController extends Controller
 				})
 
 				->editColumn('Actions', function ($row) {
-					$buttons = '';
+                    $buttons = '';
+                    if (empty(Auth::user()->parent_id)) {
+                        $buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" onclick=getUser(this) class="fa-pencil pointer fa fs-22 py-2 mx-2" type="button"></i>';
+                    } else {
+                        $buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" class="fa-pencil pointer fa fs-22 py-2 mx-2" type="button"></i>';
+                    }
 					
-					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" onclick=getUser(this) class="fa-pencil pointer fa fs-22 py-2 mx-2" type="button"></i>';
 					return $buttons;
 				})
 				->rawColumns(['Actions'])
@@ -287,6 +291,7 @@ class UserController extends Controller
 			$data->save();
 		} else {
 			$data =  new User();
+			$data->parent_id = Auth::user()->id;
 			$data->first_name = $request->first_name;
 			$data->last_name = $request->last_name;
             $data->birth_date = Carbon::parse($request->birth_date)->format('Y-m-d');
