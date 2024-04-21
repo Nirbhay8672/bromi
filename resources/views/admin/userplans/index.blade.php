@@ -69,7 +69,7 @@
 												<input type="hidden" name="plan_id" value="{{$plan->id}}">
 
                                                 <?php
-                                                $gstType = Auth::user()->gst_type; // gst_type
+                                                $gstType = Auth::user()->state->gst_type; // gst_type
                                                 $gst = $plan->price * 0.18;
                                                 ?>
 

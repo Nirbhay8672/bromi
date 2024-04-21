@@ -213,7 +213,7 @@
                                                     </p>
                                                     @csrf
                                                     @php
-                                                        $gst_type = Auth::user()->gst_type;
+                                                        $gst_type = Auth::user()->state->gst_type;
                                                         Session::put('transaction_goal', 'add_user');
                                                     @endphp
                                                     <input type="hidden" name="transaction_goal", value='add_user'>

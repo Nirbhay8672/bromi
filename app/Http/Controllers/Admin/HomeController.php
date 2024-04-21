@@ -512,7 +512,7 @@ class HomeController extends Controller
             }
             $priceAfterDiscount = $planPrice - $discount;
 
-            $gstType = Auth::user()->gst_type;
+            $gstType = Auth::user()->state->gst_type;
             $gst = $priceAfterDiscount * 0.18;
             
             return response()->json([
@@ -746,14 +746,16 @@ class HomeController extends Controller
             $resp = curl_exec($curl);
             if (curl_errno($curl)) {
                 $error_msg = curl_error($curl);
-                dd($error_msg);
+                Session::put('message', $error_msg);
+                return redirect()->route('admin.plans');
+                // dd($error_msg);
             }
             curl_close($curl);
 
             return redirect()->to(json_decode($resp)->payment_link);
         } catch (\Throwable $th) {
             //throw $th;
-            dd($th);
+            // dd($th);
             Session::put('message', $th->getMessage());
             return redirect()->route('admin.plans');
         }
@@ -832,14 +834,16 @@ class HomeController extends Controller
             $resp = curl_exec($curl);
             if (curl_errno($curl)) {
                 $error_msg = curl_error($curl);
-                dd('order_create', $error_msg);
+                Session::put('message', $error_msg);
+                return redirect()->route('admin.plans');
+                // dd('order_create', $error_msg);
             }
             curl_close($curl);
 
             return redirect()->to(json_decode($resp)->payment_link);
         } catch (\Throwable $th) {
             //throw $th;
-            dd($th);
+            // dd($th);
             Session::put('message', $th->getMessage());
             return redirect()->route('admin.plans');
         }
@@ -1042,12 +1046,13 @@ class HomeController extends Controller
                 Session::put('plan_id', $orderTags['plan_id']);
                 return redirect('/admin');
             } else {
-                dd('paymetsudd');
+                // dd('paymetsudd');
                 Session::put('message', 'Payment failed.');
                 return redirect()->route('admin.plans');
             }
         } catch (\Throwable $th) {
-            dd($th);
+            // dd($th);
+            Session::put('message', $th->getMessage());
             return redirect()->route('admin.plans');
         }
     }
