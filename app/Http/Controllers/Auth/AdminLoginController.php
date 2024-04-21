@@ -195,7 +195,7 @@ class AdminLoginController extends Controller
 	
 	public function subscription()
 	{
-        $gstType = User::find(Session::get('user_id'))->gst_type;
+        $gstType = User::find(Session::get('user_id'))->state->gst_type;
 	    Session::put('transaction_goal', 'new_subscription');
 		return view('guest.plan')->with([
 			'plans' =>  Subplans::all(),
@@ -229,7 +229,7 @@ class AdminLoginController extends Controller
             }
             $priceAfterDiscount = $planPrice - $discount;
 
-            $gstType = User::find($request->user_id)->gst_type;
+            $gstType = User::find($request->user_id)->state->gst_type;
             $gst = $priceAfterDiscount * 0.18;
 
             return response()->json([
@@ -340,7 +340,9 @@ class AdminLoginController extends Controller
             $resp = curl_exec($curl);
             if (curl_errno($curl)) {
                 $error_msg = curl_error($curl);
-                dd('order_create', $error_msg);
+                Session::put('message', $error_msg);
+                return redirect()->route('subscription');
+                // dd('order_create', $error_msg);
             }
             curl_close($curl);
 
@@ -348,7 +350,7 @@ class AdminLoginController extends Controller
 
         } catch (\Throwable $th) {
             //throw $th;
-            dd('Exception: ', $th);
+            // dd('Exception: ', $th);
             Session::put('message', $th->getMessage());
             return redirect()->route('subscription');
         }
@@ -511,7 +513,9 @@ class AdminLoginController extends Controller
                     ])->render();
                 } else {
                     // add more users template
-                    dd('Error: add_more_users_BR.');
+                    Session::put('message', 'Something went wrong');
+                    return redirect()->route('subscription');
+                    // dd('Error: add_more_users_BR.');
                 }
     
                 // create invoice record
@@ -528,11 +532,13 @@ class AdminLoginController extends Controller
                 Session::put('parent_id', $user->id);
                 return redirect('/admin');
             } else {
-                dd('payment failed.');
+                // dd('payment failed.');
+                Session::put('message', 'Payment Failed.');
                 return redirect()->route('subscription');
             }
         } catch (\Throwable $th) {
-            dd($th);
+            // dd($th);
+            Session::put('message', $th->getMessage());
             return redirect()->route('subscription');
         }
 	}
