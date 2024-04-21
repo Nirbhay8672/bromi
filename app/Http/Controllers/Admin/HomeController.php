@@ -1121,12 +1121,12 @@ class HomeController extends Controller
 			])->where('payments.user_id',Auth::user()->id)->get();
 
 		$tickets = DB::table('tickets')
-			->join('categories','categories.id','tickets.id')
+			->join('categories','categories.id','tickets.category_id')
 			->select([
 				'tickets.*',
 				'categories.name AS category_name',
 			])->where('tickets.user_id',Auth::user()->id)
-			->where('status', 'Open')
+			->where('tickets.status', 'Open')
 			->orderBy('tickets.created_at', 'asc')
 			->take(10)
 			->get();
