@@ -223,9 +223,12 @@ class AdminLoginController extends Controller
             }
             // get plan and give discount price
             $planPrice = Subplans::find($request->plan_id)->price;
-            if ($validCoupon->discount_type == 1) {
+            if ($validCoupon->discount_type == 1) { // percentage
                 $percent = (((int) $validCoupon->amount_off) / 100);
                 $discount = $planPrice * $percent;
+            } else {
+                // flat discount
+                $discount = $validCoupon->amount_off;
             }
             $priceAfterDiscount = $planPrice - $discount;
 
@@ -249,6 +252,7 @@ class AdminLoginController extends Controller
                 'error' => true,
                 'message' => $msg,
                 'error_details' => $th->getMessage(),
+                'line' => $th->getLine(),
                 'data' => null
             ]);
         }

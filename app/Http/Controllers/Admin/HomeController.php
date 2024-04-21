@@ -509,6 +509,9 @@ class HomeController extends Controller
             if ($validCoupon->discount_type == 1) {
                 $percent = (((int) $validCoupon->amount_off) /100);
                 $discount = $planPrice*$percent;
+            } else {
+                // flat discount
+                $discount = $validCoupon->amount_off;
             }
             $priceAfterDiscount = $planPrice - $discount;
 
