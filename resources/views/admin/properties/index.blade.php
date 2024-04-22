@@ -64,7 +64,7 @@
                                 <table class="display" id="propertyTable">
                                     <thead>
                                         <tr>
-                                            <th>
+                                            <th style="width: 10px !important;">
                                                 <div class="form-check form-check-inline checkbox checkbox-dark mb-0 me-0">
                                                     <input class="form-check-input" id="select_all_checkbox"
                                                         name="selectrows" type="checkbox">

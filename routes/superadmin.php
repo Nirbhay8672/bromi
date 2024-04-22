@@ -10,6 +10,7 @@ use App\Http\Controllers\Superadmin\SuperSettingController;
 use App\Http\Controllers\Superadmin\UserController;
 use App\Http\Controllers\Superadmin\TicketsController;
 use App\Http\Controllers\Superadmin\CommentsController;
+use App\Http\Controllers\Superadmin\ImportController;
 use App\Http\Controllers\Superadmin\ProjectsController;
 use App\Http\Controllers\Superadmin\SuperTalukaController;
 use App\Http\Controllers\Superadmin\SuperVillageController;
@@ -66,6 +67,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-plan', [PlanController::class, 'destroy'])->name('superadmin.deletePlan');
 		Route::post('/save-plan', [PlanController::class, 'savePlan'])->name('superadmin.savePlan');
 		Route::any('/Coupons', [CouponController::class, 'index'])->name('superadmin.coupons');
+		Route::any('/update-coupon-status', [CouponController::class, 'updateStatus'])->name('superadmin.update_coupon');
 		Route::post('/get-coupon', [CouponController::class, 'getSpecificCoupon'])->name('superadmin.getCoupon');
 		Route::post('/delete-coupon', [CouponController::class, 'destroy'])->name('superadmin.deleteCoupon');
 		Route::post('/save-coupon', [CouponController::class, 'saveCoupon'])->name('superadmin.saveCoupon');
@@ -89,6 +91,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/superadmin/save-projects', [ProjectsController::class, 'saveProject'])->name('superadmin.saveProject');
 		Route::post('/superadmin/delete-projects', [ProjectsController::class, 'destroy'])->name('superadmin.deleteProject');
 		Route::any('/superadmin/project/view/{id}', [ProjectsController::class, 'viewProject'])->name('superadmin.viewProject');
+
+		Route::get('/settings', [SuperSettingController::class, 'index'])->name('superadmin.settings');
 
 		Route::get('/settings-state', [SuperSettingController::class, 'states_index'])->name('superadmin.settings.state');
 		Route::post('/settings-get-state', [SuperSettingController::class, 'get_state'])->name('superadmin.settings.getState');
@@ -143,5 +147,12 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/settings-delete-village', [SuperVillageController::class, 'village_delete'])->name('superadmin.settings.deletevillage');
 		
 		Route::any('/users-login-activity', [UserController::class, 'loginActivity'])->name('superadmin.usersLoginActivity');
+
+		Route::post('/state-import', [ImportController::class, 'stateImport'])->name('superadmin.stateImport');
+		Route::post('/city-import', [ImportController::class, 'cityImport'])->name('superadmin.cityImport');
+		Route::post('/locality-import', [ImportController::class, 'localityImport'])->name('superadmin.areaImport');
+		Route::post('/district-import', [ImportController::class, 'districtImport'])->name('superadmin.districtImport');
+		Route::post('/taluka-import', [ImportController::class, 'talukaImport'])->name('superadmin.talukaImport');
+		Route::post('/village-import', [ImportController::class, 'villageImport'])->name('superadmin.villageImport');
 	});
 });

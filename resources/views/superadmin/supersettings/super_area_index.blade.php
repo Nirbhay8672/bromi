@@ -61,7 +61,7 @@
                                         </template>
                                     </select>
                                 </div>
-                                <div style="width: 150px;">
+                                <div style="width: 300px;">
                                     <button
                                         class="btn custom-icon-theme-button"
                                         type="button"
@@ -76,6 +76,14 @@
                                         @click="reset()"
                                     ><i class="fa fa-recycle"></i>
                                     </button>
+                                    <button
+                                        class="btn custom-icon-theme-button open_modal_with_this ms-2"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#importModal"
+                                        title="Import CSV"
+                                    ><i class="fa fa-download"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +92,7 @@
                                 <table class="display" id="areaTable">
                                     <thead>
                                         <tr>
-                                            <th>
+                                            <th style="width: 10px !important;">
                                                 <div class="form-check form-check-inline checkbox checkbox-dark mb-0 me-0">
                                                     <input class="form-check-input" id="select_all_checkbox"
                                                         name="selectrows" type="checkbox">
@@ -112,6 +120,42 @@
 
 
         </div>
+
+        <div class="modal fade" id="importModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import Locality</h5>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-bookmark" action="{{ route('superadmin.areaImport') }}" method="POST" enctype="multipart/form-data">
+                            @csrf    
+                            <div class="form-row mb-2 mt-2">
+                                <div>
+                                    <div class="form-group col-md-12 mb-1">
+                                        <label for="State">CSV File</label>
+                                        <input
+                                            class="form-control"
+                                            name="csv_file"
+                                            id="csv_file"
+                                            accept=".csv"
+                                            type="file"
+                                            style="border:1px solid black"
+                                            required
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-5">
+                                <button class="btn custom-theme-button" type="submit">Import</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="areaModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -225,7 +269,6 @@
                     columns: [{
                             data: 'select_checkbox',
                             name: 'select_checkbox',
-                            orderable: false
                         }, {
                             data: 'name',
                             name: 'name'

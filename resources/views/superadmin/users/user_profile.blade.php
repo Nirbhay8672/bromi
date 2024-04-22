@@ -16,7 +16,7 @@
                 <div class="page-title mb-3" style="margin-left: 10px;">
                     <div class="row">
                         <div class="col-12 col-sm-6">
-                            <h3 class="text-white">Profile Details</h3>
+                            <h3 class="text-white">User Profile Details</h3>
                         </div>
                     </div>
                 </div>
@@ -116,6 +116,12 @@
                                                             </div>
                                                         </li>
                                                     </ul>
+
+                                                    <div class="row">
+                                                        <div class="col text-center">
+                                                            <a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary" style="border-radius:5px;">Login as user</a>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -260,6 +266,47 @@
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-body">
+                                            <h3 class="text-center mb-3">Sub Users</h3>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead style="background-color: rgba(223, 223, 223, 0.804)">
+                                                        <tr>
+                                                            <th>Sr No.</th>
+                                                            <th>First Name</th>
+                                                            <th>Last Name</th>
+                                                            <th>Email</th>
+                                                            <th>Phone</th>
+                                                            <th>Company Name</th>
+                                                            <th class="text-center">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if(count($sub_users) > 0)
+                                                        @foreach($sub_users as $index => $user)
+                                                        <tr>
+                                                            <td>{{ $index + 1 }}</td>
+                                                            <td>{{ $user->first_name ?? '-' }}</td>
+                                                            <td>{{ $user->last_name ?? '-' }}</td>
+                                                            <td>{{ $user->email ?? '-' }}</td>
+                                                            <td>{{ $user->mobile_number ?? '-' }}</td>
+                                                            <td>{{ $user->company_name ?? '-' }}</td>
+                                                            <td class="text-center"><a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary" style="border-radius:5px;">Login as user</a></td>
+                                                        </tr>
+                                                        @endforeach
+                                                        @else
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">No record found</td>
+                                                        </tr>
+                                                        @endif
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body">
                                             <h3 class="text-center mb-3">Transaction Details</h3>
                                             <div class="table-responsive">
                                                 <table class="table table-bordered">
@@ -267,8 +314,10 @@
                                                         <tr>
                                                             <th>Transaction Date Time</th>
                                                             <th>Order Id</th>
+                                                            <td>Transaction Goal</td>
                                                             <th>Amount</th>
                                                             <th>Currency</th>
+                                                            <th>Coupon Code</th>
                                                             <th>Plan Name</th>
                                                             <th>Status</th>
                                                         </tr>
@@ -279,8 +328,10 @@
                                                         <tr>
                                                             <td>{{ $transaction->payment_completion_time }}</td>
                                                             <td>{{ $transaction->order_id }}</td>
+                                                            <td>{{ $transaction->transaction_goal_flag }}</td>
                                                             <td>{{ $transaction->payment_amount }}</td>
                                                             <td>{{ $transaction->payment_currency }}</td>
+                                                            <td>{{ $transaction->coupon_applied ?? '-' }}</td>
                                                             <td>{{ $transaction->plan_name }}</td>
                                                             <td>{{ $transaction->payment_status }}</td>
                                                         </tr>

@@ -63,6 +63,9 @@ class UserController extends Controller
 					'state_id',
 					'role_id',
 					'status',
+					'company_name',
+					'subscribed_on',
+					'plan_expire_on',
 				])
 				->whereNotNull('parent_id')
 				->where('role_id','!=',3)
@@ -80,6 +83,9 @@ class UserController extends Controller
 					'state_id',
 					'role_id',
 					'status',
+					'company_name',
+					'subscribed_on',
+					'plan_expire_on',
 				])
 				->where('role_id','!=',3)
 				->whereNull('parent_id')
@@ -115,6 +121,7 @@ class UserController extends Controller
 			}
 
 			return DataTables::of($final_array)
+				->addIndexColumn()
 				->editColumn('plan', function ($row) {
 					if (!empty($row['plan']['name'])) {
 						return $row['plan']['name'];
@@ -161,7 +168,9 @@ class UserController extends Controller
 			$user->city_name = $user->superCity->name;
 		}
 
-		$user_count =  User::where('parent_id',$id)->orWhere('id',$id)->get()->count();
+		$sub_users = User::where('parent_id',$id)->whereNull('users.vendor_id')->get();
+
+		$user_count = $sub_users->count();
 
 		$total_property = Properties::select('id')->where('user_id', $id)->count();
 		$total_enquiry = Enquiries::select('id')->where('user_id', $id)->count();
@@ -172,6 +181,7 @@ class UserController extends Controller
 			->select([
 				'payments.*',
 				'subplans.name AS plan_name',
+				DB::raw("CASE WHEN payments.transaction_goal = 'new_subscription' THEN 'New Subscription' WHEN payments.transaction_goal = 'add_user' THEN 'Add User' WHEN payments.transaction_goal = 'upgrade' THEN 'Upgrade' ELSE '-' END AS transaction_goal_flag")
 			])->where('payments.user_id',$id)->get();
 
 		$tickets = DB::table('tickets')
@@ -185,7 +195,7 @@ class UserController extends Controller
 			->take(10)
 			->get();
 
-		return view('superadmin.users.user_profile',compact('user','tickets', 'plans','transactions','user_count','total_property','total_enquiry','total_project'));
+		return view('superadmin.users.user_profile',compact('user','sub_users','tickets', 'plans','transactions','user_count','total_property','total_enquiry','total_project'));
 	}
 
     public function membersList(Request $request)
@@ -200,9 +210,13 @@ class UserController extends Controller
 				})
 
 				->editColumn('Actions', function ($row) {
-					$buttons = '';
+                    $buttons = '';
+                    if (empty(Auth::user()->parent_id)) {
+                        $buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" onclick=getUser(this) class="fa-pencil pointer fa fs-22 py-2 mx-2" type="button"></i>';
+                    } else {
+                        $buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" class="fa-pencil pointer fa fs-22 py-2 mx-2" type="button"></i>';
+                    }
 					
-					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" onclick=getUser(this) class="fa-pencil pointer fa fs-22 py-2 mx-2" type="button"></i>';
 					return $buttons;
 				})
 				->rawColumns(['Actions'])
@@ -277,6 +291,7 @@ class UserController extends Controller
 			$data->save();
 		} else {
 			$data =  new User();
+			$data->parent_id = Auth::user()->id;
 			$data->first_name = $request->first_name;
 			$data->last_name = $request->last_name;
             $data->birth_date = Carbon::parse($request->birth_date)->format('Y-m-d');

@@ -42,22 +42,30 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-	public function showRegistrationForm()
+    public function showRegistrationForm()
     {
-		$states = State::where('user_id','=', 6)
+        $states = State::where('user_id', '=', 6)
             ->orderBy('name')
             ->get();
 
         $state_id = [];
 
-        foreach($states as $state) {
-            $state_id[] = intval($state['id']); 
+        foreach ($states as $state) {
+            $state_id[] = intval($state['id']);
         }
 
-		$cities = SuperCity::whereIn('state_id',$state_id)->orderBy('name')->get();
-        
-		$roles = Role::all();
-        return view('admin.auth.register',compact('cities','states','roles'));
+        $cities = SuperCity::join('state', 'state.id', 'super_cities.state_id')
+            ->select([
+                'super_cities.id',
+                'super_cities.name',
+                'super_cities.state_id',
+            ])
+            ->whereIn('super_cities.state_id', $state_id)
+            ->where('state.user_id', '=', 6)
+            ->orderBy('super_cities.name')->get();
+
+        $roles = Role::all();
+        return view('admin.auth.register', compact('cities', 'states', 'roles'));
     }
 
     /**
@@ -95,31 +103,31 @@ class RegisterController extends Controller
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
                 'role_id' => 1,
-				'city_id' =>  $data['city_id'],
-				'state_id' =>  $data['state_id'],
-				'company_name' =>  $data['company_name'],
+                'city_id' => $data['city_id'],
+                'state_id' => $data['state_id'],
+                'company_name' => $data['company_name'],
                 'vendor_id' => Str::random(10),
                 'is_active' => 1
             ]
         );
-		try {
-			if (!empty($data['branch_id'])) {
-				$br = Branches::create(['name'=> $data['branch_id'] ,'city_id'=> $data['city_id'],'user_id'=> $user->id]);
-				$user->branch_id = $br->id;
-				$user->save();
-			}
-		} catch (\Throwable $th) {
-			//throw $th;
-		}
+        try {
+            if (!empty($data['branch_id'])) {
+                $br = Branches::create(['name' => $data['branch_id'], 'city_id' => $data['city_id'], 'user_id' => $user->id]);
+                $user->branch_id = $br->id;
+                $user->save();
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 
-		$role =  new Role();
-		$role->name = 'Admin_---_' . $user->id;
-		$role->user_id =$user->id;
-		$role->save();
-		$role->syncPermissions(Permission::where('guard_name','web')->get()->pluck('id')->all());
-		$user->syncRoles([]);
-		$user->assignRole($role->name);
-		Helper::setDroddownConfigurations($user->id);
+        $role = new Role();
+        $role->name = 'Admin_---_' . $user->id;
+        $role->user_id = $user->id;
+        $role->save();
+        $role->syncPermissions(Permission::where('guard_name', 'web')->get()->pluck('id')->all());
+        $user->syncRoles([]);
+        $user->assignRole($role->name);
+        Helper::setDroddownConfigurations($user->id);
         return $user;
     }
 
@@ -130,20 +138,20 @@ class RegisterController extends Controller
      */
     public function registered(Request $request, $user)
     {
-		// return redirect('/admin/login');
+        // return redirect('/admin/login');
         $this->guard()->logout();
         return redirect('admin/login');
         //     ->with('success', 'We sent you an activation link. Check your email and click on the link to verify.');
     }
 
-    
-	public function storeFile(UploadedFile $file)
+
+    public function storeFile(UploadedFile $file)
     {
-        $path = "company_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
-        $file->storeAs("public/file_image/",$path);
+        $path = "company_" . time() . (string) random_int(0, 5) . '.' . $file->getClientOriginalExtension();
+        $file->storeAs("public/file_image/", $path);
         return $path;
     }
-    
+
     public function storeUser(Request $request)
     {
         $request->validate([
@@ -162,16 +170,16 @@ class RegisterController extends Controller
         $all_user_count = count(User::all());
 
         $user = User::create(
-            [   
+            [
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'mobile_number' => $request->mobile_number,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role_id' => $all_user_count > 0 ? $request->role_id : 1,
-				'city_id' =>  $request->city_id,
-				'state_id' =>  $request->state_id,
-				'company_name' =>  $request->company_name,
+                'city_id' => $request->city_id,
+                'state_id' => $request->state_id,
+                'company_name' => $request->company_name,
                 'address' => $request->address,
                 'vendor_id' => Str::random(10),
                 'is_active' => 0,
@@ -180,10 +188,10 @@ class RegisterController extends Controller
 
         $role_name = '';
 
-        if($user->role_id != 1) {
+        if ($user->role_id != 1) {
             $role_name = 'Builder_---_' . $user->id;
 
-            $role =  new Role();
+            $role = new Role();
             $role->name = $role_name;
             $role->user_id = $user->id;
             $role->save();
@@ -193,16 +201,14 @@ class RegisterController extends Controller
                 'plan_id' => 1,
             ])->save();
 
-            $role->syncPermissions(Permission::where('guard_name','web')->get()->pluck('id')->all());
+            $role->syncPermissions(Permission::where('guard_name', 'web')->get()->pluck('id')->all());
             $user->syncRoles([]);
             $user->assignRole($role->name);
-        }
-        else 
-        {
+        } else {
             $user->fill([
                 'property_for_id' => 'Both',
-                'property_type_id' => ["85","87"],
-                'specific_properties' => ["254","255","256","257","258","259","260","261","262"],
+                'property_type_id' => ["85", "87"],
+                'specific_properties' => ["254", "255", "256", "257", "258", "259", "260", "261", "262"],
             ])->save();
 
             $user->assignRole(1);
@@ -215,6 +221,7 @@ class RegisterController extends Controller
         $new_state->fill([
             'name' => $state->name,
             'user_id' => $user->id,
+            'gst_type' => $state->gst_type,
         ])->save();
 
         $new_city = new City();
@@ -224,13 +231,12 @@ class RegisterController extends Controller
             'state_id' => $new_state->id,
         ])->save();
 
-        $allarea = SuperAreas::where('super_city_id',$request->city_id)
-            ->where('state_id',$request->state_id)
+        $allarea = SuperAreas::where('super_city_id', $request->city_id)
+            ->where('state_id', $request->state_id)
             ->get();
-            
-            
-        foreach ($allarea as $area_obj)
-        {
+
+
+        foreach ($allarea as $area_obj) {
             $area = new Areas();
 
             $area->fill([
@@ -242,8 +248,8 @@ class RegisterController extends Controller
             ])->save();
         }
 
-        if($user->exists) {
-            Session::flash('registration_success',  'Your registration is successful. Kindly login to continue.');
+        if ($user->exists) {
+            Session::flash('registration_success', 'Your registration is successful. Kindly login to continue.');
             return redirect('admin/login');
         }
     }

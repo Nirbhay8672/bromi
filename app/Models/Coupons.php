@@ -9,14 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Coupons extends Model
 {
     use HasFactory;
-use SoftDeletes;
+	use SoftDeletes;
 
 	protected $table = 'coupons';
-
-	protected $fillable = [
-		'name',
-		'code',
-		'amount_off',
-		'status',
-	];
+	protected $guarded = [];
 }

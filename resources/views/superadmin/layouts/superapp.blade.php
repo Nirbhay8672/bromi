@@ -440,60 +440,11 @@ Helper::set_default_measuerement();
                                         </li>
                                     @endif
 
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::STATE))
-                                        <li class="sidebar-list"><a
-                                                class="sidebar-link @if ($route == 'superadmin.settings.state') active @endif"
-                                                href="{{ route('superadmin.settings.state') }}"><i
-                                                    class="fa fa-map-marker"></i><span class="lan-3">State</span></a>
-                                        </li>
-                                    @endif
-
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::CITY))
-                                        <li class="sidebar-list"><a
-                                                class="sidebar-link @if ($route == 'superadmin.settings.city') active @endif"
-                                                href="{{ route('superadmin.settings.city') }}"><i
-                                                    class="fa fa-map-marker"></i><span class="lan-3">City</span></a>
-                                        </li>
-                                    @endif
-
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::AREA))
-                                        <li class="sidebar-list"><a
-                                                class="sidebar-link @if ($route == 'superadmin.settings.area') active @endif"
-                                                href="{{ route('superadmin.settings.area') }}"><i
-                                                    class="fa fa-map-marker"></i><span class="lan-3">Area</span></a>
-                                        </li>
-                                    @endif
-
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::DISTRICT))
-                                        <li class="sidebar-list"><a
-                                                class="sidebar-link @if ($route == 'superadmin.settings.district') active @endif"
-                                                href="{{ route('superadmin.settings.district') }}"><i
-                                                    class="fa fa-map-marker"></i><span class="lan-3">District</span></a>
-                                        </li>
-                                    @endif
-
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::TALUKA))
-                                        <li class="sidebar-list">
-                                            <a
-                                                class="sidebar-link @if ($route == 'superadmin.settings.taluka') active @endif"
-                                                href="{{ route('superadmin.settings.taluka') }}"
-                                            >
-                                            <i class="fa fa-map-marker"></i>
-                                            <span class="lan-3">Taluka</span></a>
-                                        </li>
-                                    @endif
-
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::VILLAGE))
-                                        <li class="sidebar-list">
-                                            <a
-                                                class="sidebar-link @if ($route == 'superadmin.settings.village') active @endif"
-                                                href="{{ route('superadmin.settings.village') }}"
-                                            >
-                                                <i class="fa fa-map-marker"></i>
-                                                <span class="lan-3">Village</span>
-                                            </a>
-                                        </li>
-                                    @endif
+                                    <li class="sidebar-list"><a
+                                            class="sidebar-link @if ($route == 'superadmin.settings') active @endif"
+                                            href="{{ route('superadmin.settings') }}"><i class="fa fa-gear"></i><span
+                                                class="lan-3">Settings</span></a>
+                                    </li>
                                     
                                     @if ($permissions->contains(\App\Constants\SupAdminPermissions::EMAIL_TEMPLATE))
                                         <li class="sidebar-list"><a
@@ -524,14 +475,14 @@ Helper::set_default_measuerement();
                                         </li>
                                     @endif
 
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::BROMI_REQUESTS))
+                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::LEADS))
                                         <li class="sidebar-list">
                                             <a
                                                 class="sidebar-link"
                                                 href="{{ route('superadmin.adminEnquiries') }}"
                                             >
                                                 <i class="fa fa-comments"></i>
-                                                <span class="lan-3">Bromi Requests</span>
+                                                <span class="lan-3">Leads</span>
                                             </a>
                                         </li>   
                                     @endif

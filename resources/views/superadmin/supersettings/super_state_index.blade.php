@@ -15,13 +15,21 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">List of States</h5>
-                            <div style="width: 70px;">
+                            <div style="width: 150px;">
                                 <button
                                     class="btn custom-icon-theme-button open_modal_with_this"
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#stateModal"
                                 ><i class="fa fa-plus"></i>
+                                </button>
+                                <button
+                                    class="btn custom-icon-theme-button open_modal_with_this ms-2"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#importModal"
+                                    title="Import CSV"
+                                ><i class="fa fa-download"></i>
                                 </button>
                             </div>
                         </div>
@@ -32,6 +40,7 @@
                                         <tr>
                                             <th style="min-width: 80px;">Sr No.</th>
                                             <th>State Name</th>
+                                            <th>Gst Type</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -41,6 +50,40 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="importModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import State</h5>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-bookmark" action="{{ route('superadmin.stateImport') }}" method="POST" enctype="multipart/form-data">
+                            @csrf    
+                            <div class="form-row mb-2 mt-2">
+                                <div>
+                                    <div class="form-group col-md-12 mb-1">
+                                        <label for="State">CSV File</label>
+                                        <input
+                                            class="form-control"
+                                            name="csv_file"
+                                            id="csv_file"
+                                            accept=".csv"
+                                            type="file"
+                                            style="border:1px solid black"
+                                            required
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-5">
+                                <button class="btn custom-theme-button" type="submit">Import</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -69,6 +112,10 @@
                                         >
                                     </div>
                                     <label id="state_name-error" class="error" for="state_name"></label>
+                                </div>
+                                <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    <input class="form-check-input" id="is_inter_state" type="checkbox">
+                                    <label class="form-check-label" for="is_inter_state">Is Inter State</label>
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
@@ -101,6 +148,10 @@
                             name: 'name'
                         },
                         {
+                            data: 'gst_type',
+                            name: 'gst_type'
+                        },
+                        {
                             data: 'Actions',
                             name: 'Actions',
                             orderable: false
@@ -127,6 +178,16 @@
                         data = JSON.parse(data)
                         $('#this_data_id').val(data.id)
                         $('#state_name').val(data.name).trigger('change');
+
+                        if(data.gst_type) {
+
+                            if(data.gst_type == 'inter_state') {
+                                $('#is_inter_state').prop('checked', true);
+                            } else {
+                                $('#is_inter_state').prop('checked', false);
+                            }
+                        }
+
                         $('#stateModal').modal('show');
 						triggerChangeinput()
                     }
@@ -168,12 +229,15 @@
                 $(this).prop('disabled',true);
                 var id = $('#this_data_id').val();
 
+                var getVal=document.getElementById("is_inter_state").checked;
+
                 $.ajax({
                     type: "POST",
                     url: "{{ route('superadmin.settings.saveState') }}",
                     data: {
                         id: id,
                         name: $('#state_name').val(),
+                        gst_type: getVal ? 'inter_state' : 'intra_state',
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {

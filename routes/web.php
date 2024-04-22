@@ -45,6 +45,9 @@ Route::get('/subscription', [AdminLoginController::class, 'subscription'])->name
 Route::post('/save-plan', [AdminLoginController::class, 'savePlan'])->name('savePlan');
 Route::any('cashfree/payments/success', [AdminLoginController::class, 'paymentSuccess'])->name('payment-success');
 
+// apply coupon
+Route::any('apply-coupon-code', [AdminLoginController::class, 'applyCoupuonCode'])->name('apply-coupon');
+
 Route::prefix('builder')->as('builder.')->middleware(['auth'])->group(function () {
     Route::get('/index', [HomeController::class, 'index'])->name('home');
 

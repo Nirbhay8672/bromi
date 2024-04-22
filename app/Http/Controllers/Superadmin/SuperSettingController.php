@@ -7,6 +7,8 @@ use App\Models\District;
 use App\Models\State;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
+use App\Models\SuperTaluka;
+use App\Models\SuperVillages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -16,6 +18,25 @@ class SuperSettingController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth');
+	}
+
+	public function index()
+	{
+		$total_state = State::where('user_id',Auth::user()->id)->get()->count();
+		$total_city = SuperCity::get()->count();
+		$total_locality = SuperAreas::get()->count();
+		$total_dist = District::where('user_id',Auth::user()->id)->get()->count();
+		$total_taluka = SuperTaluka::get()->count();
+		$total_village = SuperVillages::get()->count();
+
+		return view('superadmin.supersettings.index')->with([
+			'total_state' => $total_state,
+			'total_city' => $total_city,
+			'total_locality' => $total_locality,
+			'total_dist' => $total_dist,
+			'total_taluka' => $total_taluka,
+			'total_village' => $total_village
+		]); 
 	}
 
 	public function district_index(Request $request)
@@ -85,6 +106,20 @@ class SuperSettingController extends Controller
 			$data = State::where('user_id', Auth::user()->id)->get();
 
 			return DataTables::of($data)
+				->editColumn('gst_type', function ($row) {
+
+					$gst_type_case = '';
+
+					if($row->gst_type == 'inter_state') {
+						$gst_type_case = 'Inter State'; 
+					}
+
+					if($row->gst_type == 'intra_state') {
+						$gst_type_case = 'Intra State'; 
+					}
+
+					return $gst_type_case;
+				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
 					$buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" title="Edit" onclick=getState(this) class="fa-pencil pointer fa fs-22 py-2 mx-2  " type="button"></i>';
@@ -117,10 +152,12 @@ class SuperSettingController extends Controller
 
 				if(!$state) {
 					$data->name = $request->name;
+					$data->gst_type = $request->gst_type;
 					$data->save();
 				}
 			} else  {
 				$data->name = $request->name;
+				$data->gst_type = $request->gst_type;
 				$data->save();
 			}
 		} else {
@@ -130,6 +167,7 @@ class SuperSettingController extends Controller
 				$data =  new State();
 				$data->user_id = Auth::user()->id;
 				$data->name = $request->name;
+				$data->gst_type = $request->gst_type;
 				$data->save();
 			}
 		}
