@@ -1690,7 +1690,6 @@
                             $('input[name=property_category][value=' + data.property_type + ']').prop('checked',
                                 true).trigger('change')
                         }
-                        console.log("data.country_id",data.country_code);
                         $('#this_data_id').val(data.id);
                         $('#client_name').val(data.client_name);
                         $('#client_mobile').val(data.client_mobile);
@@ -1698,7 +1697,6 @@
                         $('#client_email').val(data.client_email);
                         $('#is_nri').prop('checked', Number(data.is_nri));
                         $('#enquiry_for').val(data.enquiry_for).trigger('change');
-                        $('#country_code').val(data.country_code).trigger('change');
                         // if ($('[name=configuration][value=' + data.configuration + ']').length > 0) {
                         //     $('[name=configuration][value=' + data.configuration + ']').prop('checked', true)
                         //         .trigger('change');

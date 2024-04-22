@@ -1204,7 +1204,7 @@ class EnquiriesController extends Controller
 		$data->user_id = Session::get('parent_id');
 		$data->client_name = $request->client_name;
 		$data->client_mobile = $request->client_mobile;
-		$data->country_code = $request->country_code;
+		$data->country_id = $request->country_code;
 		$data->client_email = $request->client_email;
 		$data->is_nri = $request->is_nri;
 		$data->enquiry_for = $request->enquiry_for;
