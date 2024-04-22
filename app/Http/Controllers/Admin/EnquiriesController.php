@@ -74,7 +74,7 @@ class EnquiriesController extends Controller
 				return ($var['name'] == 'only-assigned');
 			});
 
-			if (count($new) > 0 &&  $user->role_id !== '1') {
+			if (count($new) > 0 &&  $user->role_id !== 1) {
 				// dd("0nn",$user->role_id);
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
@@ -589,6 +589,7 @@ class EnquiriesController extends Controller
 		$prop_list = Helper::get_property_units_helper();
 		$projects = Properties::with('Projects')->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
+        
 
 		$prop_type = [];
 		foreach ($configuration_settings as $key => $value) {
@@ -641,7 +642,7 @@ class EnquiriesController extends Controller
 		return json_encode($comments);
 	}
 
-	public function importEnquiryTemplate()
+	public function importEnquiryTemplate(Request $request)
 	{
 		$spreadsheet = new Spreadsheet;
 
@@ -656,14 +657,19 @@ class EnquiriesController extends Controller
 		$sheet->setCellValue('H1', "Configuration2");
 		$sheet->setCellValue('I1', "Enquiry Source");
 		$sheet->setCellValue('J1', "BudgetFrom");
-		$sheet->setCellValue('K1', "BudgetTo");
+		$sheet->setCellValue('J1', "AreaTo");
 		$sheet->setCellValue('L1', "AssingedTo");
 		$sheet->setCellValue('M1', "Remarks");
 		$sheet->setCellValue('N1', "Created On");
 		$sheet->setCellValue('O1', "Status");
 		$sheet->setCellValue('P1', "Enquiry Progress");
 
-		$vvells = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
+		$type = "Flat";
+		if (!empty($request->type)) {
+            $type = $request->type;
+        }
+
+		$vvells = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P','Q','R'];
 		foreach ($vvells as $key => $value) {
 			$spreadsheet->getActiveSheet()->getColumnDimension($value)->setWidth(15);
 		}
@@ -686,19 +692,71 @@ class EnquiriesController extends Controller
 			array_push($property_configuration, $value);
 		}
 
+		$subcategoryOptions = [];
+        $categoryOptions = [];
+        $propertyTypeOptions = [];
+        if ($type == 'Flat') {
+            $subcategoryOptions = ['1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
+            $categoryOptions = ['Flat'];
+            $propertyTypeOptions = ['Residential'];
+        } elseif ($type == 'Vila/Bunglow') {
+            $subcategoryOptions = ['1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
+            $categoryOptions = ['Vila/Bunglow'];
+            $propertyTypeOptions = ['Residential'];
+
+        } elseif ($type == 'Land') {
+            $subcategoryOptions = ['Commercial Land', 'Agricultural/Farm Land'];
+            $categoryOptions = ['Land'];
+            $propertyTypeOptions = ['Commercial'];
+
+        } elseif ($type == 'Penthouse') {
+            $subcategoryOptions = ['1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
+            $categoryOptions = ['Penthouse'];
+            $propertyTypeOptions = ['Residential'];
+
+        } elseif ($type == 'Farmhouse') {
+            $subcategoryOptions = [''];
+            $categoryOptions = ['Farmhouse'];
+            $propertyTypeOptions = ['Residential'];
+
+        } elseif ($type == 'Office') {
+            $subcategoryOptions = ['office space', 'Co-working'];
+            $categoryOptions = ['Office'];
+            $propertyTypeOptions = ['Commercial'];
+
+        } elseif ($type == 'Retail') {
+            $subcategoryOptions = ['Ground floor', '1st floor', '2st floor', '3rd floor'];
+            $categoryOptions = ['Retail'];
+            $propertyTypeOptions = ['Commercial'];
+
+        } elseif ($type == 'Storage/industrial') {
+            $subcategoryOptions = ['Warehouse', 'Cold Storage', 'ind. shed', 'Plotting'];
+            $categoryOptions = ['Storage/industrial'];
+            $propertyTypeOptions = ['Commercial'];
+
+        } elseif ($type == 'Plot') {
+            $subcategoryOptions = [''];
+            $categoryOptions = ['Plot'];
+            $propertyTypeOptions = ['Residential'];
+        }
+
 
 
 		$enquiryFor = '"Rent, Buy,Both"';
-		$PropertyType = '"' . implode(",", $dropdownsarr['property_construction_type']) . '"';
-		$specificType = '"' . implode(",", $dropdownsarr['property_specific_type']) . '"';
-		$planType = '"' . implode(",", $property_configuration) . '"';
+		// $PropertyType = '"' . implode(",", $dropdownsarr['property_construction_type']) . '"';
+		$PropertyType = '"' . implode(",", $propertyTypeOptions) . '"';
+		// $specificType = '"' . implode(",", $dropdownsarr['property_specific_type']) . '"';
+		$specificType = '"' . implode(",", $categoryOptions) . '"';
+		// $planType = '"' . implode(",", $property_configuration) . '"';
+		$planType = '"' . implode(",", $subcategoryOptions) . '"';
 		$enquirySource = '"' . implode(",", $dropdownsarr['property_source']) . '"';
-
 		$progress = '"Lead Confirmed,Site Visit Scheduled,Site Visit Completed,Discussion,Booked,Lost"';
 		$propertyStatus = '"Active,In Active"';
+		$areaFrom = '"0"';
+		$areaTo = '"0"';
 		$arrr = [];
-		$arrr['vals'] = [$enquiryFor, $PropertyType, $specificType, $planType, $planType, $enquirySource, $users, $propertyStatus, $progress];
-		$arrr['sheetcell'] = ['D1', 'E1', 'F1', 'G1', 'H1', 'I1',  'L1', 'O1', 'P1'];
+		$arrr['vals'] = [$enquiryFor, $PropertyType,$specificType, $planType,$areaFrom,$areaTo, $enquirySource, $users, $propertyStatus, $progress];
+		$arrr['sheetcell'] = ['D1', 'E1', 'F1', 'G1', 'H1', 'I1',  'L1', 'O1'];
 		$arrr['setsqref'] = ['D2:D1048576', 'E2:E1048576', 'F2:F1048576', 'G2:G1048576', 'H2:H1048576', 'I2:I1048576',  'L2:L1048576', 'O2:O1048576', 'P2:P1048576'];
 		foreach ($arrr['sheetcell'] as $key => $value) {
 			$validation = $spreadsheet->getActiveSheet()->getcell($value)->getDataValidation();
@@ -1222,16 +1280,19 @@ class EnquiriesController extends Controller
 			}
 
 			$Configuration_id = NULL;
-			$Configuration = DropdownSettings::where('name', 'like', '%' . $value['Configuration1'] . '%')->first();
-			if (!empty($Configuration->id) && !empty($value['Configuration1'])) {
-				$Configuration_id = $Configuration->id;
+			$Configuration = DropdownSettings::where('name', 'like', '%' . $value['Configuration1'] . '%')->where('dropdown_for','property_sub_category')->first();
+			if (!empty($Configuration->user_id) && !empty($value['Configuration1'])) {
+				$Configuration_id = $Configuration->user_id;
 			}
 
-			$Configuration_id2 = NULL;
-			$Configuration2 = DropdownSettings::where('name', 'like', '%' . $value['Configuration2'] . '%')->first();
-			if (!empty($Configuration2->id) && !empty($value['Configuration2'])) {
-				$Configuration_id2 = $Configuration2->id;
-			}
+
+			// $Configuration_id2 = NULL;
+			// $Configuration2 = DropdownSettings::where('name', 'like', '%' . $value['Configuration2'] . '%')->where('dropdown_for','property_sub_category')->first();
+			// if (!empty($Configuration2->user_id) && !empty($value['Configuration2'])) {
+			// 	$Configuration_id2 = $Configuration2->user_id;
+			// }
+
+			// dd("val",$property_type_id,$specific_property_id,$Configuration_id,$Configuration_id2,$value);
 
 
 			$enquiry_source_id = NULL;
@@ -1255,7 +1316,7 @@ class EnquiriesController extends Controller
 				$data->enquiry_for = $value['EnquiryFor'];
 				$data->requirement_type = json_encode([$property_type_id]);
 				$data->property_type =  json_encode([$specific_property_id]);
-				$data->configuration = json_encode([$Configuration_id, $Configuration_id2]);
+				$data->configuration = json_encode([$Configuration_id]);
 				$data->enquiry_source = $enquiry_source_id;
 				$data->budget_from = $value['BudgetFrom'];
 				$data->budget_to = $value['BudgetTo'];

@@ -62,10 +62,10 @@
                                         class="fa fa-random"></i></button>
 
                                 <button class="btn ms-3 custom-icon-theme-button" onclick="exportEnquiry()" type="button"
-                                    title="Export"><i class="fa fa-download"></i></button>
+                                    title="Export"><i class="fa fa-upload"></i></button>
 
                                 <button class="btn ms-3 custom-icon-theme-button" onclick="importEnquiries()" type="button"
-                                    title="Import"><i class="fa fa-upload"></i></button>
+                                    title="Import"><i class="fa fa-download"></i></button>
 
                                 <button class="btn text-white delete_table_row ms-3"
                                     style="border-radius: 5px;display: none;background-color:red" onclick="deleteTableRow()"
@@ -683,8 +683,22 @@
                                         id="import_file">
                                 </div>
                                 <br>
+                                <div class="col-md-3 m-b-4 mb-4">
+                                    <select class="form-select" name="project_id" data-error="#project_id_error"
+                                        id="import_category">
+                                        <option value="">Select Category</option>
+                                        @forelse ($configuration_settings as $props)
+                                            @if ($props['dropdown_for'] == 'property_specific_type')
+                                                <option data-val="{{ $props['name'] }}" value="{{ $props['id'] }}">
+                                                    {{ $props['name'] }}</option>
+                                            @endif
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                </div>
+                                <br>
                                 <div class="form-group col-md-5 m-b-10">
-                                    <a href="{{ route('admin.importenquiryTemplate') }}">Download Sample file</a>
+                                    <a id="import_url" href="{{ route('admin.importenquiryTemplate') }}">Download Sample file</a>
                                 </div>
                                 <br>
                             </div>
@@ -1313,6 +1327,13 @@
     @endsection
     @push('scripts')
         <script>
+
+            $(document).on('change', '#import_category', function() {
+                var type = $('#import_category option:selected').attr('data-val')
+                console.log("typetype ==",type);
+                $('#import_url').attr('href', $('#import_url').attr('href') + '?type=' + type);
+            })
+
             function limitYearTo4Digits1() {
                 const dateInput = document.getElementById('site_visit_date1');
                 const inputValue = dateInput.value;
