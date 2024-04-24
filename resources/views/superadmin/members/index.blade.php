@@ -63,17 +63,20 @@
                                 <div class="fname">
                                     <input class="form-control" name="first_name" id="first_name" type="text"
                                         autocomplete="off" placeholder="First Name">
+                                    <span class="text-danger invalid-error d-none" id="first_name_error">First name is required.</span>
                                 </div>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
                                     <input class="form-control" name="last_name" id="last_name" type="text"
                                         autocomplete="off" placeholder="Last Name">
+                                    <span class="text-danger invalid-error d-none" id="last_name_error">Email is required.</span>
                                 </div>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
                                     <input class="form-control" name="birth_date" id="birth_date" type="date" autocomplete="off" placeholder="Birth Date (YYYY-MM-DD)">
+                                    <span class="text-danger invalid-error d-none" id="birth_date_error">Birth Date is required.</span>
                                 </div>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
@@ -81,12 +84,14 @@
                                     <input class="form-control" name="email" id="email"
                                         style="text-transform: none !important;" type="text" autocomplete="off"
                                         placeholder="Email">
+                                    <span class="text-danger invalid-error d-none" id="email_error">Email is required.</span>
                                 </div>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
                                     <input class="form-control" name="password" id="password" type="text"
                                         autocomplete="off" placeholder="Password">
+                                    <span class="text-danger invalid-error d-none" id="password_error">Password is required.</span>
                                 </div>
                             </div>
                             <div class="form-group col-md-4 m-b-20"></div>
@@ -233,29 +238,10 @@
         });
 
 
-        $('#modal_form').validate({ // initialize the plugin
-            rules: {
-                first_name: {
-                    required: true,
-                },
-                birth_date: {
-                    required: true,
-                },
-                email: {
-                    required: true,
-                    email: true,
-                }
-            },
-            submitHandler: function(form) { // for demo
-                alert('valid form submitted'); // for demo
-                return false; // for demo
-            }
-        });
-
 
         function resetData() {
-            document.getElementById('total-card').classList.add('d-none');
-            document.getElementById('user_table').classList.add('d-none');
+            $('.invalid-error').addClass('d-none');
+            $('#modal_form').trigger("reset");
         }
 
         function getUser(data) {
@@ -292,10 +278,43 @@
 
         $(document).on('click', '#saveUser', function(e) {
             e.preventDefault();
-            $("#modal_form").validate();
-            if (!$("#modal_form").valid()) {
-                return
+            // $("#modal_form").validate();
+            let all_error = document.querySelectorAll('.invalid-error');
+            all_error.forEach(element => {
+                element.classList.add('d-none');
+            });
+            
+            let valid = true;
+            
+            if($('#first_name').val() == '') {
+                document.getElementById('first_name_error').classList.remove('d-none');
+                valid = false;
             }
+            
+            if($('#last_name').val() == '') {
+                document.getElementById('last_name_error').classList.remove('d-none');
+                valid = false;
+            }
+            
+            if($('#birth_date').val() == '') {
+                document.getElementById('birth_date_error').classList.remove('d-none');
+                valid = false;
+            }
+
+            if($('#email').val() == '') {
+                document.getElementById('email_error').classList.remove('d-none');
+                valid = false;
+            }
+            
+            if($('#password').val() == '') {
+                document.getElementById('password_error').classList.remove('d-none');
+                valid = false;
+            }
+            
+            if (!valid) {
+                return;
+            }
+
             var id = $('#this_data_id').val()
             // Serialize the permissions checkboxes
             var permissions = $('input[name="permissions[]"]:checked').map(function(){
