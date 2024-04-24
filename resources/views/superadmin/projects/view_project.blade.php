@@ -1165,7 +1165,7 @@
 
         function openDocument(file_name) {
             let filename = file_name;
-            let url = '{{ route("admin.project.document", ["filename" => ":filename"]) }}';
+            let url = '{{ route("superadmin.project.document", ["filename" => ":filename"]) }}';
             url = url.replace(':filename', filename);
 
             // Open the document in a new window
