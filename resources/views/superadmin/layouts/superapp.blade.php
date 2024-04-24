@@ -360,7 +360,7 @@ Helper::set_default_measuerement();
                                                 class="sidebar-link @if ($route == 'superadmin.members') active @endif"
                                                 href="{{ route('superadmin.members') }}"
                                             ><i class="fa fa-users"></i>
-                                                <span class="lan-3">Members</span>
+                                                <span class="lan-3">Teams</span>
                                             </a>
                                         </li>
                                     @endif

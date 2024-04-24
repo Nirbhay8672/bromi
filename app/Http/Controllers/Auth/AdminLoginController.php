@@ -195,6 +195,9 @@ class AdminLoginController extends Controller
 	
 	public function subscription()
 	{
+        if (empty(Session::get('user_id'))) {
+            return redirect()->route('admin-login');
+        }
         $gstType = User::find(Session::get('user_id'))->state->gst_type;
 	    Session::put('transaction_goal', 'new_subscription');
 		return view('guest.plan')->with([
