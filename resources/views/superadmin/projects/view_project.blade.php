@@ -115,12 +115,12 @@
 
                                                 <div class="row pull-right" style="display: contents;">
                                                     <div class="col-md-1">
-                                                        <a href="{{ URL::to('/superadmin/superadmin/Projects') }}">
+                                                        <a href={{ URL::to("admin/Projects") }}>
                                                             <button class="nav-link mx-1 active" id="v-view-summary-tab">Back</button>
                                                         </a>
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <a href="{{ URL::to('/superadmin/superadmin/project/edit/'.$project->id)}} ">
+                                                        <a href="{{ URL::to('admin/project/edit/'.$project->id)}} ">
                                                             <button class="nav-link mx-1 active" id="v-view-summary-tab">Edit</button>
                                                         </a>
                                                     </div>
@@ -248,7 +248,7 @@
                                                         <h6><b>Total Land Area</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_4">
-                                                        <div style="text-transform: none !important;">: {{ $project->land_area }}</div>
+                                                        <div style="text-transform: none !important;">: {{ $project->land_area }} {{ $map_unit[$project->land_size_unit] ?? '-' }}</div>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Remark</b></h6>
@@ -348,10 +348,11 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Contact Details</h5>
                                             </div>
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mb-2">
+                                                <table class="table custom-table-design" style="border: 1px solid blue;">
                                                     <thead>
                                                         <tr>
+                                                            <th scope="col">Sr No.</th>
                                                             <th scope="col">Name</th>
                                                             <th scope="col">Mobile</th>
                                                             <th scope="col">Email</th>
@@ -359,8 +360,9 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($project->contacts as $contact)
+                                                        @foreach ($project->contacts as $index => $contact)
                                                             <tr>
+                                                                <td>{{$index + 1}}</td>
                                                                 <td>{{$contact['name']}}</td>
                                                                 <td>{{$contact['mobile']}}</td>
                                                                 <td style="text-transform: none !important;">{{$contact['email']}}</td>
@@ -379,8 +381,8 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Tower Details</h5>
                                             </div>
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mb-3">
+                                                <table class="table custom-table-design" style="border: 1px solid blue;">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Number Of Tower</th>
@@ -416,28 +418,42 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mb-3">
+                                                <table class="table custom-table-design" style="border: 1px solid blue;">
                                                     <thead>
                                                         <tr>
+                                                            <th scope="col">Sr No.</th>
                                                             <th scope="col">Tower Name</th>
                                                             <th scope="col">Saleable</th>
+                                                            <th scope="col">Ceilling Height</th>
                                                             <th scope="col">Carpet</th>
                                                             <th scope="col">Built Up</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($project->if_office as $office_tower)
+                                                        @foreach ($project->if_office as $index => $office_tower)
                                                         <tr>
+                                                            <td>{{$index + 1}}</td>
                                                             <td>{{$office_tower['tower_name']}}</td>
                                                             <td>
-                                                                {{$office_tower['saleable']}} - {{ $office_tower['saleable_to'] }}
+                                                                @if($office_tower['saleable'])
+                                                                    {{$office_tower['saleable']}} - {{ $office_tower['saleable_to'] }} {{ $office_tower['saleable_from_to_map_unit'] > 0 ? $map_unit[$office_tower['saleable_from_to_map_unit']] : '' }}
+                                                                @endif
                                                             </td>
                                                             <td>
-                                                                {{$office_tower['carpet']}}
+                                                                @if($office_tower['ceiling_height'])
+                                                                    {{$office_tower['ceiling_height']}} {{ $office_tower['ceiling_height_map_unit'] > 0 ? $map_unit[$office_tower['ceiling_height_map_unit']] : '' }}
+                                                                @endif
                                                             </td>
                                                             <td>
-                                                                {{$office_tower['built_up']}} - {{ $office_tower['built_up_to'] }}
+                                                                @if($office_tower['carpet'])
+                                                                    {{$office_tower['carpet']}} - {{ $office_tower['carpet_to'] }} {{ $office_tower['carpet_from_to_map_unit'] > 0 ? $map_unit[$office_tower['carpet_from_to_map_unit']] : '' }}
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if($office_tower['built_up'])
+                                                                    {{$office_tower['built_up']}} - {{ $office_tower['built_up_to'] }} {{ $office_tower['built_from_to_map_unit'] > 0 ? $map_unit[$office_tower['built_from_to_map_unit']] : '' }}
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                         @endforeach
@@ -452,21 +468,23 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mt-3">
+                                                <table class="table custom-table-design" style="border: 1px solid blue;">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Tower Name</th>
+                                                            <th scope="col">Floor</th>
                                                             <th scope="col">Size</th>
                                                             <th scope="col">Front Opening</th>
                                                             <th scope="col">Number of each floor</th>
-                                                            <th scope="col">Ceiling_height</th>
+                                                            <th scope="col">Ceiling Height</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($project->if_retail as $retail_tower)
                                                         <tr>
                                                             <td>{{$retail_tower['tower_name']}}</td>
+                                                            <td>{{$retail_tower['sub_category']}}</td>
                                                             <td>
                                                                 {{$retail_tower['size_from']}} - {{$retail_tower['size_to']}}
                                                                 <span>
@@ -604,10 +622,11 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Storage Industrial Details</h5>
                                             </div>
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mt-3">
+                                                <table class="table custom-table-design" style="border: 1px solid blue;">
                                                     <thead>
                                                         <tr>
+                                                            <th scope="col">Sr No.</th>
                                                             <th scope="col">Plot Area</th>
                                                             <th scope="col">Constructed Area</th>
                                                             <th scope="col">Road width Area</th>
@@ -616,8 +635,10 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($project->stor_indu as $st)
+                                                        @foreach ($project->stor_indu as $index => $st)
                                                         <tr>
+                                                            <td>{{ $index + 1 }}</td>
+
                                                             <td>{{$st['plot_area_from']}} - {{$st['plot_area_to']}} {{ $map_unit[$st['carpet_from_to_unit_map']] }}</td>
                                                             
                                                             <td>{{$st['construced_area_from']}} - {{$st['construced_area_to']}} {{ $map_unit[$st['constructed_from_to_unit_map']] }}</td>
@@ -759,8 +780,40 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Parking Details</h5>
                                             </div>
+                                            <div class="row mt-3">
+                                                <div class="form-group col-4 m-b-20 data_conent_1">
+                                                    <h6 for="Client Name"><b>Free Alloted Parking For Four Wheeler</b></h6>
+                                                </div>
+                                                <div class="form-group col-8 m-b-20 data_conent_1">
+                                                    <div>: {{ $project->parkings_decode['free_alloted_for_four_wheeler'] ? 'Yes' : 'No' }}</div>
+                                                </div>
+                                                <div class="form-group col-4 m-b-20 data_conent_1">
+                                                    <h6 for="Client Name"><b>Free Alloted Parking For Two Wheeler</b></h6>
+                                                </div>
+                                                <div class="form-group col-8 m-b-20 data_conent_1">
+                                                    <div>: {{ $project->parkings_decode['free_alloted_for_two_wheeler'] ? 'Yes' : 'No' }}</div>
+                                                </div>
+                                                <div class="form-group col-4 m-b-20 data_conent_1">
+                                                    <h6 for="Client Name"><b>Available For Purchase</b></h6>
+                                                </div>
+                                                <div class="form-group col-8 m-b-20 data_conent_1">
+                                                    <div>: {{ $project->parkings_decode['available_for_purchase'] ? 'Yes' : 'No' }}</div>
+                                                </div>
+                                                <div class="form-group col-4 m-b-20 data_conent_1">
+                                                    <h6 for="Client Name"><b>Total Number Of Parking</b></h6>
+                                                </div>
+                                                <div class="form-group col-8 m-b-20 data_conent_1">
+                                                    <div>: {{ $project->parkings_decode['total_number_of_parking'] ??  '-' }}</div>
+                                                </div>
+                                                <div class="form-group col-4 m-b-20 data_conent_1">
+                                                    <h6 for="Client Name"><b>Total Floor For Parking</b></h6>
+                                                </div>
+                                                <div class="form-group col-8 m-b-20 data_conent_1">
+                                                    <div>: {{ $project->parkings_decode['total_floor_for_parking'] ?? '-' }}</div>
+                                                </div>
+                                            </div>
                                             <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Floor Number</th>
@@ -776,7 +829,7 @@
                                                                 <td>{{$parking['ev_charging_point']}}</td>
                                                                 <td>{{$parking['hydraulic_parking']}}</td>
                                                                 <td>
-                                                                    {{$parking['height_of_basement']}}
+                                                                    {{$parking['height_of_basement']}} {{ $parking['height_of_basement'] ? $map_unit[$parking['height_of_basement_map_unit']] : '' }}
                                                                 </td>
                                                             </tr>
                                                         @endforeach
@@ -784,12 +837,12 @@
                                                 </table>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row mt-3">
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Amenities</h5>
                                             </div>
                                             <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Sr No.</th>
@@ -811,19 +864,48 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Documents</h5>
                                             </div>
+
+                                            <?php
+                                                $docu_types = [
+                                                    1 => 'Building Elevation',
+                                                    2 => 'Common Amenities Photos',
+                                                    3 => 'Master Layout Of Building',
+                                                    4 => 'Brochure',
+                                                    5 => 'Cost Sheet',
+                                                    6 => 'Other',
+                                                ];
+                                            ?>
+
+                                            <div class="col-md-12 mt-3">
+                                                <b class="text-center">Other Documents</b>
+                                                <table class="table custom-table-design mt-2" style="border:1px solid blue">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Type</th>
+                                                            <th scope="col">File</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{ $docu_types[$project->document_category] }}</td>
+                                                            <td><span class="text-primary" style="cursor: pointer;" onclick="openDocument(`{{ $project->document_image }}`)">{{ $project->document_image }}</span></td>
+                                                        </tr>
+                                                        @foreach($project->other_documents as $other_doc)
+                                                            <tr>
+                                                                <td>{{ $docu_types[$other_doc['document_type']] }}</td>
+                                                                <td><span class="text-primary" style="cursor: pointer;" onclick="openDocument(`{{ $other_doc['file'] }}`)">{{ $other_doc['file'] }}</span></td>
+                                                            </tr>
+                                                        @endforeach
+                                                    <tbody>
+                                                </table>
+                                            </div>
+
                                             <div class="row gy-2">
                                                 <div class="col mt-2">
-                                                    File : <span class="text-primary cursor-pointer" onclick="openDocument('{{ $project->document_image }}')">{{ $project->document_image }}</span>
+                                                    Catlog File : <span class="text-primary" style="cursor: pointer;" onclick="openDocument('{{ $project->document_image }}')">{{ $project->document_image }}</span>
                                                 </div>
                                             </div>
-                                            
-                                            @foreach($project->other_documents as $other_doc)
-                                                <div class="row gy-2">
-                                                    <div class="col mt-2">
-                                                        File : <span class="text-primary cursor-pointer" onclick="openDocument('{{ $other_doc['file'] }}')">{{ $other_doc['file'] }}</span>
-                                                    </div>
-                                                </div>
-                                            @endforeach
+
                                         </div>
                                     </div>
 
@@ -1083,7 +1165,7 @@
 
         function openDocument(file_name) {
             let filename = file_name;
-            let url = '{{ route("admin.project.document", ["filename" => ":filename"]) }}';
+            let url = '{{ route("superadmin.project.document", ["filename" => ":filename"]) }}';
             url = url.replace(':filename', filename);
 
             // Open the document in a new window
