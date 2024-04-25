@@ -449,4 +449,15 @@ class ProjectsController extends Controller
 
 		return redirect()->route('admin.login');
 	}
+
+	public function viewProjectDocument($filename)
+    {
+		dd(1);
+        $filePath = storage_path("app/public/file_image/{$filename}");
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+        $mimeType = mime_content_type($filePath);
+        return response()->file($filePath, ['Content-Type' => $mimeType]);
+    }
 }
