@@ -80,6 +80,18 @@ Helper::set_default_measuerement();
             color: #7fb927;
         }
 
+         /* prop read more-read less */
+         #propertyTable .read-more,
+        #propertyTable .read-less {
+            cursor: pointer;
+        }
+        #propertyTable .read-more:hover {
+            color: #7fb927;
+        }
+        #propertyTable .read-less:hover {
+            color: #7fb927;
+        }
+
         /* Added Custom Style For Property Status */
         table.dataTable.stripe tbody tr.odd.important-row,
         table.dataTable.display tbody tr.odd.important-row {

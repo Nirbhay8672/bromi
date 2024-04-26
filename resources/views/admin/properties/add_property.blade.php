@@ -3667,7 +3667,7 @@
                         'div_flat_details_5', 'div_flat_details_4', 'div_property_source', 'the_total_no_of_floor',
                         'the_two_wheller_Parking', 'div_checkboxes1', 'div_flat_details_7', 'div_flat_details_8',
                         'div_care_taker', 'div_availability_status', 'the_furnished_status', 'the_1rk',
-                        'div_amenities', 'cl-locality', 'terrace', 'div_document_section', 'the_ceilling_height',
+                        'div_amenities', 'cl-locality', 'terrace', 'div_document_section',
                     ];
                     addAddAreaButtons(['the_carpet_area'], ['Add Carpet Area']);
                 } else if (category_type == 'Vila/Bunglow') {
@@ -3706,7 +3706,7 @@
                         'div_care_taker',
                         'div_availability_status', 'div_amenities',
                         'the_furnished_status', 'the_total_no_of_floor', 'the_no_of_balcony', 'cl-locality',
-                        'div_document_section', 'the_ceilling_height',
+                        'div_document_section',
                     ];
                     addAddAreaButtons(['the_carpet_area', 'the_builtup_area', 'the_terrace_carpet_area'], [
                         'Add Carpet Area', 'Add Builtup Area', 'Add Terrace Carpet Area'
