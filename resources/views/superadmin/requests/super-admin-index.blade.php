@@ -130,6 +130,7 @@
                                 <div class="fname">
                                     <input class="form-control" name="mobile" id="mobile" type="text" autocomplete="off" placeholder="Phone Number">
                                     <span class="text-danger invalid-error d-none" id="mobile_error">Phone Number is required.</span>
+                                    <span class="text-danger invalid-error d-none" id="mobile_length_error">Phone Number is invalid.</span>
                                 </div>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
@@ -346,6 +347,13 @@
             if($('#mobile').val() == '') {
                 document.getElementById('mobile_error').classList.remove('d-none');
                 valid = false;
+            }
+
+            if($('#mobile').val() != '') {
+                if($('#mobile').val().length != 10 || isNaN($('#mobile').val())) {
+                    document.getElementById('mobile_length_error').classList.remove('d-none');
+                    valid = false;
+                }
             }
 
             if($('#email').val() == '') {
