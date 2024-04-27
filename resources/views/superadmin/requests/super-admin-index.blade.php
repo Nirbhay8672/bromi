@@ -25,7 +25,7 @@
                                 ><i class="fa fa-plus"></i></button>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div class="table table-responsive">
                                 <table class="display" id="enquiryTable">
                                     <thead>
                                         <tr>
@@ -50,6 +50,59 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="progressModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Lead Status</h5>
+                    <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="d-none" name="this_progress_data_id" id="this_progress_data_id">
+                    <div class="row mb-1">
+                        <div class="form-group col-md-6 m-b-20">
+                            <div class="fname">
+                                <select name="" id="status" class="form-select" style="border:1px solid black;border-radius:5px;">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Read">Read</option>
+                                    <option value="In-progress">In-progress</option>
+                                    <option value="Closed">Closed</option>
+                                </select>
+                                <span class="text-danger invalid-error d-none" id="status_error">Status is required.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 m-b-20">
+                            <div class="fname">
+                                <input value="{{date('Y-m-d')}}" class="form-control" name="followup_date" id="followup_date" type="date" autocomplete="off">
+                                <span class="text-danger invalid-error d-none" id="followup_date_error">Follow up date is required.</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6 m-b-20">
+                            <div class="fname">
+                                <input value="{{date('H:i')}}" class="form-control" name="time" id="time" type="time" autocomplete="off">
+                                <span class="text-danger invalid-error d-none" id="time_error">Time is required.</span>
+                            </div>
+                        </div>
+                        <div class="form-group m-b-20">
+                            <div class="fname">
+                                <textarea name="progress_enquiry" class="form-control" id="progress_enquiry" cols="10" rows="5" placeholder="Enquiry"></textarea>
+                                <span class="text-danger invalid-error d-none" id="progress_enquiry_error">Enquiry is required.</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-3">  
+                            <button class="btn custom-theme-button" type="button" onclick="saveProgress()">Save</button>
+                            <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="leadModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -59,7 +112,7 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
-                        <input type="hidden" name="this_data_id" id="this_data_id">
+                        <input type="text" class="d-none" name="this_data_id" id="this_data_id">
                         <div class="row">
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
@@ -106,19 +159,12 @@
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
-                                    <input value="{{date('Y-m-d')}}" class="form-control" name="followup_date" id="followup_date" type="date" autocomplete="off">
-                                    <span class="text-danger invalid-error d-none" id="followup_date_error">Follow up date is required.</span>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-4 m-b-20">
-                                <div class="fname">
-                                    <input value="{{date('H:i')}}" class="form-control" name="time" id="time" type="time" autocomplete="off">
-                                    <span class="text-danger invalid-error d-none" id="time_error">Time is required.</span>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-4 m-b-20">
-                                <div class="fname">
-                                    <input placeholder="Plan Interested In" name="plan_interested_in" id="plan_interested_in" class="form-control"/>
+                                    <select name="plan_interested_in" id="plan_interested_in" class="form-control">
+                                        <option value="">Plan interested</option>
+                                        @foreach($plans as $plan)
+                                            <option value="{{ $plan->id }}">{{ $plan->name }} - {{ $plan->price }}</option>
+                                        @endforeach
+                                    </select>
                                     <span class="text-danger invalid-error d-none" id="plan_interested_in_error">Plan interested in is required.</span>
                                 </div>
                             </div>
@@ -128,16 +174,10 @@
                                     <span class="text-danger invalid-error d-none" id="enquiry_error">Enquiry is required.</span>
                                 </div>
                             </div>
-                            <div class="form-group col-md-4 m-b-20"></div>
-                            <div class="form-group col-md-4 m-b-20"></div>
-                            
-                        </div>
-
-                        <div class="row" id="total-card">
                         </div>
 
                         <div class="text-center mt-3">  
-                            <button class="btn custom-theme-button" id="saveLead">Save</button>
+                            <button class="btn custom-theme-button" type="button" id="saveLead">Save</button>
                             <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                         </div>
                     </form>
@@ -148,19 +188,6 @@
 @endsection
 @push('scripts')
     <script>
-        function userActivate(enq) {
-            $.ajax({
-                type: "POST",
-                url: "{{ route('superadmin.changeEnquiryStatus') }}",
-                data: {
-                    id: $(enq).attr('data-id'),
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(data) {
-                    $('#enquiryTable').DataTable().draw();
-                }
-            });
-        }
 
         $(document).ready(function() {
             $('#enquiryTable').DataTable({
@@ -178,25 +205,10 @@
                     { data: 'Actions', name: 'Actions' },
                 ],
                 columnDefs: [
-                    { targets: 0, width: '90px' },
-                    { targets: 0, className: 'small' },
-
-                    { targets: 1, width: '90px' },
-                    { targets: 1, className: 'small' },
-
-                    { targets: 2, width: '70px' },
-                    { targets: 2, className: 'text-center small' },
-                    
-                    { targets: 3, width: '70px' }, // Set width of the third column (index 2) to 200 pixels
-                    { targets: 3, className: 'small' },
-
-                    { targets: 4, width: '100px' }, // Set width of the 4th column (index 3) to 60 pixels
-                    { targets: 4, className: 'text-center' },
-                    
-                    { targets: 5, width: '150px' }, // Set width of the 4th column (index 3) to 60 pixels
-                    { targets: 5, className: 'small' },
-                    
-                    { targets: 6, width: '60px' } // Set width of the 4th column (index 3) to 60 pixels
+                    { targets: 6, width: '150px' },
+                    { targets: 4, width: '100px' },
+                    { targets: 6, className: 'text-center' },
+                    { targets: 7, className: 'text-center' },
                 ]
             });
         });
@@ -219,29 +231,102 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
-                    console.log(data);
-                    $('#first_name').val(data.brom_enq.user_name)
-                    $('#last_name').val(data.brom_enq.last_name)
-                    $('#mobile').val(data.brom_enq.mobile)
-                    $('#email').val(data.brom_enq.email)
-                    $('#company').val(data.brom_enq.company)
-                    $('#lead_type').val(data.brom_enq.lead_type).trigger('change')
-                    $('#followup_date').val(data.brom_enq.next_follow_up_date)
-                    $('#time').val(data.brom_enq.next_follow_up_time)
-                    $('#plan_interested_in').val(data.brom_enq.plan_interested_in)
+                    $('#first_name').val(data.brom_enq.user_name);
+                    $('#last_name').val(data.brom_enq.last_name);
+                    $('#mobile').val(data.brom_enq.mobile);
+                    $('#email').val(data.brom_enq.email);
+                    $('#company').val(data.brom_enq.company);
+                    $('#lead_type').val(data.brom_enq.lead_type).trigger('change');
+                    $('#plan_interested_in').val(data.brom_enq.plan_interested_in).trigger('change');
                     $('#enquiry').val(data.brom_enq.enquiry);
-                    $('#this_data_id').val(data.brom_enq.id)
+                    $('#this_data_id').val(data.brom_enq.id);
                     $('#leadModal').modal('show');
                     $('#saveEnq').addClass('d-none');
                 }
             });
         }
 
+        function updateStatusForm(data) {
+            var id = $(data).attr('data-id');
+            $.ajax({
+                type: "POST",
+                url: "{{ route('superadmin.showEnquiry') }}",
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    $('#followup_date').val(data.brom_enq.next_follow_up_date);
+                    $('#time').val(data.brom_enq.next_follow_up_time);
+                    $('#progress_enquiry').val(data.brom_enq.enquiry);
+                    $('#this_progress_data_id').val(data.brom_enq.id);
+                    $('#status').val(data.brom_enq.status).trigger('change');
+                    $('#progressModal').modal('show');
+                }
+            });
+        }
+
+        function saveProgress(){
+            let all_error = document.querySelectorAll('.invalid-error');
+
+            all_error.forEach(element => {
+                element.classList.add('d-none');
+            });
+
+            let valid = true;
+
+            if($('#status').val() == '') {
+                document.getElementById('status_error').classList.remove('d-none');
+                valid = false;
+            }
+
+            if($('#followup_date').val() == '') {
+                document.getElementById('followup_date_error').classList.remove('d-none');
+                valid = false;
+            }
+
+            if($('#time').val() == '') {
+                document.getElementById('time_error').classList.remove('d-none');
+                valid = false;
+            }
+
+            if($('#progress_enquiry').val() == '') {
+                document.getElementById('progress_enquiry_error').classList.remove('d-none');
+                valid = false;
+            }
+
+            if (!valid) {
+                return;
+            }
+
+            var id = $('#this_progress_data_id').val();
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('superadmin.saveProgress') }}",
+                data: {
+                    id: id,
+                    status: $('#status').val(),
+                    followup_date: $('#followup_date').val(),
+                    time: $('#time').val(),
+                    enquiry: $('#progress_enquiry').val(),
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function(data) {
+                    $('#enquiryTable').DataTable().draw();
+                    $('#progressModal').modal('hide');
+                },
+                error:function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
         $(document).on('click', '#saveLead', function(e) {
             e.preventDefault();
-            // validate form
-            // $("#modal_form").validate();
+
             let all_error = document.querySelectorAll('.invalid-error');
+
             all_error.forEach(element => {
                 element.classList.add('d-none');
             });
@@ -278,16 +363,6 @@
                 valid = false;
             }
             
-            if($('#followup_date').val() == '') {
-                document.getElementById('followup_date_error').classList.remove('d-none');
-                valid = false;
-            }
-            
-            if($('#time').val() == '') {
-                document.getElementById('time_error').classList.remove('d-none');
-                valid = false;
-            }
-            
             if($('#plan_interested_in').val() == '') {
                 document.getElementById('plan_interested_in_error').classList.remove('d-none');
                 valid = false;
@@ -301,7 +376,9 @@
             if (!valid) {
                 return;
             }
-            var id = $('#this_data_id').val()
+
+            var id = $('#this_data_id').val();
+
             $.ajax({
                 type: "POST",
                 url: "{{ route('superadmin.saveEnquiry') }}",
@@ -323,20 +400,13 @@
                 success: function(data) {
                     $('#enquiryTable').DataTable().draw();
                     $('#leadModal').modal('hide');
-                    if (id.length > 0) {
-                        window.location.reload();
-                    }
                 },
                 error:function(error) {
                     console.log(error);
-                    // Check if the error object contains responseJSON
                     if (error.responseJSON) {
-                        // Retrieve the error message from responseJSON
                         var errorMessage = 'Something went wrong! May be duplicate email.';
-                        // Display or handle the error message as needed
                         $('#em_err').remove();
                         $('#email').after('<span class="text-danger" id="em_err">' + errorMessage + '</span>');
-                        console.log(errorMessage);
                     }
                 }
             });

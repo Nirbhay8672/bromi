@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Superadmin;
 use App\Constants\Statuses;
 use App\Http\Controllers\Controller;
 use App\Models\BromiEnquiry;
+use App\Models\Subplans;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
@@ -58,7 +59,6 @@ class BromiEnquiryController extends Controller
     public function superadminList(Request $request)
     {
         if ($request->ajax()) {
-            $user = Auth::user();
             $data = BromiEnquiry::get();
             return DataTables::of($data)
                 ->editColumn('enquiry', function ($row) {
@@ -74,53 +74,46 @@ class BromiEnquiryController extends Controller
                 ->editColumn('status', function ($row) {
                     if (!empty($row->status)) {
                         if ($row->status == Statuses::PENDING) {
-                            return '<span style="font-size:10px;" class="bg-danger rounded-pill px-2 py-1">'. $row->status .'</span>';
+                            return '<span style="font-size:13px;" class="bg-danger rounded-pill px-2 py-1">'. $row->status .'</span>';
                         } else if ($row->status == Statuses::READ) {
-                            return '<spa style="font-size:10px;"n class="bg-warning rounded-pill px-2 py-1">'. $row->status .'</span>';
+                            return '<spa style="font-size:13px;"n class="bg-warning rounded-pill px-2 py-1">'. $row->status .'</span>';
                         } else if ($row->status == Statuses::IN_PROGRESS) {
-                            return '<span style="font-size:10px;" class="bg-success rounded-pill px-2 py-1">'. $row->status .'</span>';
+                            return '<span style="font-size:13px;" class="bg-success rounded-pill px-2 py-1">'. $row->status .'</span>';
                         } else if ($row->status == Statuses::CLOSED) {
-                            return '<span style="font-size:10px;" class="bg-secondary rounded-pill px-2 py-1">'. $row->status .'</span>';
+                            return '<span style="font-size:13px;" class="bg-secondary rounded-pill px-2 py-1">'. $row->status .'</span>';
                         }
                     }
                 })
 
                 ->editColumn('Actions', function ($row) {
                     $buttons = '';
-                    $buttons =  $buttons . '<span data-id="' . $row->id . '" onclick=getBromiEnq(this) class="btn rounded btn-primary" style="font-size:13px;padding:5px 7px;">View / Edit</span>';
-                    if ($row->status == Statuses::PENDING) {
-                        $buttons =  $buttons . ' <span data-id="' . $row->id . '" onclick=userActivate(this) class="btn rounded btn-primary" style="font-size:13px;padding:5px 7px;">Mark Read</span>';
-                    } else if ($row->status == Statuses::READ) {
-                        $buttons =  $buttons . ' <span data-id="' . $row->id . '" onclick=userActivate(this) class="btn rounded btn-primary" style="font-size:13px;padding:5px 7px;">Mark In-Progress</span>';
-                    } else if ($row->status == Statuses::IN_PROGRESS) {
-                        $buttons =  $buttons . ' <span data-id="' . $row->id . '" onclick=userActivate(this) class="btn rounded btn-primary" style="font-size:13px;padding:5px 7px;">Mark Closed</span>';
-                    } 
+                    $buttons =  $buttons . '<span data-id="' . $row->id . '" onclick=getBromiEnq(this) style="cursor:pointer"><i class="fa fa-pencil fs-5"></i></span>';
+                    $buttons =  $buttons . '<span class="ms-3" data-id="' . $row->id . '" onclick=updateStatusForm(this) style="cursor:pointer"><i class="fa fa-bars fs-5 text-warning"></i></span>';
                     return $buttons;
                 })
                 ->rawColumns(['enquiry', 'status', 'Actions'])
                 ->make(true);
         }
-        return view('superadmin.requests.super-admin-index');
+
+        return view('superadmin.requests.super-admin-index')->with([
+            'plans' => Subplans::all(),
+        ]);
     }
 
     /**
      * change enquiry status.
      */
-    public function changeStatus(Request $request)
+    public function saveProgress(Request $request)
     {
-        if (!empty($request->id)) {
-            $data = BromiEnquiry::find($request->id);
-            if ($data->status == Statuses::PENDING) {
-                $data->status =  Statuses::READ;
-                $data->save();
-            } else if ($data->status == Statuses::READ) {
-                $data->status =  Statuses::IN_PROGRESS;
-                $data->save();
-            } else if ($data->status == Statuses::IN_PROGRESS) {
-                $data->status =  Statuses::CLOSED;
-                $data->save();
-            }
-        }
+        $bromi_enquiry = BromiEnquiry::find($request->id);
+
+        $dateTime = $request->followup_date . ' ' . $request->time . ':00';
+
+        $bromi_enquiry->fill([
+            'status' => $request->status,
+            'followup_date' => Carbon::parse($dateTime)->format('Y-m-d H:i:s'),
+            'enquiry' => $request->enquiry,
+        ])->save();
     }
 
     /**
@@ -131,40 +124,21 @@ class BromiEnquiryController extends Controller
      */
     public function store(Request $request)
     {
-        $loginUser = Auth::user();
-        $dateTime = $request->followup_date . ' ' . $request->time . ':00';
-        if (!empty($request->id) && $request->id != '') {
-            $data = BromiEnquiry::find($request->id);
-            $data->user_id = $loginUser->id;
-            $data->super_admin_id = $loginUser->parent_id;
-            $data->user_name = $request->user_name;
-            $data->last_name = $request->last_name;
-            $data->mobile = $request->mobile;
-            $data->email = $request->email;
-            $data->company = $request->company;
-            $data->lead_type = $request->lead_type;
-            $data->followup_date = Carbon::parse($dateTime)->format('Y-m-d H:i:s');
-            $data->email = $request->email;
-            $data->plan_interested_in = $request->plan_interested_in;
-            $data->enquiry = $request->enquiry;
-            $data->save();
-        } else {
-            $data =  new BromiEnquiry();
-            $data->user_id = $loginUser->id;
-            $data->super_admin_id = $loginUser->parent_id;
-            $data->user_name = $request->user_name;
-            $data->last_name = $request->last_name;
-            $data->mobile = $request->mobile;
-            $data->email = $request->email;
-            $data->company = $request->company;
-            $data->lead_type = $request->lead_type;
-            $data->followup_date = Carbon::parse($dateTime)->format('Y-m-d H:i:s');
-            $data->email = $request->email;
-            $data->plan_interested_in = $request->plan_interested_in;
-            $data->enquiry = $request->enquiry;
-            $data->save();
-        }
-        
+        $bromi_enquiry = BromiEnquiry::find($request->id) ?? new BromiEnquiry();
+
+        $bromi_enquiry->fill([
+            'user_id' => Auth::user()->id,
+            'super_admin_id' => Auth::user()->parent_id,
+            'user_name' => $request->user_name,
+            'last_name' => $request->last_name,
+            'mobile' => $request->mobile,
+            'email' => $request->email,
+            'company' => $request->company,
+            'lead_type' => $request->lead_type,
+            'email' => $request->email,
+            'plan_interested_in' => $request->plan_interested_in,
+            'enquiry' => $request->enquiry,
+        ])->save();
     }
 
     /**
@@ -184,39 +158,5 @@ class BromiEnquiryController extends Controller
 
             return response()->json($data);
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\BromiEnquiry  $bromiEnquiry
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(BromiEnquiry $bromiEnquiry)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\BromiEnquiry  $bromiEnquiry
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, BromiEnquiry $bromiEnquiry)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\BromiEnquiry  $bromiEnquiry
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(BromiEnquiry $bromiEnquiry)
-    {
-        //
     }
 }
