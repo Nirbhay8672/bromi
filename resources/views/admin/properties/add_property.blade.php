@@ -959,7 +959,7 @@
                                                                 <div class="form-group col-md-7 m-b-20">
                                                                     <label for="Ceiling Height">Ceiling Height</label>
                                                                     <input class="form-control" name="ceiling_height"
-                                                                        id="ceiling_height" maxlength="2" type="text"
+                                                                        id="ceiling_height" maxlength="6" type="text"
                                                                         autocomplete="off">
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
