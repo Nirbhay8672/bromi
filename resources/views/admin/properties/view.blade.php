@@ -317,7 +317,7 @@ use Illuminate\Support\Facades\DB;
                                                         @endif
 
                                                         @if ($type == 'Penthouse' || ($type == 'Flat' && $property->is_terrace != 0))
-                                                            @if($terrace_builtupArray[0] !== "")
+                                                            @if($terrace_carpetArray[0] !== "")
                                                                 <div class="form-group col-4 m-b-10 data_conent_61">
                                                                     <h6><b>Terrace Carpet Area</b></h6>
                                                                 </div>
