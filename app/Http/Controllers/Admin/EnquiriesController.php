@@ -74,7 +74,7 @@ class EnquiriesController extends Controller
 				return ($var['name'] == 'only-assigned');
 			});
 
-			if (count($new) > 0 &&  $user->role_id !== 1) {
+			if (count($new) > 0 &&  $user->role_id !== '1') {
 				// dd("0nn",$user->role_id);
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
@@ -644,6 +644,7 @@ class EnquiriesController extends Controller
 
 	public function importEnquiryTemplate(Request $request)
 	{
+		// dd("impor enq");
 		$spreadsheet = new Spreadsheet;
 
 		$sheet = $spreadsheet->getActiveSheet();
@@ -653,16 +654,18 @@ class EnquiriesController extends Controller
 		$sheet->setCellValue('D1', "EnquiryFor");
 		$sheet->setCellValue('E1', "RequirementType");
 		$sheet->setCellValue('F1', "SpecificPropertyType");
-		$sheet->setCellValue('G1', "Configuration1");
-		$sheet->setCellValue('H1', "Configuration2");
+		$sheet->setCellValue('G1', "Configuration");
+		// $sheet->setCellValue('H1', "Configuration2");
 		$sheet->setCellValue('I1', "Enquiry Source");
-		$sheet->setCellValue('J1', "BudgetFrom");
-		$sheet->setCellValue('J1', "AreaTo");
+		$sheet->setCellValue('J1', "AreaFrom");
+		$sheet->setCellValue('K1', "AreaTo");
 		$sheet->setCellValue('L1', "AssingedTo");
 		$sheet->setCellValue('M1', "Remarks");
 		$sheet->setCellValue('N1', "Created On");
 		$sheet->setCellValue('O1', "Status");
 		$sheet->setCellValue('P1', "Enquiry Progress");
+		$sheet->setCellValue('Q1', "BudgetFrom");
+		$sheet->setCellValue('R1', "BudgetTo");
 
 		$type = "Flat";
 		if (!empty($request->type)) {
@@ -749,13 +752,12 @@ class EnquiriesController extends Controller
 		$specificType = '"' . implode(",", $categoryOptions) . '"';
 		// $planType = '"' . implode(",", $property_configuration) . '"';
 		$planType = '"' . implode(",", $subcategoryOptions) . '"';
+		// dd("...",$enquiryFor,$PropertyType,$specificType,$planType);
 		$enquirySource = '"' . implode(",", $dropdownsarr['property_source']) . '"';
 		$progress = '"Lead Confirmed,Site Visit Scheduled,Site Visit Completed,Discussion,Booked,Lost"';
 		$propertyStatus = '"Active,In Active"';
-		$areaFrom = '"0"';
-		$areaTo = '"0"';
 		$arrr = [];
-		$arrr['vals'] = [$enquiryFor, $PropertyType,$specificType, $planType,$areaFrom,$areaTo, $enquirySource, $users, $propertyStatus, $progress];
+		$arrr['vals'] = [$enquiryFor, $PropertyType,$specificType, $planType, $enquirySource, $users, $propertyStatus, $progress];
 		$arrr['sheetcell'] = ['D1', 'E1', 'F1', 'G1', 'H1', 'I1',  'L1', 'O1'];
 		$arrr['setsqref'] = ['D2:D1048576', 'E2:E1048576', 'F2:F1048576', 'G2:G1048576', 'H2:H1048576', 'I2:I1048576',  'L2:L1048576', 'O2:O1048576', 'P2:P1048576'];
 		foreach ($arrr['sheetcell'] as $key => $value) {
@@ -1245,6 +1247,7 @@ class EnquiriesController extends Controller
 
 	public function importEnquiry(Request $request)
 	{
+		// dd("store enq ");
 		$file = $request->file('csv_file');
 		$name = Str::random(10) . '.xlsx';
 		$file->move(storage_path('app'), $name);
@@ -1257,15 +1260,15 @@ class EnquiriesController extends Controller
 		unlink(storage_path('app/' . $name));
 		foreach ($collection as $key => $value) {
 
-			$user_id = NULL;
-			if (!empty($value['AssingedTo'])) {
-				$user = User::where('parent_id', Session::get('parent_id'))->where('first_name', 'like', '%' . explode(' ', $value['AssingedTo'])[0])->where('last_name', 'like', '%' . explode(' ', $value['AssingedTo'])[1])->first();
-			}
-
-
-			if (!empty($user->id) && !empty($value['AssingedTo'])) {
-				$user_id = $user->id;
-			}
+			// $user_id = NULL;
+			// if (!empty($value['AssingedTo'])) {
+			// 	$user = User::where('parent_id', Session::get('parent_id'))->where('first_name', 'like', '%' . explode(' ', $value['AssingedTo'])[0])->where('last_name', 'like', '%' . explode(' ', $value['AssingedTo'])[1])->first();
+			// }
+			
+			
+			// if (!empty($user->id) && !empty($value['AssingedTo'])) {
+			// 	$user_id = $user->id;
+			// }
 
 			$property_type_id = NULL;
 			$property_type = DropdownSettings::where('name', 'like', '%' . $value['RequirementType'] . '%')->first();
@@ -1280,8 +1283,8 @@ class EnquiriesController extends Controller
 			}
 
 			$Configuration_id = NULL;
-			$Configuration = DropdownSettings::where('name', 'like', '%' . $value['Configuration1'] . '%')->where('dropdown_for','property_sub_category')->first();
-			if (!empty($Configuration->user_id) && !empty($value['Configuration1'])) {
+			$Configuration = DropdownSettings::where('name', 'like', '%' . $value['Configuration'] . '%')->where('dropdown_for','property_sub_category')->first();
+			if (!empty($Configuration->user_id) && !empty($value['Configuration'])) {
 				$Configuration_id = $Configuration->user_id;
 			}
 
@@ -1297,6 +1300,7 @@ class EnquiriesController extends Controller
 
 			$enquiry_source_id = NULL;
 			$enquiry_source = DropdownSettings::where('name', 'like', '%' . $value['Enquiry Source'] . '%')->first();
+			// dd("Enquiry Source",$enquiry_source);
 			if (!empty($enquiry_source->id) && !empty($value['Enquiry Source'])) {
 				$enquiry_source_id = $enquiry_source->id;
 			}
@@ -1305,6 +1309,7 @@ class EnquiriesController extends Controller
 			if (empty($value['Enquiry Progress'])) {
 				$telephonic = $value['Remarks'];
 			}
+			dd("value",$value,$enquiry_source_id);
 
 			if (!empty($value['ClientName'])) {
 				$data =  new Enquiries();
@@ -1320,7 +1325,10 @@ class EnquiriesController extends Controller
 				$data->enquiry_source = $enquiry_source_id;
 				$data->budget_from = $value['BudgetFrom'];
 				$data->budget_to = $value['BudgetTo'];
-				$data->employee_id = $user_id;
+				$data->budget_to = $value['BudgetTo'];
+				$data->area_from = $value['AreaFrom'];
+				$data->area_to = $value['AreaTo'];
+				// $data->employee_id = $user_id;
 				$data->enquiry_status = $value['Status'];
 				$data->telephonic_discussion = $telephonic;
 				$data->save();
