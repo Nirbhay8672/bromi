@@ -409,6 +409,7 @@ class EnquiriesController extends Controller
 					$sub_cat = ((!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '');
 					$configurationArray = json_decode($row->configuration);
 					// dd("sub ",$configurationArray);
+					$configuration_display = ''; 
 					if (!empty($configurationArray) && isset($configurationArray[0])) {
 						$configuration_names = []; // Initialize an empty array to store configuration names
 
