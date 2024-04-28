@@ -768,8 +768,8 @@
                                                             <div class="invalid-feedback" id="storage_centre_height_error"
                                                                 style="display: none;color:red;"></div>
                                                         </div>
-                                                        
-                                                          <div class="col-md-4 the_constructed_carpet_area">
+
+                                                        <div class="col-md-4 the_constructed_carpet_area">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
                                                                     <label for="Constructed Carpet Area">Constructed Carpet
@@ -795,7 +795,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="col-md-3 the_carpet_plot_area">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
@@ -917,11 +917,13 @@
                                                         <!--                <select-->
                                                         <!--                    class="form-select measure_select measure_square"-->
                                                         <!--                    id="carpet_area_measurement">-->
-                                                        <!--                    @foreach ($land_units as $land_unit)-->
+                                                        <!--                    @foreach ($land_units as $land_unit)
+    -->
                                                         <!--                        <option value="{{ $land_unit->id }}"-->
                                                         <!--                            {{ $land_unit->id == 1 ? 'selected' : '' }}>-->
                                                         <!--                            {{ $land_unit->unit_name }}</option>-->
-                                                        <!--                    @endforeach-->
+                                                        <!--
+    @endforeach-->
                                                         <!--                </select>-->
                                                         <!--            </div>-->
                                                         <!--        </div>-->
@@ -957,7 +959,7 @@
                                                                 <div class="form-group col-md-7 m-b-20">
                                                                     <label for="Ceiling Height">Ceiling Height</label>
                                                                     <input class="form-control" name="ceiling_height"
-                                                                        id="ceiling_height" maxlength="2"  type="text" 
+                                                                        id="ceiling_height" maxlength="2" type="text"
                                                                         autocomplete="off">
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
@@ -1479,22 +1481,26 @@
                                                         <div class="mb-4 div_construction_documents">
                                                             <label><b>Construction Documents :</b></label>
                                                             <div class="input-group control-group increment">
-                                                                <div class="input-group-prepend col-md-3" 
+                                                                <div class="input-group-prepend col-md-3"
                                                                     style="margin-right: 2%">
-                                                                    <select class="custom-select" name="const_doc_type[]">
+                                                                    <select class="custom-select"
+                                                                        name="const_doc_type[]">
                                                                         <option value=""> Category</option>
                                                                         <option value="1">Building Elevation</option>
-                                                                        <option value="2">Common Amenities Photos</option>
-                                                                        <option value="3">Master Layout Of Building</option>
+                                                                        <option value="2">Common Amenities Photos
+                                                                        </option>
+                                                                        <option value="3">Master Layout Of Building
+                                                                        </option>
                                                                         <option value="4">Brochure</option>
                                                                         <option value="5">Cost Sheet</option>
                                                                         <option value="6">Other</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                <input type="file" id="const_documents"
-                                                                    name="const_documents[]" class="form-control col-md-4"
-                                                                    style="margin-right: 2%">
+                                                                    <input type="file" id="const_documents"
+                                                                        name="const_documents[]"
+                                                                        class="form-control col-md-4"
+                                                                        style="margin-right: 2%">
                                                                 </div>
                                                                 <div class="input-group-btn" style="margin-left: 2%">
                                                                     <div class="form-group col-md-1">
@@ -2157,13 +2163,18 @@
                                                             <div class="input-group">
                                                                 <div class="input-group-append col-md-4 m-b-20">
                                                                     <div class="form-group country_code">
-                                                                        <div
-                                                                            style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important" class="divSelect">
-                                                                            <select class="form-control countries_list" id="country_code" name="country_code"
-                                                                            style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">
-                                                                            @foreach ($country_codes as $country_code)
-                                                                                <option data-parent_id="{{ $country_code->id }}" value={{$country_code->id}}>+{{$country_code->country_iso}}({{$country_code->country_code}})</option>
-                                                                            @endforeach
+                                                                        <div style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important"
+                                                                            class="divSelect">
+                                                                            <select class="form-control countries_list"
+                                                                                id="country_code" name="country_code"
+                                                                                style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">
+                                                                                @foreach ($country_codes as $country_code)
+                                                                                    <option
+                                                                                        data-parent_id="{{ $country_code->id }}"
+                                                                                        value={{ $country_code->id }}>
+                                                                                        +{{ $country_code->country_iso }}({{ $country_code->country_code }})
+                                                                                    </option>
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -2171,12 +2182,14 @@
                                                                 <div class="form-group col-md-8 m-b-20">
                                                                     <div class="fname">
                                                                         <label for="Mobile">Contact</label>
-                                                                        <input class="form-control" name="owner_contact_specific_no"
+                                                                        <input class="form-control"
+                                                                            name="owner_contact_specific_no"
                                                                             style="border-right:2px solid #1d2848 !important; border-top-right-radius: 5px;border-bottom-right-radius: 5px"
-                                                                            id="owner_contact_specific_no" type="text"
-                                                                            autocomplete="off">
+                                                                            id="owner_contact_specific_no"
+                                                                            type="text" autocomplete="off">
                                                                     </div>
-                                                                    <div class="invalid-feedback" id="owner_contact_specific_no_error"
+                                                                    <div class="invalid-feedback"
+                                                                        id="owner_contact_specific_no_error"
                                                                         style="display: block;color:red;"></div>
                                                                 </div>
                                                             </div>
@@ -2700,7 +2713,6 @@
     @push('scripts')
         <script src="{{ asset('admins/assets/js/form-wizard/property_wizard.js') }}"></script>
         <script>
-           
             // Hide State dropdown
 
             //#B 5+BHK then add txtbox
@@ -2724,14 +2736,22 @@
             let penthouseConf, farmConf, landConfiguration, plotConf, VillaCategory, landCategory, villaConfiguration,
                 flateConfiguration, officeConf, retailConfiguration, storageConfiguration, theForLand;
             $(document).ready(function() {
-                 //only 2 digits add
-                 $('#ceiling_height').on('input', function() {
-            var currentValue = $(this).val();
-            if (currentValue.length > 2) {
-                $(this).val(currentValue.slice(0, 2));
-            }
-        });
-                
+                //only 2 digits add
+                $('#ceiling_height').on('input', function() {
+                    var currentValue = $(this).val();
+                    if (currentValue.length > 2) {
+                        $(this).val(currentValue.slice(0, 2));
+                    }
+                });
+                //.00 decimal add
+                $("#ceiling_height").blur(function() {
+                    var value = $(this).val();
+                    var roundedValue = parseFloat(value).toFixed(2);
+                    if (roundedValue.indexOf('.') === -1) {
+                        roundedValue += ".00";
+                    }
+                    $(this).val(roundedValue);
+                });
                 // Initialize Select2 for all dropdowns
                 $('#project_id, #state_id, #area_id, #zone, #village_id, #taluka_id, #district_id, #state-dropdown')
                     .select2();
@@ -3090,18 +3110,18 @@
                         '<div class="control-group input-group" style="margin-top:10px">' +
                         '<div class="input-group-prepend col-md-3" style="margin-right: 2%">' +
                         '<select class="custom-select select2-hidden-accessible" name="const_doc_type[]" tabindex="-1" aria-hidden="true">' +
-                        '<option value=""> Category</option>'+
-                        '<option value="1">Building Elevation</option>'+
-                        '<option value="2">Common Amenities Photos</option>'+
-                        '<option value="3">Master Layout Of Building</option>'+
-                        '<option value="4">Brochure</option>'+
-                        '<option value="5">Cost Sheet</option>'+
-                        '<option value="6">Other</option>'+
+                        '<option value=""> Category</option>' +
+                        '<option value="1">Building Elevation</option>' +
+                        '<option value="2">Common Amenities Photos</option>' +
+                        '<option value="3">Master Layout Of Building</option>' +
+                        '<option value="4">Brochure</option>' +
+                        '<option value="5">Cost Sheet</option>' +
+                        '<option value="6">Other</option>' +
                         '</select>' +
                         '</div>' +
-                        '<div class="col-md-4" style="margin-right: 2%">'+
+                        '<div class="col-md-4" style="margin-right: 2%">' +
                         '<input type="file" name="const_documents[]" class="form-control" data-bs-original-title="" title="">' +
-                        '</div>'+
+                        '</div>' +
                         '<div class="form-group col-md-1">' +
                         '<button class="btn btn-primary rem-docs" style="border-radius:5px;" type="button" title="">-</button>' +
                         '</div>' +
@@ -3906,7 +3926,7 @@
                     '               <div style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important" class="divSelect">' +
                     '                   <select class="form-control countries_list" id="contact_country_code" name="other_contact_country_code" style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">' +
                     '                       @foreach ($country_codes as $country_code)' +
-                    '                           <option data-parent_id="{{ $country_code->id }}" value={{$country_code->id}}>+{{$country_code->country_iso}} ({{$country_code->country_code}})</option>' +
+                    '                           <option data-parent_id="{{ $country_code->id }}" value={{ $country_code->id }}>+{{ $country_code->country_iso }} ({{ $country_code->country_code }})</option>' +
                     '                       @endforeach' +
                     '                   </select>' +
                     '               </div>' +
@@ -4544,8 +4564,9 @@
                                     $("[data-contact_id=" + id + "] input[name=other_name]").val(details[i][0]);
                                     $("[data-contact_id=" + id + "] input[name=other_contact]").val(details[i][1]);
                                     $("[data-contact_id=" + id + "] input[name=position]").val(details[i][2]);
-                                    $("[data-contact_id=" + id + "] input[name=other_contact_country_code]").val(details[i][3]);
-                                    
+                                    $("[data-contact_id=" + id + "] input[name=other_contact_country_code]").val(
+                                        details[i][3]);
+
                                 }
                             } else {
                                 generate_contact_detail_click(1)
@@ -4660,7 +4681,8 @@
                     name = $(this).val();
                     otherName = $("[data-contact_id=" + unique_id + "] input[name=other_name]").val();
                     otherContact = $("[data-contact_id=" + unique_id + "] input[name=other_contact]").val();
-                    otherContactCode = $("[data-contact_id=" + unique_id + "] input[name=other_contact_country_code]").val();
+                    otherContactCode = $("[data-contact_id=" + unique_id +
+                        "] input[name=other_contact_country_code]").val();
                     position = $("[data-contact_id=" + unique_id + "] input[name=position]").val();
                     // if (otherName.trim() === "") {
                     //     $("#other_name_error_" + unique_id).text("other name field is required").show();
@@ -4836,12 +4858,12 @@
                     .map(function() {
                         return $(this).val();
                     }).get();
-                    
+
                 var other_contact_code = $("input[id='contact_country_code']")
                     .map(function() {
                         return $(this).val();
                     }).get();
-                    
+
                 var position = $("input[id='position']")
                     .map(function() {
                         return $(this).val();
@@ -5050,7 +5072,7 @@
                                     window.location.href = "{{ route('admin.industrial.properties') }}";
                                 } else {
                                     window.location.href = "{{ route('admin.properties') }}";
-                                } 
+                                }
                                 property_image.innerHTML = 'Property Image is required.';
                             }
                             if (filesImages.length > 0) {
@@ -5239,7 +5261,8 @@
                         if (parentId.find('label').length > 0) {
                             $(this).remove();
                             var currenthtml = $(parentId).html()
-                            $(parentId).html('<div class="fname focused">' + currenthtml + '<div class="fvalue">' + inputhtml[0]
+                            $(parentId).html('<div class="fname focused">' + currenthtml + '<div class="fvalue">' +
+                                inputhtml[0]
                                 .outerHTML + '</div>' + '</div>')
                         }
                     }
@@ -5303,4 +5326,4 @@
 
 
 
-{{-- addproppp --}}
+    {{-- addproppp --}}
