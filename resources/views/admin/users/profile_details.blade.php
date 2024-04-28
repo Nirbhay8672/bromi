@@ -365,7 +365,7 @@
                                                         <h5 class="mb-3">Subscribed On :
                                                             {{ \Carbon\Carbon::parse($user->subscribed_on)->format('d-m-Y') }}
                                                         </h5>
-                                                        <h5>Renewal On :
+                                                        <h5>Valid On :
                                                             {{ \Carbon\Carbon::parse($user->plan_expire_on)->format('d-m-Y') }}
                                                         </h5>
                                                     </div>
