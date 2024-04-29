@@ -24,6 +24,16 @@ class CouponController extends Controller
 					$discount_flag = $row->discount_type == 1 ? '% Off' : 'Flat amount off';	
 					return $discount_flag;
 				})
+				->editColumn('date_from', function ($row) {
+					if (!empty($row->date_from)) {
+						return date('d/m/Y', strtotime($row->date_from));
+					}
+				})
+				->editColumn('date_to', function ($row) {
+					if (!empty($row->date_to)) {
+						return date('d/m/Y', strtotime($row->date_to));
+					}
+				})
 				->editColumn('is_active', function ($row) {
 
 					$status = $row->status == 1 ? 'checked' : '';

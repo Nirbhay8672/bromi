@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupons;
 use App\Models\District;
+use App\Models\EmailTemplate;
 use App\Models\State;
+use App\Models\Subplans;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
 use App\Models\SuperTaluka;
 use App\Models\SuperVillages;
+use App\Models\TpScheme;
+use App\Models\Units;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -28,6 +33,8 @@ class SuperSettingController extends Controller
 		$total_dist = District::where('user_id',Auth::user()->id)->get()->count();
 		$total_taluka = SuperTaluka::get()->count();
 		$total_village = SuperVillages::get()->count();
+		$total_units = Units::get()->count();
+		$total_tp = TpScheme::get()->count();
 
 		return view('superadmin.supersettings.index')->with([
 			'total_state' => $total_state,
@@ -35,7 +42,13 @@ class SuperSettingController extends Controller
 			'total_locality' => $total_locality,
 			'total_dist' => $total_dist,
 			'total_taluka' => $total_taluka,
-			'total_village' => $total_village
+			'total_village' => $total_village,
+			'total_units' => $total_units,
+			'total_tp' => $total_tp,
+			'total_plans' => Subplans::get()->count(),
+			'total_email' => EmailTemplate::where('template_type','email')->get()->count(),
+			'total_sms' => EmailTemplate::where('template_type','sms')->get()->count(),
+			'total_coup' => Coupons::get()->count(),
 		]); 
 	}
 

@@ -130,6 +130,11 @@ class UserController extends Controller
 				->editColumn('users', function ($row) {
 					return User::where('users.parent_id', $row['id'])->whereNull('users.vendor_id')->get()->count();
 				})
+				->editColumn('subscribed_on', function ($row) {
+					if (!empty($row['subscribed_on'])) {
+						return date("d/m/Y", strtotime($row['subscribed_on']));
+					}
+				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
 					
@@ -205,7 +210,7 @@ class UserController extends Controller
 			return DataTables::of($data)
 				->editColumn('birth_date', function ($row) {
 					if (!empty($row->birth_date)) {
-						return date('d M, Y', strtotime($row->birth_date));
+						return date('d/m/Y', strtotime($row->birth_date));
 					}
 				})
 
@@ -214,7 +219,7 @@ class UserController extends Controller
                     if (empty(Auth::user()->parent_id)) {
                         $buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" onclick=getUser(this) class="fa-pencil pointer fa fs-22 py-2 mx-2" type="button"></i>';
                     } else {
-                        $buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" class="fa-pencil pointer fa fs-22 py-2 mx-2" type="button"></i>';
+                        $buttons =  $buttons . '<i role="button" data-id="' . $row->id . '" class="fa-pencil pointer fa fs-22 py-2 mx-2" type="button" onclick="resetData()"></i>';
                     }
 					
 					return $buttons;
@@ -287,7 +292,6 @@ class UserController extends Controller
 			$data->status = 1;
 			$data->role_id = 3;
 			$data->permissions = json_encode($request->permissions);
-            // $role->syncPermissions(Permission::where('guard_name', 'web')->get()->pluck('id')->all());
 			$data->save();
 		} else {
 			$data =  new User();
