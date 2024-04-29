@@ -360,7 +360,7 @@ Helper::set_default_measuerement();
                                                 class="sidebar-link @if ($route == 'superadmin.members') active @endif"
                                                 href="{{ route('superadmin.members') }}"
                                             ><i class="fa fa-users"></i>
-                                                <span class="lan-3">Teams</span>
+                                                <span class="lan-3">Team Members</span>
                                             </a>
                                         </li>
                                     @endif
@@ -394,41 +394,11 @@ Helper::set_default_measuerement();
                                         </li>
                                     @endif
 
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::PLANS))
-                                        <li class="sidebar-list"><a class="sidebar-link @if ($route == 'superadmin.plans') active @endif"
-                                                href="{{ route('superadmin.plans') }}"><i class="fa fa-th-list"></i><span
-                                                    class="lan-3">Plans</span></a>
-                                        </li>
-                                    @endif
-
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::UNITS))
-                                        <li class="sidebar-list"><a class="sidebar-link @if ($route == 'superadmin.units') active @endif"
-                                                href="{{ route('superadmin.units') }}"><i class="fa fa-columns"></i><span
-                                                    class="lan-3">Measurement Units</span></a>
-                                        </li>
-                                    @endif
-
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::COUPONS))
-                                        <li class="sidebar-list"><a
-                                                class="sidebar-link @if ($route == 'superadmin.coupons') active @endif"
-                                                href="{{ route('superadmin.coupons') }}"><i class="fa fa-ticket"></i><span
-                                                    class="lan-3">Coupons</span></a>
-                                        </li>
-                                    @endif
-
                                     @if ($permissions->contains(\App\Constants\SupAdminPermissions::NOTIFICATIONS))
                                         <li class="sidebar-list"><a
                                                 class="sidebar-link @if ($route == 'superadmin.notifications') active @endif"
                                                 href="{{ route('superadmin.notifications') }}"><i
                                                     class="fa fa-bell"></i><span class="lan-3">Notifications</span></a>
-                                        </li>
-                                    @endif
-
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::TP_SCHEME))
-                                        <li class="sidebar-list"><a
-                                                class="sidebar-link @if ($route == 'superadmin.tpscheme') active @endif"
-                                                href="{{ route('superadmin.tpscheme') }}"><i class="fa fa-copy"></i><span
-                                                    class="lan-3">Tp Scheme</span></a>
                                         </li>
                                     @endif
 
@@ -445,24 +415,6 @@ Helper::set_default_measuerement();
                                             href="{{ route('superadmin.settings') }}"><i class="fa fa-gear"></i><span
                                                 class="lan-3">Settings</span></a>
                                     </li>
-                                    
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::EMAIL_TEMPLATE))
-                                        <li class="sidebar-list"><a
-                                                class="sidebar-link @if ($route == 'superadmin.email.index') active @endif"
-                                                href="{{ route('superadmin.email.index') }}"><i
-                                                    class="fa fa-envelope"></i>
-                                                    <span class="lan-3">Email Template</span></a>
-                                        </li>
-                                    @endif
-                                    
-                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::SMS_TEMPLATE))
-                                        <li class="sidebar-list">
-                                            <a class="sidebar-link" href="{{ route('superadmin.sms.index') }}">
-                                                <i class="fa fa-envelope"></i>
-                                                <span class="lan-3">SMS Template</span>
-                                            </a>
-                                        </li>   
-                                    @endif
                                     
                                     @if ($permissions->contains(\App\Constants\SupAdminPermissions::REQUESTS))
                                         <li class="sidebar-list">

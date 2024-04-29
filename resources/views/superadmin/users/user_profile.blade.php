@@ -119,7 +119,7 @@
 
                                                     <div class="row">
                                                         <div class="col text-center">
-                                                            <a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary" style="border-radius:5px;">Login as user</a>
+                                                            <a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary" style="border-radius:5px;" target="_blank">Login as user</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -177,10 +177,10 @@
                                                     @endforeach
                                                     <div class="text-center">
                                                         <h5 class="mb-3">Subscribed On :
-                                                            {{ \Carbon\Carbon::parse($user->subscribed_on)->format('d-m-Y') }}
+                                                            {{ \Carbon\Carbon::parse($user->subscribed_on)->format('d/m/Y') }}
                                                         </h5>
                                                         <h5>Renewal On :
-                                                            {{ \Carbon\Carbon::parse($user->subscribed_on)->addMonth()->format('d-m-Y') }}
+                                                            {{ \Carbon\Carbon::parse($user->subscribed_on)->addMonth()->format('d/m/Y') }}
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -290,12 +290,12 @@
                                                             <td>{{ $user->email ?? '-' }}</td>
                                                             <td>{{ $user->mobile_number ?? '-' }}</td>
                                                             <td>{{ $user->company_name ?? '-' }}</td>
-                                                            <td class="text-center"><a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary" style="border-radius:5px;">Login as user</a></td>
+                                                            <td class="text-center"><a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary btn-xs" style="border-radius:5px;" target="_blank">Login as user</a></td>
                                                         </tr>
                                                         @endforeach
                                                         @else
                                                         <tr>
-                                                            <td colspan="4" class="text-center">No record found</td>
+                                                            <td colspan="7" class="text-center">No record found</td>
                                                         </tr>
                                                         @endif
                                                     </tbody>
@@ -326,7 +326,7 @@
                                                         @if(count($transactions) > 0)
                                                         @foreach($transactions as $transaction)
                                                         <tr>
-                                                            <td>{{ $transaction->payment_completion_time }}</td>
+                                                            <td>{{ \Carbon\Carbon::parse($transaction->payment_completion_time)->format('d/m/Y h:i:s A') }}</td>
                                                             <td>{{ $transaction->order_id }}</td>
                                                             <td>{{ $transaction->transaction_goal_flag }}</td>
                                                             <td>{{ $transaction->payment_amount }}</td>
@@ -338,7 +338,7 @@
                                                         @endforeach
                                                         @else
                                                         <tr>
-                                                            <td colspan="6" class="text-center">No record found</td>
+                                                            <td colspan="8" class="text-center">No record found</td>
                                                         </tr>
                                                         @endif
                                                     </tbody>

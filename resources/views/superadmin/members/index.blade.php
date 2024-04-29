@@ -13,7 +13,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Members </h5>
+                            <h5 class="mb-3">Team Members</h5>
                             @if(empty(Auth::user()->parent_id))
                                 <button
                                     class="btn custom-icon-theme-button"
@@ -237,14 +237,13 @@
 
         });
 
-
-
         function resetData() {
             $('.invalid-error').addClass('d-none');
             $('#modal_form').trigger("reset");
         }
 
         function getUser(data) {
+            resetData();
             $('#modal_form').trigger("reset");
             var id = $(data).attr('data-id');
             $.ajax({
@@ -268,8 +267,7 @@
                     if (data.main_user.permissions.length) {
                         data.main_user.permissions.forEach(function(v,e){
                             $(`#${v}_`).prop('checked', true);
-                        })
-                        console.log(data.main_user.permissions);
+                        });
                     }
                 }
             });
@@ -285,6 +283,8 @@
             });
             
             let valid = true;
+
+            var id = $('#this_data_id').val();
             
             if($('#first_name').val() == '') {
                 document.getElementById('first_name_error').classList.remove('d-none');
@@ -305,21 +305,24 @@
                 document.getElementById('email_error').classList.remove('d-none');
                 valid = false;
             }
-            
-            if($('#password').val() == '') {
-                document.getElementById('password_error').classList.remove('d-none');
-                valid = false;
+
+            if(!id) {
+                if($('#password').val() == '') {
+                    document.getElementById('password_error').classList.remove('d-none');
+                    valid = false;
+                }
             }
-            
+
             if (!valid) {
                 return;
             }
 
-            var id = $('#this_data_id').val()
-            // Serialize the permissions checkboxes
+            var id = $('#this_data_id').val();
+
             var permissions = $('input[name="permissions[]"]:checked').map(function(){
                 return $(this).val();
             }).get();
+
             $.ajax({
                 type: "POST",
                 url: "{{ route('superadmin.saveMember') }}",

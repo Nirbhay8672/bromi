@@ -112,7 +112,7 @@
                         <div class="media static-widget my-3">
                             <div class="media-body text-center">
                                 <h1 class="font-roboto">{{ $total_members }}</h1>
-                                <h3 class="mb-0">Total Members</h3>
+                                <h3 class="mb-0">Total Team Members</h3>
                             </div>
                         </div>
                     </div>
