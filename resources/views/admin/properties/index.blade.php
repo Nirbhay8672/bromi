@@ -29,7 +29,7 @@
                                     <button class="btn ms-3 custom-icon-theme-button" type="button" data-bs-toggle="modal"
                                         data-bs-target="#filtermodal" title="Filter"><i class="fa fa-filter"></i></button>
 
-                                    <button class="btn ms-3 custom-icon-theme-button" type="button" title="Clear Filter"
+                                    <button class="btn ms-3 custom-icon-theme-button" style="background-color: #FF0000 !important" type="button" title="Clear Filter"
                                         id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
 
                                     <button class="btn matchbutton ms-3 custom-icon-theme-button" type="button"
@@ -577,7 +577,7 @@
                                     </div>
                                     {{-- <hr class="color-hr"> --}}
 
-                                    <div class="form-group col-md-3 m-b-4 mb-3">
+                                    <div class="form-group col-md-2 m-b-4 mb-3">
                                         {{-- <label>&nbsp;</label> --}}
                                         <div>
                                             <label for="From Price">From Price</label>
@@ -585,31 +585,31 @@
                                                 id="filter_from_price" type="text" autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-3 mb-3">
+                                    <div class="form-group col-md-2 mb-3">
                                         <div>
                                             <label for="To Price">To Price</label>
                                             <input class="form-control indian_currency_amount" name="filter_to_price"
                                                 id="filter_to_price" type="text" autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-3 m-b-20">
+                                    <div class="form-group col-md-2 m-b-20">
                                         <label for="From Area">From Area</label>
                                         <input class="form-control" name="filter_from_area" id="filter_from_area"
                                             type="text" autocomplete="off">
                                     </div>
-                                    <div class="form-group col-md-3 m-b-20">
+                                    <div class="form-group col-md-2 m-b-20">
                                         <label for="To Area">To Area</label>
                                         <input class="form-control" name="filter_to_area" id="filter_to_area"
                                             type="text" autocomplete="off">
                                     </div>
-                                    <div class="form-group col-md-6 m-b-4 mb-3">
+                                    <div class="form-group col-md-2 m-b-4 mb-3">
                                         <label for="From Date">From Date</label>
                                         <div class="input-group">
                                             <input class="form-control " id="filter_from_date" type="date"
                                                 data-language="en">
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-6 m-b-4 mb-3">
+                                    <div class="form-group col-md-2 m-b-4 mb-3">
                                         <label for="To Date">To Date</label>
                                         <div class="input-group">
                                             <input class="form-control " id="filter_to_date" type="date"
@@ -1228,11 +1228,11 @@
                             "targets": 4
                         },
                         {
-                            "width": "15%",
+                            "width": "18%",
                             "targets": 5
                         },
                         {
-                            "width": "18%",
+                            "width": "15%",
                             "targets": 6
                         },
                     ],

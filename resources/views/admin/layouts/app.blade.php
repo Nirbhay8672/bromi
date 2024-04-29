@@ -74,22 +74,29 @@ Helper::set_default_measuerement();
             cursor: pointer;
         }
         #enquiryTable .read-more:hover {
-            color: #7fb927;
+            color: blue;
         }
         #enquiryTable .read-less:hover {
+            color: red;
+        }
+
+        .read-more{
             color: #7fb927;
         }
 
+        .read-less{
+            color: #7fb927;
+        }
          /* prop read more-read less */
          #propertyTable .read-more,
         #propertyTable .read-less {
             cursor: pointer;
         }
         #propertyTable .read-more:hover {
-            color: #7fb927;
+            color: blue;
         }
         #propertyTable .read-less:hover {
-            color: #7fb927;
+            color: red;
         }
 
         /* Added Custom Style For Property Status */
