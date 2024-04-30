@@ -51,7 +51,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-unit', [UnitController::class, 'destroy'])->name('superadmin.deleteUnits');
 		Route::post('/save-unit', [UnitController::class, 'saveUnit'])->name('superadmin.saveUnits');
 		
-		Route::any('/Members', [UserController::class, 'membersList'])->name('superadmin.members');
+		Route::any('/team-members', [UserController::class, 'membersList'])->name('superadmin.members');
 		Route::post('/get-member', [UserController::class, 'getSpecificMember'])->name('superadmin.getMember');
 		Route::post('/delete-member', [UserController::class, 'destroyMember'])->name('superadmin.deleteMember');
 		Route::post('/save-member', [UserController::class, 'saveMember'])->name('superadmin.saveMember');

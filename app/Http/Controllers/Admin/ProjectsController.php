@@ -418,6 +418,7 @@ class ProjectsController extends Controller
 			$data = Properties::with('Projects')->whereHas('Projects')->when(!empty($request->project_id), function ($query) use ($request) {
 				return $query->where('project_id', $request->project_id);
 			})->get();
+			// dd("data",$data);
 			$totalRecords = $data->count();
             $dataa = [];
 			foreach ($data as $key => $value2) {
@@ -450,8 +451,8 @@ class ProjectsController extends Controller
 								}
 							}
 							$arrr['fstatus'] = $fstatus;
-							$arrr['contact_name'] = $value2->other_contact_details;
-							$arrr['contact_no'] = $value2->owner_contact_specific_no;
+							$arrr['contact_name'] = $value2->owner_name;
+							$arrr['contact_no'] = $value2->owner_contact;
 							// Calculate and set the 'price' based on conditions
 							$price = '';
 							if ($value2->property_for === 'Both') {
@@ -510,9 +511,8 @@ class ProjectsController extends Controller
 					}
 				})
 				->editColumn('contact', function ($row) {
-					$contactArray = json_decode($row['contact_name'], true);
-					$contact = !empty($contactArray[0][0]) ? $contactArray[0][0] : '-';
-					$contact_number = !empty($contactArray[0][1]) ? $contactArray[0][1] : '-';
+					$contact = !empty($row['contact_name']) ? $row['contact_name']: '-';
+					$contact_number = !empty($row['contact_no']) ? $row['contact_no'] : '-';
 					$telLink = !empty($contact_number) ? '<a href="tel:' . $contact_number . '">' . $contact_number . '</a>' : '-';
 					return '<a href="' . route('admin.project.view', encrypt($row['id'])) . ' ">' . $contact . ' - ' . $telLink . '</a>';
 				})

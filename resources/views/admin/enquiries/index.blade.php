@@ -54,7 +54,7 @@
                                 <button class="btn ms-3 custom-icon-theme-button" type="button" data-bs-toggle="modal"
                                     data-bs-target="#filtermodal" title="Filter"><i class="fa fa-filter"></i></button>
 
-                                <button class="btn ms-3 custom-icon-theme-button" type="button" title="Clear Filter"
+                                <button class="btn ms-3 custom-icon-theme-button" style="background-color: #FF0000 !important" type="button" title="Clear Filter"
                                     id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
 
                                 <button class="btn matchbutton ms-3 custom-icon-theme-button" type="button"
@@ -1786,7 +1786,7 @@
                             "width": "3%",
                             "targets": 0
                         }, {
-                            "width": "17%",
+                            "width": "15%",
                             "targets": 1
                         },
                         {
@@ -1798,7 +1798,7 @@
                             "targets": 3
                         },
                         {
-                            "width": "15%",
+                            "width": "18%",
                             "targets": 4
                         },
                         {
@@ -1841,7 +1841,7 @@
             $('#enquiryTable').on('click', '.read-less', function() {
                 $(this).siblings('.full').hide();
                 $(this).siblings('.truncated').show();
-                $(this).text('Read More').removeClass('read-less').addClass('read-more');
+                $(this).text('...Read More').removeClass('read-less').addClass('read-more');
             });
             //matching popup
             // function matchingProperty(data) {

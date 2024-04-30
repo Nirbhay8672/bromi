@@ -51,9 +51,10 @@
                                                <span class="label label-danger p-1" style="border-radius: 5px;">{{ $ticket->status }}</span>
                                            @endif
                                        </td>
-                                       <td>{{ $ticket->updated_at }}</td>
+                                       <td>{{ $ticket->updated_at ? \Carbon\Carbon::parse($ticket->updated_at)->format('d/m/Y h:i:s A') : '-' }}</td>
                                        <td class="w3-bar">
                                             @if($ticket->status === 'Open')
+                                            
                                             <form action="{{ url('superadmin/close_ticket/' . $ticket->ticket_id) }}" method="POST">
                                                 {!! csrf_field() !!}
                                                 <div class="text-center">

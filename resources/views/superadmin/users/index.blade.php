@@ -104,7 +104,7 @@
                     <div class="row">
                         <div class="form-group col-md-4 m-b-20">
                             <div class="fname">
-                                <input class="form-control" name="first_name" id="first_name" type="text" autocomplete="off" placeholder="Name">
+                                <input class="form-control" name="first_name" id="first_name" type="text" autocomplete="off" placeholder="Name" autofocus>
                             </div>
                         </div>
                         <div class="form-group col-md-4 m-b-20">
@@ -290,6 +290,11 @@
         });
     }
 
+    $('#userModal').on('shown.bs.modal', function () {
+        setTimeout(function() {
+            $("#first_name").trigger("focus");
+        }, 50);
+    });
 
     $(document).on('click', '#saveUser', function(e) {
         e.preventDefault();
