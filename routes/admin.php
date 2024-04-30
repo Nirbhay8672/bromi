@@ -71,6 +71,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 	
 	Route::group(['middleware' => ['auth']], function () {
         Route::any('/Plans', [HomeController::class, 'plan_index'])->name('admin.plans');
+        Route::any('/price-calc', [HomeController::class, 'priceCalculator'])->name('admin.calc');
         Route::post('/save-plan-user', [HomeController::class, 'plan_save'])->name('admin.savePlan');
         Route::any('cashfree/payments/success', [HomeController::class, 'payment_success'])->name('admin.paymentSuccess');
         Route::post('/increase-user-limit', [HomeController::class, 'increaseUserLimit'])->name('admin.increaseUserLimit');
