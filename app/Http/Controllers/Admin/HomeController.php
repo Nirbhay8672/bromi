@@ -517,7 +517,7 @@ class HomeController extends Controller
 
             $gstType = Auth::user()->state->gst_type;
             $gst = $priceAfterDiscount * 0.18;
-            
+
             return response()->json([
                 'error' => false,
                 'message' => 'Coupon applied successfully.',
@@ -643,6 +643,29 @@ class HomeController extends Controller
         }
 		$plans = Subplans::get();
 		return view('admin.userplans.index', compact('plans'));
+	}
+	
+    public function priceCalculator(Request $request)
+	{
+        try {
+            $mainPrice = $request->truePrice; // this will set on checkPlanExpiry middleware check
+            $calculatedPrice = Helper::calculatePlanPrice($mainPrice);
+            $upgradeDiscount = $mainPrice - $calculatedPrice;
+            return response()->json([
+                'error' => false,
+                'message' => 'success',
+                'data' => [
+                    'mainPrice' => $mainPrice,
+                    'calculatedPrice' => $calculatedPrice,
+                    'upgradeDiscount' => $upgradeDiscount
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => true,
+                'message' => $th->getMessage(),
+            ]) ;
+        }
 	}
 
 	public function search(Request $request)

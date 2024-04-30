@@ -170,6 +170,18 @@
                                         <span class="plan-label">Grand Total</span>
                                         <span id="plan-price-amt">0</span>
                                     </div>
+
+                                    <div id="priceAfterUpgradeSec" class="d-none">
+                                        <div class="plan-column m-t-10 border-top ">
+                                            <span class="plan-label">Upgrade Discount</span>
+                                            <span id="upgradeDiscountPrice">0</span>
+                                        </div>
+                                        <div class="plan-column m-t-10 border-top">
+                                            <span class="plan-label">Price After Upgrade</span>
+                                            <span id="priceAfterUpgrade">0</span>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                             
@@ -233,8 +245,67 @@
         code.value = '';
         // button.disabled = true;
         // button_without.disabled = false;
+        
     }
 
+    $(document).ready(function() {
+
+        // Listen for changes in the content of the span
+        $('#plan-price-amt').bind('DOMSubtreeModified', function() {
+            // console.log('Span content changed:', $(this).text());
+            // Trigger a custom event when the content changes
+            $(this).trigger('spanContentChanged');
+        });
+        
+        // Example of handling the custom event
+        $('#plan-price-amt').on('spanContentChanged', function() {
+            if($(this).text()) {
+                if (parseFloat($('#plan-discount-col').text()) > 0) {
+                    let discPr = parseFloat($('#plan-discount-col').text());
+                    let amtToPay = parseFloat($('#priceAfterUpgrade').text());
+                    let afterDiscApply = amtToPay - discPr;
+                    console.log(discPr, amtToPay, afterDiscApply);
+                    $('#priceAfterUpgrade').text(afterDiscApply)
+                }
+            }
+        });
+        
+        var myModalEl = document.getElementById('couponModal')
+        
+        myModalEl.addEventListener('show.bs.modal', function (event) {
+            $('#plan-discount-col').text('0');
+        });
+            
+        myModalEl.addEventListener('shown.bs.modal', function (event) {
+            let pPrice = parseFloat($('#plan-price-amt').text());
+            console.log(pPrice);
+            sendAjaxForPriceUpdate(pPrice);
+        })
+    })
+
+    function sendAjaxForPriceUpdate(pPrice) {
+        $.ajax({
+            url:"{{route('admin.calc')}}",
+            type: 'POST',
+            data: {
+                _token: '{{csrf_token()}}',
+                truePrice: pPrice 
+            },
+            success: function(success) {
+                if (!success.error && success.data.calculatedPrice != pPrice) {
+                    $('#priceAfterUpgradeSec').removeClass('d-none');
+                    $('#priceAfterUpgrade').text(success.data.calculatedPrice);
+
+                    $('#upgradeDiscountPrice').text(success.data.upgradeDiscount);
+                }
+            },
+            error: function(error) {
+                console.log(error)
+            }
+            
+        });
+    }
+    
     $(document).on('click', '#apply-btn', function() {
         let couponCode = $('#coupon_code').val();
         if (!couponCode || '' == couponCode || null == couponCode) {
@@ -282,6 +353,11 @@
                 $('#discount').val(parseFloat(response.data.discount).toFixed(2));
                 $('#gstAmt').val(parseFloat(response.data.gst).toFixed(2));
                 $('#gstAmtType').val(response.data.gst_type);
+
+                let pPrice = parseFloat($('#plan-price-amt').text());
+                console.log(pPrice);
+                sendAjaxForPriceUpdate(pPrice);
+
             },
             error: (error) => console.log(error)
         });

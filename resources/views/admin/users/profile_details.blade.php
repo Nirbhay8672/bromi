@@ -343,7 +343,7 @@
                                                                 <div class="price-box">
                                                                     <div>
                                                                         <h3>{{ $plan->price }}</h3>
-                                                                        <p>/ month</p>
+                                                                        <p>/ Year</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
