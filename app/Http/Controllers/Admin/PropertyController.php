@@ -468,11 +468,11 @@ class PropertyController extends Controller
                     }
 
                     if ($row->Property_priority == "91") {
-                        $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/blue512.png') . '" alt="">';
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/Blue-Star.png') . '" alt="">';
                     } else if ($row->Property_priority == "90") {
-                        $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/yellownew512.png') . '" alt="">';
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/Yellow-Star.png') . '" alt="">';
                     } else if ($row->Property_priority == "17") {
-                        $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/red512.png') . '" alt="">';
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/Red-Star.png') . '" alt="">';
                     }
                     try {
                         return '
