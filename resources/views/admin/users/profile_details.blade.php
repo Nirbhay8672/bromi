@@ -363,10 +363,10 @@
                                                     @endforeach
                                                     <div class="text-center">
                                                         <h5 class="mb-3">Subscribed On :
-                                                            {{ \Carbon\Carbon::parse($user->subscribed_on)->format('d-m-Y') }}
+                                                            {{ \Carbon\Carbon::parse($user->subscribed_on)->format('d/m/Y') }}
                                                         </h5>
                                                         <h5>Valid On :
-                                                            {{ \Carbon\Carbon::parse($user->plan_expire_on)->format('d-m-Y') }}
+                                                            {{ \Carbon\Carbon::parse($user->plan_expire_on)->format('d/m/Y') }}
                                                         </h5>
                                                     </div>
                                                 </div>
@@ -467,7 +467,7 @@
                                                         @if(count($transactions) > 0)
                                                         @foreach($transactions as $transaction)
                                                         <tr>
-                                                            <td>{{ $transaction->payment_completion_time }}</td>
+                                                            <td>{{ $transaction->payment_completion_time ? \Carbon\Carbon::parse($transaction->payment_completion_time)->format('d/m/Y h:i:s A') : '-' }}</td>
                                                             <td>{{ $transaction->order_id }}</td>
                                                             <td>{{ $transaction->payment_amount }}</td>
                                                             <td>{{ $transaction->payment_currency }}</td>

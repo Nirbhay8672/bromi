@@ -51,7 +51,7 @@
                                                         <span class="label label-danger">{{ $ticket->status }}</span>
                                                     @endif
                                                 </td>
-                                                <td>{{ $ticket->updated_at }}</td>
+                                                <td>{{ $ticket->updated_at ? \Carbon\Carbon::parse($ticket->updated_at)->format('d/m/Y h:i:s A') : '-' }}</td>
                                                 <td class="w3-bar" style="padding-left: 6%;">
                                                     @if($ticket->status === 'Open') 
                                                         <a href="{{ url('admin/tickets/'. $ticket->ticket_id) }}" id="demo"   class="btn btn-primary extra-fields-customer" style="border-radius: 5px;">Comment</a>
