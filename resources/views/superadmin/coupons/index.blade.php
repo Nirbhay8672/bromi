@@ -15,8 +15,8 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Coupons </h5>
-                            <button class="btn custom-icon-theme-button open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#couponModal"><i class="fa fa-plus"></i></button>
+                            <button class="btn custom-icon-theme-button open_modal_with_this tooltip-btn" type="button"
+                                data-bs-toggle="modal" data-bs-target="#couponModal" data-tooltip="Add Coupon"><i class="fa fa-plus"></i></button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

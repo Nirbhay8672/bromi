@@ -16,11 +16,11 @@
                             <h5 class="mb-3">Team Members</h5>
                             @if(empty(Auth::user()->parent_id))
                                 <button
-                                    class="btn custom-icon-theme-button"
+                                    class="btn custom-icon-theme-button tooltip-btn"
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#userModal"
-                                    title="Add Member"
+                                    data-tooltip="Add Member"
                                     onclick="resetData()"
                                 ><i class="fa fa-plus"></i></button>
                             @endif

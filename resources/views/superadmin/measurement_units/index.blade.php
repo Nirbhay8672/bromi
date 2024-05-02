@@ -17,12 +17,12 @@
                             <div class="row mt-2 mb-2">
                                 <div class="col">
                                     <button
-                                        class="btn custom-icon-theme-button"
+                                        class="btn custom-icon-theme-button tooltip-btn"
                                         type="button"
                                         onclick="reset()"
                                         data-bs-toggle="modal"
                                         data-bs-target="#roleModal"
-                                        title="Add Measurement Unit"
+                                        data-tooltip="Add Measurement Unit"
                                     ><i class="fa fa-plus"></i></button>
                                 </div>
                             </div>

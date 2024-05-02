@@ -17,18 +17,19 @@
                             <h5 class="mb-3">List of States</h5>
                             <div style="width: 150px;">
                                 <button
-                                    class="btn custom-icon-theme-button open_modal_with_this"
+                                    class="btn custom-icon-theme-button open_modal_with_this tooltip-btn"
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#stateModal"
+                                    data-tooltip="Add State"
                                 ><i class="fa fa-plus"></i>
                                 </button>
                                 <button
-                                    class="btn custom-icon-theme-button open_modal_with_this ms-2"
+                                    class="btn custom-icon-theme-button open_modal_with_this ms-2 tooltip-btn"
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#importModal"
-                                    title="Import CSV"
+                                    data-tooltip="Import States"
                                 ><i class="fa fa-download"></i>
                                 </button>
                             </div>

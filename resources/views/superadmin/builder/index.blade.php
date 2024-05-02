@@ -49,16 +49,17 @@
                             </div>
                             <div style="width: 150px;">
                                 <button
-                                    class="btn custom-icon-theme-button"
+                                    class="btn custom-icon-theme-button tooltip-btn"
                                     type="button"
-                                    title="filter"
+                                    data-tooltip="Filter"
                                     @click="filter()"
                                 ><i class="fa fa-filter"></i>
                                 </button>
                                 <button
-                                    class="btn custom-icon-theme-button ms-2"
+                                    class="btn btn-warning ms-2 tooltip-btn"
                                     type="button"
-                                    title="reset"
+                                    style="border-radius: 5px;"
+                                    data-tooltip="Reset"
                                     @click="reset()"
                                 ><i class="fa fa-recycle"></i>
                                 </button>

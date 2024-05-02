@@ -14,7 +14,7 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">SMS Template </h5>
-                            <a href="{{route('superadmin.sms.create')}}" class="btn custom-icon-theme-button btn-air-primary"><i class="fa fa-plus"></i></a>
+                            <a href="{{route('superadmin.sms.create')}}" class="btn tooltip-btn custom-icon-theme-button btn-air-primary" data-tooltip="Add SMS Template"><i class="fa fa-plus"></i></a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

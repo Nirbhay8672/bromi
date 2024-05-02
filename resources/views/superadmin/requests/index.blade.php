@@ -16,8 +16,8 @@
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Requests </h5>
 
-                            <button class="btn custom-icon-theme-button open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#requestModal"  onclick="resetData()"><i class="fa fa-plus"></i></button>
+                            <button class="btn custom-icon-theme-button open_modal_with_this tooltip-btn" type="button"
+                                data-bs-toggle="modal" data-bs-target="#requestModal"  onclick="resetData()" data-tooltip="Add Lead"><i class="fa fa-plus"></i></button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

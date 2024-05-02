@@ -19,18 +19,19 @@
                             <div class="row mt-3 mb-3 gy-3">
                                 <div style="width: 150px;">
                                     <button
-                                        class="btn custom-icon-theme-button open_modal_with_this"
+                                        class="btn custom-icon-theme-button open_modal_with_this tooltip-btn"
                                         type="button"
                                         data-bs-toggle="modal"
+                                        data-tooltip="Add District"
                                         data-bs-target="#cityModal"
                                     ><i class="fa fa-plus"></i>
                                     </button>
                                     <button
-                                        class="btn custom-icon-theme-button open_modal_with_this ms-2"
+                                        class="btn custom-icon-theme-button open_modal_with_this ms-2 tooltip-btn"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#importModal"
-                                        title="Import CSV"
+                                        data-tooltip="Import Districts"
                                     ><i class="fa fa-download"></i>
                                     </button>
                                 </div>

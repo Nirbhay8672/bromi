@@ -14,13 +14,13 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Requests </h5>
+                            <h5 class="mb-3">Leads </h5>
                             <button
-                                    class="btn custom-icon-theme-button"
+                                    class="btn custom-icon-theme-button tooltip-btn"
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#leadModal"
-                                    title="Add Lead"
+                                    data-tooltip="Add Lead"
                                     onclick="resetData()"
                                 ><i class="fa fa-plus"></i></button>
                         </div>

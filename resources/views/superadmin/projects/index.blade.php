@@ -17,9 +17,9 @@
                             <div class="row mt-3 mb-3 gy-3">
                                 <div style="width: 70px;">
                                     <a  
-                                        class="btn custom-icon-theme-button"
+                                        class="btn custom-icon-theme-button tooltip-btn"
                                         href="{{route('superadmin.project.add')}}"
-                                        title="Add Project"
+                                        data-tooltip="Add Project"
                                     >
                                         <i class="fa fa-plus"></i>
                                     </a>
@@ -50,18 +50,19 @@
                                 </div>
                                 <div style="width: 150px;">
                                     <button
-                                        class="btn custom-icon-theme-button"
+                                        class="btn btn-warning tooltip-btn"
+                                        style="border-radius: 5px;"
                                         type="button"
-                                        title="reset"
+                                        data-tooltip="Reset"
                                         onclick="reset()"
                                     ><i class="fa fa-recycle"></i>
                                     </button>
                                     <button
-                                        class="btn text-white delete_table_row ms-3"
+                                        class="btn text-white delete_table_row ms-3 tooltip-btn"
                                         style="border-radius: 5px;display: none;background-color:red"
                                         onclick="deleteTableRow()"
                                         type="button"
-                                        title="Delete"
+                                        data-tooltip="Delete"
                                     ><i class="fa fa-trash"></i></button>
                                 </div>
                             </div>

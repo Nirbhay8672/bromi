@@ -15,11 +15,15 @@
                     <div class="card-header pb-0">
                         <h5 class="mb-3">List of Village</h5>
                         <div class="row mt-3 mb-3 gy-3">
-                            <div style="width: 150px;">
-                                <button class="btn custom-icon-theme-button open_modal_with_this" type="button" data-bs-toggle="modal" data-bs-target="#villageModal"><i class="fa fa-plus"></i>
-                                </button>
-
-                                <button class="btn delete_table_row ms-3" style="display: none;background-color:red;border-radius:5px;color:white;" onclick="deleteTableRow()" type="button"><i class="fa fa-trash"></i>
+                            <div style="width: 70px;">
+                                <button
+                                    class="btn custom-icon-theme-button open_modal_with_this tooltip-btn"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#villageModal"
+                                    data-tooltip="Add Village"
+                                >
+                                    <i class="fa fa-plus"></i>
                                 </button>
                             </div>
                             <div class="col-12 col-lg-3 col-md-3">
@@ -38,18 +42,41 @@
                                     </template>
                                 </select>
                             </div>
-                            <div style="width: 200px;">
-                                <button class="btn custom-icon-theme-button" type="button" title="filter" @click="filter()"><i class="fa fa-filter"></i>
-                                </button>
-                                <button class="btn custom-icon-theme-button ms-2" type="button" title="reset" @click="reset()"><i class="fa fa-recycle"></i>
-                                </button>
+                            <div style="width: 300px;">
+
                                 <button
-                                    class="btn custom-icon-theme-button open_modal_with_this ms-2"
+                                    class="btn custom-icon-theme-button tooltip-btn"
+                                    type="button"
+                                    data-tooltip="Filter"
+                                    @click="filter()">
+                                    <i class="fa fa-filter"></i>
+                                </button>
+                                
+                                <button
+                                    class="btn btn-warning ms-2 tooltip-btn"
+                                    type="button"
+                                    style="border-radius: 5px;"
+                                    data-tooltip="Reset"
+                                    @click="reset()">
+                                    <i class="fa fa-recycle"></i>
+                                </button>
+
+                                <button
+                                    class="btn custom-icon-theme-button open_modal_with_this ms-2 tooltip-btn"
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#importModal"
-                                    title="Import CSV"
+                                    data-tooltip="Import Villages"
                                 ><i class="fa fa-download"></i>
+                                </button>
+                                
+                                <button
+                                    class="btn delete_table_row ms-3 tooltip-btn"
+                                    style="display: none;background-color:red;border-radius:5px;color:white;"
+                                    onclick="deleteTableRow()"
+                                    type="button"
+                                    data-tooltip="Delete Villages"
+                                ><i class="fa fa-trash"></i>
                                 </button>
                             </div>
                         </div>

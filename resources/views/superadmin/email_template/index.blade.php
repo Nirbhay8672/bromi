@@ -14,7 +14,7 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Email Template </h5>
-                            <a href="{{route('superadmin.email.create')}}" class="btn custom-icon-theme-button btn-air-primary"><i class="fa fa-plus"></i></a>
+                            <a href="{{route('superadmin.email.create')}}" class="btn custom-icon-theme-button btn-air-primary tooltip-btn" data-tooltip="Add Email Template"><i class="fa fa-plus"></i></a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
