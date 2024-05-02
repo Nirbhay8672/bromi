@@ -17,21 +17,14 @@
                             <h5 class="mb-3">List of Locality</h5>
 
                             <div class="row mt-3 mb-3 gy-3">
-                                <div style="width: 150px;">
+                                <div style="width: 70px;">
                                     <button
-                                        class="btn custom-icon-theme-button open_modal_with_this"
+                                        class="btn custom-icon-theme-button open_modal_with_this tooltip-btn"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#areaModal"
+                                        data-tooltip="Add Locality"
                                     ><i class="fa fa-plus"></i>
-                                    </button>
-
-                                    <button
-                                        class="btn delete_table_row ms-3"
-                                        style="display: none;background-color:red;border-radius:5px;color:white;"
-                                        onclick="deleteTableRow()"
-                                        type="button"
-                                    ><i class="fa fa-trash"></i>
                                     </button>
                                 </div>
                                 <div class="col-12 col-lg-3 col-md-3">
@@ -63,26 +56,35 @@
                                 </div>
                                 <div style="width: 300px;">
                                     <button
-                                        class="btn custom-icon-theme-button"
+                                        class="btn custom-icon-theme-button tooltip-btn"
                                         type="button"
-                                        title="filter"
+                                        data-tooltip="Filter"
                                         @click="filter()"
                                     ><i class="fa fa-filter"></i>
                                     </button>
                                     <button
-                                        class="btn custom-icon-theme-button ms-2"
+                                        class="btn btn-warning ms-2 tooltip-btn"
                                         type="button"
-                                        title="reset"
+                                        style="border-radius: 5px;"
+                                        data-tooltip="Reset"
                                         @click="reset()"
                                     ><i class="fa fa-recycle"></i>
                                     </button>
                                     <button
-                                        class="btn custom-icon-theme-button open_modal_with_this ms-2"
+                                        class="btn custom-icon-theme-button open_modal_with_this ms-2 tooltip-btn"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#importModal"
-                                        title="Import CSV"
+                                        data-tooltip="Import Localities"
                                     ><i class="fa fa-download"></i>
+                                    </button>
+                                    <button
+                                        class="btn delete_table_row ms-3 tooltip-btn"
+                                        style="display: none;background-color:red;border-radius:5px;color:white;"
+                                        onclick="deleteTableRow()"
+                                        data-tooltip="Delete Localities"
+                                        type="button"
+                                    ><i class="fa fa-trash"></i>
                                     </button>
                                 </div>
                             </div>

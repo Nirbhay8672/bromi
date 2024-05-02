@@ -51,10 +51,11 @@
                             </div>
                             <div style="width: 70px;">
                                 <button
-                                    class="btn custom-icon-theme-button"
+                                    class="btn btn-warning tooltip-btn"
                                     type="button"
-                                    title="reset"
+                                    style="border-radius: 5px;"
                                     onclick="reset()"
+                                    data-tooltip="Reset"
                                 ><i class="fa fa-recycle"></i>
                                 </button>
                             </div>

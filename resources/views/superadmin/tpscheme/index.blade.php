@@ -15,8 +15,13 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Tp Schemes </h5>
-                            <button class="btn custom-icon-theme-button open_modal_with_this" type="button"
-                                data-bs-toggle="modal" data-bs-target="#tpModal"><i class="fa fa-plus"></i></button>
+                            <button
+                                class="btn custom-icon-theme-button open_modal_with_this tooltip-btn"
+                                type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#tpModal"
+                                data-tooltip="Add Tp Scheme"
+                            ><i class="fa fa-plus"></i></button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -34,7 +39,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

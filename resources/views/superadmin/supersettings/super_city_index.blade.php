@@ -19,8 +19,9 @@
                             <div class="row mt-3 mb-3 gy-3">
                                 <div style="width: 70px;">
                                     <button
-                                        class="btn custom-icon-theme-button open_modal_with_this"
+                                        class="btn custom-icon-theme-button open_modal_with_this tooltip-btn"
                                         type="button"
+                                        data-tooltip="Add City"
                                         data-bs-toggle="modal"
                                         data-bs-target="#cityModal"
                                     ><i class="fa fa-plus"></i>
@@ -41,19 +42,20 @@
                                 </div>
                                 <div style="width: 150px;">
                                     <button
-                                        class="btn delete_table_row ms-3"
-                                        style="display: none;background-color:red;border-radius:5px;color:white;"
-                                        onclick="deleteTableRow()"
-                                        type="button"
-                                    ><i class="fa fa-trash"></i>
-                                    </button>
-                                    <button
-                                        class="btn custom-icon-theme-button open_modal_with_this ms-2"
+                                        class="btn custom-icon-theme-button open_modal_with_this ms-2 tooltip-btn"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#importModal"
-                                        title="Import CSV"
+                                        data-tooltip="Import Cities"
                                     ><i class="fa fa-download"></i>
+                                    </button>
+                                    <button
+                                        class="btn delete_table_row ms-3 tooltip-btn"
+                                        style="display: none;background-color:red;border-radius:5px;color:white;"
+                                        onclick="deleteTableRow()"
+                                        data-tooltip="Delete Cities"
+                                        type="button"
+                                    ><i class="fa fa-trash"></i>
                                     </button>
                                 </div>
                             </div>

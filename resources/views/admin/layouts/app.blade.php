@@ -241,7 +241,6 @@ Helper::set_default_measuerement();
             text-transform: none;
             position: absolute;
             bottom: 50px;
-            left: 60px;
             transform: translateX(-50%);
             padding: 5px 10px;
             background-color: rgba(0, 0, 0, 0.8);
