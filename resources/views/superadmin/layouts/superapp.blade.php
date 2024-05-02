@@ -189,6 +189,28 @@ Helper::set_default_measuerement();
     .ct-series-a .ct-slice-donut {
         stroke: #53b4c3 !important;
     }
+
+    .tooltip-btn:hover::after {
+        content: attr(data-tooltip);
+        text-transform: none;
+        position: absolute;
+        bottom: 50px;
+        left: 60px;
+        transform: translateX(-50%);
+        padding: 5px 10px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .tooltip-btn:hover::after {
+        opacity: 1;
+    }
+
     </style>
     @stack('page-css')
 </head>

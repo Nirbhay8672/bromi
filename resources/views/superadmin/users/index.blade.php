@@ -17,11 +17,11 @@
                         <div class="row mt-3 mb-3 gy-3">
                             <div style="width: 70px;">
                                 <button
-                                    class="btn custom-icon-theme-button"
+                                    class="btn custom-icon-theme-button tooltip-btn"
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#userModal"
-                                    title="Add User"
+                                    data-tooltip="Add User"
                                 ><i class="fa fa-plus"></i>
                                 </button>
                             </div>
@@ -289,12 +289,6 @@
             }
         });
     }
-
-    $('#userModal').on('shown.bs.modal', function () {
-        setTimeout(function() {
-            $("#first_name").trigger("focus");
-        }, 50);
-    });
 
     $(document).on('click', '#saveUser', function(e) {
         e.preventDefault();
