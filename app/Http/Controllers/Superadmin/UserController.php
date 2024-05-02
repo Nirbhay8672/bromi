@@ -69,6 +69,7 @@ class UserController extends Controller
 				])
 				->whereNotNull('parent_id')
 				->where('role_id','!=',3)
+				->orderBy('id','DESC')
 				->get();
 
 			$main_users = User::with(['Plan','State:id,name','superCity:id,name'])
@@ -89,6 +90,7 @@ class UserController extends Controller
 				])
 				->where('role_id','!=',3)
 				->whereNull('parent_id')
+				->orderBy('id','DESC')
 				->get();
 
 			$new_array = array_merge($admin_users->toArray(), $main_users->toArray());
