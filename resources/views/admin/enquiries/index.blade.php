@@ -1765,10 +1765,10 @@
                             data: 'telephonic_discussion',
                             name: 'telephonic_discussion',
                             render: function(data, type, full, meta) {
-                                if (data && data.length > 56) {
-                                    return '<span class="truncated">' + data.substr(0, 56) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span>';
+                                if (data && data.length > 100) {
+                                    return '<div style="max-width:250px"><span class="truncated">' + data.substr(0, 100) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span></div>';
                                 } else {
-                                    return data;
+                                    return `<div style="max-width:250px"><span class="truncated full">${data}</span></div>`;
                                 }
                             }
                         },

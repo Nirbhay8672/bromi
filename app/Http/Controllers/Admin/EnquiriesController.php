@@ -526,7 +526,7 @@ class EnquiriesController extends Controller
 						if (!empty($pro->remarks)) {
 							$remark_data = $pro->remarks;
 						}
-						return '<small><b></b>' . Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') .'</small> <br>' .$remark_data;
+						return Carbon::parse($pro->nfd)->format('d-m-Y \| H:i'). '<br>'. $remark_data;
 					}
 					return $row->telephonic_discussion;
 				})
