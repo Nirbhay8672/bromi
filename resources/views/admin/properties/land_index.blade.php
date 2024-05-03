@@ -899,7 +899,14 @@
                             },
                             {
                                 data: 'remarks',
-                                name: 'remarks'
+                                name: 'remarks',
+                                render: function(data, type, full, meta) {
+                                    if (data && data.length > 56) {
+                                        return '<span class="truncated">' + data.substr(0, 56) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span>';
+                                    } else {
+                                        return data;
+                                    }
+                                }
                             },
                             {
                                 data: 'contact_details',
@@ -912,6 +919,18 @@
                             },
                         ]
                     });
+                });
+                 //Read more / Read less
+                $('#propertyTable .read-more, #propertyTable .read-less').css('cursor', 'pointer');
+                $('#propertyTable').on('click', '.read-more', function() {
+                    $(this).siblings('.truncated').hide();
+                    $(this).siblings('.full').show();
+                    $(this).text(' ...Read Less').removeClass('read-more').addClass('read-less');
+                });
+                $('#propertyTable').on('click', '.read-less', function() {
+                    $(this).siblings('.full').hide();
+                    $(this).siblings('.truncated').show();
+                    $(this).text('...Read More').removeClass('read-less').addClass('read-more');
                 });
 
                 $(document).on('click', '.showNumberNow', function(e) {
