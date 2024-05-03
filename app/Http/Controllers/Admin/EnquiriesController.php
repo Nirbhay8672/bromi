@@ -74,7 +74,7 @@ class EnquiriesController extends Controller
 				return ($var['name'] == 'only-assigned');
 			});
 
-			if (count($new) > 0 &&  $user->role_id !== '1') {
+			if (count($new) > 0 &&  $user->role_id !== 1) {
 				// dd("0nn",$user->role_id);
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
@@ -526,7 +526,7 @@ class EnquiriesController extends Controller
 						if (!empty($pro->remarks)) {
 							$remark_data = $pro->remarks;
 						}
-						return '<small style="font-style:italic; font-size:89% !important"><b></b>' . Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') . '<br>' . $remark_data . '</small>';
+						return '<small><b></b>' . Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') .'</small> <br>' .$remark_data;
 					}
 					return $row->telephonic_discussion;
 				})
