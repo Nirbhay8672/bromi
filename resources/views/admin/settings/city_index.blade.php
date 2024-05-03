@@ -18,30 +18,28 @@
                             <div class="row mt-2 mb-2">
                                 <div class="col">
                                     <button
-                                        class="btn custom-icon-theme-button"
+                                        class="btn custom-icon-theme-button tooltip-btn"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#cityModal"
-                                        title="Add City"
+                                        data-tooltip="Add City"
                                     ><i class="fa fa-plus"></i></button>
 
                                     <button
-                                        class="btn ms-3 custom-icon-theme-button"
+                                        class="btn ms-3 custom-icon-theme-button tooltip-btn"
                                         type="button"
-                                        title="Import City"
+                                        data-tooltip="Import City"
                                         data-bs-toggle="modal"
                                         data-bs-target="#importmodal"
                                     ><i class="fa fa-upload"></i></button>
 
-
                                     <button
-                                        class="btn text-white delete_table_row ms-3"
+                                        class="btn text-white delete_table_row ms-3 tooltip-btn"
                                         style="border-radius: 5px;display: none;background-color:red"
                                         onclick="deleteTableRow()"
                                         type="button"
-                                        title="Delete"
+                                        data-tooltip="Delete"
                                     ><i class="fa fa-trash"></i></button>
-
                                 </div>
                             </div>
                         </div>

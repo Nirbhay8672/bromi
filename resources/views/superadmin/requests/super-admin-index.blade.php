@@ -16,13 +16,13 @@
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Leads </h5>
                             <button
-                                    class="btn custom-icon-theme-button tooltip-btn"
-                                    type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#leadModal"
-                                    data-tooltip="Add Lead"
-                                    onclick="resetData()"
-                                ><i class="fa fa-plus"></i></button>
+                                class="btn custom-icon-theme-button tooltip-btn"
+                                type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#leadModal"
+                                data-tooltip="Add Lead"
+                                onclick="resetData()"
+                            ><i class="fa fa-plus"></i></button>
                         </div>
                         <div class="card-body">
                             <div class="table table-responsive">

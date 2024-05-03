@@ -17,9 +17,9 @@
 
                             <div class="col">
                                 <a  
-                                    class="btn custom-icon-theme-button"
+                                    class="btn custom-icon-theme-button tooltip-btn"
                                     href="{{route('admin.email.create')}}"
-                                    title="Add Template"
+                                    data-tooltip="Add Email Template"
                                 >
                                     <i class="fa fa-plus"></i>
                                 </a>

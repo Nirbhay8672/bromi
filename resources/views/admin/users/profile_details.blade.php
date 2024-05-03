@@ -179,10 +179,10 @@
                                             </div>
                                             <div class="row mt-5 text-center">
                                                 <div class="col">
-                                                    <button tabindex="0" data-toggle="tooltip" class="btn btn-secondary btn-sm btn-edit" style="border-radius: 5px;width:42px;" title="Edit Profile">
+                                                    <button tabindex="0" data-toggle="tooltip" class="btn btn-secondary btn-sm btn-edit tooltip-btn" data-tooltip="Update Profile" style="border-radius: 5px;width:42px;" title="Edit Profile">
                                                         <i class="fa fa-pencil"></i>
                                                     </button>
-                                                    <button class="btn btn-secondary text-center changepwd ms-4" style="border-radius: 5px;width:42px;" title="Update Password">
+                                                    <button class="btn btn-secondary text-center changepwd ms-4 tooltip-btn" data-tooltip="Update Password" style="border-radius: 5px;width:42px;" title="Update Password">
                                                         <i class="fa fa-lock"></i>
                                                     </button>
                                                 </div>
@@ -354,7 +354,7 @@
                                                                 <p>{{ $feature }}</p>
                                                                 @endforeach
                                                                 @endif
-                                                                <a href="{{ route('admin.plans') }}" class="btn btn-secondary mt-2" style="border-radius: 5px;width:42px;" tabindex="0" data-toggle="tooltip" title="Upgrade"><i class="fa fa-wrench"></i>
+                                                                <a href="{{ route('admin.plans') }}" class="btn btn-secondary mt-2 tooltip-btn" data-tooltip="Upgrade Plan" style="border-radius: 5px;width:42px;" tabindex="0" data-toggle="tooltip" title="Upgrade"><i class="fa fa-wrench"></i>
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -365,7 +365,7 @@
                                                         <h5 class="mb-3">Subscribed On :
                                                             {{ \Carbon\Carbon::parse($user->subscribed_on)->format('d/m/Y') }}
                                                         </h5>
-                                                        <h5>Valid On :
+                                                        <h5>Valid Till :
                                                             {{ \Carbon\Carbon::parse($user->plan_expire_on)->format('d/m/Y') }}
                                                         </h5>
                                                     </div>

@@ -13,8 +13,8 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">SmS Template </h5>
-                            <a href="{{route('admin.smsemail.create')}}" class="btn btn-pill btn-primary btn-air-primary">Add New Template</a>
+                            <h5 class="mb-3">SMS Template </h5>
+                            <a href="{{route('admin.smsemail.create')}}" class="btn custom-icon-theme-button tooltip-btn" data-tooltip="Add SMS Template"><i class="fa fa-plus"></i></a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

@@ -18,19 +18,19 @@
                             @can('user-create')
                                 @if(intval($total_user) < Auth::user()->total_user_limit)
                                     <a  
-                                        class="btn custom-icon-theme-button"
+                                        class="btn custom-icon-theme-button tooltip-btn"
                                         href="{{route('admin.user.add')}}"
-                                        title="Add User"
+                                        data-tooltip="Add User"
                                     >
                                         <i class="fa fa-plus"></i>
                                     </a>
                                 @else
                                     <button
-                                        class="btn ms-3 custom-icon-theme-button"
+                                        class="btn ms-3 custom-icon-theme-button tooltip-btn"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#planModal"
-                                        title="Filter"
+                                        data-tooltip="Filter"
                                     ><i class="fa fa-wrench"></i></button>
                                     <strong class="ms-3 text-danger">You have exceeded your user limit</strong>
                                 @endif

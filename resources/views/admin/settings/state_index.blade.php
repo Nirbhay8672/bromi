@@ -27,11 +27,11 @@
                                 </div>
                                 <div class="col-2">
                                     <button
-                                        class="btn custom-icon-theme-button"
+                                        class="btn custom-icon-theme-button tooltip-btn"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#stateModal"
-                                        title="Add State"
+                                        data-tooltip="Add State"
                                     ><i class="fa fa-plus"></i></button>
                                 </div>
                             </div>

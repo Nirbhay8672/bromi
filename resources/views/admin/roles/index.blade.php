@@ -19,11 +19,11 @@
                             <div class="row mt-2 mb-2">
                                 <div class="col">
                                     <button
-                                        class="btn custom-icon-theme-button"
+                                        class="btn custom-icon-theme-button tooltip-btn"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#roleModal"
-                                        title="Add Role"
+                                        data-tooltip="Add Role"
                                         onclick="setDefault()"
                                     ><i class="fa fa-plus"></i></button>
                                 </div>
