@@ -17,16 +17,16 @@
                             <h5 class="mb-3">Partners</h5>
                             <div class="col">
                                 <button
-                                    class="btn custom-icon-theme-button"
+                                    class="btn custom-icon-theme-button tooltip-btn"
                                     type="button"
                                     onclick="parentModal()"
-                                    title="Add Partner"
+                                    data-tooltip="Add Partner"
                                 ><i class="fa fa-plus"></i></button>
 
                                 <a  
-                                    class="btn ms-3 custom-icon-theme-button"
+                                    class="btn ms-3 custom-icon-theme-button tooltip-btn"
                                     href="{{ route('admin.partnerRequest') }}"
-                                    title="Requests"
+                                    data-tooltip="Requests"
                                 >
                                     <i class="fa fa-user-plus"></i>
                                 </a>

@@ -20,29 +20,29 @@
 
                                     @can('area-create')
                                     <button
-                                        class="btn ms-3 custom-icon-theme-button"
+                                        class="btn ms-3 custom-icon-theme-button tooltip-btn"
                                         type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#areaModal"
-                                        title="Add Locality"
+                                        data-tooltip="Add Locality"
                                     ><i class="fa fa-plus"></i></button>
                                     @endcan
 
                                     <button
-                                        class="btn ms-3 custom-icon-theme-button"
+                                        class="btn ms-3 custom-icon-theme-button tooltip-btn"
                                         type="button"
-                                        title="Import Locality"
+                                        data-tooltip="Import Locality"
                                         data-bs-toggle="modal"
                                         data-bs-target="#importmodal"
                                     ><i class="fa fa-upload"></i></button>
 
 
                                     <button
-                                        class="btn text-white delete_table_row ms-3"
+                                        class="btn text-white delete_table_row ms-3 tooltip-btn"
                                         style="border-radius: 5px;display: none;background-color:red"
                                         onclick="deleteTableRow()"
                                         type="button"
-                                        title="Delete"
+                                        data-tooltip="Delete"
                                     ><i class="fa fa-trash"></i></button>
                                     
                                 </div>

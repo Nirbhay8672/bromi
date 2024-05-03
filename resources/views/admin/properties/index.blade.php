@@ -21,38 +21,38 @@
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col">
-                                    <a class="btn custom-icon-theme-button" href="{{ route('admin.property.add') }}"
-                                        title="Add Property">
+                                    <a class="btn custom-icon-theme-button tooltip-btn" href="{{ route('admin.property.add') }}"
+                                        data-tooltip="Add Property">
                                         <i class="fa fa-plus"></i>
                                     </a>
 
-                                    <button class="btn ms-3 custom-icon-theme-button" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#filtermodal" title="Filter"><i class="fa fa-filter"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#filtermodal" data-tooltip="Filter"><i class="fa fa-filter"></i></button>
 
-                                    <button class="btn ms-3 custom-icon-theme-button" style="background-color: #FF0000 !important" type="button" title="Clear Filter"
+                                    <button class="btn ms-3 custom-icon-theme-button" style="background-color: #FF0000 !important" type="button" data-tooltip="Clear Filter"
                                         id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
 
-                                    <button class="btn matchbutton ms-3 custom-icon-theme-button" type="button"
-                                        data-bs-toggle="modal" data-bs-target="#matchModal" title="Matching"><i
+                                    <button class="btn matchbutton ms-3 custom-icon-theme-button tooltip-btn" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#matchModal" data-tooltip="Matching"><i
                                             class="fa fa-random"></i></button>
 
-                                    <button class="btn ms-3 custom-icon-theme-button" onclick="exportProperties()"
-                                        type="button" title="Export"><i class="fa fa-upload"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="exportProperties()"
+                                        type="button" data-tooltip="Export"><i class="fa fa-upload"></i></button>
 
-                                    <button class="btn ms-3 custom-icon-theme-button" onclick="importProperties()"
-                                        type="button" title="Import"><i class="fa fa-download"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="importProperties()"
+                                        type="button" data-tooltip="Import"><i class="fa fa-download"></i></button>
 
-                                    <button class="btn text-white delete_table_row ms-3"
+                                    <button class="btn text-white delete_table_row ms-3 tooltip-btn"
                                         style="border-radius: 5px;display: none;background-color:red"
-                                        onclick="deleteTableRow()" type="button" title="Delete"><i
+                                        onclick="deleteTableRow()" type="button" data-tooltip="Delete"><i
                                             class="fa fa-trash"></i></button>
 
-                                    <button class="btn share_table_row ms-3"
+                                    <button class="btn share_table_row ms-3 tooltip-btn"
                                         style="border-radius: 5px;display: none;background-color:#25d366;color:white;"
-                                        onclick="shareTableRow()" type="button" title="Share"><i
+                                        onclick="shareTableRow()" type="button" data-tooltip="Share"><i
                                             class="fa fa-whatsapp"></i></button>
 
-                                    <a class="btn float-end custom-icon-theme-button" title="Project Vise Unit"
+                                    <a class="btn float-end custom-icon-theme-button tooltip-btn" data-tooltip="Project Vise Unit"
                                         href="{{ route('admin.project.byunit') }}"><i class="fa fa-list"></i></a>
 
                                 </div>

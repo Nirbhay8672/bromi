@@ -10,15 +10,16 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Query 
+                            <h5 class="mb-3">Query</h5>
+                            <div class="col">
                                 <a  
-                                    class="btn custom-icon-theme-button"
-                                    style="float: right"
-                                    type="button"
-                                    title="Add"
+                                    class="btn custom-icon-theme-button tooltip-btn"
                                     href="{{route('admin.create')}}"
-                                ><i class="fa fa-plus"></i></a>
-                            </h5>
+                                    data-tooltip="Add Query"
+                                >
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

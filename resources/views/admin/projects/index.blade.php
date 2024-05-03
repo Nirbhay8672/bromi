@@ -18,9 +18,9 @@
 
                                 @can('project-create')
                                     <a  
-                                        class="btn custom-icon-theme-button"
+                                        class="btn custom-icon-theme-button tooltip-btn"
                                         href="{{route('admin.project.add')}}"
-                                        title="Add Project"
+                                        data-tooltip="Add Project"
                                     >
                                         <i class="fa fa-plus"></i>
                                     </a>
@@ -28,20 +28,20 @@
 
                                 @if(auth()->user()->parent_id == null && auth()->user()->company_name && auth()->user()->birth_date == null)
                                     <a  
-                                        class="btn custom-icon-theme-button ms-3"
+                                        class="btn custom-icon-theme-button ms-3 tooltip-btn"
                                         href="{{route('admin.all-projects')}}"
-                                        title="All Projects"
+                                        data-tooltip="All Projects"
                                     >
                                         <i class="fa fa-list"></i>
                                     </a>
                                 @endcan
 
                                 <button
-                                    class="btn text-white delete_table_row ms-3"
+                                    class="btn text-white delete_table_row ms-3 tooltip-btn"
                                     style="border-radius: 5px;display: none;background-color:red"
                                     onclick="deleteTableRow()"
                                     type="button"
-                                    title="Delete"
+                                    data-tooltip="Delete"
                                 ><i class="fa fa-trash"></i></button>
                             </div>
 

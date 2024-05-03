@@ -250,6 +250,7 @@ Helper::set_default_measuerement();
             white-space: nowrap;
             opacity: 0;
             transition: opacity 0.3s ease;
+            z-index: 9999;
         }
 
         .tooltip-btn:hover::after {
