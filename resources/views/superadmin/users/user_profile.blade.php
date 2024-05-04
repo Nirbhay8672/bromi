@@ -179,7 +179,7 @@
                                                         <h5 class="mb-3">Subscribed On :
                                                             {{ \Carbon\Carbon::parse($user->subscribed_on)->format('d/m/Y') }}
                                                         </h5>
-                                                        <h5>Renewal On :
+                                                        <h5>Valid Till :
                                                             {{ \Carbon\Carbon::parse($user->subscribed_on)->addMonth()->format('d/m/Y') }}
                                                         </h5>
                                                     </div>

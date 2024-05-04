@@ -130,30 +130,50 @@ class UserController extends Controller
 					}
 				})
 				->editColumn('users', function ($row) {
-					return User::where('users.parent_id', $row['id'])->whereNull('users.vendor_id')->get()->count();
+					return User::where('users.parent_id', $row['id'])->orWhere('id', $row['id'])->get()->count();
 				})
 				->editColumn('subscribed_on', function ($row) {
 					if (!empty($row['subscribed_on'])) {
 						return date("d/m/Y", strtotime($row['subscribed_on']));
 					}
 				})
+				->editColumn('plan_expire_on', function ($row) {
+					if (!empty($row['plan_expire_on'])) {
+						return date("d/m/Y", strtotime($row['plan_expire_on']));
+					}
+				})
+				->editColumn('active', function ($row) {
+					$active_button = '';
+
+					if ($row['role_id'] != 3) {
+						if ($row['status']) {
+							$active_button = '<div class="media-body text-center">
+								<label class="switch mb-0">
+									<input type="checkbox" id="active_btn" checked="" data-id="' . $row['id'] . '" onclick=userActivate(this,0)>
+									<span class="switch-state"></span>
+								</label>
+							</div>';
+						} else {
+							$active_button = '<div class="media-body text-center">
+								<label class="switch mb-0">
+									<input type="checkbox" id="active_btn" data-id="' . $row['id'] . '" onclick=userActivate(this,1)>
+									<span class="switch-state"></span>
+								</label>
+							</div>';
+						}
+					}
+
+					return $active_button;
+				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
 					
 					$buttons =  $buttons . '<a href="'.route('superadmin.user-profile',$row['id']).'"><i role="button" title="view profile" class="fs-22 py-2 mx-2 fa-eye pointer fa" type="button"></i></a>';
 					$buttons =  $buttons . '<i role="button" data-id="' . $row['id'] . '" onclick=getUser(this) class="fa fa-pencil pointer fa fs-22 py-2 mx-2"></i>';
-
-					if ($row['role_id'] != 3) {
-						if ($row['status']) {
-							$buttons =  $buttons . ' <button data-id="' . $row['id'] . '" onclick=userActivate(this,0) class="btn" style="border-radius: 5px !important;background-color: red !important;color: white !important;" type="button">Deactivate</button>';
-						} else {
-							$buttons =  $buttons . ' <button data-id="' . $row['id'] . '" onclick=userActivate(this,1) class="btn" style="border-radius: 5px !important;background-color: green !important;color: white !important;" type="button">Activate</button>';
-						}
-					}
 					
 					return $buttons;
 				})
-				->rawColumns(['Actions'])
+				->rawColumns(['Actions', 'active'])
 				->make(true);
 		}
 
@@ -177,7 +197,7 @@ class UserController extends Controller
 
 		$sub_users = User::where('parent_id',$id)->whereNull('users.vendor_id')->get();
 
-		$user_count = $sub_users->count();
+		$user_count = $sub_users->count() + 1;
 
 		$total_property = Properties::select('id')->where('user_id', $id)->count();
 		$total_enquiry = Enquiries::select('id')->where('user_id', $id)->count();
