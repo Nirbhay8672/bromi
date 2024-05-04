@@ -233,8 +233,8 @@ class EnquiriesController extends Controller
 
 							// Property For = Enquiry for
 							if ($request->match_enquiry_for) {
-								// dd("match_enquiry_for", $enquiry_for);
 								$enquiry_for = ($pro->property_for == 'Sell') ? 'Buy' : $pro->property_for;
+								// dd("match_enquiry_for", $enquiry_for);
 								$query->where('enquiry_for', $enquiry_for);
 							}
 
@@ -246,12 +246,13 @@ class EnquiriesController extends Controller
 								$unit_price = $unitDetails[0][4];
 								if ($value != '' || $value !== null) {
 									$query
-										// ->where('budget_from', '<=', $pro->survey_price)
+										->where('budget_from', '<=', $pro->survey_price)
 										->where('budget_to', '>=', $pro->survey_price);
+										// 5000
 								} else if ($unit_price != '') {
 									$query
-										// ->where('budget_from', '<=', $unit_price)
-										->where('budget_to', '>=', '22,222');
+										->where('budget_from', '<=', $unit_price)  // 1000
+										->where('budget_to', '>=', $unit_price); // 5000
 								}
 							}
 
