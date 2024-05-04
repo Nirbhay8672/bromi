@@ -66,18 +66,16 @@
                             <table class="display" id="userTable">
                                 <thead>
                                     <tr>
-                                        <th>Sr No.</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
+                                        <th style="min-width:50px;">Sr No.</th>
+                                        <th style="min-width:150px;">Full Name</th>
                                         <th>State</th>
                                         <th>City</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
+                                        <th>Company Name</th>
                                         <th>Plan</th>
                                         <th>Subscribed On</th>
                                         <th>Expired On</th>
-                                        <th>Company Name</th>
                                         <th>Users</th>
+                                        <th>Active</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -201,12 +199,9 @@
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 {
-                    data: 'first_name',
-                    name: 'first_name'
-                },
-                {
-                    data: 'last_name',
-                    name: 'last_name'
+                    data: "email" , render : function ( data, type, row, meta ) {
+                        return `<span>${row.first_name} ${row.last_name}</span><br> <span>${row.mobile_number}</span>`; 
+                    }
                 },
                 {
                     data: 'state_name',
@@ -217,13 +212,8 @@
                     name: 'city_name'
                 },
                 {
-                    data: "email" , render : function ( data, type, row, meta ) {
-                        return `<span style="text-transform:lowercase !important">${row.email}</span>`; 
-                    }
-                },
-                {
-                    data: 'mobile_number',
-                    name: 'mobile_number'
+                    data: 'company_name',
+                    name: 'company_name',
                 },
                 {
                     data: 'plan',
@@ -238,12 +228,12 @@
                     name: 'plan_expire_on'
                 },
                 {
-                    data: 'company_name',
-                    name: 'company_name',
-                },
-                {
                     data: 'users',
                     name: 'users'
+                },
+                {
+                    data: 'active',
+                    name: 'active'
                 },
                 {
                     data: 'Actions',
