@@ -122,6 +122,9 @@ class UserController extends Controller
 				}
 			}
 
+			$id_column = array_column($final_array, 'id');
+			array_multisort($id_column, SORT_DESC, $final_array);
+
 			return DataTables::of($final_array)
 				->addIndexColumn()
 				->editColumn('plan', function ($row) {
