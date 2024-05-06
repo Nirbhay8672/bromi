@@ -72,8 +72,8 @@
                                         <th>City</th>
                                         <th>Company Name</th>
                                         <th>Plan</th>
-                                        <th>Subscribed On</th>
-                                        <th>Expired On</th>
+                                        <th>Subscription</th>
+                                        <th>Expiry</th>
                                         <th>Users</th>
                                         <th>Active</th>
                                         <th>Actions</th>
