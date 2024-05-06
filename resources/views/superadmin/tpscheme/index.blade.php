@@ -55,6 +55,14 @@
                         <input type="hidden" name="this_data_id" id="this_data_id">
                         <div class="row">
 
+                            <div class="form-group col-md-5 m-b-20">
+                                <div class="fname">
+                                    <label for="tp_name">Name</label>
+                                <input class="form-control" name="name" id="tp_name" type="text" placeholder="Name"
+                                    required="" autocomplete="off">
+                                </div>
+                            </div>
+
                             <div class="form-group col-md-3 m-b-4 mb-3">
                                 <select class="form-select" id="district_id">
                                     <option value=""> District</option>
@@ -80,13 +88,6 @@
                                             {{ $village->name }}</option>
                                     @endforeach
                                 </select>
-                            </div>
-
-                            <div class="form-group col-md-5 m-b-20">
-                                <div class="fname">
-                                <input class="form-control" name="name" id="tp_name" type="text" placeholder="Name"
-                                    required="" autocomplete="off">
-                                </div>
                             </div>
                         </div>
                         <div class="text-center">
@@ -118,14 +119,13 @@
                 success: function(data) {
                     dataa = JSON.parse(data);
                     $('#this_data_id').val(dataa.id);
-                    $('#tp_name').val(dataa.name);
+                    $('#tp_name').val(dataa.name).trigger('change');
                     $('#village_id').val(JSON.parse(dataa.villages)).trigger('change');
                     $('#tpModal').modal('show');
                 }
             });
         }
-
-
+        
         function deleteTp(data) {
             var id = $(data).attr('data-id');
             $.ajax({

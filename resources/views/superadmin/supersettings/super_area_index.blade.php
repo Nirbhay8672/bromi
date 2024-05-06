@@ -308,9 +308,9 @@
                     },
                     success: function(data) {
                         data = JSON.parse(data)
-                        $('#this_data_id').val(data.id)
-                        $('#area_name').val(data.name)
-                        $('#pincode').val(data.pincode)
+                        $('#this_data_id').val(data.id).trigger('change');
+                        $('#area_name').val(data.name).trigger('change');
+                        $('#pincode').val(data.pincode).trigger('change');
                         $('#city_id').val(data.super_city_id).trigger('change');
                         $('#state_id').val(data.state_id).trigger('change');
                             $('#areaModal').modal('show');

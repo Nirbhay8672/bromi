@@ -61,41 +61,37 @@
                         <div class="row">
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
+                                    <label for="first_name">First Name</label>
                                     <input class="form-control" name="first_name" id="first_name" type="text"
-                                        autocomplete="off" placeholder="First Name">
-                                    <span class="text-danger invalid-error d-none" id="first_name_error">First name is required.</span>
+                                        autocomplete="off">
                                 </div>
+                                <span class="text-danger invalid-error d-none" id="first_name_error">First name is required.</span>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
+                                <label for="last_name">Last Name</label>
                                     <input class="form-control" name="last_name" id="last_name" type="text"
-                                        autocomplete="off" placeholder="Last Name">
-                                    <span class="text-danger invalid-error d-none" id="last_name_error">Email is required.</span>
+                                        autocomplete="off">
                                 </div>
+                                <span class="text-danger invalid-error d-none" id="last_name_error">Last name is required.</span>
                             </div>
+
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
-                                    <input class="form-control" name="birth_date" id="birth_date" type="date" autocomplete="off" placeholder="Birth Date (YYYY-MM-DD)">
-                                    <span class="text-danger invalid-error d-none" id="birth_date_error">Birth Date is required.</span>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-4 m-b-20">
-                                <div class="fname">
+                                    <label for="email">Email</label>
                                     <input class="form-control" name="email" id="email"
-                                        style="text-transform: none !important;" type="text" autocomplete="off"
-                                        placeholder="Email">
-                                    <span class="text-danger invalid-error d-none" id="email_error">Email is required.</span>
+                                        style="text-transform: none !important;" type="text" autocomplete="off">
                                 </div>
+                                <span class="text-danger invalid-error d-none" id="email_error">Email is required.</span>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
+                                    <label for="password">Password</label>
                                     <input class="form-control" name="password" id="password" type="text"
-                                        autocomplete="off" placeholder="Password">
-                                    <span class="text-danger invalid-error d-none" id="password_error">Password is required.</span>
+                                        autocomplete="off">
                                 </div>
+                                <span class="text-danger invalid-error d-none" id="password_error">Password is required.</span>
                             </div>
-                            <div class="form-group col-md-4 m-b-20"></div>
-                            <div class="form-group col-md-4 m-b-20"></div>
                             <div class="form-group col-md-12 m-b-20">
                                 <label for="permissions">Select Permissions:</label>
                                 <div class="row">
@@ -159,9 +155,6 @@
                                             </label>
                                             <label class="d-flex">
                                             <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="village_" value="village"> Village
-                                            </label>
-                                            <label class="d-flex">
-                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="requests_" value="requests"> Requests
                                             </label>
                                         </div>
                                     </div>
@@ -257,11 +250,11 @@
 
                     document.getElementById('total-card').classList.remove('d-none');
 
-                    $('#this_data_id').val(data.main_user.id)
-                    $('#first_name').val(data.main_user.first_name)
-                    $('#last_name').val(data.main_user.last_name)
-                    $('#birth_date').val(data.main_user.birth_date)
-                    $('#email').val(data.main_user.email)
+                    $('#this_data_id').val(data.main_user.id).trigger('change');
+                    $('#first_name').val(data.main_user.first_name).trigger('change');
+                    $('#last_name').val(data.main_user.last_name).trigger('change');
+                    $('#birth_date').val(data.main_user.birth_date).trigger('change');
+                    $('#email').val(data.main_user.email).trigger('change');
                     $('#userModal').modal('show');
 
                     if (data.main_user.permissions.length) {

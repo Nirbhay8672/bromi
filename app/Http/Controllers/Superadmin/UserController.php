@@ -10,6 +10,7 @@ use App\Models\Api\Properties;
 use App\Models\City;
 use App\Models\Enquiries;
 use App\Models\Projects;
+use App\Models\State;
 use App\Models\Subplans;
 use ArrayObject;
 use Illuminate\Support\Carbon;
@@ -181,7 +182,9 @@ class UserController extends Controller
 		}
 
 		$roles =  Role::where('user_id')->get();
-		return view('superadmin.users.index', compact('roles'));
+		$states = State::with(['cities'])->where('user_id', Auth::user()->id)->get();
+
+		return view('superadmin.users.index', compact('roles', 'states'));
 	}
 
 	public function profile($id){
@@ -275,6 +278,10 @@ class UserController extends Controller
 			$data->first_name = $request->first_name;
 			$data->last_name = $request->last_name;
 			$data->email = $request->email;
+			$data->mobile_number = $request->mobile_number;
+			$data->state_id = $request->state;
+			$data->city_id = $request->city;
+			$data->company_name = $request->company_name;
 			if (!empty($request->password)) {
 				$data->password = Hash::make($request->password);
 			}
@@ -286,6 +293,10 @@ class UserController extends Controller
 			$data->first_name = $request->first_name;
 			$data->last_name = $request->last_name;
 			$data->email = $request->email;
+			$data->mobile_number = $request->mobile_number;
+			$data->state_id = $request->state;
+			$data->city_id = $request->city;
+			$data->company_name = $request->company_name;
 			if (!empty($request->password)) {
 				$data->password = Hash::make($request->password);
 			}
