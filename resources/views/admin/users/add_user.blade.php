@@ -65,11 +65,11 @@
                                                         <div class="row">
                                                             <div class="form-group col-md-4 m-b-4 mb-3">
                                                                 <label for="Birth Date">Birth Date</label>
-                                                                <input class="form-control" name="birth_date" id="birth_date" type="date" data-language="en">
+                                                                <input class="form-control" style="border: 1px solid black;border-radius:5px;" name="birth_date" id="birth_date" type="date" data-language="en">
                                                             </div>
                                                             <div class="form-group col-md-4 m-b-4 mb-3">
                                                                 <label for="Hire Date">Hire Date</label>
-                                                                    <input class="form-control" id="hire_date" name="hire_date" type="date" data-language="en">
+                                                                    <input class="form-control" style="border: 1px solid black;border-radius:5px;" id="hire_date" name="hire_date" type="date" data-language="en">
                                                             </div>
                                                         </div>
                                                         <div class="row mt-2">
