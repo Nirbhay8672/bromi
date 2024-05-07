@@ -80,8 +80,8 @@ class UserController extends Controller
 						}
 						$hiring_days = "<div>".$str.'  ago </div>';
 					}
-					$created_at = '<div>Created At: '.date('d-m-Y',strtotime($row->created_at)).'</div>';
-					$updated_at = '<div>Last Modify At: '.date('d-m-Y',strtotime($row->updated_at)).'</div>';
+					$created_at = '<div>Created At: '.date('d/m/Y',strtotime($row->created_at)).'</div>';
+					$updated_at = '<div>Last Modify At: '.date('d/m/Y',strtotime($row->updated_at)).'</div>';
 					return $hiring_days.$created_at.$updated_at;
 				})
 				->editColumn('Actions', function ($row) {
