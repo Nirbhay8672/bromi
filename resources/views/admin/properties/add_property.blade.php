@@ -4564,8 +4564,7 @@
                                     $("[data-contact_id=" + id + "] input[name=other_name]").val(details[i][0]);
                                     $("[data-contact_id=" + id + "] input[name=other_contact]").val(details[i][1]);
                                     $("[data-contact_id=" + id + "] input[name=position]").val(details[i][2]);
-                                    $("[data-contact_id=" + id + "] input[name=other_contact_country_code]").val(
-                                        details[i][3]);
+                                    $("[data-contact_id=" + id + "] select[name=other_contact_country_code]").val(details[i][3]);
 
                                 }
                             } else {
@@ -4681,8 +4680,7 @@
                     name = $(this).val();
                     otherName = $("[data-contact_id=" + unique_id + "] input[name=other_name]").val();
                     otherContact = $("[data-contact_id=" + unique_id + "] input[name=other_contact]").val();
-                    otherContactCode = $("[data-contact_id=" + unique_id +
-                        "] input[name=other_contact_country_code]").val();
+                    otherContactCode = $("[data-contact_id=" + unique_id + "] select[name=other_contact_country_code]").val();
                     position = $("[data-contact_id=" + unique_id + "] input[name=position]").val();
                     // if (otherName.trim() === "") {
                     //     $("#other_name_error_" + unique_id).text("other name field is required").show();

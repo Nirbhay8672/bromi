@@ -21,26 +21,31 @@
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col">
-                                    <a class="btn custom-icon-theme-button tooltip-btn" href="{{ route('admin.property.add') }}"
-                                        data-tooltip="Add Property">
+                                    <a class="btn custom-icon-theme-button tooltip-btn"
+                                        href="{{ route('admin.property.add') }}" data-tooltip="Add Property">
                                         <i class="fa fa-plus"></i>
                                     </a>
 
-                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#filtermodal" data-tooltip="Filter"><i class="fa fa-filter"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#filtermodal" data-tooltip="Filter"><i
+                                            class="fa fa-filter"></i></button>
 
-                                    <button class="btn ms-3 custom-icon-theme-button" style="background-color: #FF0000 !important" type="button" data-tooltip="Clear Filter"
-                                        id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button"
+                                        style="background-color: #FF0000 !important" type="button"
+                                        data-tooltip="Clear Filter" id="resetfilter" style="display: none;"><i
+                                            class="fa fa-refresh"></i></button>
 
                                     <button class="btn matchbutton ms-3 custom-icon-theme-button tooltip-btn" type="button"
                                         data-bs-toggle="modal" data-bs-target="#matchModal" data-tooltip="Matching"><i
                                             class="fa fa-random"></i></button>
 
-                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="exportProperties()"
-                                        type="button" data-tooltip="Export"><i class="fa fa-upload"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn"
+                                        onclick="exportProperties()" type="button" data-tooltip="Export"><i
+                                            class="fa fa-upload"></i></button>
 
-                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="importProperties()"
-                                        type="button" data-tooltip="Import"><i class="fa fa-download"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn"
+                                        onclick="importProperties()" type="button" data-tooltip="Import"><i
+                                            class="fa fa-download"></i></button>
 
                                     <button class="btn text-white delete_table_row ms-3 tooltip-btn"
                                         style="border-radius: 5px;display: none;background-color:red"
@@ -52,8 +57,9 @@
                                         onclick="shareTableRow()" type="button" data-tooltip="Share"><i
                                             class="fa fa-whatsapp"></i></button>
 
-                                    <a class="btn float-end custom-icon-theme-button tooltip-btn" data-tooltip="Project Vise Unit"
-                                        href="{{ route('admin.project.byunit') }}"><i class="fa fa-list"></i></a>
+                                    <a class="btn float-end custom-icon-theme-button tooltip-btn"
+                                        data-tooltip="Project Vise Unit" href="{{ route('admin.project.byunit') }}"><i
+                                            class="fa fa-list"></i></a>
 
                                 </div>
                             </div>
@@ -384,7 +390,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Add Property</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         <div class="row" id="choose-property-form">
@@ -704,8 +711,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
-                                                <input class="form-check-input" id="match_enquiry_all"
-                                                    type="checkbox">
+                                                <input class="form-check-input" id="match_enquiry_all" type="checkbox">
                                                 <label class="form-check-label" for="match_enquiry_all">Select All</label>
                                             </div>
                                             <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
@@ -768,7 +774,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Shared Property</h5>
-                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal"
+                                aria-label="Close">
                             </button>
                         </div>
                         <div class="modal-body">
@@ -1086,11 +1093,10 @@
                 //     $('#propertyTable').DataTable().draw();
                 //     $('#matchModal').modal('hide');
                 // });
-
-                
-                $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
-                    .prop('checked', true);
-
+                if (window.location.pathname.toLowerCase() === '/admin/properties' && window.location.search === '') {
+                    $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                        .prop('checked', true);
+                }
                 $('#match_enquiry_all').on('change', function() {
                     let isChecked = $(this).prop('checked');
                     $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
@@ -1200,7 +1206,9 @@
                             name: 'remarks',
                             render: function(data, type, full, meta) {
                                 if (data && data.length > 56) {
-                                    return '<span class="truncated">' + data.substr(0, 56) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span>';
+                                    return '<span class="truncated">' + data.substr(0, 56) +
+                                        '...</span><span class="full" style="display:none;">' + data +
+                                        '</span><span class="read-more">Read More</span>';
                                 } else {
                                     return data;
                                 }

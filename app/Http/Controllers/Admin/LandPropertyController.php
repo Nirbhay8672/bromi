@@ -60,49 +60,48 @@ class LandPropertyController extends Controller
 				->where('property_category', $indId[0])
 				->orWhere('property_category', $indId[1])
 				// Filter Section
-				->when($request->filter_property_for || empty(Auth::user()->property_for_id), function ($query) use ($request) {
-					return $query->where(function ($query) use ($request) {
-						$query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
-					});
-				})
-				->when($request->filter_property_type || empty(Auth::user()->property_type), function ($query) use ($request) {
-					// dd($request->filter_property_type,"...",Auth::user()->property_type);
-					return $query->where(function ($query) use ($request) {
-						$query->where('properties.property_type', $request->filter_property_type);
-					});
-				})
-				->when($request->filter_specific_type || empty(Auth::user()->property_category), function ($query) use ($request) {
-					// dd($request->filter_specific_type,"...",Auth::user()->property_category);
-					return $query->where(function ($query) use ($request) {
-						$query->where('properties.property_category', $request->filter_specific_type);
-					});
-				})
-				->when($request->filter_configuration || empty(Auth::user()->configuration), function ($query) use ($request) {
-					// dd($request->filter_configuration,"...",Auth::user()->configuration);
-					return $query->where(function ($query) use ($request) {
-						$query->where('properties.configuration', $request->filter_configuration);
-					});
-				})
-				->when($request->filter_district_id || empty(Auth::user()->district_id), function ($query) use ($request) {
-					// dd($request->filter_district_id,"...",Auth::user()->district_id);
-					return $query->where(function ($query) use ($request) {
-						$query->where('properties.district_id', $request->filter_district_id);
-					});
-				})
-				->when($request->filter_taluka_id || empty(Auth::user()->taluka_id), function ($query) use ($request) {
-					// dd($request->filter_taluka_id,"...",Auth::user()->filter_taluka_id);
-					return $query->where(function ($query) use ($request) {
-						$query->where('properties.taluka_id', $request->filter_taluka_id);
-					});
-				})
-				->when($request->filter_village_id || empty(Auth::user()->village_id), function ($query) use ($request) {
-					// dd($request->filter_village_id,"...",Auth::user()->village_id);
-					return $query->where(function ($query) use ($request) {
-						$query->where('properties.village_id', $request->filter_village_id);
-					});
-				})
+				// ->when($request->filter_property_for || empty(Auth::user()->property_for_id), function ($query) use ($request) {
+				// 	return $query->where(function ($query) use ($request) {
+				// 		$query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
+				// 	});
+				// })
+				// ->when($request->filter_property_type || empty(Auth::user()->property_type), function ($query) use ($request) {
+				// 	// dd($request->filter_property_type,"...",Auth::user()->property_type);
+				// 	return $query->where(function ($query) use ($request) {
+				// 		$query->where('properties.property_type', $request->filter_property_type);
+				// 	});
+				// })
+				// ->when($request->filter_specific_type || empty(Auth::user()->property_category), function ($query) use ($request) {
+				// 	// dd($request->filter_specific_type,"...",Auth::user()->property_category);
+				// 	return $query->where(function ($query) use ($request) {
+				// 		$query->where('properties.property_category', $request->filter_specific_type);
+				// 	});
+				// })
+				// ->when($request->filter_configuration || empty(Auth::user()->configuration), function ($query) use ($request) {
+				// 	// dd($request->filter_configuration,"...",Auth::user()->configuration);
+				// 	return $query->where(function ($query) use ($request) {
+				// 		$query->where('properties.configuration', $request->filter_configuration);
+				// 	});
+				// })
+				// ->when($request->filter_district_id || empty(Auth::user()->district_id), function ($query) use ($request) {
+				// 	// dd($request->filter_district_id,"...",Auth::user()->district_id);
+				// 	return $query->where(function ($query) use ($request) {
+				// 		$query->where('properties.district_id', $request->filter_district_id);
+				// 	});
+				// })
+				// ->when($request->filter_taluka_id || empty(Auth::user()->taluka_id), function ($query) use ($request) {
+				// 	// dd($request->filter_taluka_id,"...",Auth::user()->filter_taluka_id);
+				// 	return $query->where(function ($query) use ($request) {
+				// 		$query->where('properties.taluka_id', $request->filter_taluka_id);
+				// 	});
+				// })
+				// ->when($request->filter_village_id || empty(Auth::user()->village_id), function ($query) use ($request) {
+				// 	// dd($request->filter_village_id,"...",Auth::user()->village_id);
+				// 	return $query->where(function ($query) use ($request) {
+				// 		$query->where('properties.village_id', $request->filter_village_id);
+				// 	});
+				// })
 				->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
-					// dd("request->search_enq",$request->search_enq,"enq",$enq);
 					if (!empty($enq)) {
 						// property for
 						if ($request->match_enquiry_for) {
@@ -155,7 +154,9 @@ class LandPropertyController extends Controller
 					}
 				})
 				->orderBy('id', 'desc')->get();
-			return DataTables::of($data)
+				// dd("data",$data);
+			
+				return DataTables::of($data)
 				->editColumn('project_id', function ($row) {
 					if (isset($row->Projects->project_name) || isset($row->Village->name)) {
 						$project_name =  '<td style="vertical-align:top">
@@ -455,7 +456,8 @@ class LandPropertyController extends Controller
 				})
 				->rawColumns(['project_id', 'details', 'property_category', 'unit_details', 'contact_details', 'price', 'actions', 'select_checkbox'])
 				->make(true);
-		}
+		
+			}
 		$areas = Areas::orderBy('name')->get();
 		$cities = City::orderBy('name')->get();
 		$states = State::orderBy('name')->get();
