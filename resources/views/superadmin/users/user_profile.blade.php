@@ -35,7 +35,7 @@
                                             </div>
                                             <div class="user-designation">
                                                 <div class="title"><a target="_blank" href="">
-                                                        <h4>{{ $user->company_name }}</h4>
+                                                        <h4 style="text-transform: capitalize !important;">{{ $user->company_name }}</h4>
                                                         <h6>( Company )</h6>
                                                     </a>
                                                 </div>
@@ -287,9 +287,9 @@
                                                             <td>{{ $index + 1 }}</td>
                                                             <td>{{ $user->first_name ?? '-' }}</td>
                                                             <td>{{ $user->last_name ?? '-' }}</td>
-                                                            <td>{{ $user->email ?? '-' }}</td>
+                                                            <td style="text-transform: none !important;">{{ $user->email ?? '-' }}</td>
                                                             <td>{{ $user->mobile_number ?? '-' }}</td>
-                                                            <td>{{ $user->company_name ?? '-' }}</td>
+                                                            <td style="text-transform:capitalize !important;">{{ $user->company_name ?? '-' }}</td>
                                                             <td class="text-center"><a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary btn-xs" style="border-radius:5px;" target="_blank">Login as user</a></td>
                                                         </tr>
                                                         @endforeach
