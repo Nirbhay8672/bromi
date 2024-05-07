@@ -107,45 +107,56 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Lead View / Edit</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Lead Add / Edit</h5>
                     <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <div class="modal-body">
                     <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
-                        <input type="text" class="d-none" name="this_data_id" id="this_data_id">
                         <div class="row">
-                            <div class="form-group col-md-4 m-b-20">
+                            <div class="form-group col-md-4 m-b-20 d-none">
                                 <div class="fname">
-                                    <input class="form-control" name="first_name" id="first_name" type="text" autocomplete="off" placeholder="First Name">
-                                    <span class="text-danger invalid-error d-none" id="first_name_error">First name is required.</span>
+                                    <input type="text" name="this_data_id" id="this_data_id">
                                 </div>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
-                                    <input class="form-control" name="last_name" id="last_name" type="text" autocomplete="off" placeholder="Last Name">
-                                    <span class="text-danger invalid-error d-none" id="last_name_error">Last Name is required.</span>
+                                    <label for="first_name">First Name</label>
+                                    <input class="form-control" name="first_name" id="first_name" type="text" autocomplete="off">
                                 </div>
+                                <span class="text-danger invalid-error d-none" id="first_name_error">First name is required.</span>
+
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
-                                    <input class="form-control" name="mobile" id="mobile" type="text" autocomplete="off" placeholder="Phone Number">
-                                    <span class="text-danger invalid-error d-none" id="mobile_error">Phone Number is required.</span>
-                                    <span class="text-danger invalid-error d-none" id="mobile_length_error">Phone Number is invalid.</span>
+                                    <label for="last_name">Last Name</label>
+                                    <input class="form-control" name="last_name" id="last_name" type="text" autocomplete="off">
                                 </div>
+                                <span class="text-danger invalid-error d-none" id="last_name_error">Last Name is required.</span>
+
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
-                                    <input placeholder="Email" class="form-control" name="email" id="email"
+                                <label for="mobile">Mobile Number</label>
+                                    <input class="form-control" name="mobile" id="mobile" type="text" autocomplete="off">
+                                </div>
+                                <span class="text-danger invalid-error d-none" id="mobile_error">Phone Number is required.</span>
+                                <span class="text-danger invalid-error d-none" id="mobile_length_error">Phone Number is invalid.</span>
+                            </div>
+                            <div class="form-group col-md-4 m-b-20">
+                                <div class="fname">
+                                    <label for="email">Email</label>
+                                    <input class="form-control" name="email" id="email"
                                         style="text-transform: none !important;" type="text" autocomplete="off">
-                                        <span class="text-danger invalid-error d-none" id="email_error">Email is required.</span>
                                 </div>
+                                <span class="text-danger invalid-error d-none" id="email_error">Email is required.</span>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
-                                    <input placeholder="Company" class="form-control" name="company" id="company" type="text"
+                                    <label for="company">Company Name</label>
+                                    <input class="form-control" name="company" id="company" type="text"
                                         autocomplete="off">
-                                        <span class="text-danger invalid-error d-none" id="company_error">Company is required.</span>
                                 </div>
+                                <span class="text-danger invalid-error d-none" id="company_error">Company is required.</span>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
@@ -218,10 +229,26 @@
             $('.invalid-error').addClass('d-none');
             $('#modal_form').trigger("reset");
             $('#exampleModalLabel').text('ADD NEW LEAD');
+
+            let all_error = document.querySelectorAll('.invalid-error');
+
+            all_error.forEach(element => {
+                element.classList.add('d-none');
+            });
+
+            $('#first_name').val('').trigger('change');
+            $('#last_name').val('').trigger('change');
+            $('#mobile').val('').trigger('change');
+            $('#email').val('').trigger('change');
+            $('#company').val('').trigger('change');
+            $('#lead_type').val('').trigger('change');
+            $('#plan_interested_in').val('').trigger('change');
+            $('#enquiry').val('').trigger('change');
         }
 
         function getBromiEnq(data) {
             $('#modal_form').trigger("reset");
+            resetData();
             $('#exampleModalLabel').text('Edit LEAD');
             var id = $(data).attr('data-id');
             $.ajax({
@@ -232,14 +259,14 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
-                    $('#first_name').val(data.brom_enq.user_name);
-                    $('#last_name').val(data.brom_enq.last_name);
-                    $('#mobile').val(data.brom_enq.mobile);
-                    $('#email').val(data.brom_enq.email);
-                    $('#company').val(data.brom_enq.company);
+                    $('#first_name').val(data.brom_enq.user_name).trigger('change');
+                    $('#last_name').val(data.brom_enq.last_name).trigger('change');
+                    $('#mobile').val(data.brom_enq.mobile).trigger('change');
+                    $('#email').val(data.brom_enq.email).trigger('change');
+                    $('#company').val(data.brom_enq.company).trigger('change');
                     $('#lead_type').val(data.brom_enq.lead_type).trigger('change');
                     $('#plan_interested_in').val(data.brom_enq.plan_interested_in).trigger('change');
-                    $('#enquiry').val(data.brom_enq.enquiry);
+                    $('#enquiry').val(data.brom_enq.enquiry).trigger('change');
                     $('#this_data_id').val(data.brom_enq.id);
                     $('#leadModal').modal('show');
                     $('#saveEnq').addClass('d-none');

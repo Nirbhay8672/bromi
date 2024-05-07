@@ -66,9 +66,14 @@ class BromiEnquiryController extends Controller
                         return substr($row->enquiry, 0, 100) . '...';
                     }
                 })
+                ->editColumn('email', function ($row) {
+                    if (!empty($row->email)) {
+                        return '<span style="text-transform:none !important">'.$row->email.'</span>';
+                    }
+                })
                 ->editColumn('created_at', function ($row) {
                     if (!empty($row->created_at)) {
-                        return date('d M, Y', strtotime($row->created_at));
+                        return date('d/m/Y', strtotime($row->created_at));
                     }
                 })
                 ->editColumn('status', function ($row) {
@@ -91,7 +96,7 @@ class BromiEnquiryController extends Controller
                     $buttons =  $buttons . '<span class="ms-3" data-id="' . $row->id . '" onclick=updateStatusForm(this) style="cursor:pointer"><i class="fa fa-bars fs-5 text-warning"></i></span>';
                     return $buttons;
                 })
-                ->rawColumns(['enquiry', 'status', 'Actions'])
+                ->rawColumns(['enquiry', 'status', 'Actions','email'])
                 ->make(true);
         }
 
