@@ -54,7 +54,7 @@
                                 <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button" data-bs-toggle="modal"
                                     data-bs-target="#filtermodal" data-tooltip="Filter"><i class="fa fa-filter"></i></button>
 
-                                <button class="btn ms-3 custom-icon-theme-button tooltip-btn" style="background-color: #FF0000 !important" type="button" data-tooltip="Clear Filter"
+                                <button class="btn ms-3 btn-warning tooltip-btn d-none" style="border-radius:5px;" type="button" data-tooltip="Clear Filter"
                                     id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
 
                                 <button class="btn matchbutton ms-3 custom-icon-theme-button tooltip-btn" type="button"
@@ -1883,6 +1883,7 @@
                 e.preventDefault();
                 go_data_id = '';
                 $('#enquiryTable').DataTable().draw();
+                $('#resetfilter').removeClass('d-none');
                 $('#filtermodal').modal('hide');
                 $('#resetfilter').show();
             });
