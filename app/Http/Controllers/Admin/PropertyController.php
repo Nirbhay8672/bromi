@@ -72,7 +72,6 @@ class PropertyController extends Controller
                 }
             }
         }
-
         if ($request->ajax()) {
             $dropdowns = DropdownSettings::get()->toArray();
             $land_units = LandUnit::all();
