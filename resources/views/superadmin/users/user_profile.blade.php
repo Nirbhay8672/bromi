@@ -180,7 +180,7 @@
                                                             {{ \Carbon\Carbon::parse($user->subscribed_on)->format('d/m/Y') }}
                                                         </h5>
                                                         <h5>Valid Till :
-                                                            {{ \Carbon\Carbon::parse($user->subscribed_on)->addMonth()->format('d/m/Y') }}
+                                                            {{ $user->plan_expire_on ? \Carbon\Carbon::parse($user->plan_expire_on)->format('d/m/Y') : '-' }}
                                                         </h5>
                                                     </div>
                                                 </div>

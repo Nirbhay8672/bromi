@@ -84,7 +84,7 @@
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#couponModal"
                                                             onclick="setDetails({{ $plan->id }}, {{ $plan->price }}, '{{ $plan->name }}', '{{ $gstType }}', '{{ $gst }}')"
-                                                        >Subscribe</button>
+                                                        >Upgrade</button>
                                                     @endif
                                                 @endif
 											</form>
