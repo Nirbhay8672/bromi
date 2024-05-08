@@ -77,7 +77,7 @@
                     <h2>Invoice Details</h2>
                     <p><strong>Invoice Number:</strong> {{$sequence}}</p>
                     <p><strong>Plan Purchase
-                            Date:</strong>{{ \Carbon\Carbon::parse($user->plan_expire_on)->subYear(1)->format('F j, Y') }}
+                            Date:</strong>{{ \Carbon\Carbon::parse($user->plan_expire_on)->subYear(1)->addDay()->format('F j, Y') }}
                     </p>
                     <p><strong>Plan Expiry Date:</strong>
                         {{ \Carbon\Carbon::parse($user->plan_expire_on)->format('F j, Y') }}</p>
