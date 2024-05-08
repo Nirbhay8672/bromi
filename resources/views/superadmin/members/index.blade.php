@@ -110,7 +110,7 @@
                                                 <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="builders_" value="builders"> Builders
                                             </label>
                                             <label class="d-flex">
-                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="area_" value="area"> Area
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="area_" value="area"> Locality
                                             </label>
                                             <label class="d-flex">
                                             <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="email-template_" value="email-template"> Email Template
