@@ -152,7 +152,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xxl-6 box-col-6 col-lg-6">
+                            <div class="col-xxl-6 box-col-6 col-lg-6 d-none">
                                 <div class="project-box">
                                     <span
                                         id="openAddFieldMOdal"
