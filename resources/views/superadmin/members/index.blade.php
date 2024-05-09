@@ -156,12 +156,8 @@
                                             <label class="d-flex">
                                             <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="village_" value="village"> Village
                                             </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="d-flex flex-column justify-content-start">
                                             <label class="d-flex">
-                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="leads_" value="leads"> Leads
+                                            <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="leads_" value="leads"> Leads
                                             </label>
                                         </div>
                                     </div>
