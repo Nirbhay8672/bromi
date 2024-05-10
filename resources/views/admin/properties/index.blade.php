@@ -31,8 +31,8 @@
                                             class="fa fa-filter"></i></button>
 
                                     <button class="btn ms-3 custom-icon-theme-button"
-                                        style="background-color: #FF0000 !important" type="button"
-                                        data-tooltip="Clear Filter" id="resetfilter" style="display: none;"><i
+                                        style="background-color: #FF0000 !important;display: none; " type="button"
+                                        data-tooltip="Clear Filter" id="resetfilter"><i
                                             class="fa fa-refresh"></i></button>
 
                                     <button class="btn matchbutton ms-3 custom-icon-theme-button tooltip-btn" type="button"
