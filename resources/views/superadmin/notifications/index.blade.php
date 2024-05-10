@@ -35,7 +35,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -53,8 +52,8 @@
                         <div class="row">
                             <div class="form-group col-md-6 m-b-20">
                                 <div class="fname">
-                                    <input class="form-control" name="notification" id="notification" type="text"
-                                    placeholder="Notification" required="" autocomplete="off">
+                                    <label for="notification">Notification</label>
+                                    <input class="form-control" name="notification" id="notification" type="text" required="" autocomplete="off">
                                 </div>
                             </div>
                              <div class="form-group col-md-6 m-b-20">
@@ -124,7 +123,7 @@
                         sch = dataa.schedule_date.split(' ');
                     }
                     $('#this_data_id').val(dataa.id);
-                    $('#notification').val(dataa.message);
+                    $('#notification').val(dataa.message).trigger('change');
 					$('#status').prop('checked', Number(dataa.status));
                     $('#date').val(sch[0]);
                     $('#time').val(sch[1]);

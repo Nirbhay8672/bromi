@@ -1911,6 +1911,7 @@
                 e.preventDefault();
                 go_data_id = '';
                 $('#enquiryTable').DataTable().draw();
+                $('#resetfilter').removeClass('d-none');
                 $('#filtermodal').modal('hide');
                 $('#resetfilter').show();
             });

@@ -83,53 +83,62 @@
                 <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div class="modal-body">
-                @csrf
-                <div class="row">
-                    <div class="form-group col-md-6 m-b-4 mb-3">
-                        <div class="fname">
-                            <input type="text" placeholder="First name" name="firstname" class="form-control" id="firstname" value="{{ $user->first_name }}">
+                <form class="form-bookmark needs-validation" method="post" id="modal_form" novalidate="">
+                    <div class="row">
+                        <div class="form-group col-md-6 m-b-4 mb-3">
+                            <div class="fname {{ $user->first_name ? 'focused' : '' }}">
+                                <label for="firstname">First Name</label>
+                                <input type="text" name="firstname" class="form-control" id="firstname" value="{{ $user->first_name }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-md-6 m-b-4 mb-3">
-                        <div class="fname">
-                            <input type="text" placeholder="Last name" name="lastname" class="form-control" id="lastname" value="{{ $user->last_name }}">
+                        <div class="form-group col-md-6 m-b-4 mb-3">
+                            <div class="fname {{ $user->last_name ? 'focused' : '' }}">
+                                <label for="lastname">Last Name</label>
+                                <input type="text" name="lastname" class="form-control" id="lastname" value="{{ $user->last_name }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-md-6 m-b-4 mb-3">
-                        <div class="fname">
-                            <input type="email" placeholder="Email" name="email" class="form-control" id="email" value="{{ $user->email }}" style="text-transform:none;" disabled>
+                        <div class="form-group col-md-6 m-b-4 mb-3">
+                            <div class="fname {{ $user->email ? 'focused' : '' }}">
+                                <label for="email">Email</label>
+                                <input type="email" name="email" class="form-control" id="email" value="{{ $user->email }}" style="text-transform:none;" disabled>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-md-6 m-b-4 mb-3">
-                        <div class="fname">
-                            <input type="text" placeholder="Mobile Number" name="mobile_number" class="form-control" id="mobile_number" value="{{ $user->mobile_number }}">
+                        <div class="form-group col-md-6 m-b-4 mb-3">
+                            <div class="fname {{ $user->mobile_number ? 'focused' : '' }}">
+                                <label for="mobile_number">Mobile Number</label>
+                                <input type="text" name="mobile_number" class="form-control" id="mobile_number" value="{{ $user->mobile_number }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-md-6 m-b-4 mb-3">
-                        <div class="fname">
-                            <input type="text" placeholder="Company Name" name="company_name" class="form-control" id="company_name" value="{{ $user->company_name }}">
+                        <div class="form-group col-md-6 m-b-4 mb-3">
+                            <div class="fname {{ $user->company_name ? 'focused' : '' }}">
+                                <label for="company_name">Company Name</label>
+                                <input type="text" name="company_name" class="form-control" id="company_name" value="{{ $user->company_name }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-md-6 m-b-4 mb-3">
-                        <div class="fname">
-                            <input type="text" placeholder="Address" name="address" class="form-control" id="address" value="{{ $user->address }}">
+                        <div class="form-group col-md-6 m-b-4 mb-3">
+                            <div class="fname {{ $user->address ? 'focused' : '' }}">
+                                <label for="address">Address</label>
+                                <input type="text" placeholder="Address" name="address" class="form-control" id="address" value="{{ $user->address }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-md-6 m-b-4 mb-3">
-                        <div class="fname">
-                            <input type="text" placeholder="Gst Number" name="gst" class="form-control" id="gst" value="{{ $user->gst }}">
+                        <div class="form-group col-md-6 m-b-4 mb-3">
+                            <div class="fname {{ $user->gst ? 'focused' : '' }}">
+                                <label for="gst">GST</label>
+                                <input type="text" placeholder="Gst Number" name="gst" class="form-control" id="gst" value="{{ $user->gst }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-md-6 m-b-4 mb-3">
-                        <div class="fname">
-                            <input type="text" placeholder="Rera Number" name="rera" class="form-control" id="rera" value="{{ $user->rera }}">
+                        <div class="form-group col-md-6 m-b-4 mb-3">
+                            <div class="fname {{ $user->rera ? 'focused' : '' }}">
+                                <label for="rera">Rera</label>
+                                <input type="text" placeholder="Rera Number" name="rera" class="form-control" id="rera" value="{{ $user->rera }}">
+                            </div>
                         </div>
+                        <div class="form-group col-md-6 m-b-4 mb-3">
+                            <input type="file" name="profile_image" class="form-control" id="profile_image" accept="image/png, image/jpeg" style="border: 1px solid black;border-radius: 5px;">
+                        </div>
+                        <input type="hidden" name="shar_string" id="shar_string">
                     </div>
-                    <div class="form-group col-md-6 m-b-4 mb-3">
-                        <input type="file" name="profile_image" class="form-control" id="profile_image" accept="image/png, image/jpeg" style="border: 1px solid black;border-radius: 5px;">
-                    </div>
-                    <input type="hidden" name="shar_string" id="shar_string">
-                </div>
+                </form>
                 <p class="error-message" style="color:red"></p>
                 <div class="text-center">
                     <button class="btn btn-success" style="border-radius: 5px;" type="button" id="updateprofile">Edit</button>

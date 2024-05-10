@@ -73,14 +73,20 @@
                                                 $gst = $plan->price * 0.18;
                                                 ?>
 
-												<button
-                                                    class="btn btn-primary btn-lg"
-                                                    type="button"
-                                                    data-original-title="btn btn-primary btn-lg"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#couponModal"
-                                                    onclick="setDetails({{ $plan->id }}, {{ $plan->price }}, '{{ $plan->name }}', '{{ $gstType }}', '{{ $gst }}')"
-                                                >Subscribe</button>
+                                                @if($current_plan['id'] == $plan->id)
+                                                    <h2><span class="badge badge-warning">Active Plan</span></h2>
+                                                @else
+                                                    @if($plan->price > $current_plan['price'] )
+                                                        <button
+                                                            class="btn btn-primary btn-lg"
+                                                            type="button"
+                                                            data-original-title="btn btn-primary btn-lg"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#couponModal"
+                                                            onclick="setDetails({{ $plan->id }}, {{ $plan->price }}, '{{ $plan->name }}', '{{ $gstType }}', '{{ $gst }}')"
+                                                        >Subscribe</button>
+                                                    @endif
+                                                @endif
 											</form>
                                         </div>
                                     </div>

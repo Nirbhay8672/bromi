@@ -642,7 +642,10 @@ class HomeController extends Controller
             Session::put('transaction_goal', 'upgrade');
         }
 		$plans = Subplans::get();
-		return view('admin.userplans.index', compact('plans'));
+
+		$current_plan = Subplans::find(Auth::user()->plan_id)->toArray();
+
+		return view('admin.userplans.index', compact('plans','current_plan'));
 	}
 	
     public function priceCalculator(Request $request)

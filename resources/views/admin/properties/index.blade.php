@@ -35,6 +35,8 @@
                                         data-tooltip="Clear Filter" id="resetfilter"><i
                                             class="fa fa-refresh"></i></button>
 
+                                    <button class="btn ms-3 btn-warning tooltip-btn d-none" style="border-radius: 5px;" type="button" data-tooltip="Clear Filter"
+                                        id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
                                     <button class="btn matchbutton ms-3 custom-icon-theme-button tooltip-btn" type="button"
                                         data-bs-toggle="modal" data-bs-target="#matchModal" data-tooltip="Matching"><i
                                             class="fa fa-random"></i></button>
@@ -1581,6 +1583,7 @@
                 e.preventDefault();
                 search_enq = '';
                 $('#resetfilter').show();
+                $('#resetfilter').removeClass('d-none');
                 $('#propertyTable').DataTable().draw();
                 $('#filtermodal').modal('hide');
             });

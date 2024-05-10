@@ -22,6 +22,7 @@
                                     data-bs-toggle="modal"
                                     data-bs-target="#userModal"
                                     data-tooltip="Add User"
+                                    onclick="resetData()"
                                 ><i class="fa fa-plus"></i>
                                 </button>
                             </div>
@@ -66,18 +67,16 @@
                             <table class="display" id="userTable">
                                 <thead>
                                     <tr>
-                                        <th>Sr No.</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
+                                        <th style="min-width:50px;">Sr No.</th>
+                                        <th style="min-width:150px;">Full Name</th>
                                         <th>State</th>
                                         <th>City</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Plan</th>
-                                        <th>Subscribed On</th>
-                                        <th>Expired On</th>
                                         <th>Company Name</th>
+                                        <th>Plan</th>
+                                        <th>Subscription</th>
+                                        <th>Expiry</th>
                                         <th>Users</th>
+                                        <th>Active</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -100,33 +99,79 @@
                 <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <div class="modal-body">
-                <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form" novalidate="">
-                    <input type="hidden" name="this_data_id" id="this_data_id">
+                <form class="form-bookmark modal_form" method="post" id="modal_form">
                     <div class="row">
-                        <div class="form-group col-md-4 m-b-20">
+                        <div class="form-group d-none">
+                            <input type="text" class="form-control" name="this_data_id" id="this_data_id">
+                        </div>
+                        <div class="form-group col-md-6 m-b-20">
                             <div class="fname">
-                                <input class="form-control" name="first_name" id="first_name" type="text" autocomplete="off" placeholder="Name" autofocus>
+                                <label for="first_name">First Name</label>
+                                <input class="form-control" name="first_name" id="first_name" type="text" autocomplete="off" autofocus>
+                            </div>
+                            <span class="custom-error d-none text-danger" id="first_name_error">First name is required.</span>
+                        </div>
+                        <div class="form-group col-md-6 m-b-20">
+                            <div class="fname">
+                                <label for="last_name">Last Name</label>  
+                                <input class="form-control" name="last_name" id="last_name" type="text" autocomplete="off">
+                            </div>
+                            <span class="custom-error d-none text-danger" id="last_name_error">Last name is required.</span>
+
+                        </div>
+                        <div class="form-group col-md-6 m-b-20">
+                            <div class="fname">
+                                <label for="email">Email</label>
+                                <input class="form-control" name="email" id="email" style="text-transform: none !important;" type="text" autocomplete="off">
+                            </div>
+                            <span class="custom-error d-none text-danger" id="email_error">Email is required.</span>
+
+                        </div>
+                        <div class="form-group col-md-6 m-b-20">
+                            <div class="fname">
+                                <label for="mobile_number">Mobile Number</label>
+                                <input class="form-control" maxlength="10" name="mobile_number" id="mobile_number" type="text" autocomplete="off">
+                            </div>
+                            <span class="custom-error d-none text-danger" id="mobile_number_error">Mobile number is required.</span>
+
+                        </div>
+                        <div class="form-group col-md-6 m-b-20">
+                            <div class="fname">
+                                <label for="password">Password</label>
+                                <input class="form-control" name="password" id="password" type="text" autocomplete="off">
+                            </div>
+                            <span class="custom-error d-none text-danger" id="password_error">Password is required.</span>
+                        </div>
+                        <div class="form-group col-md-6 m-b-20">
+                            <div class="fname">
+                                <select name="state" id="state" onchange="setCities()">
+                                    <option value="">Select State</option>
+                                    @foreach($states as $state)
+                                        <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <span class="custom-error d-none text-danger" id="state_error">State is required.</span>
+                        </div>
+                        <div class="form-group col-md-6 m-b-20">
+                            <div class="fname">
+                                <select name="city" id="city">
+                                    <option value="">Select City</option>
+                                </select>
+                                <span class="custom-error d-none text-danger" id="city_error">City is required.</span>
                             </div>
                         </div>
-                        <div class="form-group col-md-4 m-b-20">
+                        <div class="form-group col-md-6 m-b-20">
                             <div class="fname">
-                                <input class="form-control" name="last_name" id="last_name" type="text" autocomplete="off" placeholder="Last Name">
+                                <label for="company_name">Company Name</label>
+                                <input class="form-control" name="company_name" id="company_name" type="text" autocomplete="off">
                             </div>
-                        </div>
-                        <div class="form-group col-md-4 m-b-20">
-                            <div class="fname">
-                                <input class="form-control" name="email" id="email" style="text-transform: none !important;" type="text" autocomplete="off" placeholder="Email">
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4 m-b-20">
-                            <div class="fname">
-                                <input class="form-control" name="password" id="password" type="text" autocomplete="off" placeholder="Password">
-                            </div>
+                            <span class="custom-error d-none text-danger" id="company_name_error">Company name is required.</span>
                         </div>
                     </div>
 
                     <div class="text-center">
-                        <button class="btn custom-theme-button" id="saveUser">Save</button>
+                        <button class="btn custom-theme-button" type="button" id="saveUser">Save</button>
                         <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -134,9 +179,15 @@
         </div>
     </div>
 </div>
+@php
+    $states_encoded = json_encode($states);
+@endphp
+    
 @endsection
 @push('scripts')
 <script>
+
+    let states = @Json($states_encoded);
 
     function updateFilter() {
         let filterOn = document.getElementById('filter_type');
@@ -155,6 +206,25 @@
 
     function delayedFunction() {
         $('#userTable').DataTable().draw();
+    }
+
+    function setCities() {
+        let state_id = $('#state').val();
+        $('#city').val('');
+        let city_element = document.getElementById('city');
+        city_element.innerHTML = '';
+
+        let all_states = JSON.parse(states);
+
+        city_element.innerHTML += `<option value="">Select City</option>`;
+
+        if(state_id) {
+            let state_object = all_states.find((state_obj) => state_obj.id == state_id);
+            
+            state_object.cities.forEach(city => {
+                city_element.innerHTML += `<option value="${city['id']}">${city['name']}</option>`;
+            });
+        }
     }
 
     function filter() {
@@ -201,12 +271,9 @@
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 {
-                    data: 'first_name',
-                    name: 'first_name'
-                },
-                {
-                    data: 'last_name',
-                    name: 'last_name'
+                    data: "email" , render : function ( data, type, row, meta ) {
+                        return `<span>${row.first_name} ${row.last_name}</span><br> <span>${row.mobile_number}</span>`; 
+                    }
                 },
                 {
                     data: 'state_name',
@@ -217,13 +284,8 @@
                     name: 'city_name'
                 },
                 {
-                    data: "email" , render : function ( data, type, row, meta ) {
-                        return `<span style="text-transform:lowercase !important">${row.email}</span>`; 
-                    }
-                },
-                {
-                    data: 'mobile_number',
-                    name: 'mobile_number'
+                    data: 'company_name',
+                    name: 'company_name',
                 },
                 {
                     data: 'plan',
@@ -238,12 +300,12 @@
                     name: 'plan_expire_on'
                 },
                 {
-                    data: 'company_name',
-                    name: 'company_name',
-                },
-                {
                     data: 'users',
                     name: 'users'
+                },
+                {
+                    data: 'active',
+                    name: 'active'
                 },
                 {
                     data: 'Actions',
@@ -255,24 +317,12 @@
     });
 
 
-    $('#modal_form').validate({ // initialize the plugin
-        rules: {
-            first_name: {
-                required: true,
-            },
-            email: {
-                required: true,
-                email: true,
-            }
-        },
-        submitHandler: function(form) { // for demo
-            alert('valid form submitted'); // for demo
-            return false; // for demo
-        }
-    });
-
     function getUser(data) {
+        resetData();
         $('#modal_form').trigger("reset");
+
+        $('#exampleModalLabel').text('Edit User');
+
         var id = $(data).attr('data-id');
         $.ajax({
             type: "POST",
@@ -282,22 +332,101 @@
                 _token: '{{ csrf_token() }}'
             },
             success: function(data) {
-                $('#this_data_id').val(data.main_user.id)
-                $('#first_name').val(data.main_user.first_name)
-                $('#last_name').val(data.main_user.last_name)
-                $('#email').val(data.main_user.email)
+                $('#this_data_id').val(data.main_user.id).trigger('change');
+                $('#first_name').val(data.main_user.first_name).trigger('change');
+                $('#last_name').val(data.main_user.last_name).trigger('change');
+                $('#email').val(data.main_user.email).trigger('change');
+                $('#mobile_number').val(data.main_user.mobile_number).trigger('change');
+                $('#state').val(data.main_user.state_id).trigger('change');
+                setCities();
+
+                $('#city').val(data.main_user.city_id).trigger('change');
+                $('#company_name').val(data.main_user.company_name).trigger('change');
+
                 $('#userModal').modal('show');
             }
         });
     }
 
+    function resetData() {
+        let all_error = document.querySelectorAll('.custom-error');
+
+        all_error.forEach(element => {
+            element.classList.add('d-none');
+        });
+
+        $('#exampleModalLabel').text('Add User');
+
+        $('#this_data_id').val('');
+        $('#first_name').val('').trigger('change');
+        $('#last_name').val('').trigger('change');
+        $('#email').val('').trigger('change');
+        $('#mobile_number').val('').trigger('change');
+        $('#password').val('').trigger('change');
+        $('#state').val('').trigger('change');
+        $('#city').val('').trigger('change');
+        $('#company_name').val('').trigger('change');
+    }
+
     $(document).on('click', '#saveUser', function(e) {
-        e.preventDefault();
-        $("#modal_form").validate();
-        if (!$("#modal_form").valid()) {
-            return
+
+        let all_error = document.querySelectorAll('.custom-error');
+
+        var id = $('#this_data_id').val();
+
+        all_error.forEach(element => {
+            element.classList.add('d-none');
+        });
+
+        let valid = true;
+
+        if($('#first_name').val() == '') {
+            document.getElementById('first_name_error').classList.remove('d-none');
+            valid = false;
         }
-        var id = $('#this_data_id').val()
+
+        if($('#last_name').val() == '') {
+            document.getElementById('last_name_error').classList.remove('d-none');
+            valid = false;
+        }
+
+        if($('#email').val() == '') {
+            document.getElementById('email_error').classList.remove('d-none');
+            valid = false;
+        }
+
+        if($('#mobile_number').val() == '') {
+            document.getElementById('mobile_number_error').classList.remove('d-none');
+            valid = false;
+        }
+
+        if(id == '') {
+            if($('#password').val() == '') {
+                document.getElementById('password_error').classList.remove('d-none');
+                valid = false;
+            }
+
+        }
+    
+        if($('#state').val() == '') {
+            document.getElementById('state_error').classList.remove('d-none');
+            valid = false;
+        }
+
+        if($('#city').val() == '') {
+            document.getElementById('city_error').classList.remove('d-none');
+            valid = false;
+        }
+
+        if($('#company_name').val() == '') {
+            document.getElementById('company_name_error').classList.remove('d-none');
+            valid = false;
+        }
+
+        if (!valid) {
+            return;
+        }
+
         $.ajax({
             type: "POST",
             url: "{{ route('superadmin.saveUser') }}",
@@ -306,7 +435,11 @@
                 first_name: $('#first_name').val(),
                 last_name: $('#last_name').val(),
                 email: $('#email').val(),
+                mobile_number: $('#mobile_number').val(),
                 password: $('#password').val(),
+                state: $('#state').val(),
+                city: $('#city').val(),
+                company_name: $('#company_name').val(),
                 _token: '{{ csrf_token() }}',
             },
             success: function(data) {
