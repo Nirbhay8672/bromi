@@ -457,7 +457,7 @@ class AdminLoginController extends Controller
                 }
                 
                 Auth::login($user);
-                $planExpiry = today()->addYear(1);
+                $planExpiry = today()->addYear(1)->subDay();
                 
                 // adjust coupon details
                 if (!empty($orderTags['couponCode']) && !empty($orderTags['discount'])) {

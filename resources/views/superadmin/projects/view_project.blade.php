@@ -115,13 +115,8 @@
 
                                                 <div class="row pull-right" style="display: contents;">
                                                     <div class="col-md-1">
-                                                        <a href={{ URL::to("admin/Projects") }}>
+                                                        <a href={{ URL::to("superadmin/superadmin/Projects") }}>
                                                             <button class="nav-link mx-1 active" id="v-view-summary-tab">Back</button>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <a href="{{ URL::to('admin/project/edit/'.$project->id)}} ">
-                                                            <button class="nav-link mx-1 active" id="v-view-summary-tab">Edit</button>
                                                         </a>
                                                     </div>
                                                 </div>

@@ -990,7 +990,7 @@ class HomeController extends Controller
                     ]);
                 }
                 
-                $planExpiry = today()->addYear(1);
+                $planExpiry = today()->addYear(1)->subDay();
 
                 $allowedCases = ['new_subscription', 'renew_subscription', 'upgrade'];
                 // if user purchases new subscription or user renew/upgrade a subscription

@@ -3,8 +3,10 @@ namespace App\Constants;
 
 class Statuses
 {
-    const PENDING = 'Pending';
-    const READ = 'Read';
-    const IN_PROGRESS = 'In-progress';
-    const CLOSED = 'Closed';
+    const NEW_LEAD = 'New Lead'; //1
+    const Lead_CONFIRMED = 'Lead Confirmed'; //2
+    const DEMO_SCHEDULED = 'Demo Scheduled'; //3
+    const DISCUSSION = 'Discussion'; //4
+    const BOOKED = 'Booked'; //5
+    const LOST = 'Lost'; //6
 }
