@@ -500,7 +500,8 @@ class Helper
                 $existingPlanUsedPriceTillDate = $existingPlanUsedForDays * $perDayPrice;
 
                 // chargable price after upgrade plan
-                $price =  $currentPrice - $existingPlanUsedPriceTillDate;
+                $amoutWillBeDeductedFromCurrentPlanPrice =  $existingPlan->price - $existingPlanUsedPriceTillDate;
+                $price =  $currentPrice - $amoutWillBeDeductedFromCurrentPlanPrice;
                 if ($price <= 0) {
                     return $currentPrice;
                 }
