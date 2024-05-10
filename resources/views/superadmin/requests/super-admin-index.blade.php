@@ -406,8 +406,13 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
-                    $('#followup_date').val(data.brom_enq.lead_progress[0].next_follow_up_date);
-                    $('#time').val(data.brom_enq.lead_progress[0].next_follow_up_time);
+                    if (data.brom_enq.lead_progress.length > 0) {
+                        $('#followup_date').val(data.brom_enq.lead_progress[0].next_follow_up_date);
+                    }
+                    if (data.brom_enq.lead_progress.length > 0) {
+                        
+                        $('#time').val(data.brom_enq.lead_progress[0].next_follow_up_time);
+                    }
                     $('#progress_enquiry').val(data.brom_enq.enquiry);
                     $('#this_progress_data_id').val(data.brom_enq.id);
                     $('#status').val(data.brom_enq.status).trigger('change');
