@@ -29,4 +29,19 @@ class BromiEnquiry extends Model
         }
         return null;
     }
+
+    public function User()
+    {
+        return $this->belongsTo(User::class)->withTrashed();
+    }
+    
+    public function LeadProgress()
+    {
+        return $this->hasMany(LeadProgress::class, 'lead_id', 'id')->orderBy('id', 'DESC');
+    }
+    
+    public function activeProgress()
+    {
+        return $this->hasOne(LeadProgress::class, 'lead_id', 'id')->where('status', 1);
+    }
 }
