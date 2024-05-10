@@ -51,8 +51,10 @@
                                     <i class="fa fa-plus"></i>
                                 </a>
 
-                                <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#filtermodal" data-tooltip="Filter"><i class="fa fa-filter"></i></button>
+                                <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#filtermodal" data-tooltip="Filter"><i
+                                        class="fa fa-filter"></i></button>
+
 
                                 <button class="btn ms-3 btn-warning tooltip-btn d-none" style="border-radius:5px;" type="button" data-tooltip="Clear Filter"
                                     id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
@@ -61,11 +63,11 @@
                                     data-bs-toggle="modal" data-bs-target="#matchModal" data-tooltip="Matching"><i
                                         class="fa fa-random"></i></button>
 
-                                <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="exportEnquiry()" type="button"
-                                    data-tooltip="Export"><i class="fa fa-upload"></i></button>
+                                <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="exportEnquiry()"
+                                    type="button" data-tooltip="Export"><i class="fa fa-upload"></i></button>
 
-                                <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="importEnquiries()" type="button"
-                                    data-tooltip="Import"><i class="fa fa-download"></i></button>
+                                <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="importEnquiries()"
+                                    type="button" data-tooltip="Import"><i class="fa fa-download"></i></button>
 
                                 <button class="btn text-white delete_table_row ms-3 tooltip-btn"
                                     style="border-radius: 5px;display: none;background-color:red" onclick="deleteTableRow()"
@@ -118,7 +120,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add New Enquiry</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="modal_form"
@@ -395,7 +398,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Filter</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="filter_form" novalidate="">
@@ -671,7 +675,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Import Enquiries</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
@@ -698,7 +703,8 @@
                                 </div>
                                 <br>
                                 <div class="form-group col-md-5 m-b-10">
-                                    <a id="import_url" href="{{ route('admin.importenquiryTemplate') }}">Download Sample file</a>
+                                    <a id="import_url" href="{{ route('admin.importenquiryTemplate') }}">Download Sample
+                                        file</a>
                                 </div>
                                 <br>
                             </div>
@@ -716,7 +722,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Transfer Enquiry</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation " method="post" id="transfer_form" novalidate="">
@@ -903,26 +910,31 @@
             </div>
         </div> --}}
 
-        <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add Progress</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
-                        <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form" novalidate="">
+                        <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form"
+                            novalidate="">
                             <input type="hidden" name="progress_enquiry_id" id="progress_enquiry_id">
                             @forelse ($configuration_settings as $progs)
-                            @if ($progs['dropdown_for'] == 'enquiry_progress')
-                            @php
-                            $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
-                            @endphp
-                            <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
-                            @endif
+                                @if ($progs['dropdown_for'] == 'enquiry_progress')
+                                    @php
+                                        $namee = isset(explode('___', $progs['name'])[0])
+                                            ? explode('___', $progs['name'])[0]
+                                            : '';
+                                    @endphp
+                                    <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
+                                @endif
                             @empty
                             @endforelse
-        
+
                             <div class="row">
                                 <div class="form-group col-md-4 m-b-20">
                                     <label class="mb-0">Enquiry Progress: </label>
@@ -936,13 +948,15 @@
                                         @forelse ($configuration_settings as $progs)
                                             @if ($progs['dropdown_for'] == 'enquiry_progress')
                                                 @php
-                                                    $namee = isset(explode('___', $progs['name'])[0]) ? explode('___', $progs['name'])[0] : '';
+                                                    $namee = isset(explode('___', $progs['name'])[0])
+                                                        ? explode('___', $progs['name'])[0]
+                                                        : '';
                                                 @endphp
-                                                    <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
-                                                @endif
-                                                @empty
+                                                <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
+                                            @endif
+                                        @empty
                                         @endforelse
-        
+
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4 m-b-4 mb-3">
@@ -950,10 +964,11 @@
                                     <select class="form-select" id="progress_sales_comment">
                                         <option value="">Sales Comments</option>
                                         @forelse ($configuration_settings as $props)
-                                        @if ($props['dropdown_for'] == 'enquiry_sales_comment')
-                                        <option data-parent_id="{{ $props['parent_id'] }}" value="{{ $props['id'] }}">{{ $props['name'] }}
-                                        </option>
-                                        @endif
+                                            @if ($props['dropdown_for'] == 'enquiry_sales_comment')
+                                                <option data-parent_id="{{ $props['parent_id'] }}"
+                                                    value="{{ $props['id'] }}">{{ $props['name'] }}
+                                                </option>
+                                            @endif
                                         @empty
                                         @endforelse
                                     </select>
@@ -972,23 +987,27 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <input class="form-control d-none" name="schedule_remind" id="schedule_remind" type="remarks" autocomplete="off">
+                                    <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
+                                        type="remarks" autocomplete="off">
                                 </div>
                                 <div class="form-group col-md-6 m-b-20">
                                     <div class="col-12">
                                         <div class="m-checkbox-inline custom-radio-ml">
                                             <div class="form-check form-check-inline radio radio-primary">
-                                                <input class="form-check-input" id="progress_lead_type_1" type="radio" name="progress_lead_type" value="Hot Lead">
+                                                <input class="form-check-input" id="progress_lead_type_1" type="radio"
+                                                    name="progress_lead_type" value="Hot Lead">
                                                 <label class="form-check-label mb-0" for="progress_lead_type_1">Hot
                                                     Lead</label>
                                             </div>
                                             <div class="form-check form-check-inline radio radio-primary">
-                                                <input class="form-check-input" type="radio" id="progress_lead_type_2" name="progress_lead_type" value="Warm Lead">
+                                                <input class="form-check-input" type="radio" id="progress_lead_type_2"
+                                                    name="progress_lead_type" value="Warm Lead">
                                                 <label class="form-check-label mb-0" for="progress_lead_type_2"> Warm
                                                     Lead</label>
                                             </div>
                                             <div class="form-check form-check-inline radio radio-primary">
-                                                <input class="form-check-input" id="progress_lead_type_3" type="radio" name="progress_lead_type" value="Cold Lead">
+                                                <input class="form-check-input" id="progress_lead_type_3" type="radio"
+                                                    name="progress_lead_type" value="Cold Lead">
                                                 <label class="form-check-label mb-0" for="progress_lead_type_3">Cold
                                                     Lead</label>
                                             </div>
@@ -1004,21 +1023,22 @@
                                         </div> --}}
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="nfdDate" class="mb-0">Site Visit Date:</label>
-                                    <input class="form-control limitYear4digits" id="site_visit_date1" name="nfdDate" max='31-12-2050' type="date" oninput="limitYearTo4Digits1()">
+                                    <input class="form-control limitYear4digits" id="site_visit_date1" name="nfdDate"
+                                        max='31-12-2050' type="date" oninput="limitYearTo4Digits1()">
                                 </div>
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="nfdTime" class="mb-0">Site Visit Time:</label>
                                     <input class="form-control" id="site_visit_time1" name="nfdTime" type="time">
                                 </div>
-        
+
                                 <div class="form-group col-md-12 m-b-20">
                                     <label for="remarks" class="mb-0">Remarks:</label>
-                                    <input class="form-control" name="progress_remarks" id="progress_remarks" type="remarks" autocomplete="off">
+                                    <input class="form-control" name="progress_remarks" id="progress_remarks"
+                                        type="remarks" autocomplete="off">
                                 </div>
                             </div>
                             <div class="text-center mt-3">
-                                <button class="btn custom-theme-button" type="button"
-                                    id="saveProgress">Save</button>
+                                <button class="btn custom-theme-button" type="button" id="saveProgress">Save</button>
                                 <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
                                     data-bs-dismiss="modal">Cancel</button>
                             </div>
@@ -1069,8 +1089,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Show Schedule Visit</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal"
-                            aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="schedule_form"
@@ -1161,8 +1181,7 @@
                                         <label class="form-check-label" for="sms_reminder_schedule">SMS Reminder</label>
                                     </div>
                                     <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="wp_reminder" type="checkbox"
-                                            value="">
+                                        <input class="form-check-input" id="wp_reminder" type="checkbox" value="">
                                         <label class="form-check-label" for="wp_reminder">Whatsapp Reminder</label>
                                     </div>
                                 </div>
@@ -1196,7 +1215,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Contact List</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-bookmark needs-validation modal_form" method="post" id="contact_list_form"
@@ -1327,10 +1347,9 @@
     @endsection
     @push('scripts')
         <script>
-
             $(document).on('change', '#import_category', function() {
                 var type = $('#import_category option:selected').attr('data-val')
-                console.log("typetype ==",type);
+                console.log("typetype ==", type);
                 $('#import_url').attr('href', $('#import_url').attr('href') + '?type=' + type);
             })
 
@@ -1480,13 +1499,14 @@
                 $('#filter_specific_type option:selected').each(function() {
                     selectedCategories.push($(this).text().trim());
                 });
-                
+
                 console.log('selectedCategories ==', selectedCategories);
                 var url = "{{ route('admin.getEnquiryConfiguration') }}";
 
                 try {
                     var xhr = new XMLHttpRequest();
-                    xhr.open("GET", `${url}?selectedCategories=${encodeURIComponent(JSON.stringify(selectedCategories))}`, true);
+                    xhr.open("GET",
+                        `${url}?selectedCategories=${encodeURIComponent(JSON.stringify(selectedCategories))}`, true);
 
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -1519,7 +1539,7 @@
             });
 
 
-           
+
 
             var search_enq = '';
             var queryString = window.location.search;
@@ -1568,16 +1588,19 @@
                 $.ajax({
                     type: "GET",
                     url: "{{ route('admin.enquiry.category') }}",
-                    data: { id: dataId },
+                    data: {
+                        id: dataId
+                    },
                     success: function(data) {
                         console.log("Dataaaa Matching Category :", data.property_type);
                         // let redirectUrl = (data.property_type == 261) ? "{{ route('admin.industrial.properties') }}" :
                         //      (data.property_category == 262) ? "{{ route('admin.land.properties') }}" :
                         //      "{{ route('admin.properties') }}";
+                        // alert("data.property_category",data.property_category)
                         let redirectUrl;
                         if (data.property_type == 261) {
                             redirectUrl = "{{ route('admin.industrial.properties') }}";
-                        } else if (data.property_category == 262) {
+                        } else if (data.property_type == 262) {
                             redirectUrl = "{{ route('admin.land.properties') }}";
                         } else {
                             redirectUrl = "{{ route('admin.properties') }}";
@@ -1594,8 +1617,8 @@
 
             function matchingProperty(data) {
                 $('#matchModal').modal('show');
-                let enquiryId = $(data).attr('data-id'); 
-                $('#matchagain').attr('data-id', enquiryId); 
+                let enquiryId = $(data).attr('data-id');
+                $('#matchagain').attr('data-id', enquiryId);
             }
 
             $(document).on('change', '#select_all_checkbox', function(e) {
@@ -1686,9 +1709,11 @@
                 var queryString = window.location.search;
                 var urlParams = new URLSearchParams(queryString);
                 var go_data_id = urlParams.get('data_id')
-
-                $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
-                    .prop('checked', true);
+                console.log("window.location.pathname", window.location.pathname.toLowerCase());
+                if (window.location.pathname.toLowerCase() === '/admin/enquiries' && window.location.search === '?') {
+                    $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                        .prop('checked', true);
+                }
 
                 $('#match_enquiry_all').on('change', function() {
                     let isChecked = $(this).prop('checked');
@@ -1766,7 +1791,10 @@
                             name: 'telephonic_discussion',
                             render: function(data, type, full, meta) {
                                 if (data && data.length > 100) {
-                                    return '<div style="max-width:250px"><span class="truncated">' + data.substr(0, 100) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span></div>';
+                                    return '<div style="max-width:250px"><span class="truncated">' +
+                                        data.substr(0, 100) +
+                                        '...</span><span class="full" style="display:none;">' + data +
+                                        '</span><span class="read-more">Read More</span></div>';
                                 } else {
                                     return `<div style="max-width:250px"><span class="truncated full">${data}</span></div>`;
                                 }

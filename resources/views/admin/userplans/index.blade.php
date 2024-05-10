@@ -37,7 +37,7 @@
                         <div class="card-body pricing-content pricing-col">
                             <div class="row">
 								@foreach ($plans as $plan)
-								<div class="col-xl-3 col-sm-6 xl-50 box-col-6">
+								<div class="col-xl-4 col-sm-4 box-col-6">
                                     <div class="pricing-block card text-center">
                                         <div class="pricing-header">
                                             <h4 class="mt-5">{{$plan->name}}</h4>
@@ -84,7 +84,7 @@
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#couponModal"
                                                             onclick="setDetails({{ $plan->id }}, {{ $plan->price }}, '{{ $plan->name }}', '{{ $gstType }}', '{{ $gst }}')"
-                                                        >Subscribe</button>
+                                                        >Upgrade</button>
                                                     @endif
                                                 @endif
 											</form>
