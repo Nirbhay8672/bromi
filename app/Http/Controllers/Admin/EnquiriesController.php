@@ -239,27 +239,41 @@ class EnquiriesController extends Controller
 							}
 
 							// budget from - budget to
+							// if ($request->match_budget_from_type) {
+							// 	$value = $pro->survey_price; // Get the value from the request
+							// 	$unitDetails = json_decode($pro->unit_details, true);
+							// 	dd("match_budget_from_type", $request->match_budget_from_type, "..", $value,$unitDetails[0][4]);
+							// 	$unit_price = $unitDetails[0][4];
+							// 	if ($value != '' || $value !== null) {
+							// 		$query
+							// 			->where('budget_from', '<=', $pro->survey_price)
+							// 			->where('budget_to', '>=', $pro->survey_price);
+							// 			// 5000
+							// 	} else if ($unit_price != '') {
+							// 		$query
+							// 			->where('budget_from', '<=', $unit_price)  // 1000
+							// 			->where('budget_to', '>=', $unit_price); // 5000
+							// 	}
+							// 	// dd("query :",$query->toSql());
+
+							// }
+							
 							if ($request->match_budget_from_type) {
-								$value = $pro->survey_price; // Get the value from the request
+								$survey_price = (int) $pro->survey_price; // Cast to integer
 								$unitDetails = json_decode($pro->unit_details, true);
-								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $value,$unitDetails[0][4]);
-								$unit_price = $unitDetails[0][4];
-								if ($value != '' || $value !== null) {
+								$unit_price = (int) str_replace(',', '', $unitDetails[0][4]); // Remove comma from unit_price and cast to integer
+								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $survey_price,"unit", $unit_price);
+								if ($survey_price !== '' && $survey_price !== null && $survey_price !== 0) {
 									$query
-										->where('budget_from', '<=', $pro->survey_price)
-										->where('budget_to', '>=', $pro->survey_price);
-										// 5000
-								} else if ($unit_price != '') {
+										->where('budget_from', '<=', $survey_price)
+										->where('budget_to', '>=', $survey_price);
+								} else if ($unit_price !== '' && $unit_price !== null) {
 									$query
-										->where('budget_from', '<=', $unit_price)  // 1000
+										->where('budget_from', '<=', $unit_price)  // 1500
 										->where('budget_to', '>=', $unit_price); // 5000
 								}
 							}
-
-							// Advertise Prop =  sorce enq
-							// if ($request->match_inquiry_source) {
-							// 	$query->where('enquiry_source', $pro->source_of_property);
-							// }
+							
 
 							// size range = prop salable area
 							if ($request->match_enquiry_size) {
