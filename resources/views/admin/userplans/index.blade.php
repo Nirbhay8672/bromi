@@ -32,7 +32,7 @@
                             <div style="border-radius: 12px 12px 0 0;text-align: center;" class="alert alert-danger">{{ Session::get('plan_expired_redirection') }}</div>
                         @endif
                         <div class="card-header pb-0">
-                            <h5>Pricing</h5>
+                            <h5>Plans</h5>
                         </div>
                         <div class="card-body pricing-content pricing-col">
                             <div class="row">
@@ -74,7 +74,10 @@
                                                 ?>
 
                                                 @if($current_plan['id'] == $plan->id)
-                                                    <h2><span class="badge badge-warning">Active Plan</span></h2>
+                                                    <button
+                                                        class="btn btn-primary btn-lg"
+                                                        type="button"
+                                                    >Active Plan</button>
                                                 @else
                                                     @if($plan->price > $current_plan['price'] )
                                                         <button

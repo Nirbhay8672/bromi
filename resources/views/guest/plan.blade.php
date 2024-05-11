@@ -28,7 +28,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5>Pricing</h5>
+                            <h5>Plans</h5>
                         </div>
                         <div class="card-body pricing-content pricing-col">
                             <div class="row">

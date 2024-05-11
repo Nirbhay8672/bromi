@@ -1170,7 +1170,7 @@ class HomeController extends Controller
 
 		$builder =  Builders::get()->where('user_id', Auth::user()->id)->count();
 		$branch =  Branches::get()->where('user_id', Auth::user()->id)->count();
-		$user =  User::where('parent_id',Auth::User()->id)->orWhere('id',Auth::User()->id)->get()->count()-1;
+		$user =  User::where('parent_id',Auth::User()->id)->orWhere('id',Auth::User()->id)->get()->count();
 		$role = Role::where('user_id', Session::get('parent_id'))->get()->count();
 		$enquiry = DropdownSettings::where('dropdown_for', 'LIKE', "%enquiry_%")->get()->count();
 		$building = DropdownSettings::where('dropdown_for', 'LIKE', "%building_%")->get()->count();

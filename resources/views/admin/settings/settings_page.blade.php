@@ -11,6 +11,94 @@
         <div class="container-fluid general-widget">
             <div class="row">
 
+                <div class="col-xl-3 col-md-6">
+                    <div class="card crypto-chart overflow-hidden">
+                        <div class="card-header card-no-border">
+                            <a href="{{ route('admin.profile.details') }}">
+                                <div class="media pb-3">
+                                    <div class="media-body">
+                                        <div class="coin-logo-img bg-primary">
+                                            <i data-feather="user"></i>
+                                        </div>
+                                        <h5 class="font-primary">Profile</h5>
+                                    </div>
+                                    <div class="media-end">
+                                        <h4 class="mb-0 counter">1</h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                @can('user-list')
+                <div class="col-xl-3 col-md-6">
+                    <div class="card crypto-chart overflow-hidden">
+                        <div class="card-header card-no-border">
+                            <a href="{{ route('admin.users') }}">
+                                <div class="media pb-3">
+                                    <div class="media-body">
+                                        <div class="coin-logo-img bg-primary">
+                                            <i data-feather="users"></i>
+                                        </div>
+                                        <h5 class="font-primary">Users</h5>
+                                    </div>
+                                    <div class="media-end">
+                                        <h4 class="mb-0 counter">{{ $user }}</h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @endcan
+
+                @can('role-list')
+                <div class="col-xl-3 col-md-6">
+                    <div class="card crypto-chart overflow-hidden">
+                        <div class="card-header card-no-border">
+                            <a href="{{ route('admin.roles') }}">
+                                <div class="media pb-3">
+                                    <div class="media-body">
+                                        <div class="coin-logo-img bg-primary">
+                                            <i data-feather="unlock"></i>
+                                        </div>
+                                        <h5 class="font-primary">Roles</h5>
+                                    </div>
+                                    <div class="media-end">
+                                        <h4 class="mb-0 counter">{{ $role }}</h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @endcan
+
+                
+                @can('settings-branches')
+                <div class="col-xl-3 col-md-6">
+                    <div class="card crypto-chart overflow-hidden">
+                        <div class="card-header card-no-border">
+                            <a href="{{ route('admin.branches') }}">
+                                <div class="media pb-3">
+                                    <div class="media-body">
+                                        <div class="coin-logo-img bg-primary">
+                                            <i data-feather="monitor"></i>
+                                        </div>
+                                        <h5 class="font-primary">Branches</h5>
+                                    </div>
+                                    <div class="media-end">
+                                        <h4 class="mb-0 counter">{{ $branch }}</h4>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @endcan
+
                 @can('settings-states')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
@@ -157,73 +245,41 @@
                 </div>
                 @endcan
 
-
-                @can('settings-branches')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
-                            <a href="{{ route('admin.branches') }}">
+                            <a href="{{ route('createInvoice') }}">
                                 <div class="media pb-3">
                                     <div class="media-body">
-                                        <div class="coin-logo-img bg-primary">
-                                            <i data-feather="monitor"></i>
+                                        <div class="fa fa-credit-card bg-primary" style="font-size:36px">
+                                            <i data-feather="users" class="d-none"></i>
                                         </div>
-                                        <h5 class="font-primary">Branches</h5>
+                                        <h5 class="font-primary ms-3">Invoice</h5>
                                     </div>
                                     <div class="media-end">
-                                        <h4 class="mb-0 counter">{{ $branch }}</h4>
                                     </div>
                                 </div>
                             </a>
                         </div>
                     </div>
                 </div>
-                @endcan
-
-
-                @can('user-list')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
-                            <a href="{{ route('admin.users') }}">
+                            <a href="{{ route('admin.VisitingCard') }}">
                                 <div class="media pb-3">
                                     <div class="media-body">
-                                        <div class="coin-logo-img bg-primary">
-                                            <i data-feather="users"></i>
+                                        <div class="fa fa-file bg-primary" style="font-size:36px">
                                         </div>
-                                        <h5 class="font-primary">Users</h5>
+                                        <h5 class="font-primary ms-3">Visiting Card</h5>
                                     </div>
                                     <div class="media-end">
-                                        <h4 class="mb-0 counter">{{ $user }}</h4>
                                     </div>
                                 </div>
                             </a>
                         </div>
                     </div>
                 </div>
-                @endcan
-
-                @can('role-list')
-                <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
-                        <div class="card-header card-no-border">
-                            <a href="{{ route('admin.roles') }}">
-                                <div class="media pb-3">
-                                    <div class="media-body">
-                                        <div class="coin-logo-img bg-primary">
-                                            <i data-feather="unlock"></i>
-                                        </div>
-                                        <h5 class="font-primary">Roles</h5>
-                                    </div>
-                                    <div class="media-end">
-                                        <h4 class="mb-0 counter">{{ $role }}</h4>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                @endcan
 
                 @can('settings-property-configuration')
                 <div class="col-xl-3 col-md-6">
@@ -236,9 +292,6 @@
                                             <i data-feather="grid"></i>
                                         </div>
                                         <h5 class="font-primary">Property Configuration</h5>
-                                    </div>
-                                    <div class="media-end">
-                                        <h4 class="mb-0 counter">{{ $property }}</h4>
                                     </div>
                                 </div>
                             </a>
@@ -261,7 +314,7 @@
                                         <h5 class="font-primary">Building Configuration</h5>
                                     </div>
                                     <div class="media-end">
-                                        <h4 class="mb-0 counter">{{ $building }}</h4>
+                                        <h4 class="mb-0 counter">11</h4>
                                     </div>
                                 </div>
                             </a>
@@ -291,63 +344,6 @@
                     </div>
                 </div>
                 @endcan
-
-                
-                <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
-                        <div class="card-header card-no-border">
-                            <a href="{{ route('admin.profile.details') }}">
-                                <div class="media pb-3">
-                                    <div class="media-body">
-                                        <div class="coin-logo-img bg-primary">
-                                            <i data-feather="user"></i>
-                                        </div>
-                                        <h5 class="font-primary">Profile</h5>
-                                    </div>
-                                    <div class="media-end">
-                                        <h4 class="mb-0 counter">1</h4>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                  <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
-                        <div class="card-header card-no-border">
-                            <a href="{{ route('createInvoice') }}">
-                                <div class="media pb-3">
-                                    <div class="media-body">
-                                        <div class="fa fa-credit-card bg-primary" style="font-size:36px">
-                                            <i data-feather=""></i>
-                                        </div>
-                                        <h5 class="font-primary"> &nbsp;Invoice</h5>
-                                    </div>
-                                    <div class="media-end">
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
-                        <div class="card-header card-no-border">
-                            <a href="{{ route('admin.VisitingCard') }}">
-                                <div class="media pb-3">
-                                    <div class="media-body">
-                                        <div class="fa fa-file bg-primary" style='font-size:36px'>
-                                            <i data-feather="user"></i>
-                                        </div>
-                                        <h5 class="font-primary"> &nbsp; &nbsp;Visiting Card</h5>
-                                    </div>
-                                    <div class="media-end">
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
