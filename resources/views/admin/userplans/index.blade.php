@@ -77,6 +77,7 @@
                                                     <button
                                                         class="btn btn-primary btn-lg"
                                                         type="button"
+                                                        disabled
                                                     >Active Plan</button>
                                                 @else
                                                     @if($plan->price > $current_plan['price'] )
