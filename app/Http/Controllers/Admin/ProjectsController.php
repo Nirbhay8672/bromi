@@ -10,6 +10,7 @@ use App\Models\Builders;
 use App\Models\BuildingImages;
 use App\Models\City;
 use App\Models\DropdownSettings;
+use App\Models\LandUnit;
 use App\Models\Projects;
 use App\Models\Properties;
 use App\Models\State;
@@ -153,6 +154,9 @@ class ProjectsController extends Controller
 			258 => 'Farmhouse'
 		];
 
+		$map_units = LandUnit::all();
+		$mapRecordsByKey = $map_units->keyBy('id');
+
 		$project->category_name = $categories[$project->property_category] ?? '';
 
 		$project->towers_details = json_decode($project->tower_details, true);
@@ -175,8 +179,14 @@ class ProjectsController extends Controller
 
 		$project->amenity_array = json_decode($project->amenities, true);
 		$project->other_documents = json_decode($project->other_documents, true) ?? [];
+	
+		$new_array = [];
 
-		return view('admin.projects.view_project')->with(['project' => $project]);
+		foreach ($mapRecordsByKey as $key => $value) {
+			$new_array[$key] = $value['unit_name'];
+		}
+
+		return view('admin.projects.view_project')->with(['project' => $project, 'mapunits' => $new_array]);
 	}
 
 	public function changeProjectStatus(Request $request){
