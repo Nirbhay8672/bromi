@@ -22,20 +22,63 @@
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
                                     
-                                    <span
+                                    <!-- <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_construction_type"
                                         class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
+                                    ><i class="fa fa-plus"></i></span> -->
 
                                     <h6>Property Construction Type</h6>
                                     <div class="row details mt-5">
-                                        <ul class="drop_list_container" id="property_construction_type_ul">
+
+                                        <div class="col-lg-6 col-md-6 sm-12 d-inline-block"><div class="row"> <div class="col-lg-7 col-md-7 col-sm-12 mb-2">Industrial</div> <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right"></div></div></div>
+                                        <div class="col-lg-6 col-md-6 sm-12 d-inline-block"><div class="row"> <div class="col-lg-7 col-md-7 col-sm-12 mb-2">Residential</div> <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right"></div></div></div>
+                                        <div class="col-lg-6 col-md-6 sm-12 d-inline-block"><div class="row"> <div class="col-lg-7 col-md-7 col-sm-12 mb-2">Commercial</div> <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right"></div></div></div>
+                                        <div class="col-lg-6 col-md-6 sm-12 d-inline-block"><div class="row"> <div class="col-lg-7 col-md-7 col-sm-12 mb-2">Residential & Commercial</div> <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right"></div></div></div>
+                                        <div class="col-lg-6 col-md-6 sm-12 d-inline-block"><div class="row"> <div class="col-lg-7 col-md-7 col-sm-12 mb-2">Office & Retail</div> <div class="col-lg-4 col-md-4 col-sm-12 mb-2" style="text-align:right"></div></div></div>
+
+                                        <ul class="drop_list_container d-none " id="property_construction_type_ul">
 
                                         </ul>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-xxl-6 box-col-6 col-lg-6">
+                                <div class="project-box">
+                                    <!-- <span
+                                        id="openAddFieldMOdal"
+                                        data-dropdown_for="property_specific_type"
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span> -->
+
+                                    <h6>Category</h6>
+                                    <div class="row details mt-5">
+                                        <ul class="drop_list_container" id="property_specific_type_ul">
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xxl-6 box-col-6 col-lg-6">
+                                <div class="project-box">
+<!-- 
+                                    <span
+                                        id="openAddFieldMOdal"
+                                        data-dropdown_for="property_plan_type"
+                                        class="badge btn btn-primary badge-primary"
+                                    ><i class="fa fa-plus"></i></span> -->
+
+                                    <h6>Sub Category</h6>
+                                    <div class="row details mt-5">
+                                        <ul class="drop_list_container" id="property_plan_type_ul">
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
                                     <!-- <span
@@ -52,29 +95,14 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
-                                    <span
-                                        id="openAddFieldMOdal"
-                                        data-dropdown_for="property_specific_type"
-                                        class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
-
-                                    <h6>Category</h6>
-                                    <div class="row details mt-5">
-                                        <ul class="drop_list_container" id="property_specific_type_ul">
-
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-                                    <span
+                                    <!-- <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_source"
                                         class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
+                                    ><i class="fa fa-plus"></i></span> -->
 
                                     <h6>Property Source</h6>
                                     <div class="row details mt-5">
@@ -87,11 +115,11 @@
                             <div class="col-xxl-6 box-col-6 col-lg-6" style="display: none">
                                 <div class="project-box">
                                     
-                                    <span
+                                    <!-- <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_for"
                                         class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
+                                    ><i class="fa fa-plus"></i></span> -->
 
                                     <h6>Property For</h6>
                                     <div class="row details mt-5">
@@ -101,31 +129,15 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
 
-                                    <span
-                                        id="openAddFieldMOdal"
-                                        data-dropdown_for="property_plan_type"
-                                        class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
-
-                                    <h6>Sub Category</h6>
-                                    <div class="row details mt-5">
-                                        <ul class="drop_list_container" id="property_plan_type_ul">
-
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xxl-6 box-col-6 col-lg-6">
-                                <div class="project-box">
-
-                                    <span
+                                    <!-- <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_owner_type"
                                         class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
+                                    ><i class="fa fa-plus"></i></span> -->
 
                                     <h6>Owner Type</h6>
                                     <div class="row details mt-5">
@@ -138,11 +150,11 @@
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
 
-                                    <span
+                                    <!-- <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_furniture_type"
                                         class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
+                                    ><i class="fa fa-plus"></i></span> -->
 
                                     <h6>Furniture Type</h6>
                                     <div class="row details mt-5">
@@ -154,11 +166,11 @@
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6 d-none">
                                 <div class="project-box">
-                                    <span
+                                    <!-- <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_measurement_type"
                                         class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
+                                    ><i class="fa fa-plus"></i></span> -->
 
                                     <h6>Mesurement Type
                                     </h6>
@@ -171,12 +183,12 @@
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
-
+<!-- 
                                     <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_zone"
                                         class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
+                                    ><i class="fa fa-plus"></i></span> -->
                                     
                                     <h6>Property Zone</h6>
                                     <div class="row details mt-5">
@@ -189,11 +201,11 @@
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
 
-                                    <span
+                                    <!-- <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_amenities"
                                         class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
+                                    ><i class="fa fa-plus"></i></span> -->
 
                                     <h6>Amenities</h6>
                                     <div class="row details mt-5">
@@ -205,11 +217,11 @@
                             </div>
                             <div class="col-xxl-6 box-col-6 col-lg-6">
                                 <div class="project-box">
-                                    <span
+                                    <!-- <span
                                         id="openAddFieldMOdal"
                                         data-dropdown_for="property_construction"
                                         class="badge btn btn-primary badge-primary"
-                                    ><i class="fa fa-plus"></i></span>
+                                    ><i class="fa fa-plus"></i></span> -->
 
                                     <h6>Property Construction Documents</h6>
                                     <div class="row details mt-5">

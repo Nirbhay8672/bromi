@@ -40,6 +40,12 @@
     <link id="color" rel="stylesheet" href="{{ asset('admins/assets/css/color-1.css') }}" media="screen">
     <!-- Responsive css-->
     <link rel="stylesheet" type="text/css" href="{{ asset('admins/assets/css/responsive.css') }}">
+
+    <style>
+        .custom-input-border {
+            border: 1px solid blue;
+        }
+    </style>
 </head>
 
 <body>
@@ -49,7 +55,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="login-card">
-                    <form class="theme-form login-form" method="post" action="{{ route('admin.login') }}">
+                    <form class="theme-form login-form" style="width: 450px !important;" method="post" action="{{ route('admin.login') }}">
 						<img height="150" width="150" class="mainLogo" src="{{ asset('admins/assets/images/logo/Bromi-Logo.png') }}" alt="">
 						@csrf
                         <h4>Login</h4>
@@ -69,7 +75,7 @@
                         @endif
                         <div class="form-group">
                             <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
-                                <input class="form-control" value="{{ old('email') }}" name="email" type="email"
+                                <input class="form-control custom-input-border" value="{{ old('email') }}" name="email" type="email"
                                     required="" placeholder="Enter Email Address" @error('email') is-invalid @enderror
                                     autofocus>
                                 @error('email')
@@ -81,7 +87,7 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
-                                <input class="form-control" type="password" name="password"
+                                <input class="form-control custom-input-border" type="password" name="password"
                                     @error('password') is-invalid @enderror required="" placeholder="Enter Password">
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -92,14 +98,12 @@
                         </div>
 
                         <div class="form-group">
-                            <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+                            <button class="btn btn-primary" style="border-radius: 5px;" type="submit">Sign in</button>
                         </div>
 						<div class="form-group">
     							<a href="{{route('admin.forgotpassword')}}" class="forgot-password-link">Forgot Password?</a>
 						</div>
 						<p>Don't have an account?<a class="ms-2" href="{{route('admin.register')}}">Create Account</a></p>
-
-
                     </form>
                 </div>
             </div>

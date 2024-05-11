@@ -37,7 +37,6 @@ class UserController extends Controller
 	{
 		if ($request->ajax()) {
 			$data = User::where('parent_id', Auth::user()->id)
-				->where('id','!=',Auth::user()->id)
 				->when($request->go_data_id, function ($query) use ($request) {
 					return $query->where('id', $request->go_data_id);
 				})->when(empty($request->go_data_id), function ($query) use ($request) {
@@ -45,7 +44,7 @@ class UserController extends Controller
 				})->orderBy('id','desc')
 				->get();
 
-			$new_data = $data->where('id','!=',Auth::user()->id);
+			$new_data = $data;
 
 			return DataTables::of($new_data)
 				->editColumn('email', function ($row) {
@@ -80,9 +79,23 @@ class UserController extends Controller
 						}
 						$hiring_days = "<div>".$str.'  ago </div>';
 					}
+
+					$parent_user_name = '';
+
+					if($row->parent_id) {
+						$user = User::find($row->parent_id);
+						$parent_user_name = $user->first_name ?? '' . $user->last_name ?? '';   
+					}
+
+					$created_by = '';
+
+					if($parent_user_name) {
+						$created_by = '<div>Created By : '.$parent_user_name.'</div>';
+					}
+
 					$created_at = '<div>Created At: '.date('d/m/Y',strtotime($row->created_at)).'</div>';
 					$updated_at = '<div>Last Modify At: '.date('d/m/Y',strtotime($row->updated_at)).'</div>';
-					return $hiring_days.$created_at.$updated_at;
+					return $hiring_days.$created_by.$created_at.$updated_at;
 				})
 				->editColumn('Actions', function ($row) {
 					$buttons = '';
@@ -97,14 +110,16 @@ class UserController extends Controller
 						return ($var['name'] == 'user-delete');
 					});
 
-					if(count($edit_permission) > 0) {
-						$buttons =  $buttons . '<a href="'.route('admin.user.edit',$row->id).'"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+					if(Auth::user()->id != $row->id) {
+						if(count($edit_permission) > 0) {
+							$buttons =  $buttons . '<a href="'.route('admin.user.edit',$row->id).'"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+						}
+	
+						if(count($delete_permission) > 0) {
+							$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteUser(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+						}	
 					}
-
-					if(count($delete_permission) > 0) {
-						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteUser(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
-					}
-
+					
 					return $buttons;
 				})
 				->rawColumns(['Actions','status','email'])

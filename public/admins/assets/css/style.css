@@ -26701,7 +26701,7 @@ ul.pro-services li:nth-child(n + 2) {
 }
 .login-form {
   padding: 30px;
-  width: 450px;
+  width: 600px;
   background: url(../images/Pbg-dotted.jpg) no-repeat #fff;
   background-position: 50% -15%;
   -webkit-box-pack: center;
@@ -29582,7 +29582,6 @@ ul.pro-services li:nth-child(n + 2) {
 .user-profile .profile-header .userpro-box {
   background-color: #fff;
   padding: 30px;
-  max-width: 380px;
   margin-top: auto;
   margin-bottom: auto;
   text-align: center;
@@ -57449,10 +57448,11 @@ html[dir="rtl"]
 }
 
 .mainLogo{
-    margin-left: 30%;
+    margin-left: 37%;
 	background: #fff;
 	box-shadow: -2px -10px 15px rgb(0 0 0 / 20%);
     border-top-right-radius: 45px;
+    margin-bottom: 10px;
 }
 
 .ui-front{

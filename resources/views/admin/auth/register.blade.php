@@ -39,6 +39,27 @@
     <!-- Responsive css-->
     <link rel="stylesheet" type="text/css" href="{{ asset('admins/assets/css/responsive.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('admins/assets/css/vendors/select2.css') }}">
+
+    <style>
+        .custom-input-border {
+            border: 1px solid blue;
+        }
+
+        .custom-select-border {
+            border: 1px solid blue;
+            border-bottom: none;
+        }
+
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #e8e9ec !important;
+            border-radius: 3px !important;
+            height: 45px !important;
+        }
+
+        .select2-dropdown {
+            border: 1px solid #e8e9ec !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -64,11 +85,49 @@
                                 <strong>{{ $message }}</strong>
                             </div>
                         @endif
+
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input
-                                        class="form-control @error('first_name') is-invalid @enderror"
+                                        class="form-control custom-input-border @error('company_name') is-invalid @enderror"
+                                        value="{{ old('company_name') }}"
+                                        name="company_name"
+                                        type="text"
+                                        placeholder="Company Name"
+                                        autocomplete="off"
+                                        style="text-transform: capitalize;"
+                                    >
+                                    @error('company_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select
+                                    class="@error('role_id') is-invalid @enderror"
+                                    name="role_id"
+                                    id="role_id"
+                                >   
+                                    <option value="">Account Created For</option>
+                                    <option value="1" {{ old('role_id') == 1 ? 'selected' : '' }}>Agent</option>
+                                    <option value="4" {{ old('role_id') == 4 ? 'selected' : '' }}>Builder</option>
+                                </select>
+                                @error('role_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
+                                    <input
+                                        class="form-control custom-input-border @error('first_name') is-invalid @enderror"
                                         value="{{ old('first_name') }}"
                                         name="first_name"
                                         type="text"
@@ -87,7 +146,7 @@
                             <div class="form-group col-md-6">
                                 <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
                                     <input
-                                        class="form-control @error('last_name') is-invalid @enderror"
+                                        class="form-control custom-input-border @error('last_name') is-invalid @enderror"
                                         value="{{ old('last_name') }}"
                                         name="last_name"
                                         type="text"
@@ -107,7 +166,7 @@
                             <div class="form-group col-md-6">
                                 <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
                                     <input
-                                        class="form-control @error('email') is-invalid @enderror"
+                                        class="form-control custom-input-border @error('email') is-invalid @enderror"
                                         value="{{ old('email') }}"
                                         name="email"
                                         type="email"
@@ -125,7 +184,7 @@
                                 <div class="input-group"><span class="input-group-text">
                                     <i class="icon-mobile"></i></span>
                                     <input
-                                        class="form-control @error('mobile_number') is-invalid @enderror"
+                                        class="form-control custom-input-border @error('mobile_number') is-invalid @enderror"
                                         value="{{ old('mobile_number') }}"
                                         name="mobile_number"
                                         type="text"
@@ -141,45 +200,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-6">
-                                <div class="input-group"><span class="input-group-text"><i class="icon-user"></i></span>
-                                    <input
-                                        class="form-control @error('company_name') is-invalid @enderror"
-                                        value="{{ old('company_name') }}"
-                                        name="company_name"
-                                        type="text"
-                                        placeholder="Company Name"
-                                        autocomplete="off"
-                                        style="text-transform: capitalize;"
-                                    >
-                                    @error('company_name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6 mt-1">
-                                <select
-                                    class="form-select form-control @error('role_id') is-invalid @enderror"
-                                    name="role_id"
-                                    id="role_id"
-                                >   
-                                    <option value="">Account Created For</option>
-                                    <option value="1" {{ old('role_id') == 1 ? 'selected' : '' }}>Agent</option>
-                                    <option value="4" {{ old('role_id') == 4 ? 'selected' : '' }}>Builder</option>
-                                </select>
-                                @error('role_id')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="form-group col-md-6 m-b-4 mb-3">
                                 <select
-                                    class="form-select @error('state_id') is-invalid @enderror"
+                                    class="form-select custom-input-border @error('state_id') is-invalid @enderror"
                                     name="state_id"
                                     id="state_id"
                                 >
@@ -201,7 +224,7 @@
                             </div>
                             <div class="form-group col-md-6 m-b-4 mb-3">
                                 <select
-                                    class="form-select @error('state_id') is-invalid @enderror"
+                                    class="form-select custom-input-border @error('state_id') is-invalid @enderror"
                                     name="city_id"
                                     id="city_id"
                                 >
@@ -218,7 +241,7 @@
                             <div class="form-group col-md-6">
                                 <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
                                     <input
-                                        class="form-control @error('password') is-invalid @enderror"
+                                        class="form-control custom-input-border @error('password') is-invalid @enderror"
                                         type="password"
                                         name="password"
                                         value=""
@@ -235,7 +258,7 @@
                             <div class="form-group col-md-6">
                                 <div class="input-group"><span class="input-group-text"><i class="icon-lock"></i></span>
                                     <input
-                                        class="form-control @error('password_confirmation') is-invalid @enderror"
+                                        class="form-control custom-input-border @error('password_confirmation') is-invalid @enderror"
                                         type="password"
                                         value=""
                                         name="password_confirmation"
@@ -251,7 +274,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-primary btn-block" type="submit">Register Now</button>
+                            <button class="btn btn-primary" style="border-radius: 5px;" type="submit">Register Now</button>
                         </div>
                         <p>Already have an account ?<a class="ms-2" href="{{ route('admin.login') }}">Login Here</a>
                         </p>

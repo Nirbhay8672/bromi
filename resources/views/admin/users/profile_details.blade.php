@@ -116,25 +116,24 @@
                             </div>
                         </div>
                         <div class="form-group col-md-6 m-b-4 mb-3">
-                            <div class="fname {{ $user->address ? 'focused' : '' }}">
-                                <label for="address">Address</label>
-                                <input type="text" placeholder="Address" name="address" class="form-control" id="address" value="{{ $user->address }}">
+                            <div class="fname {{ $user->rera ? 'focused' : '' }}">
+                                <label for="rera">Rera</label>
+                                <input type="text" name="rera" class="form-control" id="rera" value="{{ $user->rera }}">
                             </div>
                         </div>
                         <div class="form-group col-md-6 m-b-4 mb-3">
                             <div class="fname {{ $user->gst ? 'focused' : '' }}">
                                 <label for="gst">GST</label>
-                                <input type="text" placeholder="Gst Number" name="gst" class="form-control" id="gst" value="{{ $user->gst }}">
-                            </div>
-                        </div>
-                        <div class="form-group col-md-6 m-b-4 mb-3">
-                            <div class="fname {{ $user->rera ? 'focused' : '' }}">
-                                <label for="rera">Rera</label>
-                                <input type="text" placeholder="Rera Number" name="rera" class="form-control" id="rera" value="{{ $user->rera }}">
+                                <input type="text" name="gst" class="form-control" id="gst" value="{{ $user->gst }}">
                             </div>
                         </div>
                         <div class="form-group col-md-6 m-b-4 mb-3">
                             <input type="file" name="profile_image" class="form-control" id="profile_image" accept="image/png, image/jpeg" style="border: 1px solid black;border-radius: 5px;">
+                        </div>
+                        <div class="form-group col-md-6 m-b-4 mb-3">
+                            <div class="fname {{ $user->address ? 'focused' : '' }}">
+                                <textarea type="text" name="address" class="form-control" placeholder="Enter address" id="address">{{ $user->address ?? '-' }}</textarea>
+                            </div>
                         </div>
                         <input type="hidden" name="shar_string" id="shar_string">
                     </div>
@@ -175,7 +174,7 @@
                             <div class="card profile-header" style="height:auto;background-image: url(&quot;../assets/images/user-profile/bg-profile.jpg&quot;); background-size: cover; background-position: center center; display: block;">
                                 <div class="row">
                                     <div class="col-12 col-sm-4 col-md-4 col-lg-4">
-                                        <div class="userpro-box" style="background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
+                                        <div class="userpro-box" style="background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;width:100% !important;">
                                             <div class="img-wrraper">
                                                 <img src="{{ Auth::user()->company_logo ? asset('storage/file_image'.'/'.Auth::user()->company_logo) : asset('Bromi-Logo-card.png')}}" alt="Avatar" style="width:150px;height:150px;">
                                             </div>
@@ -231,7 +230,7 @@
                                                     <input type="hidden" name="gst_amt_type" class="form-control mt-2" value="{{ $gst_type }}" id="gstAmtType">
                                                     
                                                     <button style="display: none;"
-                                                        class="btn btn-primary btn-lg pay-now" 
+                                                        class="btn btn-primary btn-lg pay-now"
                                                         id="pay-now-btn" 
                                                         type="button"
                                                         data-bs-toggle="modal"
@@ -287,6 +286,7 @@
                                                                 <small class="text-muted">( City )</small>
                                                             </div>
                                                         </li>
+                                                        @if(isset($user->address))
                                                         <li>
                                                             <div class="icon"><i data-feather="map-pin"></i></div>
                                                             <div>
@@ -294,6 +294,7 @@
                                                                 </h5>
                                                             </div>
                                                         </li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                                 <div class="col-xxl-6">
@@ -305,6 +306,7 @@
                                                                 <small class="text-muted">( Company Name )</small>
                                                             </div>
                                                         </li>
+                                                        @if($user->rera)
                                                         <li>
                                                             <div class="icon"><i data-feather="briefcase"></i></div>
                                                             <div>
@@ -312,6 +314,8 @@
                                                                 <small class="text-muted">( Rera Number )</small>
                                                             </div>
                                                         </li>
+                                                        @endif
+                                                        @if($user->gst)
                                                         <li>
                                                             <div class="icon"><i data-feather="briefcase"></i></div>
                                                             <div>
@@ -319,7 +323,71 @@
                                                                 <small class="text-muted">( Gst Number )</small>
                                                             </div>
                                                         </li>
+                                                        @endif
                                                     </ul>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row p-2">
+                                                <div class="col-4">
+                                                    <div class="card o-hidden">
+                                                        <div class="card-body bg-light-green">
+                                                            <div class="media static-widget my-3">
+                                                                <div class="media-body text-center">
+                                                                    <h1 class="font-roboto">{{ $user_count }}</h1>
+                                                                    <h3 class="mb-0">Total Sub Users</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="card o-hidden">
+                                                        <div class="card-body bg-light-orange">
+                                                            <div class="media static-widget my-3">
+                                                                <div class="media-body text-center">
+                                                                    <h1 class="font-roboto">{{ $user->total_user_limit ? $user->total_user_limit - $user_count : 0 }} / {{ $user->total_user_limit ??  0 }}</h1>
+                                                                    <h3 class="mb-0">Remaining Users</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="card o-hidden">
+                                                        <div class="card-body bg-info">
+                                                            <div class="media static-widget my-3">
+                                                                <div class="media-body text-center">
+                                                                    <h1 class="font-roboto">{{ $total_property }}</h1>
+                                                                    <h3 class="mb-0">Total Properties</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="card o-hidden">
+                                                        <div class="card-body bg-light-purpel">
+                                                            <div class="media static-widget my-3">
+                                                                <div class="media-body text-center">
+                                                                    <h1 class="font-roboto">{{ $total_project }}</h1>
+                                                                    <h3 class="mb-0">Total Projects</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="card o-hidden">
+                                                        <div class="card-body bg-secondary">
+                                                            <div class="media static-widget my-3">
+                                                                <div class="media-body text-center">
+                                                                    <h1 class="font-roboto">{{ $total_enquiry }}</h1>
+                                                                    <h3 class="mb-0">Total Enquiries</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -388,74 +456,6 @@
                         </div>
                         <div class="col-xl-8 col-lg-12 col-md-7 xl-65">
                             <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row p-2">
-                                                <div class="col-4">
-                                                    <div class="card o-hidden">
-                                                        <div class="card-body bg-light-green">
-                                                            <div class="media static-widget my-3">
-                                                                <div class="media-body text-center">
-                                                                    <h1 class="font-roboto">{{ $user_count }}</h1>
-                                                                    <h3 class="mb-0">Total Sub Users</h3>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="card o-hidden">
-                                                        <div class="card-body bg-light-orange">
-                                                            <div class="media static-widget my-3">
-                                                                <div class="media-body text-center">
-                                                                    <h1 class="font-roboto">{{ $user->total_user_limit ? $user->total_user_limit - $user_count : 0 }} / {{ $user->total_user_limit ??  0 }}</h1>
-                                                                    <h3 class="mb-0">Remaining Users</h3>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="card o-hidden">
-                                                        <div class="card-body bg-info">
-                                                            <div class="media static-widget my-3">
-                                                                <div class="media-body text-center">
-                                                                    <h1 class="font-roboto">{{ $total_property }}</h1>
-                                                                    <h3 class="mb-0">Total Properties</h3>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="card o-hidden">
-                                                        <div class="card-body bg-light-purpel">
-                                                            <div class="media static-widget my-3">
-                                                                <div class="media-body text-center">
-                                                                    <h1 class="font-roboto">{{ $total_project }}</h1>
-                                                                    <h3 class="mb-0">Total Projects</h3>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="card o-hidden">
-                                                        <div class="card-body bg-secondary">
-                                                            <div class="media static-widget my-3">
-                                                                <div class="media-body text-center">
-                                                                    <h1 class="font-roboto">{{ $total_enquiry }}</h1>
-                                                                    <h3 class="mb-0">Total Enquiries</h3>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-body">
