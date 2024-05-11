@@ -517,7 +517,6 @@
                         this.property_type = parseInt(project_data['property_type']);
                         $(`#propertytype${this.property_type}`).trigger('click');
 
-
                         if(project_data['property_type'] == 88 || project_data['property_type'] == 89) {
 
                             tower_details_object = JSON.parse(project_data['tower_details']);
@@ -550,6 +549,7 @@
                             });
 
                             let _this = this;
+                            
                             
                             this.if_office_or_retail = JSON.parse(tower_details_object['if_office_or_retail']);
                             this.$nextTick(function () {
@@ -621,10 +621,28 @@
                                 });
                             });
 
+                            let array_newest = {
+                                '1 rk' : '1RK',
+                                '1 bhk' : '1BHK',
+                                '2 bhk' : '2BHK',
+                                '3 bhk' : '3BHK',
+                                '4 bhk' : '4BHK',
+                                '5 bhk' : '5BHK',
+                                '5+ bhk' : '5+BHK',
+                            };
+
                             this.if_residential_only_wings.wing_details.forEach((wing_details, index) => {
-                                _this.$nextTick(function () {
-                                    $(`#sub_category_of_wings_${index}`).val(wing_details.sub_categories).trigger('change');
-                                    $(`#extra_sub_category_of_wings_${index}`).val(wing_details.sub_categories).trigger('change');
+                                this.$nextTick(function () {
+                                    let for_new_array = [];
+
+                                    wing_details.sub_categories.forEach(newest_element => {
+                                        let value = array_newest[newest_element] ?? newest_element;
+
+                                        for_new_array.push(value);
+                                    });
+
+                                    $(`#sub_category_of_wings_${index}`).val(for_new_array).trigger('change');
+                                    $(`#extra_sub_category_of_wings_${index}`).val(for_new_array).trigger('change');
                                 });
                             });
 
@@ -639,6 +657,7 @@
                             }
 
                             let array = {
+                                13 : '1RK',
                                 14 : '1BHK',
                                 15 : '2BHK',
                                 16 : '3BHK',
@@ -688,10 +707,28 @@
                                     });
                                 });
 
+                                let array_newest = {
+                                    '1 rk' : '1RK',
+                                    '1 bhk' : '1BHK',
+                                    '2 bhk' : '2BHK',
+                                    '3 bhk' : '3BHK',
+                                    '4 bhk' : '4BHK',
+                                    '5 bhk' : '5BHK',
+                                    '5+ bhk' : '5+BHK',
+                                };
+
                                 this.if_residential_only_wings.wing_details.forEach((wing_details, index) => {
                                     this.$nextTick(function () {
-                                        $(`#sub_category_of_wings_${index}`).val(wing_details.sub_categories).trigger('change');
-                                        $(`#extra_sub_category_of_wings_${index}`).val(wing_details.sub_categories).trigger('change');
+                                        let for_new_array = [];
+
+                                        wing_details.sub_categories.forEach(newest_element => {
+                                            let value = array_newest[newest_element] ?? newest_element;
+
+                                            for_new_array.push(value);
+                                        });
+
+                                        $(`#sub_category_of_wings_${index}`).val(for_new_array).trigger('change');
+                                        $(`#extra_sub_category_of_wings_${index}`).val(for_new_array).trigger('change');
                                     });
                                 });
                             }
