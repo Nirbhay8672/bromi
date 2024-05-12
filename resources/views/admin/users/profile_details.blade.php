@@ -130,7 +130,8 @@
                         <div class="form-group col-md-6 m-b-4 mb-3">
                             <input type="file" name="profile_image" class="form-control" id="profile_image" accept="image/png, image/jpeg" style="border: 1px solid black;border-radius: 5px;">
                         </div>
-                        <div class="form-group col-md-6 m-b-4 mb-3">
+                        <div class="form-group col-12 m-b-4 mb-3">
+                            <label>Address</label>
                             <div class="fname {{ $user->address ? 'focused' : '' }}">
                                 <textarea type="text" name="address" class="form-control" placeholder="Enter address" id="address">{{ $user->address ?? '-' }}</textarea>
                             </div>
