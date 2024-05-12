@@ -86,6 +86,9 @@ table.dataTable.display tbody tr:last-child td:last-child {
 .custom-tooltip-content .yellow-inq .fa-square{
     color:#fff600;
 }
+.custom-tooltip-content .red-inq .fa-square{
+    color:#aa0600;
+}
 .custom-tooltip-content .green-inq .fa-square{
     color:#0d8c07;
 }
