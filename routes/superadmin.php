@@ -62,6 +62,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/get-brom-enquiry', [BromiEnquiryController::class, 'show'])->name('superadmin.showEnquiry');
         Route::post('/save-brom-enquiry-progress', [BromiEnquiryController::class, 'saveProgress'])->name('superadmin.saveProgress');
         Route::post('/get-Progress', [BromiEnquiryController::class, 'getProgress'])->name('superadmin.getProgress');
+        Route::post('/delete-lead', [BromiEnquiryController::class, 'destroyLead'])->name('superadmin.deleteLead');
+        Route::post('/super-area', [BromiEnquiryController::class, 'getSuperArea'])->name('superadmin.superArea');
 
 		Route::any('/Plans', [PlanController::class, 'index'])->name('superadmin.plans');
 		Route::post('/get-plan', [PlanController::class, 'getSpecificPlan'])->name('superadmin.getPlan');

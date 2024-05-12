@@ -23,16 +23,29 @@
                                 data-tooltip="Add Lead"
                                 onclick="resetData()"
                             ><i class="fa fa-plus"></i></button>
+                            <button class="btn text-white delete_table_row ms-3 tooltip-btn"
+                                    style="border-radius: 5px;display: none;background-color:red" onclick="deleteTableRow()"
+                                    type="button" data-tooltip="Delete"><i class="fa fa-trash"></i></button>
                         </div>
                         <div class="card-body">
                             <div class="table table-responsive">
-                                <table class="display" id="enquiryTable">
+                                <table class="display" id="leadTable">
                                     <thead>
                                         <tr>
+                                            <th>
+                                                <div class="form-check form-check-inline checkbox checkbox-dark mb-0 me-0">
+                                                    <input class="form-check-input" id="select_all_checkbox"
+                                                        name="selectrows" type="checkbox">
+                                                    <label class="form-check-label" for="select_all_checkbox"></label>
+                                                </div>
+                                            </th>
                                             <th>Name</th>
-                                            <th>Follow Up</th>
-                                            <th>Remark</th>
-                                            {{-- <th>Status</th> --}}
+                                            <th>Company</th>
+                                            <th>State</th>
+                                            <th>City</th>
+                                            <th>Interested Plan</th>
+                                            <th>Added By</th>
+                                            <th>FollowUp & Remark</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -57,6 +70,50 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" class="d-none" name="this_progress_data_id" id="this_progress_data_id">
+                    <div class="row">
+                        <div class="form-group col-md-4 m-b-20">
+                            <div class="fname">
+                                <input type="text" class="form-control" id="nameRead" style="background:#ccc;" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 m-b-20">
+                            <div class="fname">
+                                <input type="text" class="form-control" id="companyRead" style="background:#ccc;" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 m-b-20">
+                            <div class="fname">
+                                <input type="text" class="form-control" id="mobileRead" style="background:#ccc;" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 m-b-20">
+                            <div class="fname">
+                                <input type="text" class="form-control" id="emailRead" style="background:#ccc;" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 m-b-20">
+                            <div class="fname">
+                                <input type="text" class="form-control" id="planRead" style="background:#ccc;" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 m-b-20">
+                            <div class="fname">
+                                <input type="text" class="form-control" id="stateRead" style="background:#ccc;" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 m-b-20">
+                            <div class="fname">
+                                <input type="text" class="form-control" id="cityRead" style="background:#ccc;" disabled>
+                            </div>
+                        </div>
+                        {{-- <div class="form-group col-md-4 m-b-20">
+                            <div class="fname">
+                                <label for="locality">Locality</label>
+                                <input type="text" class="form-control" id="localityRead" disabled>
+                            </div>
+                        </div> --}}
+                    </div>
+                    <p class="border-top"></p>
                     <div class="row mb-1">
                         <div class="form-group col-md-4 m-b-20">
                             <div class="fname">
@@ -66,15 +123,17 @@
                                     <option value="Lead Confirmed"> Lead Confirmed</option>
                                     <option value="Discussion"> Discussion</option>
                                     <option value="Demo Scheduled"> Demo Scheduled</option>
+                                    <option value="Demo Completed"> Demo Completed</option>
+                                    <option value="Due Followup"> Due Followup</option>
                                     <option value="Booked"> Booked</option>
                                     <option value="Lost"> Lost</option>
                                 </select>
                                 <span class="text-danger invalid-error d-none" id="status_error">Status is required.</span>
                             </div>
                         </div>
-                        <div class="form-group col-md-8 m-b-20">
-                            <div class="col-12">
-                                <div class="m-checkbox-inline custom-radio-ml">
+                        <div class="form-group col-md-4 m-b-20">
+                            {{-- <div class="col-12"> --}}
+                                <div class="m-checkbox-inline custom-radio-ml d-flex">
                                     <div class="form-check form-check-inline radio radio-primary">
                                         <input class="form-check-input" id="progress_lead_type_1" type="radio" name="lead_type" value="Hot Lead" checked>
                                         <label class="form-check-label mb-0" for="progress_lead_type_1">Hot Lead</label>
@@ -88,17 +147,17 @@
                                         <label class="form-check-label mb-0" for="progress_lead_type_3">Cold Lead</label>
                                     </div>
                                 </div>
-                            </div>
+                            {{-- </div> --}}
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6 m-b-20">
+                    {{-- </div>
+                    <div class="row"> --}}
+                        <div class="form-group col-md-4 m-b-20">
                             <div class="fname">
                                 <input value="{{date('Y-m-d')}}" class="form-control" name="followup_date" id="followup_date" type="date" autocomplete="off">
                                 <span class="text-danger invalid-error d-none" id="followup_date_error">Follow up date is required.</span>
                             </div>
                         </div>
-                        <div class="form-group col-md-6 m-b-20">
+                        <div class="form-group col-md-4 m-b-20">
                             <div class="fname">
                                 <input value="{{date('H:i')}}" class="form-control" name="time" id="time" type="time" autocomplete="off">
                                 <span class="text-danger invalid-error d-none" id="time_error">Time is required.</span>
@@ -137,7 +196,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">Added On</th>
-                                <th scope="col">Enquiry Progress</th>
+                                <th scope="col">Lead Progress</th>
                                 <th scope="col">NFD</th>
                                 <th scope="col">Remarks </th>
                                 <th scope="col">Type of Lead</th>
@@ -159,6 +218,8 @@
                     <div class="d-block w-100 blue-inq"><i class="fa fa-square"></i> New Lead</div>
                     <div class="d-block w-100 org-inq"><i class="fa fa-square"></i> Lead Confirmed</div>
                     <div class="d-block w-100 purple-inq"><i class="fa fa-square"></i> Demo Scheduled</div>
+                    <div class="d-block w-100 yellow-inq"><i class="fa fa-square"></i> Demo Completed</div>
+                    <div class="d-block w-100 red-inq"><i class="fa fa-square"></i> Due Followup</div>
                     <div class="d-block w-100 lblue-inq"><i class="fa fa-square"></i> Discussion</div>
                     <div class="d-block w-100 green-inq"><i class="fa fa-square"></i> Booked</div>
                     <div class="d-block w-100 pink-inq"><i class="fa fa-square"></i> Lost</div>
@@ -190,6 +251,14 @@
                                 <span class="text-danger invalid-error d-none" id="first_name_error">First name is required.</span>
 
                             </div>
+                            <div class="form-group col-md-4 m-b-20">
+                                <div class="fname">
+                                    <label for="company">Company Name</label>
+                                    <input class="form-control" name="company" id="company" type="text"
+                                        autocomplete="off">
+                                </div>
+                                <span class="text-danger invalid-error d-none" id="company_error">Company is required.</span>
+                            </div>
                             {{-- <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
                                     <label for="last_name">Last Name</label>
@@ -216,22 +285,14 @@
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
-                                    <label for="company">Company Name</label>
-                                    <input class="form-control" name="company" id="company" type="text"
-                                        autocomplete="off">
-                                </div>
-                                <span class="text-danger invalid-error d-none" id="company_error">Company is required.</span>
-                            </div>
-                            <div class="form-group col-md-4 m-b-20">
-                                {{-- <div class="fname">
-                                    <select name="lead_type" id="lead_type" class="form-control">
-                                        <option value="">Lead Type</option>
-                                        <option value="Hot">Hot</option>
-                                        <option value="Warm">Warm</option>
-                                        <option value="Cold">Cold</option>
+                                    <select name="plan_interested_in" id="plan_interested_in" class="form-control">
+                                        <option value="">Plan interested</option>
+                                        @foreach($plans as $plan)
+                                            <option value="{{ $plan->id }}">{{ $plan->name }} - {{ $plan->price }}</option>
+                                        @endforeach
                                     </select>
-                                    <span class="text-danger invalid-error d-none" id="lead_type_error">Lead Type is required.</span>
-                                </div> --}}
+                                    <span class="text-danger invalid-error d-none" id="plan_interested_in_error">Plan interested in is required.</span>
+                                </div>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
@@ -244,32 +305,30 @@
                                     <span class="text-danger invalid-error d-none" id="state_error">Lead Type is required.</span>
                                 </div>
                             </div>
-                            <div class="form-group col-md-6 m-b-20">
+                            <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
                                     <select name="city" id="city">
                                         <option value="">Select City</option>
                                     </select>
-                                    <span class="custom-error d-none text-danger" id="city_error">City is required.</span>
+                                    <span class="invalid-error d-none text-danger" id="city_error">City is required.</span>
                                 </div>
-                            </div>
-                            <div class="form-group col-md-6 m-b-20">
-                                <div class="fname">
-                                    <label for="locality">Locality</label>
-                                    <input type="text" class="form-control" name="locality" id="locality">
-                                </div>
-                                <span class="custom-error d-none text-danger" id="locality_error">This field is required.</span>
                             </div>
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
-                                    <select name="plan_interested_in" id="plan_interested_in" class="form-control">
-                                        <option value="">Plan interested</option>
-                                        @foreach($plans as $plan)
-                                            <option value="{{ $plan->id }}">{{ $plan->name }} - {{ $plan->price }}</option>
-                                        @endforeach
+                                    <label for="locality">Locality</label>
+                                    <select class="form-select" id="area_id" name="locality" data-error="#locality_id_error">
+                                        <option value="">Select Locality</option>
+                                        {{-- @foreach ($areas as $area)
+                                            <option data-city_id="{{ $area->city_id }}" data-state_id="{{ $area->state_id }}"
+                                                value="{{ $area->id }}">{{ $area->name }}
+                                            </option>
+                                        @endforeach --}}
                                     </select>
-                                    <span class="text-danger invalid-error d-none" id="plan_interested_in_error">Plan interested in is required.</span>
+                                    {{-- <input type="text" class="form-control" name="locality" id="locality"> --}}
                                 </div>
+                                <span class="invalid-error d-none text-danger" id="locality_error">This field is required.</span>
                             </div>
+                            
                             <div class="form-group m-b-20">
                                 <div class="fname">
                                     <textarea name="enquiry" class="form-control" id="enquiry" cols="10" rows="5" placeholder="Remark"></textarea>
@@ -312,21 +371,55 @@
                 });
             }
         }
+
+        $('#city').on('change', function() {
+            let id = $(this).val();
+            var locality_element = document.getElementById('area_id');
+            locality_element.innerHTML = '';
+            locality_element.innerHTML += `<option value="">Select Locality</option>`;
+            $.ajax({
+                type: "POST",
+                url: "{{ route('superadmin.superArea') }}",
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: (data) => {
+                    data.forEach(locali => {
+                        locality_element.innerHTML += `<option value="${locali['id']}">${locali['name']}</option>`;
+                    });
+                    let choosen = localStorage.getItem("locality");
+                    console.log(choosen);
+                    $('#area_id').val(choosen).trigger('change');
+                },
+                error: error => console.log(error)
+            });
+        });
+        
         $(document).ready(function() {
-            $('#enquiryTable').DataTable({
+            $('#leadTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('superadmin.adminEnquiries') }}",
                 columns: [
+                    {
+                        data: 'select_checkbox',
+                        name: 'select_checkbox',
+                        orderable: false
+                    },
                     { data: 'user_name', name: 'user_name' },
-                    { data: 'followup_date', name: 'created_at' },
-                    { data: 'enquiry', name: 'enquiry' },
+                    { data: 'company', name: 'company' },
+                    { data: 'state', name: 'state' },
+                    { data: 'city', name: 'city' },
+                    { data: 'plan', name: 'plan' },
+                    { data: 'added_by', name: 'added_by' },
+                    { data: 'followup_date', name: 'followup_date' },
                     // { data: 'status', name: 'status' },
                     { data: 'Actions', name: 'Actions' },
                 ],
                 columnDefs: [
-                    { targets: 0, width: '150px' },
-                    { targets: 1, width: '100px' },
+                    // { targets: 0, width: '150px' },
+                    { targets: 1, width: '150px' },
                     // { targets: 2, width: '200px' },
                     // { targets: 3, className: 'text-center' },
                     // { targets: 4, className: 'text-center' },
@@ -350,6 +443,8 @@
         function resetData() {
             $('.invalid-error').addClass('d-none');
             $('#modal_form').trigger("reset");
+            $('#state').val('').trigger('change');
+            $('#city').val('').trigger('change');
             $('#exampleModalLabel').text('ADD NEW LEAD');
 
             let all_error = document.querySelectorAll('.invalid-error');
@@ -381,12 +476,15 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
+                    localStorage.setItem("locality", data.brom_enq.locality);
                     $('#first_name').val(data.brom_enq.user_name).trigger('change');
                     $('#last_name').val(data.brom_enq.last_name).trigger('change');
                     $('#mobile').val(data.brom_enq.mobile).trigger('change');
                     $('#email').val(data.brom_enq.email).trigger('change');
                     $('#company').val(data.brom_enq.company).trigger('change');
                     $('#lead_type').val(data.brom_enq.lead_type).trigger('change');
+                    $('#state').val(data.brom_enq.state_id).trigger('change');
+                    $('#city').val(data.brom_enq.city_id).trigger('change');
                     $('#plan_interested_in').val(data.brom_enq.plan_interested_in).trigger('change');
                     $('#enquiry').val(data.brom_enq.enquiry).trigger('change');
                     $('#this_data_id').val(data.brom_enq.id);
@@ -408,14 +506,23 @@
                 success: function(data) {
                     if (data.brom_enq.lead_progress.length > 0) {
                         $('#followup_date').val(data.brom_enq.lead_progress[0].next_follow_up_date);
-                    }
-                    if (data.brom_enq.lead_progress.length > 0) {
-                        
                         $('#time').val(data.brom_enq.lead_progress[0].next_follow_up_time);
+                        $('[value="'+data.brom_enq.lead_progress[0].lead_type+'"]').prop('checked', true);
+                        console.log(data.brom_enq.lead_progress[0]);
                     }
                     $('#progress_enquiry').val(data.brom_enq.enquiry);
                     $('#this_progress_data_id').val(data.brom_enq.id);
                     $('#status').val(data.brom_enq.status).trigger('change');
+                    // ---------------- display statically data -------
+                    $('#nameRead').val(data.brom_enq.user_name)
+                    $('#companyRead').val(data.brom_enq.company)
+                    $('#mobileRead').val(data.brom_enq.mobile)
+                    $('#emailRead').val(data.brom_enq.email)
+                    $('#planRead').val(data.brom_enq.plan_interested.name)
+                    $('#stateRead').val(data.brom_enq.state.name)
+                    $('#cityRead').val(data.brom_enq.city.name)
+                    // $('#localityRead').val(data.brom_enq.lead.)
+                    // ---------------- display statically data -------
                     $('#showprogressmodal').modal('hide');
                     $('#progressModal').modal('show');
                 }
@@ -530,7 +637,7 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
-                    $('#enquiryTable').DataTable().draw();
+                    $('#leadTable').DataTable().draw();
                     $('#progressModal').modal('hide');
                 },
                 error:function(error) {
@@ -538,6 +645,91 @@
                 }
             });
         }
+
+        // -------------------------- Delete -------------------
+        $(document).on('change', '#select_all_checkbox', function(e) {
+                if ($(this).prop('checked')) {
+                    $('.delete_table_row').show();
+                    $(".table_checkbox").each(function(index) {
+                        $(this).prop('checked', true)
+                    })
+                } else {
+                    $('.delete_table_row').hide();
+                    $(".table_checkbox").each(function(index) {
+                        $(this).prop('checked', false)
+                    })
+                }
+            })
+
+            $(document).on('change', '.table_checkbox', function(e) {
+                var rowss = [];
+                $(".table_checkbox").each(function(index) {
+                    if ($(this).prop('checked')) {
+                        rowss.push($(this).attr('data-id'))
+                    }
+                })
+                if (rowss.length > 0) {
+                    $('.delete_table_row').show();
+                } else {
+                    $('.delete_table_row').hide();
+                }
+            })
+
+            function deleteTableRow(params) {
+                var rowss = [];
+                $(".table_checkbox").each(function(index) {
+                    if ($(this).prop('checked')) {
+                        rowss.push($(this).attr('data-id'))
+                    }
+                })
+                if (rowss.length > 0) {
+                    Swal.fire({
+                        title: "Are you sure?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                    }).then(function(isConfirm) {
+                        if (isConfirm.isConfirmed) {
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ route('superadmin.deleteLead') }}",
+                                data: {
+                                    allids: JSON.stringify(rowss),
+                                    _token: '{{ csrf_token() }}'
+                                },
+                                success: function(data) {
+                                    $('.delete_table_row').hide();
+                                    $('#leadTable').DataTable().draw();
+                                }
+                            });
+                        }
+                    })
+                }
+            }
+            function deleteEnquiry(data) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                }).then(function(isConfirm) {
+                    if (isConfirm.isConfirmed) {
+                        var id = $(data).attr('data-id');
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('superadmin.deleteLead') }}",
+                            data: {
+                                id: id,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+                                $('#leadTable').DataTable().draw();
+                            }
+                        });
+                    }
+                })
+            }
+        // -------------------------- Delete -------------------
 
         $(document).on('click', '#saveLead', function(e) {
             e.preventDefault();
@@ -623,7 +815,7 @@
                     user_name: $('#first_name').val(),
                     state: $('#state').val(),
                     city: $('#city').val(),
-                    locality: $('#locality').val(),
+                    locality: $('#area_id').val(),
                     mobile: $('#mobile').val(),
                     email: $('#email').val(),
                     company: $('#company').val(),
@@ -635,7 +827,7 @@
                     _token: '{{ csrf_token() }}',
                 },
                 success: function(data) {
-                    $('#enquiryTable').DataTable().draw();
+                    $('#leadTable').DataTable().draw();
                     $('#leadModal').modal('hide');
                 },
                 error:function(error) {

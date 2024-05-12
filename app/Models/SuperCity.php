@@ -33,4 +33,9 @@ class SuperCity extends Model
     {
         return $this->hasMany('App\Models\User');
     }
+	
+    public function areas()
+    {
+        return $this->hasMany(SuperAreas::class);
+    }
 }
