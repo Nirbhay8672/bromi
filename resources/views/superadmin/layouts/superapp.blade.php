@@ -386,7 +386,14 @@ Helper::set_default_measuerement();
                                             </a>
                                         </li>
                                     @endif
-
+                                    <li class="sidebar-list">
+                                        <a
+                                            class="sidebar-link @if ($route == 'superadmin.members') active @endif"
+                                            href="{{ route('superadmin.enquiries.calendar') }}"
+                                        ><i class="fa fa-users"></i>
+                                            <span class="lan-3">Enquiry Calendar</span>
+                                        </a>
+                                    </li>
                                     @if ($permissions->contains(\App\Constants\SupAdminPermissions::BUILDERS))
                                         <li class="sidebar-list">
                                             <a
