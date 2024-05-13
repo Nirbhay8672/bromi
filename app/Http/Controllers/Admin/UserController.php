@@ -147,6 +147,27 @@ class UserController extends Controller
 
 	public function saveUser(Request $request)
 	{
+		$validated = $request->validate([
+			'first_name' => 'required',
+			'middle_name' => 'required',
+			'last_name' => 'required',
+			'birth_date' => 'required',
+			'hire_date' => 'required',
+			"address" => 'required',
+			"pincode" => 'required|numeric|digits:6',
+			"city_id" => 'required',
+			"state_id" => 'required',
+			"mobile_number" => 'required|numeric|digits:10|unique:users,mobile_number,' . $request->id ?? 0,
+			"email" => 'required|unique:users,email,'. $request->id ?? 0,
+			'password' => $request->id ? '' : 'required|string',
+			'role_id' => $request->id ? '' : 'required|string',
+		],
+		[
+			'city_id.required' => 'The city field is required.',
+			'state_id.required' => 'The state field is required.',
+			'role_id.required' => 'The role field is required.',
+		]);
+
 		if (!empty($request->id) && $request->id != '') {
 			$data = User::find($request->id);
 			if (empty($data)) {
