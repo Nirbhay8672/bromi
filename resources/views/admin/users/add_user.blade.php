@@ -43,33 +43,48 @@
                                                 <div class="col-xs-12">
                                                     <div class="col-md-12">
                                                         <div class="row">
-                                                            <div>
+                                                            <div class="mb-2"> 
                                                                 <label><b>Employee Information</b></label>
                                                             </div>
                                                             <div class="form-group col-md-4 m-b-20">
-                                                                <label for="First Name">First Name</label>
-                                                                <input class="form-control" name="first_name" id="first_name"
-                                                                    type="text" autocomplete="off">
+                                                                <div>
+                                                                    <label for="First Name">First Name</label>
+                                                                    <input class="form-control" name="first_name" id="first_name"
+                                                                        type="text" autocomplete="off">
+                                                                </div>
+                                                                <span id="first_name_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
                                                             <div class="form-group col-md-4 m-b-20">
-                                                                <label for="Middle Name">Middle Name</label>
-                                                                <input class="form-control" name="middle_name" id="middle_name"
-                                                                    type="text" autocomplete="off">
+                                                                <div>   
+                                                                    <label for="Middle Name">Middle Name</label>
+                                                                    <input class="form-control" name="middle_name" id="middle_name"
+                                                                        type="text" autocomplete="off">
+                                                                </div>
+                                                                <span id="middle_name_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
                                                             <div class="form-group col-md-4 m-b-20">
-                                                                <label for="Last Name">Last Name</label>
-                                                                <input class="form-control" name="last_name" id="last_name"
-                                                                    type="text" autocomplete="off">
+                                                                <div>
+                                                                    <label for="Last Name">Last Name</label>
+                                                                    <input class="form-control" name="last_name" id="last_name"
+                                                                        type="text" autocomplete="off">
+                                                                </div>
+                                                                <span id="last_name_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="form-group col-md-4 m-b-4 mb-3">
-                                                                <label for="Birth Date">Birth Date</label>
-                                                                <input class="form-control" style="border: 1px solid black;border-radius:5px;" name="birth_date" id="birth_date" type="date" data-language="en">
+                                                                <div>
+                                                                    <label for="Birth Date">Birth Date</label>
+                                                                    <input class="form-control" style="border: 1px solid black;border-radius:5px;" name="birth_date" id="birth_date" type="date" data-language="en">
+                                                                </div>
+                                                                <span id="birth_date_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
                                                             <div class="form-group col-md-4 m-b-4 mb-3">
-                                                                <label for="Hire Date">Hire Date</label>
+                                                                <div>
+                                                                    <label for="Hire Date">Hire Date</label>
                                                                     <input class="form-control" style="border: 1px solid black;border-radius:5px;" id="hire_date" name="hire_date" type="date" data-language="en">
+                                                                </div>
+                                                                <span id="hire_date_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
                                                         </div>
                                                         <div class="row mt-2">
@@ -101,6 +116,7 @@
                                                                     <option value="Sell">Sell</option>
                                                                     <option value="Both">Both</option>
                                                                 </select>
+                                                                <span id="property_for_id_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-20 mb-3">
@@ -165,9 +181,12 @@
                                                                 <label><b>Employee Address</b></label>
                                                             </div>
                                                             <div class="form-group col-md-4 m-b-20">
-                                                                <label for="Address">Address</label>
-                                                                <input class="form-control" name="address" id="address"
-                                                                    type="text" autocomplete="off">
+                                                                <div>
+                                                                    <label for="Address">Address</label>
+                                                                    <input class="form-control" name="address" id="address"
+                                                                        type="text" autocomplete="off">
+                                                                </div>
+                                                                <span id="address_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
 
                                                             <div class="form-group col-md-4 m-b-4">
@@ -178,6 +197,7 @@
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
+                                                                <span id="state_id_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
 
                                                             <div class="form-group col-md-4 m-b-4">
@@ -188,12 +208,16 @@
                                                                             {{ $city->name }}</option>
                                                                     @endforeach
                                                                 </select>
+                                                                <span id="city_id_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
 
                                                             <div class="form-group col-md-4 m-b-20">
-                                                                <label for="Pincode">Pincode</label>
-                                                                <input class="form-control" name="pincode" id="pincode"
-                                                                    type="text" autocomplete="off">
+                                                                <div>
+                                                                    <label for="Pincode">Pincode</label>
+                                                                    <input class="form-control" name="pincode" id="pincode"
+                                                                        type="text" autocomplete="off">
+                                                                </div>
+                                                                <span id="pincode_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
 
                                                             <div>
@@ -201,9 +225,12 @@
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-20">
-                                                                <label for="Mobile Number">Mobile Number</label>
-                                                                <input class="form-control" name="mobile_number"
-                                                                    id="mobile_number" type="text" autocomplete="off">
+                                                                <div>
+                                                                    <label for="Mobile Number">Mobile Number</label>
+                                                                    <input class="form-control" name="mobile_number"
+                                                                        id="mobile_number" type="text" autocomplete="off">
+                                                                </div>
+                                                                <span id="mobile_number_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-20">
@@ -217,10 +244,13 @@
                                                                     id="home_phone_no" type="text" autocomplete="off">
                                                             </div>
                                                             <div class="form-group col-md-4 m-b-20">
-                                                             <label for="Email">Email</label>
-                                                                <input class="form-control" name="email" id="email"
-                                                                    type="text" autocomplete="off" style="text-transform: none;">
-                                                            </div>   
+                                                                <div>
+                                                                    <label for="Email">Email</label>
+                                                                    <input class="form-control" name="email" id="email"
+                                                                        type="text" autocomplete="off" style="text-transform: none;">
+                                                                </div>
+                                                                <span id="email_error" class="text-danger invalid-error d-none"></span>
+                                                            </div>
 
                                                             <div>
                                                                 <label><b>Employee ID</b></label>
@@ -290,9 +320,12 @@
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-20">
-                                                                <label for="Password">Password</label>
-                                                                <input class="form-control" name="password" id="password"
-                                                                    type="text" autocomplete="off">
+                                                                <div>
+                                                                    <label for="Password">Password</label>
+                                                                    <input class="form-control" name="password" id="password"
+                                                                        type="text" autocomplete="off">
+                                                                </div>
+                                                                <span id="password_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-20">
@@ -304,6 +337,7 @@
                                                                             {{ explode('_---_', $role->name)[0] }}</option>
                                                                     @endforeach
                                                                 </select>
+                                                                <span id="role_id_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
                                                         </div>
                                                         <button
@@ -440,39 +474,32 @@
                     });
                 }
 
-                getUser()
+                let errors_array = [];
 
+                function validate() {
+                    
+                    Object.entries(errors_array).forEach(error => {
+                        let error_element = document.getElementById(`${error[0]}_error`);
+
+                        if(error_element) {
+                            error_element.classList.remove('d-none');
+                            error_element.innerText = error[1][0];
+                        }
+                    });
+                }
+
+                getUser();
 
                 $(document).ready(function() {
 
-
-                    $('#modal_form').validate({ // initialize the plugin
-                        rules: {
-                            first_name: {
-                                required: true,
-                            },
-                            middle_name: {
-                                required: true,
-                            },
-                            email: {
-                                email: true,
-                            },
-                            pincode: {
-                                digits: true,
-                            },
-                        },
-                        submitHandler: function(form) { // for demo
-                            alert('valid form submitted'); // for demo
-                            return false; // for demo
-                        }
-                    });
-
                     $(document).on('click', '#saveUser', function(e) {
-                        e.preventDefault();
-                        $("#modal_form").validate();
-                        if (!$("#modal_form").valid()) {
-                            return
-                        }
+
+                        let all_error = document.querySelectorAll('.invalid-error');
+
+                        all_error.forEach(element => {
+                            element.classList.add('d-none');
+                        });
+
                         var id = $('#this_data_id').val();
 
                         let form_data = new FormData();
@@ -487,8 +514,8 @@
                         form_data.set('status', $('#status').val());
                         form_data.set('address', $('#address').val());
                         form_data.set('pincode', $('#pincode').val());
-                        form_data.set('city_id', $('#city_id').val());
-                        form_data.set('state_id', $('#state_id').val());
+                        form_data.set('city_id', $('#city_id').val() ?? '');
+                        form_data.set('state_id', $('#state_id').val() ?? '');
                         form_data.set('mobile_number', $('#mobile_number').val());
                         form_data.set('office_no', $('#office_no').val());
                         form_data.set('email', $('#email').val());
@@ -497,7 +524,7 @@
                         form_data.set('branch_id', JSON.stringify($('#branch_id').val()));
                         form_data.set('reporting_to', JSON.stringify($('#reporting_to').val()));
                         form_data.set('password', $('#password').val());
-                        form_data.set('role_id', $('#role_id').val());
+                        form_data.set('role_id', $('#role_id').val() ?? '');
                         form_data.set('property_for_id', $('#property_for_id').val());
                         form_data.set('property_type_id', JSON.stringify($('#property_type_id').val()));
                         form_data.set('specific_properties', JSON.stringify($('#specific_properties').val()));
@@ -525,8 +552,9 @@
                             window.location.href = redirect_url;
                         })
                         .catch((err) => {
-                            if(err.response.status != 500) {
-                                _this.errors = err.response.data.errors;
+                            if(err.response.status == 422) {
+                                errors_array = err.response.data.errors;
+                                validate();
                             }
                         });
                     })
