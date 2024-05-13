@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Superadmin;
 
 use App\Constants\Statuses;
 use App\Http\Controllers\Controller;
+use App\Models\Areas;
 use App\Models\BromiEnquiry;
 use App\Models\LeadProgress;
 use App\Models\State;
 use App\Models\Subplans;
+use App\Models\SuperAreas;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,7 +63,8 @@ class BromiEnquiryController extends Controller
     public function superadminList(Request $request)
     {
         if ($request->ajax()) {
-            $data = BromiEnquiry::with('User', 'LeadProgress', 'activeProgress')->orderBy('id', 'desc')->get();
+            $data = BromiEnquiry::with('User', 'LeadProgress', 'activeProgress', 'state', 'city', 'planInterested')->orderBy('id', 'desc')->get();
+            // dd($data->first()->User);
             return DataTables::of($data)
                 ->editColumn('user_name', function ($row) /* use ($dropdownsarr) */ {
 
@@ -96,6 +99,10 @@ class BromiEnquiryController extends Controller
                         $s_1 = 'border-bottom:10px solid #ff7e00 !important';
                     } elseif ($pro == Statuses::DEMO_SCHEDULED) {
                         $s_1 = 'border-bottom:10px solid #a200ff !important';
+                    } elseif ($pro == Statuses::DEMO_COMPLETED) {
+                        $s_1 = 'border-bottom:10px solid #fff600 !important';                   
+                    } elseif ($pro == Statuses::DUE_FOLLOWUP) {
+                        $s_1 = 'border-bottom:10px solid #aa0600 !important';                   
                     } elseif ($pro == Statuses::DISCUSSION) {
                         $s_1 = 'border-bottom:10px solid #00f0ff !important';
                     } elseif ($pro == Statuses::BOOKED) {
@@ -114,30 +121,50 @@ class BromiEnquiryController extends Controller
                     return $first . $second . $end;
                 })
                 ->editColumn('followup_date', function ($row) {
+                    $remark_data = $row->enquiry;
                     if (isset($row->activeProgress)) {
                         $pro = $row->activeProgress;
-                        $remark_data = "";
                         if (!empty($pro->remarks)) {
                             $remark_data = $pro->remarks;
                         }
                         return Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') . '<br>' . $remark_data;
                     }
-                    return Carbon::parse($row->followup_date)->format('d-m-Y \| H:i');
+                    return Carbon::parse($row->followup_date)->format('d-m-Y \| H:i') . '<br>' . $remark_data;
                 })
-
+                ->editColumn('select_checkbox', function ($row) {
+                    $abc = '<div class="form-check checkbox checkbox-primary mb-0">
+					<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
+					<label class="form-check-label" for="checkbox-primary-' . $row->id . '"></label>
+				  	</div>';
+                    return $abc;
+                })
+                ->editColumn('state', function ($row) {
+                    return $row->state->name ?? '-';
+                })
+                ->editColumn('city', function ($row) {
+                    return $row->city->name ?? '-'; 
+                })
+                ->editColumn('plan', function ($row) {
+                    return $row->planInterested->name ?? '-'; 
+                })
+                ->editColumn('added_by', function ($row) {
+                    return $row->User->first_name ? $row->User->first_name .' '. @$row->User->last_name : '-'; 
+                })
                 ->editColumn('Actions', function ($row) {
                     $buttons = '';
-                    $buttons =  $buttons . '<span data-id="' . $row->id . '" onclick=getBromiEnq(this) style="cursor:pointer"><i class="fa fa-pencil fs-5"></i></span>';
-                    $buttons =  $buttons . '<span class="ms-3" data-id="' . $row->id . '" onclick=showProgress(this) style="cursor:pointer"><i class="fa fa-bars fs-5 text-warning"></i></span>';
+                    $buttons .= '<span data-id="' . $row->id . '" onclick=getBromiEnq(this) style="cursor:pointer"><i class="fa fa-pencil fs-5"></i></span>';
+                    $buttons .= '&nbsp;&nbsp;<span title="Delete" data-id="' . $row->id . '" onclick=deleteEnquiry(this) class="pointer text-danger" type="button"><i class="fs-5 fa fa-trash"></i></span>';
+                    $buttons .= '<span class="ms-3" data-id="' . $row->id . '" onclick=showProgress(this) style="cursor:pointer"><i class="fa fa-bars fs-5 text-warning"></i></span>';
                     return $buttons;
                 }) // updateStatusForm(this)
-                ->rawColumns(['user_name', 'Actions', 'followup_date'])
+                ->rawColumns(['select_checkbox', 'user_name', 'Actions', 'followup_date', 'state', 'city', 'plan', 'added_by'])
                 ->make(true);
         }
         $states = State::with(['cities'])->where('user_id', Auth::user()->id)->get();
+        
         return view('superadmin.requests.super-admin-index')->with([
             'plans' => Subplans::all(),
-            'states' => $states
+            'states' => $states,
         ]);
     }
 
@@ -159,7 +186,9 @@ class BromiEnquiryController extends Controller
     {
         $bromi_enquiry = BromiEnquiry::find($request->id);
         $leadProgress = LeadProgress::where('lead_id', $request->id)->where('status', 1)->first();
-        $leadProgress->update(['status' => 0]);
+        if ($leadProgress) {
+            $leadProgress->update(['status' => 0]);
+        }
 
         $dateTime = $request->followup_date . ' ' . $request->time . ':00';
         LeadProgress::create([
@@ -205,8 +234,14 @@ class BromiEnquiryController extends Controller
             'locality' => $request->locality,
         ])->save();
 
-       /*  LeadProgress::create([
-
+        // $dateTime = $request->followup_date . ' ' . $request->time . ':00';
+        /* LeadProgress::create([
+            'lead_id' => $request->id,
+            'user_id' => Auth::user()->id,
+            'progress' => $request->status,
+            'lead_type' => $request->lead_type,
+            'nfd' => Carbon::parse($dateTime)->format('Y-m-d H:i:s'),
+            'remarks' => $request->enquiry,
         ]); */
     }
 
@@ -220,7 +255,7 @@ class BromiEnquiryController extends Controller
     {
         if (!empty($request->id)) {
 
-            $bromEnq = BromiEnquiry::with('LeadProgress')->where('id', $request->id)->first()->toArray();
+            $bromEnq = BromiEnquiry::with('LeadProgress', 'city', 'state', 'planInterested')->where('id', $request->id)->first()->toArray();
             $data = [
                 'brom_enq' => $bromEnq,
             ];
@@ -228,4 +263,23 @@ class BromiEnquiryController extends Controller
             return response()->json($data);
         }
     }
+
+    public function destroyLead(Request $request) {
+        if (!empty($request->id)) {
+            $data = BromiEnquiry::where('id', $request->id)->delete();
+            LeadProgress::where('lead_id', $request->id)->delete();
+            return json_encode($data);
+        }
+        if (!empty($request->allids) && isset(json_decode($request->allids)[0])) {
+            $data = BromiEnquiry::whereIn('id', json_decode($request->allids))->delete();
+            LeadProgress::whereIn('lead_id', json_decode($request->allids))->delete();
+            return json_encode($data);
+        }
+    }
+
+    public function getSuperArea(Request $request) {
+        $superAreas = SuperAreas::where('super_city_id', $request->id)->get();
+        return response()->json($superAreas);
+    }
+    
 }

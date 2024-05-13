@@ -44,4 +44,19 @@ class BromiEnquiry extends Model
     {
         return $this->hasOne(LeadProgress::class, 'lead_id', 'id')->where('status', 1);
     }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function planInterested()
+    {
+        return $this->belongsTo(Subplans::class, 'plan_interested_in', 'id');
+    }
 }
