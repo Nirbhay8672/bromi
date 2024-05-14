@@ -77,6 +77,9 @@ Route::group(['middleware' => 'revalidate'], function () {
         Route::post('/increase-user-limit', [HomeController::class, 'increaseUserLimit'])->name('admin.increaseUserLimit');
         // apply coupon
         Route::any('apply-coupon-code', [HomeController::class, 'applyCoupuonCode'])->name('admin.apply-coupon');
+        // Route::get('verify-otp', [HomeController::class, 'showVerifyForm'])->name('admin.otp.verify');
+        // Route::post('verify-otp', [HomeController::class, 'verifyEmailOtp'])->name('admin.otp.submit');
+
     });
     
 	Route::group(['middleware' => ['auth', 'checkPlanExpiry']], function () {

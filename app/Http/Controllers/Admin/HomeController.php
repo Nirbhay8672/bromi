@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Rules\MatchOldPassword;
 use App\Http\Controllers\Controller;
 use App\Mail\InvoiceEmail;
+use App\Mail\SendOtpMail;
 use App\Models\Api\Properties as ApiProperties;
 use App\Models\Areas;
 use App\Models\Branches;
@@ -1256,4 +1257,42 @@ class HomeController extends Controller
 		return response()->json(['status'=>'success']);
 		// return redirect('/VisitingCard');
 	}
+
+    public function showVerifyForm(Request $request) {
+        $user = Auth::user();
+
+        // Check if email is not verified
+        if (!$user->email_verified) {
+            // Generate random 4-digit OTP
+            $otp = mt_rand(10000, 99999);
+
+            // Send OTP via email
+            Mail::to($user->email)->send(new SendOtpMail($otp));
+
+            // Store OTP in user session
+            $request->session()->put('otp', $otp);
+
+            // Redirect user to OTP verification page
+            return view('admin.auth.verifyOtp');
+        }
+    }
+
+    public function verifyEmailOtp(Request $request)
+    {
+        $otp = $request->input('otp');
+        $user = Auth::user();
+
+        if ($otp == $request->session()->get('otp')) {
+            // OTP matched, update email_verified column in the database
+            $user->email_verified = true;
+            $user->update();
+
+            // Clear OTP from session
+            $request->session()->forget('otp');
+
+            return redirect()->route('admin')->with('success', 'Email verified successfully.');
+        } else {
+            return back()->with('error', 'Invalid OTP. Please try again.');
+        }
+    }
 }
