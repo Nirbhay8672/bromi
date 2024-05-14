@@ -158,7 +158,7 @@ class RegisterController extends Controller
             "first_name" => 'required',
             "last_name" => 'required',
             "email" => 'required|unique:users,email',
-            "mobile_number" => 'required',
+            "mobile_number" => 'required|unique:users,mobile_number',
             "company_name" => 'required',
             "role_id" => 'required',
             "state_id" => 'required',
