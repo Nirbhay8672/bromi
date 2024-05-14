@@ -67,6 +67,7 @@ class UserController extends Controller
 					'company_name',
 					'subscribed_on',
 					'plan_expire_on',
+					'parent_id',
 				])
 				->whereNotNull('parent_id')
 				->where('role_id','!=',3)
@@ -88,6 +89,7 @@ class UserController extends Controller
 					'company_name',
 					'subscribed_on',
 					'plan_expire_on',
+					'parent_id',
 				])
 				->where('role_id','!=',3)
 				->whereNull('parent_id')
@@ -173,7 +175,10 @@ class UserController extends Controller
 					$buttons = '';
 					
 					$buttons =  $buttons . '<a href="'.route('superadmin.user-profile',$row['id']).'"><i role="button" title="view profile" class="fs-22 py-2 mx-2 fa-eye pointer fa" type="button"></i></a>';
-					$buttons =  $buttons . '<i role="button" data-id="' . $row['id'] . '" onclick=getUser(this) class="fa fa-pencil pointer fa fs-22 py-2 mx-2"></i>';
+					
+					if(!$row['parent_id'] || $row['parent_id'] == Auth::user()->id) {
+						$buttons =  $buttons . '<i role="button" data-id="' . $row['id'] . '" onclick=getUser(this) class="fa fa-pencil pointer fa fs-22 py-2 mx-2"></i>';
+					}
 					
 					return $buttons;
 				})
