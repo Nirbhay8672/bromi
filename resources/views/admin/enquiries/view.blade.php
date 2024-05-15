@@ -1,3 +1,9 @@
+<?php
+    use Illuminate\Support\Facades\DB;
+    $units=DB::table('land_units')->get();
+    $land_units=$units->where('id',$data->area_from_measurement)->first();
+    $land_unit_name=$land_units->unit_name;
+?>
 @extends('admin.layouts.app')
 @section('content')
     <div class="page-body">
@@ -14,7 +20,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">View Enquiry</h5>
+                            <h5 class="mb-3">Details Of Enquiry</h5>
                         </div>
                         <div class="card-body pt-0">
                             <div class="row px-3">
@@ -229,9 +235,14 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_10">
                                                                 <div>:
+                                                                    @if (count($configuration_name) > 1)
                                                                     @foreach ($configuration_name as $configuration)
-                                                                        {{ $configuration }},
+                                                                        
+                                                                    {{ $configuration }},
                                                                     @endforeach
+                                                                    @else
+                                                                    {{ $configuration_name[0] }}
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         @endif
@@ -243,7 +254,7 @@
                                                             <div>:
                                                                 {{ $data->area_from . ' to' }}
 
-                                                                {{ $data->area_to . ' ' . (isset($dropdowns[$data->area_to_measurement]['name']) ? $dropdowns[$data->area_to_measurement]['name'] : '') }}
+                                                                {{ $data->area_to . ' ' . $land_unit_name }}
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_12">
@@ -269,8 +280,8 @@
                                                         </div>
 
                                                         <div class="form-group col-8 m-b-10 data_conent_14">
-                                                            <div>: {{ $data->budget_from ? $data->budget_from : '0' }} to
-                                                                {{ $data->budget_to }}
+                                                            <div>:  {{ $data->budget_from ? $data->budget_from : '0' }} ₹  to
+                                                                {{ $data->budget_to }} ₹ 
                                                             </div>
                                                         </div>
 
@@ -284,7 +295,7 @@
 
                                                         @if (!empty($project_name))
                                                             <div class="form-group col-4 m-b-10 data_conent_16">
-                                                                <h6><b>Building</b></h6>
+                                                                <h6><b>Project Name</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_16">
                                                                 <div>: {{ $project_name }}</div>
@@ -666,9 +677,15 @@
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_10">
                                                                 <div>:
+                                                                    
+                                                                    @if (count($configuration_name) > 1)
                                                                     @foreach ($configuration_name as $configuration)
-                                                                        {{ $configuration }},
+                                                                        
+                                                                    {{ $configuration }},
                                                                     @endforeach
+                                                                    @else
+                                                                    {{ $configuration_name[0] }}
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         @endif
