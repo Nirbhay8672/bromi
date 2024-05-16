@@ -24,10 +24,10 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="row px-3">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <ul class="nav nav-pills sticky-nav-menu-tab mb-3" id="pills-tab"
+                                <div class="col-md-12 mr-0 ml-0">
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12">
+                                            <ul class="nav nav-pills sticky-nav-menu-tab mb-3" style="overflow-x: hidden;" id="pills-tab"
                                                 role="tablist">
                                                 <li class="nav-item" role="presentation">
                                                     <button class="nav-link mx-1 active" id="v-customer-summary-tab"
@@ -77,16 +77,16 @@
                                                         Property</button>
                                                 </li>
                                                 <div class="row" style="float:right; display:contents;">
-                                                    <div class="col-md-1" style="float:right; padding-left:2%;">
-                                                        <a href={{ URL::to('admin/Enquiries') }}>
-                                                            <button class="nav-link mx-1 active"
-                                                                id="v-view-summary-tab">Back</button>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-md-1" style="float:right">
+                                                    <div class="col-md-1" style="float:right;">
                                                         <a href="{{ URL::to('admin/enquiry/edit/' . $data['id']) }}">
                                                             <button class="nav-link mx-1 active"
                                                                 id="v-view-summary-tab">Edit</button>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-1" style="float:right; margin-left: auto">
+                                                        <a href={{ URL::to('admin/Enquiries') }}>
+                                                            <button class="nav-link mx-1 active"
+                                                                id="v-view-summary-tab">Back</button>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -95,10 +95,10 @@
                                             <form action="{{route('admin.updateEnquiryStatus')}}" class="row row-cols g-1" method="get">
                                                 @csrf
                                                 @method('post')
-                                                <div class="col-lg-3 col-md-6 col-12">
+                                                <div class="col-lg-2 col-md-6 col-12">
                                                     <input type="text" hidden value="{{$data['id']}}" name="id">
                                                     <select class="form-select" id="enquiry_progress_status" name="status">
-                                                        <option value="">Enquiry Progress</option>
+                                                        <option value="">Status</option>
                                                         <option value="1">Active</option>
                                                         <option value="0">Inactive</option>
                                                     </select>
@@ -110,10 +110,10 @@
                                             </form>
                                         </div>
                                        
-                                        <div class="col-md-2 align-self-center">
+                                        <div class="col-md-4 align-self-center">
                                             <div class="input-group mb-3">
                                                 <select class="form-select form-control" id="enquiry_progress_status">
-                                                    <option value="">Enquiry Progress</option>
+                                                    <option value="">Booked/Lost</option>
                                                     <option value="Booked">Booked</option>
                                                     <option value="Lost">Lost</option>
                                                 </select>
@@ -356,6 +356,9 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {{-- @dd(count($data->AssignHistory)); --}}
+                                            @if (count($data->AssignHistory) != 0)
+                                                
                                             <div class="row">
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style">Assigning History</h5>
@@ -392,6 +395,8 @@
                                                     </table>
                                                 </div>
                                             </div>
+                                            @endif
+                                            @if (count($data->Progress) != 0)
                                             <div class="row">
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style">Progress History</h5>
@@ -439,6 +444,8 @@
                                                     </table>
                                                 </div>
                                             </div>
+                                            @endif
+                                            @if (count($data->Visits) != 0)
                                             <div class="row">
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style">Quick Visit Schedule History</h5>
@@ -484,6 +491,8 @@
                                                     </table>
                                                 </div>
                                             </div>
+                                            @endif
+                                            @if (count($data->Comments) != 0)
                                             <div class="row">
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style">Enquiry Comments</h5>
@@ -518,9 +527,11 @@
                                                     </table>
                                                 </div>
                                             </div>
+                                            @endif
+                                            @if (count($properties) != 0)
                                             <div class="row">
                                                 <div class="form-group col-md-12">
-                                                    <h5 class="border-style">Matching Enquiry</h5>
+                                                    <h5 class="border-style">Matching Property</h5>
                                                 </div>
                                                 <div class="form-group">
                                                     <table class="table table-responsive custom-table-design mb-3">
@@ -539,12 +550,14 @@
 
                                                         <tbody id="matching_container">
                                                             @forelse ($properties as $value)
-                                                            {{-- @dd($value);     --}}
+                                                            <?php
+                                                                $salable_units=$units->where($value->id,$data->salable_area)->first();
+                                                                // dd("salable_units",$salable_units->unit_name);
+                                                            ?>
                                                             <tr>
-                                                                    {{-- <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '' }}
-                                                                    </td> --}}
+                                                                    <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
                                                                     <td>{{ $value->property_for }}</td>
-                                                                    <td>{{ explode("_-||-_", $value->salable_area)[0] }}</td>
+                                                                    <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : " - "}}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][2] }}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][4] }}</td>
                                                                     <td>
@@ -566,6 +579,7 @@
                                                     </table>
                                                 </div>
                                             </div>
+                                            @endif
                                         </div>
                                         <div class="tab-pane fade" id="v-customer-enquiry" role="tabpanel"
                                             aria-labelledby="v-customer-enquiry-tab">
