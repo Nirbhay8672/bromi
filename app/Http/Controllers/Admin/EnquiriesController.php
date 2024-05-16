@@ -234,7 +234,6 @@ class EnquiriesController extends Controller
 							// Property For = Enquiry for
 							if ($request->match_enquiry_for) {
 								$enquiry_for = ($pro->property_for == 'Sell') ? 'Buy' : $pro->property_for;
-								// dd("match_enquiry_for", $enquiry_for);
 								$query->where('enquiry_for', $enquiry_for);
 							}
 
@@ -1022,6 +1021,7 @@ class EnquiriesController extends Controller
 			if (empty($request->year)) {
 				$request->year = Carbon::now()->year;
 			}
+			// dd("request",$request->all());
 			$arr = [];
 			$events = [];
 			$type_array = [];
@@ -1537,30 +1537,45 @@ class EnquiriesController extends Controller
 			}
 		}
 
+		
+		
+		
+		$land_units = DB::table('land_units')->get();
 		// match query
 		$property_for = ($data->enquiry_for == 'Buy') ? 'Sell' : $data->enquiry_for;
 		$budgetFrom = str_replace(',', '', $data->budget_from);
 		$budgetTo = str_replace(',', '', $data->budget_to);
 		$areaFrom = $data->area_from;
 		$areaTo = $data->area_to;
+		$area_from_to_unit=$land_units->where('id',$data->area_from_measurement)->first();
+		// dd("area_from_to_unit",$area_from_to_unit->id);
 		$properties = Properties::where('properties.property_type', $data->requirement_type)
 			->where('properties.property_for', $property_for)
-			// ->where('properties.property_category', $data->property_type)
-			->where(function ($query) use ($budgetFrom, $budgetTo, $areaFrom, $areaTo) {
+			->where('properties.property_category', $data->property_type)
+			->where(function ($query) use ($budgetFrom, $budgetTo, $areaFrom, $areaTo, $area_from_to_unit) {
 				$query->where(function ($query) use ($budgetFrom, $budgetTo) {
 					$query->where('properties.survey_price', '>=', $budgetFrom)
 						->where('properties.survey_price', '<=', $budgetTo);
 				})
-					->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-						$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-					})
-					->Where(function ($query) use ($areaFrom, $areaTo) {
-						$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-							->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo]);
-					});
+				->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+					$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+						->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+				})
+				// ->Where(function ($query) use ($areaFrom, $areaTo) {
+				// 	$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+				// 		->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo]);
+				// });
+				->Where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+					$query
+						->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+						->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+						->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id])
+						->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+				});
+		
 			})
 			->get();
+			// dd("properties :",$properties);
 		$employees = User::where('parent_id', Session::get('parent_id'))->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
 		$projects = Projects::orderBy('project_name')->get();
@@ -1574,6 +1589,7 @@ class EnquiriesController extends Controller
 
 	public function calenderDetail(Request $request)
 	{
+		// dd("view enq cal details");
 		// calendar 
 		// click to edit cal
 		$type = explode(',', $request->type);

@@ -2148,32 +2148,68 @@ class PropertyController extends Controller
         // salable_area
         $area_parts = explode("_-||-_", $property->salable_area);
         $area_size = str_replace(',', '', $area_parts[0]);
+        $area_size_unit = str_replace(',', '', $area_parts[1]);
         // constructed_salable_area
         $constructed_area_parts = explode("_-||-_", $property->constructed_salable_area);
         $constructed_area = str_replace(',', '', $constructed_area_parts[0]);
-
+        $constructed_area_unit = str_replace(',', '', $constructed_area_parts[1]);
+        // matching
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
             ->when(!empty($unit_price), function ($query) use ($unit_price) {
                 return $query->where('budget_from', '<=', $unit_price)
                     ->where('budget_to', '>=', $unit_price);
-            }, function ($query) use ($property) {
+            },
+            function ($query) use ($property) {
                 return $query->where('budget_from', '<=', $property->survey_price)
                     ->where('budget_to', '>=', $property->survey_price);
             })
-            ->when(!empty($area_size), function ($query) use ($area_size) {
-                return $query->where(function ($query) use ($area_size) {
+            // ->when(!empty($area_size), function ($query) use ($area_size) {
+            //     return $query->where(function ($query) use ($area_size) {
+            //         $query->where('area_from', '<=', $area_size)
+            //             ->where('area_to', '>=', $area_size);
+            //     });
+            // },
+            // function ($query) use ($constructed_area) {
+            //     return $query->where(function ($query) use ($constructed_area) {
+            //         $query->where('area_from', '<=', $constructed_area)
+            //             ->where('area_to', '>=', $constructed_area);
+            // });
+            // ->when(!empty($area_size) || !empty($constructed_area), function ($query) use ($area_size, $area_size_unit, $constructed_area, $constructed_area_unit) {
+            //     return $query->where(function ($query) use ($area_size, $area_size_unit, $constructed_area, $constructed_area_unit) {
+            //         if (!empty($area_size)) {
+            //             $query->where('area_from', '<=', $area_size)
+            //                 ->where('area_to', '>=', $area_size)
+            //                 ->where('area_from_measurement', $area_size_unit);
+            //         }
+            //         if (!empty($constructed_area)) {
+            //             $query->orWhere(function ($query) use ($constructed_area, $constructed_area_unit) {
+            //                 $query->where('area_from', '<=', $constructed_area)
+            //                     ->where('area_to', '>=', $constructed_area)
+            //                     ->where('area_from_measurement', $constructed_area_unit);
+            //             });
+            //         }
+            //     });
+            // })
+        
+            ->when(!empty($area_size), function ($query) use ($area_size, $area_size_unit) {
+                return $query->where(function ($query) use ($area_size, $area_size_unit) {
                     $query->where('area_from', '<=', $area_size)
-                        ->where('area_to', '>=', $area_size);
+                        ->where('area_to', '>=', $area_size)
+                        ->where('area_from_measurement', $area_size_unit);
                 });
-            }, function ($query) use ($constructed_area) {
-                return $query->where(function ($query) use ($constructed_area) {
+            },
+            function ($query) use ($constructed_area, $constructed_area_unit) {
+                return $query->where(function ($query) use ($constructed_area, $constructed_area_unit) {
                     $query->where('area_from', '<=', $constructed_area)
-                        ->where('area_to', '>=', $constructed_area);
+                        ->where('area_to', '>=', $constructed_area)
+                        ->where('area_from_measurement', $constructed_area_unit);
                 });
             })
             ->get();
+
+            // dd("Enqq :",$enquiries);
 
 
         $prop_type = [];
