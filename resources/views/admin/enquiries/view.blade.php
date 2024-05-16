@@ -551,8 +551,7 @@
                                                         <tbody id="matching_container">
                                                             @forelse ($properties as $value)
                                                             <?php
-                                                                $salable_units=$units->where($value->id,$data->salable_area)->first();
-                                                                // dd("salable_units",$salable_units->unit_name);
+                                                                $salable_units=$units->where('id',$data->area_from_measurement)->first();
                                                             ?>
                                                             <tr>
                                                                     <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
