@@ -1256,7 +1256,8 @@ use Illuminate\Support\Facades\DB;
 														</div>
                                                     @endif
 
-
+                                                @if (count(json_decode($property->other_contact_details)) != 0)
+                                                    
                                                     <div class="row">
                                                         <div class="form-group col-md-12 mt-1">
                                                             <h5 class="border-style">Other Conatct Details</h5>
@@ -1271,7 +1272,7 @@ use Illuminate\Support\Facades\DB;
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-
+                                                    
                                                                 <tbody>
                                                                     @if (isset(json_decode($property->other_contact_details)[0]))
                                                                         @forelse (json_decode($property->other_contact_details) as $value)
@@ -1279,17 +1280,19 @@ use Illuminate\Support\Facades\DB;
                                                                                 <td>{{ isset($value[0]) ? ucfirst(strtolower($value[0])) : '-' }}</td>
                                                                                 <td>{{ isset($value[1]) ? $value[1] : '-' }}</td>
                                                                                 <td>{{ isset($value[2]) ? ucfirst(strtolower($value[2])) : '-' }}</td>
-
+                                                    
                                                                             </tr>
                                                                         @empty
                                                                         @endforelse
                                                                     @endif
-
+                                                    
                                                                 </tbody>
                                                                 </tbody>
                                                             </table>
                                                         </div>
                                                     </div>
+                                                @endif 
+                                                    
 
                                                 </div>
                                                 <div class="col-md-6 d-flex" style="height: 185px;">
@@ -1315,6 +1318,8 @@ use Illuminate\Support\Facades\DB;
                                                         </div>
                                                     @endif
                                                 </div>
+                                                @if (count($visits))
+                                                    
                                                 <div class="col-md-6">
                                                     <h5 class="border-style">Enquiry Visit Logs</h5>
                                                     <br>
@@ -1350,6 +1355,8 @@ use Illuminate\Support\Facades\DB;
                                                         </table>
                                                     </div>
                                                 </div>
+                                                @endif
+                                                @if (count($enquiries))
                                                 <div class="col-md-12">
                                                     <h5 class="border-style">Matching Enquiry</h5>
                                                     <br>
@@ -1386,6 +1393,7 @@ use Illuminate\Support\Facades\DB;
                                                         </table>
                                                     </div>
                                                 </div>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="v-property-information" role="tabpanel"
