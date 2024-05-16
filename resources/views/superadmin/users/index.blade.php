@@ -50,7 +50,7 @@
                                     >
                                 </div>
                             </div>
-                            <div style="width: 70px;">
+                            <div style="width: 150px;">
                                 <button
                                     class="btn btn-warning tooltip-btn"
                                     type="button"
@@ -59,6 +59,13 @@
                                     data-tooltip="Reset"
                                 ><i class="fa fa-recycle"></i>
                                 </button>
+                                <button
+                                    class="btn text-white delete_table_row ms-3 tooltip-btn"
+                                    style="border-radius: 5px;display: none;background-color:red"
+                                    onclick="deleteTableRow()"
+                                    type="button"
+                                    data-tooltip="Delete"
+                                ><i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -67,7 +74,12 @@
                             <table class="display" id="userTable">
                                 <thead>
                                     <tr>
-                                        <th style="min-width:50px;">Sr No.</th>
+                                        <th style="width: 10px !important;">
+                                            <div class="form-check form-check-inline checkbox checkbox-dark mb-0 me-0">
+                                                <input class="form-check-input" id="select_all_checkbox" name="selectrows" type="checkbox">
+                                                <label class="form-check-label" for="select_all_checkbox"></label>
+                                            </div>
+                                        </th>
                                         <th style="min-width:150px;">Full Name</th>
                                         <th>State</th>
                                         <th>City</th>
@@ -179,6 +191,36 @@
         </div>
     </div>
 </div>
+
+<button
+    class="btn custom-icon-theme-button d-none"
+    type="button"
+    id="openList"
+    data-bs-toggle="modal"
+    data-bs-target="#userListModal"
+><i class="fa fa-plus"></i>
+</button>
+
+<div class="modal fade" id="userListModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">User List</h5>
+                <button class="btn-close bg-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+            </div>
+            <div class="modal-body">
+                <h3 class="text-danger">This users cant be delete</h3>
+                <ul id="user_list" class="mt-3">
+                </ul>
+
+                <div class="text-center mt-5">
+                    <button class="btn custom-theme-button" type="button" onclick="deleteAllUsers()">Delete Remaining Users</button>
+                    <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @php
     $states_encoded = json_encode($states);
 @endphp
@@ -269,7 +311,11 @@
                 }
             },
             columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                {
+                    data: 'select_checkbox',
+                    name: 'select_checkbox',
+                    orderable: false
+                },
                 {
                     data: "email" , render : function ( data, type, row, meta ) {
                         return `<span>${row.first_name} ${row.last_name}</span><br> <span>${row.mobile_number}</span>`; 
@@ -447,6 +493,101 @@
                 $('#userModal').modal('hide');
             }
         });
+    });
+
+    $(document).on('change', '#select_all_checkbox', function(e) {
+        if ($(this).prop('checked')) {
+            $('.delete_table_row').show();
+
+            $(".table_checkbox").each(function(index) {
+                $(this).prop('checked',true)
+            })
+        }else{
+            $('.delete_table_row').hide();
+            $(".table_checkbox").each(function(index) {
+                $(this).prop('checked',false)
+            })
+        }
     })
+
+    $(document).on('change', '.table_checkbox', function(e) {
+        var rowss = [];
+        $(".table_checkbox").each(function(index) {
+            if ($(this).prop('checked')) {
+                rowss.push($(this).attr('data-id'))
+            }
+        })
+        if (rowss.length > 0) {
+            $('.delete_table_row').show();
+        }else{
+            $('.delete_table_row').hide();
+        }
+    });
+
+    let deletable_users = [];
+
+    function deleteTableRow(params) {
+        var rowss = [];
+        $(".table_checkbox").each(function(index) {
+            if ($(this).prop('checked')) {
+                rowss.push($(this).attr('data-id'))
+            }
+        })
+        if (rowss.length>0)
+        {
+            Swal.fire({
+                title: "Are you sure?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+            }).then(function(isConfirm) {
+                if (isConfirm.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('superadmin.checkForDeleteUsers') }}",
+                        data: {
+                            allids: rowss,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            let openListButton = document.getElementById('openList');
+                            openListButton.click();
+
+                            let userList = document.getElementById('user_list');
+                            userList.innerHTML = '';
+
+                            response.user_list.forEach((user, index) => {
+                                userList.innerHTML += `<li>${index + 1} . ${user}</li>`;
+                            });
+
+                            $('.delete_table_row').hide();
+
+                            deletable_users = response.deletable_user;
+
+                            $('#select_all_checkbox').prop('checked',false);
+                        }
+                    });
+                }
+            })
+        }
+    }
+
+    function deleteAllUsers() {
+        $.ajax({
+            type: "POST",
+            url: "{{ route('superadmin.deleteAllUsers') }}",
+            data: {
+                allids: deletable_users,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                $('#userTable').DataTable().draw();
+                $('#userListModal').modal('hide');
+                deletable_users = [];
+                $('#select_all_checkbox').prop('checked',false);
+            }
+        });
+    }
+
 </script>
 @endpush
