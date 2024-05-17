@@ -7,12 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\Api\Properties;
-use App\Models\City;
 use App\Models\Enquiries;
 use App\Models\Projects;
 use App\Models\State;
 use App\Models\Subplans;
-use ArrayObject;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -129,7 +127,13 @@ class UserController extends Controller
 			array_multisort($id_column, SORT_DESC, $final_array);
 
 			return DataTables::of($final_array)
-				->addIndexColumn()
+				->editColumn('select_checkbox', function ($row) {
+					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
+				<input class="form-check-input table_checkbox" data-id="' . $row['id'] . '" name="select_row[]" id="checkbox-primary-' . $row['id'] . '" type="checkbox">
+				<label class="form-check-label" for="checkbox-primary-' . $row['id'] . '"></label>
+				</div>';
+					return $abc;
+				})
 				->editColumn('plan', function ($row) {
 					if (!empty($row['plan']['name'])) {
 						return $row['plan']['name'];
@@ -182,7 +186,7 @@ class UserController extends Controller
 					
 					return $buttons;
 				})
-				->rawColumns(['Actions', 'active'])
+				->rawColumns(['Actions', 'active', 'select_checkbox'])
 				->make(true);
 		}
 
@@ -442,5 +446,37 @@ class UserController extends Controller
 		}
 
 		return view('superadmin.users.login_activity');
+	}
+
+	public function checkForDeleteUsers(Request $request)
+	{
+		$users_list = [];
+		$users_list_possible = [];
+		
+		foreach ($request->allids as $user_id) {
+			$users = User::where('parent_id',$user_id)->get()->count();
+			$properties  = Properties::where('user_id',$user_id)->get()->count();
+			$enquiries  = Enquiries::where('user_id',$user_id)->get()->count();
+			$projects  = Projects::where('user_id',$user_id)->get()->count();
+
+			$total = $users + $properties + $projects + $enquiries;
+
+			if($total > 0) {
+				$user = User::withTrashed()->find($user_id);
+
+				array_push($users_list,[
+					$user->first_name.' '.$user->last_name,
+				]);
+			} else {
+				array_push($users_list_possible,$user_id);
+			}
+		}
+
+		return response()->json(['user_list' => $users_list, 'deletable_user' => $users_list_possible]);
+	}
+
+	public function deleteAllUsers(Request $request)
+	{
+		User::whereIn('id', $request->allids ?? [])->delete();
 	}
 }
