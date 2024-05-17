@@ -8,6 +8,21 @@
                 </div>
             </div>
         </div>
+        <style>
+            .card .card-body {
+                border-radius: 15px;
+            }
+            .pt span, strong {
+                font-size: 15px;
+                margin: 5px 0;
+            }
+            .card-title {
+                padding: 10px;
+            }
+            .card {
+                margin-top: 20px;
+            }   
+        </style>
         <!-- Container-fluid starts-->
         <div class="container-fluid">
             <div class="row">
@@ -70,49 +85,6 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" class="d-none" name="this_progress_data_id" id="this_progress_data_id">
-                    <div class="row">
-                        <div class="form-group col-md-4 m-b-20">
-                            <div class="fname">
-                                <input type="text" class="form-control" id="nameRead" style="background:#ccc;" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4 m-b-20">
-                            <div class="fname">
-                                <input type="text" class="form-control" id="companyRead" style="background:#ccc;" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4 m-b-20">
-                            <div class="fname">
-                                <input type="text" class="form-control" id="mobileRead" style="background:#ccc;" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4 m-b-20">
-                            <div class="fname">
-                                <input type="text" class="form-control" id="emailRead" style="background:#ccc;" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4 m-b-20">
-                            <div class="fname">
-                                <input type="text" class="form-control" id="planRead" style="background:#ccc;" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4 m-b-20">
-                            <div class="fname">
-                                <input type="text" class="form-control" id="stateRead" style="background:#ccc;" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4 m-b-20">
-                            <div class="fname">
-                                <input type="text" class="form-control" id="cityRead" style="background:#ccc;" disabled>
-                            </div>
-                        </div>
-                        {{-- <div class="form-group col-md-4 m-b-20">
-                            <div class="fname">
-                                <label for="locality">Locality</label>
-                                <input type="text" class="form-control" id="localityRead" disabled>
-                            </div>
-                        </div> --}}
-                    </div>
                     <p class="border-top"></p>
                     <div class="row mb-1">
                         <div class="form-group col-md-4 m-b-20">
@@ -191,7 +163,26 @@
                 <div class="modal-body">
                     <button class="btn btn-secondary" id="addProgressButton" data-id=""
                         onclick="updateStatusForm(this)">Add</button>
-
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title bg-primary rounded">Lead Details</h4>
+                            <div class="d-flex justify-content-between">
+                                <div class="pt">
+                                    <div class=""><strong>Name:</strong> <span id="nameRead"></span></div>
+                                    <div class=""><strong>Company:</strong> <span id="companyRead"></span></div>
+                                    <div class=""><strong>Phone:</strong> <span id="mobileRead"></span></div>
+                                </div>
+                                <div class="pt">
+                                    <div class=""><strong>Email:</strong> <span id="emailRead"></span></div>
+                                    <div class=""><strong>Plan:</strong> <span id="planRead"></span></div>
+                                    <div class=""><strong>State:</strong> <span id="stateRead"></span></div>
+                                </div>
+                                <div class="pt">
+                                    <div class=""><strong>City:</strong><span id="cityRead"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <table class="table custom-table-design mt-2">
                         <thead>
                             <tr>
@@ -418,11 +409,7 @@
                     { data: 'Actions', name: 'Actions' },
                 ],
                 columnDefs: [
-                    // { targets: 0, width: '150px' },
                     { targets: 1, width: '150px' },
-                    // { targets: 2, width: '200px' },
-                    // { targets: 3, className: 'text-center' },
-                    // { targets: 4, className: 'text-center' },
                 ],
                 "drawCallback": function(settings, json) {
                         $('.color-code-popover').attr('data-bs-content', $('#mypopover-content').html());
@@ -513,16 +500,6 @@
                     $('#progress_enquiry').val(data.brom_enq.enquiry);
                     $('#this_progress_data_id').val(data.brom_enq.id);
                     $('#status').val(data.brom_enq.status).trigger('change');
-                    // ---------------- display statically data -------
-                    $('#nameRead').val(data.brom_enq.user_name)
-                    $('#companyRead').val(data.brom_enq.company)
-                    $('#mobileRead').val(data.brom_enq.mobile)
-                    $('#emailRead').val(data.brom_enq.email)
-                    $('#planRead').val(data.brom_enq.plan_interested.name)
-                    $('#stateRead').val(data.brom_enq.state.name)
-                    $('#cityRead').val(data.brom_enq.city.name)
-                    // $('#localityRead').val(data.brom_enq.lead.)
-                    // ---------------- display statically data -------
                     $('#showprogressmodal').modal('hide');
                     $('#progressModal').modal('show');
                 }
@@ -540,6 +517,20 @@
                     },
                     success: function(data) {
                         data = JSON.parse(data);
+                        console.log('lead: ', data[0].lead);
+
+                        // ---------------- display statically data -------
+                        if (data.length > 0) {
+                            $('#nameRead').text(data[0].lead.user_name)
+                            $('#companyRead').text(data[0].lead.company)
+                            $('#mobileRead').text(data[0].lead.mobile)
+                            $('#emailRead').text(data[0].lead.email)
+                            $('#planRead').text(data[0].lead.plan_interested.name)
+                            $('#stateRead').text(data[0].lead.state.name)
+                            $('#cityRead').text(data[0].lead.city.name)
+                        }
+                        // ---------------- display statically data -------
+                        
                         for (let i = 0; i < data.length; i++) {
                             var str = '<tr>';
                             str += '   <td>' + data[i]['created_at'] + '</td>';

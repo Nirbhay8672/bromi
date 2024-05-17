@@ -93,10 +93,7 @@ class BromiEnquiryController extends Controller
 
                     $s_1 = 'border-bottom:10px solid #1d2848 !important';
                     $title = $pro;
-                    /* if (isset($dropdownsarr[$pro])) {
-                        $s_1 = 'border-bottom:10px solid ' . (isset(explode('___', $dropdownsarr[$pro]['name'])[1]) ? explode('___', $dropdownsarr[$pro]['name'])[1] : "") . ' !important';
-                        $title = (isset(explode('___', $dropdownsarr[$pro]['name'])[0]) ? explode('___', $dropdownsarr[$pro]['name'])[0] : "");
-                    } */
+
                     if ($pro == Statuses::Lead_CONFIRMED) {
                         $s_1 = 'border-bottom:10px solid #ff7e00 !important';
                     } elseif ($pro == Statuses::DEMO_SCHEDULED) {
@@ -119,7 +116,6 @@ class BromiEnquiryController extends Controller
                     $second = '<div><div class="row mx-0 align-items-center"><div data-bs-content="' . $title . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom" style="' . $s_1 . '" class="py-0 px-0 d-block col-8"></div> <div class="col-2"><i class="fa fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="&nbsp;" data-bs-trigger="hover focus"></i></div></div></div>';
                     $end = '</td>';
 
-                // $second = '<div><div class="row mx-0 align-items-center"><div title="'.$title.'" data-toggle="tooltip" data-bs-html="true"  style="' . $s_1 . '" class="py-0 px-0 d-block col-8"></div> <div class="col-2"><i class="fa fa-info-circle color-code-popover" data-bs-content="" data-bs-trigger="hover focus"></i></div></div></div>';
                     return $first . $second . $end;
                 })
                 ->editColumn('followup_date', function ($row) {
@@ -172,7 +168,7 @@ class BromiEnquiryController extends Controller
 
     public function getProgress(Request $request)
     {
-        $progress = LeadProgress::with('User', 'Lead')->where('lead_id', $request->id)->orderBy('id', 'DESC')->get()->toArray();
+        $progress = LeadProgress::with('User', 'Lead.planInterested', 'Lead.city', 'Lead.state')->where('lead_id', $request->id)->orderBy('id', 'DESC')->get()->toArray();
         foreach ($progress as $key => $value) {
             $value['created_at'] = Carbon::parse($value['created_at'])->format('d-m-Y');
             $value['nfd'] = Carbon::parse($value['nfd'])->format('d-m-Y g:i A');
