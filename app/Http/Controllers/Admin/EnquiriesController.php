@@ -74,8 +74,7 @@ class EnquiriesController extends Controller
 				return ($var['name'] == 'only-assigned');
 			});
 
-			if (count($new) > 0 &&  $user->role_id !== '1') {
-				// dd("0nn",$user->role_id);
+			if (count($new) > 0 &&  $user->role_id != '1') {
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
 						$query->where('assign_id', '=', Auth::user()->id);
@@ -83,7 +82,6 @@ class EnquiriesController extends Controller
 					->orderBy('id', 'desc')
 					->get();
 			} else {
-				//   dd("02");
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->when($request->filter_by, function ($query) use ($request) {
 						if ($request->filter_by == 'new') {
@@ -256,7 +254,7 @@ class EnquiriesController extends Controller
 							// 	// dd("query :",$query->toSql());
 
 							// }
-							
+
 							if ($request->match_budget_from_type) {
 								$survey_price = (int) $pro->survey_price; // Cast to integer
 								$unitDetails = json_decode($pro->unit_details, true);
@@ -272,21 +270,23 @@ class EnquiriesController extends Controller
 										->where('budget_to', '>=', $unit_price); // 5000
 								}
 							}
-							
+
 
 							// size range = prop salable area
 							if ($request->match_enquiry_size) {
 								// dd("match_enquiry_size ==>", $request->match_enquiry_size, "..", $pro->salable_area, "..", $pro->constructed_salable_area);
 								$parts = explode("_-||-_", $pro->salable_area);
 								$result = $parts[0];
+								$result_unit = $parts[1];
 								$area_size_from = str_replace(',', '', $result);
 								$area_size_to = str_replace(',', '', $result);
-
-								// dd($result);
+								
 								$parts = explode("_-||-_", $pro->constructed_salable_area);
 								$result2 = $parts[0];
+								$result2_unit = $parts[1];
 								$area_from = str_replace(',', '', $result2);
 								$area_to = str_replace(',', '', $result2);
+								// dd($result,$result2,$pro->salable_area,$result_unit);
 
 								if ($area_size_from != '' && $area_size_to != '') {
 									$query->where('area_from', '<=', $area_size_from)
@@ -294,6 +294,14 @@ class EnquiriesController extends Controller
 								} else if ($area_from != '' && $area_to != '') {
 									$query->where('area_from', '<=', $area_from)
 										->where('area_to', '>=', $area_to);
+								}
+
+								if($result_unit){
+									$query->where('area_from_measurement', '=', $result_unit)
+									->where('area_to_measurement', '>=', $result_unit);
+								}else if($result2_unit){
+									$query->where('area_from_measurement', '=', $result2_unit)
+									->where('area_to_measurement', '>=', $result2_unit);
 								}
 							}
 
@@ -423,7 +431,7 @@ class EnquiriesController extends Controller
 					$sub_cat = ((!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '');
 					$configurationArray = json_decode($row->configuration);
 					// dd("sub ",$configurationArray);
-					$configuration_display = ''; 
+					$configuration_display = '';
 					if (!empty($configurationArray) && isset($configurationArray[0])) {
 						$configuration_names = []; // Initialize an empty array to store configuration names
 
@@ -540,7 +548,7 @@ class EnquiriesController extends Controller
 						if (!empty($pro->remarks)) {
 							$remark_data = $pro->remarks;
 						}
-						return Carbon::parse($pro->nfd)->format('d-m-Y \| H:i'). '<br>'. $remark_data;
+						return Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') . '<br>' . $remark_data;
 					}
 					return $row->telephonic_discussion;
 				})
@@ -604,7 +612,7 @@ class EnquiriesController extends Controller
 		$prop_list = Helper::get_property_units_helper();
 		$projects = Properties::with('Projects')->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
-        
+
 
 		$prop_type = [];
 		foreach ($configuration_settings as $key => $value) {
@@ -684,10 +692,10 @@ class EnquiriesController extends Controller
 
 		$type = "Flat";
 		if (!empty($request->type)) {
-            $type = $request->type;
-        }
+			$type = $request->type;
+		}
 
-		$vvells = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P','Q','R'];
+		$vvells = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'];
 		foreach ($vvells as $key => $value) {
 			$spreadsheet->getActiveSheet()->getColumnDimension($value)->setWidth(15);
 		}
@@ -711,52 +719,45 @@ class EnquiriesController extends Controller
 		}
 
 		$subcategoryOptions = [];
-        $categoryOptions = [];
-        $propertyTypeOptions = [];
-        if ($type == 'Flat') {
-            $subcategoryOptions = ['1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
-            $categoryOptions = ['Flat'];
-            $propertyTypeOptions = ['Residential'];
-        } elseif ($type == 'Vila/Bunglow') {
-            $subcategoryOptions = ['1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
-            $categoryOptions = ['Vila/Bunglow'];
-            $propertyTypeOptions = ['Residential'];
-
-        } elseif ($type == 'Land') {
-            $subcategoryOptions = ['Commercial Land', 'Agricultural/Farm Land'];
-            $categoryOptions = ['Land'];
-            $propertyTypeOptions = ['Commercial'];
-
-        } elseif ($type == 'Penthouse') {
-            $subcategoryOptions = ['1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
-            $categoryOptions = ['Penthouse'];
-            $propertyTypeOptions = ['Residential'];
-
-        } elseif ($type == 'Farmhouse') {
-            $subcategoryOptions = [''];
-            $categoryOptions = ['Farmhouse'];
-            $propertyTypeOptions = ['Residential'];
-
-        } elseif ($type == 'Office') {
-            $subcategoryOptions = ['office space', 'Co-working'];
-            $categoryOptions = ['Office'];
-            $propertyTypeOptions = ['Commercial'];
-
-        } elseif ($type == 'Retail') {
-            $subcategoryOptions = ['Ground floor', '1st floor', '2st floor', '3rd floor'];
-            $categoryOptions = ['Retail'];
-            $propertyTypeOptions = ['Commercial'];
-
-        } elseif ($type == 'Storage/industrial') {
-            $subcategoryOptions = ['Warehouse', 'Cold Storage', 'ind. shed', 'Plotting'];
-            $categoryOptions = ['Storage/industrial'];
-            $propertyTypeOptions = ['Commercial'];
-
-        } elseif ($type == 'Plot') {
-            $subcategoryOptions = [''];
-            $categoryOptions = ['Plot'];
-            $propertyTypeOptions = ['Residential'];
-        }
+		$categoryOptions = [];
+		$propertyTypeOptions = [];
+		if ($type == 'Flat') {
+			$subcategoryOptions = ['1rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
+			$categoryOptions = ['Flat'];
+			$propertyTypeOptions = ['Residential'];
+		} elseif ($type == 'Vila/Bunglow') {
+			$subcategoryOptions = ['1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
+			$categoryOptions = ['Vila/Bunglow'];
+			$propertyTypeOptions = ['Residential'];
+		} elseif ($type == 'Land') {
+			$subcategoryOptions = ['Commercial Land', 'Agricultural/Farm Land'];
+			$categoryOptions = ['Land'];
+			$propertyTypeOptions = ['Commercial'];
+		} elseif ($type == 'Penthouse') {
+			$subcategoryOptions = ['1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
+			$categoryOptions = ['Penthouse'];
+			$propertyTypeOptions = ['Residential'];
+		} elseif ($type == 'Farmhouse') {
+			$subcategoryOptions = [''];
+			$categoryOptions = ['Farmhouse'];
+			$propertyTypeOptions = ['Residential'];
+		} elseif ($type == 'Office') {
+			$subcategoryOptions = ['office space', 'Co-working'];
+			$categoryOptions = ['Office'];
+			$propertyTypeOptions = ['Commercial'];
+		} elseif ($type == 'Retail') {
+			$subcategoryOptions = ['Ground floor', '1st floor', '2st floor', '3rd floor'];
+			$categoryOptions = ['Retail'];
+			$propertyTypeOptions = ['Commercial'];
+		} elseif ($type == 'Storage/industrial') {
+			$subcategoryOptions = ['Warehouse', 'Cold Storage', 'ind. shed', 'Plotting'];
+			$categoryOptions = ['Storage/industrial'];
+			$propertyTypeOptions = ['Commercial'];
+		} elseif ($type == 'Plot') {
+			$subcategoryOptions = [''];
+			$categoryOptions = ['Plot'];
+			$propertyTypeOptions = ['Residential'];
+		}
 
 
 
@@ -772,7 +773,7 @@ class EnquiriesController extends Controller
 		$progress = '"Lead Confirmed,Site Visit Scheduled,Site Visit Completed,Discussion,Booked,Lost"';
 		$propertyStatus = '"Active,In Active"';
 		$arrr = [];
-		$arrr['vals'] = [$enquiryFor, $PropertyType,$specificType, $planType, $enquirySource, $users, $propertyStatus, $progress];
+		$arrr['vals'] = [$enquiryFor, $PropertyType, $specificType, $planType, $enquirySource, $users, $propertyStatus, $progress];
 		$arrr['sheetcell'] = ['D1', 'E1', 'F1', 'G1', 'H1', 'I1',  'L1', 'O1'];
 		$arrr['setsqref'] = ['D2:D1048576', 'E2:E1048576', 'F2:F1048576', 'G2:G1048576', 'H2:H1048576', 'I2:I1048576',  'L2:L1048576', 'O2:O1048576', 'P2:P1048576'];
 		foreach ($arrr['sheetcell'] as $key => $value) {
@@ -1280,8 +1281,8 @@ class EnquiriesController extends Controller
 			// if (!empty($value['AssingedTo'])) {
 			// 	$user = User::where('parent_id', Session::get('parent_id'))->where('first_name', 'like', '%' . explode(' ', $value['AssingedTo'])[0])->where('last_name', 'like', '%' . explode(' ', $value['AssingedTo'])[1])->first();
 			// }
-			
-			
+
+
 			// if (!empty($user->id) && !empty($value['AssingedTo'])) {
 			// 	$user_id = $user->id;
 			// }
@@ -1299,7 +1300,7 @@ class EnquiriesController extends Controller
 			}
 
 			$Configuration_id = NULL;
-			$Configuration = DropdownSettings::where('name', 'like', '%' . $value['Configuration'] . '%')->where('dropdown_for','property_sub_category')->first();
+			$Configuration = DropdownSettings::where('name', 'like', '%' . $value['Configuration'] . '%')->where('dropdown_for', 'property_sub_category')->first();
 			if (!empty($Configuration->user_id) && !empty($value['Configuration'])) {
 				$Configuration_id = $Configuration->user_id;
 			}
@@ -1325,7 +1326,7 @@ class EnquiriesController extends Controller
 			if (empty($value['Enquiry Progress'])) {
 				$telephonic = $value['Remarks'];
 			}
-			dd("value",$value,$enquiry_source_id);
+			dd("value", $value, $enquiry_source_id);
 
 			if (!empty($value['ClientName'])) {
 				$data =  new Enquiries();
@@ -1537,9 +1538,9 @@ class EnquiriesController extends Controller
 			}
 		}
 
-		
-		
-		
+
+
+
 		$land_units = DB::table('land_units')->get();
 		// match query
 		$property_for = ($data->enquiry_for == 'Buy') ? 'Sell' : $data->enquiry_for;
@@ -1547,8 +1548,8 @@ class EnquiriesController extends Controller
 		$budgetTo = str_replace(',', '', $data->budget_to);
 		$areaFrom = $data->area_from;
 		$areaTo = $data->area_to;
-		$area_from_to_unit=$land_units->where('id',$data->area_from_measurement)->first();
-		// dd("area_from_to_unit",$area_from_to_unit->id);
+		$area_from_to_unit = $land_units->where('id', $data->area_from_measurement)->first();
+
 		$properties = Properties::where('properties.property_type', $data->requirement_type)
 			->where('properties.property_for', $property_for)
 			->where('properties.property_category', $data->property_type)
@@ -1557,25 +1558,23 @@ class EnquiriesController extends Controller
 					$query->where('properties.survey_price', '>=', $budgetFrom)
 						->where('properties.survey_price', '<=', $budgetTo);
 				})
-				->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-					$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-						->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-				})
-				// ->Where(function ($query) use ($areaFrom, $areaTo) {
-				// 	$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-				// 		->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo]);
-				// });
-				->Where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-					$query
-						->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-						->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-						->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id])
-						->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-				});
-		
+					->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+						$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+					})
+					->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+						$query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+							$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+								->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+						})
+							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+									->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+							});
+					});
 			})
 			->get();
-			// dd("properties :",$properties);
+
 		$employees = User::where('parent_id', Session::get('parent_id'))->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
 		$projects = Projects::orderBy('project_name')->get();
@@ -1707,7 +1706,7 @@ class EnquiriesController extends Controller
 		$country_codes  = DB::table('countries')->get();
 
 
-		return view('admin.properties.add_enquiry', compact('country_codes','enquiry_list', 'land_units', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
+		return view('admin.properties.add_enquiry', compact('country_codes', 'enquiry_list', 'land_units', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
 	}
 
 	public function editEnquiry(Request $request)
@@ -1739,7 +1738,7 @@ class EnquiriesController extends Controller
 		$land_units = DB::table('land_units')->get();
 		$country_codes  = DB::table('countries')->get();
 
-		return view('admin.properties.add_enquiry', compact('country_codes','edit_configuration', 'land_units', 'edit_category', 'enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'current_id', 'districts', 'talukas', 'villages'));
+		return view('admin.properties.add_enquiry', compact('country_codes', 'edit_configuration', 'land_units', 'edit_category', 'enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'current_id', 'districts', 'talukas', 'villages'));
 	}
 	// public function getEnquiryConfiguration(Request $request)
 	// {
@@ -1777,7 +1776,7 @@ class EnquiriesController extends Controller
 	// }
 
 
-    public function getEnquiryConfiguration(Request $request)
+	public function getEnquiryConfiguration(Request $request)
 	{
 		$selectedCategories = json_decode($request->query('selectedCategories'), true);
 		$filteredConfig = [];
