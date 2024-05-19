@@ -193,16 +193,6 @@ class PropertyController extends Controller
                             $budgetFrom = str_replace(',', '', $enq->budget_from);
                             $budgetTo = str_replace(',', '', $enq->budget_to);
 
-                            // $query->where(function ($query) use ($budgetFrom, $budgetTo) {
-                            //     $query->where(function ($query) use ($budgetFrom, $budgetTo) {
-                            //         $query->where('properties.survey_price', '>=', $budgetFrom)
-                            //             ->where('properties.survey_price', '<=', $budgetTo);
-                            //     })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-                            //         $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-                            //             ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-                            //     });
-
-                            // });
                             $query->where(function ($query) use ($budgetFrom, $budgetTo) {
                                 $query->where(function ($query) use ($budgetFrom, $budgetTo) {
                                     $query->where('properties.survey_price', '>=', $budgetFrom)
@@ -218,18 +208,20 @@ class PropertyController extends Controller
                         }
 
                         if ($request->match_enquiry_size) {
-                            // $enq->area_from = '1000';
-                            // $enq->area_to = '1800';
-
-                            //enq 48=vigha
-                            // dd("match_enquiry_size 32", $request->match_enquiry_size, "area_from..", $enq->area_from, $enq->area_from_measurement, "area_to...", $enq->area_to, $enq->area_to_measurement);
+                            // $query->where(function ($query) use ($enq) {
+                            //     $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                            //         ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                            //         ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
+                            // });
 
                             $query->where(function ($query) use ($enq) {
                                 $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                    ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
                                     ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
-                                    ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
+                                    ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                    ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                    ->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$enq->area_from_measurement]);
                             });
-                            // survey_plot_size
                         }
 
                         // if ($request->match_building && !empty(json_decode($enq->building_id)[0])) {

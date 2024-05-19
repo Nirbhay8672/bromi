@@ -277,14 +277,16 @@ class EnquiriesController extends Controller
 								// dd("match_enquiry_size ==>", $request->match_enquiry_size, "..", $pro->salable_area, "..", $pro->constructed_salable_area);
 								$parts = explode("_-||-_", $pro->salable_area);
 								$result = $parts[0];
+								$result_unit = $parts[1];
 								$area_size_from = str_replace(',', '', $result);
 								$area_size_to = str_replace(',', '', $result);
-
-								// dd($result);
+								
 								$parts = explode("_-||-_", $pro->constructed_salable_area);
 								$result2 = $parts[0];
+								$result2_unit = $parts[1];
 								$area_from = str_replace(',', '', $result2);
 								$area_to = str_replace(',', '', $result2);
+								// dd($result,$result2,$pro->salable_area,$result_unit);
 
 								if ($area_size_from != '' && $area_size_to != '') {
 									$query->where('area_from', '<=', $area_size_from)
@@ -292,6 +294,14 @@ class EnquiriesController extends Controller
 								} else if ($area_from != '' && $area_to != '') {
 									$query->where('area_from', '<=', $area_from)
 										->where('area_to', '>=', $area_to);
+								}
+
+								if($result_unit){
+									$query->where('area_from_measurement', '=', $result_unit)
+									->where('area_to_measurement', '>=', $result_unit);
+								}else if($result2_unit){
+									$query->where('area_from_measurement', '=', $result2_unit)
+									->where('area_to_measurement', '>=', $result2_unit);
 								}
 							}
 
