@@ -10,17 +10,26 @@
         <!-- Container-fluid starts-->
         <div class="main-card mb-3 card">
             <div class="card-body">
+                <div class="card-header">
+                    <h5 class="mb-3">Add SMS Template <a class="btn custom-icon-theme-button tooltip-btn"
+                        href="{{ route('superadmin.sms.index') }}"
+                        data-tooltip="Back"
+                        style="float: inline-end;"
+                    >
+                        <i class="fa fa-backward"></i>
+                    </a></h5>
+                </div>
                 <div class="container-fluid">
                 <form method="post" action="{{route('superadmin.sms.update',$email_template->id)}}" id="email_template_form">
                     @csrf
                     <input type="hidden" name="id" value="{{$email_template->id}}">
                     <div class="col-md-6">
-                        <div class="position-relative form-group">
+                        <div class="position-relative form-group {{$email_template->title ? 'focused' : ''}}">
                             <label for="title" class="">Title</label>
-                            <input name="title" placeholder="Title" type="text" value="{{$email_template->title}}" class="form-control" />
+                            <input name="title" type="text" value="{{$email_template->title}}" class="form-control" />
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-3">
                         <div class="position-relative form-group">
                             <label for="lastname" class="">Content</label>
                             <textarea id="content" data-error="#email_content_error" name="content" cols="30" rows="50">{!! $email_template->content !!}</textarea>

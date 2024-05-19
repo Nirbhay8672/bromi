@@ -14,7 +14,13 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">List of Cities</h5>
+                            <h5 class="mb-3">List of Cities <a class="btn custom-icon-theme-button tooltip-btn"
+                                href="{{ route('admin.settings') }}"
+                                data-tooltip="Back"
+                                style="float: inline-end;"
+                            >
+                                <i class="fa fa-backward"></i>
+                            </a></h5>
                             <div class="row mt-2 mb-2">
                                 <div class="col">
                                     <button

@@ -2,20 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helpers\Helper;
-use Illuminate\Support\Facades\Http;
-use App\Models\InstaProperties;
 use App\Http\Controllers\Controller;
-use App\Models\Areas;
-use App\Models\DropdownSettings;
 use App\Models\EmailTemplate;
-use App\Models\Enquiries;
-use App\Models\Projects;
-use App\Models\Properties;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Yajra\DataTables\Facades\DataTables;
 use Goutte\Client;
 use Illuminate\Support\Facades\DB;
@@ -90,9 +80,9 @@ public function emaildataget(Request $request)
     return response()->json(['error' => 'Somthing wrong.'], 404);
 }
 
-public function integrationemailsendmailform (){
-	return view("admin.integration.show");
-}
+    public function integrationemailsendmailform (){
+        return view("admin.integration.show");
+    }
 
   /**
      * Display a listing of the resource.
@@ -222,7 +212,7 @@ public function integrationemailsendmailform (){
         $update->title =$request->title;
         $update->content =$request->content;
         $update->status =$request->status;
-        $update->trmplate_type ='email';
+        $update->template_type ='sms';
         $update->user_id =$user;
         $update->save();
         return redirect()->route('admin.email.index');
@@ -307,7 +297,7 @@ public function integrationemailsendmailform (){
             'title'=>$request->title,
             'content'=>$request->content,
             'status'=>$request->status,
-            'template_type'=>'email',
+            'template_type'=>'sms',
             'user_id'=>$user,
         ]);
         return redirect()->route('admin.smsemail.index');
@@ -362,7 +352,7 @@ public function integrationemailsendmailform (){
         $update->title =$request->title;
         $update->content =$request->content;
         $update->status =$request->status;
-        $update->trmplate_type ='sms';
+        $update->template_type ='sms';
         $update->user_id =$user;
         $update->save();
         return redirect()->route('admin.smsemail.index');

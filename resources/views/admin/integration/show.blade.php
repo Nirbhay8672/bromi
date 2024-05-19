@@ -100,6 +100,7 @@
                             </div>
                         </form>
                     </div>
+                    @if(count($email_bulk) > 0)
                     <template x-if="email_bulk_array.length > 0">
                         <div class="modal-body">
                             <p><strong>User name : </strong> {{ $email_bulk[0]->user_name }}</p>
@@ -112,6 +113,7 @@
                             </div>
                         </div>
                     </template>
+                    @endif
                 </div>
             </div>
         </div>
