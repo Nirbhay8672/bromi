@@ -969,7 +969,7 @@ class PropertyController extends Controller
         if ($type == 'Flat') {
             $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Constructed Builtup Area', 'Constructed Carpet Area', 'Salable Plot Area', 'Constructed Salable Area', 'Terrace Carpet Area', 'Carpet Measurement', 'Super Builtup Measurement', 'Builtup Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Two wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'remarks'];
         } else if ($type == 'Vila/Bunglow') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at','Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1','Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2','Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3', 'remarks'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3', 'remarks'];
         } else if ($type == 'Land,Plot') {
             $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Carpet Plot Area', 'Salable Area', 'Length of plot', 'Width of plot', 'Total No. of units', 'No Of Floors Allowed', 'No Of Side Open', 'Hot', 'Favourite', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'remarks'];
         } else if ($type == 'Penthouse') {
@@ -997,42 +997,34 @@ class PropertyController extends Controller
             $subcategoryOptions = ['1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
             $categoryOptions = ['Vila/Bunglow'];
             $propertyTypeOptions = ['Residential'];
-
         } elseif ($type == 'Land') {
             $subcategoryOptions = ['Commercial Land', 'Agricultural/Farm Land'];
             $categoryOptions = ['Land'];
             $propertyTypeOptions = ['Commercial'];
-
         } elseif ($type == 'Penthouse') {
             $subcategoryOptions = ['1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk'];
             $categoryOptions = ['Penthouse'];
             $propertyTypeOptions = ['Residential'];
-
         } elseif ($type == 'Farmhouse') {
             $subcategoryOptions = [''];
             $categoryOptions = ['Farmhouse'];
             $propertyTypeOptions = ['Residential'];
-
         } elseif ($type == 'Office') {
             $subcategoryOptions = ['office space', 'Co-working'];
             $categoryOptions = ['Office'];
             $propertyTypeOptions = ['Commercial'];
-
         } elseif ($type == 'Retail') {
             $subcategoryOptions = ['Ground floor', '1st floor', '2st floor', '3rd floor'];
             $categoryOptions = ['Retail'];
             $propertyTypeOptions = ['Commercial'];
-
         } elseif ($type == 'Storage/industrial') {
             $subcategoryOptions = ['Warehouse', 'Cold Storage', 'ind. shed', 'Plotting'];
             $categoryOptions = ['Storage/industrial'];
             $propertyTypeOptions = ['Commercial'];
-
         } elseif ($type == 'Plot') {
             $subcategoryOptions = [''];
             $categoryOptions = ['Plot'];
             $propertyTypeOptions = ['Residential'];
-
         }
 
         $allCells2 = [];
@@ -1118,7 +1110,7 @@ class PropertyController extends Controller
         $key_available_at = '"Office,Owner,Care Taker"';
 
         $arrDetails['Property For'] = $propertyFor;
-        $arrDetails['Property Type'] = '"' . implode(",", $propertyTypeOptions ) . '"';;
+        $arrDetails['Property Type'] = '"' . implode(",", $propertyTypeOptions) . '"';;
         $arrDetails['Category'] = '"' . implode(",", $categoryOptions) . '"';
         $arrDetails['Subcategory'] = '"' . implode(",", $subcategoryOptions) . '"';
         $arrDetails['Project'] = $projects;
@@ -1933,7 +1925,7 @@ class PropertyController extends Controller
             if (!empty($property_type->id) && !empty($value['Property Type'])) {
                 $property_type_id = $property_type->id;
             }
-            
+
             $specific_property_id = null;
             $specific_property = DropdownSettings::where('name', 'like', '%' . $value['Category'] . '%')->first();
             if (!empty($specific_property->id) && !empty($value['Category'])) {
@@ -1941,7 +1933,7 @@ class PropertyController extends Controller
             }
 
             $Configuration_id = null;
-            $Configuration = DropdownSettings::where('name', 'like', "%{$value['Subcategory']}%")->where('dropdown_for','property_sub_category')->first();
+            $Configuration = DropdownSettings::where('name', 'like', "%{$value['Subcategory']}%")->where('dropdown_for', 'property_sub_category')->first();
             if (!empty($Configuration->id) && !empty($value['Subcategory'])) {
                 $Configuration_id = $Configuration->user_id;
             }
@@ -2064,8 +2056,8 @@ class PropertyController extends Controller
                     // 'property_wing' => $value['Wing'],
                     // 'property_unit_no' => $value['UnitNo'],
                     'unit_details' => json_encode($unit),
-                    'constructed_carpet_area' => !empty($value['Constructed Carpet Area']) ? $value['Constructed Carpet Area'] .'_-||-_1' : '_-||-_1',
-                    'constructed_builtup_area' => !empty($value['Constructed Builtup Area']) ? $value['Constructed Builtup Area'] .'_-||-_1' : '_-||-_1',
+                    'constructed_carpet_area' => !empty($value['Constructed Carpet Area']) ? $value['Constructed Carpet Area'] . '_-||-_1' : '_-||-_1',
+                    'constructed_builtup_area' => !empty($value['Constructed Builtup Area']) ? $value['Constructed Builtup Area'] . '_-||-_1' : '_-||-_1',
                     'builtup_area' => !empty($value['Salable Plot Area']) ? $value['Salable Plot Area'] . '_-||-_1' : '',
                     'plot_area' => !empty($value['Plot Area']) ? $value['Plot Area'] . '_-||-_1' : '',
                     'salable_plot_area' => !empty($value['Salable Plot Area']) ? $value['Salable Plot Area'] . '_-||-_1' : '',
@@ -2086,7 +2078,7 @@ class PropertyController extends Controller
                     // 'price' => $value['Price'] . ' ' . $value['Price Unit'],
                     'owner_details' => json_encode($contact_details),
                     'property_remarks' => "",
-                    
+
                     'created_at' => $created_at,
                 ]);
             }
@@ -2142,57 +2134,33 @@ class PropertyController extends Controller
             $dropdownsarr[$value['id']] = $value;
         }
         $dropdowns = $dropdownsarr;
-        // price
         $unitDetails = json_decode($property->unit_details, true);
-        $unit_price = !empty($unitDetails[0][4]) ? $unitDetails[0][4] : (!empty($unitDetails[0][7]) ? $unitDetails[0][7] : $unitDetails[0][3]);
-        // salable_area
+        $raw_unit_price = !empty($unitDetails[0][4]) ? $unitDetails[0][4] : (!empty($unitDetails[0][7]) ? $unitDetails[0][7] : $unitDetails[0][3]);
+        $unit_price = (int)str_replace(',', '', $raw_unit_price); // Convert to integer
+        $survey_price = (int)str_replace(',', '', $property->survey_price); // Convert to integer
+
         $area_parts = explode("_-||-_", $property->salable_area);
         $area_size = str_replace(',', '', $area_parts[0]);
-        $area_size_unit = str_replace(',', '', $area_parts[1]);
-        // constructed_salable_area
         $constructed_area_parts = explode("_-||-_", $property->constructed_salable_area);
         $constructed_area = str_replace(',', '', $constructed_area_parts[0]);
-        $constructed_area_unit = str_replace(',', '', $constructed_area_parts[1]);
+        $constructed_area_unit = "";
+        $area_size_unit = "";
+        if ($constructed_area !== "") {
+            $constructed_area_unit = str_replace(',', '', $constructed_area_parts[1]);
+        } else if ($area_size !== "") {
+            $area_size_unit = str_replace(',', '', $area_parts[1]);
+        }
         // matching
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
-            ->when(!empty($unit_price), function ($query) use ($unit_price) {
+            ->when($unit_price !== "", function ($query) use ($unit_price) {
                 return $query->where('budget_from', '<=', $unit_price)
                     ->where('budget_to', '>=', $unit_price);
-            },
-            function ($query) use ($property) {
+            }, function ($query) use ($property) {
                 return $query->where('budget_from', '<=', $property->survey_price)
                     ->where('budget_to', '>=', $property->survey_price);
             })
-            // ->when(!empty($area_size), function ($query) use ($area_size) {
-            //     return $query->where(function ($query) use ($area_size) {
-            //         $query->where('area_from', '<=', $area_size)
-            //             ->where('area_to', '>=', $area_size);
-            //     });
-            // },
-            // function ($query) use ($constructed_area) {
-            //     return $query->where(function ($query) use ($constructed_area) {
-            //         $query->where('area_from', '<=', $constructed_area)
-            //             ->where('area_to', '>=', $constructed_area);
-            // });
-            // ->when(!empty($area_size) || !empty($constructed_area), function ($query) use ($area_size, $area_size_unit, $constructed_area, $constructed_area_unit) {
-            //     return $query->where(function ($query) use ($area_size, $area_size_unit, $constructed_area, $constructed_area_unit) {
-            //         if (!empty($area_size)) {
-            //             $query->where('area_from', '<=', $area_size)
-            //                 ->where('area_to', '>=', $area_size)
-            //                 ->where('area_from_measurement', $area_size_unit);
-            //         }
-            //         if (!empty($constructed_area)) {
-            //             $query->orWhere(function ($query) use ($constructed_area, $constructed_area_unit) {
-            //                 $query->where('area_from', '<=', $constructed_area)
-            //                     ->where('area_to', '>=', $constructed_area)
-            //                     ->where('area_from_measurement', $constructed_area_unit);
-            //             });
-            //         }
-            //     });
-            // })
-        
             ->when(!empty($area_size), function ($query) use ($area_size, $area_size_unit) {
                 return $query->where(function ($query) use ($area_size, $area_size_unit) {
                     $query->where('area_from', '<=', $area_size)
@@ -2208,10 +2176,6 @@ class PropertyController extends Controller
                 });
             })
             ->get();
-
-            // dd("Enqq :",$enquiries);
-
-
         $prop_type = [];
         foreach ($dropdowns as $key => $value) {
             if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
