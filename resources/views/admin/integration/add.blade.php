@@ -15,8 +15,14 @@
                 
                 <div class="container-fluid">
                     <div class="row">
-                    <h1>Add Template  <a class="mt-1 btn btn-primary" href="{{route('admin.email.index')}}" type="button" style="float: right;">Back</a></h1>
-                     
+                    <h1>Add Template  <a class="btn custom-icon-theme-button tooltip-btn"
+                            href="{{route('admin.email.index')}}"
+                            data-tooltip="Back"
+                            style="float: inline-end;"
+                        >
+                            <i class="fa fa-backward"></i>
+                        </a>
+                    </h1>
                 </div>
                 <form method="post" action="{{route('admin.email.store')}}" id="email_template_form">
                    

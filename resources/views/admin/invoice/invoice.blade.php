@@ -13,6 +13,13 @@
 <body>
     <div class="tm_container">
         <div class="tm_invoice_wrap">
+            <a class="btn custom-icon-theme-button tooltip-btn"
+                href="{{ route('admin.settings') }}"
+                data-tooltip="Back"
+                style="float: inline-end;"
+            >
+                <i class="fa fa-backward"></i>
+            </a></h5>
             <div class="tm_invoice tm_style1" id="tm_download_section">
                 <div class="tm_invoice_in">
                     <div class="tm_invoice_head tm_align_center tm_mb20">

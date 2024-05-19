@@ -13,7 +13,13 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Query</h5>
+                            <h5 class="mb-3">Query <a class="btn custom-icon-theme-button tooltip-btn"
+                                href="<?php echo e(route('admin.index')); ?>"
+                                data-tooltip="Back"
+                                style="float: inline-end;"
+                            >
+                                <i class="fa fa-backward"></i>
+                            </a></h5>
                         </div>
                         <div class="card-body">
                             <div class="row">

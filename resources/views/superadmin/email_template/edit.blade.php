@@ -10,17 +10,26 @@
         <!-- Container-fluid starts-->
         <div class="main-card mb-3 card">
             <div class="card-body">
-                <div class="container-fluid">
+                <div class="card-header pb-3">
+                    <h5 class="mb-3">Edit Email Template <a class="btn custom-icon-theme-button tooltip-btn"
+                        href="{{ route('superadmin.email.index') }}"
+                        data-tooltip="Back"
+                        style="float: inline-end;"
+                    >
+                        <i class="fa fa-backward"></i>
+                    </a></h5>
+                </div>
+                <div class="container-fluid mt-3" style="margin-top: 10px !important;">
                 <form method="post" action="{{route('superadmin.email.update',$email_template->id)}}" id="email_template_form">
                     @csrf
                     <input type="hidden" name="id" value="{{$email_template->id}}">
-                    <div class="col-md-6">
-                        <div class="position-relative form-group">
+                    <div class="col-md-6 mt-2" style="margin-top: 10px !important;">
+                        <div class="position-relative form-group {{$email_template->title ? 'focused' : ''}}">
                             <label for="title" class="">Title</label>
-                            <input name="title" placeholder="Title" type="text" value="{{$email_template->title}}" class="form-control" />
+                            <input name="title" type="text" value="{{$email_template->title}}" class="form-control" />
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-3">
                         <div class="position-relative form-group">
                             <label for="lastname" class="">Content</label>
                             <textarea id="content" data-error="#email_content_error" name="content" cols="30" rows="50">{!! $email_template->content !!}</textarea>
