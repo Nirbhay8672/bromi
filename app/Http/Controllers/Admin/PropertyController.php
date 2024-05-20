@@ -172,9 +172,15 @@ class PropertyController extends Controller
                         }
 
                         // property Sub Category
+                        // if ($request->match_specific_sub_type && !empty($enq->configuration)) {
+                        //     dd("match_specific_sub_type", $enq->configuration, "..", $request->match_specific_sub_type);
+                        //     $query->where('properties.configuration', json_decode($enq->configuration));
+                        // }
                         if ($request->match_specific_sub_type && !empty($enq->configuration)) {
-                            // dd("match_specific_sub_type", $enq->configuration, "..", $request->match_specific_sub_type);
-                            $query->where('properties.configuration', json_decode($enq->configuration));
+                            $configurations = json_decode($enq->configuration, true);
+                            if (is_array($configurations)) {
+                                $query->whereIn('properties.configuration', $configurations);
+                            }
                         }
 
                         //property price & unit_price
