@@ -2146,6 +2146,7 @@ class PropertyController extends Controller
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
+            ->whereJsonContains('configuration', $property->configuration)
             ->when($unit_price !== "", function ($query) use ($unit_price) {
                 return $query->where('budget_from', '<=', $unit_price)
                     ->where('budget_to', '>=', $unit_price);
@@ -2168,6 +2169,7 @@ class PropertyController extends Controller
                 });
             })
             ->get();
+            // dd("Auth",Auth::user()->id,$property->configuration,$enquiries);
         $prop_type = [];
         foreach ($dropdowns as $key => $value) {
             if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
