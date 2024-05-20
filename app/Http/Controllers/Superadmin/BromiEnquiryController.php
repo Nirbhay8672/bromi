@@ -5,11 +5,15 @@ namespace App\Http\Controllers\Superadmin;
 use App\Constants\Statuses;
 use App\Http\Controllers\Controller;
 use App\Models\Areas;
+use App\Models\Branches;
 use App\Models\BromiEnquiry;
+use App\Models\DropdownSettings;
 use App\Models\LeadProgress;
+use App\Models\Projects;
 use App\Models\State;
 use App\Models\Subplans;
 use App\Models\SuperAreas;
+use App\Models\SuperCity;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
@@ -293,162 +297,283 @@ class BromiEnquiryController extends Controller
 			$arr = [];
 			$events = [];
 			$type_array = [];
-			// if ($request->newe) {
-			// 	$ar = [];
-			// 	$newenq = Enquiries::when($request->month, function ($query) use ($request) {
-			// 		return $query->whereMonth('created_at', '=', $request->month);
-			// 	})->when($request->year, function ($query) use ($request) {
-			// 		return $query->whereYear('created_at', '=', $request->year);
-			// 	})
-			// 		->where('enq_status', 1)
-			// 		->get();
-			// 	foreach ($newenq as $key => $value) {
-			// 		array_push($ar, Carbon::parse($value->created_at)->format('Y-m-d'));
-			// 	}
-			// 	$arr['new_enquiry'] = array_count_values($ar);
-			// 	$type_array[] = 'new_enquiry';
-			// }
-			// // Lead Confirm
-			// if ($request->leadConf) {
-			// 	$ar = [];
-			// 	$lead_conf = EnquiryProgress::whereHas('Enquiry')->where('status', 1)->where('progress', '=', 'Lead Confirmed')->when($request->month, function ($query) use ($request) {
-			// 		return $query->whereMonth('created_at', '=', $request->month);
-			// 	})->when($request->year, function ($query) use ($request) {
-			// 		return $query->whereYear('created_at', '=', $request->year);
-			// 	})->get();
+			if ($request->newe) {
+				$ar = [];
+				$newenq = BromiEnquiry::when($request->month, function ($query) use ($request) {
+					return $query->whereMonth('followup_date', '=', $request->month);
+				})->when($request->year, function ($query) use ($request) {
+					return $query->whereYear('followup_date', '=', $request->year);
+				})
+					// ->where('enq_status', 1)
+					->get();
+				foreach ($newenq as $key => $value) {
+					array_push($ar, Carbon::parse($value->followup_date)->format('Y-m-d'));
+				}
+				$arr['new_enquiry'] = array_count_values($ar);
+				$type_array[] = 'new_enquiry';
+			}
+			// Lead Confirm
+			if ($request->leadConf) {
+				$ar = [];
+				$lead_conf = LeadProgress::whereHas('Lead')->where('status', 1)->where('progress', '=', Statuses::Lead_CONFIRMED)->when($request->month, function ($query) use ($request) {
+					return $query->whereMonth('nfd', '=', $request->month);
+				})->when($request->year, function ($query) use ($request) {
+					return $query->whereYear('nfd', '=', $request->year);
+				})->get();
 
-			// 	foreach ($lead_conf as $key => $value) {
-			// 		array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
-			// 	}
-			// 	$arr['leadConf'] = array_count_values($ar);
-			// 	$type_array[] = 'leadConf';
-			// }
-			// // Site Visit
-			// if ($request->sitecomp) {
-			// 	$ar = [];
-			// 	$sitevisit = EnquiryProgress::whereHas('enquiry')->where('status', 1)->where('progress', '=', 'Site Visit Scheduled')->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
-			// 		return $query->whereMonth('nfd', '=', $request->month);
-			// 	})->when($request->year, function ($query) use ($request) {
-			// 		return $query->whereYear('nfd', '=', $request->year);
-			// 	})->get();
+				foreach ($lead_conf as $key => $value) {
+					array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
+				}
+				$arr['leadConf'] = array_count_values($ar);
+				$type_array[] = 'leadConf';
+			}
+			// Demo Scheduled
+			if ($request->sitecomp) {
+				$ar = [];
+				$sitevisit = LeadProgress::whereHas('Lead')->where('status', 1)->where('progress', '=', Statuses::DEMO_SCHEDULED)->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
+					return $query->whereMonth('nfd', '=', $request->month);
+				})->when($request->year, function ($query) use ($request) {
+					return $query->whereYear('nfd', '=', $request->year);
+				})->get();
 
-			// 	foreach ($sitevisit as $key => $value) {
-			// 		array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
-			// 	}
-			// 	$arr['site_visit_scheduled'] = array_count_values($ar);
-			// 	$type_array[] = 'site_visit_scheduled';
-			// 	// dd($arr['site_visit_scheduled'], "arr1");
-			// }
+				foreach ($sitevisit as $key => $value) {
+					array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
+				}
+				$arr['site_visit_scheduled'] = array_count_values($ar);
+				$type_array[] = 'site_visit_scheduled';
+				// dd($arr['site_visit_scheduled'], "arr1");
+			}
 
-			// // Site Completed
-			// if ($request->sitecomp) {
-			// 	$ar = [];
-			// 	$sitecomp = EnquiryProgress::whereHas('Enquiry')->where('status', 1)->where('progress', '=', 'Site Visit Completed')->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
-			// 		return $query->whereMonth('nfd', '=', $request->month);
-			// 	})->when($request->year, function ($query) use ($request) {
-			// 		return $query->whereYear('nfd', '=', $request->year);
-			// 	})->get();
+			// Demo Completed
+			if ($request->sitecomp) {
+				$ar = [];
+				$sitecomp = LeadProgress::whereHas('Lead')->where('status', 1)->where('progress', '=', Statuses::DEMO_COMPLETED)->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
+					return $query->whereMonth('nfd', '=', $request->month);
+				})->when($request->year, function ($query) use ($request) {
+					return $query->whereYear('nfd', '=', $request->year);
+				})->get();
 
-			// 	foreach ($sitecomp as $key => $value) {
-			// 		array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
-			// 	}
-			// 	$arr['site_visit_completed'] = array_count_values($ar);
-			// 	$type_array[] = 'site_visit_completed';
-			// 	// dd($arr['site_visit_completed'], "arr");
-			// }
-			// // discussion
-			// if ($request->dis) {
-			// 	$ar = [];
-			// 	$sitevisit = EnquiryProgress::whereHas('Enquiry')->where('status', 1)->where('progress', '=', 'Discussion')->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
-			// 		return $query->whereMonth('nfd', '=', $request->month);
-			// 	})->when($request->year, function ($query) use ($request) {
-			// 		return $query->whereYear('nfd', '=', $request->year);
-			// 	})->get();
+				foreach ($sitecomp as $key => $value) {
+					array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
+				}
+				$arr['site_visit_completed'] = array_count_values($ar);
+				$type_array[] = 'site_visit_completed';
+				// dd($arr['site_visit_completed'], "arr");
+			}
+			// Due Followup
+			if ($request->dueFollowup) {
+				$ar = [];
+				$sitecomp = LeadProgress::whereHas('Lead')->where('status', 1)->where('progress', '=', Statuses::DUE_FOLLOWUP)->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
+					return $query->whereMonth('nfd', '=', $request->month);
+				})->when($request->year, function ($query) use ($request) {
+					return $query->whereYear('nfd', '=', $request->year);
+				})->get();
 
-			// 	foreach ($sitevisit as $key => $value) {
-			// 		array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
-			// 	}
-			// 	$arr['discussion_schedule'] = array_count_values($ar);
-			// 	$type_array[] = 'discussion_schedule';
-			// }
-			// // Booked
-			// if ($request->done) {
-			// 	$ar = [];
-			// 	$sitevisit = EnquiryProgress::whereHas('Enquiry')->where('status', 1)->where('progress', '=', 'Booked')->when($request->month, function ($query) use ($request) {
-			// 		return $query->whereMonth('created_at', '=', $request->month);
-			// 	})->when($request->year, function ($query) use ($request) {
-			// 		return $query->whereYear('created_at', '=', $request->year);
-			// 	})->get();
+				foreach ($sitecomp as $key => $value) {
+					array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
+				}
+				$arr['due_followup'] = array_count_values($ar);
+				$type_array[] = 'due_followup';
+				// dd($arr['due_followup'], "arr");
+			}
+			// discussion
+			if ($request->dis) {
+				$ar = [];
+				$sitevisit = LeadProgress::whereHas('Lead')->where('status', 1)->where('progress', '=', Statuses::DISCUSSION)->whereNotNull('nfd')->when($request->month, function ($query) use ($request) {
+					return $query->whereMonth('nfd', '=', $request->month);
+				})->when($request->year, function ($query) use ($request) {
+					return $query->whereYear('nfd', '=', $request->year);
+				})->get();
 
-			// 	foreach ($sitevisit as $key => $value) {
-			// 		array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
-			// 	}
-			// 	$arr['booked'] = array_count_values($ar);
-			// 	$type_array[] = 'booked';
-			// }
-			// // Lost
-			// if ($request->lost) {
-			// 	$ar = [];
-			// 	$sitevisit = EnquiryProgress::whereHas('Enquiry')->where('status', 1)->where('progress', '=', 'Lost')->when($request->month, function ($query) use ($request) {
-			// 		return $query->whereMonth('created_at', '=', $request->month);
-			// 	})->when($request->year, function ($query) use ($request) {
-			// 		return $query->whereYear('created_at', '=', $request->year);
-			// 	})->get();
+				foreach ($sitevisit as $key => $value) {
+					array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
+				}
+				$arr['discussion_schedule'] = array_count_values($ar);
+				$type_array[] = 'discussion_schedule';
+			}
+			// Booked
+			if ($request->done) {
+				$ar = [];
+				$sitevisit = LeadProgress::whereHas('Lead')->where('status', 1)->where('progress', '=', Statuses::BOOKED)->when($request->month, function ($query) use ($request) {
+					return $query->whereMonth('created_at', '=', $request->month);
+				})->when($request->year, function ($query) use ($request) {
+					return $query->whereYear('created_at', '=', $request->year);
+				})->get();
 
-			// 	foreach ($sitevisit as $key => $value) {
-			// 		array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
-			// 	}
-			// 	$arr['lost'] = array_count_values($ar);
-			// 	$type_array[] = 'lost';
-			// }
-			// $custom_calender_array = [];
+				foreach ($sitevisit as $key => $value) {
+					array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
+				}
+				$arr['booked'] = array_count_values($ar);
+				$type_array[] = 'booked';
+			}
+			// Lost
+			if ($request->lost) {
+				$ar = [];
+				$sitevisit = LeadProgress::whereHas('Lead')->where('status', 1)->where('progress', '=', Statuses::LOST)->when($request->month, function ($query) use ($request) {
+					return $query->whereMonth('created_at', '=', $request->month);
+				})->when($request->year, function ($query) use ($request) {
+					return $query->whereYear('created_at', '=', $request->year);
+				})->get();
 
-			// // Fetch the names associated with each type
-			// $type_names = [
-			// 	'new_enquiry' => ['name' => 'New Enquiry', 'class' => 'event-type-new-enquiry'],
-			// 	'leadConf' => ['name' => 'Lead Confirmed', 'class' => 'event-type-lead-confirmed'],
-			// 	'site_visit_scheduled' => ['name' => 'Site Visit Scheduled', 'class' => 'event-type-site-visit-scheduled'],
-			// 	'site_visit_completed' => ['name' => 'Site Visit Completed', 'class' => 'event-type-site-visit-completed'],
-			// 	'discussion_schedule' => ['name' => 'Discussion', 'class' => 'event-type-discussion'],
-			// 	'booked' => ['name' => 'Booked', 'class' => 'event-type-booked'],
-			// 	'lost' => ['name' => 'Lost', 'class' => 'event-type-lost'],
-			// ];
-			// foreach ($arr as $key => $value) {
-			// 	foreach ($value as $key2 => $value2) {
-			// 		$date = Carbon::parse($key2)->format('Y-m-d 00:00:00');
-			// 		if (isset($custom_calender_array[$date])) {
-			// 			continue;
-			// 		}
-			// 		$custom_calender_array[$date] = $type_array;
+				foreach ($sitevisit as $key => $value) {
+					array_push($ar, Carbon::parse($value->nfd)->format('Y-m-d'));
+				}
+				$arr['lost'] = array_count_values($ar);
+				$type_array[] = 'lost';
+			}
+			$custom_calender_array = [];
 
-			// 		$event['start'] = $date;
-			// 		$types = implode(",", $type_array);
-			// 		$event['url'] = route('admin.enquiries.calendar.view') . '?date=' . $key2 . '&type=' . $types;
+			// Fetch the names associated with each type
+			$type_names = [
+				'new_enquiry' => ['name' => 'New Lead', 'class' => 'event-type-new-enquiry'],
+				'leadConf' => ['name' => 'Lead Confirmed', 'class' => 'event-type-lead-confirmed'],
+				'site_visit_scheduled' => ['name' => 'Demo Scheduled', 'class' => 'event-type-site-visit-scheduled'],
+				'site_visit_completed' => ['name' => 'Demo Completed', 'class' => 'event-type-site-visit-completed'],
+				'due_followup' => ['name' => 'Due Followup', 'class' => 'event-type-due-followup'],
+				'discussion_schedule' => ['name' => 'Discussion', 'class' => 'event-type-discussion'],
+				'booked' => ['name' => 'Booked', 'class' => 'event-type-booked'],
+				'lost' => ['name' => 'Lost', 'class' => 'event-type-lost'],
+			];
+			foreach ($arr as $key => $value) {
+				foreach ($value as $key2 => $value2) {
+					$date = Carbon::parse($key2)->format('Y-m-d 00:00:00');
+					if (isset($custom_calender_array[$date])) {
+						continue;
+					}
+					$custom_calender_array[$date] = $type_array;
 
-			// 		$title = "";
-			// 		$classes = []; // Initialize the classes array for each event
-			// 		foreach ($type_array as $type) {
-			// 			if (isset($type_names[$type])) {
-			// 				$count = isset($arr[$type][$key2]) ? $arr[$type][$key2] : 0;
-			// 				if ($count > 0) {
-			// 					$title .= $type_names[$type]['name'] . ' (' . $count . ")\n";
-			// 					$classes[] = $type_names[$type]['class']; // Add the CSS class to the classes array
-			// 				}
-			// 			}
-			// 		}
+					$event['start'] = $date;
+					$types = implode(",", $type_array);
+					$event['url'] = route('superadmin.enquiries.calendar.view') . '?date=' . $key2 . '&type=' . $types;
 
-			// 		$event['title'] = $title;
-			// 		$event['id'] = 'event-' . $key . '-' . $key2;
-			// 		$event['classname'] = implode(' ', $classes); // Combine all CSS classes into a single string
+					$title = "";
+					$classes = []; // Initialize the classes array for each event
+					foreach ($type_array as $type) {
+						if (isset($type_names[$type])) {
+							$count = isset($arr[$type][$key2]) ? $arr[$type][$key2] : 0;
+							if ($count > 0) {
+								$title .= $type_names[$type]['name'] . ' (' . $count . ")\n";
+								$classes[] = $type_names[$type]['class']; // Add the CSS class to the classes array
+							}
+						}
+					}
 
-			// 		array_push($events, $event);
-			// 	}
-			// }
-			// // dd($events);
+					$event['title'] = $title;
+					$event['id'] = 'event-' . $key . '-' . $key2;
+					$event['classname'] = implode(' ', $classes); // Combine all CSS classes into a single string
+
+					array_push($events, $event);
+				}
+			}
+			// dd($events);
 			return json_encode($events);
 		}
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		return view('superadmin.calendar.index', compact('employees'));
 	}
+
+    public function calenderDetail(Request $request)
+    {
+        // dd("view enq cal details");
+        // calendar 
+        // click to edit cal
+        $type = explode(',', $request->type);
+        if (in_array('new_enquiry', $type)) {
+            // $data['new_enquiry'] = Enquiries::whereDate('created_at', $request->date)->get();
+            $data['new_enquiry'] = BromiEnquiry::with('state', 'city', 'LeadProgress', 'planInterested' )->whereDate('created_at', $request->date)->get();
+        }
+        if (in_array('leadConf', $type)) {
+            $data['leadConf'] = LeadProgress::with('Lead')
+            ->where('status', 1)
+            ->where('progress', '=', 'Lead Confirmed')
+            ->whereNotNull('nfd')
+            ->whereDate('nfd', '=', $request->date)
+            ->get();
+        }
+        if (in_array('site_visit_scheduled', $type)) {
+            $data['site_visit_scheduled'] = LeadProgress::with('Lead')
+            ->where('status', 1)
+            ->where('progress', '=', 'Demo Scheduled')
+            ->whereNotNull('nfd')
+            ->whereDate('nfd', '=', $request->date)
+            ->get();
+        }
+        // site_visit_completed
+        if (in_array('site_visit_completed', $type)) {
+            $data['site_visit_completed'] = LeadProgress::with('Lead')
+            ->where('status', 1)
+            ->where( 'progress', '=', 'Demo Completed')
+            ->whereNotNull('nfd')
+            ->whereDate('nfd', '=', $request->date)
+            ->get();
+            // dd($data['site_visit_completed'], "site_visit_completedsite_visit_completed");
+        }
+        // due_followup
+        if (in_array('due_followup', $type)) {
+            $data['due_followup'] = LeadProgress::with('Lead')
+            ->where('status', 1)
+            ->where( 'progress', '=', Statuses::DUE_FOLLOWUP)
+            ->whereNotNull('nfd')
+            ->whereDate('nfd', '=', $request->date)
+            ->get();
+            // dd($data['due_followup'], "site_visit_completedsite_visit_completed");
+        }
+        if (in_array('discussion_schedule', $type)) {
+            $data['discussion_schedule'] = LeadProgress::with('Lead')
+            ->where('status', 1)
+            ->where('progress', '=', 'Discussion')
+            ->whereNotNull('nfd')
+            ->whereDate('nfd', '=', $request->date)
+            ->get();
+        }
+        if (in_array('booked', $type)) {
+            $data['booked'] = LeadProgress::with('Lead')
+            ->where('status', 1)
+            ->where('progress', '=', 'Booked')
+            ->whereDate('nfd', '=', $request->date)
+            ->get();
+        }
+        if (in_array('lost', $type)) {
+            $data['lost'] = LeadProgress::with('Lead')
+            ->where('status', 1)
+            ->where('progress', '=', 'Lost')
+            ->whereDate('nfd', '=', $request->date)
+            ->get();
+        }
+
+        $areas = SuperAreas::get();
+        $areaarr = [];
+        foreach ($areas as $key => $value) {
+            $areaarr[$value['id']] = $value;
+        }
+        $data['areas'] = $areaarr;
+
+        $builds = Projects::orderBy('project_name')->get();
+        $buildarr = [];
+        foreach ($builds as $key => $value) {
+            $buildarr[$value['id']] = $value;
+        }
+        $data['builds'] = $buildarr;
+        $data['projects'] = $buildarr;
+
+        $dropdowns = DropdownSettings::get()->toArray();
+        $dropdownsarr = [];
+        foreach ($dropdowns as $key => $value) {
+            $dropdownsarr[$value['id']] = $value;
+        }
+        $data['dropdowns'] = $dropdownsarr;
+
+        $configuration_settings = DropdownSettings::get()->toArray();
+        $data['configuration_settings'] = $configuration_settings;
+        $cities = SuperCity::orderBy('name')->get();
+        $data['cities'] = $cities;
+        $branches = Branches::orderBy('name')->get();
+        $data['branches'] = $branches;
+        $employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
+        $data['employees'] = $employees;
+        // dd($data, "Data");
+
+        return view('superadmin.calendar.view', $data);
+    }
     
 }

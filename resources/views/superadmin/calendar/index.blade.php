@@ -211,7 +211,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('admin.enquiries.calendar') }}",
+                    url: "{{ route('superadmin.enquiries.calendar') }}",
                     data: {
                         employee: employee,
                         month: month,
