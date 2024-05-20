@@ -878,7 +878,7 @@
 
                                             <div class="row gy-2">
                                                 <div class="col mt-2">
-                                                    Catlog File : <span class="text-primary" style="cursor: pointer;" onclick="openDocument('{{ $project->document_image }}')">{{ $project->document_image }}</span>
+                                                    Catlog File : <span class="text-primary" style="cursor: pointer;" onclick="openDocument('{{ $project->catlog_file }}')">{{ $project->catlog_file }}</span>
                                                 </div>
                                             </div>
 
