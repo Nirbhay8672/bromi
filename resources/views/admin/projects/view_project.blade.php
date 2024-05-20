@@ -324,8 +324,8 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Contact Details</h5>
                                             </div>
-                                            <div class="col-md-12 mb-2">
-                                                <table class="table custom-table-design" style="border: 1px solid blue;">
+                                            <div class="col-md-12 mb-2 mt-3">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Sr No.</th>
@@ -357,8 +357,8 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Tower Details</h5>
                                             </div>
-                                            <div class="col-md-12 mb-3">
-                                                <table class="table custom-table-design" style="border: 1px solid blue;">
+                                            <div class="col-md-12 mb-3 mt-3">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Number Of Tower</th>
@@ -395,7 +395,7 @@
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
                                             <div class="col-md-12 mb-3">
-                                                <table class="table custom-table-design" style="border: 1px solid blue;">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Sr No.</th>
@@ -445,7 +445,7 @@
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
                                             <div class="col-md-12 mt-3">
-                                                <table class="table custom-table-design" style="border: 1px solid blue;">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Tower Name</th>
@@ -489,8 +489,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Basic Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Number Of Tower</th>
@@ -518,8 +518,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Tower Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
@@ -553,8 +553,8 @@
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
 
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mt-3">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Tower Name</th>
@@ -788,7 +788,7 @@
                                                     <div>: {{ $project->parkings_decode['total_floor_for_parking'] ?? '-' }}</div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-12 mt-3">
                                                 <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
@@ -817,7 +817,7 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Amenities</h5>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-12 mt-3">
                                                 <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
@@ -892,8 +892,8 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Tower Details</h5>
                                             </div>
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mt-3">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Number Of Tower</th>
@@ -925,8 +925,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Unit Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
@@ -964,8 +964,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Unit Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
@@ -1010,8 +1010,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Unit Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
@@ -1049,8 +1049,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Tower Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
@@ -1084,8 +1084,8 @@
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
 
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mt-3">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Tower Name</th>
