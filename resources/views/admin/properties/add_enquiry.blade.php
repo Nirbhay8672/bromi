@@ -142,7 +142,7 @@
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Rent" class="btn-check"
                                                                     name="enquiry_for" id="propertyfor1"
-                                                                    autocomplete="off" checked>
+                                                                    autocomplete="off">
                                                                 <label class="btn btn-outline-info btn-pill btn-sm py-1"
                                                                     for="propertyfor1">Rent</label>
                                                             </div>
@@ -456,7 +456,7 @@
                                                                         value="19" id="flatkind7" name="flat_type[]"
                                                                         data-error="#flat_type_error" autocomplete="off"
                                                                         <?php
-                                                                        if (!empty($edit_category) && !empty($edit_configuration) && in_array('18', $edit_configuration)) {
+                                                                        if (!empty($edit_category) && !empty($edit_configuration) && in_array('19', $edit_configuration)) {
                                                                             if ($edit_category == '254' || $edit_category == '257') {
                                                                                 echo 'checked';
                                                                             }
@@ -1671,18 +1671,17 @@
                         id: id,
                         _token: '{{ csrf_token() }}'
                     },
-                    success: function(data) {
-                        if (data == '') {
+                    success: function(data_obj) {
+                        if (data_obj == '') {
                             return
                         }
                         // edit enquiry
-                        data = JSON.parse(data);
+                        data = JSON.parse(data_obj);
 
                         // Requirement Type
                         if (data.requirement_type != null) {
                             $('input[name=property_type][value=' + data.requirement_type + ']').prop('checked',
                                 true).trigger('change')
-
                         }
 
                         // category
@@ -1696,11 +1695,20 @@
                         // $('#country_code').val(data.country_code);
                         $('#client_email').val(data.client_email);
                         $('#is_nri').prop('checked', Number(data.is_nri));
-                        $('#enquiry_for').val(data.enquiry_for).trigger('change');
-                        // if ($('[name=configuration][value=' + data.configuration + ']').length > 0) {
-                        //     $('[name=configuration][value=' + data.configuration + ']').prop('checked', true)
-                        //         .trigger('change');
-                        // }
+
+                        if(data.enquiry_for == 'Rent') {
+                            document.getElementById('propertyfor1').checked = true;
+                        }
+
+                        if(data.enquiry_for == 'Buy') {
+                            document.getElementById('propertyfor2').checked = true;
+                        }
+
+                        
+                        if(data.enquiry_for == 'Both') {
+                            document.getElementById('propertyfor3').checked = true;
+                        }
+
                         $('#area_from').val(data.area_from);
                         $('#area_to').val(data.area_to);
                         $('#area_from_measurement').val(data.area_from_measurement).trigger('change');
