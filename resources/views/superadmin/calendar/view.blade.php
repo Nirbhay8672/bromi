@@ -62,7 +62,7 @@
                                             <button class="nav-link mx-1 {{ $is_active }}"
                                                 id="v-site_visit_scheduled-tab" data-bs-toggle="pill"
                                                 data-bs-target="#v-site_visit_scheduled" type="button" role="tab"
-                                                aria-controls="v-site_visit_scheduled" aria-selected="true">Site Visit
+                                                aria-controls="v-site_visit_scheduled" aria-selected="true">Demo
                                                 Scheduled
                                                 <span
                                                     class="position-absolute top-0 end-1 translate-middle badge rounded-pill bg-primary">
@@ -78,9 +78,7 @@
                                             <button class="nav-link mx-1 {{ $is_active }}"
                                                 id="v-site_visit_completed-tab" data-bs-toggle="pill"
                                                 data-bs-target="#v-site_visit_completed" type="button" role="tab"
-                                                aria-controls="v-site_visit_completed" aria-selected="true">Site
-                                                Visit
-                                                Completed
+                                                aria-controls="v-site_visit_completed" aria-selected="true">Demo Completed
                                                 <span
                                                     class="position-absolute top-0 end-1 translate-middle badge rounded-pill bg-primary">
                                                     {{ count($site_visit_completed) ?? 0 }}
@@ -316,7 +314,7 @@
                                     <div class="tab-pane fade {{ $is_active }}" id="v-site_visit_scheduled"
                                         role="tabpanel" aria-labelledby="v-site_visit_scheduled-tab">
                                         <div class="form-group col-md-12 mb-2">
-                                            <h5 class="border-style">Site Visit Scheduled</h5>
+                                            <h5 class="border-style">Demo Scheduled</h5>
                                         </div>
                                         @forelse ($site_visit_scheduled as $data)
                                             {{-- @dd($data->id); --}}
@@ -376,7 +374,7 @@
                                     <div class="tab-pane fade {{ $is_active }}" id="v-site_visit_completed"
                                         role="tabpanel" aria-labelledby="v-site_visit_completed-tab">
                                         <div class="form-group col-md-12 mb-2">
-                                            <h5 class="border-style">Site Visit Scheduled</h5>
+                                            <h5 class="border-style">Demo Completed</h5>
                                         </div>
                                         @forelse ($site_visit_completed as $data)
                                             <div class="col-md-4 mb-3">
