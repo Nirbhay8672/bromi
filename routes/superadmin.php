@@ -67,6 +67,7 @@ Route::group(['middleware' => 'revalidate'], function () {
         Route::post('/delete-lead', [BromiEnquiryController::class, 'destroyLead'])->name('superadmin.deleteLead');
         Route::post('/super-area', [BromiEnquiryController::class, 'getSuperArea'])->name('superadmin.superArea');
 		Route::any('/Enquiries-Calendar', [BromiEnquiryController::class, 'enquiryCalendar'])->name('superadmin.enquiries.calendar');
+        Route::get('/enquiries-calendar/view', [BromiEnquiryController::class, 'calenderDetail'])->name('superadmin.enquiries.calendar.view');
 		
 		Route::any('/Plans', [PlanController::class, 'index'])->name('superadmin.plans');
 		Route::post('/get-plan', [PlanController::class, 'getSpecificPlan'])->name('superadmin.getPlan');
