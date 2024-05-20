@@ -13,19 +13,21 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <div class="page-title mb-3" style="margin-left: 10px;">
-                    <div class="row">
-                        <div class="col-12 col-sm-6">
-                            <h3 class="text-white">User Profile Details</h3>
-                        </div>
-                    </div>
-                </div>
                 <div class="user-profile">
                     <div class="row p-2">
                         <div class="col-sm-12">
                             <div class="card profile-header"
                                 style="height:auto;background-image: url(&quot;../assets/images/user-profile/bg-profile.jpg&quot;); background-size: cover; background-position: center center; display: block;">
-                                <div class="row">
+                                <div class="col">
+                                    <h3>User Profile Details <a class="btn custom-icon-theme-button tooltip-btn"
+                                        href="{{ route('superadmin.users') }}"
+                                        data-tooltip="Back"
+                                        style="float: inline-end;"
+                                    >
+                                        <i class="fa fa-backward"></i>
+                                    </a></h3>
+                                </div>
+                                <div class="row mt-3">
                                     <div class="col-12 col-sm-4 col-md-4 col-lg-4">
                                         <div class="userpro-box"
                                             style="background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">

@@ -9,14 +9,24 @@
         </div>
         <!-- Container-fluid starts-->
         <div class="main-card mb-3 card">
+            
             <div class="card-body">
+                <div class="card-header pb-0">
+                    <h5 class="mb-3">Add Email Template <a class="btn custom-icon-theme-button tooltip-btn"
+                        href="{{ route('superadmin.email.index') }}"
+                        data-tooltip="Back"
+                        style="float: inline-end;"
+                    >
+                        <i class="fa fa-backward"></i>
+                    </a></h5>
+                </div>
                 <div class="container-fluid">
                 <form method="post" action="{{route('superadmin.email.store')}}" id="email_template_form">
                     @csrf
                     <div class="col-md-6">
                         <div class="position-relative form-group">
                             <label for="title" class="">Title</label>
-                            <input name="title" placeholder="Title" type="text" value="" class="form-control" />
+                            <input name="title" type="text" value="" class="form-control" />
                         </div>
                     </div>
                     <div class="col-md-12">

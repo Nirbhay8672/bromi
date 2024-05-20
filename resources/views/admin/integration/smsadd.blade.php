@@ -12,16 +12,16 @@
             <div class="card-body">
                 <div class="container-fluid">
                     <div class="row">
-                    <h1>Add Template  <a class="mt-1 btn btn-primary" href="{{route('admin.smsemail.index')}}" type="button" style="float: right;">Back</a></h1>
-                     
+                    <h1>Add Template  <a class="btn custom-icon-theme-button tooltip-btn" href="{{route('admin.smsemail.index')}}" data-tooltip="Back" style="float: inline-end;" data-bs-original-title="" title="">
+                        <i class="fa fa-backward"></i>
+                    </a></h1>
                 </div>
                 <form method="post" action="{{route('admin.smsemail.store')}}" id="email_template_form">
                     @csrf
                     <div class="col-md-6">
                         <div class="position-relative form-group">
-                                <label for="" >Title</label><br>
-                            <br>
-                            <input name="title" placeholder="Title" type="text" value="" class="form-control" />
+                            <label for="title">Title</label>
+                            <input name="title" type="text" value="" class="form-control" />
                         </div>
                     </div>
                     <div class="col-md-12">

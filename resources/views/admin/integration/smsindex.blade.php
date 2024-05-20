@@ -13,7 +13,13 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">SMS Template </h5>
+                            <h5 class="mb-3">SMS Template <a class="btn custom-icon-theme-button tooltip-btn"
+                                href="{{ route('admin.integration') }}"
+                                data-tooltip="Back"
+                                style="float: inline-end;"
+                            >
+                                <i class="fa fa-backward"></i>
+                            </a></h5>
                             <a href="{{route('admin.smsemail.create')}}" class="btn custom-icon-theme-button tooltip-btn" data-tooltip="Add SMS Template"><i class="fa fa-plus"></i></a>
                         </div>
                         <div class="card-body">
@@ -33,7 +39,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

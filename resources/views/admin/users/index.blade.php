@@ -14,7 +14,14 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Users</h5>
+                            <h5 class="mb-3">Users <a  
+                                class="btn custom-icon-theme-button tooltip-btn"
+                                href="{{ route('admin.settings') }}"
+                                data-tooltip="Back"
+                                style="float: inline-end;"
+                            >
+                                <i class="fa fa-backward"></i>
+                            </a></h5>
                             @can('user-create')
                                 @if(intval($total_user) < Auth::user()->total_user_limit)
                                     <a  

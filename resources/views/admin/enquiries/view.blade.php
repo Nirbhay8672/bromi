@@ -558,7 +558,7 @@
                                                                     <td>{{ $value->property_for }}</td>
                                                                     <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : " - "}}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][2] }}</td>
-                                                                    <td>{{ json_decode($value->unit_details)[0][4] }}</td>
+                                                                    <td>{{ json_decode($value->unit_details)[0][4] ? json_decode($value->unit_details)[0][4] : $value->survey_price }}</td>
                                                                     <td>
                                                                         @if ($value->Property_priority == "91")
                                                                             High
@@ -985,7 +985,6 @@
                                         <div class="tab-pane fade" id="v-enquiry-matching" role="tabpanel"
                                             aria-labelledby="v-enquiry-matching-tab">
                                             <h5 class="border-style">Matching Property</h5>
-
                                             <br>
 
                                             <div class="form-group">
@@ -999,16 +998,14 @@
 
                                                         </tr>
                                                     </thead>
-
                                                     <tbody id="matching_container">
 
                                                         @forelse ($properties as $value)
                                                             <tr>
-                                                                {{-- <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '' }}
-                                                                </td> --}}
+                                                                <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}
+                                                                </td>
                                                                 <td>{{ $value->property_for }}</td>
-                                                                <td>{{ json_decode($value->unit_details)[0][4] }}</td>
-                                                                <td>{{ $value->survey_price }}</td>
+                                                                <td>{{ json_decode($value->unit_details)[0][4] ? json_decode($value->unit_details)[0][4] : $value->survey_price }}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($value->updated_at)->format('d-m-Y') }}
                                                                 </td>
                                                             </tr>

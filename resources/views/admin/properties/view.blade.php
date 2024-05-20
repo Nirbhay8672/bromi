@@ -1377,13 +1377,20 @@ use Illuminate\Support\Facades\DB;
                                                             </thead>
                                                             <tbody id="matching_container">
                                                                 @forelse ($enquiries as $value)
+                                                                <?php
+                                                                $unit_name = "";
+                                                                $area_measure = DB::table('land_units')->where('id',$value->area_from_measurement)->get();
+                                                                if ($area_measure->isNotEmpty()) {
+                                                                    $unit_name = $area_measure[0]->unit_name;
+                                                                }
+                                                                ?>
                                                                 <tr>
                                                                     <td>{{ $value->client_name }}</td>
                                                                     <td>{{ $value->client_mobile }}</td>
                                                                     <td>{{ $value->enquiry_for }}</td>
                                                                     <td>{{ $value->requirement_type == "87" ? "Resedential" : "Commercial" }}</td>
-                                                                    <td>{{ $value->area_from }}</td>
-                                                                    <td>{{ $value->area_to }}</td>
+                                                                    <td>{{ $value->area_from .' '. $unit_name}}</td>
+                                                                    <td>{{ $value->area_to .' '. $unit_name}}</td>
                                                                     <td>{{ $value->budget_from }}</td>
                                                                     <td>{{ $value->budget_to }}</td>
                                                                 </tr>

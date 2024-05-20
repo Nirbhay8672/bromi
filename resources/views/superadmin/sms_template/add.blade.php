@@ -10,6 +10,15 @@
         <!-- Container-fluid starts-->
         <div class="main-card mb-3 card">
             <div class="card-body">
+                <div class="card-header pb-0">
+                    <h5 class="mb-3">Add SMS Template <a class="btn custom-icon-theme-button tooltip-btn"
+                        href="{{ route('superadmin.sms.index') }}"
+                        data-tooltip="Back"
+                        style="float: inline-end;"
+                    >
+                        <i class="fa fa-backward"></i>
+                    </a></h5>
+                </div>
                 <div class="container-fluid">
                 <form method="post" action="{{route('superadmin.sms.store')}}" id="email_template_form">
                     @csrf

@@ -14,7 +14,13 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Employee Audit Log</h5>
+                            <h5 class="mb-3">Employee Audit Log <a class="btn custom-icon-theme-button tooltip-btn"
+                                href="{{ route('admin.reports') }}"
+                                data-tooltip="Back"
+                                style="float: inline-end;"
+                            >
+                                <i class="fa fa-backward"></i>
+                            </a></h5>
 							<div class="row">
                                 <div class="form-group col-md-3 m-b-4 mb-3">
                                     <label for="filter_date_from">From:</label>

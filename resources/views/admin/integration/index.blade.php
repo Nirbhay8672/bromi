@@ -13,8 +13,14 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Email Template </h5>
-
+                            <h5 class="mb-3">Email Template <a class="btn custom-icon-theme-button tooltip-btn"
+                                href="{{ route('admin.integration') }}"
+                                data-tooltip="Back"
+                                style="float: inline-end;"
+                            >
+                                <i class="fa fa-backward"></i>
+                            </a></h5>
+                            
                             <div class="col">
                                 <a  
                                     class="btn custom-icon-theme-button tooltip-btn"

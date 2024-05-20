@@ -17,7 +17,13 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Project & Builder Information</h5>
+                            <h5 class="mb-3">Project & Builder Information <a class="btn custom-icon-theme-button tooltip-btn"
+                                href="{{ route('superadmin.projects') }}"
+                                data-tooltip="Back"
+                                style="float: inline-end;"
+                            >
+                                <i class="fa fa-backward"></i>
+                            </a></h5>
                             <template x-if="id != ''"><strong>Update Project</strong></template>
                             <template x-if="id == ''"><strong>Create Project</strong></template>
                         </div>
