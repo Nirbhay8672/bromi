@@ -1550,30 +1550,80 @@ class EnquiriesController extends Controller
 		$areaTo = $data->area_to;
 		$area_from_to_unit = $land_units->where('id', $data->area_from_measurement)->first();
 
-		$properties = Properties::where('properties.property_type', $data->requirement_type)
-			->where('properties.property_for', $property_for)
-			->where('properties.property_category', $data->property_type)
-			->where(function ($query) use ($budgetFrom, $budgetTo, $areaFrom, $areaTo, $area_from_to_unit) {
-				$query->where(function ($query) use ($budgetFrom, $budgetTo) {
-					$query->where('properties.survey_price', '>=', $budgetFrom)
-						->where('properties.survey_price', '<=', $budgetTo);
-				})
-					->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-						$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-					})
-					->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-						$query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-							$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-								->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-						})
-							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-								$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-									->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-							});
-					});
-			})
-			->get();
+$configurations = is_string($data->configuration) ? json_decode($data->configuration, true) : $data->configuration;
+
+if (!is_array($configurations)) {
+    $configurations = [$configurations];
+}
+
+$configurations = array_map('intval', $configurations);
+
+$properties = Properties::where('properties.property_type', $data->requirement_type)
+    ->where('properties.property_for', $property_for)
+    ->where('properties.property_category', $data->property_type)
+    ->where(function ($query) use ($configurations) {
+        foreach ($configurations as $config) {
+            $query->orWhereJsonContains('configuration', $config);
+        }
+    })
+    ->where(function ($query) use ($budgetFrom, $budgetTo, $areaFrom, $areaTo, $area_from_to_unit) {
+        $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+            $query->where('properties.survey_price', '>=', $budgetFrom)
+                ->where('properties.survey_price', '<=', $budgetTo);
+        })
+        ->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+            $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+                ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+        })
+        ->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+            $query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+                $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+                    ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+            })
+            ->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+                $query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+                    ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+            });
+        });
+    })
+    ->get();
+
+// dd("propertiessssssssssss", Auth::user()->id, $configurations, $properties);
+
+
+		// $data->configuration = json_decode($data->configuration, true);
+
+		// $properties = Properties::where('properties.property_type', $data->requirement_type)
+		// 	->where('properties.property_for', $property_for)
+		// 	->where('properties.property_category', $data->property_type)
+		// 	->where(function ($query) use ($data) {
+		// 		foreach ($data->configuration as $config) {
+		// 			$query->orWhereJsonContains('configuration', $config);
+		// 		}
+		// 	})
+		// 	->where(function ($query) use ($budgetFrom, $budgetTo, $areaFrom, $areaTo, $area_from_to_unit) {
+		// 		$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+		// 			$query->where('properties.survey_price', '>=', $budgetFrom)
+		// 				->where('properties.survey_price', '<=', $budgetTo);
+		// 		})
+		// 			->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+		// 				$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+		// 					->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+		// 			})
+		// 			->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+		// 				$query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+		// 					$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+		// 						->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+		// 				})
+		// 					->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+		// 						$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+		// 							->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+		// 					});
+		// 			});
+		// 	})
+		// 	->get();
+
+		// 	dd("properties",Auth::user()->id,$data->configuration,$properties);
 
 		$employees = User::where('parent_id', Session::get('parent_id'))->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
