@@ -499,8 +499,15 @@ class Helper
                 $existingPlanUsedForDays = $currentDate->diffInDays($existingPlanSubscribedOn);
                 $existingPlanUsedPriceTillDate = $existingPlanUsedForDays * $perDayPrice;
 
-                // chargable price after upgrade plan
+                # in gujrat 
+                # cgst = 9, sgst = 9, total gst = 18 % 
+                # igst = 18 %, Overall gst is 18 % 
+                $gst = 0.18;
+                # chargable price after upgrade plan
                 $amoutWillBeDeductedFromCurrentPlanPrice =  $existingPlan->price - $existingPlanUsedPriceTillDate;
+                // include gst to the deductable price
+                $gstAmount = $amoutWillBeDeductedFromCurrentPlanPrice * $gst;
+                $amoutWillBeDeductedFromCurrentPlanPrice += $gstAmount; 
                 $price =  $currentPrice - $amoutWillBeDeductedFromCurrentPlanPrice;
                 if ($price <= 0) {
                     return $currentPrice;
