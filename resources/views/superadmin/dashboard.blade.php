@@ -81,9 +81,33 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-3 col-sm-6"> 
+            <div class="col-12 col-md-6 col-lg-3 col-sm-6">
                 <div class="card o-hidden" style="height: 150px;">
                     <div class="card-body bg-light-purpel">
+                        <div class="media static-widget my-3">
+                            <div class="media-body text-center">
+                                <h1 class="font-roboto">{{ $total_users }}</h1>
+                                <h3 class="mb-0">Total User</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 col-sm-6">
+                <div class="card o-hidden" style="height: 150px;">
+                    <div class="card-body bg-light-orange">
+                        <div class="media static-widget my-3">
+                            <div class="media-body text-center">
+                                <h1 class="font-roboto">{{ $total_sub_users }}</h1>
+                                <h3 class="mb-0">Total Sub Users</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 col-sm-6"> 
+                <div class="card o-hidden" style="height: 150px;">
+                    <div class="card-body bg-info">
                         <div class="media static-widget my-3">
                             <div class="media-body text-center">
                                 <h1 class="font-roboto">{{ $total_ex_users }}</h1>
@@ -96,7 +120,7 @@
             </div>
             <div class="col-12 col-md-6 col-lg-3 col-sm-6"> 
                 <div class="card o-hidden" style="height: 150px;">
-                    <div class="card-body bg-info">
+                    <div class="card-body bg-light-orange">
                         <div class="media static-widget my-3">
                             <div class="media-body text-center">
                                 <h1 class="font-roboto">{{ $total_builder }}</h1>
@@ -108,7 +132,7 @@
             </div> 
             <div class="col-12 col-md-6 col-lg-3 col-sm-6">
                 <div class="card o-hidden" style="height: 150px;">
-                    <div class="card-body bg-light-orange">
+                    <div class="card-body bg-info">
                         <div class="media static-widget my-3">
                             <div class="media-body text-center">
                                 <h1 class="font-roboto">{{ $total_members }}</h1>
@@ -120,7 +144,7 @@
             </div>
             <div class="col-12 col-md-6 col-lg-3 col-sm-6">
                 <div class="card o-hidden" style="height: 150px;">
-                    <div class="card-body bg-light-orange">
+                    <div class="card-body bg-light-green">
                         <div class="media static-widget my-3">
                             <div class="media-body text-center">
                                 <h1 class="font-roboto">{{ $total_requests }}</h1>
@@ -132,7 +156,7 @@
             </div>
             <div class="col-12 col-md-6 col-lg-3 col-sm-6"> 
                 <div class="card o-hidden" style="height: 150px;">
-                    <div class="card-body bg-info">
+                    <div class="card-body bg-light-purpel">
                         <div class="media static-widget my-3">
                             <div class="media-body text-center">
                                 <h1 class="font-roboto">{{ $total_projects }}</h1>

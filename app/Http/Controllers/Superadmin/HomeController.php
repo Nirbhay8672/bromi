@@ -80,13 +80,17 @@ class Homecontroller extends Controller
 			$total_requests = $total_requests->get()->count();
 			$total_projects = $total_projects->get()->count();
 
-			$total_active_users = User::where('status',1)->get()->count();
+			$total_active_users = User::where('status',1)->where('id','!=',6)->get()->count();
+			$total_users = User::where('id','!=',6)->get()->count();
+			$total_sub_users = User::where('parent_id', '>', 0)->where('id','!=',6)->get()->count();
 			
 			$date= Carbon::now()->addDays(30);
 			$total_ex_users = User::whereDate('plan_expire_on','<=', $date)->get()->count();
 
 			return view('superadmin.dashboard')->with([
 				'total_active_users' => $total_active_users,
+				'total_users' => $total_users,
+				'total_sub_users' => $total_sub_users,
 				'total_ex_users' => $total_ex_users,
 				'total_builder' => $total_builder,
 				'total_members' => $total_members,
