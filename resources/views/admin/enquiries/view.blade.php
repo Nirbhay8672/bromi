@@ -1033,7 +1033,7 @@
                 </div>
             </div>
         </div>
-        @include('admin.enquiries.status_model')
+        {{-- @include('admin.enquiries.status_model') --}}
         <!-- schedule visit modal -->
        <div class="modal fade" id="schedulemodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
