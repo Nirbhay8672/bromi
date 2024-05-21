@@ -1916,7 +1916,6 @@
                         'area_id',
                         'state_id',
                         'city_id',
-                        'location_link',
                         'pincode',
                         'rera',
                         'land_size',
@@ -1939,15 +1938,6 @@
                             }
                         }
                     });
-
-                    let restrictions = $(`#restrictions`).val();
-                    if(restrictions.length < 1) {
-                        let error_restrictions = document.getElementById('err_restrictions');
-                        if(error_restrictions) {
-                            error_restrictions.classList.remove('d-none');
-                            is_valid = false;
-                        }
-                    }
 
                     this.other_contact_details.forEach((conatct_obj , index) => {
                         Object.entries(conatct_obj).forEach((key_name) => {
@@ -4133,7 +4123,7 @@
                 }
             }
 
-		function generate_contact_detail_click(plus = 0) {
+		    function generate_contact_detail_click(plus = 0) {
                 id = makeid(10);
                 $('#all_owner_contacts').append(generate_contact_detail(id, plus));
                 $("#all_owner_contacts select").each(function(index) {
