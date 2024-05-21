@@ -2160,22 +2160,24 @@ class PropertyController extends Controller
                 return $query->where('budget_from', '<=', $property->survey_price)
                     ->where('budget_to', '>=', $property->survey_price);
             })
-            ->when(!empty($area_size), function ($query) use ($area_size, $area_size_unit) {
-                return $query->where(function ($query) use ($area_size, $area_size_unit) {
-                    $query->where('area_from', '<=', $area_size)
-                        ->where('area_to', '>=', $area_size)
-                        ->where('area_from_measurement', $area_size_unit);
-                });
-            },
-            function ($query) use ($constructed_area, $constructed_area_unit) {
-                return $query->where(function ($query) use ($constructed_area, $constructed_area_unit) {
-                    $query->where('area_from', '<=', $constructed_area)
-                        ->where('area_to', '>=', $constructed_area)
-                        ->where('area_from_measurement', $constructed_area_unit);
-                });
-            })
+            ->when(!empty($area_size),
+                function ($query) use ($area_size, $area_size_unit) {
+                    return $query->where(function ($query) use ($area_size, $area_size_unit) {
+                        $query->where('area_from', '<=', $area_size)
+                            ->where('area_to', '>=', $area_size)
+                            ->where('area_from_measurement', $area_size_unit);
+                    });
+                },
+                function ($query) use ($constructed_area, $constructed_area_unit) {
+                    return $query->where(function ($query) use ($constructed_area, $constructed_area_unit) {
+                        $query->where('area_from', '<=', $constructed_area)
+                            ->where('area_to', '>=', $constructed_area)
+                            ->where('area_from_measurement', $constructed_area_unit);
+                    });
+                }
+            )
             ->get();
-            // dd("Auth",Auth::user()->id,$property->configuration,$enquiries);
+        // dd("Auth",Auth::user()->id,$property->configuration,$enquiries);
         $prop_type = [];
         foreach ($dropdowns as $key => $value) {
             if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {

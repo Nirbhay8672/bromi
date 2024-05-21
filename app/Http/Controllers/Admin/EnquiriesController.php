@@ -296,12 +296,12 @@ class EnquiriesController extends Controller
 										->where('area_to', '>=', $area_to);
 								}
 
-								if($result_unit){
+								if ($result_unit) {
 									$query->where('area_from_measurement', '=', $result_unit)
-									->where('area_to_measurement', '>=', $result_unit);
-								}else if($result2_unit){
+										->where('area_to_measurement', '>=', $result_unit);
+								} else if ($result2_unit) {
 									$query->where('area_from_measurement', '=', $result2_unit)
-									->where('area_to_measurement', '>=', $result2_unit);
+										->where('area_to_measurement', '>=', $result2_unit);
 								}
 							}
 
@@ -1550,45 +1550,45 @@ class EnquiriesController extends Controller
 		$areaTo = $data->area_to;
 		$area_from_to_unit = $land_units->where('id', $data->area_from_measurement)->first();
 
-$configurations = is_string($data->configuration) ? json_decode($data->configuration, true) : $data->configuration;
+		$configurations = is_string($data->configuration) ? json_decode($data->configuration, true) : $data->configuration;
 
-if (!is_array($configurations)) {
-    $configurations = [$configurations];
-}
+		if (!is_array($configurations)) {
+			$configurations = [$configurations];
+		}
 
-$configurations = array_map('intval', $configurations);
+		$configurations = array_map('intval', $configurations);
 
-$properties = Properties::where('properties.property_type', $data->requirement_type)
-    ->where('properties.property_for', $property_for)
-    ->where('properties.property_category', $data->property_type)
-    ->where(function ($query) use ($configurations) {
-        foreach ($configurations as $config) {
-            $query->orWhereJsonContains('configuration', $config);
-        }
-    })
-    ->where(function ($query) use ($budgetFrom, $budgetTo, $areaFrom, $areaTo, $area_from_to_unit) {
-        $query->where(function ($query) use ($budgetFrom, $budgetTo) {
-            $query->where('properties.survey_price', '>=', $budgetFrom)
-                ->where('properties.survey_price', '<=', $budgetTo);
-        })
-        ->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-            $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-                ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-        })
-        ->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-            $query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-                $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-                    ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-            })
-            ->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-                $query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-                    ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-            });
-        });
-    })
-    ->get();
+		$properties = Properties::where('properties.property_type', $data->requirement_type)
+			->where('properties.property_for', $property_for)
+			->where('properties.property_category', $data->property_type)
+			->where(function ($query) use ($configurations) {
+				foreach ($configurations as $config) {
+					$query->orWhereJsonContains('configuration', $config);
+				}
+			})
+			->where(function ($query) use ($budgetFrom, $budgetTo, $areaFrom, $areaTo, $area_from_to_unit) {
+				$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+					$query->where('properties.survey_price', '>=', $budgetFrom)
+						->where('properties.survey_price', '<=', $budgetTo);
+				})
+					->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+						$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+					})
+					->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+						$query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+							$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+								->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+						})
+							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+									->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+							});
+					});
+			})
+			->get();
 
-// dd("propertiessssssssssss", Auth::user()->id, $configurations, $properties);
+		// dd("propertiessssssssssss", Auth::user()->id, $configurations, $properties);
 
 
 		// $data->configuration = json_decode($data->configuration, true);

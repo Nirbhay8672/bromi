@@ -20,7 +20,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Details Of Enquiry</h5>
+                            <h5 class="mb-3">Details Of Enquiryyyy</h5>
                         </div>
                         <div class="card-body pt-0">
                             <div class="row px-3">
@@ -83,10 +83,16 @@
                                                                 id="v-view-summary-tab">Edit</button>
                                                         </a>
                                                     </div>
-                                                    <div class="col-md-1" style="float:right; margin-left: auto">
+                                                    <div class="col-md-1" style="float:right; padding-left:2%;">
                                                         <a href={{ URL::to('admin/Enquiries') }}>
                                                             <button class="nav-link mx-1 active"
                                                                 id="v-view-summary-tab">Back</button>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-1" style="float:right">
+                                                        <a href="{{ URL::to('admin/enquiry/edit/' . $data['id']) }}">
+                                                            <button class="nav-link mx-1 active"
+                                                                id="v-view-summary-tab">Edit</button>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -95,10 +101,10 @@
                                             <form action="{{route('admin.updateEnquiryStatus')}}" class="row row-cols g-1" method="get">
                                                 @csrf
                                                 @method('post')
-                                                <div class="col-lg-2 col-md-6 col-12">
-                                                    <input type="text" hidden value="{{$data['id']}}" name="id">
+                                                <div class="col-lg-3 col-md-6 col-12">
+                                                    <input type="text" hidden value="{{$data['id']}}" name="id" onclick="status(this)">
                                                     <select class="form-select" id="enquiry_progress_status" name="status">
-                                                        <option value="">Status</option>
+                                                        <option value="">Enquiry Progress</option>
                                                         <option value="1">Active</option>
                                                         <option value="0">Inactive</option>
                                                     </select>
@@ -556,7 +562,7 @@
                                                             <tr>
                                                                     <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
                                                                     <td>{{ $value->property_for }}</td>
-                                                                    <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : " - "}}</td>
+                                                                    <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->constructed_salable_area)[0] .' '. $salable_units->unit_name}}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][2] }}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][4] ? json_decode($value->unit_details)[0][4] : $value->survey_price }}</td>
                                                                     <td>
@@ -985,6 +991,7 @@
                                         <div class="tab-pane fade" id="v-enquiry-matching" role="tabpanel"
                                             aria-labelledby="v-enquiry-matching-tab">
                                             <h5 class="border-style">Matching Property</h5>
+
                                             <br>
 
                                             <div class="form-group">
@@ -998,6 +1005,7 @@
 
                                                         </tr>
                                                     </thead>
+
                                                     <tbody id="matching_container">
 
                                                         @forelse ($properties as $value)
@@ -1025,6 +1033,7 @@
                 </div>
             </div>
         </div>
+        @include('admin.enquiries.status_model')
         <!-- schedule visit modal -->
        <div class="modal fade" id="schedulemodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -1270,6 +1279,15 @@
     @endsection
     @push('scripts')
         <script>
+            function Status(data) {
+                var id = $(data).attr('data-id');
+                var status = $(data).attr('data-status');
+                
+                $('#schedule_visit_id').val(id);
+                 $('#schedule_visit_status').val(status);
+                $('#status').modal('show');
+
+            }
             function limitYearTo4Digits() {
                 const dateInput = document.getElementById('site_visit_date');
                 const inputValue = dateInput.value;
