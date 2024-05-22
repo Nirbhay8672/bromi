@@ -630,15 +630,25 @@
                                                 data-language="en">
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-6 m-b-20">
+                                    <div class="form-group col-md-3 m-b-20">
                                         <label for="From Budget">From Budget</label>
                                         <input class="form-control indian_currency_amount" name="filter_from_budget"
                                             id="filter_from_budget" type="text" autocomplete="off">
                                     </div>
-                                    <div class="form-group col-md-6 m-b-20">
+                                    <div class="form-group col-md-3 m-b-20">
                                         <label for="To Budget">To Budget</label>
                                         <input class="form-control indian_currency_amount" name="filter_to_budget"
                                             id="filter_to_budget" type="text" autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-3 m-b-20">
+                                        <label for="From Budget">From Area</label>
+                                        <input class="form-control" name="filter_from_area"
+                                            id="filter_from_area" type="text" autocomplete="off">
+                                    </div>
+                                    <div class="form-group col-md-3 m-b-20">
+                                        <label for="To Budget">To Area</label>
+                                        <input class="form-control" name="filter_to_area"
+                                            id="filter_to_area" type="text" autocomplete="off">
                                     </div>
                                     <hr class="color-hr">
                                     <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
@@ -1748,6 +1758,8 @@
                             d.filter_to_date = $('#filter_to_date').val();
                             d.filter_from_budget = $('#filter_from_budget').val();
                             d.filter_to_budget = $('#filter_to_budget').val();
+                            d.filter_from_area = $('#filter_from_area').val();
+                            d.filter_to_area = $('#filter_to_area').val();
                             d.filter_favourite = Number($('#filter_favourite').prop('checked'));
                             d.filter_new_enquiry = Number($('#filter_new_enquiry').prop('checked'));
                             // d.filter_draft = Number($('#filter_draft').prop('checked'));

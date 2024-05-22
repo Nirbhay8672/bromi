@@ -794,7 +794,7 @@
                                                         <div class="form-group col-md-2 m-b-20">
                                                             <div>
                                                                 <label for="Budget From">Budget From</label>
-                                                                <input class="form-control" name="budget" value=""
+                                                                <input class="form-control indian_currency_amount" name="budget" value=""
                                                                     id="budget_from" type="text" autocomplete="off">
                                                             </div>
                                                             <div class="invalid-feedback" id="budget_from_error"
@@ -804,7 +804,7 @@
                                                         <div class="form-group col-md-2 m-b-20">
                                                             <div>
                                                                 <label for="Budget To">Budget To</label>
-                                                                <input class="form-control" name="budget_to"
+                                                                <input class="form-control indian_currency_amount" name="budget_to"
                                                                     id="budget_to" type="text" autocomplete="off">
                                                             </div>
                                                             <div class="invalid-feedback" id="budget_to_error"

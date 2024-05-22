@@ -263,34 +263,20 @@
                                                                 {{ $data->area_to . ' ' . $land_unit_name }}
                                                             </div>
                                                         </div>
-                                                        <div class="form-group col-4 m-b-10 data_conent_12">
-                                                            <h6><b>Enquiry Source</b></h6>
-                                                        </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_12">
-                                                            <div>:
-                                                                {{ isset($dropdowns[$data->enquiry_source]['name']) ? $dropdowns[$data->enquiry_source]['name'] : '' }}
-                                                            </div>
-                                                        </div>
-
                                                         <div class="form-group col-4 m-b-10 data_conent_13">
                                                             <h6><b>Furnished Status</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_13">
                                                             <div>: {{ $furnished }}</div>
                                                         </div>
-
-
-
                                                         <div class="form-group col-4 m-b-10 data_conent_14">
                                                             <h6><b>Budget</b></h6>
                                                         </div>
-
                                                         <div class="form-group col-8 m-b-10 data_conent_14">
                                                             <div>:  {{ $data->budget_from ? $data->budget_from : '0' }} ₹  to
                                                                 {{ $data->budget_to }} ₹ 
                                                             </div>
                                                         </div>
-
                                                         <div class="form-group col-4 m-b-10 data_conent_15">
                                                             <h6><b>Purpose</b></h6>
                                                         </div>
@@ -328,7 +314,14 @@
                                                                 </div>
                                                             </div>
                                                         @endif
-
+                                                        <div class="form-group col-4 m-b-10 data_conent_12">
+                                                            <h6><b>Enquiry Source</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_12">
+                                                            <div>:
+                                                                {{ isset($dropdowns[$data->enquiry_source]['name']) ? $dropdowns[$data->enquiry_source]['name'] : '' }}
+                                                            </div>
+                                                        </div>
                                                         @if (!empty($area_name))
                                                             <div class="form-group col-4 m-b-10 data_conent_19">
                                                                 <h6><b>Locality</b></h6>
@@ -718,32 +711,20 @@
                                                                 {{ $data->area_to . ' ' . (isset($dropdowns[$data->area_to_measurement]['name']) ? $dropdowns[$data->area_to_measurement]['name'] : '') }}
                                                             </div>
                                                         </div>
-                                                        <div class="form-group col-4 m-b-10 data_conent_32">
-                                                            <h6><b>Enquiry Source</b></h6>
-                                                        </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_32">
-                                                            <div>:
-                                                                {{ isset($dropdowns[$data->enquiry_source]['name']) ? $dropdowns[$data->enquiry_source]['name'] : '' }}
-                                                            </div>
-                                                        </div>
-
                                                         <div class="form-group col-4 m-b-10 data_conent_33">
                                                             <h6><b>Furnished Status</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_33">
                                                             <div>: {{ $furnished }}</div>
                                                         </div>
-
                                                         <div class="form-group col-4 m-b-10 data_conent_34">
                                                             <h6><b>Budget</b></h6>
                                                         </div>
-
                                                         <div class="form-group col-8 m-b-10 data_conent_34">
                                                             <div>: {{ $data->budget_from ? $data->budget_from : '0' }} to
                                                                 {{ $data->budget_to }}
                                                             </div>
                                                         </div>
-
                                                         <div class="form-group col-4 m-b-10 data_conent_35">
                                                             <h6><b>Purpose</b></h6>
                                                         </div>
@@ -777,7 +758,14 @@
                                                                 {{ isset($dropdowns[$data->project_status]['name']) ? $dropdowns[$data->project_status]['name'] : '' }}
                                                             </div>
                                                         </div>
-
+                                                        <div class="form-group col-4 m-b-10 data_conent_32">
+                                                            <h6><b>Enquiry Source</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-10 data_conent_32">
+                                                            <div>:
+                                                                {{ isset($dropdowns[$data->enquiry_source]['name']) ? $dropdowns[$data->enquiry_source]['name'] : '' }}
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_39">
                                                             <h6><b>Locality</b></h6>
                                                         </div>
