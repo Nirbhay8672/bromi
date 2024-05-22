@@ -58,6 +58,7 @@ Route::prefix('builder')->as('builder.')->middleware(['auth'])->group(function (
 	Route::post('/save-projects', [HomeController::class, 'saveProject'])->name('saveProject');
 	Route::post('/delete-projects', [HomeController::class, 'destroy'])->name('deleteProject');
 	Route::any('/project/view/{id}', [HomeController::class, 'viewProject'])->name('viewProject');
+	Route::get('/superadmin/view-document/{filename}', [HomeController::class, 'viewProjectDocument'])->name('project-document');
 
 	Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
 });

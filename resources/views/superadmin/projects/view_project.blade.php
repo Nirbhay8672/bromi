@@ -115,41 +115,25 @@
 
                                                 <div class="row pull-right" style="display: contents;">
                                                     <div class="col-md-1">
-                                                        <a href={{ URL::to("superadmin/superadmin/Projects") }}>
+                                                        <a href={{ URL::to("/superadmin/superadmin/Projects") }}>
                                                             <button class="nav-link mx-1 active" id="v-view-summary-tab">Back</button>
                                                         </a>
                                                     </div>
+
+                                                    @if($project->id == Auth::user()->id)
+                                                        <div class="col-md-1">
+                                                            <a href="{{ URL::to('/superadmin/superadmin/project/edit/'.$project->id)}} ">
+                                                                <button class="nav-link mx-1 active" id="v-view-summary-tab">Edit</button>
+                                                            </a>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </ul>
                                         </div>
                                     </div>
 
                                     @php
-                                        $map_unit = [
-                                           1 => 'Square Fit',
-                                           2 => 'Square Yard',
-                                           3 => 'Square Meter',
-                                           4 => 'Ground',
-                                           5 => 'Square Mile',
-                                           6 => 'Bigha',
-                                           7 => 'Square Karam',
-                                           8 => 'Square Kilometer',
-                                           9 => 'Murabba',
-                                           10 => 'Decimal',
-                                           11 => 'Lessa',
-                                           12 => 'Cent',
-                                           13 => 'Biswa Kacha',
-                                           14 => 'Marla',
-                                           15 => 'Chatak',
-                                           16 => 'Dhur',
-                                           17 => 'Biswa',
-                                           18 => 'Acre',
-                                           19 => 'Kanal',
-                                           20 => 'Gaj',
-                                           21 => 'Killa',
-                                           22 => 'Pura',
-                                           23 => 'Katha',
-                                        ];
+                                        $map_unit = $mapunits;
 
                                         $sub_category_key = [
                                             1 => 'Office Space',
@@ -343,8 +327,8 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Contact Details</h5>
                                             </div>
-                                            <div class="col-md-12 mb-2">
-                                                <table class="table custom-table-design" style="border: 1px solid blue;">
+                                            <div class="col-md-12 mb-2 mt-3">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Sr No.</th>
@@ -376,8 +360,8 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Tower Details</h5>
                                             </div>
-                                            <div class="col-md-12 mb-3">
-                                                <table class="table custom-table-design" style="border: 1px solid blue;">
+                                            <div class="col-md-12 mb-3 mt-3">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Number Of Tower</th>
@@ -414,7 +398,7 @@
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
                                             <div class="col-md-12 mb-3">
-                                                <table class="table custom-table-design" style="border: 1px solid blue;">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Sr No.</th>
@@ -464,7 +448,7 @@
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
                                             <div class="col-md-12 mt-3">
-                                                <table class="table custom-table-design" style="border: 1px solid blue;">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Tower Name</th>
@@ -508,8 +492,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Basic Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Number Of Tower</th>
@@ -537,8 +521,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Tower Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
@@ -572,8 +556,8 @@
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
 
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mt-3">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Tower Name</th>
@@ -807,7 +791,7 @@
                                                     <div>: {{ $project->parkings_decode['total_floor_for_parking'] ?? '-' }}</div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-12 mt-3">
                                                 <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
@@ -836,7 +820,7 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Amenities</h5>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-12 mt-3">
                                                 <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
@@ -897,7 +881,7 @@
 
                                             <div class="row gy-2">
                                                 <div class="col mt-2">
-                                                    Catlog File : <span class="text-primary" style="cursor: pointer;" onclick="openDocument('{{ $project->document_image }}')">{{ $project->document_image }}</span>
+                                                    Catlog File : <span class="text-primary" style="cursor: pointer;" onclick="openDocument('{{ $project->catlog_file }}')">{{ $project->catlog_file }}</span>
                                                 </div>
                                             </div>
 
@@ -911,8 +895,8 @@
                                             <div class="form-group col-md-12">
                                                 <h5 class="border-style mb-1">Tower Details</h5>
                                             </div>
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mt-3">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Number Of Tower</th>
@@ -944,8 +928,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Unit Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
@@ -983,8 +967,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Unit Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
@@ -1029,8 +1013,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Unit Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
@@ -1068,8 +1052,8 @@
                                                 <div class="form-group col-md-12">
                                                     <h5 class="border-style mb-1">Tower Details</h5>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <table class="table custom-table-design">
+                                                <div class="col-md-12 mt-3">
+                                                    <table class="table custom-table-design" style="border:1px solid blue">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Tower Name</th>
@@ -1103,8 +1087,8 @@
                                                 <h5 class="border-style mb-1">Unit Details</h5>
                                             </div>
 
-                                            <div class="col-md-12">
-                                                <table class="table custom-table-design">
+                                            <div class="col-md-12 mt-3">
+                                                <table class="table custom-table-design" style="border:1px solid blue">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Tower Name</th>

@@ -8,6 +8,7 @@ use App\Models\Areas;
 use App\Models\Builders;
 use App\Models\City;
 use App\Models\DropdownSettings;
+use App\Models\LandUnit;
 use App\Models\Projects;
 use App\Models\State;
 use App\Models\SuperAreas;
@@ -193,7 +194,16 @@ class ProjectsController extends Controller
 		$project->amenity_array = json_decode($project->amenities, true);
 		$project->other_documents = json_decode($project->other_documents, true) ?? [];
 
-		return view('superadmin.projects.view_project')->with(['project' => $project]);
+		$map_units = LandUnit::all();
+		$mapRecordsByKey = $map_units->keyBy('id');
+
+		$new_array = [];
+
+		foreach ($mapRecordsByKey as $key => $value) {
+			$new_array[$key] = $value['unit_name'];
+		}
+
+		return view('superadmin.projects.view_project')->with(['project' => $project, 'mapunits' => $new_array]);
 	}
 
 	public function addproject(Request $request){

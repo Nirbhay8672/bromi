@@ -8,6 +8,7 @@ use App\Models\Areas;
 use App\Models\Builders;
 use App\Models\City;
 use App\Models\DropdownSettings;
+use App\Models\LandUnit;
 use App\Models\Projects;
 use App\Models\State;
 use Carbon\Carbon;
@@ -149,7 +150,16 @@ class HomeController extends Controller
 		$project->amenity_array = json_decode($project->amenities, true);
 		$project->other_documents = json_decode($project->other_documents, true) ?? [];
 
-		return view('builder.projects.view_project')->with(['project' => $project]);
+		$map_units = LandUnit::all();
+		$mapRecordsByKey = $map_units->keyBy('id');
+
+		$new_array = [];
+
+		foreach ($mapRecordsByKey as $key => $value) {
+			$new_array[$key] = $value['unit_name'];
+		}
+
+		return view('builder.projects.view_project')->with(['project' => $project, 'mapunits' => $new_array]);
 	}
 
 	public function addproject(Request $request){
@@ -406,6 +416,16 @@ class HomeController extends Controller
 			$data = Projects::whereIn('id', json_decode($request->allids))->delete();
 		}
 	}
+
+	public function viewProjectDocument($filename)
+    {
+        $filePath = storage_path("app/public/file_image/{$filename}");
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+        $mimeType = mime_content_type($filePath);
+        return response()->file($filePath, ['Content-Type' => $mimeType]);
+    }
 
 	public function logout() {
 		Session::flush();
