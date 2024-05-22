@@ -53,7 +53,7 @@ use Illuminate\Support\Facades\DB;
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Details of Propertyyy</h5>
+                            <h5 class="mb-3">Details of Property</h5>
                         </div>
                         <div class="card-body pt-0">
                             <div class="row px-3">
