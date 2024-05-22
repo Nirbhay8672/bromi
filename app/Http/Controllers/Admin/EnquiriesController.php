@@ -258,16 +258,21 @@ class EnquiriesController extends Controller
 							if ($request->match_budget_from_type) {
 								$survey_price = (int) $pro->survey_price; // Cast to integer
 								$unitDetails = json_decode($pro->unit_details, true);
-								$unit_price = (int) str_replace(',', '', $unitDetails[0][4]); // Remove comma from unit_price and cast to integer
-								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $survey_price,"unit", $unit_price);
+								$unit_price = (int) str_replace(',', '', $unitDetails[0][4]);
+								$sell_price = (int) str_replace(',', '', $unitDetails[0][3]);
+								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $survey_price,"unit", $unit_price,"sell_price",$sell_price);
 								if ($survey_price !== '' && $survey_price !== null && $survey_price !== 0) {
 									$query
 										->where('budget_from', '<=', $survey_price)
 										->where('budget_to', '>=', $survey_price);
-								} else if ($unit_price !== '' && $unit_price !== null) {
+								} else if ($unit_price !== '' && $unit_price !== null && $unit_price !== 0) {
 									$query
 										->where('budget_from', '<=', $unit_price)  // 1500
 										->where('budget_to', '>=', $unit_price); // 5000
+								}else if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0) {
+									$query
+										->where('budget_from', '<=', $sell_price)  // 1500
+										->where('budget_to', '>=', $sell_price); // 5000
 								}
 							}
 
