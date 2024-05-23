@@ -173,6 +173,12 @@ class EnquiriesController extends Controller
 							$query->where('sales_comment_id', $request->filter_sales_comment);
 						});
 					})
+					->when($request->filter_from_area, function ($query) use ($request) {
+						return $query->where('area_from', '>=', $request->filter_from_area);
+					})
+					->when($request->filter_to_area, function ($query) use ($request) {
+						return $query->where('area_to', '<=', $request->filter_to_area);
+					})
 					->when($request->filter_lead_type, function ($query) use ($request) {
 						return $query->whereHas('activeProgress', function ($query) use ($request) {
 							$query->where('lead_type', $request->filter_lead_type);
@@ -336,9 +342,7 @@ class EnquiriesController extends Controller
 						}
 					}
 				}
-				$data = $data->get(); // Execute the query and get the result
-
-				// Filtering the results based on budget_from and budget_to
+				$data = $data->get();
 				$data = $data->filter(function ($value) use ($request) {
 					if (!empty($request->filter_from_budget) && !empty($value->budget_from) && !(Helper::c_to_n($value->budget_from) >= Helper::c_to_n($request->filter_from_budget))) {
 						return false;
