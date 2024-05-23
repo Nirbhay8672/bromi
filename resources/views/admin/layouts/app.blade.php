@@ -62,6 +62,9 @@ Helper::set_default_measuerement();
     <link href="{{ asset('admins/assets/css/fullcalendar.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admins/assets/css/custom.css?v='.time()) }}" rel="stylesheet" type="text/css" />
     <style>
+        .dropdown-basic .dropdown .dropdown-content {
+            left: auto !important;
+        }
         /* country code */
         .country_code_area .input-group .input-group-append .select2 .select2-selection{
             border-bottom-left-radius: 5px !important;
