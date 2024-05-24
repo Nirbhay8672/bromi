@@ -2737,21 +2737,21 @@
                 flateConfiguration, officeConf, retailConfiguration, storageConfiguration, theForLand;
             $(document).ready(function() {
                 //only 2 digits add
-                $('#ceiling_height').on('input', function() {
-                    var currentValue = $(this).val();
-                    if (currentValue.length > 2) {
-                        $(this).val(currentValue.slice(0, 2));
-                    }
-                });
-                //.00 decimal add
-                $("#ceiling_height").blur(function() {
-                    var value = $(this).val();
-                    var roundedValue = parseFloat(value).toFixed(2);
-                    if (roundedValue.indexOf('.') === -1) {
-                        roundedValue += ".00";
-                    }
-                    $(this).val(roundedValue);
-                });
+                // $('#ceiling_height').on('input', function() {
+                //     var currentValue = $(this).val();
+                //     if (currentValue.length > 2) {
+                //         $(this).val(currentValue.slice(0, 2));
+                //     }
+                // });
+                // //.00 decimal add
+                // $("#ceiling_height").blur(function() {
+                //     var value = $(this).val();
+                //     var roundedValue = parseFloat(value).toFixed(2);
+                //     if (roundedValue.indexOf('.') === -1) {
+                //         roundedValue += ".00";
+                //     }
+                //     $(this).val(roundedValue);
+                // });
                 // Initialize Select2 for all dropdowns
                 $('#project_id, #state_id, #area_id, #zone, #village_id, #taluka_id, #district_id, #state-dropdown')
                     .select2();
@@ -2776,6 +2776,19 @@
                     return isValid;
                 }
 
+                function validateFloat(inputSelector, errorSelector, errorMessage, regex = null) {
+                    let inputValue = $(inputSelector).val().trim();
+                    let isValid = inputValue !== '';
+                    
+                    if (isValid && regex) {
+                        isValid = regex.test(inputValue);
+                    }
+
+                    $(inputSelector).toggleClass('is-invalid', !isValid);
+                    $(errorSelector).toggle(!isValid).text(isValid ? '' : errorMessage);
+                    return isValid;
+                }
+                
                 //office_type
                 $(document).on('change', 'input[name=office_type]', function() {
                     office_type_val = $(this).attr('data-val');
@@ -2880,6 +2893,8 @@
 
                 function validateForm() {
                     isValid = true;
+                    let numberRegex = /^\d+(\.\d+)?$/; // Regex for integer and floating point numbers
+
 
                     if (flateConfiguration || plotConf || officeConf || retailConfiguration) {
                         console.log("enter in salable area ==");
@@ -2948,20 +2963,21 @@
                         // isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
                         //     'two wheel parking field is required') && isValid;
                     }
-                    // if (flateConfiguration || officeConf || retailConfiguration) {
-                    //     isValid = validateField('#ceiling_height', '#ceiling_height_error',
-                    //         'ceiling height field is required') && isValid;
-                    //     // isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
-                    //     //     'total units field is required') && isValid;
-                    //     // isValid = validateField('#total_no_of_floor', '#total_no_of_floor_error',
-                    //     //     'no of floor field is required') && isValid;
-                    //     // isValid = validateField('#total_units_in_tower', '#total_units_in_tower_error',
-                    //     //     'unit tower field is required') && isValid;
-                    //     // isValid = validateField('#no_of_elavators', '#no_of_elavators_error',
-                    //     //     'elavators field is required') && isValid;
-                    //     // isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
-                    //     //     'two wheel parking field is required') && isValid;
-                    // }
+                    if (flateConfiguration || officeConf || retailConfiguration) {
+                        isValid = validateFloat('#ceiling_height', '#ceiling_height_error',
+                        'ceiling height field is required and must be a number', numberRegex) && isValid;
+
+                        // isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
+                        //     'total units field is required') && isValid;
+                        // isValid = validateField('#total_no_of_floor', '#total_no_of_floor_error',
+                        //     'no of floor field is required') && isValid;
+                        // isValid = validateField('#total_units_in_tower', '#total_units_in_tower_error',
+                        //     'unit tower field is required') && isValid;
+                        // isValid = validateField('#no_of_elavators', '#no_of_elavators_error',
+                        //     'elavators field is required') && isValid;
+                        // isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
+                        //     'two wheel parking field is required') && isValid;
+                    }
                     // if (penthouseConf) {
                     //     isValid = validateField('#no_of_balcony', '#no_of_balcony_error',
                     //         'no of balcony field is required') && isValid;
@@ -3099,7 +3115,7 @@
                     });
                 }
                 restrictToNumeric(['#terrace_salable_area', '#salable_area', '#another_area', '#length_of_plot',
-                    '#width_of_plot', '#carpet_area', '#entrance_width', '#ceiling_height',
+                    '#width_of_plot', '#carpet_area', '#entrance_width',
                     '#storage_centre_height', '#carpet_plot_area', '#constructed_builtup_area',
                     '#constructed_salable_area', '#salable_plot_area', '#constructed_carpet_area'
                 ]);
