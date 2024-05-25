@@ -24,7 +24,8 @@ class UserNotifications extends Model
         'first_notification',
         'second_notification',
         'state',
-        'city'
+        'city',
+        'lead_id'
         
 	];
 
