@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Superadmin;
 
+use App\Constants\Constants;
 use App\Constants\Statuses;
 use App\Http\Controllers\Controller;
 use App\Models\Areas;
@@ -15,6 +16,8 @@ use App\Models\Subplans;
 use App\Models\SuperAreas;
 use App\Models\SuperCity;
 use App\Models\User;
+use App\Models\UserNotifications;
+use App\Traits\HelperFn;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
@@ -23,6 +26,8 @@ use Yajra\DataTables\DataTables;
 
 class BromiEnquiryController extends Controller
 {
+
+    use HelperFn;
 
     public function __construct()
     {
@@ -193,20 +198,54 @@ class BromiEnquiryController extends Controller
         }
 
         $dateTime = $request->followup_date . ' ' . $request->time . ':00';
+
+        $nfDate = Carbon::parse($dateTime)->format('Y-m-d H:i:s');
+        $user = Auth::user();
+        $message = "There an update on a lead for `$bromi_enquiry->user_name`.  The next follow up date is " . Carbon::parse($nfDate)->format('d-m-Y');
+
         LeadProgress::create([
             'lead_id' => $request->id,
-            'user_id' => Auth::user()->id,
+            'user_id' => $user->id,
             'progress' => $request->status,
             'lead_type' => $request->lead_type,
-            'nfd' => Carbon::parse($dateTime)->format('Y-m-d H:i:s'),
+            'nfd' => $nfDate,
             'remarks' => $request->enquiry,
         ]);
 
-        $dateTime = $request->followup_date . ' ' . $request->time . ':00';
+        if ($request->status == 'Lead Confirmed') {
+            $notifType = Constants::LEAD_CONFIRMED;
+        } elseif ($request->status == 'Discussion') {
+            $notifType = Constants::LEAD_DISCUSSION;
+        } elseif ($request->status == 'Demo Scheduled') {
+            $notifType = Constants::LEAD_DEMO_SCHEDULED;
+        } elseif ($request->status == 'Demo Completed') {
+            $notifType = Constants::LEAD_DEMO_COMPLETED;
+        } elseif ($request->status == 'Due Followup') {
+            $notifType = Constants::LEAD_DUE_FOLLOWUP;
+        } elseif ($request->status == 'Booked') {
+            $notifType = Constants::LEAD_BOOKED;
+        } elseif ($request->status == 'Lost') {
+            $notifType = Constants::LEAD_LOST;
+        }
+
+        // On each and every lead-prgress,
+        // notify logged in user for next follow up date
+        UserNotifications::create([
+            "user_id" => (int) $user->id,
+            "notification" => $message,
+            "notification_type" => $notifType,
+            'lead_id' => $bromi_enquiry->id,
+            'schedule_date' => $nfDate,
+        ]);
+
+        // send if user has onesignal id
+        if (!empty($user->onesignal_token)) {
+            HelperFn::sendPushNotification($user->onesignal_token, $message);
+        }
 
         $bromi_enquiry->fill([
             'status' => $request->status,
-            'followup_date' => Carbon::parse($dateTime)->format('Y-m-d H:i:s'),
+            'followup_date' => $nfDate,
             // 'enquiry' => $request->enquiry,
         ])->save();
     }

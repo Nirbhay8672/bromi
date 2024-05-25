@@ -11,4 +11,11 @@ class Constants
     const PARTNER_REQUEST_ACCEPTED = 'partner_request_accepted';
     const PROPERTY_REQUEST_ACCEPTED = 'property_request_accepted';
     const GENERAL = 'general';
+    const LEAD_CONFIRMED = 'lead_confirmed';
+    const LEAD_DEMO_SCHEDULED = 'lead_demo_scheduled';
+    const LEAD_DEMO_COMPLETED = 'lead_demo_completed';
+    const LEAD_DUE_FOLLOWUP = 'lead_due_followup';
+    const LEAD_DISCUSSION = 'lead_discussion';
+    const LEAD_BOOKED = 'lead_booked';
+    const LEAD_LOST = 'lead_lost';
 }
