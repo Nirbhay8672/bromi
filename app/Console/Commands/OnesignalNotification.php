@@ -56,6 +56,7 @@ class OnesignalNotification extends Command
         // Find records in the database where the schedule_date matches the current time and 30 minutes before
         $notifications = UserNotifications::whereDate('schedule_date', $currentDateTime)
             ->where('notification_type', Constants::SCHEDULE_VISIT)
+            ->orWhere('notification_type', Constants::LEAD_DEMO_SCHEDULED)
             ->orWhere('notification_type', Constants::ENQUIRY_FOLLOWUP)
             ->get();
         
@@ -67,7 +68,7 @@ class OnesignalNotification extends Command
             // send a notification or execute a function
             $user = User::find($notification->user_id);
 
-            if ($notification->notification_type == Constants::SCHEDULE_VISIT) {
+            if ($notification->notification_type == Constants::SCHEDULE_VISIT || $notification->notification_type == Constants::LEAD_DEMO_SCHEDULED) {
                 # code...
                 if (!empty($user->onesignal_token)) {
                     if ($isBetween10to11 /* && $notification->first_notification != 1 */) {
@@ -78,6 +79,7 @@ class OnesignalNotification extends Command
                             $notification->update();
                         } catch (\Throwable $th) {
                             Log::info('Cron failed: 10 AM Notification not sent for Schedule visit');
+                            Log::info('Notification Id: ' . $notification->id);
                             Log::info('Error: ' . $th->getMessage());
                         }
                         
@@ -91,6 +93,7 @@ class OnesignalNotification extends Command
                             $notification->update();
                         } catch (\Throwable $th) {
                             Log::info('Cron failed:  1 hour before Notification not sent for Schedule visit');
+                            Log::info('Notification Id: ' . $notification->id);
                             Log::info('Error: ' . $th->getMessage());
                         }
                     }
@@ -113,7 +116,7 @@ class OnesignalNotification extends Command
                         }
                         
                     } else {
-                        Log::info('Time span does not fall between 10 - 11 am');
+                        Log::info('Time span does not fall between 10 - 11 am: ' . $currentDateTime);
                     }
                 }
             }
