@@ -110,10 +110,13 @@
                                                 <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="builders_" value="builders"> Builders
                                             </label>
                                             <label class="d-flex">
-                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="area_" value="area"> Locality
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="sms-template_" value="sms-template"> SMS Template
                                             </label>
                                             <label class="d-flex">
-                                            <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="email-template_" value="email-template"> Email Template
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="email-template_" value="email-template"> Email Template
+                                            </label>
+                                            <label class="d-flex">
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="rera_" value="rera"> Rera
                                             </label>
                                         </div>
                                     </div>
@@ -132,32 +135,35 @@
                                                 <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="coupons_" value="coupons"> Coupons
                                             </label>
                                             <label class="d-flex">
-                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="taluka_" value="taluka"> Taluka
-                                            </label>
-                                            <label class="d-flex">
-                                            <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="sms-template_" value="sms-template"> SMS Template
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="d-flex flex-column justify-content-start">
-                                            <label class="d-flex">
                                                 <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="notifications_" value="notifications"> Notifications
                                             </label>
                                             <label class="d-flex">
                                                 <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="tp-scheme_" value="tp-scheme"> TP Scheme
                                             </label>
                                             <label class="d-flex">
-                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="rera_" value="rera"> Rera
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="leads_" value="leads"> Leads
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="d-flex flex-column justify-content-start">
+                                            <label class="d-flex">
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="state_" value="state"> State
                                             </label>
                                             <label class="d-flex">
                                                 <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="city_" value="city"> City
                                             </label>
                                             <label class="d-flex">
-                                            <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="village_" value="village"> Village
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="area_" value="area"> Locality
                                             </label>
                                             <label class="d-flex">
-                                            <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="leads_" value="leads"> Leads
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="district_" value="district"> District
+                                            </label>
+                                            <label class="d-flex">
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="taluka_" value="taluka"> Taluka
+                                            </label>
+                                            <label class="d-flex">
+                                                <input type="checkbox" style="margin-right:4px;" name="permissions[]" id="village_" value="village"> Village
                                             </label>
                                         </div>
                                     </div>
