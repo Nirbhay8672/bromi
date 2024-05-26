@@ -26,3 +26,8 @@ class SupAdminPermissions
     const REQUESTS = 'requests';
     const LEADS = 'leads';
 }
+
+class SettingPermission
+{
+    
+}
