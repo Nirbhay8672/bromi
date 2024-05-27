@@ -203,21 +203,48 @@
         </div>
     </div>
 
-    <div hidden>
-            <div id="mypopover-content">
-                <div class="custom-tooltip-content">
-                    <div class="d-block w-100 blue-inq"><i class="fa fa-square"></i> New Lead</div>
-                    <div class="d-block w-100 org-inq"><i class="fa fa-square"></i> Lead Confirmed</div>
-                    <div class="d-block w-100 purple-inq"><i class="fa fa-square"></i> Demo Scheduled</div>
-                    <div class="d-block w-100 yellow-inq"><i class="fa fa-square"></i> Demo Completed</div>
-                    <div class="d-block w-100 red-inq"><i class="fa fa-square"></i> Due Followup</div>
-                    <div class="d-block w-100 lblue-inq"><i class="fa fa-square"></i> Discussion</div>
-                    <div class="d-block w-100 green-inq"><i class="fa fa-square"></i> Booked</div>
-                    <div class="d-block w-100 pink-inq"><i class="fa fa-square"></i> Lost</div>
-                   
+    <div class="modal fade" id="assignLeadModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Assign Lead</h5>
+                    <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- set select and add button here -->
+                    <table class="table custom-table-design mt-2">
+                        <thead>
+                            <tr>
+                                <th scope="col">Assign To</th>
+                                <th scope="col">Assign At</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="assign_history_table">
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
+
+
+    <div hidden>
+        <div id="mypopover-content">
+            <div class="custom-tooltip-content">
+                <div class="d-block w-100 blue-inq"><i class="fa fa-square"></i> New Lead</div>
+                <div class="d-block w-100 org-inq"><i class="fa fa-square"></i> Lead Confirmed</div>
+                <div class="d-block w-100 purple-inq"><i class="fa fa-square"></i> Demo Scheduled</div>
+                <div class="d-block w-100 yellow-inq"><i class="fa fa-square"></i> Demo Completed</div>
+                <div class="d-block w-100 red-inq"><i class="fa fa-square"></i> Due Followup</div>
+                <div class="d-block w-100 lblue-inq"><i class="fa fa-square"></i> Discussion</div>
+                <div class="d-block w-100 green-inq"><i class="fa fa-square"></i> Booked</div>
+                <div class="d-block w-100 pink-inq"><i class="fa fa-square"></i> Lost</div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="leadModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -250,14 +277,6 @@
                                 </div>
                                 <span class="text-danger invalid-error d-none" id="company_error">Company is required.</span>
                             </div>
-                            {{-- <div class="form-group col-md-4 m-b-20">
-                                <div class="fname">
-                                    <label for="last_name">Last Name</label>
-                                    <input class="form-control" name="last_name" id="last_name" type="text" autocomplete="off">
-                                </div>
-                                <span class="text-danger invalid-error d-none" id="last_name_error">Last Name is required.</span>
-
-                            </div> --}}
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
                                 <label for="mobile">Mobile Number</label>
@@ -315,7 +334,6 @@
                                             </option>
                                         @endforeach --}}
                                     </select>
-                                    {{-- <input type="text" class="form-control" name="locality" id="locality"> --}}
                                 </div>
                                 <span class="invalid-error d-none text-danger" id="locality_error">This field is required.</span>
                             </div>
