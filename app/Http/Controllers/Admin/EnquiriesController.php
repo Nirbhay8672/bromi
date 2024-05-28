@@ -462,20 +462,46 @@ class EnquiriesController extends Controller
 					$area_name = '';
 					$other_areas = '';
 					$area_title = '';
+					// if (!empty($row->area_ids)) {
+					// 	foreach (json_decode($row->area_ids) as $key => $value) {
+					// 		if ($key < 2) {
+					// 			echo "* key -- ".$key; 
+					// 			// echo "<br> val -- ".$areas[$value]['name'];
+					// 			if ($key > 0) {
+					// 				dd("inn 1");
+					// 				$area_name .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+					// 			} else {
+					// 				// dd("inn 2");
+					// 				$area_name .= (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+					// 			}
+					// 		} else {
+					// 			dd("inn 3");
+					// 			$other_areas .= $area_name;
+					// 			$other_areas .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+					// 		}
+					// 	}
+					// }
 					if (!empty($row->area_ids)) {
 						foreach (json_decode($row->area_ids) as $key => $value) {
 							if ($key < 2) {
-								if ($key > 0) {
-									$area_name .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-								} else {
+								// echo "* key -- " . $key . "<br>";
+								// if ($key > 0) {
+								// 	dd("inn 1");
+								// 	$area_name .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+								// } else
+								//  {
+									// dd("inn 2");
 									$area_name .= (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-								}
+								// }
 							} else {
+								// dd("inn 3");
 								$other_areas .= $area_name;
 								$other_areas .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
 							}
 						}
 					}
+					
+					// dd("row->other_areas",$other_areas);
 					if ($other_areas) {
 						$area_title = ' <i class="fa fa-info-circle cursor-pointer" data-bs-content="' . $other_areas . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom"></i>';
 					}
@@ -1331,11 +1357,11 @@ class EnquiriesController extends Controller
 				$enquiry_source_id = $enquiry_source->id;
 			}
 
-			$telephonic = NULL;
+			$telephonic = "";
 			if (empty($value['Enquiry Progress'])) {
 				$telephonic = $value['Remarks'];
 			}
-			dd("value", $value, $enquiry_source_id);
+			// dd("value", $value, $enquiry_source_id);
 
 			if (!empty($value['ClientName'])) {
 				$data =  new Enquiries();
@@ -1757,6 +1783,7 @@ class EnquiriesController extends Controller
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
 		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
+		// dd("area",$areas);
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		$districts = District::orderBy('name')->get();
 		$talukas   = Taluka::orderBy('name')->get();
