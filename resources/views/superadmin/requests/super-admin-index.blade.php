@@ -203,21 +203,68 @@
         </div>
     </div>
 
-    <div hidden>
-            <div id="mypopover-content">
-                <div class="custom-tooltip-content">
-                    <div class="d-block w-100 blue-inq"><i class="fa fa-square"></i> New Lead</div>
-                    <div class="d-block w-100 org-inq"><i class="fa fa-square"></i> Lead Confirmed</div>
-                    <div class="d-block w-100 purple-inq"><i class="fa fa-square"></i> Demo Scheduled</div>
-                    <div class="d-block w-100 yellow-inq"><i class="fa fa-square"></i> Demo Completed</div>
-                    <div class="d-block w-100 red-inq"><i class="fa fa-square"></i> Due Followup</div>
-                    <div class="d-block w-100 lblue-inq"><i class="fa fa-square"></i> Discussion</div>
-                    <div class="d-block w-100 green-inq"><i class="fa fa-square"></i> Booked</div>
-                    <div class="d-block w-100 pink-inq"><i class="fa fa-square"></i> Lost</div>
+    <div class="modal fade" id="assignLeadModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Assign Lead</h5>
+                    <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="">
+                        <input type="hidden" name="lead_id" id="lead_id">
+                        <div class="row mt-2">
+                            <div class="form-group m-b-20 col-md-4">
+                                <div class="fname">
+                                    <select name="memeber" id="member_id">
+                                        <option value="">-- Select Member --</option>
+                                        @foreach($members as $member)
+                                            <option value="{{$member->id}}">{{ $member->first_name }} {{ $member->last_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger invalid-error d-none mt-2" id="member_error">Member is required.</span>
+                                    <span class="text-danger invalid-error d-none mt-2" id="member_exist_error">This lead already assign to this member.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-3">
+                            <div class="col">
+                                <button class="btn custom-theme-button" type="button" id="assignLead" onclick="assignLeadToMember()">Assign</button>
+                            </div>
+                        </div>
+                    </form>
                    
+                    <table class="table custom-table-design mt-2">
+                        <thead>
+                            <tr>
+                                <th scope="col">Assign To</th>
+                                <th scope="col">Assign At</th>
+                            </tr>
+                        </thead>
+                        <tbody class="assign_history_table" id="assign_history_table">
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div hidden>
+        <div id="mypopover-content">
+            <div class="custom-tooltip-content">
+                <div class="d-block w-100 blue-inq"><i class="fa fa-square"></i> New Lead</div>
+                <div class="d-block w-100 org-inq"><i class="fa fa-square"></i> Lead Confirmed</div>
+                <div class="d-block w-100 purple-inq"><i class="fa fa-square"></i> Demo Scheduled</div>
+                <div class="d-block w-100 yellow-inq"><i class="fa fa-square"></i> Demo Completed</div>
+                <div class="d-block w-100 red-inq"><i class="fa fa-square"></i> Due Followup</div>
+                <div class="d-block w-100 lblue-inq"><i class="fa fa-square"></i> Discussion</div>
+                <div class="d-block w-100 green-inq"><i class="fa fa-square"></i> Booked</div>
+                <div class="d-block w-100 pink-inq"><i class="fa fa-square"></i> Lost</div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="leadModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -250,14 +297,6 @@
                                 </div>
                                 <span class="text-danger invalid-error d-none" id="company_error">Company is required.</span>
                             </div>
-                            {{-- <div class="form-group col-md-4 m-b-20">
-                                <div class="fname">
-                                    <label for="last_name">Last Name</label>
-                                    <input class="form-control" name="last_name" id="last_name" type="text" autocomplete="off">
-                                </div>
-                                <span class="text-danger invalid-error d-none" id="last_name_error">Last Name is required.</span>
-
-                            </div> --}}
                             <div class="form-group col-md-4 m-b-20">
                                 <div class="fname">
                                 <label for="mobile">Mobile Number</label>
@@ -315,7 +354,6 @@
                                             </option>
                                         @endforeach --}}
                                     </select>
-                                    {{-- <input type="text" class="form-control" name="locality" id="locality"> --}}
                                 </div>
                                 <span class="invalid-error d-none text-danger" id="locality_error">This field is required.</span>
                             </div>
@@ -328,7 +366,7 @@
                             </div>
                         </div>
 
-                        <div class="text-center mt-3">  
+                        <div class="text-center mt-3">
                             <button class="btn custom-theme-button" type="button" id="saveLead">Save</button>
                             <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                         </div>
@@ -343,6 +381,79 @@
 @endsection
 @push('scripts')
     <script>
+
+        function showAssignForm(data) {
+            $('#member_id').val('').trigger('change');
+            $('#lead_id').val($(data).attr('data-id'));
+            
+            let all_error = document.querySelectorAll('.invalid-error');
+
+            all_error.forEach(element => {
+                element.classList.add('d-none');
+            });
+
+            let lead_history_table = document.getElementById('assign_history_table');
+
+            lead_history_table.innerHTML = '';
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('superadmin.getLeadHistory') }}",
+                data: {
+                    id : $('#lead_id').val(),
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(res_data) {
+                    res_data.forEach(history => {
+                        lead_history_table.innerHTML += `<tr>
+                            <td>${history.member_name}</td>
+                            <td>${history.assign_date}</td>
+                        </tr>`;
+                    });
+                },
+                error:function(error) {
+                    console.log(error);
+                }
+            });
+
+            $('#assignLeadModal').modal('show');
+        }
+
+        function assignLeadToMember() {
+
+            let all_error = document.querySelectorAll('.invalid-error');
+
+            all_error.forEach(element => {
+                element.classList.add('d-none');
+            });
+            
+            let valid = true;
+
+            if($('#member_id').val() == '') {
+                document.getElementById('member_error').classList.remove('d-none');
+                valid = false;
+            }
+
+            if(valid) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('superadmin.assignLead') }}",
+                    data: {
+                        id : $('#lead_id').val(),
+                        member_id : $('#member_id').val(),
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        $('#leadTable').DataTable().draw();
+                        $('#assignLeadModal').modal('hide');
+                    },
+                    error:function(error) {
+                        document.getElementById('member_exist_error').classList.remove('d-none');
+                    }
+                });
+            }
+        }
+     
         let states = @Json($states_encoded);
         function setCities() {
             let state_id = $('#state').val();
