@@ -75,8 +75,21 @@ class BromiEnquiryController extends Controller
     public function superadminList(Request $request)
     {
         if ($request->ajax()) {
-            $data = BromiEnquiry::with('User', 'LeadProgress', 'activeProgress', 'state', 'city', 'planInterested')->orderBy('id', 'desc')->get();
-            // dd($data->first()->User);
+
+            $data = [];
+
+            if(Auth::user()->id == 6 ) {
+                $data = BromiEnquiry::with('User', 'LeadProgress', 'activeProgress', 'state', 'city', 'planInterested')->orderBy('id', 'desc')->get();
+            } else {
+                $lead_id = LeadAssignHistory::where('member_id', Auth::user()->id)->pluck('lead_id');
+                
+                $data = BromiEnquiry::with('User', 'LeadProgress', 'activeProgress', 'state', 'city', 'planInterested')
+                    ->whereIn('id', $lead_id)
+                    ->orWhere('user_id',Auth::user()->id)
+                    ->orderBy('id', 'desc')
+                    ->get();
+            }
+
             return DataTables::of($data)
                 ->editColumn('user_name', function ($row) /* use ($dropdownsarr) */ {
 
