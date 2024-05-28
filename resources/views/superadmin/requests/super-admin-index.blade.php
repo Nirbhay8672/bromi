@@ -212,16 +212,37 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- set select and add button here -->
+                    <form action="">
+                        <input type="hidden" name="lead_id" id="lead_id">
+                        <div class="row mt-2">
+                            <div class="form-group m-b-20 col-md-4">
+                                <div class="fname">
+                                    <select name="memeber" id="member_id">
+                                        <option value="">-- Select Member --</option>
+                                        @foreach($members as $member)
+                                            <option value="{{$member->id}}">{{ $member->first_name }} {{ $member->last_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger invalid-error d-none mt-2" id="member_error">Member is required.</span>
+                                    <span class="text-danger invalid-error d-none mt-2" id="member_exist_error">This lead already assign to this member.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-3">
+                            <div class="col">
+                                <button class="btn custom-theme-button" type="button" id="assignLead" onclick="assignLeadToMember()">Assign</button>
+                            </div>
+                        </div>
+                    </form>
+                   
                     <table class="table custom-table-design mt-2">
                         <thead>
                             <tr>
                                 <th scope="col">Assign To</th>
                                 <th scope="col">Assign At</th>
-                                <th scope="col">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="assign_history_table">
+                        <tbody class="assign_history_table" id="assign_history_table">
 
                         </tbody>
                     </table>
@@ -229,7 +250,6 @@
             </div>
         </div>
     </div>
-
 
     <div hidden>
         <div id="mypopover-content">
@@ -346,7 +366,7 @@
                             </div>
                         </div>
 
-                        <div class="text-center mt-3">  
+                        <div class="text-center mt-3">
                             <button class="btn custom-theme-button" type="button" id="saveLead">Save</button>
                             <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                         </div>
@@ -361,6 +381,79 @@
 @endsection
 @push('scripts')
     <script>
+
+        function showAssignForm(data) {
+            $('#member_id').val('').trigger('change');
+            $('#lead_id').val($(data).attr('data-id'));
+            
+            let all_error = document.querySelectorAll('.invalid-error');
+
+            all_error.forEach(element => {
+                element.classList.add('d-none');
+            });
+
+            let lead_history_table = document.getElementById('assign_history_table');
+
+            lead_history_table.innerHTML = '';
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('superadmin.getLeadHistory') }}",
+                data: {
+                    id : $('#lead_id').val(),
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(res_data) {
+                    res_data.forEach(history => {
+                        lead_history_table.innerHTML += `<tr>
+                            <td>${history.member_name}</td>
+                            <td>${history.assign_date}</td>
+                        </tr>`;
+                    });
+                },
+                error:function(error) {
+                    console.log(error);
+                }
+            });
+
+            $('#assignLeadModal').modal('show');
+        }
+
+        function assignLeadToMember() {
+
+            let all_error = document.querySelectorAll('.invalid-error');
+
+            all_error.forEach(element => {
+                element.classList.add('d-none');
+            });
+            
+            let valid = true;
+
+            if($('#member_id').val() == '') {
+                document.getElementById('member_error').classList.remove('d-none');
+                valid = false;
+            }
+
+            if(valid) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('superadmin.assignLead') }}",
+                    data: {
+                        id : $('#lead_id').val(),
+                        member_id : $('#member_id').val(),
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        $('#leadTable').DataTable().draw();
+                        $('#assignLeadModal').modal('hide');
+                    },
+                    error:function(error) {
+                        document.getElementById('member_exist_error').classList.remove('d-none');
+                    }
+                });
+            }
+        }
+     
         let states = @Json($states_encoded);
         function setCities() {
             let state_id = $('#state').val();

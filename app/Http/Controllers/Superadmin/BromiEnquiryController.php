@@ -9,6 +9,7 @@ use App\Models\Areas;
 use App\Models\Branches;
 use App\Models\BromiEnquiry;
 use App\Models\DropdownSettings;
+use App\Models\LeadAssignHistory;
 use App\Models\LeadProgress;
 use App\Models\Projects;
 use App\Models\State;
@@ -155,15 +156,20 @@ class BromiEnquiryController extends Controller
                     return $row->planInterested->name ?? '-'; 
                 })
                 ->editColumn('added_by', function ($row) {
-                    return $row->User->first_name ? $row->User->first_name .' '. @$row->User->last_name : '-'; 
+                    return $row->User->first_name ? $row->User->first_name .' '. @$row->User->last_name : '-';
                 })
                 ->editColumn('Actions', function ($row) {
                     $buttons = '';
                     $buttons .= '<span data-id="' . $row->id . '" onclick=getBromiEnq(this) style="cursor:pointer"><i class="fa fa-pencil fs-5"></i></span>';
                     $buttons .= '&nbsp;&nbsp;<span title="Delete" data-id="' . $row->id . '" onclick=deleteEnquiry(this) class="pointer text-danger" type="button"><i class="fs-5 fa fa-trash"></i></span>';
                     $buttons .= '<span class="ms-3" data-id="' . $row->id . '" onclick=showProgress(this) style="cursor:pointer"><i class="fa fa-bars fs-5 text-warning"></i></span>';
+                    
+                    if(Auth::user()->id == 6 ) {
+                        $buttons .= '<span class="ms-3" data-id="' . $row->id . '" onclick=showAssignForm(this) style="cursor:pointer"><i class="fa fa-slideshare fs-5 text-primary"></i></span>';  
+                    }
+                    
                     return $buttons;
-                }) // updateStatusForm(this)
+                })
                 ->rawColumns(['select_checkbox', 'user_name', 'Actions', 'followup_date', 'state', 'city', 'plan', 'added_by'])
                 ->make(true);
         }
@@ -172,6 +178,7 @@ class BromiEnquiryController extends Controller
         return view('superadmin.requests.super-admin-index')->with([
             'plans' => Subplans::all(),
             'states' => $states,
+            'members' => User::where('role_id', '3')->where('id','!=',6)->get(),
         ]);
     }
 
@@ -614,5 +621,49 @@ class BromiEnquiryController extends Controller
 
         return view('superadmin.calendar.view', $data);
     }
-    
+
+    public function getLeadHistory(Request $request)
+    {
+        $lead = BromiEnquiry::with(['LeadHistory'])->where('id',$request->id)->first();
+
+        $lead_history = [];
+
+        foreach ($lead->LeadHistory as $key => $value) {
+            $member = User::find($value['member_id']);
+
+            $date = Carbon::parse($value->assign_at);
+            $formattedDate = $date->format('d/m/Y');
+
+            $obj = [
+                'member_name' => $member->first_name. ' ' .$member->last_name,   
+                'assign_date' => $formattedDate,
+            ];
+
+            array_push($lead_history, $obj);
+        }
+
+        return response()->json($lead_history);
+    }
+
+    public function assignLead(Request $request)
+    {
+        $check_history =  LeadAssignHistory::where('lead_id', $request->id)->where('member_id' , $request->member_id)->get();
+
+        if(count($check_history) > 0) {
+            return response()->json([
+                'error' => [
+                    'message' => 'This lead already assign to this member.',
+                    'status_code' => 422,
+                ],
+            ], 422);
+        } else {
+            $histroy = new LeadAssignHistory();
+
+            $histroy->fill([
+                'lead_id' => $request->id,
+                'member_id' => $request->member_id,
+                'assign_at' => now(),
+            ])->save();
+        }
+    }
 }

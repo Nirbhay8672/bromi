@@ -162,5 +162,8 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/district-import', [ImportController::class, 'districtImport'])->name('superadmin.districtImport');
 		Route::post('/taluka-import', [ImportController::class, 'talukaImport'])->name('superadmin.talukaImport');
 		Route::post('/village-import', [ImportController::class, 'villageImport'])->name('superadmin.villageImport');
+
+		Route::post('/assign-lead', [BromiEnquiryController::class, 'assignLead'])->name('superadmin.assignLead');
+		Route::post('/get-lead-history', [BromiEnquiryController::class, 'getLeadHistory'])->name('superadmin.getLeadHistory');
 	});
 });
