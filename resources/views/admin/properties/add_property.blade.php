@@ -868,7 +868,7 @@
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select class="form-select measure_select measure_unit"
                                                                             id="length_of_plot_measurement">
                                                                             <option value="ft">
                                                                                 ft.
@@ -896,7 +896,7 @@
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select class="form-select measure_select measure_unit"
                                                                             id="width_of_plot_measurement">
                                                                             <option value="ft">
                                                                                 ft.
@@ -3225,6 +3225,13 @@
             $(".measure_square").on("change", function() {
                 let selectedValue = $(this).val();
                 $(".measure_square").val(selectedValue).trigger("change.select2");
+            });
+
+            //LEngth of plot and width of plot (units) are change one change
+            $(".measure_unit").select2();
+            $(".measure_unit").on("change", function() {
+                let selectedValue = $(this).val();
+                $(".measure_unit").val(selectedValue).trigger("change.select2");
             });
             // });
 
