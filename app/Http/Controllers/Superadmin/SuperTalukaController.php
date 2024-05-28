@@ -55,7 +55,7 @@ class SuperTalukaController extends Controller
 				->make(true);
 		}
 
-		$districts = District::orderBy('name')->get();
+		$districts = District::orderBy('name')->where("user_id",Auth::user()->id)->get();
 
 		return view('superadmin.supersettings.super_taluka_index', compact('districts'));
 	}
@@ -81,15 +81,31 @@ class SuperTalukaController extends Controller
 	public function store(Request $request)
 	{
 		if (!empty($request->id) && $request->id != '') {
-			$data = SuperTaluka::find($request->id);
-			if (empty($data)) {
-				$data =  new SuperTaluka();
+			$data = SuperTaluka::where('name' ,$request->name)->where('district_id',$request->district_id)->where('id','!=',$request->id)->first();
+			if(!$data) {
+				$obj = SuperTaluka::find($request->id);
+
+				$obj->fill([
+					'name' => ucfirst($request->name),
+					'district_id' => $request->district_id,
+				])->save();
 			}
 		} else {
-			$data =  new SuperTaluka();
+			$data = SuperTaluka::where('name' ,$request->name)->where('district_id',$request->district_id)->first();
+
+			if($data) {
+				$data->fill([
+					'name' => ucfirst($request->name),
+					'district_id' => $request->district_id,
+				])->save();
+			} else {
+				$new = new SuperTaluka();
+	
+				$new->fill([
+					'name' => ucfirst($request->name),
+					'district_id' => $request->district_id,
+				])->save();
+			}
 		}
-		$data->name = $request->name;
-		$data->district_id = $request->district_id;
-		$data->save();
 	}
 }

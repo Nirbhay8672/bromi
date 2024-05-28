@@ -160,7 +160,11 @@ class BromiEnquiryController extends Controller
                 })
                 ->editColumn('Actions', function ($row) {
                     $buttons = '';
-                    $buttons .= '<span data-id="' . $row->id . '" onclick=getBromiEnq(this) style="cursor:pointer"><i class="fa fa-pencil fs-5"></i></span>';
+                    
+                    if(Auth::user()->id == $row->user_id ) {
+                        $buttons .= '<span data-id="' . $row->id . '" onclick=getBromiEnq(this) style="cursor:pointer"><i class="fa fa-pencil fs-5"></i></span>';
+                    }
+
                     $buttons .= '&nbsp;&nbsp;<span title="Delete" data-id="' . $row->id . '" onclick=deleteEnquiry(this) class="pointer text-danger" type="button"><i class="fs-5 fa fa-trash"></i></span>';
                     $buttons .= '<span class="ms-3" data-id="' . $row->id . '" onclick=showProgress(this) style="cursor:pointer"><i class="fa fa-bars fs-5 text-warning"></i></span>';
                     

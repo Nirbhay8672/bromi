@@ -28,11 +28,29 @@ class SuperSettingController extends Controller
 	public function index()
 	{
 		$total_state = State::where('user_id',Auth::user()->id)->get()->count();
-		$total_city = SuperCity::get()->count();
-		$total_locality = SuperAreas::get()->count();
+
+		$total_city = SuperCity::select([
+			'super_cities.*',
+			'state.user_id',
+		])->join('state','super_cities.state_id','state.id')->where('state.user_id',Auth::user()->id)->get()->count();
+
+		$total_locality = SuperAreas::select([
+			'super_areas.*',
+			'state.user_id',
+		])->join('state','super_areas.state_id','state.id')->where('state.user_id',Auth::user()->id)->get()->count();
+
 		$total_dist = District::where('user_id',Auth::user()->id)->get()->count();
-		$total_taluka = SuperTaluka::get()->count();
-		$total_village = SuperVillages::get()->count();
+
+		$total_taluka = SuperTaluka::select([
+			'super_talukas.*',
+			'district.user_id',
+		])->join('district','super_talukas.district_id','district.id')->where('district.user_id',Auth::user()->id)->get()->count();
+
+		$total_village = SuperVillages::select([
+			'super_villages.*',
+			'district.user_id',
+		])->join('district','super_villages.district_id','district.id')->where('district.user_id',Auth::user()->id)->get()->count();
+
 		$total_units = Units::get()->count();
 		$total_tp = TpScheme::get()->count();
 
@@ -99,7 +117,7 @@ class SuperSettingController extends Controller
 		} else {
 			$data =  new District();
 		}
-		$data->name = $request->name;
+		$data->name = ucfirst($request->name);
 		$data->state_id = $request->state_id;
 		$data->user_id = Auth::user()->id;
 		$data->save();
@@ -164,7 +182,7 @@ class SuperSettingController extends Controller
 				$state = State::where('name',$request->name)->where('id','!=',$data->id)->where('user_id',Auth::user()->id)->first();
 
 				if(!$state) {
-					$data->name = $request->name;
+					$data->name = ucfirst($request->name);
 					$data->gst_type = $request->gst_type;
 					$data->save();
 				}
@@ -179,7 +197,7 @@ class SuperSettingController extends Controller
 			if(!$state) {
 				$data =  new State();
 				$data->user_id = Auth::user()->id;
-				$data->name = $request->name;
+				$data->name = ucfirst($request->name);
 				$data->gst_type = $request->gst_type;
 				$data->save();
 			}
@@ -265,7 +283,7 @@ class SuperSettingController extends Controller
 		} else {
 			$data =  new SuperCity();
 		}
-		$data->name = $request->name;
+		$data->name = ucfirst($request->name);
 		$data->state_id = $request->state_id;
 		$data->save();
 	}
@@ -348,7 +366,7 @@ class SuperSettingController extends Controller
 			}
 			$data =  new SuperAreas();
 		}
-		$data->name = $request->name;
+		$data->name = ucfirst($request->name);
 		$data->super_city_id = $request->super_city_id;
 		$data->pincode = $request->pincode;
 		$data->state_id = $request->state_id;
