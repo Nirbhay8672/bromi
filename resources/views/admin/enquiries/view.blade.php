@@ -89,12 +89,12 @@
                                                                 id="v-view-summary-tab">Back</button>
                                                         </a>
                                                     </div>
-                                                    <div class="col-md-1" style="float:right">
-                                                        <a href="{{ URL::to('admin/enquiry/edit/' . $data['id']) }}">
-                                                            <button class="nav-link mx-1 active"
-                                                                id="v-view-summary-tab">Edit</button>
-                                                        </a>
-                                                    </div>
+                                                        {{-- <div class="col-md-1" style="float:right">
+                                                            <a href="{{ URL::to('admin/enquiry/edit/' . $data['id']) }}">
+                                                                <button class="nav-link mx-1 active"
+                                                                    id="v-view-summary-tab">Edit</button>
+                                                            </a>
+                                                        </div> --}}
                                                 </div>
                                                 
                                             </ul>
@@ -647,7 +647,7 @@
                                                             <h5 class="border-style">Remarks</h5>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_25">
-                                                            <h6><b>Telephonic Discussion</b></h6>
+                                                            <h6><b>Remarks</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_25">
                                                             <div>: {{ $data->telephonic_discussion }}</div>
