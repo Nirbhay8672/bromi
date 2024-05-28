@@ -211,6 +211,10 @@ Helper::set_default_measuerement();
         opacity: 1;
     }
 
+    option {
+        text-transform: capitalize !important;
+    }
+
     </style>
     @stack('page-css')
 </head>

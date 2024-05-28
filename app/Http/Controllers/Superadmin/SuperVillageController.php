@@ -7,6 +7,7 @@ use App\Models\District;
 use App\Models\SuperTaluka;
 use App\Models\SuperVillages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 class SuperVillageController extends Controller
@@ -28,6 +29,7 @@ class SuperVillageController extends Controller
 					'district.name AS district_name',
 				])
 				->join('district', 'district.id', 'super_talukas.district_id')
+				->where('district.user_id', Auth::user()->id)
 				->orderBy('super_villages.id', 'desc');
 
 			if ($request->district_id > 0) {
@@ -69,8 +71,12 @@ class SuperVillageController extends Controller
 				->make(true);
 		}
 
-		$talukas = SuperTaluka::orderBy('name')->get()->toArray();
-		$districts = District::with(['talukas'])->orderBy('name')->get()->toArray();
+		$talukas = SuperTaluka::select([
+			'super_talukas.*',
+			'district.user_id',
+		])->join('district','super_talukas.district_id','district.id')->where('district.user_id',Auth::user()->id)->orderBy('super_talukas.name')->get()->toArray();
+
+		$districts = District::with(['talukas'])->where('user_id',Auth::user()->id)->orderBy('name')->get()->toArray();
 
 		return view('superadmin.supersettings.super_village_index', compact('talukas', 'districts'));
 	}
@@ -78,25 +84,35 @@ class SuperVillageController extends Controller
 	public function village_store(Request $request)
 	{
 		if (!empty($request->id) && $request->id != '') {
-			$data = SuperVillages::find($request->id);
-			if (empty($data)) {
-				$exist = SuperVillages::where('name', $request->name)->where('super_taluka_id', $request->super_taluka_id)->first();
-				if (!empty($exist)) {
-					return;
-				}
-				$data =  new SuperVillages();
+			$data = SuperVillages::where('name' ,$request->name)->where('district_id', $request->district_id)->where('super_taluka_id', $request->super_taluka_id)->where('id','!=',$request->id)->first();
+			if(!$data) {
+				$obj = SuperVillages::find($request->id);
+
+				$obj->fill([		
+					'name' => ucfirst($request->name),
+					'super_taluka_id' => $request->super_taluka_id,
+					'district_id' => $request->district_id,
+				])->save();
 			}
 		} else {
-			$exist = SuperVillages::where('name', $request->name)->where('super_taluka_id', $request->super_taluka_id)->first();
-			if (!empty($exist)) {
-				return;
+			$data = SuperVillages::where('name' ,$request->name)->where('district_id', $request->district_id)->where('super_taluka_id', $request->super_taluka_id)->first();
+
+			if($data) {
+				$data->fill([
+					'name' => ucfirst($request->name),
+					'super_taluka_id' => $request->super_taluka_id,
+					'district_id' => $request->district_id,
+				])->save();
+			} else {
+				$new = new SuperVillages();
+	
+				$new->fill([
+					'name' => ucfirst($request->name),
+					'super_taluka_id' => $request->super_taluka_id,
+					'district_id' => $request->district_id,
+				])->save();
 			}
-			$data =  new SuperVillages();
 		}
-		$data->name = $request->name;
-		$data->super_taluka_id = $request->super_taluka_id;
-		$data->district_id = $request->district_id;
-		$data->save();
 	}
 
 	public function get_village(Request $request)
