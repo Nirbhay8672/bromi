@@ -392,4 +392,34 @@ class SuperSettingController extends Controller
 			$data = SuperAreas::whereIn('id', json_decode($request->allids))->delete();
 		}
 	}
+
+	public function districtTemplate() {
+		$filePath = public_path("districts.csv");
+
+		if (!file_exists($filePath)) {
+			abort(404);
+		}
+
+		return response()->download($filePath, 'district.csv');
+	}
+
+	public function talukaTemplate() {
+		$filePath = public_path("talukas.csv");
+
+		if (!file_exists($filePath)) {
+			abort(404);
+		}
+
+		return response()->download($filePath, 'talukas.csv');
+	}
+
+	public function villageTemplate() {
+		$filePath = public_path("villages.csv");
+
+		if (!file_exists($filePath)) {
+			abort(404);
+		}
+
+		return response()->download($filePath, 'villages.csv');
+	}
 }

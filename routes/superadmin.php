@@ -165,5 +165,9 @@ Route::group(['middleware' => 'revalidate'], function () {
 
 		Route::post('/assign-lead', [BromiEnquiryController::class, 'assignLead'])->name('superadmin.assignLead');
 		Route::post('/get-lead-history', [BromiEnquiryController::class, 'getLeadHistory'])->name('superadmin.getLeadHistory');
+
+		Route::get('/district-template', [SuperSettingController::class, 'districtTemplate'])->name('superadmin.districtTemplate');
+		Route::get('/taluka-template', [SuperSettingController::class, 'talukaTemplate'])->name('superadmin.talukaTemplate');
+		Route::get('/village-template', [SuperSettingController::class, 'villageTemplate'])->name('superadmin.villageTemplate');
 	});
 });
