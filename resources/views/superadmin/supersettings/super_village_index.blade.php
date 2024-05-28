@@ -141,7 +141,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-5">
+
+                        <div class="form-group col-md-5 mt-3">
+                            <a id="import_url" href="{{ route('superadmin.villageTemplate') }}" target="_blank">Download Sample file</a>
+                        </div>
+
+                        <div class="mt-3">
                             <button class="btn custom-theme-button" type="submit">Import</button>
                         </div>
                     </form>
