@@ -43,7 +43,7 @@
                                         type="button"
                                         title="Clear Filter"
                                         id="resetfilter"
-                                        style="display: none;"
+                                        style="background-color: #FF0000 !important;display: none;"
                                     ><i class="fa fa-refresh"></i></button>
 
                                     <button
@@ -92,9 +92,9 @@
                                             <th>Property Info</th>
                                             <th>Unit</th>
                                             <th>Price</th>
-                                            <th>Details</th>
+                                            {{-- <th>Details</th> --}}
                                             <th>Remarks</th>
-                                            <th>Contacts</th>
+                                            {{-- <th>Contacts</th> --}}
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -893,10 +893,10 @@
                                 data: 'price',
                                 name: 'price'
                             },
-                            {
-                                data: 'details',
-                                name: 'details'
-                            },
+                            // {
+                            //     data: 'details',
+                            //     name: 'details'
+                            // },
                             {
                                 data: 'remarks',
                                 name: 'remarks',
@@ -908,16 +908,46 @@
                                     }
                                 }
                             },
-                            {
-                                data: 'contact_details',
-                                name: 'contact_details'
-                            },
+                            // {
+                            //     data: 'contact_details',
+                            //     name: 'contact_details'
+                            // },
                             {
                                 data: 'actions',
                                 name: 'actions',
                                 orderable: false
                             },
-                        ]
+                        ], columnDefs: [{
+                            "width": "2%",
+                            "targets": 0
+                        }, {
+                            "width": "13%",
+                            "targets": 1
+                        },
+                        {
+                            "width": "18%",
+                            "targets": 2
+                        },
+                        {
+                            "width": "12%",
+                            "targets": 3
+                        },
+                        {
+                            "width": "12%",
+                            "targets": 4
+                        },
+                        // {
+                        //     "width": "8%",
+                        //     "targets": 5
+                        // },
+                        {
+                            "width": "18%",
+                            "targets": 5
+                        },{
+                            "width": "15%",
+                            "targets": 6
+                        }
+                    ],
                     });
                 });
                  //Read more / Read less

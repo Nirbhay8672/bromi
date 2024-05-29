@@ -868,7 +868,7 @@
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select class="form-select measure_select measure_unit"
                                                                             id="length_of_plot_measurement">
                                                                             <option value="ft">
                                                                                 ft.
@@ -896,7 +896,7 @@
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select class="form-select measure_select measure_unit"
                                                                             id="width_of_plot_measurement">
                                                                             <option value="ft">
                                                                                 ft.
@@ -3005,15 +3005,13 @@
                 // Update theForLand when plot_type is clicked
                 $(document).on('change', 'input[name=plot_type]', function() {
                     theForLand = $(this).attr('data-val');
-                    console.log("theForLand select dropdown val ==", theForLand);
-
-                    if (theForLand === 'agriculture') {
-                        console.log("location show ==")
-                        $(".location_link_cls").show();
-                    } else {
-                        console.log("location hide ==")
-                        $(".location_link_cls").hide();
-                    }
+                    // if (theForLand === 'agriculture') {
+                    //     console.log("location show ==")
+                    //     $(".location_link_cls").show();
+                    // } else {
+                    //     console.log("location hide ==")
+                    //     $(".location_link_cls").hide();
+                    // }
                 });
 
                 // Validation on 2ndstep submit
@@ -3225,6 +3223,13 @@
             $(".measure_square").on("change", function() {
                 let selectedValue = $(this).val();
                 $(".measure_square").val(selectedValue).trigger("change.select2");
+            });
+
+            //LEngth of plot and width of plot (units) are change one change
+            $(".measure_unit").select2();
+            $(".measure_unit").on("change", function() {
+                let selectedValue = $(this).val();
+                $(".measure_unit").val(selectedValue).trigger("change.select2");
             });
             // });
 
@@ -3804,7 +3809,6 @@
                         'Add Constructed Carpet Area'
                     ]);
                 } else if (category_type == 'Land') {
-                    console.log("Land here ==")
                     showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
                         'div_area_size_details', 'div_borewell',
                         'the_length_of_plot', 'the_width_of_plot',
@@ -3812,7 +3816,7 @@
                         // 'div_care_taker','div_flat_details_5','div_flat_details_7'
                         'div_property_source', 'div_checkboxes1', 'div_construction_allowed_for', 'div_tp_details',
                         'div_flat_details_8', 'div_plot_ind_common', 'div_document_section', 'div_survey_details',
-                        'div_road_width', 'div_construction_docs_allowed_for', 'div_extra_land_details',
+                        'div_road_width', 'div_construction_docs_allowed_for', 'div_extra_land_details','location_link_cls'
                     ];
                 }
                 for (let i = 0; i < showfields.length; i++) {
