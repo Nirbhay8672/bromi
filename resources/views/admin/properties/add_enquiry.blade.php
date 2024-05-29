@@ -2164,7 +2164,7 @@
                     '               <label for="Mobile">Mobile</label>' +
                     '               <input class="form-control" name="contact_person_no" style="border-right:2px solid #1d2848 !important; border-top-right-radius: 5px;border-bottom-right-radius: 5px" id="contact_person_no" type="text" autocomplete="off">' +
                     '           </div>' +
-                    '           <div class="invalid-feedback" id="contact_person_no_error" style="display: block;color:red;"></div>' +
+                    '           <div class="invalid-feedback" id="contact_person_no_error' + id + '" style="display: block;color:red;"></div>' +
                     '       </div>' +
                     '   </div>' +
                     '</div>' +
@@ -2282,20 +2282,10 @@
                     contact_code = $("[data-contact_id=" + unique_id + "] select[name=contact_country_code]")
                         .val();
                     nri = $("[data-contact_id=" + unique_id + "] input[name=contact_nri]").prop('checked')
-                    // if (name.trim() === "") {
-                    //     $("#contact_person_name_error_" + unique_id).text("name is required").show();
-                    //     isValid = false;
-                    // } else {
-                    //     $("#contact_person_name_error_" + unique_id).hide();
-                    //     isValid = true;
-                    // }
-                    // if (no.trim() === "") {
-                    //     $("#contact_person_no_error_" + unique_id).text("number field is required").show();
-                    //     isValid = false;
-                    // } else {
-                    //     $("#contact_person_no_error_" + unique_id).hide();
-                    //     isValid = true;
-                    // }
+                   
+                    let isContactNumberValid = validateMobileNumber("[data-contact_id=" + unique_id + "] input[name=contact_person_no]", "#contact_person_no_error" + unique_id, "Number field is required", "Invalid mobile number format");
+                    isValid = isContactNumberValid && isValid;
+
                     cona_arr.push(name)
                     cona_arr.push(no)
                     // cona_arr.push(status)
