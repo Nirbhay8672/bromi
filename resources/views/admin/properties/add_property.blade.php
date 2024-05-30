@@ -2832,7 +2832,6 @@
                 //strg cat
                 $(document).on('change', '[name="property_category"]', function(e) {
                     storageCategory = $(this).attr('data-val') === 'Storage/industrial'
-                    console.log("storageCategory ==", storageCategory);
                 });
 
                 // Land.
@@ -2850,7 +2849,6 @@
                 //land cat
                 $(document).on('change', '[name="property_category"]', function(e) {
                     landCategory = $(this).attr('data-val') === 'Land'
-                    console.log("landCategory ==", landCategory);
                 });
 
                 // Flate and Penthouse
@@ -2877,32 +2875,26 @@
                 //villa cat
                 $(document).on('change', '[name="property_category"]', function(e) {
                     VillaCategory = $(this).attr('data-val') === 'Vila/Bunglow'
-                    console.log("VillaCategory ==", VillaCategory);
                 });
 
                 //Penthouse cat
                 $(document).on('change', '[name="property_category"]', function(e) {
                     penthouseConf = $(this).attr('data-val') === 'Penthouse'
-                    console.log("penthouseConf ==", penthouseConf);
                 });
 
                 //farmhouse
                 $(document).on('change', '[name="property_category"]', function(e) {
                     farmConf = $(this).attr('data-val') === 'Farmhouse'
-                    console.log("farmConf ==", farmConf);
                 });
 
                 //Plot
                 $(document).on('change', '[name="property_category"]', function(e) {
                     plotConf = $(this).attr('data-val') === 'Plot'
-                    console.log("plotConf ==", plotConf);
                 });
 
                 function validateForm() {
                     isValid = true;
-                    let numberRegex = /^\d+(\.\d+)?$/; // Regex for integer and floating point numbers
-
-
+                    let numberRegex = /^\d+(\.\d+)?$/; 
                     if (flateConfiguration || plotConf || officeConf || retailConfiguration) {
                         console.log("enter in salable area ==");
                         isValid = validateField('#salable_area', '#salable_area_error',
@@ -3797,8 +3789,7 @@
                     addAddAreaButtons(['the_carpet_area'], ['Add Carpet Area']);
                 } else if (category_type == 'Storage/industrial') {
                     showfields = ['div_storage_type', 'div_flat_details_2', 'div_area_size_details',
-                        'the_salable_plot_area', 'the_constructed_salable_area',
-                        'the_centre_height', 'div_flat_details', 'div_flat_details_5', 'div_flat_details_4',
+                        'the_salable_plot_area','div_flat_details', 'div_flat_details_5', 'div_flat_details_4',
                         'div_property_source', 'div_checkboxes1', 'div_flat_details_7',
                         'div_flat_details_8', 'div_other_details',
                         'div_availability_status', 'the_total_units_in_project',
@@ -4330,6 +4321,7 @@
 
             function getProperty() {
                 var id = '{{ isset($current_id) ? $current_id : 'null' }}';
+                console.log("idddd",id);
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.getProperty') }}",
@@ -4670,7 +4662,6 @@
             }
             getProperty()
 
-            console.log("outide farmConf", farmConf);
             //save property
             $(document).on('click', '.submitFnl', function(e) {
                 e.preventDefault();
@@ -4679,8 +4670,6 @@
                     return
                 }
                 let allFieldsValid = true;
-
-                console.log("third final clicked");
                 // $(this).prop('disabled', true);
                 var owner_details = [];
                 var unit_details = [];
