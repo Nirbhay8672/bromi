@@ -241,7 +241,7 @@ class IndustrialPropertyController extends Controller
 					}
                     $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
 					if (empty($salable_area_print)) {
-						$salable_area_print = "Area Not Available";
+						$salable_area_print = "";
 					}
 
 					try {
@@ -621,7 +621,11 @@ class IndustrialPropertyController extends Controller
 				$salable = '';
 			}
 			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-			$area = "P:" . $salable . ' - C: ' . $constructed;
+			if (!empty($salable) && (!empty($constructed))) {
+				$area = "P:" . $salable . ' - C: ' . $constructed;
+			}else{
+				$area = "";
+			}
 		} elseif ($type == 'Farmhouse') {
 			$area = explode('_-||-_', $row->salable_plot_area)[0];
 			$measure = explode('_-||-_', $row->salable_plot_area)[1];

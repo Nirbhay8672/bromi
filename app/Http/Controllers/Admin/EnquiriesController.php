@@ -585,9 +585,11 @@ class EnquiriesController extends Controller
 						}
 						return Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') . '<br>' . $remark_data;
 					}
+					if($row->telephonic_discussion == null){
+						return " ";
+					}
 					return $row->telephonic_discussion;
 				})
-
 				//transfer date
 				->editColumn('assigned_to', function ($row) {
 					if (!empty($row->Employee)) {
@@ -639,6 +641,12 @@ class EnquiriesController extends Controller
 					}
 					$buttons =  $buttons . '<i title="Contact List" data-id="' . $row->id . '" onclick=contactList(this) class="fa fs-22 py-2 mx-2 fa-database text-blue"></i>';
 					$buttons =  $buttons . '<i title="Schedule Visit" data-employee="' . $row->employee_id . '" data-id="' . $row->id . '" onclick=showScheduleVisit(this) class="fa fs-22 py-2 mx-2 fa-map text-success"></i>';
+					if($row->enq_status){
+						$buttons =  $buttons . '<i title="change Stats" data-status="' . $row->enq_status . '" data-id="' . $row->id . '" onclick=Status(this) class="fa fs-22 py-2 mx-2 fad fa-toggle-on" text-success"></i>';
+					}else{
+						$buttons =  $buttons . '<i title="change Stats" data-status="' . $row->enq_status . '" data-id="' . $row->id . '" onclick=Status(this) class="fa fs-22 py-2 mx-2 fad fa-toggle-off" text-success"></i>';
+
+					}
 					return $buttons;
 				})
 				->rawColumns(['select_checkbox', 'telephonic_discussion', 'client_name', 'client_requirement', 'budget', 'assigned_to', 'Actions', 'Actions2', 'status_change'])
@@ -1913,11 +1921,18 @@ class EnquiriesController extends Controller
 
 	public function updateEnquiryStatus(Request $request)
 	{
-		$status = $request->status;
-		$vv = Enquiries::where('id', $request->id)->update(['enq_status' => $status]);
+		
+		$enquiry = Enquiries::find($request->id);
+		if ($enquiry) {
+			$enquiry->enq_status = $enquiry->enq_status == 1 ? 0 : 1;
+			$enquiry->save();
+		}
+		if(isset($request->flag)){
+			// dd(333);
+			return redirect()->back();
+		}
 		return redirect('admin/Enquiries');
 	}
-
 	public function getEnquiryCategory(Request $request)
 	{
 		$enquiryID = $request->query('id');
