@@ -24,10 +24,10 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="row px-3">
-                                <div class="col-md-12 mr-0 ml-0">
-                                    <div class="row mr-0 ml-0">
-                                        <div class="col-md-12">
-                                            <ul class="nav nav-pills sticky-nav-menu-tab mb-3" style="overflow-x: hidden;" id="pills-tab"
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <ul class="nav nav-pills sticky-nav-menu-tab mb-3" id="pills-tab"
                                                 role="tablist">
                                                 <li class="nav-item" role="presentation">
                                                     <button class="nav-link mx-1 active" id="v-customer-summary-tab"
@@ -77,10 +77,15 @@
                                                         Property</button>
                                                 </li>
                                                 <div class="row" style="float:right; display:contents;">
-                                                    <div class="col-md-1" style="float:right;">
-                                                        <a href="{{ URL::to('admin/enquiry/edit/' . $data['id']) }}">
+                                                    <div class="col-md-1" style="float:right; padding-left:2%;">
+                                                        <a  data-id={{$data->id}} onclick="Status(this)">
+                                                            @if ($data->enq_status == 1)
                                                             <button class="nav-link mx-1 active"
-                                                                id="v-view-summary-tab">Edit</button>
+                                                                id="v-view-summary-tab">Active</button>
+                                                                @else
+                                                                <button class="nav-link mx-1 active"
+                                                                id="v-view-summary-tab">InActive</button>  
+                                                            @endif
                                                         </a>
                                                     </div>
                                                     <div class="col-md-1" style="float:right; padding-left:2%;">
@@ -89,16 +94,16 @@
                                                                 id="v-view-summary-tab">Back</button>
                                                         </a>
                                                     </div>
-                                                        {{-- <div class="col-md-1" style="float:right">
-                                                            <a href="{{ URL::to('admin/enquiry/edit/' . $data['id']) }}">
-                                                                <button class="nav-link mx-1 active"
-                                                                    id="v-view-summary-tab">Edit</button>
-                                                            </a>
-                                                        </div> --}}
+                                                    <div class="col-md-1" style="float:right">
+                                                        <a href="{{ URL::to('admin/enquiry/edit/' . $data['id']) }}">
+                                                            <button class="nav-link mx-1 active"
+                                                                id="v-view-summary-tab">Edit</button>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                                 
                                             </ul>
-                                            <form action="{{route('admin.updateEnquiryStatus')}}" class="row row-cols g-1" method="get">
+                                            {{-- <form action="{{route('admin.updateEnquiryStatus')}}" class="row row-cols g-1" method="get">
                                                 @csrf
                                                 @method('post')
                                                 <div class="col-lg-3 col-md-6 col-12">
@@ -113,10 +118,10 @@
                                                 <div class="col-lg-3 col-md-6 col-12" style="margin-left: 10px;">
                                                     <button class="btn btn-primary" type="submit">Update</button>
                                                 </div>
-                                            </form>
+                                            </form> --}}
                                         </div>
                                        
-                                        <div class="col-md-4 align-self-center">
+                                        <div class="col-md-2 align-self-center">
                                             <div class="input-group mb-3">
                                                 <select class="form-select form-control" id="enquiry_progress_status">
                                                     <option value="">Booked/Lost</option>
@@ -1021,7 +1026,7 @@
                 </div>
             </div>
         </div>
-        {{-- @include('admin.enquiries.status_model') --}}
+        @include('admin.enquiries.status_model')
         <!-- schedule visit modal -->
        <div class="modal fade" id="schedulemodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
