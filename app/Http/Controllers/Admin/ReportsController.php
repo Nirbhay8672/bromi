@@ -32,11 +32,12 @@ class ReportsController extends Controller
 	public function sourceViseEnquiry()
 	{
 		$groupedData = Enquiries::select([
-			DB::raw("(CASE WHEN enquiries.enquiry_source = '103' THEN 'Advertise' WHEN enquiries.enquiry_source = '104' THEN 'Refrence' WHEN enquiries.enquiry_source = '105' THEN '99 - Acres' ELSE 'Unknown' END) AS enquiry_source_case"),	
+			'dropdown_settings.name AS enquiry_source_case',
 			DB::raw('count(*) as total_enquiry'),
 		])
-		->where('enquiry_source','!=',null)
-		->groupBy('enquiry_source')
+		->join('dropdown_settings', 'enquiries.enquiry_source','dropdown_settings.id')
+		->where('enquiries.enquiry_source','!=',null)
+		->groupBy('enquiries.enquiry_source')
 		->get();
 
         return DataTables::of($groupedData)
@@ -82,10 +83,11 @@ class ReportsController extends Controller
 	{
 		$total_active_leads = Enquiries::select([
 			'enquiries.enquiry_source',
-			DB::raw("(CASE WHEN enquiries.enquiry_source = '103' THEN 'Advertise' WHEN enquiries.enquiry_source = '104' THEN 'Refrence' WHEN enquiries.enquiry_source = '105' THEN '99 - Acres' ELSE 'Unknown' END) AS enquiry_source_case"),
-		])->withCount(['Progress' => function($query) {
+			'dropdown_settings.name AS enquiry_source_case',
+		])->join('dropdown_settings', 'enquiries.enquiry_source','dropdown_settings.id')
+		->withCount(['Progress' => function($query) {
 			$query->where('progress','Discussion');
-		} ])->where('enquiry_source', '!=', null)->get();
+		}])->where('enquiries.enquiry_source', '!=', null)->get();
 
 		$array = [];
 
@@ -115,10 +117,11 @@ class ReportsController extends Controller
 	{
 		$total_active_leads = Enquiries::select([
 			'enquiries.enquiry_source',
-			DB::raw("(CASE WHEN enquiries.enquiry_source = '103' THEN 'Advertise' WHEN enquiries.enquiry_source = '104' THEN 'Refrence' WHEN enquiries.enquiry_source = '105' THEN '99 - Acres' ELSE 'Unknown' END) AS enquiry_source_case"),
-		])->withCount(['Progress' => function($query) {
+			'dropdown_settings.name AS enquiry_source_case',
+		])->join('dropdown_settings', 'enquiries.enquiry_source','dropdown_settings.id')
+		->withCount(['Progress' => function($query) {
 			$query->where('progress','Lost');
-		} ])->where('enquiry_source', '!=', null)->get();
+		} ])->where('enquiries.enquiry_source', '!=', null)->get();
 
 		$array = [];
 
