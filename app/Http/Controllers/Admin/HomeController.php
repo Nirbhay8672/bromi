@@ -115,12 +115,15 @@ class HomeController extends Controller
 				$total_property = Properties::select('id')->where('user_id', Auth::user()->id);
 				$total_enquiry = Enquiries::select('id')->where('user_id', Auth::user()->id);
 				$total_project = Projects::select('id')->where('user_id', Auth::user()->id);
+
 				$total_active_leads = Enquiries::select('id')->whereHas('Progress', function($q){
 					$q->where('progress','Discussion');
 				})->where('user_id', Auth::user()->id);
+
 				$total_lost = Enquiries::select('id')->whereHas('Progress', function($q){
 					$q->where('progress','Lost');
 				})->where('user_id', Auth::user()->id);
+
 				$total_win = Enquiries::select('id')->whereHas('Progress', function($q){
 					$q->where('progress','Booked');
 				})->where('user_id', Auth::user()->id);
@@ -390,13 +393,14 @@ class HomeController extends Controller
 				}
 				
 				$second_chart = Enquiries::select([
-					DB::raw("(CASE WHEN enquiries.enquiry_source = '103' THEN 'Advertise' WHEN enquiries.enquiry_source = '104' THEN 'Refrence' WHEN enquiries.enquiry_source = '105' THEN '99 - Acres' ELSE 'Unknown' END) AS enquiry_source_case"),	
+					'dropdown_settings.name AS enquiry_source_case',
 					DB::raw('count(*) as total_enquiry'),
 				])
-				->where('enquiry_source','!=',null)
-				->where('user_id', Auth::user()->id)
-				->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
-				->groupBy('enquiry_source')
+				->join('dropdown_settings', 'enquiries.enquiry_source','dropdown_settings.id')
+				->where('enquiries.enquiry_source','!=',null)
+				->where('enquiries.user_id', Auth::user()->id)
+				->whereBetween('enquiries.created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
+				->groupBy('enquiries.enquiry_source')
 				->get();
 				
 				$inquiryCounts = Enquiries::select(
@@ -416,16 +420,18 @@ class HomeController extends Controller
 				foreach($new->toArray() as $key => $data) {
 					array_push($third_chart,[
 						'user_name' => $key,
-						'total_inquiries' => count($data), 
+						'total_inquiries' => count($data),
 					]);
 				}
 				
 				$total_lost_leads = Enquiries::select([
 					'enquiries.enquiry_source',
-					DB::raw("(CASE WHEN enquiries.enquiry_source = '103' THEN 'Advertise' WHEN enquiries.enquiry_source = '104' THEN 'Refrence' WHEN enquiries.enquiry_source = '105' THEN '99 - Acres' ELSE 'Unknown' END) AS enquiry_source_case"),
-				])->withCount(['Progress' => function($query) {
+					'dropdown_settings.name AS enquiry_source_case',
+				])
+				->join('dropdown_settings', 'enquiries.enquiry_source','dropdown_settings.id')
+				->withCount(['Progress' => function($query) {
 					$query->where('progress','Lost');
-				}])->where('enquiry_source', '!=', null)->where('user_id', Auth::user()->id)
+				}])->where('enquiries.enquiry_source', '!=', null)->where('enquiries.user_id', Auth::user()->id)
 				->whereBetween('enquiries.created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 				->get();
 		
@@ -443,16 +449,36 @@ class HomeController extends Controller
 						'total_enquiry' => $total,
 					]);
 				};
-				
-				$seventh_chart = EnquiryProgress::select([
-					'progress',	
-					DB::raw('count(*) as total_enquiry'),
-				])
-				->where('progress','!=',null)
-				->where('user_id', Auth::user()->id)
-				->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
-				->groupBy('progress')
-				->get();
+
+				// stage wise total leads
+
+				$seventh_chart = [
+					[
+						'progress' => 'New Lead',
+						'total_enquiry' => 0,
+					],
+					[
+						'progress' => 'Lead Confirmed',
+						'total_enquiry' => 0,
+					],
+					[
+						'progress' => 'Discussion',
+						'total_enquiry' => 0,
+					],
+					[
+						'progress' => 'Booked',
+						'total_enquiry' => 0,
+					],
+					[
+						'progress' => 'Lost',
+						'total_enquiry' => 0,
+					],
+				];
+
+				foreach ($seventh_chart as $index => $progress_type)
+				{
+					$seventh_chart[$index]['total_enquiry'] = EnquiryProgress::where('progress', $progress_type['progress'])->get()->count();
+				}
 
 				$total_prop_for_sell = ApiProperties::where('property_for','Sell')
 					->where('user_id',Auth::user()->id)
@@ -480,7 +506,43 @@ class HomeController extends Controller
 
 				$filter_value = $request->date_range ?? 'this_month';
 				
-				return view('admin.dashboard', compact('filter_value', 'total_property','total_prop_for_sell','total_prop_for_rent', 'total_prop_for_comm', 'total_prop_for_rec', 'total_enquiry','first_chart', 'second_chart' , 'third_chart', 'fifth_chart', 'seventh_chart', 'properties_tyeps_enquries', 'enqs', 'props', 'progess', 'todayEnquiry', 'disschedule', 'sitevisit', 'recentproperty', 'enqchart', 'chart1data', 'dropdownsarr', 'enqlatest', 'prop_added_for_rent', 'prop_added_for_sell', 'prop_rented', 'prop_sold','totalSource','total_project','total_win','total_lost','total_active_leads','totalsales','dashboard_widget_positions'));
+				return view('admin.dashboard', compact(
+					'filter_value',
+					'total_property',
+					'total_prop_for_sell',
+					'total_prop_for_rent',
+					'total_prop_for_comm',
+					'total_prop_for_rec',
+					'total_enquiry',
+					'first_chart',
+					'second_chart',
+					'third_chart',
+					'fifth_chart',
+					'seventh_chart',
+					'properties_tyeps_enquries',
+					'enqs',
+					'props',
+					'progess',
+					'todayEnquiry',
+					'disschedule',
+					'sitevisit',
+					'recentproperty',
+					'enqchart',
+					'chart1data',
+					'dropdownsarr',
+					'enqlatest',
+					'prop_added_for_rent',
+					'prop_added_for_sell',
+					'prop_rented',
+					'prop_sold',
+					'totalSource',
+					'total_project',
+					'total_win',
+					'total_lost',
+					'total_active_leads',
+					'totalsales',
+					'dashboard_widget_positions'
+				));
 			}
 			return redirect()->route('admin.login');
 		} catch (Throwable $e) {
