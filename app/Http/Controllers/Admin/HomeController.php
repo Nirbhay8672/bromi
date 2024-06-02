@@ -506,8 +506,10 @@ class HomeController extends Controller
 				return view('admin.dashboard', compact('filter_value','total_property','total_prop_for_sell','total_prop_for_rent','total_prop_for_comm','total_prop_for_rec','total_enquiry','first_chart','second_chart','third_chart','fifth_chart','seventh_chart','properties_tyeps_enquries','enqs','props','progess','todayEnquiry','disschedule','sitevisit','recentproperty','enqchart','chart1data','dropdownsarr','enqlatest','prop_added_for_rent','prop_added_for_sell','prop_rented','prop_sold','totalSource','total_project','total_win','total_lost','total_active_leads','totalsales','dashboard_widget_positions'));
 			}
 			return redirect()->route('admin.login');
-		} catch (Throwable $e) {
-			report($e);
+
+		} catch (Exception $e) {
+			dd($e->getMessage());
+			return $e->getMessage();
 		}
 	}
 
