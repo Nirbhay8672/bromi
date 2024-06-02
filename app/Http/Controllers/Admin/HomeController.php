@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\Helper;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Rules\MatchOldPassword;
 use App\Http\Controllers\Controller;
 use App\Mail\InvoiceEmail;
 use App\Mail\SendOtpMail;
@@ -16,7 +15,6 @@ use App\Models\Builders;
 use App\Models\City;
 use App\Models\CompanyDetails;
 use App\Models\Coupons;
-use App\Models\DashboardWidget;
 use App\Models\District;
 use App\Models\DropdownSettings;
 use App\Models\Enquiries;
@@ -38,7 +36,6 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Spatie\Activitylog\Models\Activity;
 use Throwable;
@@ -506,43 +503,7 @@ class HomeController extends Controller
 
 				$filter_value = $request->date_range ?? 'this_month';
 				
-				return view('admin.dashboard', compact(
-					'filter_value',
-					'total_property',
-					'total_prop_for_sell',
-					'total_prop_for_rent',
-					'total_prop_for_comm',
-					'total_prop_for_rec',
-					'total_enquiry',
-					'first_chart',
-					'second_chart',
-					'third_chart',
-					'fifth_chart',
-					'seventh_chart',
-					'properties_tyeps_enquries',
-					'enqs',
-					'props',
-					'progess',
-					'todayEnquiry',
-					'disschedule',
-					'sitevisit',
-					'recentproperty',
-					'enqchart',
-					'chart1data',
-					'dropdownsarr',
-					'enqlatest',
-					'prop_added_for_rent',
-					'prop_added_for_sell',
-					'prop_rented',
-					'prop_sold',
-					'totalSource',
-					'total_project',
-					'total_win',
-					'total_lost',
-					'total_active_leads',
-					'totalsales',
-					'dashboard_widget_positions'
-				));
+				return view('admin.dashboard', compact('filter_value','total_property','total_prop_for_sell','total_prop_for_rent','total_prop_for_comm','total_prop_for_rec','total_enquiry','first_chart','second_chart','third_chart','fifth_chart','seventh_chart','properties_tyeps_enquries','enqs','props','progess','todayEnquiry','disschedule','sitevisit','recentproperty','enqchart','chart1data','dropdownsarr','enqlatest','prop_added_for_rent','prop_added_for_sell','prop_rented','prop_sold','totalSource','total_project','total_win','total_lost','total_active_leads','totalsales','dashboard_widget_positions'));
 			}
 			return redirect()->route('admin.login');
 		} catch (Throwable $e) {
