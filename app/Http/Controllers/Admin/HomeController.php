@@ -389,19 +389,27 @@ class HomeController extends Controller
 					}
 				}
 				
-				$second_chart = Enquiries::select([
+				$second_chart_query = Enquiries::select([
 					'dropdown_settings.name AS enquiry_source_case',
-					DB::raw('count(*) as total_enquiry'),
+					'enquiries.enquiry_source',
+					'enquiries.id',
 				])
 				->join('dropdown_settings', 'enquiries.enquiry_source','dropdown_settings.id')
 				->where('enquiries.enquiry_source','!=',null)
 				->where('enquiries.user_id', Auth::user()->id)
 				->whereBetween('enquiries.created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
-				->groupBy('enquiries.enquiry_source')
 				->get();
 
+				$second_chart_group = $second_chart_query->groupBy('enquiry_source_case');
 
-				// add comment
+				$second_chart = [];
+
+				foreach ($second_chart_group as $key_name => $enqs) {
+					array_push($second_chart ,[
+						'enquiry_source_case' => $key_name,
+						'total_enquiry' => count($enqs),
+					]);
+				}
 				
 				$inquiryCounts = Enquiries::select(
 					'enquiries.employee_id',
