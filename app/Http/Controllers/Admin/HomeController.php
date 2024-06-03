@@ -399,6 +399,9 @@ class HomeController extends Controller
 				->whereBetween('enquiries.created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 				->groupBy('enquiries.enquiry_source')
 				->get();
+
+
+				// add comment
 				
 				$inquiryCounts = Enquiries::select(
 					'enquiries.employee_id',
