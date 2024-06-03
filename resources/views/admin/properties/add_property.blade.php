@@ -3033,15 +3033,14 @@
                     //     'property priority field is required.') && isValid;
 
                     if (theForLand === 'commercial' || theForLand === 'agriculture' || farmConf) {
-                        console.log("enter in zone-vlg-taluka-dist ==");
                         isValid = validateDropdown($('#zone'), $('#zone_id_error'),
                             'Zone field is required') && isValid;
-                        isValid = validateDropdown($('#village_id'), $('#village_id_error'),
-                            'Village field is required') && isValid;
-                        isValid = validateDropdown($('#taluka_id'), $('#taluka_id_error'),
-                            'Taluka field is required') && isValid;
-                        isValid = validateDropdown($('#district_id'), $('#district_id_error'),
-                            'District field is required') && isValid;
+                        // isValid = validateDropdown($('#village_id'), $('#village_id_error'),
+                        //     'Village field is required') && isValid;
+                        // isValid = validateDropdown($('#taluka_id'), $('#taluka_id_error'),
+                        //     'Taluka field is required') && isValid;
+                        // isValid = validateDropdown($('#district_id'), $('#district_id_error'),
+                        //     'District field is required') && isValid;
                     }
 
                     if (isValid) {

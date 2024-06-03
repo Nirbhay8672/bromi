@@ -641,12 +641,12 @@ class EnquiriesController extends Controller
 					}
 					$buttons =  $buttons . '<i title="Contact List" data-id="' . $row->id . '" onclick=contactList(this) class="fa fs-22 py-2 mx-2 fa-database text-blue"></i>';
 					$buttons =  $buttons . '<i title="Schedule Visit" data-employee="' . $row->employee_id . '" data-id="' . $row->id . '" onclick=showScheduleVisit(this) class="fa fs-22 py-2 mx-2 fa-map text-success"></i>';
-					if($row->enq_status){
-						$buttons =  $buttons . '<i title="change Stats" data-status="' . $row->enq_status . '" data-id="' . $row->id . '" onclick=Status(this) class="fa fs-22 py-2 mx-2 fad fa-toggle-on" text-success"></i>';
-					}else{
-						$buttons =  $buttons . '<i title="change Stats" data-status="' . $row->enq_status . '" data-id="' . $row->id . '" onclick=Status(this) class="fa fs-22 py-2 mx-2 fad fa-toggle-off" text-success"></i>';
+					// if($row->enq_status){
+					// 	$buttons =  $buttons . '<i title="change Stats" data-status="' . $row->enq_status . '" data-id="' . $row->id . '" onclick=Status(this) class="fa fs-22 py-2 mx-2 fad fa-toggle-on" text-success"></i>';
+					// }else{
+					// 	$buttons =  $buttons . '<i title="change Stats" data-status="' . $row->enq_status . '" data-id="' . $row->id . '" onclick=Status(this) class="fa fs-22 py-2 mx-2 fad fa-toggle-off" text-success"></i>';
 
-					}
+					// }
 					return $buttons;
 				})
 				->rawColumns(['select_checkbox', 'telephonic_discussion', 'client_name', 'client_requirement', 'budget', 'assigned_to', 'Actions', 'Actions2', 'status_change'])
@@ -1626,6 +1626,14 @@ class EnquiriesController extends Controller
 							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
 								$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
 									->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+							})
+							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+									->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+							})
+							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+									->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
 							});
 					});
 			})
