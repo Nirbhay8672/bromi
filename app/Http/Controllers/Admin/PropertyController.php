@@ -2144,21 +2144,29 @@ class PropertyController extends Controller
         $area_size = str_replace(',', '', $area_parts[0]);
         $constructed_area_parts = explode("_-||-_", $property->constructed_salable_area);
         $constructed_area = str_replace(',', '', $constructed_area_parts[0]);
+        $salable_plot_area_part = explode("_-||-_", $property->salable_plot_area);
+        $constructed_area = str_replace(',', '', $salable_plot_area_part[0]);
+
         $constructed_area_unit = "";
         $area_size_unit = "";
+        $salable_plot_area = "";
+        $salable_plot_area_unit = "";
         if ($constructed_area !== "") {
             $constructed_area_unit = str_replace(',', '', $constructed_area_parts[1]);
         } else if ($area_size !== "") {
             $area_size_unit = str_replace(',', '', $area_parts[1]);
+        }else if ($salable_plot_area_part !== "") {
+            $salable_plot_area_unit = str_replace(',', '', $salable_plot_area_part[1]);
         }
+        // dd("constructed_area",$constructed_area,$area_size,$salable_plot_area);
         // matching
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
             ->whereJsonContains('configuration', $property->configuration)
-            ->when($unit_price !== "", function ($query) use ($unit_price) {
-                return $query->where('budget_from', '<=', $unit_price)
-                    ->where('budget_to', '>=', $unit_price);
+            ->when($raw_unit_price !== "", function ($query) use ($raw_unit_price) {
+                return $query->where('budget_from', '<=', $raw_unit_price)
+                    ->where('budget_to', '>=', $raw_unit_price);
             }, function ($query) use ($property) {
                 return $query->where('budget_from', '<=', $property->survey_price)
                     ->where('budget_to', '>=', $property->survey_price);
@@ -2177,10 +2185,18 @@ class PropertyController extends Controller
                             ->where('area_to', '>=', $constructed_area)
                             ->where('area_from_measurement', $constructed_area_unit);
                     });
+                },
+                function ($query) use ($salable_plot_area, $salable_plot_area_unit) {
+                    dd("salable_plot_area",$salable_plot_area);
+                    return $query->where(function ($query) use ($salable_plot_area, $salable_plot_area_unit) {
+                        $query->where('area_from', '<=', $salable_plot_area)
+                            ->where('area_to', '>=', $salable_plot_area)
+                            ->where('area_from_measurement', $salable_plot_area_unit);
+                    });
                 }
             )
             ->get();
-        // dd("Auth",Auth::user()->id,$property->configuration,$enquiries);
+        // dd("Auasdth",Auth::user()->id,$property->configuration,$enquiries);
         $prop_type = [];
         foreach ($dropdowns as $key => $value) {
             if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {

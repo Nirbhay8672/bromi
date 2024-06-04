@@ -711,8 +711,6 @@
                 $('.matchbutton').hide()
                 try {
                     search_enq = decryptSimpleString(enqq);
-                    console.log("search_enq industrial ......", search_enq);
-
                     if (search_enq != '') {
                         console.log("show searchenqq");
                         $('.matchbutton').show()
@@ -729,7 +727,6 @@
                     console.log("ulr1 ==>", url);
                     url = url.replace('the_phone_number_to_send', $('#CountryCode').val() + $(
                         '#whatsapp_number').val().toString())
-                    console.log("ulr2 ==>", url);
                     window.open(url, '_blank').focus();
                 })
             });
@@ -746,6 +743,16 @@
             });
 
             matching_enquiry_url = "{{ route('admin.enquiries') }}";
+
+            if (window.location.pathname.toLowerCase() === '/admin/Industrial-Properties' && window.location.search === '') {
+                $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                    .prop('checked', true);
+            }
+            $('#match_enquiry_all').on('change', function() {
+                let isChecked = $(this).prop('checked');
+                $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                    .prop('checked', isChecked);
+            });
 
             $(document).on('click', '#matchagain', function(e) {
                 e.preventDefault();
@@ -925,7 +932,9 @@
                             name: 'remarks',
                             render: function(data, type, full, meta) {
                                 if (data && data.length > 56) {
-                                    return '<span class="truncated">' + data.substr(0, 56) + '...</span><span class="full" style="display:none;">' + data + '</span><span class="read-more">Read More</span>';
+                                    return '<span class="truncated">' + data.substr(0, 56) +
+                                        '...</span><span class="full" style="display:none;">' + data +
+                                        '</span><span class="read-more">Read More</span>';
                                 } else {
                                     return data;
                                 }
@@ -980,7 +989,7 @@
                     }
                 });
             });
-             //Read more / Read less
+            //Read more / Read less
             $('#propertyTable .read-more, #propertyTable .read-less').css('cursor', 'pointer');
             $('#propertyTable').on('click', '.read-more', function() {
                 $(this).siblings('.truncated').hide();
