@@ -264,7 +264,7 @@ class EnquiriesController extends Controller
 							if ($request->match_budget_from_type) {
 								$survey_price = (int) $pro->survey_price; // Cast to integer
 								$unitDetails = json_decode($pro->unit_details, true);
-								$unit_price = (int) str_replace(',', '', $unitDetails[0][4]);
+								$unit_price =  str_replace(',', '', $unitDetails[0][4]);
 								$sell_price = (int) str_replace(',', '', $unitDetails[0][3]);
 								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $survey_price,"unit", $unit_price,"sell_price",$sell_price);
 								if ($survey_price !== '' && $survey_price !== null && $survey_price !== 0) {
@@ -297,22 +297,36 @@ class EnquiriesController extends Controller
 								$result2_unit = $parts[1];
 								$area_from = str_replace(',', '', $result2);
 								$area_to = str_replace(',', '', $result2);
+
+								$parts3 = explode("_-||-_", $pro->salable_plot_area);
+								$result3 = $parts3[0];
+								$result3_unit = $parts3[1];
+								$area_from3 = str_replace(',', '', $result3);
+								$area_to3 = str_replace(',', '', $result3);
+
+								
 								// dd($result,$result2,$pro->salable_area,$result_unit);
 
-								if ($area_size_from != '' && $area_size_to != '') {
+								if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "") {
 									$query->where('area_from', '<=', $area_size_from)
 										->where('area_to', '>=', $area_size_to);
-								} else if ($area_from != '' && $area_to != '') {
+								} else if ($area_from != '' && $area_to != '' && $result2_unit !== "") {
 									$query->where('area_from', '<=', $area_from)
 										->where('area_to', '>=', $area_to);
+								}else if ($area_from3 != '' && $area_to3 != '' && $result3_unit !== "") {
+									$query->where('area_from', '<=', $area_from3)
+										->where('area_to', '>=', $area_to3);
 								}
-
+								
 								if ($result_unit) {
 									$query->where('area_from_measurement', '=', $result_unit)
 										->where('area_to_measurement', '>=', $result_unit);
 								} else if ($result2_unit) {
 									$query->where('area_from_measurement', '=', $result2_unit)
 										->where('area_to_measurement', '>=', $result2_unit);
+								}else if ($result3_unit) {
+									$query->where('area_from_measurement', '=', $result3_unit)
+										->where('area_to_measurement', '>=', $result3_unit);
 								}
 							}
 
@@ -1617,25 +1631,25 @@ class EnquiriesController extends Controller
 					->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
 						$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
 							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-					})
-					->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-						$query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-							$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-								->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-						})
-							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-								$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-									->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-							})
-							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-								$query->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-									->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-							})
-							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-								$query->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-									->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-							});
 					});
+					// ->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+					// 	$query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+					// 		$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+					// 			->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+					// 	})
+					// 		->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+					// 			$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+					// 				->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+					// 		})
+					// 		->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+					// 			$query->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+					// 				->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+					// 		})
+					// 		->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+					// 			$query->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+					// 				->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+					// 		});
+					// });
 			})
 			->get();
 
@@ -1674,7 +1688,7 @@ class EnquiriesController extends Controller
 		// 	})
 		// 	->get();
 
-		// 	dd("properties",Auth::user()->id,$data->configuration,$properties);
+			// dd("properties",Auth::user()->id,$data->configuration,$properties);
 
 		$employees = User::where('parent_id', Session::get('parent_id'))->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
