@@ -10,6 +10,7 @@ use App\Mail\InvoiceEmail;
 use App\Mail\SendOtpMail;
 use App\Models\Api\Properties as ApiProperties;
 use App\Models\Areas;
+use App\Models\AssignHistory;
 use App\Models\Branches;
 use App\Models\Builders;
 use App\Models\City;
@@ -1173,7 +1174,15 @@ class HomeController extends Controller
 		$states = State::orderBy('name')->get()->toArray();
 
 		$total_property = Properties::select('id')->where('user_id', Auth::user()->id)->count();
-		$total_enquiry = Enquiries::select('id')->where('user_id', Auth::user()->id)->count();
+
+		$assign_leads_ids = AssignHistory::get()->pluck('enquiry_id');
+		$total_enquiry = Enquiries::select('id')
+			->where('user_id', Auth::user()->id)
+			->orWhere(function ($query) use ($assign_leads_ids) {
+				$query->whereIn('id', $assign_leads_ids);
+			})
+			->count();
+
 		$total_project = Projects::select('id')->where('user_id', Auth::user()->id)->count();
 
 		$transactions = DB::table('payments')
