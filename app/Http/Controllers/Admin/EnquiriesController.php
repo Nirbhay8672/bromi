@@ -81,8 +81,8 @@ class EnquiriesController extends Controller
 					->orderBy('id', 'desc')
 					->get();
 			} else {
-				$assign_leads_ids = AssignHistory::get()->pluck('enquiry_id');
-				
+				$assign_leads_ids = AssignHistory::where('assign_id',Auth::user()->id)->get()->pluck('enquiry_id');
+
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')->where('user_id', Auth::user()->id)
 					->orWhere(function ($query) use ($assign_leads_ids) {
 						$query->whereIn('id', $assign_leads_ids);
