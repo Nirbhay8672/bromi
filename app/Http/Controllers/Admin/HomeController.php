@@ -1175,7 +1175,7 @@ class HomeController extends Controller
 
 		$total_property = Properties::select('id')->where('user_id', Auth::user()->id)->count();
 
-		$assign_leads_ids = AssignHistory::get()->pluck('enquiry_id');
+		$assign_leads_ids = AssignHistory::where('assign_id',Auth::user()->id)->get()->pluck('enquiry_id');
 		$total_enquiry = Enquiries::select('id')
 			->where('user_id', Auth::user()->id)
 			->orWhere(function ($query) use ($assign_leads_ids) {
