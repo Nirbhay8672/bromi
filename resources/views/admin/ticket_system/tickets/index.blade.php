@@ -42,7 +42,7 @@
                                                 </td>
                                                 <td>
                                                     <a>
-                                                        #{{ $ticket->ticket_id }} - {{ $ticket->title }}
+                                                        {{ $ticket->title }}
                                                     </a>
                                                 </td>
                                                 <td>

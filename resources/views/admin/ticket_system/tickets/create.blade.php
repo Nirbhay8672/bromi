@@ -30,6 +30,7 @@
                                 role="form"
                                 method="POST"
                                 action="{{route('admin.new.ticket')}}"
+                                enctype="multipart/form-data"
                             >
                                 {!! csrf_field() !!}
         
@@ -83,6 +84,14 @@
                                                 <span>{{ $errors->first('priority') }}</span>
                                             </span>
                                         @endif
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="priority" class="col-md-4 control-label">Attachment</label>
+
+                                    <div class="col-md-4">
+                                        <input type="file" style="border: 1px solid black;border-radius:5px;" name="attachment" id="attachment" class="form-control">
                                     </div>
                                 </div>
                         

@@ -24,7 +24,7 @@ class TicketsController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::paginate(10);
+        $tickets = Ticket::with(['user.city'])->get();
 
         return view('superadmin.ticket_system.tickets.index', compact('tickets'));
     }
