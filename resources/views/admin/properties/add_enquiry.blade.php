@@ -1054,6 +1054,23 @@
                 return value !== '' && isValidMobileNumber;
             }
 
+            function validateOtherMobileNumber(field, errorField, invalidErrorMessage) {
+                var value = $(field).val().trim();
+                var isValidMobileNumber = /^\d{10}$/.test(value);
+                console.log("isValidMobileNumber =",isValidMobileNumber);
+
+                if (!isValidMobileNumber && value !== '') {
+                    console.log("entered ==");
+                    $(errorField).text(invalidErrorMessage);
+                } else {
+                    console.log("not entered ==");
+                    $(errorField).text('');
+                }
+
+                $(field).toggleClass('is-invalid', !isValidMobileNumber && value !== '');
+                return isValidMobileNumber || value === '';
+            }
+
             function validateEmail(field, errorField, requiredMessage, invalidFormatMessage) {
                 var value = $(field).val().trim();
                 var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -2283,8 +2300,16 @@
                         .val();
                     nri = $("[data-contact_id=" + unique_id + "] input[name=contact_nri]").prop('checked')
                    
-                    let isContactNumberValid = validateMobileNumber("[data-contact_id=" + unique_id + "] input[name=contact_person_no]", "#contact_person_no_error" + unique_id, "Number field is required", "Invalid mobile number format");
-                    isValid = isContactNumberValid && isValid;
+                    // let isContactNumberValid = validateMobileNumber("[data-contact_id=" + unique_id + "] input[name=contact_person_no]", "#contact_person_no_error" + unique_id, "Number field is required", "Invalid mobile number format");
+                    // isValid = isContactNumberValid && isValid;
+                    if (no) {
+                        let isContactNumberValid = validateOtherMobileNumber(
+                            "[data-contact_id=" + unique_id + "] input[name=contact_person_no]",
+                            "#contact_person_no_error" + unique_id,
+                            "Invalid mobile number format"
+                        );
+                        isValid = isContactNumberValid && isValid;
+                    }
 
                     cona_arr.push(name)
                     cona_arr.push(no)
@@ -2334,7 +2359,7 @@
                     console.log("error on validations :", isValid);
                     return
                 } else {
-                    console.log("true redirect", isValid);
+                    console.log("true redirect :", isValid);
                 }
                 var id = $('#this_data_id').val()
                 $.ajax({
