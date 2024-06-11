@@ -62,7 +62,7 @@
                                        </td>
                                        <td>
                                             <?php if($ticket->attachment_file_path) : ?>
-                                                <a href="{{$ticket->attachment_file_path}}" target="_blank">View</a>
+                                                <a href="/bromi/public{{$ticket->attachment_file_path}}" target="_blank">View</a>
                                             <?php else : ?>
                                                 <span>No Attachment</span>
                                             <?php endif; ?>
