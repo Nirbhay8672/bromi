@@ -578,7 +578,7 @@
                                                             class="row col-md-7 div_flat_details_7 mb-3 location_link_cls">
                                                             <div class="form-group col-md-9">
                                                                 <label for="Link">Location Link</label>
-                                                                <input class="form-control" name="property_link"
+                                                                <input class="form-control" style="text-transform: lowercase !important;" name="property_link"
                                                                     id="property_link" type="text" autocomplete="off">
                                                             </div>
                                                             <div class="invalid-feedback" id="property_link_error"

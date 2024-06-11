@@ -145,7 +145,7 @@
                         <div class="fname" :class="location_link == '' ? '' : 'focused' ">
                             <label for="location_link">Location Link</label>
                             <div class="fvalue">
-                                <input class="form-control" id="location_link" name="location_link" x-model="location_link" type="text" autocomplete="off" :class="errors.hasOwnProperty('location_link') ? 'is-invalid' : ''">
+                                <input class="form-control" id="location_link" style="text-transform: lowercase !important;" name="location_link" x-model="location_link" type="text" autocomplete="off" :class="errors.hasOwnProperty('location_link') ? 'is-invalid' : ''">
                                 <span class="text-danger new_error d-none" id="err_location_link">Location link field is required.</span>
                                 <div class="invalid-feedback">
                                     <span x-text="errors.location_link"></span>
