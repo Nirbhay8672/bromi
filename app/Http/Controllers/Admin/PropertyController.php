@@ -2187,7 +2187,7 @@ class PropertyController extends Controller
                     });
                 },
                 function ($query) use ($salable_plot_area, $salable_plot_area_unit) {
-                    dd("salable_plot_area",$salable_plot_area);
+                    // dd("salable_plot_area",$salable_plot_area);
                     return $query->where(function ($query) use ($salable_plot_area, $salable_plot_area_unit) {
                         $query->where('area_from', '<=', $salable_plot_area)
                             ->where('area_to', '>=', $salable_plot_area)
