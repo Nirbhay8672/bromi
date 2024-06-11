@@ -187,7 +187,7 @@
                                                         <h6><b>Website</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_3">
-                                                        <div style="text-transform: none !important;">: {{ $project->website }}</div>
+                                                        <div style="text-transform: lowercase !important;">: {{ $project->website }}</div>
                                                     </div>
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Project Status</b></h6>
@@ -266,7 +266,7 @@
                                                     <div class="form-group col-4 m-b-20 data_conent_2">
                                                         <h6><b>Location Link</b></h6>
                                                     </div>
-                                                    <div class="form-group col-8 m-b-20 data_conent_2">
+                                                    <div class="form-group col-8 m-b-20 data_conent_2" style="text-transform: lowercase !important;">
                                                         <div>: {{ $project->location_link }}</div>
                                                     </div>
                                                 </div>
