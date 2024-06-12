@@ -558,7 +558,11 @@
                                                                 $salable_units=$units->where('id',$data->area_from_measurement)->first();
                                                             ?>
                                                             <tr>
-                                                                    <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
+                                                                    @if ($value->property_category !== '262')
+                                                                        <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
+                                                                    @else
+                                                                        <td>{{"-"}}</td>
+                                                                    @endif
                                                                     <td>{{ $value->property_for }}</td>
                                                                     <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->constructed_salable_area)[0] .' '. $salable_units->unit_name}}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][2] }}</td>
@@ -1003,8 +1007,11 @@
 
                                                         @forelse ($properties as $value)
                                                             <tr>
-                                                                <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}
-                                                                </td>
+                                                                @if ($value->property_category !== '262')
+                                                                   <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
+                                                                @else
+                                                                    <td>{{"-"}}</td>
+                                                                @endif
                                                                 <td>{{ $value->property_for }}</td>
                                                                 <td>{{ json_decode($value->unit_details)[0][4] ? json_decode($value->unit_details)[0][4] : $value->survey_price }}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($value->updated_at)->format('d-m-Y') }}

@@ -289,7 +289,7 @@ class EnquiriesController extends Controller
 
 							// size range = prop salable area
 							if ($request->match_enquiry_size) {
-								// dd("match_enquiry_size ==>", $request->match_enquiry_size, "..", $pro->salable_area, "..", $pro->constructed_salable_area);
+								// dd("match_enquiry_size ==>", $request->match_enquiry_size, ".1.", $pro->salable_area, ".2.", $pro->constructed_salable_area);
 								$parts = explode("_-||-_", $pro->salable_area);
 								$result = $parts[0];
 								$result_unit = $parts[1];
@@ -1618,7 +1618,7 @@ class EnquiriesController extends Controller
 		}
 
 		$configurations = array_map('intval', $configurations);
-
+// dd("configurations",$configurations,$data->property_type);
 		$properties = Properties::where('properties.property_type', $data->requirement_type)
 			->where('properties.property_for', $property_for)
 			->where('properties.property_category', $data->property_type)
@@ -1635,25 +1635,25 @@ class EnquiriesController extends Controller
 					->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
 						$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
 							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+					})
+					->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+						$query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+							$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+								->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+						})
+							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+									->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+							})
+							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+									->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+							})
+							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+									->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+							});
 					});
-					// ->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-					// 	$query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-					// 		$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-					// 			->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-					// 	})
-					// 		->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-					// 			$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-					// 				->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-					// 		})
-					// 		->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-					// 			$query->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-					// 				->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-					// 		})
-					// 		->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-					// 			$query->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-					// 				->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-					// 		});
-					// });
 			})
 			->get();
 
