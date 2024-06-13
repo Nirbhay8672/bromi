@@ -4862,6 +4862,8 @@
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Vila/Bunglow') {
                     var configuration = $('input[name=vila_type]:checked').val()
                     //
+                } else if ($('input[name=property_category]:checked').attr('data-val') == 'Farmhouse') {
+                    var configuration = 0;
                 }
                 var other_name = $("input[id='other_name']")
                     .map(function() {
