@@ -211,6 +211,10 @@ Helper::set_default_measuerement();
         opacity: 1;
     }
 
+    option {
+        text-transform: capitalize !important;
+    }
+
     </style>
     @stack('page-css')
 </head>
@@ -386,6 +390,8 @@ Helper::set_default_measuerement();
                                             </a>
                                         </li>
                                     @endif
+
+                                    @if ($permissions->contains(\App\Constants\SupAdminPermissions::LEADS))
                                     <li class="sidebar-list">
                                         <a
                                             class="sidebar-link @if ($route == 'superadmin.members') active @endif"
@@ -394,6 +400,8 @@ Helper::set_default_measuerement();
                                             <span class="lan-3">Lead Calendar</span>
                                         </a>
                                     </li>
+                                    @endif
+
                                     @if ($permissions->contains(\App\Constants\SupAdminPermissions::BUILDERS))
                                         <li class="sidebar-list">
                                             <a
@@ -465,7 +473,7 @@ Helper::set_default_measuerement();
                                                 <i class="fa fa-comments"></i>
                                                 <span class="lan-3">Leads</span>
                                             </a>
-                                        </li>   
+                                        </li>
                                     @endif
                                 </ul>
                             </div>

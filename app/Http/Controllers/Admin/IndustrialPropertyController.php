@@ -138,6 +138,7 @@ class IndustrialPropertyController extends Controller
 						$query->where(function ($query) use ($enq) {
 							$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
 								->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+								->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
 								->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
 						});
 					}
@@ -189,9 +190,10 @@ class IndustrialPropertyController extends Controller
 				// 	return $row->property_for;
 				// })
 				->editColumn('property_for', function ($row) use ($dropdowns, $land_units) {
-					// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
-				$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk', 'Plotting', 'Test', 'testw');
-					if ($row->property_for == 'Both') {
+				// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
+				$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk','Plotting', 'Test', 'testw');
+
+				if ($row->property_for == 'Both') {
 						$forr = 'Rent & Sell';
 					} else {
 						$forr = $row->property_for;
@@ -240,7 +242,7 @@ class IndustrialPropertyController extends Controller
 					}
                     $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
 					if (empty($salable_area_print)) {
-						$salable_area_print = "Area Not Available";
+						$salable_area_print = "";
 					}
 
 					try {
@@ -620,7 +622,11 @@ class IndustrialPropertyController extends Controller
 				$salable = '';
 			}
 			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-			$area = "P:" . $salable . ' - C: ' . $constructed;
+			if (!empty($salable) && (!empty($constructed))) {
+				$area = "P:" . $salable . ' - C: ' . $constructed;
+			}else{
+				$area = "";
+			}
 		} elseif ($type == 'Farmhouse') {
 			$area = explode('_-||-_', $row->salable_plot_area)[0];
 			$measure = explode('_-||-_', $row->salable_plot_area)[1];

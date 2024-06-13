@@ -49,7 +49,6 @@ class EnquiriesController extends Controller
 
 	public function index(Request $request)
 	{
-
 		if ($request->ajax()) {
 			$dropdowns = DropdownSettings::get()->toArray();
 			// $land_units = DB::table('land_units')->get();
@@ -82,7 +81,12 @@ class EnquiriesController extends Controller
 					->orderBy('id', 'desc')
 					->get();
 			} else {
-				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
+				$assign_leads_ids = AssignHistory::where('assign_id',Auth::user()->id)->get()->pluck('enquiry_id');
+
+				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')->where('user_id', Auth::user()->id)
+					->orWhere(function ($query) use ($assign_leads_ids) {
+						$query->whereIn('id', $assign_leads_ids);
+					})
 					->when($request->filter_by, function ($query) use ($request) {
 						if ($request->filter_by == 'new') {
 							return $query->doesntHave('Progress');
@@ -264,7 +268,7 @@ class EnquiriesController extends Controller
 							if ($request->match_budget_from_type) {
 								$survey_price = (int) $pro->survey_price; // Cast to integer
 								$unitDetails = json_decode($pro->unit_details, true);
-								$unit_price = (int) str_replace(',', '', $unitDetails[0][4]);
+								$unit_price =  str_replace(',', '', $unitDetails[0][4]);
 								$sell_price = (int) str_replace(',', '', $unitDetails[0][3]);
 								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $survey_price,"unit", $unit_price,"sell_price",$sell_price);
 								if ($survey_price !== '' && $survey_price !== null && $survey_price !== 0) {
@@ -285,7 +289,7 @@ class EnquiriesController extends Controller
 
 							// size range = prop salable area
 							if ($request->match_enquiry_size) {
-								// dd("match_enquiry_size ==>", $request->match_enquiry_size, "..", $pro->salable_area, "..", $pro->constructed_salable_area);
+								// dd("match_enquiry_size ==>", $request->match_enquiry_size, ".1.", $pro->salable_area, ".2.", $pro->constructed_salable_area);
 								$parts = explode("_-||-_", $pro->salable_area);
 								$result = $parts[0];
 								$result_unit = $parts[1];
@@ -297,22 +301,36 @@ class EnquiriesController extends Controller
 								$result2_unit = $parts[1];
 								$area_from = str_replace(',', '', $result2);
 								$area_to = str_replace(',', '', $result2);
+
+								$parts3 = explode("_-||-_", $pro->salable_plot_area);
+								$result3 = $parts3[0];
+								$result3_unit = $parts3[1];
+								$area_from3 = str_replace(',', '', $result3);
+								$area_to3 = str_replace(',', '', $result3);
+
+								
 								// dd($result,$result2,$pro->salable_area,$result_unit);
 
-								if ($area_size_from != '' && $area_size_to != '') {
+								if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "") {
 									$query->where('area_from', '<=', $area_size_from)
 										->where('area_to', '>=', $area_size_to);
-								} else if ($area_from != '' && $area_to != '') {
+								} else if ($area_from != '' && $area_to != '' && $result2_unit !== "") {
 									$query->where('area_from', '<=', $area_from)
 										->where('area_to', '>=', $area_to);
+								}else if ($area_from3 != '' && $area_to3 != '' && $result3_unit !== "") {
+									$query->where('area_from', '<=', $area_from3)
+										->where('area_to', '>=', $area_to3);
 								}
-
+								
 								if ($result_unit) {
 									$query->where('area_from_measurement', '=', $result_unit)
 										->where('area_to_measurement', '>=', $result_unit);
 								} else if ($result2_unit) {
 									$query->where('area_from_measurement', '=', $result2_unit)
 										->where('area_to_measurement', '>=', $result2_unit);
+								}else if ($result3_unit) {
+									$query->where('area_from_measurement', '=', $result3_unit)
+										->where('area_to_measurement', '>=', $result3_unit);
 								}
 							}
 
@@ -462,20 +480,46 @@ class EnquiriesController extends Controller
 					$area_name = '';
 					$other_areas = '';
 					$area_title = '';
+					// if (!empty($row->area_ids)) {
+					// 	foreach (json_decode($row->area_ids) as $key => $value) {
+					// 		if ($key < 2) {
+					// 			echo "* key -- ".$key; 
+					// 			// echo "<br> val -- ".$areas[$value]['name'];
+					// 			if ($key > 0) {
+					// 				dd("inn 1");
+					// 				$area_name .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+					// 			} else {
+					// 				// dd("inn 2");
+					// 				$area_name .= (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+					// 			}
+					// 		} else {
+					// 			dd("inn 3");
+					// 			$other_areas .= $area_name;
+					// 			$other_areas .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+					// 		}
+					// 	}
+					// }
 					if (!empty($row->area_ids)) {
 						foreach (json_decode($row->area_ids) as $key => $value) {
 							if ($key < 2) {
-								if ($key > 0) {
-									$area_name .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-								} else {
+								// echo "* key -- " . $key . "<br>";
+								// if ($key > 0) {
+								// 	dd("inn 1");
+								// 	$area_name .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
+								// } else
+								//  {
+									// dd("inn 2");
 									$area_name .= (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-								}
+								// }
 							} else {
+								// dd("inn 3");
 								$other_areas .= $area_name;
 								$other_areas .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
 							}
 						}
 					}
+					
+					// dd("row->other_areas",$other_areas);
 					if ($other_areas) {
 						$area_title = ' <i class="fa fa-info-circle cursor-pointer" data-bs-content="' . $other_areas . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom"></i>';
 					}
@@ -559,9 +603,11 @@ class EnquiriesController extends Controller
 						}
 						return Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') . '<br>' . $remark_data;
 					}
+					if($row->telephonic_discussion == null){
+						return " ";
+					}
 					return $row->telephonic_discussion;
 				})
-
 				//transfer date
 				->editColumn('assigned_to', function ($row) {
 					if (!empty($row->Employee)) {
@@ -613,6 +659,12 @@ class EnquiriesController extends Controller
 					}
 					$buttons =  $buttons . '<i title="Contact List" data-id="' . $row->id . '" onclick=contactList(this) class="fa fs-22 py-2 mx-2 fa-database text-blue"></i>';
 					$buttons =  $buttons . '<i title="Schedule Visit" data-employee="' . $row->employee_id . '" data-id="' . $row->id . '" onclick=showScheduleVisit(this) class="fa fs-22 py-2 mx-2 fa-map text-success"></i>';
+					// if($row->enq_status){
+					// 	$buttons =  $buttons . '<i title="change Stats" data-status="' . $row->enq_status . '" data-id="' . $row->id . '" onclick=Status(this) class="fa fs-22 py-2 mx-2 fad fa-toggle-on" text-success"></i>';
+					// }else{
+					// 	$buttons =  $buttons . '<i title="change Stats" data-status="' . $row->enq_status . '" data-id="' . $row->id . '" onclick=Status(this) class="fa fs-22 py-2 mx-2 fad fa-toggle-off" text-success"></i>';
+
+					// }
 					return $buttons;
 				})
 				->rawColumns(['select_checkbox', 'telephonic_discussion', 'client_name', 'client_requirement', 'budget', 'assigned_to', 'Actions', 'Actions2', 'status_change'])
@@ -1331,11 +1383,11 @@ class EnquiriesController extends Controller
 				$enquiry_source_id = $enquiry_source->id;
 			}
 
-			$telephonic = NULL;
+			$telephonic = "";
 			if (empty($value['Enquiry Progress'])) {
 				$telephonic = $value['Remarks'];
 			}
-			dd("value", $value, $enquiry_source_id);
+			// dd("value", $value, $enquiry_source_id);
 
 			if (!empty($value['ClientName'])) {
 				$data =  new Enquiries();
@@ -1566,7 +1618,7 @@ class EnquiriesController extends Controller
 		}
 
 		$configurations = array_map('intval', $configurations);
-
+// dd("configurations",$configurations,$data->property_type);
 		$properties = Properties::where('properties.property_type', $data->requirement_type)
 			->where('properties.property_for', $property_for)
 			->where('properties.property_category', $data->property_type)
@@ -1592,6 +1644,14 @@ class EnquiriesController extends Controller
 							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
 								$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
 									->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+							})
+							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+									->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
+							})
+							->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
+									->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
 							});
 					});
 			})
@@ -1632,7 +1692,7 @@ class EnquiriesController extends Controller
 		// 	})
 		// 	->get();
 
-		// 	dd("properties",Auth::user()->id,$data->configuration,$properties);
+			// dd("properties",Auth::user()->id,$data->configuration,$properties);
 
 		$employees = User::where('parent_id', Session::get('parent_id'))->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
@@ -1757,6 +1817,7 @@ class EnquiriesController extends Controller
 		$cities = City::orderBy('name')->get();
 		$branches = Branches::orderBy('name')->get();
 		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
+		// dd("area",$areas);
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
 		$districts = District::orderBy('name')->get();
 		$talukas   = Taluka::orderBy('name')->get();
@@ -1886,11 +1947,18 @@ class EnquiriesController extends Controller
 
 	public function updateEnquiryStatus(Request $request)
 	{
-		$status = $request->status;
-		$vv = Enquiries::where('id', $request->id)->update(['enq_status' => $status]);
+		
+		$enquiry = Enquiries::find($request->id);
+		if ($enquiry) {
+			$enquiry->enq_status = $enquiry->enq_status == 1 ? 0 : 1;
+			$enquiry->save();
+		}
+		if(isset($request->flag)){
+			// dd(333);
+			return redirect()->back();
+		}
 		return redirect('admin/Enquiries');
 	}
-
 	public function getEnquiryCategory(Request $request)
 	{
 		$enquiryID = $request->query('id');

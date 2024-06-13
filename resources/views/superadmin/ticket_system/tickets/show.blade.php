@@ -26,7 +26,7 @@
                                 <div class="col-md-6 col-md-offset-1">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            #{{ $ticket->ticket_id }} - {{ $ticket->title }}
+                                            {{ $ticket->title }}
                                         </div>
                         
                                         <div class="panel-body">

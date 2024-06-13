@@ -59,4 +59,9 @@ class BromiEnquiry extends Model
     {
         return $this->belongsTo(Subplans::class, 'plan_interested_in', 'id');
     }
+
+    public function LeadHistory()
+    {
+        return $this->hasMany(LeadAssignHistory::class, 'lead_id', 'id');
+    }
 }

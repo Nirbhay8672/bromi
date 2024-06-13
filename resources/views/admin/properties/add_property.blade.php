@@ -578,7 +578,7 @@
                                                             class="row col-md-7 div_flat_details_7 mb-3 location_link_cls">
                                                             <div class="form-group col-md-9">
                                                                 <label for="Link">Location Link</label>
-                                                                <input class="form-control" name="property_link"
+                                                                <input class="form-control" style="text-transform: lowercase !important;" name="property_link"
                                                                     id="property_link" type="text" autocomplete="off">
                                                             </div>
                                                             <div class="invalid-feedback" id="property_link_error"
@@ -868,7 +868,7 @@
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select class="form-select measure_select measure_unit"
                                                                             id="length_of_plot_measurement">
                                                                             <option value="ft">
                                                                                 ft.
@@ -896,7 +896,7 @@
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select"
+                                                                        <select class="form-select measure_select measure_unit"
                                                                             id="width_of_plot_measurement">
                                                                             <option value="ft">
                                                                                 ft.
@@ -2832,7 +2832,6 @@
                 //strg cat
                 $(document).on('change', '[name="property_category"]', function(e) {
                     storageCategory = $(this).attr('data-val') === 'Storage/industrial'
-                    console.log("storageCategory ==", storageCategory);
                 });
 
                 // Land.
@@ -2850,7 +2849,6 @@
                 //land cat
                 $(document).on('change', '[name="property_category"]', function(e) {
                     landCategory = $(this).attr('data-val') === 'Land'
-                    console.log("landCategory ==", landCategory);
                 });
 
                 // Flate and Penthouse
@@ -2877,32 +2875,26 @@
                 //villa cat
                 $(document).on('change', '[name="property_category"]', function(e) {
                     VillaCategory = $(this).attr('data-val') === 'Vila/Bunglow'
-                    console.log("VillaCategory ==", VillaCategory);
                 });
 
                 //Penthouse cat
                 $(document).on('change', '[name="property_category"]', function(e) {
                     penthouseConf = $(this).attr('data-val') === 'Penthouse'
-                    console.log("penthouseConf ==", penthouseConf);
                 });
 
                 //farmhouse
                 $(document).on('change', '[name="property_category"]', function(e) {
                     farmConf = $(this).attr('data-val') === 'Farmhouse'
-                    console.log("farmConf ==", farmConf);
                 });
 
                 //Plot
                 $(document).on('change', '[name="property_category"]', function(e) {
                     plotConf = $(this).attr('data-val') === 'Plot'
-                    console.log("plotConf ==", plotConf);
                 });
 
                 function validateForm() {
                     isValid = true;
-                    let numberRegex = /^\d+(\.\d+)?$/; // Regex for integer and floating point numbers
-
-
+                    let numberRegex = /^\d+(\.\d+)?$/; 
                     if (flateConfiguration || plotConf || officeConf || retailConfiguration) {
                         console.log("enter in salable area ==");
                         isValid = validateField('#salable_area', '#salable_area_error',
@@ -3005,15 +2997,13 @@
                 // Update theForLand when plot_type is clicked
                 $(document).on('change', 'input[name=plot_type]', function() {
                     theForLand = $(this).attr('data-val');
-                    console.log("theForLand select dropdown val ==", theForLand);
-
-                    if (theForLand === 'agriculture') {
-                        console.log("location show ==")
-                        $(".location_link_cls").show();
-                    } else {
-                        console.log("location hide ==")
-                        $(".location_link_cls").hide();
-                    }
+                    // if (theForLand === 'agriculture') {
+                    //     console.log("location show ==")
+                    //     $(".location_link_cls").show();
+                    // } else {
+                    //     console.log("location hide ==")
+                    //     $(".location_link_cls").hide();
+                    // }
                 });
 
                 // Validation on 2ndstep submit
@@ -3043,15 +3033,14 @@
                     //     'property priority field is required.') && isValid;
 
                     if (theForLand === 'commercial' || theForLand === 'agriculture' || farmConf) {
-                        console.log("enter in zone-vlg-taluka-dist ==");
                         isValid = validateDropdown($('#zone'), $('#zone_id_error'),
                             'Zone field is required') && isValid;
-                        isValid = validateDropdown($('#village_id'), $('#village_id_error'),
-                            'Village field is required') && isValid;
-                        isValid = validateDropdown($('#taluka_id'), $('#taluka_id_error'),
-                            'Taluka field is required') && isValid;
-                        isValid = validateDropdown($('#district_id'), $('#district_id_error'),
-                            'District field is required') && isValid;
+                        // isValid = validateDropdown($('#village_id'), $('#village_id_error'),
+                        //     'Village field is required') && isValid;
+                        // isValid = validateDropdown($('#taluka_id'), $('#taluka_id_error'),
+                        //     'Taluka field is required') && isValid;
+                        // isValid = validateDropdown($('#district_id'), $('#district_id_error'),
+                        //     'District field is required') && isValid;
                     }
 
                     if (isValid) {
@@ -3225,6 +3214,13 @@
             $(".measure_square").on("change", function() {
                 let selectedValue = $(this).val();
                 $(".measure_square").val(selectedValue).trigger("change.select2");
+            });
+
+            //LEngth of plot and width of plot (units) are change one change
+            $(".measure_unit").select2();
+            $(".measure_unit").on("change", function() {
+                let selectedValue = $(this).val();
+                $(".measure_unit").val(selectedValue).trigger("change.select2");
             });
             // });
 
@@ -3792,8 +3788,7 @@
                     addAddAreaButtons(['the_carpet_area'], ['Add Carpet Area']);
                 } else if (category_type == 'Storage/industrial') {
                     showfields = ['div_storage_type', 'div_flat_details_2', 'div_area_size_details',
-                        'the_salable_plot_area', 'the_constructed_salable_area',
-                        'the_centre_height', 'div_flat_details', 'div_flat_details_5', 'div_flat_details_4',
+                        'the_salable_plot_area','div_flat_details', 'div_flat_details_5', 'div_flat_details_4',
                         'div_property_source', 'div_checkboxes1', 'div_flat_details_7',
                         'div_flat_details_8', 'div_other_details',
                         'div_availability_status', 'the_total_units_in_project',
@@ -3804,7 +3799,6 @@
                         'Add Constructed Carpet Area'
                     ]);
                 } else if (category_type == 'Land') {
-                    console.log("Land here ==")
                     showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
                         'div_area_size_details', 'div_borewell',
                         'the_length_of_plot', 'the_width_of_plot',
@@ -3812,7 +3806,7 @@
                         // 'div_care_taker','div_flat_details_5','div_flat_details_7'
                         'div_property_source', 'div_checkboxes1', 'div_construction_allowed_for', 'div_tp_details',
                         'div_flat_details_8', 'div_plot_ind_common', 'div_document_section', 'div_survey_details',
-                        'div_road_width', 'div_construction_docs_allowed_for', 'div_extra_land_details',
+                        'div_road_width', 'div_construction_docs_allowed_for', 'div_extra_land_details','location_link_cls'
                     ];
                 }
                 for (let i = 0; i < showfields.length; i++) {
@@ -4326,6 +4320,7 @@
 
             function getProperty() {
                 var id = '{{ isset($current_id) ? $current_id : 'null' }}';
+                console.log("idddd",id);
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.getProperty') }}",
@@ -4666,7 +4661,6 @@
             }
             getProperty()
 
-            console.log("outide farmConf", farmConf);
             //save property
             $(document).on('click', '.submitFnl', function(e) {
                 e.preventDefault();
@@ -4675,8 +4669,6 @@
                     return
                 }
                 let allFieldsValid = true;
-
-                console.log("third final clicked");
                 // $(this).prop('disabled', true);
                 var owner_details = [];
                 var unit_details = [];

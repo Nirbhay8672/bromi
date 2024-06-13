@@ -13,6 +13,8 @@
         </div>
         <div class="container-fluid">
             <div class="row p-2">
+
+                @if ($permissions->contains(\App\Constants\SupAdminPermissions::STATE))
                 <div class="col-12 col-md-6 col-lg-4 col-sm-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -32,6 +34,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
+
+                @if ($permissions->contains(\App\Constants\SupAdminPermissions::CITY))
                 <div class="col-12 col-md-6 col-lg-4 col-sm-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -51,6 +56,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
+
+                @if ($permissions->contains(\App\Constants\SupAdminPermissions::AREA))
                 <div class="col-12 col-md-6 col-lg-4 col-sm-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -70,6 +78,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
+
+                @if ($permissions->contains(\App\Constants\SupAdminPermissions::DISTRICT))
                 <div class="col-12 col-md-6 col-lg-4 col-sm-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -89,6 +100,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
+
+                @if ($permissions->contains(\App\Constants\SupAdminPermissions::TALUKA))
                 <div class="col-12 col-md-6 col-lg-4 col-sm-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -108,6 +122,9 @@
                         </div>
                     </div>
                 </div>
+                @endif
+
+                @if ($permissions->contains(\App\Constants\SupAdminPermissions::VILLAGE))
                 <div class="col-12 col-md-6 col-lg-4 col-sm-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -127,6 +144,8 @@
                         </div>
                     </div>
                 </div>
+                @endif
+
                 @if ($permissions->contains(\App\Constants\SupAdminPermissions::UNITS))
                 <div class="col-12 col-md-6 col-lg-4 col-sm-6">
                     <div class="card crypto-chart overflow-hidden">
@@ -148,6 +167,7 @@
                     </div>
                 </div>
                 @endif
+
                 @if ($permissions->contains(\App\Constants\SupAdminPermissions::TP_SCHEME))
                 <div class="col-12 col-md-6 col-lg-4 col-sm-6">
                     <div class="card crypto-chart overflow-hidden">
@@ -258,6 +278,7 @@
                     </div>
                 </div>
                 @endif
+                
             </div>
         </div>
     @endsection

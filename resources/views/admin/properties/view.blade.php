@@ -1132,15 +1132,14 @@ use Illuminate\Support\Facades\DB;
 																									<i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
 																									<div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
 																										<div class="row">
-
 																											<div class="col-4 d-flex justify-content-between">
-																												<b>Seats:</b> {{isset($value[9][0]) && $value[9][0] == '1' ? 'Yes' : 'No' }}
+																												<b>Seats:</b> {{isset($value[9][0]) && $value[9][0] !== '' ? 'Yes' : 'No' }}
 																											</div>
 																											<div class="col-4 d-flex justify-content-between">
-																												<b>Cabins:</b> {{isset($value[9][1]) && $value[9][1] == '1' ? "yes": 'No' }}
+																												<b>Cabins:</b> {{isset($value[9][1]) && $value[9][1] !== '' ? "yes": 'No' }}
 																											</div>
 																											<div class="col-4 d-flex justify-content-between">
-																												<b>Conference Room:</b> {{isset($value[9][2])&& $value[9][2] == '1' ? 'Yes' : 'No'}}
+																												<b>Conference Room:</b> {{isset($value[9][2]) && $value[9][2] !== '' ? 'Yes' : 'No'}}
 																											</div>
 
 																										</div>

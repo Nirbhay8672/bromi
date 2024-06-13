@@ -105,7 +105,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-5">
+
+                        <div class="form-group col-md-5 mt-3">
+                            <a id="import_url" href="{{ route('superadmin.talukaTemplate') }}" target="_blank">Download Sample file</a>
+                        </div>
+
+                        <div class="mt-3">
                             <button class="btn custom-theme-button" type="submit">Import</button>
                         </div>
                     </form>
@@ -135,9 +140,9 @@
                                 <select class="form-select" id="district_id" required="">
                                     <option value="">District</option>
                                     @forelse ($districts as $district)
-                                    <option value="{{ $district->id }}">{{ $district->name }}
+                                    <option value="{{ $district->id }}" style="text-transform: capitalize !important;">{{ $district->name }}
                                         @empty
-                                        @endforelse
+                                    @endforelse
                                 </select>
                             </div>
                             <input type="hidden" name="this_data_id" id="this_data_id">

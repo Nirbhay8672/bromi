@@ -259,6 +259,10 @@ Helper::set_default_measuerement();
         .tooltip-btn:hover::after {
             opacity: 1;
         }
+
+        option {
+            text-transform: capitalize !important;
+        }
     </style>
     @stack('page-css')
 </head>

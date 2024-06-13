@@ -572,7 +572,7 @@
                                                             <div class="form-group col-md-9">
                                                                 <label for="Link">Location Link</label>
                                                                 <input class="form-control" name="property_link"
-                                                                    id="property_link" type="text" autocomplete="off">
+                                                                    id="property_link" style="text-transform: lowercase !important;" type="text" autocomplete="off">
                                                             </div>
                                                             <div class="invalid-feedback" id="property_link_error"
                                                                 style="display: none;color:red;"></div>

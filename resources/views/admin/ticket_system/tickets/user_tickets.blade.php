@@ -62,26 +62,23 @@
                                            @endif
                                        </td>
                                        <td>{{ $ticket->updated_at }}</td>
-                                       <td class="w3-bar">
+                                       <td class="w3-bar text-center">
                                                  @if($ticket->status === 'Open')
                                                  
                                                  <form action="{{ url('admin/close_ticket/' . $ticket->ticket_id) }}" method="POST">
                                                    {!! csrf_field() !!}
                                                    <a href="{{ url('admin/tickets/'. $ticket->ticket_id) }}" id="demo"   class="btn btn-primary extra-fields-customer">Comment</a>
-                                                   <button type="submit" class="btn btn-danger" style="float: right">Close</button>
+                                                   <button type="submit" class="btn btn-danger">Close</button>
                                                </form>
                                            @endif
-                                               
-                                          
                                        </td>
                                    </tr>
                                    @endforeach
                                </tbody>
-                       </table>
+                                </table>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

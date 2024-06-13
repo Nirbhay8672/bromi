@@ -24,10 +24,10 @@
                         </div>
                         <div class="card-body pt-0">
                             <div class="row px-3">
-                                <div class="col-md-12 mr-0 ml-0">
-                                    <div class="row mr-0 ml-0">
-                                        <div class="col-md-12">
-                                            <ul class="nav nav-pills sticky-nav-menu-tab mb-3" style="overflow-x: hidden;" id="pills-tab"
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-10">
+                                            <ul class="nav nav-pills sticky-nav-menu-tab mb-3" id="pills-tab"
                                                 role="tablist">
                                                 <li class="nav-item" role="presentation">
                                                     <button class="nav-link mx-1 active" id="v-customer-summary-tab"
@@ -77,10 +77,15 @@
                                                         Property</button>
                                                 </li>
                                                 <div class="row" style="float:right; display:contents;">
-                                                    <div class="col-md-1" style="float:right;">
-                                                        <a href="{{ URL::to('admin/enquiry/edit/' . $data['id']) }}">
+                                                    <div class="col-md-1" style="float:right; padding-left:2%;">
+                                                        <a  data-id={{$data->id}} onclick="Status(this)">
+                                                            @if ($data->enq_status == 1)
                                                             <button class="nav-link mx-1 active"
-                                                                id="v-view-summary-tab">Edit</button>
+                                                                id="v-view-summary-tab">Active</button>
+                                                                @else
+                                                                <button class="nav-link mx-1 active"
+                                                                id="v-view-summary-tab">InActive</button>  
+                                                            @endif
                                                         </a>
                                                     </div>
                                                     <div class="col-md-1" style="float:right; padding-left:2%;">
@@ -98,7 +103,7 @@
                                                 </div>
                                                 
                                             </ul>
-                                            <form action="{{route('admin.updateEnquiryStatus')}}" class="row row-cols g-1" method="get">
+                                            {{-- <form action="{{route('admin.updateEnquiryStatus')}}" class="row row-cols g-1" method="get">
                                                 @csrf
                                                 @method('post')
                                                 <div class="col-lg-3 col-md-6 col-12">
@@ -113,10 +118,10 @@
                                                 <div class="col-lg-3 col-md-6 col-12" style="margin-left: 10px;">
                                                     <button class="btn btn-primary" type="submit">Update</button>
                                                 </div>
-                                            </form>
+                                            </form> --}}
                                         </div>
                                        
-                                        <div class="col-md-4 align-self-center">
+                                        <div class="col-md-2 align-self-center">
                                             <div class="input-group mb-3">
                                                 <select class="form-select form-control" id="enquiry_progress_status">
                                                     <option value="">Booked/Lost</option>
@@ -553,7 +558,11 @@
                                                                 $salable_units=$units->where('id',$data->area_from_measurement)->first();
                                                             ?>
                                                             <tr>
-                                                                    <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
+                                                                    @if ($value->property_category !== '262')
+                                                                        <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
+                                                                    @else
+                                                                        <td>{{"-"}}</td>
+                                                                    @endif
                                                                     <td>{{ $value->property_for }}</td>
                                                                     <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->constructed_salable_area)[0] .' '. $salable_units->unit_name}}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][2] }}</td>
@@ -647,7 +656,7 @@
                                                             <h5 class="border-style">Remarks</h5>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_25">
-                                                            <h6><b>Telephonic Discussion</b></h6>
+                                                            <h6><b>Remarks</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_25">
                                                             <div>: {{ $data->telephonic_discussion }}</div>
@@ -998,8 +1007,11 @@
 
                                                         @forelse ($properties as $value)
                                                             <tr>
-                                                                <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}
-                                                                </td>
+                                                                @if ($value->property_category !== '262')
+                                                                   <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
+                                                                @else
+                                                                    <td>{{"-"}}</td>
+                                                                @endif
                                                                 <td>{{ $value->property_for }}</td>
                                                                 <td>{{ json_decode($value->unit_details)[0][4] ? json_decode($value->unit_details)[0][4] : $value->survey_price }}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($value->updated_at)->format('d-m-Y') }}
@@ -1021,7 +1033,7 @@
                 </div>
             </div>
         </div>
-        {{-- @include('admin.enquiries.status_model') --}}
+        @include('admin.enquiries.status_model')
         <!-- schedule visit modal -->
        <div class="modal fade" id="schedulemodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">

@@ -25,12 +25,9 @@
                         <div class="card-header pb-0">
                             {{-- <h5 class="mb-3">Add Enquiry</h5> --}}
                             <h5 class="mb-3">Add Enquiry <a class="btn custom-icon-theme-button tooltip-btn"
-                                href="{{ route('admin.enquiries') }}"
-                                data-tooltip="Back"
-                                style="float: inline-end;"
-                            >
-                                <i class="fa fa-backward"></i>
-                            </a></h5>
+                                    href="{{ route('admin.enquiries') }}" data-tooltip="Back" style="float: inline-end;">
+                                    <i class="fa fa-backward"></i>
+                                </a></h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -79,13 +76,18 @@
                                                             <div class="input-group">
                                                                 <div class="input-group-append col-md-4 m-b-20">
                                                                     <div class="form-group country_code">
-                                                                        <div
-                                                                            style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important" class="divSelect">
-                                                                            <select class="form-control countries_list" id="country_code" name="country_code"
-                                                                            style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">
-                                                                            @foreach ($country_codes as $country_code)
-                                                                                <option data-parent_id="{{ $country_code->id }}" value={{$country_code->id}}>+{{$country_code->country_iso}}({{$country_code->country_code}})</option>
-                                                                            @endforeach
+                                                                        <div style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important"
+                                                                            class="divSelect">
+                                                                            <select class="form-control countries_list"
+                                                                                id="country_code" name="country_code"
+                                                                                style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">
+                                                                                @foreach ($country_codes as $country_code)
+                                                                                    <option
+                                                                                        data-parent_id="{{ $country_code->id }}"
+                                                                                        value={{ $country_code->id }}>
+                                                                                        +{{ $country_code->country_iso }}({{ $country_code->country_code }})
+                                                                                    </option>
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -801,8 +803,9 @@
                                                         <div class="form-group col-md-2 m-b-20">
                                                             <div>
                                                                 <label for="Budget From">Budget From</label>
-                                                                <input class="form-control indian_currency_amount" name="budget" value=""
-                                                                    id="budget_from" type="text" autocomplete="off">
+                                                                <input class="form-control indian_currency_amount"
+                                                                    name="budget" value="" id="budget_from"
+                                                                    type="text" autocomplete="off">
                                                             </div>
                                                             <div class="invalid-feedback" id="budget_from_error"
                                                                 style="display: block;color:red;"></div>
@@ -811,8 +814,9 @@
                                                         <div class="form-group col-md-2 m-b-20">
                                                             <div>
                                                                 <label for="Budget To">Budget To</label>
-                                                                <input class="form-control indian_currency_amount" name="budget_to"
-                                                                    id="budget_to" type="text" autocomplete="off">
+                                                                <input class="form-control indian_currency_amount"
+                                                                    name="budget_to" id="budget_to" type="text"
+                                                                    autocomplete="off">
                                                             </div>
                                                             <div class="invalid-feedback" id="budget_to_error"
                                                                 style="display: block;color:red;"></div>
@@ -1050,6 +1054,23 @@
                 return value !== '' && isValidMobileNumber;
             }
 
+            function validateOtherMobileNumber(field, errorField, invalidErrorMessage) {
+                var value = $(field).val().trim();
+                var isValidMobileNumber = /^\d{10}$/.test(value);
+                console.log("isValidMobileNumber =",isValidMobileNumber);
+
+                if (!isValidMobileNumber && value !== '') {
+                    console.log("entered ==");
+                    $(errorField).text(invalidErrorMessage);
+                } else {
+                    console.log("not entered ==");
+                    $(errorField).text('');
+                }
+
+                $(field).toggleClass('is-invalid', !isValidMobileNumber && value !== '');
+                return isValidMobileNumber || value === '';
+            }
+
             function validateEmail(field, errorField, requiredMessage, invalidFormatMessage) {
                 var value = $(field).val().trim();
                 var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -1077,7 +1098,7 @@
                     'Invalid email format') && isValid;
                 return isValid;
             }
-            
+
             function validateNumericField(field, errorField, errorMessage) {
                 var value = $(field).val().trim();
                 var isValidNumeric = /^\d+$/.test(value);
@@ -1121,15 +1142,14 @@
             //     return isValid;
             // }
             function validateBudgetFields() {
-                var budgetFrom = parseFloat($('#budget_from').val());
-                var budgetTo = parseFloat($('#budget_to').val());
+                let budgetFrom = parseFloat($('#budget_from').val().replace(/,/g, ''));
+                let budgetTo = parseFloat($('#budget_to').val().replace(/,/g, ''));
                 if (isNaN(budgetFrom) || isNaN(budgetTo)) {
                     $('#budget_to_error').text('Please enter numeric values').show();
                     return false;
                 }
-                
-                if (isNaN(budgetFrom) || isNaN(budgetTo) || budgetFrom >= budgetTo) {
-                    $('#budget_to_error').text('Budget To must be greater than Budget From').show();
+                if (budgetFrom >= budgetTo) {
+                    $('#budget_to_error').text('Budget From must be greater than Budget To').show();
                     return false;
                 } else {
                     $('#budget_to_error').hide();
@@ -1220,18 +1240,18 @@
                         isValid = false;
                     }
 
-                        // If isValid is true, all validations passed, proceed to the next step
-                        if (isValid) {
-                            console.log("All second fields are valid");
-                            $("#other-contact").show();
-                        } else {
-                            console.log("Some second fields are invalid");
-                            $("#customer-requirement").show();
-                            $("#step1").addClass("btn-primary");
-                            $("#step2").removeClass("btn-primary");
-                            $("#other-contact").hide();
-                        }
-                    });
+                    // If isValid is true, all validations passed, proceed to the next step
+                    if (isValid) {
+                        console.log("All second fields are valid");
+                        $("#other-contact").show();
+                    } else {
+                        console.log("Some second fields are invalid");
+                        $("#customer-requirement").show();
+                        $("#step1").addClass("btn-primary");
+                        $("#step2").removeClass("btn-primary");
+                        $("#other-contact").hide();
+                    }
+                });
 
 
                 // $('#saveEnquiry').click(function() {
@@ -1703,16 +1723,16 @@
                         $('#client_email').val(data.client_email);
                         $('#is_nri').prop('checked', Number(data.is_nri));
 
-                        if(data.enquiry_for == 'Rent') {
+                        if (data.enquiry_for == 'Rent') {
                             document.getElementById('propertyfor1').checked = true;
                         }
 
-                        if(data.enquiry_for == 'Buy') {
+                        if (data.enquiry_for == 'Buy') {
                             document.getElementById('propertyfor2').checked = true;
                         }
 
-                        
-                        if(data.enquiry_for == 'Both') {
+
+                        if (data.enquiry_for == 'Both') {
                             document.getElementById('propertyfor3').checked = true;
                         }
 
@@ -1730,7 +1750,7 @@
                         $('#enquiry_status').val(data.enquiry_status).trigger('change');
                         $('#project_status').val(data.project_status).trigger('change');
                         $('#country_code').val(data.country_id).trigger('change');
-                        
+
                         $('#area_ids').val(JSON.parse(data.area_ids)).trigger('change');
                         $('#is_preleased').prop('checked', Number(data.is_preleased));
                         $('#telephonic_discussion').val(data.telephonic_discussion);
@@ -1765,8 +1785,9 @@
                                     $("[data-contact_id=" + id + "] input[name=contact_person_no]").val(details[i][
                                         1
                                     ]);
-                                    
-                                    $("[data-contact_id=" + id + "] select[name=contact_country_code]").val(details[i][
+
+                                    $("[data-contact_id=" + id + "] select[name=contact_country_code]").val(details[
+                                        i][
                                         2
                                     ]).trigger('change');
                                     $("[data-contact_id=" + id + "] input[name=contact_nri]").prop('checked',
@@ -1939,7 +1960,9 @@
                                     0
                                 ]);
                                 $("[data-contact_id=" + id + "] input[name=contact_person_no]").val(details[i][1]);
-                                $("[data-contact_id=" + id + "] select[name=contact_country_code]").val(details[i][2])
+                                $("[data-contact_id=" + id + "] select[name=contact_country_code]").val(details[i][
+                                        2
+                                    ])
                                     .trigger('change');
                                 $("[data-contact_id=" + id + "] input[name=contact_nri]").prop('checked', Number(
                                     details[i][3]));
@@ -1960,7 +1983,8 @@
                     unique_id = $(this).closest('.form-group').attr('data-contact_id');
                     name = $(this).val();
                     no = $("[data-contact_id=" + unique_id + "] input[name=contact_person_no]").val();
-                    contact_code = $("[data-contact_id=" + unique_id + "] select[name=contact_country_code]").val();
+                    contact_code = $("[data-contact_id=" + unique_id + "] select[name=contact_country_code]")
+                        .val();
                     nri = $("[data-contact_id=" + unique_id + "] input[name=contact_nri]").prop('checked')
                     cona_arr.push(name)
                     cona_arr.push(no)
@@ -2133,12 +2157,12 @@
 
             function generate_contact_detail(id, plus = 0) {
                 var myvar = '<div data-contact_id= ' + id + ' class="form-group col-md-4 m-b-20">' +
-                                '<div><label>Contact person</label>' +
-                                    '<input class="form-control" name="contact_person_name" type="text"' +
-                                        'autocomplete="off">' +
-                                '</div><div id="contact_person_name_error_' + id +
-                                        '" class="invalid-feedback" style="display: none; color: red;"></div>' +
-                            '</div>' +
+                    '<div><label>Contact person</label>' +
+                    '<input class="form-control" name="contact_person_name" type="text"' +
+                    'autocomplete="off">' +
+                    '</div><div id="contact_person_name_error_' + id +
+                    '" class="invalid-feedback" style="display: none; color: red;"></div>' +
+                    '</div>' +
                     '<div  data-contact_id= ' + id + ' class="col-md-4 country_code_area">' +
                     '   <div class="input-group">' +
                     '       <div class="input-group-append col-md-4 m-b-20">' +
@@ -2146,7 +2170,7 @@
                     '               <div style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important" class="divSelect">' +
                     '                   <select class="form-control countries_list" id="contact_country_code" name="contact_country_code" style="border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important">' +
                     '                       @foreach ($country_codes as $country_code)' +
-                    '                           <option data-parent_id="{{ $country_code->id }}" value={{$country_code->id}}>+{{$country_code->country_iso}} ({{$country_code->country_code}})</option>' +
+                    '                           <option data-parent_id="{{ $country_code->id }}" value={{ $country_code->id }}>+{{ $country_code->country_iso }} ({{ $country_code->country_code }})</option>' +
                     '                       @endforeach' +
                     '                   </select>' +
                     '               </div>' +
@@ -2157,7 +2181,7 @@
                     '               <label for="Mobile">Mobile</label>' +
                     '               <input class="form-control" name="contact_person_no" style="border-right:2px solid #1d2848 !important; border-top-right-radius: 5px;border-bottom-right-radius: 5px" id="contact_person_no" type="text" autocomplete="off">' +
                     '           </div>' +
-                    '           <div class="invalid-feedback" id="contact_person_no_error" style="display: block;color:red;"></div>' +
+                    '           <div class="invalid-feedback" id="contact_person_no_error' + id + '" style="display: block;color:red;"></div>' +
                     '       </div>' +
                     '   </div>' +
                     '</div>' +
@@ -2272,22 +2296,21 @@
                     unique_id = $(this).closest('.form-group').attr('data-contact_id');
                     name = $(this).val();
                     no = $("[data-contact_id=" + unique_id + "] input[name=contact_person_no]").val();
-                    contact_code = $("[data-contact_id=" + unique_id + "] select[name=contact_country_code]").val();
+                    contact_code = $("[data-contact_id=" + unique_id + "] select[name=contact_country_code]")
+                        .val();
                     nri = $("[data-contact_id=" + unique_id + "] input[name=contact_nri]").prop('checked')
-                    // if (name.trim() === "") {
-                    //     $("#contact_person_name_error_" + unique_id).text("name is required").show();
-                    //     isValid = false;
-                    // } else {
-                    //     $("#contact_person_name_error_" + unique_id).hide();
-                    //     isValid = true;
-                    // }
-                    // if (no.trim() === "") {
-                    //     $("#contact_person_no_error_" + unique_id).text("number field is required").show();
-                    //     isValid = false;
-                    // } else {
-                    //     $("#contact_person_no_error_" + unique_id).hide();
-                    //     isValid = true;
-                    // }
+                   
+                    // let isContactNumberValid = validateMobileNumber("[data-contact_id=" + unique_id + "] input[name=contact_person_no]", "#contact_person_no_error" + unique_id, "Number field is required", "Invalid mobile number format");
+                    // isValid = isContactNumberValid && isValid;
+                    if (no) {
+                        let isContactNumberValid = validateOtherMobileNumber(
+                            "[data-contact_id=" + unique_id + "] input[name=contact_person_no]",
+                            "#contact_person_no_error" + unique_id,
+                            "Invalid mobile number format"
+                        );
+                        isValid = isContactNumberValid && isValid;
+                    }
+
                     cona_arr.push(name)
                     cona_arr.push(no)
                     // cona_arr.push(status)
@@ -2336,7 +2359,7 @@
                     console.log("error on validations :", isValid);
                     return
                 } else {
-                    console.log("true redirect", isValid);
+                    console.log("true redirect :", isValid);
                 }
                 var id = $('#this_data_id').val()
                 $.ajax({

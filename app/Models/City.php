@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use App\Scopes\VendorScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Session;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\Models\Activity;
 
 class City extends Model
 {
@@ -26,12 +23,6 @@ class City extends Model
 		'name',
 		'state_id',
 	];
-
-	// protected static function boot()
-	// {
-	// 	parent::boot();
-	// 	static::addGlobalScope(new VendorScope);
-	// }
 
 	public function State()
 	{

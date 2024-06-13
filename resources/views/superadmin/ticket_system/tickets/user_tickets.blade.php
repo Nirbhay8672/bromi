@@ -56,7 +56,7 @@ tr:hover {background-color: coral;}
                                         </td>
                                         <td>
                                             <a href="{{ url('admin/tickets/' . $ticket->ticket_id) }}">
-                                                #{{ $ticket->ticket_id }} - {{ $ticket->title }}
+                                                {{ $ticket->title }}
                                             </a>
                                         </td>
                                         <td>

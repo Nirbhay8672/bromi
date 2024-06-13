@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\BranchesController;
 use App\Http\Controllers\Admin\BuildingController;
+use App\Http\Controllers\Admin\CommentsController;
 use App\Http\Controllers\Admin\EnquiriesController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\IndustrialPropertyController;
@@ -377,6 +378,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 			Route::any('new-ticket', [TicketsController :: class,'store'])->name('admin.new.ticket');
 			Route::any('my_tickets', [TicketsController :: class,'userTickets'])->name('admin.my_tickets');
 			Route::any('tickets/{ticket_id}', [TicketsController :: class,'show'])->name('admin.tickets');
+			Route::any('close_ticket/{ticket_id}', [TicketsController :: class,'close'])->name('admin.tickets.close');
 			Route::any('comment', [CommentsController:: class,'postComment'])->name('admin.comment');
 		//Ticket System Routes End
 	});
