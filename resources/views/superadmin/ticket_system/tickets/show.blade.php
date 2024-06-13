@@ -52,9 +52,9 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    @include('admin.ticket_system.tickets.comments')
+                                    @include('superadmin.ticket_system.tickets.comments')
                                     <hr>
-                                    @include('admin.ticket_system.tickets.reply')
+                                    @include('superadmin.ticket_system.tickets.reply')
                                 </div>
                             </div>
                         </div>

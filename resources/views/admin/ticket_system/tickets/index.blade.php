@@ -10,7 +10,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Query</h5>
+                            <h5 class="mb-3">Support Tickets</h5>
                             <div class="col">
                                 <a  
                                     class="btn custom-icon-theme-button tooltip-btn"

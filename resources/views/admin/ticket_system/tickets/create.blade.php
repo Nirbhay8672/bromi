@@ -10,7 +10,7 @@
                 <div class="">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Add Query <a class="btn custom-icon-theme-button tooltip-btn"
+                            <h5 class="mb-3">Raise Ticket <a class="btn custom-icon-theme-button tooltip-btn"
                                 href="<?php echo e(route('admin.index')); ?>"
                                 data-tooltip="Back"
                                 style="float: inline-end;"
@@ -113,7 +113,7 @@
                                 <div class="form-group mt-3">
                                     <div class="col-md-6 col-md-offset-4">
                                         <button type="submit" class="btn btn-primary" style="border-radius: 5px;">
-                                            <i class="fa fa-btn fa-ticket me-2"></i> Open Ticket
+                                            <i class="fa fa-btn fa-ticket me-2"></i> Raised
                                         </button>
                                     </div>
                                 </div>
