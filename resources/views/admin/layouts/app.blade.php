@@ -1058,23 +1058,40 @@ Helper::set_default_measuerement();
                 };
                 
                 // Construct the URL
-                const url = "{{route('admin.saveOnesignal')}}"; // Replace with your actual endpoint
+                // const url = "{{route('admin.saveOnesignal')}}"; // Replace with your actual endpoint
                 
                 // Send the fetch request
-                fetch(url, requestOptions)
-                  .then(response => {
-                    if (!response.ok) {
-                      throw new Error(`HTTP error! Status: ${response.status}`);
+                $.ajax({
+                    url: "{{route('admin.saveOnesignal')}}", // Replace with your actual endpoint
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{csrf_token()}}" // Replace with your actual CSRF token
+                    },
+                    data: {
+                        playerId: playerId
+                    },
+                    success: function(response) {
+                        console.log('User ID sent to server successfully');
+                        console.log(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error sending user ID to server:', error);
                     }
-                    return response.json();
-                  })
-                  .then(data => {
-                    // console.log(data);
-                    console.log('User ID sent to server successfully');
-                  })
-                  .catch(error => {
-                    console.error('Error sending user ID to server:', error);
-                  });
+                });
+                // fetch(url, requestOptions)
+                //   .then(response => {
+                //     if (!response.ok) {
+                //       throw new Error(`HTTP error! Status: ${response.status}`);
+                //     }
+                //     return response.json();
+                //   })
+                //   .then(data => {
+                //     // console.log(data);
+                //     console.log('User ID sent to server successfully');
+                //   })
+                //   .catch(error => {
+                //     console.error('Error sending user ID to server:', error);
+                //   });
                 
                 // console.log("OneSignal User ID:", OneSignal.User.PushSubscription._id);
             }, 1000)

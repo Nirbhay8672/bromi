@@ -90,7 +90,7 @@ Route::group(['middleware' => 'revalidate'], function () {
                 
                 $user = Auth::user();
                 if (empty($user->onesignal_token)) {
-                    $user->onesignal_token = $request->playerId;
+                    $user->onesignal_token = $request->input('playerId');
                     $user->save();
                 }
                 return response()->json(['error' => false, 'data' => $user->onesignal_token]);
