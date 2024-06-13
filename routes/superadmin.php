@@ -15,7 +15,9 @@ use App\Http\Controllers\Superadmin\ProjectsController;
 use App\Http\Controllers\Superadmin\SuperTalukaController;
 use App\Http\Controllers\Superadmin\SuperVillageController;
 use App\Http\Controllers\Superadmin\UnitController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +41,19 @@ Route::group(['middleware' => 'revalidate'], function () {
 	});
 
 	Route::group(['middleware' => ['auth', 'superadmin']], function () {
+        Route::post('/save-onesignal-id', function (Request $request) {
+            try {
+
+                $user = Auth::user();
+                if (empty($user->onesignal_token)) {
+                    $user->onesignal_token = $request->input('playerId');
+                    $user->save();
+                }
+                return response()->json(['error' => false, 'data' => $user->onesignal_token]);
+            } catch (\Throwable $th) {
+                return response()->json(['error' => true, 'data' => $th->getMessage()]);
+            }
+        })->name('superadmin.saveOnesignal');
 		Route::get('/', [HomeController::class, 'index'])->name('superadmin');
 		Route::any('/Users', [UserController::class, 'index'])->name('superadmin.users');
 		Route::get('/user-profile/{id}', [UserController::class, 'profile'])->name('superadmin.user-profile');
