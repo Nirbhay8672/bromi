@@ -258,15 +258,15 @@ class EnquiriesController extends Controller
 									// dd('112');
 									$query
 										->where('budget_from', '<=', $unit_price)  
-										->where('budget_to', '>=', $unit_price); // 5000
+										->where('budget_to', '>=', $unit_price);
 								}
 								
-								if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category !== "260" && $pro->property_category !== "261" && $pro->property_category !== "256") {
+								if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category !== "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category !== "254") {
 									// dd('113');
 									$query
 										->where('budget_from', '<=', $sell_price) 
 										->where('budget_to', '>=', $sell_price); 
-								}else if($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category === "259" && $pro->property_category === "260" && $pro->property_category !== "261" && $pro->property_category !== "256"){
+								}else if($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category === "259" && $pro->property_category === "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category === "256"){
 									// dd('114');
 									$sell_price = str_replace(',', '', $unitDetails[0][3]);
 									$query
@@ -307,11 +307,11 @@ class EnquiriesController extends Controller
 								
 								// dd("area_size_from",$area_size_from,"area_size_to",$area_size_to,"pro->property_category",$pro->property_category,"salable_plot_area",$pro->salable_plot_area);
 
-								if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category !== "259" && $pro->property_category !== "260") {
-									// dd("inn");
+								if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category !== "259" && $pro->property_category !== "260"  && $pro->property_category !== "254") {
+									dd("inn");
 									$query->where('area_from', '<=', $area_size_from)
 										->where('area_to', '>=', $area_size_to);
-								} else if($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category === "259" && $pro->property_category === "260") {
+								} else if($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category === "259" || $pro->property_category === "260" || $pro->property_category == "254") {
 									// dd("outt");
 									$area_from_int = (int) $area_size_from;
                                     $area_to_int = (int) $area_size_to;
@@ -1627,13 +1627,15 @@ class EnquiriesController extends Controller
 		}
 
 		$configurations = array_map('intval', $configurations);
-// dd("configurations",$configurations,$data->property_type);
 		$properties = Properties::where('properties.property_type', $data->requirement_type)
-			->where('properties.property_for', $property_for)
-			->where('properties.property_category', $data->property_type)
-			->where(function ($query) use ($configurations) {
-				foreach ($configurations as $config) {
-					$query->orWhereJsonContains('configuration', $config);
+		->where('properties.property_for', $property_for)
+		->where('properties.property_category', $data->property_type)
+		->where(function ($query) use ($configurations,$data) {
+				// dd($data->property_type);
+				if($data->property_type !== '256'){
+					foreach ($configurations as $config) {
+						$query->orWhereJsonContains('configuration', $config);
+					}
 				}
 			})
 			->where(function ($query) use ($budgetFrom, $budgetTo, $areaFrom, $areaTo, $area_from_to_unit) {

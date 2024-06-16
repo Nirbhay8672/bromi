@@ -225,7 +225,7 @@ class PropertyController extends Controller
                             // });
 
                             $query->where(function ($query) use ($enq) {
-                                if ($enq->property_type !== '259' && $enq->property_type !== '260' ) {
+                                if ($enq->property_type !== '259' && $enq->property_type !== '260' && $enq->property_type !== '254') {
                                     // dd("inn");
                                     $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
                                         ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
@@ -2189,13 +2189,15 @@ class PropertyController extends Controller
             ->when(
                 !empty($area_size),
                 function ($query) use ($area_size, $property,$area_size_int, $area_size_unit) {
-                    if ($property->property_category !== "259") {
+                        // dd("inn",$property->property_category);
+                        if ($property->property_category !== "259" && $property->property_category !== "254") {
                         return $query->where(function ($query) use ($area_size, $area_size_unit) {
                             $query->where('area_from', '<=', $area_size)
                                 ->where('area_to', '>=', $area_size)
                                 ->where('area_from_measurement', $area_size_unit);
                         });
                     } else {
+                        // dd("outt");
                         return $query->where(function ($query) use ($area_size_int, $area_size_unit) {
                             $query->where('area_from', '<=', $area_size_int)
                                 ->where('area_to', '>=', $area_size_int)

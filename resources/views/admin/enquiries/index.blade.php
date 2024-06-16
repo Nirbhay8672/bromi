@@ -1606,17 +1606,15 @@
                         // let redirectUrl = (data.property_type == 261) ? "{{ route('admin.industrial.properties') }}" :
                         //      (data.property_category == 262) ? "{{ route('admin.land.properties') }}" :
                         //      "{{ route('admin.properties') }}";
-                        // alert("data.property_category",data.property_category)
                         let redirectUrl;
                         if (data.property_type == 261) {
                             redirectUrl = "{{ route('admin.industrial.properties') }}";
-                        } else if (data.property_type == 262) {
+                        } else if (data.property_type == 262 || data.property_type == 256) {
                             redirectUrl = "{{ route('admin.land.properties') }}";
                         } else {
                             redirectUrl = "{{ route('admin.properties') }}";
                         }
                         let url = redirectUrl + '?' + queryString + '&enq=' + encryptSimpleString(dataId);
-                        // Redirect to the new URL
                         window.location = url;
                     },
                     error: function(xhr, status, error) {

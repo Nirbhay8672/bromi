@@ -4864,7 +4864,18 @@
                     //
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Farmhouse') {
                     var configuration = 0;
+                }else if ($('input[name=property_category]:checked').attr('data-val') == 'Plot') {
+                    alert("testtt bhrtt ==")
+                    var configuration = 0;
                 }
+
+                $(document).on('change', '[name="property_category"]', function(e) {
+                    if($(this).attr('data-val') == "Plot"){
+                        alert("enter plot ==");
+                        var configuration = 0;
+                    }
+                })
+                console.log("asdad",$('input[name=property_category]:checked').attr('data-val'));
                 var other_name = $("input[id='other_name']")
                     .map(function() {
                         return $(this).val();
