@@ -722,6 +722,16 @@
             });
 
             matching_enquiry_url = "{{ route('admin.enquiries') }}";
+
+            if (window.location.pathname.toLowerCase() === '/admin/Land-Properties' && window.location.search === '') {
+                    $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                        .prop('checked', true);
+                }
+                $('#match_enquiry_all').on('change', function() {
+                    let isChecked = $(this).prop('checked');
+                    $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                        .prop('checked', isChecked);
+                });
             
             $(document).on('click', '#matchagain', function(e) {
                 e.preventDefault();
