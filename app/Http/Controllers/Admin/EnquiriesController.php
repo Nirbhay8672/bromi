@@ -131,6 +131,7 @@ class EnquiriesController extends Controller
 						return $query->where('requirement_type', $request->filter_property_type);
 					})
 					->when($request->filter_specific_type, function ($query) use ($request) {
+						// dd("oooo");
 						$query->where(function ($query) use ($request) {
 							$types = json_decode($request->filter_specific_type);
 							if (isset($types[0])) {
@@ -231,8 +232,12 @@ class EnquiriesController extends Controller
 							}
 
 							if ($request->match_specific_sub_type) {
-								// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration);
-								$query->whereJsonContains('configuration', ($pro->configuration));
+								// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration,$pro->property_category);
+								if($pro->property_category !== '258'){
+									$query->whereJsonContains('configuration', ($pro->configuration));
+								}else if($pro->property_category === '258'){
+									$query->whereJsonContains('configuration', (0));
+								}
 							}
 
 							// Property For = Enquiry for
