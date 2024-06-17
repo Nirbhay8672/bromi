@@ -135,6 +135,7 @@ class EnquiriesController extends Controller
 						return $query->where('requirement_type', $request->filter_property_type);
 					})
 					->when($request->filter_specific_type, function ($query) use ($request) {
+						// dd("oooo");
 						$query->where(function ($query) use ($request) {
 							$types = json_decode($request->filter_specific_type);
 							if (isset($types[0])) {
@@ -235,8 +236,12 @@ class EnquiriesController extends Controller
 							}
 
 							if ($request->match_specific_sub_type) {
-								// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration);
-								$query->whereJsonContains('configuration', ($pro->configuration));
+								// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration,$pro->property_category);
+								if($pro->property_category !== '258'){
+									$query->whereJsonContains('configuration', ($pro->configuration));
+								}else if($pro->property_category === '258'){
+									$query->whereJsonContains('configuration', (0));
+								}
 							}
 
 							// Property For = Enquiry for
@@ -312,7 +317,7 @@ class EnquiriesController extends Controller
 								// dd("area_size_from",$area_size_from,"area_size_to",$area_size_to,"pro->property_category",$pro->property_category,"salable_plot_area",$pro->salable_plot_area);
 
 								if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category !== "259" && $pro->property_category !== "260"  && $pro->property_category !== "254") {
-									dd("inn");
+									// dd("inn");
 									$query->where('area_from', '<=', $area_size_from)
 										->where('area_to', '>=', $area_size_to);
 								} else if($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category === "259" || $pro->property_category === "260" || $pro->property_category == "254") {

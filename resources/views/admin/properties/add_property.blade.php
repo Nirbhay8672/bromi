@@ -18,12 +18,9 @@
                         <div class="card-header pb-0">
                             {{-- <h5 class="mb-3">Add Property</h5> --}}
                             <h5 class="mb-3">Add Property <a class="btn custom-icon-theme-button tooltip-btn"
-                                href="{{ route('admin.properties') }}"
-                                data-tooltip="Back"
-                                style="float: inline-end;"
-                            >
-                                <i class="fa fa-backward"></i>
-                            </a></h5>
+                                    href="{{ route('admin.properties') }}" data-tooltip="Back" style="float: inline-end;">
+                                    <i class="fa fa-backward"></i>
+                                </a></h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -474,7 +471,7 @@
                                                                         for="storagekind3">ind. shed</label>
                                                                 </div>
                                                                 {{-- bharat subcategory 2nd task --}}
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
+                                                                <div class="btn-group bromi-checkbox-btn me-1 the_plotting"
                                                                     role="group"
                                                                     aria-label="Basic radio toggle button group">
                                                                     <input type="radio" class="btn-check"
@@ -868,7 +865,8 @@
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select measure_unit"
+                                                                        <select
+                                                                            class="form-select measure_select measure_unit"
                                                                             id="length_of_plot_measurement">
                                                                             <option value="ft">
                                                                                 ft.
@@ -896,7 +894,8 @@
                                                                 </div>
                                                                 <div class="input-group-append col-md-5 m-b-20">
                                                                     <div class="form-group form_measurement">
-                                                                        <select class="form-select measure_select measure_unit"
+                                                                        <select
+                                                                            class="form-select measure_select measure_unit"
                                                                             id="width_of_plot_measurement">
                                                                             <option value="ft">
                                                                                 ft.
@@ -2786,7 +2785,7 @@
                 function validateFloat(inputSelector, errorSelector, errorMessage, regex = null) {
                     let inputValue = $(inputSelector).val().trim();
                     let isValid = inputValue !== '';
-                    
+
                     if (isValid && regex) {
                         isValid = regex.test(inputValue);
                     }
@@ -2795,7 +2794,7 @@
                     $(errorSelector).toggle(!isValid).text(isValid ? '' : errorMessage);
                     return isValid;
                 }
-                
+
                 //office_type
                 $(document).on('change', 'input[name=office_type]', function() {
                     office_type_val = $(this).attr('data-val');
@@ -2894,7 +2893,7 @@
 
                 function validateForm() {
                     isValid = true;
-                    let numberRegex = /^\d+(\.\d+)?$/; 
+                    let numberRegex = /^\d+(\.\d+)?$/;
                     if (flateConfiguration || plotConf || officeConf || retailConfiguration) {
                         console.log("enter in salable area ==");
                         isValid = validateField('#salable_area', '#salable_area_error',
@@ -2964,7 +2963,7 @@
                     }
                     if (flateConfiguration || officeConf || retailConfiguration) {
                         isValid = validateFloat('#ceiling_height', '#ceiling_height_error',
-                        'ceiling height field is required and must be a number', numberRegex) && isValid;
+                            'ceiling height field is required and must be a number', numberRegex) && isValid;
 
                         // isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
                         //     'total units field is required') && isValid;
@@ -3459,14 +3458,25 @@
                     $('.the_price').hide()
                 }
                 if (theFor2 == 'Storage/industrial' && (theFor == 'Sell' || theFor == 'Both')) {
-                    $('.the_constructed_plot_price').show()
-                    $('.the_price').hide()
+                    $('.the_plotting').show();
+                    $('.the_constructed_plot_price').show();
+                    $('.the_price').hide();
+                } else if (theFor2 == 'Storage/industrial' && (theFor == 'Rent')) {
+                    $('.the_plotting').hide();
                 }
+
                 if (theFor2 == 'Plot' || theFor2 == 'Storage/industrial' || theFor2 == 'Land') {
                     $('.the_furnished_status').hide();
                 }
                 if (theFor2 == 'Plot') {
                     $('.the_furnished_status').hide();
+                }
+                if (theFor2 === 'Land' && (theFor == 'Rent')) {
+                    console.log("landing here ==");
+                    $('.div_plot_type').hide();
+                } else {
+                    console.log("landing not here ==");
+                    $('.div_plot_type').show();
                 }
                 if (theFor2 == 'Vila/Bunglow' || theFor2 == 'Plot' || theFor2 == 'Farmhouse') {
                     $('.the_wing').hide();
@@ -3788,7 +3798,7 @@
                     addAddAreaButtons(['the_carpet_area'], ['Add Carpet Area']);
                 } else if (category_type == 'Storage/industrial') {
                     showfields = ['div_storage_type', 'div_flat_details_2', 'div_area_size_details',
-                        'the_salable_plot_area','div_flat_details', 'div_flat_details_5', 'div_flat_details_4',
+                        'the_salable_plot_area', 'div_flat_details', 'div_flat_details_5', 'div_flat_details_4',
                         'div_property_source', 'div_checkboxes1', 'div_flat_details_7',
                         'div_flat_details_8', 'div_other_details',
                         'div_availability_status', 'the_total_units_in_project',
@@ -3806,7 +3816,8 @@
                         // 'div_care_taker','div_flat_details_5','div_flat_details_7'
                         'div_property_source', 'div_checkboxes1', 'div_construction_allowed_for', 'div_tp_details',
                         'div_flat_details_8', 'div_plot_ind_common', 'div_document_section', 'div_survey_details',
-                        'div_road_width', 'div_construction_docs_allowed_for', 'div_extra_land_details','location_link_cls'
+                        'div_road_width', 'div_construction_docs_allowed_for', 'div_extra_land_details',
+                        'location_link_cls'
                     ];
                 }
                 for (let i = 0; i < showfields.length; i++) {
@@ -3854,6 +3865,14 @@
                 } else {
                     $('.property-type-element[data-property-id="256"]').hide();
                 }
+                if (theFor === 'Rent' && parent_val == '85') {
+                    console.log("rent land ==");
+                    $('.property-type-element[data-property-id="262"]').hide();
+                } else if ((theFor === 'Sell' || theFor === 'Both') && parent_val == '85') {
+                    console.log("not rent land ==");
+                    $('.property-type-element[data-property-id="262"]').show();
+                }
+
             }
 
             $(document).on('change', '#project_id', function(e) {
@@ -4320,7 +4339,7 @@
 
             function getProperty() {
                 var id = '{{ isset($current_id) ? $current_id : 'null' }}';
-                console.log("idddd",id);
+                console.log("idddd", id);
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.getProperty') }}",
@@ -4582,7 +4601,8 @@
                                     $("[data-contact_id=" + id + "] input[name=other_name]").val(details[i][0]);
                                     $("[data-contact_id=" + id + "] input[name=other_contact]").val(details[i][1]);
                                     $("[data-contact_id=" + id + "] input[name=position]").val(details[i][2]);
-                                    $("[data-contact_id=" + id + "] select[name=other_contact_country_code]").val(details[i][3]);
+                                    $("[data-contact_id=" + id + "] select[name=other_contact_country_code]").val(
+                                        details[i][3]);
 
                                 }
                             } else {
@@ -4695,7 +4715,8 @@
                     name = $(this).val();
                     otherName = $("[data-contact_id=" + unique_id + "] input[name=other_name]").val();
                     otherContact = $("[data-contact_id=" + unique_id + "] input[name=other_contact]").val();
-                    otherContactCode = $("[data-contact_id=" + unique_id + "] select[name=other_contact_country_code]").val();
+                    otherContactCode = $("[data-contact_id=" + unique_id +
+                        "] select[name=other_contact_country_code]").val();
                     position = $("[data-contact_id=" + unique_id + "] input[name=position]").val();
                     // if (otherName.trim() === "") {
                     //     $("#other_name_error_" + unique_id).text("other name field is required").show();
@@ -4864,18 +4885,7 @@
                     //
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Farmhouse') {
                     var configuration = 0;
-                }else if ($('input[name=property_category]:checked').attr('data-val') == 'Plot') {
-                    alert("testtt bhrtt ==")
-                    var configuration = 0;
                 }
-
-                $(document).on('change', '[name="property_category"]', function(e) {
-                    if($(this).attr('data-val') == "Plot"){
-                        alert("enter plot ==");
-                        var configuration = 0;
-                    }
-                })
-                console.log("asdad",$('input[name=property_category]:checked').attr('data-val'));
                 var other_name = $("input[id='other_name']")
                     .map(function() {
                         return $(this).val();
