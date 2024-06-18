@@ -821,6 +821,29 @@
                                                             <div class="invalid-feedback" id="budget_to_error"
                                                                 style="display: block;color:red;"></div>
                                                         </div>
+
+                                                        <div class="form-group col-md-2 m-b-20 both-price">
+                                                            <div>
+                                                                <label for="Rent Price">Rent Price</label>
+                                                                <input class="form-control indian_currency_amount"
+                                                                    name="rent_price" value="" id="rent_price"
+                                                                    type="text" autocomplete="off">
+                                                            </div>
+                                                            {{-- <div class="invalid-feedback" id="budget_from_error"
+                                                                style="display: block;color:red;"></div> --}}
+                                                        </div>
+
+                                                        <div class="form-group col-md-2 m-b-20 both-price">
+                                                            <div>
+                                                                <label for="Sell Price">Sell Price</label>
+                                                                <input class="form-control indian_currency_amount"
+                                                                    name="sell_price" id="sell_price" type="text"
+                                                                    autocomplete="off">
+                                                            </div>
+                                                            {{-- <div class="invalid-feedback" id="budget_to_error"
+                                                                style="display: block;color:red;"></div> --}}
+                                                        </div>
+
                                                         <div class="form-group col-md-2 m-b-20 mb-3">
                                                             <div>
                                                                 <select class="form-select" id="purpose">
@@ -1704,7 +1727,7 @@
                         }
                         // edit enquiry
                         data = JSON.parse(data_obj);
-
+                        console.log("data.enquiry_for ==",data.enquiry_for);
                         // Requirement Type
                         if (data.requirement_type != null) {
                             $('input[name=property_type][value=' + data.requirement_type + ']').prop('checked',
@@ -1745,6 +1768,8 @@
                         $('#furnished_status').val(JSON.parse(data.furnished_status)).trigger('change');
                         $('#budget_from').val(data.budget_from);
                         $('#budget_to').val(data.budget_to);
+                        $('#rent_price').val(data.rent_price);
+                        $('#sell_price').val(data.sell_price);
                         $('#purpose').val(data.purpose).trigger('change');;
                         $('#building_id').val(JSON.parse(data.building_id)).trigger('change');
                         $('#enquiry_status').val(data.enquiry_status).trigger('change');
@@ -2389,6 +2414,8 @@
                         budget_from: $('#budget_from').val(),
                         // res_more: $('#txt5moreFlate').val() !== "" ? $('#txt5moreFlate').val() : $('#txt5moreVilla').val(),
                         budget_to: $('#budget_to').val(),
+                        rent_price: $('#rent_price').val(),
+                        sell_price: $('#sell_price').val(),
                         purpose: $('#purpose').val(),
                         building_id: JSON.stringify($('#building_id').val()),
                         enquiry_status: $('#enquiry_status').val(),
@@ -2499,6 +2526,7 @@
 
                 //Hide Land while click on rent or both 
                 var theFor = $('input[name=enquiry_for]:checked').val();
+                console.log("theFor ==",theFor);
 
                 if (theFor == 'Buy' && parent_val == '87') {
                     $('.enquiry-type-element[data-enquiry-id="256"]').show();
@@ -2520,7 +2548,13 @@
             })
             $(document).on('change', '.btn-check', function() {
                 var attr_name = this.id;
-
+                console.log("attr_name ==", attr_name);
+                if (attr_name == "propertyfor3") {
+                    console.log("Both Type :");
+                    $(".both-price").show();
+                }else{
+                    $(".both-price").hide();
+                }
                 const newCategories = ['plotkind2'];
                 if (newCategories.includes(attr_name)) {
                     $(".div_land_plot").show();
@@ -2544,7 +2578,8 @@
                 if (attr_name == "storagekind4") {
                     $(".f-status").hide();
                 }
-                //
+                
+               
             });
         </script>
     @endpush

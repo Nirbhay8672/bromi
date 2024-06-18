@@ -3471,13 +3471,13 @@
                 if (theFor2 == 'Plot') {
                     $('.the_furnished_status').hide();
                 }
-                if (theFor2 === 'Land' && (theFor == 'Rent')) {
-                    console.log("landing here ==");
-                    $('.div_plot_type').hide();
-                } else {
-                    console.log("landing not here ==");
-                    $('.div_plot_type').show();
-                }
+                // if (theFor2 === 'Land' && (theFor == 'Rent')) {
+                //     console.log("landing here ==");
+                //     $('.div_plot_type').hide();
+                // } else {
+                //     console.log("landing not here ==");
+                //     $('.div_plot_type').show();
+                // }
                 if (theFor2 == 'Vila/Bunglow' || theFor2 == 'Plot' || theFor2 == 'Farmhouse') {
                     $('.the_wing').hide();
                 }
