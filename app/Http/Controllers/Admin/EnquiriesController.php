@@ -1314,6 +1314,8 @@ class EnquiriesController extends Controller
 		$data->furnished_status = $request->furnished_status;
 		$data->budget_from = $request->budget_from;
 		$data->budget_to = $request->budget_to;
+		$data->rent_price = $request->rent_price;
+		$data->sell_price = $request->sell_price;
 		$data->purpose = $request->purpose;
 		$data->building_id = $request->building_id;
 		$data->enquiry_status = $request->enquiry_status;
