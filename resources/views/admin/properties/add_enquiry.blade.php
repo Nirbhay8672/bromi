@@ -800,7 +800,7 @@
                                                                 style="display: block;color:red;"></div>
                                                         </div>
 
-                                                        <div class="form-group col-md-2 m-b-20">
+                                                        <div class="form-group col-md-2 m-b-20 enq_budget">
                                                             <div>
                                                                 <label for="Budget From">Budget From</label>
                                                                 <input class="form-control indian_currency_amount"
@@ -811,7 +811,7 @@
                                                                 style="display: block;color:red;"></div>
                                                         </div>
 
-                                                        <div class="form-group col-md-2 m-b-20">
+                                                        <div class="form-group col-md-2 m-b-20 enq_budget">
                                                             <div>
                                                                 <label for="Budget To">Budget To</label>
                                                                 <input class="form-control indian_currency_amount"
@@ -1080,7 +1080,7 @@
             function validateOtherMobileNumber(field, errorField, invalidErrorMessage) {
                 var value = $(field).val().trim();
                 var isValidMobileNumber = /^\d{10}$/.test(value);
-                console.log("isValidMobileNumber =",isValidMobileNumber);
+                console.log("isValidMobileNumber =", isValidMobileNumber);
 
                 if (!isValidMobileNumber && value !== '') {
                     console.log("entered ==");
@@ -1727,7 +1727,8 @@
                         }
                         // edit enquiry
                         data = JSON.parse(data_obj);
-                        console.log("data.enquiry_for ==",data.enquiry_for);
+                        console.log("data.enquiry_for ==", data.enquiry_for);
+
                         // Requirement Type
                         if (data.requirement_type != null) {
                             $('input[name=property_type][value=' + data.requirement_type + ']').prop('checked',
@@ -1748,15 +1749,20 @@
 
                         if (data.enquiry_for == 'Rent') {
                             document.getElementById('propertyfor1').checked = true;
+                            $(".both-price").hide();
+                            $('.enq_budget').show();
                         }
 
                         if (data.enquiry_for == 'Buy') {
                             document.getElementById('propertyfor2').checked = true;
+                            $(".both-price").hide();
+                            $('.enq_budget').show();
                         }
-
 
                         if (data.enquiry_for == 'Both') {
                             document.getElementById('propertyfor3').checked = true;
+                            $(".both-price").show();
+                            $('.enq_budget').hide();
                         }
 
                         $('#area_from').val(data.area_from);
@@ -2206,7 +2212,8 @@
                     '               <label for="Mobile">Mobile</label>' +
                     '               <input class="form-control" name="contact_person_no" style="border-right:2px solid #1d2848 !important; border-top-right-radius: 5px;border-bottom-right-radius: 5px" id="contact_person_no" type="text" autocomplete="off">' +
                     '           </div>' +
-                    '           <div class="invalid-feedback" id="contact_person_no_error' + id + '" style="display: block;color:red;"></div>' +
+                    '           <div class="invalid-feedback" id="contact_person_no_error' + id +
+                    '" style="display: block;color:red;"></div>' +
                     '       </div>' +
                     '   </div>' +
                     '</div>' +
@@ -2324,7 +2331,7 @@
                     contact_code = $("[data-contact_id=" + unique_id + "] select[name=contact_country_code]")
                         .val();
                     nri = $("[data-contact_id=" + unique_id + "] input[name=contact_nri]").prop('checked')
-                   
+
                     // let isContactNumberValid = validateMobileNumber("[data-contact_id=" + unique_id + "] input[name=contact_person_no]", "#contact_person_no_error" + unique_id, "Number field is required", "Invalid mobile number format");
                     // isValid = isContactNumberValid && isValid;
                     if (no) {
@@ -2513,6 +2520,11 @@
 
             }
 
+            $(document).on('change', '[name="enquiry_for"]', function(e) {
+                resetallfields();
+                showReleventCategory();
+            });
+
             function showReleventCategory(params) {
                 var parent_val = $('input[name=property_type]:checked').val();
 
@@ -2526,12 +2538,25 @@
 
                 //Hide Land while click on rent or both 
                 var theFor = $('input[name=enquiry_for]:checked').val();
-                console.log("theFor ==",theFor);
 
                 if (theFor == 'Buy' && parent_val == '87') {
                     $('.enquiry-type-element[data-enquiry-id="256"]').show();
                 } else {
                     $('.enquiry-type-element[data-enquiry-id="256"]').hide();
+                }
+
+                if (theFor == 'Rent') {
+                    $('.enquiry-type-element[data-enquiry-id="262"]').hide();
+                } else if (parent_val == '85') {
+                    $('.enquiry-type-element[data-enquiry-id="262"]').show();
+                }
+
+                if (theFor == 'Both') {
+                    $(".both-price").show();
+                    $('.enq_budget').hide();
+                } else {
+                    $(".both-price").hide();
+                    $('.enq_budget').show();
                 }
             }
             $(document).on('click', '.previousBtn1', function() {
@@ -2548,13 +2573,7 @@
             })
             $(document).on('change', '.btn-check', function() {
                 var attr_name = this.id;
-                console.log("attr_name ==", attr_name);
-                if (attr_name == "propertyfor3") {
-                    console.log("Both Type :");
-                    $(".both-price").show();
-                }else{
-                    $(".both-price").hide();
-                }
+
                 const newCategories = ['plotkind2'];
                 if (newCategories.includes(attr_name)) {
                     $(".div_land_plot").show();
@@ -2578,8 +2597,8 @@
                 if (attr_name == "storagekind4") {
                     $(".f-status").hide();
                 }
-                
-               
+
+
             });
         </script>
     @endpush
