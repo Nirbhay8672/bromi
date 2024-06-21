@@ -256,14 +256,31 @@ class EnquiriesController extends Controller
 								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $survey_price,"unit", $unit_price,"sell_price",$sell_price,"pro",$unitDetails[0][7],$pro->property_category);
 								if ($survey_price !== '' && $survey_price !== null && $survey_price !== 0) {
 									// dd('11');
-									$query
-										->where('budget_from', '<=', $survey_price)
-										->where('budget_to', '>=', $survey_price);
+									// $query
+									// 	->where('budget_from', '<=', $survey_price)
+									// 	->where('budget_to', '>=', $survey_price);
+										$query->where(function($q) use ($survey_price) {
+											$q->where('budget_from', '<=', $survey_price)
+											  ->where('budget_to', '>=', $survey_price);
+										})->orWhere(function($q) use ($survey_price) {
+											$q->where('rent_price', '<=', $survey_price)
+											  ->where('sell_price', '>=', $survey_price);
+										});
 								} else if ($unit_price !== '' && $unit_price !== null && $unit_price !== 0) {
 									// dd('112');
-									$query
-										->where('budget_from', '<=', $unit_price)  
-										->where('budget_to', '>=', $unit_price);
+									// $query
+									// 	->where('budget_from', '<=', $unit_price)  
+									// 	->where('budget_to', '>=', $unit_price);
+
+										$query->where(function($q) use ($unit_price) {
+											// dd("1231");
+											$q->where('budget_from', '<=', $unit_price)
+											  ->where('budget_to', '>=', $unit_price);
+										})->orWhere(function($q) use ($unitDetails) {
+											// dd("inn",$unitDetails[0][4],$unitDetails[0][3]);
+											$q->where('rent_price', '=', $unitDetails[0][4])
+											  ->where('sell_price', '=', $unitDetails[0][3]);
+										});
 								}
 								
 								if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category !== "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category !== "254") {
@@ -348,11 +365,6 @@ class EnquiriesController extends Controller
 								}
 							}
 
-							// prop building id == enq build id
-							// if ($request->match_building) {
-							// 	dd("building_id:", $request->match_building);
-							// 	return $query->where('building_id', 'like', '%"' . $pro->project_id . '"%');
-							// }
 						}
 					})
 					->orderByRaw('CASE
@@ -601,9 +613,14 @@ class EnquiriesController extends Controller
 					$bud = '';
 					$row->budget_from = trim($row->budget_from);
 					$row->budget_to = trim($row->budget_to);
-					if (!empty($row->budget_from) || !empty($row->budget_to)) {
+					// dd("row->enquiry_for",$row->enquiry_for);
+					if ((!empty($row->budget_from) || !empty($row->budget_to)) && $row->enquiry_for !== 'Both') {
 						$bud = '<td style="vertical-align:top">
 					' . ((!empty($row->budget_from)) ? $row->budget_from . " to " : " upto ")  . $row->budget_to . '
+					</td>';
+					}else{
+						$bud = '<td style="vertical-align:top">
+					' . ((!empty($row->rent_price)) ?"R: ". $row->rent_price . " to S:" : " ")  . $row->sell_price . '
 					</td>';
 					}
 					return $bud;

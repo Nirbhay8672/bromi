@@ -575,8 +575,10 @@
                                                             class="row col-md-7 div_flat_details_7 mb-3 location_link_cls">
                                                             <div class="form-group col-md-9">
                                                                 <label for="Link">Location Link</label>
-                                                                <input class="form-control" name="property_link"
-                                                                    id="property_link" type="text" autocomplete="off">
+                                                                <input class="form-control"
+                                                                    style="text-transform: lowercase !important;"
+                                                                    name="property_link" id="property_link"
+                                                                    type="text" autocomplete="off">
                                                             </div>
                                                             <div class="invalid-feedback" id="property_link_error"
                                                                 style="display: none;color:red;"></div>
@@ -3848,6 +3850,14 @@
             }
             setIndividualfields();
 
+
+            var theFor = $('input[name=property_for]:checked').val(); // Initial value
+
+            $(document).on('change', '[name="property_for"]', function() {
+                theFor = $(this).val();
+                showReleventCategory();
+            });
+
             function showReleventCategory(params) {
                 var parent_val = $('input[name=property_type]:checked').val();
 
@@ -3858,18 +3868,16 @@
                         $(this).parent().hide();
                     }
                 });
-                //Hide Land while click on rent or both 
-                var theFor = $('input[name=property_for]:checked').val();
+
                 if (theFor == 'Sell' && parent_val == '87') {
                     $('.property-type-element[data-property-id="256"]').show();
                 } else {
                     $('.property-type-element[data-property-id="256"]').hide();
                 }
+
                 if (theFor === 'Rent' && parent_val == '85') {
-                    console.log("rent land ==");
                     $('.property-type-element[data-property-id="262"]').hide();
                 } else if ((theFor === 'Sell' || theFor === 'Both') && parent_val == '85') {
-                    console.log("not rent land ==");
                     $('.property-type-element[data-property-id="262"]').show();
                 }
 
