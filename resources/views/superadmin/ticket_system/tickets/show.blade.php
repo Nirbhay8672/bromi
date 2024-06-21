@@ -26,7 +26,7 @@
                                 <div class="col-md-6 col-md-offset-1">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            #{{ $ticket->ticket_id }} - {{ $ticket->title }}
+                                            {{ $ticket->title }}
                                         </div>
                         
                                         <div class="panel-body">
@@ -52,9 +52,9 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    @include('admin.ticket_system.tickets.comments')
+                                    @include('superadmin.ticket_system.tickets.comments')
                                     <hr>
-                                    @include('admin.ticket_system.tickets.reply')
+                                    @include('superadmin.ticket_system.tickets.reply')
                                 </div>
                             </div>
                         </div>

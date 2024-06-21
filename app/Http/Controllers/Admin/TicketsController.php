@@ -56,20 +56,23 @@ class TicketsController extends Controller
             'priority' => 'required',
             'message' => 'required'
         ]);
+
+        $file = $request->file('attachment');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/ticket_attachment'), $filename);
+
         $ticket = new Ticket([
             'title' => $request->input('title'),
             'user_id' => Auth::user()->id,
-            'ticket_id' => Str::random(10),//strtoupper(str_random(10)),
+            'ticket_id' => Str::random(10),
             'category_id' => $request->input('category'),
             'priority' => $request->input('priority'),
+            'attachment_file_path' => '/uploads/ticket_attachment/' . $filename,
             'message' => $request->input('message'),
             'status' => "Open"
         ]);
 
         $ticket->save();
-        // $mailer=new AppMailer();
-        // $user=Auth::user();
-        // $mailer->sendTicketInformation($user, $ticket);
 
         return redirect('admin/index')->with("status", "A ticket with ID: #$ticket->ticket_id has been opened.");
     }

@@ -10,6 +10,7 @@ use App\Mail\InvoiceEmail;
 use App\Mail\SendOtpMail;
 use App\Models\Api\Properties as ApiProperties;
 use App\Models\Areas;
+use App\Models\AssignHistory;
 use App\Models\Branches;
 use App\Models\Builders;
 use App\Models\City;
@@ -23,6 +24,7 @@ use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Projects;
 use App\Models\Properties;
+use App\Models\ShareProperty;
 use App\Models\State;
 use App\Models\Subplans;
 use App\Models\SuperCity;
@@ -109,8 +111,20 @@ class HomeController extends Controller
 					$query->where('progress', '=', 'Booked');
 				})->where('user_id', Auth::user()->id)->count();
 
-				$total_property = Properties::select('id')->where('user_id', Auth::user()->id);
-				$total_enquiry = Enquiries::select('id')->where('user_id', Auth::user()->id);
+				$assign_property_id = ShareProperty::where('partner_id', Auth::user()->id)->get()->pluck('property_id');
+				$total_property = Properties::select('id','user_id')
+					->where('user_id', Auth::user()->id)
+					->orWhere(function ($query) use ($assign_property_id) {
+						$query->whereIn('id', $assign_property_id);
+					});
+		
+				$assign_leads_ids = AssignHistory::where('assign_id',Auth::user()->id)->get()->pluck('enquiry_id');
+				$total_enquiry = Enquiries::select('id')
+					->where('user_id', Auth::user()->id)
+					->orWhere(function ($query) use ($assign_leads_ids) {
+						$query->whereIn('id', $assign_leads_ids);
+					});
+					
 				$total_project = Projects::select('id')->where('user_id', Auth::user()->id);
 
 				$total_active_leads = Enquiries::select('id')->whereHas('Progress', function($q){
@@ -1172,8 +1186,22 @@ class HomeController extends Controller
 		$cities = City::orderBy('name')->get()->toArray();
 		$states = State::orderBy('name')->get()->toArray();
 
-		$total_property = Properties::select('id')->where('user_id', Auth::user()->id)->count();
-		$total_enquiry = Enquiries::select('id')->where('user_id', Auth::user()->id)->count();
+		$assign_property_id = ShareProperty::where('partner_id', Auth::user()->id)->get()->pluck('property_id');
+		$total_property = Properties::select('id','user_id')
+			->where('user_id', Auth::user()->id)
+			->orWhere(function ($query) use ($assign_property_id) {
+				$query->whereIn('id', $assign_property_id);
+			})
+			->count();
+
+		$assign_leads_ids = AssignHistory::where('assign_id',Auth::user()->id)->get()->pluck('enquiry_id');
+		$total_enquiry = Enquiries::select('id')
+			->where('user_id', Auth::user()->id)
+			->orWhere(function ($query) use ($assign_leads_ids) {
+				$query->whereIn('id', $assign_leads_ids);
+			})
+			->count();
+
 		$total_project = Projects::select('id')->where('user_id', Auth::user()->id)->count();
 
 		$transactions = DB::table('payments')
