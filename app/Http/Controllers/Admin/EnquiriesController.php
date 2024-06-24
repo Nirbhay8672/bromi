@@ -243,6 +243,7 @@ class EnquiriesController extends Controller
 							// Property For = Enquiry for
 							if ($request->match_enquiry_for) {
 								$enquiry_for = ($pro->property_for == 'Sell') ? 'Buy' : $pro->property_for;
+								// dd("enquiry_for",$enquiry_for);
 								$query->where('enquiry_for', $enquiry_for);
 							}
 
