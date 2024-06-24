@@ -186,13 +186,14 @@ class PropertyController extends Controller
                         //property price & unit_price
                         if ($request->match_budget_from_type) {
                             // dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
-                                $budgetFrom = str_replace(',', '', $enq->budget_from);
-                                $budgetTo = str_replace(',', '', $enq->budget_to);
-                                $rentPrice = str_replace(',', '', $enq->rent_price);
-                                $rentIntPrice = (int) str_replace(',', '', $enq->rent_price);
-                                $sellPrice = str_replace(',', '', $enq->sell_price);
-                                $sellIntPrice = (int) str_replace(',', '', $enq->sell_price);
+                            $budgetFrom = str_replace(',', '', $enq->budget_from);
+                            $budgetTo = str_replace(',', '', $enq->budget_to);
+                            $rentPrice = str_replace(',', '', $enq->rent_price);
+                            $rentIntPrice = (int) str_replace(',', '', $enq->rent_price);
+                            $sellPrice = str_replace(',', '', $enq->sell_price);
+                            $sellIntPrice = (int) str_replace(',', '', $enq->sell_price);
                             if ($budgetFrom !== "" && $budgetTo !== "" && $enq->enquiry_for !== "Both") {
+                                // dd("inn");
                                 $query->where(function ($query) use ($budgetFrom, $budgetTo) {
                                     $query->where(function ($query) use ($budgetFrom, $budgetTo) {
                                         $query->where('properties.survey_price', '>=', $budgetFrom)
@@ -210,7 +211,7 @@ class PropertyController extends Controller
                                 });
                             } else {
                                 // dd("oo",$rentPrice, $sellPrice);
-                                $query->where(function ($query) use ($rentPrice, $sellPrice,$sellIntPrice,$rentIntPrice) {
+                                $query->where(function ($query) use ($rentPrice, $sellPrice, $sellIntPrice, $rentIntPrice) {
                                     $query->where(function ($query) use ($rentPrice, $sellPrice) {
                                         $query->where('properties.survey_price', '>=', $rentPrice)
                                             ->where('properties.survey_price', '<=', $sellPrice);
@@ -2167,21 +2168,95 @@ class PropertyController extends Controller
         $constructed_area_parts = explode("_-||-_", $property->constructed_salable_area);
         $constructed_area = str_replace(',', '', $constructed_area_parts[0]);
         $salable_plot_area_part = explode("_-||-_", $property->salable_plot_area);
-        $constructed_area = str_replace(',', '', $salable_plot_area_part[0]);
+        $salable_plot_area = str_replace(',', '', $salable_plot_area_part[0]);
+        $length_of_plot_part = explode("_-||-_", $property->length_of_plot);
+        $length_of_plot = str_replace(',', '', $length_of_plot_part[0]);
 
         $constructed_area_unit = "";
         $area_size_unit = "";
-        $salable_plot_area = "";
+        $length_of_plot_unit = "";
         $salable_plot_area_unit = "";
+        $length_of_plot_part_unit = "";
         if ($constructed_area !== "") {
             $constructed_area_unit = str_replace(',', '', $constructed_area_parts[1]);
         } else if ($area_size !== "") {
             $area_size_unit = str_replace(',', '', $area_parts[1]);
         } else if ($salable_plot_area_part !== "") {
             $salable_plot_area_unit = str_replace(',', '', $salable_plot_area_part[1]);
+        } else if ($length_of_plot_part !== "") {
+            $length_of_plot_part_unit = $length_of_plot_part[1];
         }
-        // dd("constructed_area",$constructed_area,"22",$area_size,"33",$salable_plot_area);
+        // dd("constructed_area",$constructed_area,"22",$area_size,"33",$salable_plot_area,$length_of_plot,"part length",$length_of_plot_part);
         // matching
+        // $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
+        //     ->where('requirement_type', $property->property_type)
+        //     ->where('property_type', $property->property_category)
+        //     ->whereJsonContains('configuration', $property->configuration)
+        //     ->when($raw_unit_price !== "", function ($query) use ($raw_unit_price) {
+        //         return $query->where('budget_from', '<=', $raw_unit_price)
+        //             ->where('budget_to', '>=', $raw_unit_price);
+        //     }, function ($query) use ($property) {
+        //         return $query->where('budget_from', '<=', $property->survey_price)
+        //             ->where('budget_to', '>=', $property->survey_price);
+        //     })
+        //     ->when(
+        //         function ($query) use ($area_size, $property, $area_size_int, $area_size_unit) {
+        //             dd("inn",$property->property_category);
+        //             if ($property->property_category !== "259" && $property->property_category !== "254") {
+        //                 return $query->where(function ($query) use ($area_size, $area_size_unit) {
+        //                     $query->where('area_from', '<=', $area_size)
+        //                         ->where('area_to', '>=', $area_size)
+        //                         ->where('area_from_measurement', $area_size_unit);
+        //                 });
+        //             } else {
+        //                 dd("outt");
+        //                 return $query->where(function ($query) use ($area_size_int, $area_size_unit) {
+        //                     $query->where('area_from', '<=', $area_size_int)
+        //                         ->where('area_to', '>=', $area_size_int)
+        //                         ->where('area_from_measurement', $area_size_unit);
+        //                 });
+        //             }
+        //         },
+        //         function ($query) use ($constructed_area, $constructed_area_unit) {
+        //             // dd("111",$constructed_area,$constructed_area_unit);
+        //             return $query->where(function ($query) use ($constructed_area, $constructed_area_unit) {
+        //                 $query->where('area_from', '<=', $constructed_area)
+        //                     ->where('area_to', '>=', $constructed_area)
+        //                     ->where('area_from_measurement', $constructed_area_unit);
+        //             });
+        //         },
+        //         function ($query) use ($salable_plot_area, $salable_plot_area_unit) {
+        //             dd("salable_plot_area",$salable_plot_area);
+        //             return $query->where(function ($query) use ($salable_plot_area, $salable_plot_area_unit) {
+        //                 $query->where('area_from', '<=', $salable_plot_area)
+        //                     ->where('area_to', '>=', $salable_plot_area)
+        //                     ->where('area_from_measurement', $salable_plot_area_unit);
+        //             });
+        //         }, 
+        //         function ($query) use ($length_of_plot, $length_of_plot_part) {
+        //             dd("length_of_plot",$length_of_plot,"length_of_plot_part[1]",$length_of_plot_part[1]);
+        //             return $query->where(function ($query) use ($length_of_plot, $length_of_plot_part) {
+        //                 $query->where('area_from', '<=', $length_of_plot)
+        //                     ->where('area_to', '>=', $length_of_plot)
+        //                     ->where('area_from_measurement', $length_of_plot_part[1]);
+        //             });
+        //         }
+        //     )
+        //     ->get();
+        // dd("Auasdth", Auth::user()->id, $property->configuration, $enquiries);
+
+        // Initial debug dump to see the values before conditions
+        // dd("Initial values",
+        // "constructed_area" , $constructed_area,
+        // "constructed_area_unit" , $constructed_area_unit,
+        // "area_size" , $area_size,
+        // "area_size_unit" , $area_size_unit,
+        // "salable_plot_area" , $salable_plot_area,
+        // "salable_plot_area_unit" , $salable_plot_area_unit,
+        // "length_of_plot" , $length_of_plot,
+        // "length_of_plot_unit" , $length_of_plot_unit
+        // );
+
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
@@ -2193,43 +2268,58 @@ class PropertyController extends Controller
                 return $query->where('budget_from', '<=', $property->survey_price)
                     ->where('budget_to', '>=', $property->survey_price);
             })
-            ->when(
-                !empty($area_size),
-                function ($query) use ($area_size, $property, $area_size_int, $area_size_unit) {
-                    // dd("inn",$property->property_category);
-                    if ($property->property_category !== "259" && $property->property_category !== "254") {
-                        return $query->where(function ($query) use ($area_size, $area_size_unit) {
-                            $query->where('area_from', '<=', $area_size)
-                                ->where('area_to', '>=', $area_size)
-                                ->where('area_from_measurement', $area_size_unit);
-                        });
-                    } else {
-                        // dd("outt");
-                        return $query->where(function ($query) use ($area_size_int, $area_size_unit) {
-                            $query->where('area_from', '<=', $area_size_int)
-                                ->where('area_to', '>=', $area_size_int)
-                                ->where('area_from_measurement', $area_size_unit);
-                        });
-                    }
-                },
-                function ($query) use ($constructed_area, $constructed_area_unit) {
-                    return $query->where(function ($query) use ($constructed_area, $constructed_area_unit) {
-                        $query->where('area_from', '<=', $constructed_area)
-                            ->where('area_to', '>=', $constructed_area)
-                            ->where('area_from_measurement', $constructed_area_unit);
-                    });
-                },
-                function ($query) use ($salable_plot_area, $salable_plot_area_unit) {
-                    // dd("salable_plot_area",$salable_plot_area);
-                    return $query->where(function ($query) use ($salable_plot_area, $salable_plot_area_unit) {
-                        $query->where('area_from', '<=', $salable_plot_area)
-                            ->where('area_to', '>=', $salable_plot_area)
-                            ->where('area_from_measurement', $salable_plot_area_unit);
-                    });
+            ->when($constructed_area !== "", function ($query) use ($constructed_area, $constructed_area_unit) {
+                // Debug statement for constructed_area
+                // dd("constructed_area condition",
+                //     "constructed_area" , $constructed_area,
+                //     "constructed_area_unit" , $constructed_area_unit
+                // );
+                return $query->where('area_from', '<=', $constructed_area)
+                    ->where('area_to', '>=', $constructed_area)
+                    ->where('area_from_measurement', $constructed_area_unit);
+            })
+            ->when($area_size !== "", function ($query) use ($area_size, $area_size_int, $area_size_unit, $property) {
+                // Debug statement for area_size
+                // dd("area_size condition",
+                //     "area_size" , $area_size,
+                //     "area_size_int" , $area_size_int,
+                //     "area_size_unit" , $area_size_unit,
+                //     "property_category" , $property->property_category
+                // );
+                if ($property->property_category !== "259" && $property->property_category !== "254") {
+                    return $query->where('area_from', '<=', $area_size)
+                        ->where('area_to', '>=', $area_size)
+                        ->where('area_from_measurement', $area_size_unit);
+                } else {
+                    return $query->where('area_from', '<=', $area_size_int)
+                        ->where('area_to', '>=', $area_size_int)
+                        ->where('area_from_measurement', $area_size_unit);
                 }
-            )
+            })
+            ->when($salable_plot_area !== "", function ($query) use ($salable_plot_area, $salable_plot_area_unit) {
+                // Debug statement for salable_plot_area
+                // dd("salable_plot_area condition",
+                //     "salable_plot_area" , $salable_plot_area,
+                //     "salable_plot_area_unit" , $salable_plot_area_unit
+                // );
+                return $query->where('area_from', '<=', $salable_plot_area)
+                    ->where('area_to', '>=', $salable_plot_area)
+                    ->where('area_from_measurement', $salable_plot_area_unit);
+            })
+            ->when($length_of_plot !== "", function ($query) use ($length_of_plot, $length_of_plot_part) {
+                // Debug statement for length_of_plot
+                // dd("length_of_plot condition",
+                //     "length_of_plot" , $length_of_plot,
+                //     "length_of_plot_part_unit" , $length_of_plot_part[1]
+                // );
+                return $query->where('area_from', '<=', $length_of_plot)
+                    ->where('area_to', '>=', $length_of_plot);
+                //  ->where('area_from_measurement', $length_of_plot_part[1]);
+            })
             ->get();
-        // dd("Auasdth", Auth::user()->id, $property->configuration, $enquiries);
+
+        // dd("Final results", Auth::user()->id, $property->configuration, $enquiries);
+
         $prop_type = [];
         foreach ($dropdowns as $key => $value) {
             if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
