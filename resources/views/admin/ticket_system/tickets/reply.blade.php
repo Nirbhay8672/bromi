@@ -11,7 +11,7 @@
                             $url=url('superadmin/comment');}
                             
             @endphp
-                <form action="{{ url('superadmin/comment')}}" method="POST" class="form">
+                <form action="{{ url('admin/comment')}}" method="POST" class="form">
                     {!! csrf_field() !!}
 
                     <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">

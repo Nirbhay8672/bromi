@@ -18,7 +18,7 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header pb-0">
-                        <h5 class="mb-3">Query</h5>
+                        <h5 class="mb-3">Tickets</h5>
                     </div>
                     <div class="card-body">
                     <div class="table-responsive">
@@ -29,19 +29,22 @@
                                         <th>Category</th>
                                         <th>Title</th>
                                         <th>Status</th>
+                                        <th>Username</th>
+                                        <th>City</th>
+                                        <th>Attachment</th>
                                         <th>Last Updated</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 @foreach ($tickets as $ticket)
-                                    <tr>
+                                    <tr style="text-transform: capitalize !important;">
                                        <td>
                                            {{ $ticket->category->name }}
                                        </td>
                                        <td>
                                            <a>
-                                               #{{ $ticket->ticket_id }} - {{ $ticket->title }}
+                                                {{ $ticket->title }}
                                            </a>
                                        </td>
                                        <td>
@@ -50,6 +53,19 @@
                                            @else
                                                <span class="label label-danger p-1" style="border-radius: 5px;">{{ $ticket->status }}</span>
                                            @endif
+                                       </td>
+                                       <td>
+                                            {{ $ticket->user->first_name }} {{ $ticket->user->last_name }}
+                                       </td>
+                                       <td>
+                                            {{ $ticket->user->city->name }}
+                                       </td>
+                                       <td>
+                                            <?php if($ticket->attachment_file_path) : ?>
+                                                <a href="/bromi/public{{$ticket->attachment_file_path}}" target="_blank">View</a>
+                                            <?php else : ?>
+                                                <span>No Attachment</span>
+                                            <?php endif; ?>
                                        </td>
                                        <td>{{ $ticket->updated_at ? \Carbon\Carbon::parse($ticket->updated_at)->format('d/m/Y h:i:s A') : '-' }}</td>
                                        <td class="w3-bar">

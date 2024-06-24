@@ -49,7 +49,6 @@ class EnquiriesController extends Controller
 
 	public function index(Request $request)
 	{
-
 		if ($request->ajax()) {
 			$dropdowns = DropdownSettings::get()->toArray();
 			// $land_units = DB::table('land_units')->get();
@@ -82,7 +81,12 @@ class EnquiriesController extends Controller
 					->orderBy('id', 'desc')
 					->get();
 			} else {
-				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
+				$assign_leads_ids = AssignHistory::where('assign_id',Auth::user()->id)->get()->pluck('enquiry_id');
+
+				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')->where('user_id', Auth::user()->id)
+					->orWhere(function ($query) use ($assign_leads_ids) {
+						$query->whereIn('id', $assign_leads_ids);
+					})
 					->when($request->filter_by, function ($query) use ($request) {
 						if ($request->filter_by == 'new') {
 							return $query->doesntHave('Progress');

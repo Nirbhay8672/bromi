@@ -857,6 +857,56 @@ Helper::set_default_measuerement();
         <script src="{{ asset('admins/assets/js/fullcalendar.js') }}"></script>
 
         <!-- Plugins JS Ends-->
+         <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+        <script>
+          window.OneSignalDeferred = window.OneSignalDeferred || [];
+          OneSignalDeferred.push(function(OneSignal) {
+            OneSignal.init({
+              appId: "{{config('app.onesignalId')}}",
+            });
+            //  let playerId = null;
+            setTimeout(function(){
+                let playerId = OneSignal.User.PushSubscription._id;
+               console.log(playerId);
+                // Construct the request headers
+                const headers = new Headers({
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': "{{csrf_token()}}", // Replace with your actual CSRF token
+                });
+                
+                // Construct the request options
+                const requestOptions = {
+                  method: 'POST',
+                  headers: headers,
+                  body: JSON.stringify({ playerId: playerId }),
+                };
+                
+                // Construct the URL
+                const url = "{{route('superadmin.saveOnesignal')}}"; // Replace with your actual endpoint
+                
+                // Send the fetch request
+                $.ajax({
+                    url: "{{route('superadmin.saveOnesignal')}}", // Replace with your actual endpoint
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{csrf_token()}}" // Replace with your actual CSRF token
+                    },
+                    data: {
+                        playerId: playerId
+                    },
+                    success: function(response) {
+                        console.log('User ID sent to server successfully');
+                        console.log(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error sending user ID to server:', error);
+                    }
+                });
+                // console.log("OneSignal User ID:", OneSignal.User.PushSubscription._id);
+            }, 1000)
+
+          });
+        </script>
         <!-- Theme js-->
 
         <script src="{{ asset('admins/assets/js/script.js') }}"></script>
