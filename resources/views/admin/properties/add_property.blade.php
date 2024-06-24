@@ -3875,10 +3875,10 @@
                     $('.property-type-element[data-property-id="256"]').hide();
                 }
 
-                if (theFor === 'Rent' && parent_val == '85') {
-                    $('.property-type-element[data-property-id="262"]').hide();
-                } else if ((theFor === 'Sell' || theFor === 'Both') && parent_val == '85') {
+                if (theFor === 'Sell' && parent_val == '85') {
                     $('.property-type-element[data-property-id="262"]').show();
+                } else  {
+                    $('.property-type-element[data-property-id="262"]').hide();
                 }
 
             }

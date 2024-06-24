@@ -2545,7 +2545,7 @@
                     $('.enquiry-type-element[data-enquiry-id="256"]').hide();
                 }
 
-                if (theFor == 'Rent') {
+                if (theFor == 'Rent' || theFor == 'Both') {
                     $('.enquiry-type-element[data-enquiry-id="262"]').hide();
                 } else if (parent_val == '85') {
                     $('.enquiry-type-element[data-enquiry-id="262"]').show();
