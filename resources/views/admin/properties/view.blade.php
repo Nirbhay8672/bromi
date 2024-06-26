@@ -1275,10 +1275,11 @@ use Illuminate\Support\Facades\DB;
                                                                 <tbody>
                                                                     @if (isset(json_decode($property->other_contact_details)[0]))
                                                                         @forelse (json_decode($property->other_contact_details) as $value)
-                                                                            <tr>
+                                                                        {{-- @dd($value); --}}
+                                                                                <tr>
                                                                                 <td>{{ isset($value[0]) ? ucfirst(strtolower($value[0])) : '-' }}</td>
                                                                                 <td>{{ isset($value[1]) ? $value[1] : '-' }}</td>
-                                                                                <td>{{ isset($value[2]) ? ucfirst(strtolower($value[2])) : '-' }}</td>
+                                                                                <td>{{ isset($value[3]) ? ucfirst(strtolower($value[3])) : '-' }}</td>
                                                     
                                                                             </tr>
                                                                         @empty
@@ -1383,8 +1384,7 @@ use Illuminate\Support\Facades\DB;
                                                                 }
                                                                 ?>
                                                                 <tr>
-                                                                    <td>{{ $value->client_name }}</td>
-                                                                    <td>{{ $value->client_mobile }}</td>
+                                                                    <td><a href="{{ route('admin.view.enquiry', encrypt($value->id)) }}">{{ $value->client_name }}</a></td>
                                                                     <td>{{ $value->enquiry_for }}</td>
                                                                     <td>{{ $value->requirement_type == "87" ? "Resedential" : "Commercial" }}</td>
                                                                     <td>{{ $value->area_from .' '. $unit_name}}</td>
@@ -2521,7 +2521,8 @@ use Illuminate\Support\Facades\DB;
                                                                     <tr>
 																		<td>{{ isset($value[0]) ? ucfirst(strtolower($value[0])) : '-' }}</td>
 																		<td>{{ isset($value[1]) ? $value[1] : '-' }}</td>
-																		<td>{{ isset($value[2]) ? ucfirst(strtolower($value[2])) : '-' }}</td>
+                                                                        <td>{{ isset($value[3]) ? ucfirst(strtolower($value[3])) : '-' }}</td>
+
 																	</tr>
                                                                 @empty
                                                                 @endforelse
@@ -2774,7 +2775,7 @@ use Illuminate\Support\Facades\DB;
 
                                                         @forelse ($enquiries as $value)
                                                             <tr>
-                                                                <td>{{ $value->client_name }}</td>
+                                                                <td><a href="{{ route('admin.view.enquiry', encrypt($value->id)) }}">{{ $value->client_name }}</a></td>
                                                                 <td>{{ $value->client_mobile }}</td>
                                                                 <td>{{ $value->enquiry_for }}</td>
                                                                 <td>{{ $value->budget_to }}</td>

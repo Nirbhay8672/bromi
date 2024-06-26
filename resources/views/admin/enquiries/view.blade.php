@@ -559,7 +559,7 @@
                                                             ?>
                                                             <tr>
                                                                     @if ($value->property_category !== '262')
-                                                                        <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
+                                                                        <td><a href="{{ route('admin.project.view', encrypt($value->id)) }}">{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</a></td>
                                                                     @else
                                                                         <td>{{"-"}}</td>
                                                                     @endif
@@ -1008,7 +1008,7 @@
                                                         @forelse ($properties as $value)
                                                             <tr>
                                                                 @if ($value->property_category !== '262')
-                                                                   <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
+                                                                <td><a href="{{ route('admin.project.view', encrypt($value->id)) }}">{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</a></td>
                                                                 @else
                                                                     <td>{{"-"}}</td>
                                                                 @endif

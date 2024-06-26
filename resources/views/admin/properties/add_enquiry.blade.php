@@ -151,7 +151,7 @@
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Rent" class="btn-check"
                                                                     name="enquiry_for" id="propertyfor1"
-                                                                    autocomplete="off">
+                                                                    autocomplete="off" checked>
                                                                 <label class="btn btn-outline-info btn-pill btn-sm py-1"
                                                                     for="propertyfor1">Rent</label>
                                                             </div>
