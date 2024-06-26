@@ -1267,7 +1267,7 @@ use Illuminate\Support\Facades\DB;
                                                                     <tr>
                                                                         <th scope="col">Name</th>
                                                                         <th scope="col">Contact</th>
-                                                                        <th scope="col">Designation</th>
+                                                                        <th scope="col">Position</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -1275,7 +1275,6 @@ use Illuminate\Support\Facades\DB;
                                                                 <tbody>
                                                                     @if (isset(json_decode($property->other_contact_details)[0]))
                                                                         @forelse (json_decode($property->other_contact_details) as $value)
-                                                                        {{-- @dd($value); --}}
                                                                                 <tr>
                                                                                 <td>{{ isset($value[0]) ? ucfirst(strtolower($value[0])) : '-' }}</td>
                                                                                 <td>{{ isset($value[1]) ? $value[1] : '-' }}</td>
@@ -1357,17 +1356,17 @@ use Illuminate\Support\Facades\DB;
                                                 </div>
                                                 @endif
                                                 @if (count($enquiries))
-                                                <div class="col-md-12">
-                                                    <h5 class="border-style">Matching Enquiry</h5>
+                                                {{-- <div class="col-md-12">
+                                                    <h5 class="border-style">Matching Enquiry :</h5>
                                                     <br>
                                                     <div class="form-group">
                                                         <table class="table table-responsive custom-table-design mb-3">
                                                             <thead>
                                                                 <tr>
                                                                     <th scope="col">Client Name</th>
-                                                                    <th scope="col">Mobile</th>
                                                                     <th scope="col">For</th>
                                                                     <th scope="col">Category</th>
+                                                                    <th scope="col">Sub Category</th>
                                                                     <th scope="col">Area From</th>
                                                                     <th scope="col">Area To</th>
                                                                     <th scope="col">Budget From</th>
@@ -1397,7 +1396,51 @@ use Illuminate\Support\Facades\DB;
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                </div> --}}
+                                                
+                                                <div class="col-md-12">
+                                                    <h5 class="border-style">Matching Enquiry :</h5>
+                                                    <br>
+                                                    <div class="form-group">
+                                                        <table class="table table-responsive custom-table-design mb-3">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Client Name</th>
+                                                                    <th scope="col">For</th>
+                                                                    <th scope="col">Category</th>
+                                                                    <th scope="col">Sub Category</th>
+                                                                    <th scope="col">Area From</th>
+                                                                    <th scope="col">Area To</th>
+                                                                    <th scope="col">Budget From</th>
+                                                                    <th scope="col">Budget To</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="matching_container">
+                                                                @forelse ($enquiries as $value)
+                                                                <?php
+                                                                $unit_name = "";
+                                                                $area_measure = DB::table('land_units')->where('id', $value->area_from_measurement)->get();
+                                                                if ($area_measure->isNotEmpty()) {
+                                                                    $unit_name = $area_measure[0]->unit_name;
+                                                                }
+                                                                ?>
+                                                                <tr>
+                                                                    <td><a href="{{ route('admin.view.enquiry', encrypt($value->id)) }}">{{ $value->client_name }}</a></td>
+                                                                    <td>{{ $value->enquiry_for }}</td>
+                                                                    <td>{{ $value->requirement_type == "87" ? "Residential" : "Commercial" }}</td>
+                                                                    <td>{{ $sub_cat }}</td> <!-- Display subcategory here -->
+                                                                    <td>{{ $value->area_from .' '. $unit_name}}</td>
+                                                                    <td>{{ $value->area_to .' '. $unit_name}}</td>
+                                                                    <td>{{ $value->budget_from }}</td>
+                                                                    <td>{{ $value->budget_to }}</td>
+                                                                </tr>
+                                                                @empty
+                                                                @endforelse
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
+                                                
                                                 @endif
                                             </div>
                                         </div>
@@ -2510,7 +2553,7 @@ use Illuminate\Support\Facades\DB;
                                                             <tr>
                                                                 <th scope="col">Name</th>
                                                                 <th scope="col">Contact</th>
-																<th scope="col">Designation</th>
+																<th scope="col">Position</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
