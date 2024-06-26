@@ -187,21 +187,20 @@ class SettingsController extends Controller
 
 	public function state_import(Request $request)
 	{
-		$file = $request->file('csv_file');
-		$name = Str::random(10) . '.csv';
-		$file->move(storage_path('app'), $name);
-		try {
-			$collection = (new FastExcel)->import(storage_path('app/' . $name));
-		} catch (\Throwable $th) {
-			$collection = [];
-		}
-		unlink(storage_path('app/' . $name));
-		$states = State::all()->pluck('name')->all();
-		$states = array_map('strtolower', $states);
-		foreach ($collection as $key => $value) {
-			if (!in_array(strtolower($value['name']), $states)) {
-				Helper::add_state($value['name']);
-			}
+		$state = State::find($request->id);
+
+		$current_user_state = State::where('name', $state->name)->where('user_id',Auth::user()->id)->first();
+
+		if($current_user_state) {
+			return response()->json(['error' => 'State already exist.'], 500);
+		} else {
+			$new_state = new State();
+			
+			$new_state->fill([
+				'name' => $state->name,
+				'user_id' => Auth::user()->id,
+				'gst_type' => $state->gst_type,
+			])->save();
 		}
 	}
 
@@ -233,7 +232,10 @@ class SettingsController extends Controller
 				->rawColumns(['Actions'])
 				->make(true);
 		}
-		return view('admin.settings.state_index');
+
+		$data = State::where('user_id', 6)->get()->toArray();
+
+		return view('admin.settings.state_index')->with(['states' => $data]);
 	}
 
 	public function get_state(Request $request)
