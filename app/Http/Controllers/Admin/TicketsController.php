@@ -49,7 +49,6 @@ class TicketsController extends Controller
      */
     public function store(Request $request, AppMailer $mailer)
     {
-        // dd($request);
         $this->validate($request, [
             'title' => 'required',
             'category' => 'required',
@@ -57,9 +56,11 @@ class TicketsController extends Controller
             'message' => 'required'
         ]);
 
-        $file = $request->file('attachment');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $file->move(public_path('uploads/ticket_attachment'), $filename);
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/ticket_attachment'), $filename);
+        }
 
         $ticket = new Ticket([
             'title' => $request->input('title'),
@@ -67,7 +68,7 @@ class TicketsController extends Controller
             'ticket_id' => Str::random(10),
             'category_id' => $request->input('category'),
             'priority' => $request->input('priority'),
-            'attachment_file_path' => '/uploads/ticket_attachment/' . $filename,
+            'attachment_file_path' => $request->hasFile('attachment') ? '/uploads/ticket_attachment/' . $filename : null,
             'message' => $request->input('message'),
             'status' => "Open"
         ]);
