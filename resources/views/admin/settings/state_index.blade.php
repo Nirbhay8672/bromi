@@ -40,6 +40,15 @@
                                         data-bs-target="#stateModal"
                                         data-tooltip="Add State"
                                     ><i class="fa fa-plus"></i></button>
+
+                                    <button
+                                        class="btn custom-icon-theme-button tooltip-btn ms-3"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#importModal"
+                                        data-tooltip="Import State"
+                                        onclick="resetImportForm()"
+                                    ><i class="fa fa-download"></i></button>
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -61,6 +70,7 @@
                 </div>
             </div>
         </div>
+
         <div class="modal fade" id="stateModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
@@ -101,35 +111,44 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="importmodal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal fade" id="importModal" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Import States</h5>
+                        <h5 class="modal-title" id="importModalLabel">Import State</h5>
                         <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
-                        <form class="form-bookmark needs-validation " method="post" id="import_form" novalidate="">
-                            @csrf
-                            <div class="form-row">
-                                <div class="form-group col-md-12 m-b-20">
-                                    <input class="form-control" type="file" accept=".csv" name="import_file"
-                                        id="import_file">
-                                </div>
+                        <div class="form-row mb-2">
+                            <div class="form-group col-12 d-inline-block m-b-20">
+                                <label class="mb-0">State</label>
+                                <select id="import_state_id">
+                                    <option value=""> State</option>
+                                    @foreach ($states as $state)
+                                        <option value="{{ $state['id'] }}">{{ $state['name'] }}</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger" id="state_error"></span>
                             </div>
-                            <button class="btn btn-secondary" id="importFile">Save</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                        </form>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn custom-theme-button" id="importState">Import</button>
+                            <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
     @endsection
     @push('scripts')
         <script>
             $(document).ready(function() {
 
                 $("#change_location_link").select2();
+                $("#import_state_id").select2();
                 
                 $(document).on('change', '#change_location_link', function(e) {
                     window.location.href = $(this).val();
@@ -207,7 +226,6 @@
                         });
                     }
                 })
-
             }
 
             $(document).on('click', '#saveState', function(e) {
@@ -239,7 +257,48 @@
 						$('#saveState').prop('disabled',false);
                     }
                 });
-            })
+            });
+
+            function resetImportForm() {
+                let state_erorr = document.getElementById('state_error');
+                state_erorr.classList.add('d-none');
+
+                $('#import_state_id').val('').trigger('change');
+            }
+
+            $(document).on('click', '#importState', function(e) {
+                let valid = true;
+                let import_state = $('#import_state_id').val();
+
+                let state_erorr = document.getElementById('state_error');
+                state_erorr.classList.add('d-none');
+
+                if(import_state == '') {
+                    valid = false;
+                    state_erorr.classList.remove('d-none');
+                    state_erorr.innerHTML = 'Please select state';
+                }
+
+                if(valid) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('admin.settings.importstate') }}",
+                        data: {
+                            id: import_state,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(data) {
+                            $('#stateTable').DataTable().draw();
+                            $('#importModal').modal('hide');
+                            resetImportForm();
+                        },
+                        error: function(xhr, status, error) {
+                            state_erorr.classList.remove('d-none');
+                            state_erorr.innerHTML = 'State is already exist';
+                        }
+                    });
+                }
+            });
 
             $(document).on('click', '#importFile', function(e) {
                 e.preventDefault();

@@ -40,7 +40,7 @@
                                         data-tooltip="Import Locality"
                                         data-bs-toggle="modal"
                                         data-bs-target="#importmodal"
-                                    ><i class="fa fa-upload"></i></button>
+                                    ><i class="fa fa-download"></i></button>
 
 
                                     <button
