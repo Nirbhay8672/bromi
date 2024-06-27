@@ -802,7 +802,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-3 the_carpet_plot_area">
+                                                        <div class="col-md-3 the_carpet_plot_area" >
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
                                                                     <label for="Carpet Plot Area">Carpet Plot Area</label>
@@ -912,31 +912,6 @@
                                                             <div class="invalid-feedback" id="width_of_plot_error"
                                                                 style="display: none;color:red;"></div>
                                                         </div>
-                                                        <!--<div class="col-md-3 the_carpet_area">-->
-                                                        <!--    <div class="input-group">-->
-                                                        <!--        <div class="form-group col-md-7 m-b-20">-->
-                                                        <!--            <label for="Carpet Area">Carpet Area</label>-->
-                                                        <!--            <input class="form-control" name="carpet_area"-->
-                                                        <!--                id="carpet_area" type="text"-->
-                                                        <!--                autocomplete="off">-->
-                                                        <!--        </div>-->
-                                                        <!--        <div class="input-group-append col-md-5 m-b-20">-->
-                                                        <!--            <div class="form-group form_measurement">-->
-                                                        <!--                <select-->
-                                                        <!--                    class="form-select measure_select measure_square"-->
-                                                        <!--                    id="carpet_area_measurement">-->
-                                                        <!--                    @foreach ($land_units as $land_unit)
-    -->
-                                                        <!--                        <option value="{{ $land_unit->id }}"-->
-                                                        <!--                            {{ $land_unit->id == 1 ? 'selected' : '' }}>-->
-                                                        <!--                            {{ $land_unit->unit_name }}</option>-->
-                                                        <!--
-    @endforeach-->
-                                                        <!--                </select>-->
-                                                        <!--            </div>-->
-                                                        <!--        </div>-->
-                                                        <!--    </div>-->
-                                                        <!--</div>-->
                                                         <div class="col-md-3 the_opening_width">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
@@ -3802,7 +3777,7 @@
                     showfields = ['div_storage_type', 'div_flat_details_2', 'div_area_size_details',
                         'the_salable_plot_area', 'div_flat_details', 'div_flat_details_5', 'div_flat_details_4',
                         'div_property_source', 'div_checkboxes1', 'div_flat_details_7',
-                        'div_flat_details_8', 'div_other_details',
+                        'div_flat_details_8', 'div_other_details', 'the_constructed_salable_area',
                         'div_availability_status', 'the_total_units_in_project',
                         'the_furnished_status', 'the_two_wheller_Parking', 'div_road_width', 'cl-locality',
                         'div_care_taker', 'div_document_section',
@@ -3877,7 +3852,7 @@
 
                 if (theFor === 'Sell' && parent_val == '85') {
                     $('.property-type-element[data-property-id="262"]').show();
-                } else  {
+                } else {
                     $('.property-type-element[data-property-id="262"]').hide();
                 }
 
@@ -4359,7 +4334,6 @@
                         if (data == '') {
                             return
                         }
-
                         //Disable Price on Land
                         var $price1 = $('#price');
                         var $price2 = $('#price2');
@@ -4381,6 +4355,14 @@
                         });
                         // edit property selected valdata.width_of_plot, 1
                         data = JSON.parse(data);
+                        let carpetVal = setSplitedValue(data.carpet_plot_area, 1);
+                        if (carpetVal != "") {
+                            console.log("carpet VAl", carpetVal);
+                            $('#carpet_plot_area').val(carpetVal); // Set the value
+                            $('.the_carpet_plot_area').show(); // Show the section
+                        } else {
+                            $('.the_carpet_plot_area').hide(); // Hide the section if value is empty
+                        }
                         const ceilingHeight = data.ceiling_height;
                         let parts = ceilingHeight.split('_-||-_');
                         $('#this_data_id').val(data.id);
@@ -4608,9 +4590,9 @@
                                     floatingField()
                                     $("[data-contact_id=" + id + "] input[name=other_name]").val(details[i][0]);
                                     $("[data-contact_id=" + id + "] input[name=other_contact]").val(details[i][1]);
-                                    $("[data-contact_id=" + id + "] input[name=position]").val(details[i][2]);
+                                    $("[data-contact_id=" + id + "] input[name=position]").val(details[i][3]);
                                     $("[data-contact_id=" + id + "] select[name=other_contact_country_code]").val(
-                                        details[i][3]);
+                                        details[i][2]);
 
                                 }
                             } else {
@@ -4762,8 +4744,6 @@
                     }
                 });
                 other_contact_details = JSON.stringify(other_contact_details);
-
-
 
                 $("#modal_form [name=unit_unit_no]").each(function(index) {
                     let cona_arr = [];
