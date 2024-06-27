@@ -596,7 +596,7 @@ class EnquiriesController extends Controller
 					$configuration_names = [];
 					$category = '';
 					$configuration_display = '';
-				
+
 					$configurationArray = json_decode($row->configuration);
 					if (!empty($configurationArray) && isset($configurationArray[0])) {
 						foreach ($configurationArray as $configurationKey) {
@@ -610,7 +610,9 @@ class EnquiriesController extends Controller
 					} else {
 						$category = (!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '';
 					}
-				
+
+					
+
 					if (!empty($row->area_ids)) {
 						$area_ids = json_decode($row->area_ids);
 						foreach ($area_ids as $key => $value) {
@@ -622,21 +624,21 @@ class EnquiriesController extends Controller
 							}
 						}
 					}
-				
+
 					$area_title = !empty($other_areas) ? '<i class="fa fa-info-circle cursor-pointer" data-bs-content="' . $other_areas . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom"></i>' : '';
-				
+
 					$area_form_m = '';
 					$land_units = DB::table('land_units')->get();
 					if (!empty($row->area_from_measurement)) {
 						$unit = $land_units->firstWhere('id', $row->area_from_measurement);
 						$area_form_m = $unit ? $unit->unit_name : null;
 					}
-				
+
 					$fstatus = '';
 					if ($row->property_type != '256' && !empty($row->furnished_status)) {
 						$vv = json_decode($row->furnished_status);
 						if (isset($vv[0]) && !empty($vv[0])) {
-							$fstatus = match($vv[0]) {
+							$fstatus = match ($vv[0]) {
 								"106", "34" => 'Furnished',
 								"107", "35" => 'Semi Furnished',
 								"108", "36" => 'Unfurnished',
@@ -644,7 +646,7 @@ class EnquiriesController extends Controller
 							};
 						}
 					}
-				
+
 					$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_display)) ? ' | ' : $category) . $configuration_display . '</div>';
 					$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " - " . $row->area_to . " " . $area_form_m : "") . '</div>';
 					$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"></small></div>';
@@ -652,7 +654,7 @@ class EnquiriesController extends Controller
 					if (!empty($area_name)) {
 						$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"><i class="fa fa-map-marker"></i> ' . $area_name . $area_title . '</small></div>';
 					}
-				
+
 					return $req;
 				})
 				->editColumn('budget', function ($row) {
