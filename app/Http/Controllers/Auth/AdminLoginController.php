@@ -201,7 +201,7 @@ class AdminLoginController extends Controller
         $gstType = User::find(Session::get('user_id'))->state->gst_type;
 	    Session::put('transaction_goal', 'new_subscription');
 		return view('guest.plan')->with([
-			'plans' =>  Subplans::all(),
+			'plans' =>  Subplans::orderBy('price', 'asc')->get(),
             'gstType' => $gstType
 		]);
 	}

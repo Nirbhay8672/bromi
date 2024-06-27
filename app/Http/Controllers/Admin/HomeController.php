@@ -692,7 +692,8 @@ class HomeController extends Controller
         } else {
             Session::put('transaction_goal', 'upgrade');
         }
-		$plans = Subplans::get();
+		
+		$plans = Subplans::orderBy('price', 'asc')->get();
 
 		$current_plan = Subplans::find(Auth::user()->plan_id)->toArray();
 
