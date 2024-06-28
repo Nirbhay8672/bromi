@@ -449,7 +449,8 @@ class PropertyController extends Controller
                     }
                     $sub_cat = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | ' . $dropdowns[$row->property_category]['name'] : '');
 
-                    if (!is_null($row->configuration)) {
+                    // if (!is_null($row->configuration)) {
+                        if (!is_null($row->configuration) && $dropdowns[$row->property_category]['name'] !== "Farmhouse") {
                         $catId = (int) $row->configuration;
                         //$getsub_category = Helper::getsubcategory($catId);
                         $getsub_category = $new_array[$catId];
@@ -499,7 +500,7 @@ class PropertyController extends Controller
                     try {
                         return '
                         <td style="vertical-align:top">
-                            ' . ((!empty($forr)) ? $forr : '') . $category . '
+                           ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
                             <font size="2" style="font-style:italic">
                             <br>
                             ' . $salable_area_print . '
@@ -2348,7 +2349,7 @@ class PropertyController extends Controller
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property','configuration_name', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
 
     // public function downloadZip($type, $prop)

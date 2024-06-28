@@ -634,19 +634,41 @@ class EnquiriesController extends Controller
 						$area_form_m = $unit ? $unit->unit_name : null;
 					}
 
-					$fstatus = '';
-					if ($row->property_type != '256' && !empty($row->furnished_status)) {
-						$vv = json_decode($row->furnished_status);
-						if (isset($vv[0]) && !empty($vv[0])) {
-							$fstatus = match ($vv[0]) {
-								"106", "34" => 'Furnished',
-								"107", "35" => 'Semi Furnished',
-								"108", "36" => 'Unfurnished',
-								default => 'Can Furnished',
-							};
+// 				$fstatus = '';
+// if ($row->property_type != '256' && !empty($row->furnished_status)) {
+//     $vv = json_decode($row->furnished_status);
+//     if (isset($vv[0]) && !empty($vv[0])) {
+//         $fstatus = match ($vv[0]) {
+//             "106", "34" => 'Furnished',
+//             "107", "35" => 'Semi Furnished',
+//             "108", "36" => 'Unfurnished',
+//             default => 'Can Furnished',
+//         };
+//     }
+// }
+
+
+if ($row->property_type == '256') {
+						$fstatus  = '';
+					} else {
+						$fstatus  = '';
+						if (!empty($row->furnished_status) && !empty(json_decode($row->furnished_status))) {
+							$vv = json_decode($row->furnished_status);
+							if (isset($vv[0])) {
+								if (!empty($vv[0])) {
+									if ($vv[0] == "106" || $vv[0] == "34") {
+										$fstatus = 'Furnished';
+									} elseif ($vv[0] == "107" || $vv[0] == "35") {
+										$fstatus = 'Semi Furnished';
+									} elseif ($vv[0] == "108" || $vv[0] == "36") {
+										$fstatus = 'Unfurnished';
+									} else {
+										$fstatus = 'Can Furnished';
+									}
+								}
+							}
 						}
 					}
-
 					$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_display)) ? ' | ' : $category) . $configuration_display . '</div>';
 					$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " - " . $row->area_to . " " . $area_form_m : "") . '</div>';
 					$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"></small></div>';
