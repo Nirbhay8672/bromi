@@ -60,8 +60,10 @@
 						@csrf
                         <h4>Login</h4>
                         <h6>We are happy to see you again!</h6>
-                        @if (session('error'))
-                            <span class="text-danger"> {{ session('error') }}</span>
+                        @if (session('warning'))
+                            <div class="alert alert-danger alert-block">
+                                <strong>{{ session('warning') }}</strong>
+                            </div>
                         @endif
                         @if ($message = Session::get('success'))  
                             <div class="alert alert-success alert-block">
