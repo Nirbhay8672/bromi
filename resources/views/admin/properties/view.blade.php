@@ -1355,6 +1355,8 @@ use Illuminate\Support\Facades\DB;
                                                     </div>
                                                 </div>
                                                 @endif
+                                                {{-- @dd("sub_cat"$sub_cat); --}}
+
                                                 @if (count($enquiries))
                                                 {{-- <div class="col-md-12">
                                                     <h5 class="border-style">Matching Enquiry :</h5>
@@ -1428,7 +1430,7 @@ use Illuminate\Support\Facades\DB;
                                                                     <td><a href="{{ route('admin.view.enquiry', encrypt($value->id)) }}">{{ $value->client_name }}</a></td>
                                                                     <td>{{ $value->enquiry_for }}</td>
                                                                     <td>{{ $value->requirement_type == "87" ? "Residential" : "Commercial" }}</td>
-                                                                    <td>{{ $sub_cat }}</td> <!-- Display subcategory here -->
+                                                                    <td>{{ $configuration_name }}</td> 
                                                                     <td>{{ $value->area_from .' '. $unit_name}}</td>
                                                                     <td>{{ $value->area_to .' '. $unit_name}}</td>
                                                                     <td>{{ $value->budget_from }}</td>
@@ -2807,26 +2809,38 @@ use Illuminate\Support\Facades\DB;
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Client Name</th>
-                                                            <th scope="col">Mobile</th>
                                                             <th scope="col">For</th>
-                                                            <th scope="col">Budget</th>
+                                                            <th scope="col">Category</th>
+                                                            <th scope="col">Sub Category</th>
+                                                            <th scope="col">Area From</th>
+                                                            <th scope="col">Area To</th>
+                                                            <th scope="col">Budget From</th>
+                                                            <th scope="col">Budget To</th>
 
                                                         </tr>
                                                     </thead>
 
                                                     <tbody id="matching_container">
-
                                                         @forelse ($enquiries as $value)
-                                                            <tr>
-                                                                <td><a href="{{ route('admin.view.enquiry', encrypt($value->id)) }}">{{ $value->client_name }}</a></td>
-                                                                <td>{{ $value->client_mobile }}</td>
-                                                                <td>{{ $value->enquiry_for }}</td>
-                                                                <td>{{ $value->budget_to }}</td>
-                                                            </tr>
+                                                        <?php
+                                                        $unit_name = "";
+                                                        $area_measure = DB::table('land_units')->where('id', $value->area_from_measurement)->get();
+                                                        if ($area_measure->isNotEmpty()) {
+                                                            $unit_name = $area_measure[0]->unit_name;
+                                                        }
+                                                        ?>
+                                                        <tr>
+                                                            <td><a href="{{ route('admin.view.enquiry', encrypt($value->id)) }}">{{ $value->client_name }}</a></td>
+                                                            <td>{{ $value->enquiry_for }}</td>
+                                                            <td>{{ $value->requirement_type == "87" ? "Residential" : "Commercial" }}</td>
+                                                            <td>{{ $configuration_name }}</td> 
+                                                            <td>{{ $value->area_from .' '. $unit_name}}</td>
+                                                            <td>{{ $value->area_to .' '. $unit_name}}</td>
+                                                            <td>{{ $value->budget_from }}</td>
+                                                            <td>{{ $value->budget_to }}</td>
+                                                        </tr>
                                                         @empty
                                                         @endforelse
-
-
                                                     </tbody>
                                                 </table>
                                             </div>
