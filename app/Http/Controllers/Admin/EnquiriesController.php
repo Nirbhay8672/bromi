@@ -611,7 +611,7 @@ class EnquiriesController extends Controller
 						$category = (!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '';
 					}
 
-
+					
 
 					if (!empty($row->area_ids)) {
 						$area_ids = json_decode($row->area_ids);
@@ -634,20 +634,21 @@ class EnquiriesController extends Controller
 						$area_form_m = $unit ? $unit->unit_name : null;
 					}
 
-					// $fstatus = '';
-					// if ($row->property_type != '256' && !empty($row->furnished_status)) {
-					// 	$vv = json_decode($row->furnished_status);
-					// 	if (isset($vv[0]) && !empty($vv[0])) {
-					// 		$fstatus = match ($vv[0]) {
-					// 			"106", "34" => 'Furnished',
-					// 			"107", "35" => 'Semi Furnished',
-					// 			"108", "36" => 'Unfurnished',
-					// 			default => 'Can Furnished',
-					// 		};
-					// 	}
-					// }
+// 				$fstatus = '';
+// if ($row->property_type != '256' && !empty($row->furnished_status)) {
+//     $vv = json_decode($row->furnished_status);
+//     if (isset($vv[0]) && !empty($vv[0])) {
+//         $fstatus = match ($vv[0]) {
+//             "106", "34" => 'Furnished',
+//             "107", "35" => 'Semi Furnished',
+//             "108", "36" => 'Unfurnished',
+//             default => 'Can Furnished',
+//         };
+//     }
+// }
 
-						if ($row->property_type == '256') {
+
+if ($row->property_type == '256') {
 						$fstatus  = '';
 					} else {
 						$fstatus  = '';
@@ -668,7 +669,6 @@ class EnquiriesController extends Controller
 							}
 						}
 					}
-
 					$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_display)) ? ' | ' : $category) . $configuration_display . '</div>';
 					$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " - " . $row->area_to . " " . $area_form_m : "") . '</div>';
 					$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"></small></div>';
