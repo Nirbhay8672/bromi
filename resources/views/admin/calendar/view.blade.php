@@ -261,7 +261,7 @@
                                                                 <h6><b>Email</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
-                                                                <div>: {{ $data->client_email }}</div>
+                                                                <div style="text-transform: lowercase;">: {{ $data->client_email }}</div>
                                                             </div>
 
                                                             <div class="form-group col-6 m-b-5">
@@ -486,7 +486,7 @@
                                                             <h6><b>Email</b></h6>
                                                         </div>
                                                         <div class="form-group col-6 m-b-5">
-                                                            <div>: {{ $data->Enquiry->client_email }}</div>
+                                                            <div  style="text-transform: lowercase;">: {{ $data->Enquiry->client_email }}</div>
                                                         </div>
 
                                                         <div class="form-group col-6 m-b-5">
@@ -673,7 +673,7 @@
                                                             <h6><b>Email</b></h6>
                                                         </div>
                                                         <div class="form-group col-6 m-b-5">
-                                                            <div>: {{ $data->Enquiry->client_email }}</div>
+                                                            <div  style="text-transform: lowercase;">: {{ $data->Enquiry->client_email }}</div>
                                                         </div>
 
                                                         <div class="form-group col-6 m-b-5">
@@ -872,7 +872,7 @@
                                                                 <h6><b>Email</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
-                                                                <div>: {{ $data->Enquiry->client_email }}</div>
+                                                                <div  style="text-transform: lowercase;">: {{ $data->Enquiry->client_email }}</div>
                                                             </div>
 
                                                             <div class="form-group col-6 m-b-5">
@@ -1067,7 +1067,7 @@
                                                                 <h6><b>Email</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
-                                                                <div>: {{ $data->Enquiry->client_email }}</div>
+                                                                <div  style="text-transform: lowercase;">: {{ $data->Enquiry->client_email }}</div>
                                                             </div>
 
                                                             <div class="form-group col-6 m-b-5">
@@ -1267,7 +1267,7 @@
                                                                 <h6><b>Email</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
-                                                                <div>: {{ $data->Enquiry->client_email }}</div>
+                                                                <div  style="text-transform: lowercase;">: {{ $data->Enquiry->client_email }}</div>
                                                             </div>
 
                                                             <div class="form-group col-6 m-b-5">
@@ -1467,7 +1467,7 @@
                                                                 <h6><b>Email</b></h6>
                                                             </div>
                                                             <div class="form-group col-6 m-b-5">
-                                                                <div>: {{ $data->Enquiry->client_email }}</div>
+                                                                <div  style="text-transform: lowercase;">: {{ $data->Enquiry->client_email }}</div>
                                                             </div>
 
                                                             <div class="form-group col-6 m-b-5">

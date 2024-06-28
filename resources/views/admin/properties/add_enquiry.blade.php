@@ -151,7 +151,7 @@
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Rent" class="btn-check"
                                                                     name="enquiry_for" id="propertyfor1"
-                                                                    autocomplete="off">
+                                                                    autocomplete="off" checked>
                                                                 <label class="btn btn-outline-info btn-pill btn-sm py-1"
                                                                     for="propertyfor1">Rent</label>
                                                             </div>
@@ -2545,7 +2545,7 @@
                     $('.enquiry-type-element[data-enquiry-id="256"]').hide();
                 }
 
-                if (theFor == 'Rent') {
+                if (theFor == 'Rent' || theFor == 'Both') {
                     $('.enquiry-type-element[data-enquiry-id="262"]').hide();
                 } else if (parent_val == '85') {
                     $('.enquiry-type-element[data-enquiry-id="262"]').show();

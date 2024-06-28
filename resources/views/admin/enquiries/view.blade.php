@@ -541,12 +541,13 @@
                                                     <table class="table table-responsive custom-table-design mb-3">
                                                         <thead>
                                                             <tr>
-                                                                <th scope="col">property Name</th>
-                                                                <th scope="col">Property For</th>
-                                                                <th scope="col">Property Area</th>
-                                                                <th scope="col">Property Status</th>
-                                                                <th scope="col">Property Price</th>
-                                                                <th scope="col">Property Priority</th>
+                                                                <th scope="col">Name</th>
+                                                                <th scope="col">Type</th>
+                                                                <th scope="col">Category</th>
+                                                                <th scope="col">Area</th>
+                                                                <th scope="col">Status</th>
+                                                                <th scope="col">Price</th>
+                                                                <th scope="col">Priority</th>
                                                                 <th scope="col">Modified On</th>
 
                                                             </tr>
@@ -559,14 +560,20 @@
                                                             ?>
                                                             <tr>
                                                                     @if ($value->property_category !== '262')
-                                                                        <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
+                                                                        <td><a href="{{ route('admin.project.view', encrypt($value->id)) }}">{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</a></td>
                                                                     @else
                                                                         <td>{{"-"}}</td>
                                                                     @endif
-                                                                    <td>{{ $value->property_for }}</td>
+                                                                    <td>{{ $requiretype_name }}</td>
+                                                                    <td>{{$category}}</td>
                                                                     <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->constructed_salable_area)[0] .' '. $salable_units->unit_name}}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][2] }}</td>
-                                                                    <td>{{ json_decode($value->unit_details)[0][4] ? json_decode($value->unit_details)[0][4] : $value->survey_price }}</td>
+                                                                    <td>
+                                                                        @php
+                                                                            $unitDetails = json_decode($value->unit_details);
+                                                                        @endphp
+                                                                        {{ isset($unitDetails[0][3]) ? $unitDetails[0][3] : (isset($unitDetails[0][4]) ? $unitDetails[0][4] : $value->survey_price) }}
+                                                                    </td>
                                                                     <td>
                                                                         @if ($value->Property_priority == "91")
                                                                             High
@@ -985,36 +992,58 @@
                                                 </table>
                                             </div>
                                         </div>
+                                        {{-- @dd("val enq view",$requiretype_name); --}}
                                         <div class="tab-pane fade" id="v-enquiry-matching" role="tabpanel"
                                             aria-labelledby="v-enquiry-matching-tab">
                                             <h5 class="border-style">Matching Property</h5>
 
                                             <br>
-
                                             <div class="form-group">
                                                 <table class="table table-responsive custom-table-design mb-3">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Property Name</th>
-                                                            <th scope="col">Property For</th>
-                                                            <th scope="col">Property Price</th>
+                                                            <th scope="col">Name</th>
+                                                            <th scope="col">Type</th>
+                                                            <th scope="col">Category</th>
+                                                            <th scope="col">Area</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col">Price</th>
+                                                            <th scope="col">Priority</th>
                                                             <th scope="col">Modified On</th>
 
                                                         </tr>
                                                     </thead>
 
                                                     <tbody id="matching_container">
-
                                                         @forelse ($properties as $value)
-                                                            <tr>
+                                                        <?php
+                                                            $salable_units=$units->where('id',$data->area_from_measurement)->first();
+                                                        ?>
+                                                        <tr>
                                                                 @if ($value->property_category !== '262')
-                                                                   <td>{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</td>
+                                                                    <td><a href="{{ route('admin.project.view', encrypt($value->id)) }}">{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</a></td>
                                                                 @else
                                                                     <td>{{"-"}}</td>
                                                                 @endif
-                                                                <td>{{ $value->property_for }}</td>
-                                                                <td>{{ json_decode($value->unit_details)[0][4] ? json_decode($value->unit_details)[0][4] : $value->survey_price }}</td>
-                                                                <td>{{ \Carbon\Carbon::parse($value->updated_at)->format('d-m-Y') }}
+                                                                <td>{{ $requiretype_name }}</td>
+                                                                <td>{{$category}}</td>
+                                                                <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->constructed_salable_area)[0] .' '. $salable_units->unit_name}}</td>
+                                                                <td>{{ json_decode($value->unit_details)[0][2] }}</td>
+                                                                <td>
+                                                                    @php
+                                                                        $unitDetails = json_decode($value->unit_details);
+                                                                    @endphp
+                                                                    {{ isset($unitDetails[0][3]) ? $unitDetails[0][3] : (isset($unitDetails[0][4]) ? $unitDetails[0][4] : $value->survey_price) }}
+                                                                </td>
+                                                                <td>
+                                                                    @if ($value->Property_priority == "91")
+                                                                        High
+                                                                    @elseif ($value->Property_priority == "90")
+                                                                        Medium
+                                                                    @elseif ($value->Property_priority == "17")
+                                                                        Low
+                                                                    @endif
+                                                                </td><td>{{ \Carbon\Carbon::parse($value->updated_at)->format('d-m-Y') }}
                                                                 </td>
                                                             </tr>
                                                         @empty

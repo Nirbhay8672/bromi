@@ -81,12 +81,12 @@ class EnquiriesController extends Controller
 					->orderBy('id', 'desc')
 					->get();
 			} else {
-				$assign_leads_ids = AssignHistory::where('assign_id',Auth::user()->id)->get()->pluck('enquiry_id');
+				// $assign_leads_ids = AssignHistory::where('assign_id', Auth::user()->id)->get()->pluck('enquiry_id');
 
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')->where('user_id', Auth::user()->id)
-					->orWhere(function ($query) use ($assign_leads_ids) {
-						$query->whereIn('id', $assign_leads_ids);
-					})
+					// ->orWhere(function ($query) use ($assign_leads_ids) {
+					// 	$query->whereIn('id', $assign_leads_ids);
+					// })
 					->when($request->filter_by, function ($query) use ($request) {
 						if ($request->filter_by == 'new') {
 							return $query->doesntHave('Progress');
@@ -237,9 +237,9 @@ class EnquiriesController extends Controller
 
 							if ($request->match_specific_sub_type) {
 								// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration,$pro->property_category);
-								if($pro->property_category !== '258'){
+								if ($pro->property_category !== '258') {
 									$query->whereJsonContains('configuration', ($pro->configuration));
-								}else if($pro->property_category === '258'){
+								} else if ($pro->property_category === '258') {
 									$query->whereJsonContains('configuration', (0));
 								}
 							}
@@ -264,41 +264,41 @@ class EnquiriesController extends Controller
 									// $query
 									// 	->where('budget_from', '<=', $survey_price)
 									// 	->where('budget_to', '>=', $survey_price);
-										$query->where(function($q) use ($survey_price) {
-											$q->where('budget_from', '<=', $survey_price)
-											  ->where('budget_to', '>=', $survey_price);
-										})->orWhere(function($q) use ($survey_price) {
-											$q->where('rent_price', '<=', $survey_price)
-											  ->where('sell_price', '>=', $survey_price);
-										});
+									$query->where(function ($q) use ($survey_price) {
+										$q->where('budget_from', '<=', $survey_price)
+											->where('budget_to', '>=', $survey_price);
+									})->orWhere(function ($q) use ($survey_price) {
+										$q->where('rent_price', '<=', $survey_price)
+											->where('sell_price', '>=', $survey_price);
+									});
 								} else if ($unit_price !== '' && $unit_price !== null && $unit_price !== 0) {
 									// dd('112');
 									// $query
 									// 	->where('budget_from', '<=', $unit_price)  
 									// 	->where('budget_to', '>=', $unit_price);
 
-										$query->where(function($q) use ($unit_price) {
-											// dd("1231");
-											$q->where('budget_from', '<=', $unit_price)
-											  ->where('budget_to', '>=', $unit_price);
-										})->orWhere(function($q) use ($unitDetails) {
-											// dd("inn",$unitDetails[0][4],$unitDetails[0][3]);
-											$q->where('rent_price', '=', $unitDetails[0][4])
-											  ->where('sell_price', '=', $unitDetails[0][3]);
-										});
+									$query->where(function ($q) use ($unit_price) {
+										// dd("1231");
+										$q->where('budget_from', '<=', $unit_price)
+											->where('budget_to', '>=', $unit_price);
+									})->orWhere(function ($q) use ($unitDetails) {
+										// dd("inn",$unitDetails[0][4],$unitDetails[0][3]);
+										$q->where('rent_price', '=', $unitDetails[0][4])
+											->where('sell_price', '=', $unitDetails[0][3]);
+									});
 								}
-								
+
 								if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category !== "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category !== "254") {
 									// dd('113');
 									$query
-										->where('budget_from', '<=', $sell_price) 
-										->where('budget_to', '>=', $sell_price); 
-								}else if($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category === "259" && $pro->property_category === "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category === "256"){
+										->where('budget_from', '<=', $sell_price)
+										->where('budget_to', '>=', $sell_price);
+								} else if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category === "259" && $pro->property_category === "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category === "256") {
 									// dd('114');
 									$sell_price = str_replace(',', '', $unitDetails[0][3]);
 									$query
-										->where('budget_from', '<=', $sell_price)  
-										->where('budget_to', '>=', $sell_price); 
+										->where('budget_from', '<=', $sell_price)
+										->where('budget_to', '>=', $sell_price);
 								}
 
 								if ($both_price !== '' && $both_price !== null && $both_price !== 0 && $pro->property_category === "261") {
@@ -318,7 +318,7 @@ class EnquiriesController extends Controller
 								$result_unit = $parts[1];
 								$area_size_from = str_replace(',', '', $result);
 								$area_size_to = str_replace(',', '', $result);
-								
+
 								$parts = explode("_-||-_", $pro->constructed_salable_area);
 								$result2 = $parts[0];
 								$result2_unit = $parts[1];
@@ -331,45 +331,44 @@ class EnquiriesController extends Controller
 								$area_from3 = str_replace(',', '', $result3);
 								$area_to3 = str_replace(',', '', $result3);
 
-								
+
 								// dd("area_size_from",$area_size_from,"area_size_to",$area_size_to,"pro->property_category",$pro->property_category,"salable_plot_area",$pro->salable_plot_area);
 
 								if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category !== "259" && $pro->property_category !== "260"  && $pro->property_category !== "254") {
 									// dd("inn");
 									$query->where('area_from', '<=', $area_size_from)
 										->where('area_to', '>=', $area_size_to);
-								} else if($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category === "259" || $pro->property_category === "260" || $pro->property_category == "254") {
+								} else if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category === "259" || $pro->property_category === "260" || $pro->property_category == "254") {
 									// dd("outt");
 									$area_from_int = (int) $area_size_from;
-                                    $area_to_int = (int) $area_size_to;
+									$area_to_int = (int) $area_size_to;
 									// dd("out",$area_from_int,$area_to_int);
 									$query->where('area_from', '<=', $area_from_int)
 										->where('area_to', '>=', $area_to_int);
 								}
-								
+
 								if ($area_from != '' && $area_to != '' && $result2_unit !== "") {
 									// dd("12");
 									$query->where('area_from', '<=', $area_from)
 										->where('area_to', '>=', $area_to);
-								}else if ($area_from3 != '' && $area_to3 != '' && $result3_unit !== "") {
+								} else if ($area_from3 != '' && $area_to3 != '' && $result3_unit !== "") {
 									// dd("area_from3",$area_from3,$area_to3);
 									$query->where('area_from', '<=', $area_from3)
 										->where('area_to', '>=', $area_from3);
 								}
-								
+
 								if ($result_unit) {
 									$query->where('area_from_measurement', '=', $result_unit)
 										->where('area_to_measurement', '>=', $result_unit);
 								} else if ($result2_unit) {
 									$query->where('area_from_measurement', '=', $result2_unit)
 										->where('area_to_measurement', '>=', $result2_unit);
-								}else if ($result3_unit) {
-									dd('result3_unit',$result3_unit);
+								} else if ($result3_unit) {
+									dd('result3_unit', $result3_unit);
 									$query->where('area_from_measurement', '=', $result3_unit)
 										->where('area_to_measurement', '>=', $result3_unit);
 								}
 							}
-
 						}
 					})
 					->orderByRaw('CASE
@@ -475,24 +474,131 @@ class EnquiriesController extends Controller
 					// $second = '<div><div class="row mx-0 align-items-center"><div title="'.$title.'" data-toggle="tooltip" data-bs-html="true"  style="' . $s_1 . '" class="py-0 px-0 d-block col-8"></div> <div class="col-2"><i class="fa fa-info-circle color-code-popover" data-bs-content="" data-bs-trigger="hover focus"></i></div></div></div>';
 					return $first . $second . $end;
 				})
+				// ->editColumn('client_requirement', function ($row) use ($dropdowns, $areas) {
+				// 	// try {
+				// 	$area_name = '';
+				// 	$configuration_name = '';
+				// 	$requiretype_name = '';
+				// 	$configurationArray = json_decode($row->configuration);
+
+				// 	// if (!empty(config('constant.property_configuration')[$row->configuration])) {
+				// 	// 	$configuration_name = config('constant.property_configuration')[$row->configuration];
+				// 	// 	dd($configuration_name);
+
+				// 	$sub_cat = ((!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '');
+				// 	$configurationArray = json_decode($row->configuration);
+				// 	// dd("sub ",$configurationArray);
+				// 	$configuration_display = '';
+				// 	if (!empty($configurationArray) && isset($configurationArray[0])) {
+				// 		$configuration_names = []; // Initialize an empty array to store configuration names
+
+				// 		foreach ($configurationArray as $configurationKey) {
+				// 			if (!empty(config('constant.property_configuration')[$configurationKey])) {
+				// 				$configuration_names[] = config('constant.property_configuration')[$configurationKey];
+				// 			} else {
+				// 				$configuration_names[] = "Null";
+				// 			}
+				// 		}
+
+				// 		$configuration_display = implode(', ', $configuration_names); // Join configuration names with a comma and space
+				// 	} else {
+				// 		$category = $sub_cat;
+				// 	}
+
+				// 	$category = $sub_cat;
+
+				// 	$area_name = '';
+				// 	$other_areas = '';
+
+				// 	if (!empty($row->area_ids)) {
+				// 		$area_ids = json_decode($row->area_ids);
+				// 		foreach ($area_ids as $key => $value) {
+				// 			$area = !empty($areas[$value]['name']) ? $areas[$value]['name'] : '';
+				// 			if ($key < 2) {
+				// 				// Concatenate the first two areas
+				// 				$area_name .= ($key > 0 ? ', ' : '') . $area;
+				// 			} else {
+				// 				// Concatenate the remaining areas
+				// 				$other_areas .= (!empty($other_areas) ? ', ' : '') . $area;
+				// 			}
+				// 		}
+				// 	}
+
+				// 	if (!empty($other_areas)) {
+				// 		$area_title = '<i class="fa fa-info-circle cursor-pointer" data-bs-content="' . $other_areas . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom"></i>';
+				// 	} else {
+				// 		$area_title = '';
+				// 	}
+
+				// 	$area_form_m = '';
+				// 	// if (!empty($row->area_from_measurement)) {  //1
+				// 	// 	$area_form_m = $land_units[$row->area_from_measurement]['unit_name'];
+				// 	// }
+				// 	$land_units = DB::table('land_units')->get();
+
+				// 	if (!empty($row->area_from_measurement)) {
+				// 		// Find the unit with the specified ID in the collection
+				// 		$unit = $land_units->firstWhere('id', $row->area_from_measurement);
+
+				// 		if ($unit) {
+				// 			// Access the unit_name property of the object
+				// 			$area_form_m = $unit->unit_name;
+				// 		} else {
+				// 			// Handle the case when the unit with the specified ID doesn't exist
+				// 			$area_form_m = null; // or any default value you want
+				// 		}
+				// 	}
+
+
+				// 	// $area_form_t = '';
+				// 	// if (!empty($row->area_to_measurement)) {
+				// 	// 	$area_form_t = $dropdowns[$row->area_to_measurement]['name'];
+				// 	// }
+
+				// 	if ($row->property_type == '256') {
+				// 		$fstatus  = '';
+				// 	} else {
+				// 		$fstatus  = '';
+				// 		if (!empty($row->furnished_status) && !empty(json_decode($row->furnished_status))) {
+				// 			$vv = json_decode($row->furnished_status);
+				// 			if (isset($vv[0])) {
+				// 				if (!empty($vv[0])) {
+				// 					if ($vv[0] == "106" || $vv[0] == "34") {
+				// 						$fstatus = 'Furnished';
+				// 					} elseif ($vv[0] == "107" || $vv[0] == "35") {
+				// 						$fstatus = 'Semi Furnished';
+				// 					} elseif ($vv[0] == "108" || $vv[0] == "36") {
+				// 						$fstatus = 'Unfurnished';
+				// 					} else {
+				// 						$fstatus = 'Can Furnished';
+				// 					}
+				// 				}
+				// 			}
+				// 		}
+				// 	}
+
+				// 	$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_display)) ? ' | ' : $category) . $configuration_display . '</div>';
+				// 	//	$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " " . $area_form_m . " - " . $row->area_to . " " . $area_form_t : "") . '</div>';
+				// 	$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " - " . $row->area_to . " " . $area_form_m : "") . '</div>';
+				// 	$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"></small></div>';
+				// 	$req .= $fstatus;
+				// 	if (!empty($area_name)) {
+				// 		$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"><i class="fa fa-map-marker"></i> ' . $area_name . $area_title . '</small></div>';
+				// 	}
+				// 	return $req;
+				// 	// } catch (\Throwable $th) {
+				// 	// 	report($th);
+				// 	// }
+				// })
 				->editColumn('client_requirement', function ($row) use ($dropdowns, $areas) {
-					// try {
 					$area_name = '';
-					$configuration_name = '';
-					$requiretype_name = '';
-					$configurationArray = json_decode($row->configuration);
-
-					// if (!empty(config('constant.property_configuration')[$row->configuration])) {
-					// 	$configuration_name = config('constant.property_configuration')[$row->configuration];
-					// 	dd($configuration_name);
-
-					$sub_cat = ((!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '');
-					$configurationArray = json_decode($row->configuration);
-					// dd("sub ",$configurationArray);
+					$other_areas = '';
+					$configuration_names = [];
+					$category = '';
 					$configuration_display = '';
-					if (!empty($configurationArray) && isset($configurationArray[0])) {
-						$configuration_names = []; // Initialize an empty array to store configuration names
 
+					$configurationArray = json_decode($row->configuration);
+					if (!empty($configurationArray) && isset($configurationArray[0])) {
 						foreach ($configurationArray as $configurationKey) {
 							if (!empty(config('constant.property_configuration')[$configurationKey])) {
 								$configuration_names[] = config('constant.property_configuration')[$configurationKey];
@@ -500,132 +606,68 @@ class EnquiriesController extends Controller
 								$configuration_names[] = "Null";
 							}
 						}
-
-						$configuration_display = implode(', ', $configuration_names); // Join configuration names with a comma and space
+						$configuration_display = implode(', ', $configuration_names);
 					} else {
-						$category = $sub_cat;
+						$category = (!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '';
 					}
 
-					$category = $sub_cat;
-
-					$area_name = '';
-					$other_areas = '';
-					$area_title = '';
-					// if (!empty($row->area_ids)) {
-					// 	foreach (json_decode($row->area_ids) as $key => $value) {
-					// 		if ($key < 2) {
-					// 			echo "* key -- ".$key; 
-					// 			// echo "<br> val -- ".$areas[$value]['name'];
-					// 			if ($key > 0) {
-					// 				dd("inn 1");
-					// 				$area_name .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-					// 			} else {
-					// 				// dd("inn 2");
-					// 				$area_name .= (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-					// 			}
-					// 		} else {
-					// 			dd("inn 3");
-					// 			$other_areas .= $area_name;
-					// 			$other_areas .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-					// 		}
-					// 	}
-					// }
-					if (!empty($row->area_ids)) {
-						foreach (json_decode($row->area_ids) as $key => $value) {
-							if ($key < 2) {
-								// echo "* key -- " . $key . "<br>";
-								// if ($key > 0) {
-								// 	dd("inn 1");
-								// 	$area_name .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-								// } else
-								//  {
-									// dd("inn 2");
-									$area_name .= (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-								// }
-							} else {
-								// dd("inn 3");
-								$other_areas .= $area_name;
-								$other_areas .= ', ' . (!empty($areas[$value]['name']) ? $areas[$value]['name'] : '');
-							}
-						}
-					}
 					
-					// dd("row->other_areas",$other_areas);
-					if ($other_areas) {
-						$area_title = ' <i class="fa fa-info-circle cursor-pointer" data-bs-content="' . $other_areas . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom"></i>';
-					}
-					$area_form_m = '';
-					// if (!empty($row->area_from_measurement)) {  //1
-					// 	$area_form_m = $land_units[$row->area_from_measurement]['unit_name'];
-					// }
-					$land_units = DB::table('land_units')->get();
 
-					if (!empty($row->area_from_measurement)) {
-						// Find the unit with the specified ID in the collection
-						$unit = $land_units->firstWhere('id', $row->area_from_measurement);
-
-						if ($unit) {
-							// Access the unit_name property of the object
-							$area_form_m = $unit->unit_name;
-						} else {
-							// Handle the case when the unit with the specified ID doesn't exist
-							$area_form_m = null; // or any default value you want
+					if (!empty($row->area_ids)) {
+						$area_ids = json_decode($row->area_ids);
+						foreach ($area_ids as $key => $value) {
+							$area = !empty($areas[$value]['name']) ? $areas[$value]['name'] : '';
+							if ($key < 2) {
+								$area_name .= ($key > 0 ? ', ' : '') . $area;
+							} else {
+								$other_areas .= (!empty($other_areas) ? ', ' : '') . $area;
+							}
 						}
 					}
 
+					$area_title = !empty($other_areas) ? '<i class="fa fa-info-circle cursor-pointer" data-bs-content="' . $other_areas . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom"></i>' : '';
 
-					// $area_form_t = '';
-					// if (!empty($row->area_to_measurement)) {
-					// 	$area_form_t = $dropdowns[$row->area_to_measurement]['name'];
-					// }
+					$area_form_m = '';
+					$land_units = DB::table('land_units')->get();
+					if (!empty($row->area_from_measurement)) {
+						$unit = $land_units->firstWhere('id', $row->area_from_measurement);
+						$area_form_m = $unit ? $unit->unit_name : null;
+					}
 
-					if ($row->property_type == '256') {
-						$fstatus  = '';
-					} else {
-						$fstatus  = '';
-						if (!empty($row->furnished_status) && !empty(json_decode($row->furnished_status))) {
-							$vv = json_decode($row->furnished_status);
-							if (isset($vv[0])) {
-								if (!empty($vv[0])) {
-									if ($vv[0] == "106" || $vv[0] == "34") {
-										$fstatus = 'Furnished';
-									} elseif ($vv[0] == "107" || $vv[0] == "35") {
-										$fstatus = 'Semi Furnished';
-									} elseif ($vv[0] == "108" || $vv[0] == "36") {
-										$fstatus = 'Unfurnished';
-									} else {
-										$fstatus = 'Can Furnished';
-									}
-								}
-							}
+					$fstatus = '';
+					if ($row->property_type != '256' && !empty($row->furnished_status)) {
+						$vv = json_decode($row->furnished_status);
+						if (isset($vv[0]) && !empty($vv[0])) {
+							$fstatus = match ($vv[0]) {
+								"106", "34" => 'Furnished',
+								"107", "35" => 'Semi Furnished',
+								"108", "36" => 'Unfurnished',
+								default => 'Can Furnished',
+							};
 						}
 					}
 
 					$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_display)) ? ' | ' : $category) . $configuration_display . '</div>';
-					//	$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " " . $area_form_m . " - " . $row->area_to . " " . $area_form_t : "") . '</div>';
 					$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " - " . $row->area_to . " " . $area_form_m : "") . '</div>';
 					$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"></small></div>';
 					$req .= $fstatus;
 					if (!empty($area_name)) {
 						$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"><i class="fa fa-map-marker"></i> ' . $area_name . $area_title . '</small></div>';
 					}
+
 					return $req;
-					// } catch (\Throwable $th) {
-					// 	report($th);
-					// }
 				})
 				->editColumn('budget', function ($row) {
 					$bud = '';
 					$row->budget_from = trim($row->budget_from);
 					$row->budget_to = trim($row->budget_to);
-					// dd("row->enquiry_for",$row->enquiry_for);
 					if ((!empty($row->budget_from) || !empty($row->budget_to)) && $row->enquiry_for !== 'Both') {
 						$bud = '<td style="vertical-align:top">
 					' . ((!empty($row->budget_from)) ? $row->budget_from . " to " : " upto ")  . $row->budget_to . '
 					</td>';
-					}else{
+					} else {
 						$bud = '<td style="vertical-align:top">
-					' . ((!empty($row->rent_price)) ?"R: ". $row->rent_price . " to S:" : " ")  . $row->sell_price . '
+					' . ((!empty($row->rent_price)) ? "R: " . $row->rent_price . " to S:" : " ")  . $row->sell_price . '
 					</td>';
 					}
 					return $bud;
@@ -639,12 +681,11 @@ class EnquiriesController extends Controller
 						}
 						return Carbon::parse($pro->nfd)->format('d-m-Y \| H:i') . '<br>' . $remark_data;
 					}
-					if($row->telephonic_discussion == null){
+					if ($row->telephonic_discussion == null) {
 						return " ";
 					}
 					return $row->telephonic_discussion;
 				})
-				//transfer date
 				->editColumn('assigned_to', function ($row) {
 					if (!empty($row->Employee)) {
 						return '<td align="center" style="vertical-align:top">
@@ -695,12 +736,6 @@ class EnquiriesController extends Controller
 					}
 					$buttons =  $buttons . '<i title="Contact List" data-id="' . $row->id . '" onclick=contactList(this) class="fa fs-22 py-2 mx-2 fa-database text-blue"></i>';
 					$buttons =  $buttons . '<i title="Schedule Visit" data-employee="' . $row->employee_id . '" data-id="' . $row->id . '" onclick=showScheduleVisit(this) class="fa fs-22 py-2 mx-2 fa-map text-success"></i>';
-					// if($row->enq_status){
-					// 	$buttons =  $buttons . '<i title="change Stats" data-status="' . $row->enq_status . '" data-id="' . $row->id . '" onclick=Status(this) class="fa fs-22 py-2 mx-2 fad fa-toggle-on" text-success"></i>';
-					// }else{
-					// 	$buttons =  $buttons . '<i title="change Stats" data-status="' . $row->enq_status . '" data-id="' . $row->id . '" onclick=Status(this) class="fa fs-22 py-2 mx-2 fad fa-toggle-off" text-success"></i>';
-
-					// }
 					return $buttons;
 				})
 				->rawColumns(['select_checkbox', 'telephonic_discussion', 'client_name', 'client_requirement', 'budget', 'assigned_to', 'Actions', 'Actions2', 'status_change'])
@@ -1654,14 +1689,13 @@ class EnquiriesController extends Controller
 		if (!is_array($configurations)) {
 			$configurations = [$configurations];
 		}
-
 		$configurations = array_map('intval', $configurations);
 		$properties = Properties::where('properties.property_type', $data->requirement_type)
-		->where('properties.property_for', $property_for)
-		->where('properties.property_category', $data->property_type)
-		->where(function ($query) use ($configurations,$data) {
+			->where('properties.property_for', $property_for)
+			->where('properties.property_category', $data->property_type)
+			->where(function ($query) use ($configurations, $data) {
 				// dd($data->property_type);
-				if($data->property_type !== '256'){
+				if ($data->property_type !== '256') {
 					foreach ($configurations as $config) {
 						$query->orWhereJsonContains('configuration', $config);
 					}
@@ -1675,13 +1709,13 @@ class EnquiriesController extends Controller
 					->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
 						$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
 							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-						})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-							$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-								->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-						})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-							$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-								->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-						})
+					})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+						$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+					})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+						$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+					})
 					->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
 						$query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
 							$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
@@ -1738,7 +1772,30 @@ class EnquiriesController extends Controller
 		// 	})
 		// 	->get();
 
-			// dd("properties",Auth::user()->id,$data->configuration,$properties);
+		// dd("properties",Auth::user()->id,$data->configuration,$properties);
+
+		$configurationArray = json_decode($data->configuration);
+
+		$sub_cat = ((!empty($dropdowns[$data->property_type]['name'])) ?  $dropdowns[$data->property_type]['name'] : '');
+		$configurationArray = json_decode($data->configuration);
+		$configuration_display = '';
+		if (!empty($configurationArray) && isset($configurationArray[0])) {
+			$configuration_names = []; // Initialize an empty array to store configuration names
+
+			foreach ($configurationArray as $configurationKey) {
+				if (!empty(config('constant.property_configuration')[$configurationKey])) {
+					$configuration_names[] = config('constant.property_configuration')[$configurationKey];
+				} else {
+					$configuration_names[] = "Null";
+				}
+			}
+
+			$configuration_display = implode(', ', $configuration_names); // Join configuration names with a comma and space
+		} else {
+			$category = $sub_cat;
+		}
+
+		$category = $sub_cat;
 
 		$employees = User::where('parent_id', Session::get('parent_id'))->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
@@ -1747,7 +1804,7 @@ class EnquiriesController extends Controller
 		$branches = Branches::orderBy('name')->get();
 		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$prop_list = Helper::get_property_units_helper();
-		return view('admin.enquiries.view', compact('areas', 'employees', 'data', 'prop_type', 'configuration_name', 'requiretype_name', 'area_name', 'city', 'branches', 'cities', 'project_name', 'employee', 'dropdowns', 'furnished', 'configuration_settings', 'projects', 'properties', 'prop_list'));
+		return view('admin.enquiries.view', compact('areas', 'category', 'requiretype_name', 'employees', 'data', 'prop_type', 'configuration_name', 'requiretype_name', 'area_name', 'city', 'branches', 'cities', 'project_name', 'employee', 'dropdowns', 'furnished', 'configuration_settings', 'projects', 'properties', 'prop_list'));
 	}
 
 
@@ -1993,13 +2050,13 @@ class EnquiriesController extends Controller
 
 	public function updateEnquiryStatus(Request $request)
 	{
-		
+
 		$enquiry = Enquiries::find($request->id);
 		if ($enquiry) {
 			$enquiry->enq_status = $enquiry->enq_status == 1 ? 0 : 1;
 			$enquiry->save();
 		}
-		if(isset($request->flag)){
+		if (isset($request->flag)) {
 			// dd(333);
 			return redirect()->back();
 		}
