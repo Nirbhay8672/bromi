@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Constants\Constants;
 use App\Helpers\Helper;
 use App\Models\User;
 use App\Http\Controllers\Controller;
@@ -261,7 +262,7 @@ class RegisterController extends Controller
             $userNotification = UserNotifications::create([
                 "user_id" => $superUser->id,
                 "notification" => $msg,
-                "notification_type" => "new_user",
+                "notification_type" => Constants::NEW_USER,
                 "new_user_id" => $user->id
             ]);
             // if notificaton creation failed.

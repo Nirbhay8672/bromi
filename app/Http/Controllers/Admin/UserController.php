@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\Constants;
 use App\Models\User;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
@@ -271,7 +272,7 @@ class UserController extends Controller
         $userNotification = UserNotifications::create([
             "user_id" => Auth::user()->id,
             "notification" => $msg,
-            "notification_type" => "new_user",
+            "notification_type" => Constants::NEW_USER,
             "new_user_id" => $data->id
         ]);
         // if notificaton creation failed.
