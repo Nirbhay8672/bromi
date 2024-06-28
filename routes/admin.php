@@ -87,12 +87,9 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::get('/', [HomeController::class, 'index'])->name('admin');
 		Route::post('/save-onesignal-id', function(Request $request) {
             try {
-                
                 $user = Auth::user();
-                if ($user->onesignal_token) {
-                    $user->onesignal_token = $request->input('playerId');
-                    $user->save();
-                }
+                $user->onesignal_token = $request->input('playerId');
+                $user->save();
                 return response()->json(['error' => false, 'data' => $user->onesignal_token]);
             } catch (\Throwable $th) {
                 return response()->json(['error' => true, 'data' => $th->getMessage()]);

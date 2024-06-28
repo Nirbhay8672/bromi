@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\Constants;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\SharedProperty;
 use App\Models\User;
 use App\Models\UserNotifications;
 use App\Models\UserPartner;
+use App\Traits\HelperFn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -15,6 +17,8 @@ use Illuminate\Support\Facades\Log;
 
 class PartnerController extends Controller
 {
+    use HelperFn;
+
 	public function __construct()
 	{
 		$this->middleware('auth');
@@ -234,7 +238,7 @@ class PartnerController extends Controller
                 $userNotification = UserNotifications::create([
                     "user_id" => (int) $val,
                     "notification" => Auth::user()->first_name . " has shared property.",
-                    "notification_type" => "property_shared",
+                    "notification_type" => Constants::PROPERTY_SHARED,
                     "property_id" => $request->property_id
                 ]);
                 // if notificaton creation failed.
