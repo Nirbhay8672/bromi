@@ -2356,7 +2356,6 @@
                 //bharat add subcategory done
                 var configuration = '';
                 if ($('input[name=property_category]:checked').attr('data-val') == 'Office') {
-                    // var configuration = $('input[name=office_type]:checked').val()
                     var configuration = $('input[name="office_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
@@ -2366,6 +2365,7 @@
                     }).get();
                     //
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Flat') {
+                    console.log("flate cat here ==",configuration);
                     var configuration = $('input[name="flat_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
@@ -2385,7 +2385,10 @@
                     var configuration = $('input[name="vila_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
-                } else {}
+                } else {
+                    console.log("none sub category in enquiries : ==",configuration);
+                    var configuration = ["0"];
+                }
 
                 if (!isValid) {
                     console.log("error on validations :", isValid);
