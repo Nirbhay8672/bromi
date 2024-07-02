@@ -450,7 +450,7 @@ class PropertyController extends Controller
                     $sub_cat = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | ' . $dropdowns[$row->property_category]['name'] : '');
 
                     // if (!is_null($row->configuration)) {
-                        if (!is_null($row->configuration) && $dropdowns[$row->property_category]['name'] !== "Farmhouse") {
+                    if (!is_null($row->configuration) && $dropdowns[$row->property_category]['name'] !== "Farmhouse") {
                         $catId = (int) $row->configuration;
                         //$getsub_category = Helper::getsubcategory($catId);
                         $getsub_category = $new_array[$catId];
@@ -2187,7 +2187,7 @@ class PropertyController extends Controller
         } else if ($length_of_plot_part !== "") {
             $length_of_plot_part_unit = $length_of_plot_part[1];
         }
-        // dd("constructed_area",$constructed_area,"22",$area_size,"33",$salable_plot_area,$length_of_plot,"part length",$length_of_plot_part);
+        // dd("salable_plot_area_part",$salable_plot_area_part[1],"constructed_area",$constructed_area,"22",$area_size,"33",$salable_plot_area,$length_of_plot,"part length",$length_of_plot_part);
         // matching
         // $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
         //     ->where('requirement_type', $property->property_type)
@@ -2244,7 +2244,6 @@ class PropertyController extends Controller
         //         }
         //     )
         //     ->get();
-        // dd("Auasdth", Auth::user()->id, $property->configuration, $enquiries);
 
         // Initial debug dump to see the values before conditions
         // dd("Initial values",
@@ -2269,18 +2268,23 @@ class PropertyController extends Controller
                 return $query->where('budget_from', '<=', $property->survey_price)
                     ->where('budget_to', '>=', $property->survey_price);
             })
-            ->when($constructed_area !== "", function ($query) use ($constructed_area, $constructed_area_unit) {
-                // Debug statement for constructed_area
-                // dd("constructed_area condition",
-                //     "constructed_area" , $constructed_area,
-                //     "constructed_area_unit" , $constructed_area_unit
+            ->when($constructed_area !== "", function ($query) use ($constructed_area,$salable_plot_area_part, $constructed_area_unit, $property) {
+                // dd(
+                //     "constructed_area condition",
+                //     "constructed_area",
+                //     $constructed_area,
+                //     "constructed_area_unit",
+                //     $constructed_area_unit,
+                // $property->property_category,
+                // "salable_plot_area_part",$salable_plot_area_part[1]
                 // );
-                return $query->where('area_from', '<=', $constructed_area)
-                    ->where('area_to', '>=', $constructed_area)
-                    ->where('area_from_measurement', $constructed_area_unit);
+                if ($property->property_category !== "258" && $property->property_category !== '255') {
+                    return $query->where('area_from', '<=', $constructed_area)
+                        ->where('area_to', '>=', $constructed_area)
+                        ->where('area_from_measurement', $constructed_area_unit);
+                }
             })
-            ->when($area_size !== "", function ($query) use ($area_size, $area_size_int, $area_size_unit, $property) {
-                // Debug statement for area_size
+            ->when($area_size !== "", function ($query) use ($area_parts,$area_size, $area_size_int, $area_size_unit, $property) {
                 // dd("area_size condition",
                 //     "area_size" , $area_size,
                 //     "area_size_int" , $area_size_int,
@@ -2290,25 +2294,29 @@ class PropertyController extends Controller
                 if ($property->property_category !== "259" && $property->property_category !== "254") {
                     return $query->where('area_from', '<=', $area_size)
                         ->where('area_to', '>=', $area_size)
-                        ->where('area_from_measurement', $area_size_unit);
+                        ->where('area_from_measurement', $area_parts[1]);
                 } else {
+                    // dd("oyt",1100,$area_parts[1]);
                     return $query->where('area_from', '<=', $area_size_int)
                         ->where('area_to', '>=', $area_size_int)
-                        ->where('area_from_measurement', $area_size_unit);
+                        ->where('area_from_measurement', $area_parts[1]);
                 }
             })
-            ->when($salable_plot_area !== "", function ($query) use ($salable_plot_area, $salable_plot_area_unit) {
-                // Debug statement for salable_plot_area
+            ->when($salable_plot_area !== "", function ($query) use ($property,$salable_plot_area_part, $salable_plot_area, $salable_plot_area_unit) {
                 // dd("salable_plot_area condition",
                 //     "salable_plot_area" , $salable_plot_area,
                 //     "salable_plot_area_unit" , $salable_plot_area_unit
                 // );
-                return $query->where('area_from', '<=', $salable_plot_area)
-                    ->where('area_to', '>=', $salable_plot_area)
-                    ->where('area_from_measurement', $salable_plot_area_unit);
+                if ($property->property_category !== '258') {
+                    return $query->where('area_from', '<=', $salable_plot_area)
+                        ->where('area_to', '>=', $salable_plot_area)
+                        ->where('area_from_measurement', $salable_plot_area_part[1]);
+                } else {
+                    return "";
+                }
+                // ->where('area_from_measurement', $salable_plot_area_unit);
             })
             ->when($length_of_plot !== "", function ($query) use ($length_of_plot, $length_of_plot_part) {
-                // Debug statement for length_of_plot
                 // dd("length_of_plot condition",
                 //     "length_of_plot" , $length_of_plot,
                 //     "length_of_plot_part_unit" , $length_of_plot_part[1]
@@ -2349,7 +2357,7 @@ class PropertyController extends Controller
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property','configuration_name', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property', 'configuration_name', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
 
     // public function downloadZip($type, $prop)

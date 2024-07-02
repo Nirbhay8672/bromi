@@ -542,8 +542,8 @@
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Name</th>
-                                                                <th scope="col">Type</th>
-                                                                <th scope="col">Category</th>
+                                                                {{-- <th scope="col">Type</th>
+                                                                <th scope="col">Category</th> --}}
                                                                 <th scope="col">Area</th>
                                                                 <th scope="col">Status</th>
                                                                 <th scope="col">Price</th>
@@ -556,23 +556,57 @@
                                                         <tbody id="matching_container">
                                                             @forelse ($properties as $value)
                                                             <?php
-                                                                $salable_units=$units->where('id',$data->area_from_measurement)->first();
-                                                            ?>
+                                                            $salable_units = $units->where('id', $data->area_from_measurement)->first();
+                                                            $category_prop = "";
+                                                            if (!empty($value->property_category) && !empty($dropdowns[$value->property_category]['name'])) {
+                                                                $category_prop = $dropdowns[$value->property_category]['name'];
+                                                            }
+
+                                                            $dataConfiguration = json_decode($value->configuration);
+
+                                                            $configuration_name = [];
+                                                            if (is_array($dataConfiguration)) {
+                                                                $configuration = config('constant.property_configuration');
+                                                                foreach ($dataConfiguration as $id) {
+                                                                    if (isset($configuration[$id])) {
+                                                                        $configuration_name[] = $configuration[$id];
+                                                                    }
+                                                                }
+                                                            } elseif (is_int($dataConfiguration)) {
+                                                                $configuration = config('constant.property_configuration');
+                                                                if (isset($configuration[$dataConfiguration])) {
+                                                                    $configuration_name[] = $configuration[$dataConfiguration];
+                                                                }
+                                                            } else {
+                                                                $dataConfiguration = (array) $dataConfiguration;
+                                                                $configuration = config('constant.property_configuration');
+                                                                foreach ($dataConfiguration as $id) {
+                                                                    if (isset($configuration[$id])) {
+                                                                        $configuration_name[] = $configuration[$id];
+                                                                    }
+                                                                }
+                                                            }
+                                                        ?>
                                                             <tr>
                                                                     @if ($value->property_category !== '262')
                                                                         <td><a href="{{ route('admin.project.view', encrypt($value->id)) }}">{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</a></td>
                                                                     @else
                                                                         <td>{{"-"}}</td>
                                                                     @endif
-                                                                    <td>{{ $requiretype_name }}</td>
-                                                                    <td>{{$category}}</td>
+                                                                    {{-- <td>{{ $category_prop }}</td>
+                                                                    <td>{{ implode(', ', $configuration_name) }}</td> --}}
                                                                     <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->constructed_salable_area)[0] .' '. $salable_units->unit_name}}</td>
                                                                     <td>{{ json_decode($value->unit_details)[0][2] }}</td>
                                                                     <td>
                                                                         @php
                                                                             $unitDetails = json_decode($value->unit_details);
-                                                                        @endphp
-                                                                        {{ isset($unitDetails[0][3]) ? $unitDetails[0][3] : (isset($unitDetails[0][4]) ? $unitDetails[0][4] : $value->survey_price) }}
+                                                                        $price = isset($unitDetails[0][3]) ? $unitDetails[0][3] : 
+                                                                                 (isset($unitDetails[0][4]) ? $unitDetails[0][4] : 
+                                                                                 (isset($unitDetails[0][7]) ? $unitDetails[0][7] : 
+                                                                                 $value->survey_price));
+                                                                    @endphp
+                                                                    {{ $price }}
+                                                                        {{-- {{ isset($unitDetails[0][3]) ? $unitDetails[0][3] : (isset($unitDetails[0][4]) ? $unitDetails[0][4] : $value->survey_price) }} --}}
                                                                     </td>
                                                                     <td>
                                                                         @if ($value->Property_priority == "91")
@@ -1003,8 +1037,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Name</th>
-                                                            <th scope="col">Type</th>
-                                                            <th scope="col">Category</th>
+                                                            {{-- <th scope="col">Type</th>
+                                                            <th scope="col">Category</th> --}}
                                                             <th scope="col">Area</th>
                                                             <th scope="col">Status</th>
                                                             <th scope="col">Price</th>
@@ -1025,8 +1059,8 @@
                                                                 @else
                                                                     <td>{{"-"}}</td>
                                                                 @endif
-                                                                <td>{{ $requiretype_name }}</td>
-                                                                <td>{{$category}}</td>
+                                                                {{-- <td>{{ $requiretype_name }}</td>
+                                                                <td>{{$category}}</td> --}}
                                                                 <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->constructed_salable_area)[0] .' '. $salable_units->unit_name}}</td>
                                                                 <td>{{ json_decode($value->unit_details)[0][2] }}</td>
                                                                 <td>

@@ -611,7 +611,7 @@ class EnquiriesController extends Controller
 						$category = (!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '';
 					}
 
-					
+
 
 					if (!empty($row->area_ids)) {
 						$area_ids = json_decode($row->area_ids);
@@ -634,21 +634,21 @@ class EnquiriesController extends Controller
 						$area_form_m = $unit ? $unit->unit_name : null;
 					}
 
-// 				$fstatus = '';
-// if ($row->property_type != '256' && !empty($row->furnished_status)) {
-//     $vv = json_decode($row->furnished_status);
-//     if (isset($vv[0]) && !empty($vv[0])) {
-//         $fstatus = match ($vv[0]) {
-//             "106", "34" => 'Furnished',
-//             "107", "35" => 'Semi Furnished',
-//             "108", "36" => 'Unfurnished',
-//             default => 'Can Furnished',
-//         };
-//     }
-// }
+					// 				$fstatus = '';
+					// if ($row->property_type != '256' && !empty($row->furnished_status)) {
+					//     $vv = json_decode($row->furnished_status);
+					//     if (isset($vv[0]) && !empty($vv[0])) {
+					//         $fstatus = match ($vv[0]) {
+					//             "106", "34" => 'Furnished',
+					//             "107", "35" => 'Semi Furnished',
+					//             "108", "36" => 'Unfurnished',
+					//             default => 'Can Furnished',
+					//         };
+					//     }
+					// }
 
 
-if ($row->property_type == '256') {
+					if ($row->property_type == '256') {
 						$fstatus  = '';
 					} else {
 						$fstatus  = '';
@@ -1711,12 +1711,13 @@ if ($row->property_type == '256') {
 		if (!is_array($configurations)) {
 			$configurations = [$configurations];
 		}
+		// dd("property_for",$property_for,"cat",$data->property_type);
 		$configurations = array_map('intval', $configurations);
 		$properties = Properties::where('properties.property_type', $data->requirement_type)
 			->where('properties.property_for', $property_for)
 			->where('properties.property_category', $data->property_type)
-			->where(function ($query) use ($configurations, $data) {
-				// dd($data->property_type);
+			->where(function ($query) use ($configurations, $data,$property_for) {
+				// dd($data->property_type,"configurations",$configurations,$property_for);
 				if ($data->property_type !== '256') {
 					foreach ($configurations as $config) {
 						$query->orWhereJsonContains('configuration', $config);
