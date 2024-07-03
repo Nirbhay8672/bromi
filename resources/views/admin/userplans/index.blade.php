@@ -73,23 +73,36 @@
                                                 $gst = $plan->price * 0.18;
                                                 ?>
 
-                                                @if($current_plan['id'] == $plan->id)
+                                                @if($display_button) 
                                                     <button
                                                         class="btn btn-primary btn-lg"
                                                         type="button"
-                                                        disabled
-                                                    >Active Plan</button>
+                                                        data-original-title="btn btn-primary btn-lg"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#couponModal"
+                                                        onclick="setDetails({{ $plan->id }}, {{ $plan->price }}, '{{ $plan->name }}', '{{ $gstType }}', '{{ $gst }}')"
+                                                    >Purchase</button>
                                                 @else
-                                                    @if($plan->price > $current_plan['price'] )
+
+                                                    @if($current_plan['id'] == $plan->id)
                                                         <button
                                                             class="btn btn-primary btn-lg"
                                                             type="button"
-                                                            data-original-title="btn btn-primary btn-lg"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#couponModal"
-                                                            onclick="setDetails({{ $plan->id }}, {{ $plan->price }}, '{{ $plan->name }}', '{{ $gstType }}', '{{ $gst }}')"
-                                                        >Upgrade</button>
+                                                            disabled
+                                                        >Active Plan</button>
+                                                    @else
+                                                        @if($plan->price > $current_plan['price'] )
+                                                            <button
+                                                                class="btn btn-primary btn-lg"
+                                                                type="button"
+                                                                data-original-title="btn btn-primary btn-lg"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#couponModal"
+                                                                onclick="setDetails({{ $plan->id }}, {{ $plan->price }}, '{{ $plan->name }}', '{{ $gstType }}', '{{ $gst }}')"
+                                                            >Upgrade</button>
+                                                        @endif
                                                     @endif
+
                                                 @endif
 											</form>
                                         </div>
