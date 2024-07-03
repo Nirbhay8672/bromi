@@ -82,10 +82,8 @@
                                                                 type="button"
                                                                 disabled
                                                             >Active Plan</button>
-
-                                                           
                                                         @else
-                                                        <button
+                                                            <button
                                                                 class="btn btn-primary btn-lg"
                                                                 type="button"
                                                                 data-original-title="btn btn-primary btn-lg"
@@ -107,8 +105,6 @@
                                                             >Upgrade</button>
                                                         @endif
                                                     @endif
-
-                                                @endif
 											</form>
                                         </div>
                                     </div>
