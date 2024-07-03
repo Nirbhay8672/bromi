@@ -542,8 +542,8 @@
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Name</th>
-                                                                {{-- <th scope="col">Type</th>
-                                                                <th scope="col">Category</th> --}}
+                                                                <th scope="col">Type</th>
+                                                                <th scope="col">Category</th>
                                                                 <th scope="col">Area</th>
                                                                 <th scope="col">Status</th>
                                                                 <th scope="col">Price</th>
@@ -588,26 +588,37 @@
                                                             }
                                                         ?>
                                                             <tr>
-                                                                    @if ($value->property_category !== '262')
-                                                                        <td><a href="{{ route('admin.project.view', encrypt($value->id)) }}">{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</a></td>
-                                                                    @else
-                                                                        <td>{{"-"}}</td>
-                                                                    @endif
-                                                                    {{-- <td>{{ $category_prop }}</td>
-                                                                    <td>{{ implode(', ', $configuration_name) }}</td> --}}
-                                                                    <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->constructed_salable_area)[0] .' '. $salable_units->unit_name}}</td>
-                                                                    <td>{{ json_decode($value->unit_details)[0][2] }}</td>
-                                                                    <td>
-                                                                        @php
-                                                                            $unitDetails = json_decode($value->unit_details);
-                                                                        $price = isset($unitDetails[0][3]) ? $unitDetails[0][3] : 
-                                                                                 (isset($unitDetails[0][4]) ? $unitDetails[0][4] : 
-                                                                                 (isset($unitDetails[0][7]) ? $unitDetails[0][7] : 
-                                                                                 $value->survey_price));
-                                                                    @endphp
-                                                                    {{ $price }}
-                                                                        {{-- {{ isset($unitDetails[0][3]) ? $unitDetails[0][3] : (isset($unitDetails[0][4]) ? $unitDetails[0][4] : $value->survey_price) }} --}}
-                                                                    </td>
+                                                                @if ($value->property_category !== '262')
+                                                                    <td><a href="{{ route('admin.project.view', encrypt($value->id)) }}">{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</a></td>
+                                                                @else
+                                                                    <td>{{"-"}}</td>
+                                                                @endif
+                                                                <td>{{ $category_prop }}</td>
+                                                                <td>{{ implode(', ', $configuration_name) }}</td>
+                                                                <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->constructed_salable_area)[0] .' '. $salable_units->unit_name}}</td>
+                                                                <td>{{ json_decode($value->unit_details)[0][2] }}</td>
+                                                                @php
+                                                                $unitDetails = json_decode($value->unit_details, true); // Decode as an associative array
+                                                        
+                                                                $price = '-';
+                                                        
+                                                                // Check if unitDetails is an array and has at least one element
+                                                                if (is_array($unitDetails) && isset($unitDetails[0])) {
+                                                                    // Check for the specific indices in the first element of the array
+                                                                    if (isset($unitDetails[0][3]) && $unitDetails[0][3] !== "") {
+                                                                        $price = $unitDetails[0][3];
+                                                                    } elseif (isset($unitDetails[0][4]) && $unitDetails[0][4] !== "") {
+                                                                        $price = $unitDetails[0][4];
+                                                                    } elseif (isset($unitDetails[0][7]) && $unitDetails[0][7] !== "") {
+                                                                        $price = $unitDetails[0][7];
+                                                                    } else {
+                                                                        // If none of the indices have a valid value, use the survey price if available
+                                                                        $price = $value->survey_price ?: '-';
+                                                                    }
+                                                                }
+                                                                @endphp
+                                                                <td>{{ $price }}</td>
+
                                                                     <td>
                                                                         @if ($value->Property_priority == "91")
                                                                             High
