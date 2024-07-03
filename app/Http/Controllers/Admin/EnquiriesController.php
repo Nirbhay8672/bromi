@@ -271,20 +271,23 @@ class EnquiriesController extends Controller
 										$q->where('rent_price', '<=', $survey_price)
 											->where('sell_price', '>=', $survey_price);
 									});
-								} else if ($unit_price !== '' && $unit_price !== null && $unit_price !== 0) {
-									// dd('112');
+								}else if ($unit_price !== '' && $unit_price !== null && $unit_price !== 0) {
+									// dd('112',$unit_price);
 									// $query
 									// 	->where('budget_from', '<=', $unit_price)  
 									// 	->where('budget_to', '>=', $unit_price);
 
 									$query->where(function ($q) use ($unit_price) {
-										// dd("1231");
-										$q->where('budget_from', '<=', $unit_price)
-											->where('budget_to', '>=', $unit_price);
-									})->orWhere(function ($q) use ($unitDetails) {
-										// dd("inn",$unitDetails[0][4],$unitDetails[0][3]);
-										$q->where('rent_price', '=', $unitDetails[0][4])
-											->where('sell_price', '=', $unitDetails[0][3]);
+										$q->where('budget_from', '<=', (int) $unit_price)
+											->where('budget_to', '>=', (int) $unit_price);
+									})->orWhere(function ($q) use ($unitDetails,$pro) {
+										// dd("inn","sd",$pro->property_category,"===",$unitDetails[0][4],$unitDetails[0][3]);
+										if($pro->property_category !== '259'){
+											// dd("in",$unitDetails[0][4]);
+											$q->where('rent_price', '=', $unitDetails[0][4])
+												->where('sell_price', '=', $unitDetails[0][3]);
+											}
+
 									});
 								}
 
@@ -625,7 +628,7 @@ class EnquiriesController extends Controller
 						}
 					}
 
-					$area_title = !empty($other_areas) ? '<i class="fa fa-info-circle cursor-pointer" data-bs-content="' . $other_areas . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom"></i>' : '';
+					$area_title = !empty($other_areas) ? ' <i class="fa fa-info-circle cursor-pointer" data-bs-content="' . $other_areas . '" data-bs-original-title="" data-bs-trigger="hover" data-container="body" data-bs-toggle="popover" data-bs-placement="bottom"></i>' : '';
 
 					$area_form_m = '';
 					$land_units = DB::table('land_units')->get();
