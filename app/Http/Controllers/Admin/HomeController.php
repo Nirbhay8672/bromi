@@ -697,7 +697,16 @@ class HomeController extends Controller
 
 		$current_plan = Subplans::find(Auth::user()->plan_id)->toArray();
 
-		return view('admin.userplans.index', compact('plans','current_plan'));
+		$display_button = false;
+
+		if(Auth::user()->plan_expire_on) {
+
+			$today = new DateTime(); // This defaults to today's date
+			$databaseDate = new DateTime(Auth::user()->plan_expire_on);
+			$display_button = $databaseDate < $today ? false : true;
+		}
+
+		return view('admin.userplans.index', compact('plans','current_plan' ,'display_button'));
 	}
 	
     public function priceCalculator(Request $request)
