@@ -77,13 +77,7 @@
                                                     @if($current_plan['id'] == $plan->id)
 
                                                         @if($display_button)
-                                                            <button
-                                                                class="btn btn-primary btn-lg"
-                                                                type="button"
-                                                                disabled
-                                                            >Active Plan</button>
-                                                        @else
-                                                            <button
+                                                        <button
                                                                 class="btn btn-primary btn-lg"
                                                                 type="button"
                                                                 data-original-title="btn btn-primary btn-lg"
@@ -91,6 +85,13 @@
                                                                 data-bs-target="#couponModal"
                                                                 onclick="setDetails({{ $plan->id }}, {{ $plan->price }}, '{{ $plan->name }}', '{{ $gstType }}', '{{ $gst }}')"
                                                             >Renew</button>
+                                                        @else
+                                                        <button
+                                                                class="btn btn-primary btn-lg"
+                                                                type="button"
+                                                                disabled
+                                                            >Active Plan</button>
+                                                           
                                                         @endif
 
                                                     @else
