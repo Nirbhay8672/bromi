@@ -148,7 +148,7 @@ class UserController extends Controller
 
 	public function saveUser(Request $request)
 	{
-		$validated = $request->validate([
+		$request->validate([
 			'first_name' => 'required',
 			'middle_name' => 'required',
 			'last_name' => 'required',
@@ -180,7 +180,8 @@ class UserController extends Controller
 		if (!empty($request->password)) {
 			$data->password = Hash::make($request->password);
 		}
-		$data->parent_id = Session::get('parent_id');
+		
+		$data->parent_id = Auth::user()->id;
 		$data->first_name = $request->first_name;
 		$data->middle_name = $request->middle_name;
 		$data->last_name = $request->last_name;
@@ -210,6 +211,9 @@ class UserController extends Controller
 		$data->buildings = $request->buildings;
 		$data->working = $request->working;
 		$data->plan_id = Auth::user()->plan_id;
+
+		$data->subscribed_on = Auth::user()->subscribed_on;
+		$data->plan_expire_on = Auth::user()->plan_expire_on;
 		
 		$plan = Subplans::find(Auth::user()->plan_id);
 		
