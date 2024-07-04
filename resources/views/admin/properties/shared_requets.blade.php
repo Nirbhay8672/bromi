@@ -15,10 +15,9 @@
                     <div class="card">
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Shared Property to others</h5>
-							<a href="{{ route('admin.userRequest') }}"><button class="btn btn-primary btn-air-primary "
+							{{-- <a href="{{ route('admin.userRequest') }}"><button class="btn btn-primary btn-air-primary "
 								type="button">User
-								Requests</button></a>
-                            {{-- <a class="btn btn-primary btn-air-primary" href="#" id="userRequestBtn">User Request</a> --}}
+								Requests</button></a> --}}
                         </div>
                         <div class="card-body">
 
