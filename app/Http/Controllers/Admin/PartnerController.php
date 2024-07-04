@@ -126,6 +126,27 @@ class PartnerController extends Controller
 					'partner_id' => $validatedData['user_id'],
 					'status' => 'Pending',
 				]);
+                $message = Auth::user()->first_name . " " . Auth::user()->last_name . "has sent you partner request.";
+                # code...
+                try {
+                    UserNotifications::create([
+                        "user_id" => (int) $validatedData['user_id'],
+                        "notification" => $message,
+                        "notification_type" => Constants::PARTNER_REQUEST,
+                        'by_user' => (int) $authenticatedUserId,
+                    ]);
+                    /* if (!empty($sender->onesignal_token)) {
+                        HelperFn::sendPushNotification($sender->onesignal_token, $message);
+                    } else {
+                        Log::error("Accept Add Partner Request Error: ");
+                        Log::error("User id: $sender->id does not have onesignal token");
+                        Log::error("That's why notification not sent.");
+                    } */
+                } catch (\Throwable $th) {
+                    // if notificaton creation failed.
+                    Log::error("On Accept add partner request attempt failed by user Id:" . $validatedData['user_id']);
+                    Log::error("Error Message: $th->getMessage()");
+                }
 				return response()->json(['message' => 'Partner added successfully', 'status' => 'sucess']);
 			} else {
 				return response()->json(['message' => 'Alredy Added Partner', 'status' => 'error']);
