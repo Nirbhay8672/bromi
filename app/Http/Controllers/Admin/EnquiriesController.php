@@ -278,8 +278,8 @@ class EnquiriesController extends Controller
 									// 	->where('budget_to', '>=', $unit_price);
 
 									$query->where(function ($q) use ($unit_price) {
-										$q->where('budget_from', '<=', (int) $unit_price)
-											->where('budget_to', '>=', (int) $unit_price);
+										$q->where('budget_from', '<=', (float) $unit_price)
+											->where('budget_to', '>=', (float) $unit_price);
 									})->orWhere(function ($q) use ($unitDetails,$pro) {
 										// dd("inn","sd",$pro->property_category,"===",$unitDetails[0][4],$unitDetails[0][3]);
 										if($pro->property_category !== '259'){
@@ -1375,6 +1375,8 @@ class EnquiriesController extends Controller
 			$data =  new Enquiries();
 			$data->transfer_date = date('Y-m-d');
 		}
+		$budget_from = str_replace(',', '', $request->budget_from);
+		$budget_to = str_replace(',', '', $request->budget_to);
 
 		$data->added_by = Auth::user()->id;
 		$data->user_id = Session::get('parent_id');
@@ -1394,8 +1396,8 @@ class EnquiriesController extends Controller
 		$data->area_to_measurement = $request->area_to_measurement;
 		$data->enquiry_source = $request->enquiry_source;
 		$data->furnished_status = $request->furnished_status;
-		$data->budget_from = $request->budget_from;
-		$data->budget_to = $request->budget_to;
+		$data->budget_from = $budget_from;
+		$data->budget_to = $budget_to;
 		$data->rent_price = $request->rent_price;
 		$data->sell_price = $request->sell_price;
 		$data->purpose = $request->purpose;
