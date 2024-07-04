@@ -367,7 +367,7 @@ class EnquiriesController extends Controller
 									$query->where('area_from_measurement', '=', $result2_unit)
 										->where('area_to_measurement', '>=', $result2_unit);
 								} else if ($result3_unit) {
-									dd('result3_unit', $result3_unit);
+									// dd('result3_unit', $result3_unit);
 									$query->where('area_from_measurement', '=', $result3_unit)
 										->where('area_to_measurement', '>=', $result3_unit);
 								}
