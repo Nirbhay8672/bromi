@@ -8,6 +8,7 @@ class Constants
     const PROPERTY_SHARED = 'property_shared';
     const ENQUIRY_FOLLOWUP = 'enquiry_followup';
     const ENQUIRY_ASSIGNED = 'enquiry_assigned';
+    const PARTNER_REQUEST = 'partner_request';
     const PARTNER_REQUEST_ACCEPTED = 'partner_request_accepted';
     const PROPERTY_REQUEST_ACCEPTED = 'property_request_accepted';
     const GENERAL = 'general';
