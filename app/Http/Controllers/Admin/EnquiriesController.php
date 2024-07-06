@@ -271,7 +271,7 @@ class EnquiriesController extends Controller
 										$q->where('rent_price', '<=', $survey_price)
 											->where('sell_price', '>=', $survey_price);
 									});
-								}else if ($unit_price !== '' && $unit_price !== null && $unit_price !== 0) {
+								} else if ($unit_price !== '' && $unit_price !== null && $unit_price !== 0) {
 									// dd('112',$unit_price);
 									// $query
 									// 	->where('budget_from', '<=', $unit_price)  
@@ -280,14 +280,13 @@ class EnquiriesController extends Controller
 									$query->where(function ($q) use ($unit_price) {
 										$q->where('budget_from', '<=', (float) $unit_price)
 											->where('budget_to', '>=', (float) $unit_price);
-									})->orWhere(function ($q) use ($unitDetails,$pro) {
+									})->orWhere(function ($q) use ($unitDetails, $pro) {
 										// dd("inn","sd",$pro->property_category,"===",$unitDetails[0][4],$unitDetails[0][3]);
-										if($pro->property_category !== '259'){
+										if ($pro->property_category !== '259') {
 											// dd("in",$unitDetails[0][4]);
 											$q->where('rent_price', '=', $unitDetails[0][4])
 												->where('sell_price', '=', $unitDetails[0][3]);
-											}
-
+										}
 									});
 								}
 
@@ -614,8 +613,6 @@ class EnquiriesController extends Controller
 						$category = (!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '';
 					}
 
-
-
 					if (!empty($row->area_ids)) {
 						$area_ids = json_decode($row->area_ids);
 						foreach ($area_ids as $key => $value) {
@@ -636,20 +633,6 @@ class EnquiriesController extends Controller
 						$unit = $land_units->firstWhere('id', $row->area_from_measurement);
 						$area_form_m = $unit ? $unit->unit_name : null;
 					}
-
-					// 				$fstatus = '';
-					// if ($row->property_type != '256' && !empty($row->furnished_status)) {
-					//     $vv = json_decode($row->furnished_status);
-					//     if (isset($vv[0]) && !empty($vv[0])) {
-					//         $fstatus = match ($vv[0]) {
-					//             "106", "34" => 'Furnished',
-					//             "107", "35" => 'Semi Furnished',
-					//             "108", "36" => 'Unfurnished',
-					//             default => 'Can Furnished',
-					//         };
-					//     }
-					// }
-
 
 					if ($row->property_type == '256') {
 						$fstatus  = '';
@@ -686,14 +669,20 @@ class EnquiriesController extends Controller
 					$bud = '';
 					$row->budget_from = trim($row->budget_from);
 					$row->budget_to = trim($row->budget_to);
+					$row->rent_price = trim($row->rent_price);
+					$row->sell_price = trim($row->sell_price);
+					$budget_from_formatted = HelperFn::formatIndianCurrency($row->budget_from);
+					$budget_to_formatted = HelperFn::formatIndianCurrency($row->budget_to);
+					$rent_price_formatted = HelperFn::formatIndianCurrency($row->rent_price);
+					$sell_price_formatted = HelperFn::formatIndianCurrency($row->sell_price);
 					if ((!empty($row->budget_from) || !empty($row->budget_to)) && $row->enquiry_for !== 'Both') {
 						$bud = '<td style="vertical-align:top">
-					' . ((!empty($row->budget_from)) ? $row->budget_from . " to " : " upto ")  . $row->budget_to . '
-					</td>';
+							' . ((!empty($row->budget_from)) ? '₹ ' . $budget_from_formatted . ' to ₹ ' : ' upto ') . $budget_to_formatted . '
+						</td>';
 					} else {
 						$bud = '<td style="vertical-align:top">
-					' . ((!empty($row->rent_price)) ? "R: " . $row->rent_price . " to S:" : " ")  . $row->sell_price . '
-					</td>';
+							' . ((!empty($row->rent_price)) ? 'R: ₹ ' . $rent_price_formatted . ' to S: ₹ ' : ' ')  . $sell_price_formatted . '
+						</td>';
 					}
 					return $bud;
 				})
@@ -1721,7 +1710,7 @@ class EnquiriesController extends Controller
 		$properties = Properties::where('properties.property_type', $data->requirement_type)
 			->where('properties.property_for', $property_for)
 			->where('properties.property_category', $data->property_type)
-			->where(function ($query) use ($configurations, $data,$property_for) {
+			->where(function ($query) use ($configurations, $data, $property_for) {
 				// dd($data->property_type,"configurations",$configurations,$property_for);
 				if ($data->property_type !== '256') {
 					foreach ($configurations as $config) {
@@ -1766,42 +1755,6 @@ class EnquiriesController extends Controller
 			->get();
 
 		// dd("propertiessssssssssss", Auth::user()->id, $configurations, $properties);
-
-
-		// $data->configuration = json_decode($data->configuration, true);
-
-		// $properties = Properties::where('properties.property_type', $data->requirement_type)
-		// 	->where('properties.property_for', $property_for)
-		// 	->where('properties.property_category', $data->property_type)
-		// 	->where(function ($query) use ($data) {
-		// 		foreach ($data->configuration as $config) {
-		// 			$query->orWhereJsonContains('configuration', $config);
-		// 		}
-		// 	})
-		// 	->where(function ($query) use ($budgetFrom, $budgetTo, $areaFrom, $areaTo, $area_from_to_unit) {
-		// 		$query->where(function ($query) use ($budgetFrom, $budgetTo) {
-		// 			$query->where('properties.survey_price', '>=', $budgetFrom)
-		// 				->where('properties.survey_price', '<=', $budgetTo);
-		// 		})
-		// 			->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-		// 				$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-		// 					->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-		// 			})
-		// 			->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-		// 				$query->where(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-		// 					$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-		// 						->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-		// 				})
-		// 					->orWhere(function ($query) use ($areaFrom, $areaTo, $area_from_to_unit) {
-		// 						$query->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$areaFrom, $areaTo])
-		// 							->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$area_from_to_unit->id]);
-		// 					});
-		// 			});
-		// 	})
-		// 	->get();
-
-		// dd("properties",Auth::user()->id,$data->configuration,$properties);
-
 		$configurationArray = json_decode($data->configuration);
 
 		$sub_cat = ((!empty($dropdowns[$data->property_type]['name'])) ?  $dropdowns[$data->property_type]['name'] : '');

@@ -3,6 +3,7 @@
     $units=DB::table('land_units')->get();
     $land_units=$units->where('id',$data->area_from_measurement)->first();
     $land_unit_name=$land_units->unit_name;
+    use App\Traits\HelperFn;
 ?>
 @extends('admin.layouts.app')
 @section('content')
@@ -278,10 +279,9 @@
                                                             <h6><b>Budget</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_14">
-                                                            <div>:  {{ $data->budget_from ? $data->budget_from : '0' }} ₹  to
-                                                                {{ $data->budget_to }} ₹ 
-                                                            </div>
+                                                            <div>: ₹ {{ HelperFn::formatIndianCurrency($data->budget_from ?? 0) }} to ₹ {{ HelperFn::formatIndianCurrency($data->budget_to ?? 0) }}</div>
                                                         </div>
+                                                        
                                                         <div class="form-group col-4 m-b-10 data_conent_15">
                                                             <h6><b>Purpose</b></h6>
                                                         </div>

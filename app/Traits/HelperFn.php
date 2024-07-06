@@ -3,6 +3,22 @@ namespace App\Traits;
 
 trait HelperFn
 {
+    public static function formatIndianCurrency($num) {
+        $num = (string)$num;
+        $lastThree = substr($num, -3);
+        $restUnits = substr($num, 0, -3);
+        if (strlen($restUnits) > 0) {
+            $restUnits = (strlen($restUnits) % 2 == 1) ? "0" . $restUnits : $restUnits;
+            $restUnits = chunk_split($restUnits, 2, ',');
+            $restUnits = rtrim($restUnits, ',');
+            $formattedNum = ltrim($restUnits, '0') . ',' . $lastThree;
+        } else {
+            $formattedNum = $lastThree;
+        }
+        return $formattedNum;
+    }
+    
+
     public static function sendPushNotification($userId, $message) 
     {
         // Assuming you have the user's OneSignal ID stored in your database

@@ -237,14 +237,14 @@ class PropertyController extends Controller
                                     // dd("inn");
                                     $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
                                         ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
-                                        ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
-                                        ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                        // ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                        // ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
                                         ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
                                         ->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$enq->area_from_measurement]);
                                 } else {
                                     $area_from_int = (int) $enq->area_from;
                                     $area_to_int = (int) $enq->area_to;
-                                    // dd("out",$area_from_int);
+                                    // dd("out",$area_from_int,$area_to_int);
                                     $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$area_from_int, $area_to_int])
                                         ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
                                         ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from_int, $enq->area_to_int])
@@ -610,17 +610,17 @@ class PropertyController extends Controller
                             $price = '';
                             if ($row->property_for === 'Both') {
                                 if (!empty($value['7']) && !empty($value['4'])) {
-                                    $price = '  R : ' . $value['4'] . '<br>' . '  S : ' . $value['7'];
+                                    $price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['7'];
                                 } elseif (!empty($value['3']) && !empty($value['4'])) {
-                                    $price = '  R : ' . $value['4'] . '<br>' . '  S : ' . $value['3'];
+                                    $price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['3'];
                                 }
                             } else {
                                 if (!empty($value['7'])) {
-                                    $price = $value['7'];
+                                    $price = ' ₹ '. $value['7'];
                                 } else if (!empty($value['4'])) {
-                                    $price = $value['4'];
+                                    $price = ' ₹ '. $value['4'];
                                 } else if (!empty($value['3'])) {
-                                    $price = $value['3'];
+                                    $price = ' ₹ '. $value['3'];
                                 }
                             }
                             $data = [];
