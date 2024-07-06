@@ -163,14 +163,14 @@
                                                                 <label class="btn btn-outline-info btn-pill btn-sm py-1"
                                                                     for="propertyfor2">Buy</label>
                                                             </div>
-                                                            <div class="btn-group me-2" role="group"
+                                                            {{-- <div class="btn-group me-2" role="group"
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Both" class="btn-check"
                                                                     name="enquiry_for" id="propertyfor3"
                                                                     autocomplete="off">
                                                                 <label class="btn btn-outline-info btn-pill btn-sm py-1"
                                                                     for="propertyfor3">Both</label>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                     <div class="row">

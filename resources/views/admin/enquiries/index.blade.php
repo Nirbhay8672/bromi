@@ -411,7 +411,7 @@
                                             <option value="">Enquiry For</option>
                                             <option value="Rent">Rent</option>
                                             <option value="Buy">Buy</option>
-                                            <option value="Both">Both</option>
+                                            {{-- <option value="Both">Both</option> --}}
                                         </select>
                                     </div>
 
