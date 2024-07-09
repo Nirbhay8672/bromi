@@ -465,7 +465,7 @@ Helper::set_default_measuerement();
                                                                 <div class="bookmark-icon"><i data-feather="list"></i>
                                                                 </div>
                                                                 <h5 class="mt-2"> <a href="javascript:void(0)">Shared
-                                                                        User Request</a>
+                                                                        Partner Requests</a>
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -475,7 +475,7 @@ Helper::set_default_measuerement();
                                                                 <div class="bookmark-icon"><i data-feather="list"></i>
                                                                 </div>
                                                                 <h5 class="mt-2"> <a href="javascript:void(0)">Shared
-                                                                        Prop Requests</a>
+                                                                        Property Requests</a>
                                                                 </h5>
                                                             </div>
                                                         </div>

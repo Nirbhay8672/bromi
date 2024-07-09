@@ -183,11 +183,11 @@ class ShareController extends Controller
                          <font size="3"><a href="#" style="font-weight: bold;">' . ((isset($row->project_name)) ? $row->project_name : '') . '</a>';
                     $first_end = '</font>';
                     $second = '<br> <a href="' . $row->property_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->area_name)) ? $row->area_name : '') . '	</font> </a>';
-                    // $third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->Property_details->created_at)->format('d-m-Y') . '</font>';
+                    $third = (!empty($row->property_link) ? '<br> <a href="' . $row->property_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a>' : "");
                     $last =     '</td>';
 
                     '</td>';
-                    return $first . $first_end . $second  .  $last;
+                    return $first . $first_end . $second  . $third .$last;
 
                     return '';
                 })

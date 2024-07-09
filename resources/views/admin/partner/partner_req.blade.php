@@ -14,7 +14,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Partner Requests <a class="btn custom-icon-theme-button tooltip-btn"
+                            <h5 class="mb-3">Property Requests <a class="btn custom-icon-theme-button tooltip-btn"
                                 href="{{ route('admin.partner.index') }}"
                                 data-tooltip="Back"
                                 style="float: inline-end;"
@@ -156,5 +156,23 @@
                 // })
 
             }
+
+            $(document).on('click', '#filtersearch', function(e) {
+                e.preventDefault();
+                search_enq = '';
+                $('#resetfilter').show();
+                $('#resetfilter').removeClass('d-none');
+                $('#propertyTable').DataTable().draw();
+                $('#filtermodal').modal('hide');
+            });
+
+            $(document).on('click', '#resetfilter', function(e) {
+                e.preventDefault();
+                $(this).hide();
+                $('#filter_form').trigger("reset");
+                $('#propertyTable').DataTable().draw();
+                $('#filtermodal').modal('hide');
+                triggerResetFilter()
+            });
         </script>
     @endpush
