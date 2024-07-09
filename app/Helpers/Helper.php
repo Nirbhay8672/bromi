@@ -290,7 +290,7 @@ class Helper
 			$count = UserNotifications::where('user_id', Auth::User()->id)->where('seen', 0)->count();
 			$notifications = UserNotifications::where('user_id', Auth::User()->id)->orderBy('id', 'DESC')->get()->toArray();
 			foreach ($notifications as $key => $value) {
-				$notifications[$key]['created_at'] = Carbon::parse($value['created_at'])->format('d-m-Y ~ h:i A');
+				$notifications[$key]['created_at'] = Carbon::parse($value['created_at'])->format('d-m-Y | h:i A');
 			}
 			$arr['noticount'] = $count;
 			$arr['notification'] = $notifications;
