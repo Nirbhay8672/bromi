@@ -46,10 +46,13 @@
                             <h5 class="mb-3">List of Enquiries</h5>
 
                             <div class="col">
+
+                                @can('enquiry-create')
                                 <a class="btn custom-icon-theme-button tooltip-btn" href="{{ route('admin.enquiry.add') }}"
                                     data-tooltip="Add Enquiry">
                                     <i class="fa fa-plus"></i>
                                 </a>
+                                @endcan
 
                                 <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
                                     data-bs-toggle="modal" data-bs-target="#filtermodal" data-tooltip="Filter"><i
@@ -63,15 +66,19 @@
                                     data-bs-toggle="modal" data-bs-target="#matchModal" data-tooltip="Matching"><i
                                         class="fa fa-random"></i></button>
 
+                                @can('export-enquiry')
                                 <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="exportEnquiry()"
                                     type="button" data-tooltip="Export"><i class="fa fa-upload"></i></button>
+                                @endcan
 
                                 <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="importEnquiries()"
                                     type="button" data-tooltip="Import"><i class="fa fa-download"></i></button>
 
+                                @can('enquiry-delete')
                                 <button class="btn text-white delete_table_row ms-3 tooltip-btn"
                                     style="border-radius: 5px;display: none;background-color:red" onclick="deleteTableRow()"
                                     type="button" data-tooltip="Delete"><i class="fa fa-trash"></i></button>
+                                @endcan
                             </div>
                         </div>
                         <div class="card-body">

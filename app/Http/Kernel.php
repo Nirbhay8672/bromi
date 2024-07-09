@@ -71,8 +71,8 @@ class Kernel extends HttpKernel
         'api-language' => \App\Http\Middleware\ApiLanguage::class,
         'check.maintanance' => \App\Http\Middleware\CheckMaintanance::class,
 		'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
-        // 'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
-        // 'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'checkPlanExpiry' => \App\Http\Middleware\CheckPlanExpiry::class,
     ];
 }

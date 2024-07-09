@@ -34,7 +34,9 @@
                                     >
                                         <i class="fa fa-list"></i>
                                     </a>
-                                @endcan
+                                @endif
+
+                                @can('project-delete')
 
                                 <button
                                     class="btn text-white delete_table_row ms-3 tooltip-btn"
@@ -43,6 +45,8 @@
                                     type="button"
                                     data-tooltip="Delete"
                                 ><i class="fa fa-trash"></i></button>
+
+                                @endcan
                             </div>
 
                         </div>

@@ -84,7 +84,7 @@ Route::group(['middleware' => 'revalidate'], function () {
     });
     
 	Route::group(['middleware' => ['auth', 'checkPlanExpiry']], function () {
-		Route::get('/', [HomeController::class, 'index'])->name('admin');
+		Route::get('/', [HomeController::class, 'index'])->middleware(['permission:view-dashboard'])->name('admin');
 		Route::post('/save-onesignal-id', function(Request $request) {
             try {
                 $user = Auth::user();
@@ -116,7 +116,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/import-village', [VillageController::class, 'importVillage'])->name('admin.importvillage');
 		
 		
-		Route::any('/Areas', [AreaController::class, 'index'])->name('admin.areas');
+		Route::any('/Areas', [AreaController::class, 'index'])->middleware(['permission:area-list'])->name('admin.areas');
 		Route::post('/get-area', [AreaController::class, 'getSpecificArea'])->name('admin.getArea');
 		Route::post('/save-area', [AreaController::class, 'saveArea'])->name('admin.saveArea');
 		Route::post('/import-area', [AreaController::class, 'importArea'])->name('admin.importarea');
@@ -126,7 +126,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-building', [BuildingController::class, 'destroy'])->name('admin.deleteBuilding');
 		Route::post('/save-building', [BuildingController::class, 'saveBuilding'])->name('admin.saveBuilding');
 		Route::post('/import-building', [BuildingController::class, 'importBuilding'])->name('admin.importbuilding');
-		Route::any('/Properties', [PropertyController::class, 'index'])->name('admin.properties');
+		Route::any('/Properties', [PropertyController::class, 'index'])->middleware(['permission:property-list'])->name('admin.properties');
 		Route::post('/get-property', [PropertyController::class, 'getSpecificProperty'])->name('admin.getProperty');
 		Route::post('/delete-property', [PropertyController::class, 'destroy'])->name('admin.deleteProperty');
 		Route::post('/save-property', [PropertyController::class, 'saveProperty'])->name('admin.saveProperty');
@@ -138,14 +138,14 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::get('/import-industrialproperty-template', [IndustrialPropertyController::class, 'importPropertyTemplate'])->name('admin.importindustrialpropertyTemplate');
 		Route::get('/admin/enquiry/category', [EnquiriesController::class, 'getEnquiryCategory'])->name('admin.enquiry.category');
 		Route::get('/import-enquiry-template', [EnquiriesController::class, 'importEnquiryTemplate'])->name('admin.importenquiryTemplate');
-		Route::any('/Enquiries', [EnquiriesController::class, 'index'])->name('admin.enquiries');
+		Route::any('/Enquiries', [EnquiriesController::class, 'index'])->middleware(['permission:enquiry-list'])->name('admin.enquiries');
 		Route::any('/Enquiries-Calendar', [EnquiriesController::class, 'enquiryCalendar'])->name('admin.enquiries.calendar');
 		Route::delete('/Enquiries-Calendar-delete/{id}', [EnquiriesController::class, 'deleteRecord'])->name('admin.enquiries.calendar.delete');
 		Route::post('/get-enquiry', [EnquiriesController::class, 'getSpecificEnquiry'])->name('admin.getEnquiry');
 		Route::post('/delete-enquiry', [EnquiriesController::class, 'destroy'])->name('admin.deleteEnquiry');
 		Route::post('/save-enquiry', [EnquiriesController::class, 'saveEnquiry'])->name('admin.saveEnquiry');
 		Route::post('/import-enquiry', [EnquiriesController::class, 'importEnquiry'])->name('admin.importenquiry');
-		Route::any('/Projects', [ProjectsController::class, 'index'])->name('admin.projects');
+		Route::any('/Projects', [ProjectsController::class, 'index'])->middleware(['permission:project-list'])->name('admin.projects');
 	    Route::any('/all-projects', [ProjectsController::class, 'allprojectList'])->name('admin.all-projects');
 		Route::post('/get-projects', [ProjectsController::class, 'getSpecificProject'])->name('admin.getProject');
 		Route::get('/get-projects-by-unit', [ProjectsController::class, 'projectByUnit'])->name('admin.project.byunit');
@@ -265,7 +265,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::get('/get-enquiry-configuration', [EnquiriesController::class, 'getEnquiryConfiguration'])->name('admin.getEnquiryConfiguration');
 
         //Share Property
-		Route::any('/shared-properties', [ShareController::class, 'sharedPropertyIndex'])->name('admin.shared.properties');
+		Route::any('/shared-properties', [ShareController::class, 'sharedPropertyIndex'])->middleware(['permission:shared-property'])->name('admin.shared.properties');
 		Route::any('/shared-requests', [ShareController::class, 'sharedPropertyRequests'])->name('admin.shared.requests');
 		Route::any('/accept-shared-requests', [ShareController::class, 'acceptRequest'])->name('admin.shared.accept');
 		Route::any('/cancel-shared-requests', [ShareController::class, 'cancelRequest'])->name('admin.shared.cancel');
@@ -328,12 +328,12 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::get('/get-property-configuration', [PropertyController::class, 'getPropertyConfiguration'])->name('admin.getPropertyConfiguration');
 		Route::get('/enquiries-calendar/view', [EnquiriesController::class, 'calenderDetail'])->name('admin.enquiries.calendar.view');
 		Route::get('/get/property/form', [PropertyController::class, 'changeFormType'])->name('admin.property.form');
-		Route::get('/property/add', [PropertyController::class, 'addProperty'])->name('admin.property.add');
-		Route::get('/property/edit/{id}', [PropertyController::class, 'editProperty'])->name('admin.property.edit');
-		Route::get('/enquiry/add', [EnquiriesController::class, 'addEnquiry'])->name('admin.enquiry.add');
-		Route::get('/enquiry/edit/{id}', [EnquiriesController::class, 'editEnquiry'])->name('admin.enquiry.edit');
-		Route::get('/project/add', [ProjectsController::class, 'addproject'])->name('admin.project.add');
-		Route::get('/project/edit/{id}', [ProjectsController::class, 'editProject'])->name('admin.project.edit');
+		Route::get('/property/add', [PropertyController::class, 'addProperty'])->middleware(['permission:property-create'])->name('admin.property.add');
+		Route::get('/property/edit/{id}', [PropertyController::class, 'editProperty'])->middleware(['permission:property-edit'])->name('admin.property.edit');
+		Route::get('/enquiry/add', [EnquiriesController::class, 'addEnquiry'])->middleware(['permission:enquiry-create'])->name('admin.enquiry.add');
+		Route::get('/enquiry/edit/{id}', [EnquiriesController::class, 'editEnquiry'])->middleware(['permission:enquiry-edit'])->name('admin.enquiry.edit');
+		Route::get('/project/add', [ProjectsController::class, 'addproject'])->middleware(['permission:project-create'])->name('admin.project.add');
+		Route::get('/project/edit/{id}', [ProjectsController::class, 'editProject'])->middleware(['permission:project-edit'])->name('admin.project.edit');
 		Route::get('/project/unit/add', [ProjectUnitController::class, 'addUnit'])->name('admin.unit.add');
 		Route::get('/project/unit/edit/{id}', [ProjectUnitController::class, 'editUnit'])->name('admin.unit.edit');
 		Route::get('/user/add', [UserController::class, 'adduser'])->name('admin.user.add');
@@ -351,7 +351,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/email-template/delete/{id}', [integrationController::class, 'destroy'])->name('admin.email.delete');
 		Route::post('/email-template/show/{id}', [integrationController::class, 'showId'])->name('admin.email.show');
 		
-	// SMS Route
+		// SMS Route
 		Route::get('/sms-template', [integrationController::class, 'smsIndex'])->name('admin.smsemail.index');
 		Route::get('/sms-template/create', [integrationController::class, 'smsCreate'])->name('admin.smsemail.create');
 		Route::post('/sms-template/store', [integrationController::class, 'smsStore'])->name('admin.smsemail.store');

@@ -743,12 +743,6 @@ Helper::set_default_measuerement();
                                         <span class="lan-6">Support Ticket</span>
                                     </a>
                                 </li>
-                                <li class="sidebar-list d-none">
-                                    <a class="sidebar-link  <?php if ($route == 'admin') : ?> active <?php endif; ?>" href="<?php echo e(route('admin.getCurrentLocation')); ?>">
-                                        <i class="fa fa-map"></i>
-                                        <span class="lan-6">Location</span>
-                                    </a>
-                                </li>
                             </ul>
                             @endif
                         </div>

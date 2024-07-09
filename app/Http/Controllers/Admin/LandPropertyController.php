@@ -440,14 +440,23 @@ class LandPropertyController extends Controller
                     $location_link = urlencode($row->location_link);
 					$message = "$building_name | $area \n $config | $details | $price \n Available For : $property_for\n\n | Link: $location_link";
                     $sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
-					$buttons =  $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
-					$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+
+					if (in_array('land-property-edit', $permissions)) {
+						$buttons =  $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
+					}
+
+					if (in_array('land-property-delete', $permissions)) {
+						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
+					}
+					
                     $buttons = $buttons . '<i title="Send On Whatsapp" data-share_string="' . $sharestring . '"  onclick=openwamodel(this)  class="fa fs-22 py-2 mx-2 fa-whatsapp text-success"></i><br>';
 					$buttons = $buttons . '<i title="Matching Enquiry" data-id="' . $row->id . '" onclick=matchingEnquiry(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
+					
 					if (in_array('shared-property', $permissions)) {
                         $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
                     }
-                    if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
+                    
+					if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
                         $cd = json_decode($row->other_contact_details);
                         foreach ($cd as $key => $value) {
                             if ($vvv == '') {

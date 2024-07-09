@@ -21,14 +21,19 @@
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col">
+
+                                    @can('property-create')
                                     <a class="btn custom-icon-theme-button tooltip-btn"
                                         href="{{ route('admin.property.add') }}" data-tooltip="Add Property">
                                         <i class="fa fa-plus"></i>
                                     </a>
+                                    @endcan
 
+                                    @can('search-property')
                                     <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
                                         data-bs-toggle="modal" data-bs-target="#filtermodal" data-tooltip="Filter"><i
                                             class="fa fa-filter"></i></button>
+                                    @endcan
 
                                     <button class="btn ms-3 custom-icon-theme-button"
                                         style="background-color: #FF0000 !important;display: none; " type="button"
@@ -41,18 +46,25 @@
                                         data-bs-toggle="modal" data-bs-target="#matchModal" data-tooltip="Matching"><i
                                             class="fa fa-random"></i></button>
 
+                                            @can('export-property')
                                     <button class="btn ms-3 custom-icon-theme-button tooltip-btn"
                                         onclick="exportProperties()" type="button" data-tooltip="Export"><i
                                             class="fa fa-upload"></i></button>
+                                            @endcan
 
+
+                                    @can('import-property')        
                                     <button class="btn ms-3 custom-icon-theme-button tooltip-btn"
                                         onclick="importProperties()" type="button" data-tooltip="Import"><i
                                             class="fa fa-download"></i></button>
+                                            @endcan
 
+                                    @can('property-create')
                                     <button class="btn text-white delete_table_row ms-3 tooltip-btn"
                                         style="border-radius: 5px;display: none;background-color:red"
                                         onclick="deleteTableRow()" type="button" data-tooltip="Delete"><i
                                             class="fa fa-trash"></i></button>
+                                    @endcan
 
                                     <button class="btn share_table_row ms-3 tooltip-btn"
                                         style="border-radius: 5px;display: none;background-color:#25d366;color:white;"
