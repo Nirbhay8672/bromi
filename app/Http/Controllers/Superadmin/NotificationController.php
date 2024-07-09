@@ -54,7 +54,10 @@ class NotificationController extends Controller
             $request->schedule_date == ':00' ||
             empty($request->city)
         ) {
-            return false;
+            return response()->json([
+                'error' => true,
+                'message' => 'All fields are requuired'
+            ]);
         }
 		if (!empty($request->id) && $request->id != '') {
 			$data = Notifications::find($request->id);
