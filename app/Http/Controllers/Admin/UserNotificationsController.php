@@ -23,7 +23,7 @@ class UserNotificationsController extends Controller
 			$data = UserNotifications::where('user_id',Auth::User()->id)->orderBy('id','DESC')->get();
 			return DataTables::of($data)
 				->editColumn('created_at', function ($row) {
-					return Carbon::parse($row->created_at)->format('d-m-Y ~ h:i A');
+					return Carbon::parse($row->created_at)->format('d-m-Y | h:i A');
 				})
 				->make(true);
 		}
