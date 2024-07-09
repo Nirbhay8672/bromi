@@ -21,22 +21,31 @@
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col-md-8">
+
+                                    @can('industrial-property-create')
                                     <a class="btn custom-icon-theme-button" href="{{ route('admin.property.add') }}"
                                         title="Add Property">
                                         <i class="fa fa-plus"></i>
                                     </a>
+                                    @endcan
 
+                                    @can('search-industrial-property')
                                     <button class="btn ms-3 custom-icon-theme-button" type="button" data-bs-toggle="modal"
                                         data-bs-target="#filtermodal" title="Filter"><i class="fa fa-filter"></i></button>
+                                    @endcan
 
                                     <button class="btn ms-3 custom-icon-theme-button" type="button" title="Clear Filter"
                                         id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
 
+                                        @can('import-industrial-property')
                                     <button class="btn ms-3 custom-icon-theme-button" onclick="importProperties()"
                                         type="button" title="Import"><i class="fa fa-download"></i></button>
+                                        @endcan
 
+                                        @can('export-industrial-property')
                                     <button class="btn ms-3 custom-icon-theme-button" onclick="exportProperties()"
                                         type="button" title="Export"><i class="fa fa-upload"></i></button>
+                                        @endcan
 
                                     <button class="btn share_table_row ms-3"
                                         style="border-radius: 5px;display: none;background-color:#25d366;color:white;"
@@ -47,10 +56,13 @@
                                         data-bs-toggle="modal" data-bs-target="#matchModal" title="Matching"><i
                                             class="fa fa-random"></i></button>
 
+                                    @can('industrial-property-delete')
                                     <button class="btn text-white delete_table_row ms-3"
                                         style="border-radius: 5px;display: none;background-color:red"
                                         onclick="deleteTableRow()" type="button" title="Delete"><i
                                             class="fa fa-trash"></i></button>
+                                    @endcan
+
                                 </div>
                             </div>
                         </div>

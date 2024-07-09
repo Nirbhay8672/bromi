@@ -37,13 +37,7 @@ class UserController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = User::where('parent_id', Auth::user()->id)
-				->when($request->go_data_id, function ($query) use ($request) {
-					return $query->where('id', $request->go_data_id);
-				})->when(empty($request->go_data_id), function ($query) use ($request) {
-					return $query->orWhere('id',Session::get('parent_id'));
-				})->orderBy('id','desc')
-				->get();
+			$data = User::where('parent_id', Auth::user()->id)->orWhere('id', Auth::user()->id)->get();
 
 			$new_data = $data;
 
