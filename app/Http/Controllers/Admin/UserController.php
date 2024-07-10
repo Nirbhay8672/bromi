@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\Constants;
 use App\Models\User;
 use App\Helpers\Helper;
 use Illuminate\Http\Request;
@@ -36,13 +37,7 @@ class UserController extends Controller
 	public function index(Request $request)
 	{
 		if ($request->ajax()) {
-			$data = User::where('parent_id', Auth::user()->id)
-				->when($request->go_data_id, function ($query) use ($request) {
-					return $query->where('id', $request->go_data_id);
-				})->when(empty($request->go_data_id), function ($query) use ($request) {
-					return $query->orWhere('id',Session::get('parent_id'));
-				})->orderBy('id','desc')
-				->get();
+			$data = User::where('parent_id', Auth::user()->id)->orWhere('id', Auth::user()->id)->get();
 
 			$new_data = $data;
 
@@ -147,7 +142,7 @@ class UserController extends Controller
 
 	public function saveUser(Request $request)
 	{
-		$validated = $request->validate([
+		$request->validate([
 			'first_name' => 'required',
 			'middle_name' => 'required',
 			'last_name' => 'required',
@@ -179,7 +174,8 @@ class UserController extends Controller
 		if (!empty($request->password)) {
 			$data->password = Hash::make($request->password);
 		}
-		$data->parent_id = Session::get('parent_id');
+		
+		$data->parent_id = Auth::user()->id;
 		$data->first_name = $request->first_name;
 		$data->middle_name = $request->middle_name;
 		$data->last_name = $request->last_name;
@@ -209,6 +205,9 @@ class UserController extends Controller
 		$data->buildings = $request->buildings;
 		$data->working = $request->working;
 		$data->plan_id = Auth::user()->plan_id;
+
+		$data->subscribed_on = Auth::user()->subscribed_on;
+		$data->plan_expire_on = Auth::user()->plan_expire_on;
 		
 		$plan = Subplans::find(Auth::user()->plan_id);
 		
@@ -271,7 +270,7 @@ class UserController extends Controller
         $userNotification = UserNotifications::create([
             "user_id" => Auth::user()->id,
             "notification" => $msg,
-            "notification_type" => "new_user",
+            "notification_type" => Constants::NEW_USER,
             "new_user_id" => $data->id
         ]);
         // if notificaton creation failed.

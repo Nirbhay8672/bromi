@@ -22,6 +22,8 @@
                                 @include('admin.properties.change_menu')
                                 <div class="col-md-8">
 
+
+                                    @can('land-property-create')
                                     <a
                                         class="btn custom-icon-theme-button"
                                         href="{{ route('admin.property.add') }}"
@@ -29,6 +31,7 @@
                                     >
                                         <i class="fa fa-plus"></i>
                                     </a>
+                                    @endcan
 
                                     <button
                                         class="btn ms-3 custom-icon-theme-button"
@@ -46,21 +49,26 @@
                                         style="background-color: #FF0000 !important;display: none;"
                                     ><i class="fa fa-refresh"></i></button>
 
+                                    @can('import-land-property')
                                     <button
                                     class="btn ms-3 custom-icon-theme-button"
                                     onclick="importProperties()"
                                     type="button"
                                     title="Import"
                                 ><i class="fa fa-download"></i></button>
+                                @endcan
 
+                                @can('export-land-proprerty')
                                 <button class="btn ms-3 custom-icon-theme-button" onclick="exportProperties()"
                                     type="button" title="Export"><i class="fa fa-upload"></i></button>
+                                    @endcan
 
                                 <button class="btn share_table_row ms-3"
                                     style="border-radius: 5px;display: none;background-color:#25d366;color:white;"
                                     onclick="shareTableRow()" type="button" title="Share"><i
                                         class="fa fa-whatsapp"></i></button>
 
+                                    @can('land-property-delete')
                                     <button
                                         class="btn text-white delete_table_row ms-3"
                                         style="border-radius: 5px;display: none;background-color:red"
@@ -68,6 +76,7 @@
                                         type="button"
                                         title="Delete"
                                     ><i class="fa fa-trash"></i></button>
+                                    @endcan
 
                                     <button class="btn matchbutton ms-3 custom-icon-theme-button" type="button"
                                         data-bs-toggle="modal" data-bs-target="#matchModal" title="Matching"><i

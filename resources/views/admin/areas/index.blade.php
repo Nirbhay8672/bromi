@@ -40,8 +40,9 @@
                                         data-tooltip="Import Locality"
                                         data-bs-toggle="modal"
                                         data-bs-target="#importmodal"
-                                    ><i class="fa fa-upload"></i></button>
+                                    ><i class="fa fa-download"></i></button>
 
+                                    @can('area-delete')
 
                                     <button
                                         class="btn text-white delete_table_row ms-3 tooltip-btn"
@@ -50,6 +51,8 @@
                                         type="button"
                                         data-tooltip="Delete"
                                     ><i class="fa fa-trash"></i></button>
+                                    
+                                    @endcan
                                     
                                 </div>
                             </div>

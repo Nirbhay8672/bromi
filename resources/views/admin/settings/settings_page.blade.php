@@ -12,7 +12,7 @@
             <div class="row">
 
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.profile.details') }}">
                                 <div class="media pb-3">
@@ -34,7 +34,7 @@
 
                 @can('user-list')
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.users') }}">
                                 <div class="media pb-3">
@@ -56,7 +56,7 @@
 
                 @can('role-list')
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.roles') }}">
                                 <div class="media pb-3">
@@ -76,10 +76,9 @@
                 </div>
                 @endcan
 
-                
                 @can('settings-branches')
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.branches') }}">
                                 <div class="media pb-3">
@@ -101,7 +100,7 @@
 
                 @can('settings-states')
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.settings.state') }}">
                                 <div class="media pb-3">
@@ -123,7 +122,7 @@
 
                 @can('settings-city')
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.settings.city') }}">
                                 <div class="media pb-3">
@@ -145,7 +144,7 @@
 
                 @can('area-list')
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.areas') }}">
                                 <div class="media pb-3">
@@ -166,7 +165,7 @@
                 @endcan
 
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.districts') }}">
                                 <div class="media pb-3">
@@ -185,7 +184,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.talukas') }}">
                                 <div class="media pb-3">
@@ -204,7 +203,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.villages') }}">
                                 <div class="media pb-3">
@@ -225,7 +224,7 @@
 
                 @can('settings-builders')
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.settings.builder') }}">
                                 <div class="media pb-3">
@@ -246,7 +245,7 @@
                 @endcan
 
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('createInvoice') }}">
                                 <div class="media pb-3">
@@ -264,7 +263,7 @@
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.VisitingCard') }}">
                                 <div class="media pb-3">
@@ -283,7 +282,7 @@
 
                 @can('settings-property-configuration')
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.settings.property_configuration') }}">
                                 <div class="media pb-3">
@@ -303,7 +302,7 @@
 
                 @can('settings-building-configuration')
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.settings.building_configuration') }}">
                                 <div class="media pb-3">
@@ -325,7 +324,7 @@
 
                 @can('settings-enquiry-configuration')
                 <div class="col-xl-3 col-md-6">
-                    <div class="card crypto-chart overflow-hidden">
+                    <div class="card crypto-chart overflow-hidden" style="height: 90px;">
                         <div class="card-header card-no-border">
                             <a href="{{ route('admin.settings.enquiry_configuration') }}">
                                 <div class="media pb-3">

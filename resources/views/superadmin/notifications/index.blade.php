@@ -190,6 +190,16 @@
                         _token: '{{ csrf_token() }}',
                     },
                     success: function(data) {
+
+                        if (data.error) {
+                            Swal.fire(
+                                'Error',
+                                'Notification not updated! <br/> Message, Schedule date and city are required.',
+                                'danger'
+                            )
+                            return;
+                        }
+                        
                         $('#notificationTable').DataTable().draw();
                         $('#notificationModal').modal('hide');
                     }

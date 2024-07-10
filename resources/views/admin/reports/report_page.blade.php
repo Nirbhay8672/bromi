@@ -10,6 +10,8 @@
         </div>
         <div class="container-fluid general-widget">
             <div class="row">
+
+                @can('report-employee-audit-log')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -26,6 +28,9 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+                @can('report-employee-by-enquiry')
 				<div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -41,6 +46,8 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -57,6 +64,8 @@
                         </div>
                     </div>
                 </div>
+
+                @can('report-enquiry-by-period')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -73,6 +82,8 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -151,6 +162,10 @@
                         </div>
                     </div>
                 </div>
+
+
+                
+                @can('logged-in-report')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -164,6 +179,9 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+                @can('report-enquiry-remarks')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -177,6 +195,9 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+                @can('report-property-sold')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -190,6 +211,9 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+
+                @can('report-property-viewer')
                 <div class="col-xl-3 col-md-6">
                     <div class="card crypto-chart overflow-hidden">
                         <div class="card-header card-no-border">
@@ -203,6 +227,8 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+                
             </div>
         </div>
     </div>
