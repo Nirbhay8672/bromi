@@ -88,21 +88,21 @@ class PropertyController extends Controller
                 $enq = Enquiries::find($request->search_enq);
             }
             $dropdowns = $dropdownsarr;
-            // $isSubAdmin = Auth::user()->parentUser()->exists();
             $isSubAdmin = User::where('id', Auth::id())->whereNotNull('parent_id')->first();
             // $superAdmin = User::find($isSubAdmin->parent_id);
             if ($isSubAdmin) {
-                // dd("is sub admin",$isSubAdmin->property_type_id,"Auth",Auth::user()->id,Auth::user()->email);
-                // dd("propertyTypeIdArray",$propertyTypeIdArray,"---",$isSubAdmin->property_type_id);
-                // dd("isSubAdmin->property_for_id",$isSubAdmin->property_for_id);
+                $propertyTypeIdArray = json_decode($isSubAdmin->property_type_id, true);
+                if (is_string($isSubAdmin->property_type_id)) {
+                    $propertyTypeIdArray = explode(',', trim($isSubAdmin->property_type_id, '[]""'));
+                    // $propertyTypeIdArray = array_map('intval', $propertyTypeIdArray);
+                }
                 $data = Properties::select('properties.*')->with('Projects.Area')
                     ->join('projects', 'projects.id', '=', 'properties.project_id')
                     ->where('properties.property_category', '!=', '256')
                     ->where('properties.property_category', '!=', '261')
                     ->where('properties.property_category', '!=', '262')
                     ->where('properties.property_for', '=', $isSubAdmin->property_for_id)
-                    // ->where('properties.property_type',  '=', 85) 
-                    // ->where('properties.property_type',  '=', '85') 
+                    ->where('properties.property_type',  '=', $propertyTypeIdArray[0]) 
                     ->when($request->filter_by, function ($query) use ($request) {
                         if ($request->filter_by == 'reminder') {
                             return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(7)->format('Y-m-d'))
