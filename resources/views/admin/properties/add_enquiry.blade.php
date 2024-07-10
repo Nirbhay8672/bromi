@@ -844,7 +844,7 @@
                                                                 style="display: block;color:red;"></div> --}}
                                                         </div>
 
-                                                        <div class="form-group col-md-2 m-b-20 mb-3">
+                                                        <div class="form-group col-md-2 m-b-20 mb-3 enq-purpose">
                                                             <div>
                                                                 <select class="form-select" id="purpose">
                                                                     <option value="">Purpose</option>
@@ -1750,12 +1750,14 @@
                         if (data.enquiry_for == 'Rent') {
                             document.getElementById('propertyfor1').checked = true;
                             $(".both-price").hide();
+                            $(".enq-purpose").hide();
                             $('.enq_budget').show();
                         }
 
                         if (data.enquiry_for == 'Buy') {
                             document.getElementById('propertyfor2').checked = true;
                             $(".both-price").hide();
+                            $(".enq-purpose").show();
                             $('.enq_budget').show();
                         }
 
@@ -2365,7 +2367,7 @@
                     }).get();
                     //
                 } else if ($('input[name=property_category]:checked').attr('data-val') == 'Flat') {
-                    console.log("flate cat here ==",configuration);
+                    console.log("flate cat here ==", configuration);
                     var configuration = $('input[name="flat_type[]"]:checked').map(function() {
                         return this.value;
                     }).get();
@@ -2386,7 +2388,7 @@
                         return this.value;
                     }).get();
                 } else {
-                    console.log("none sub category in enquiries : ==",configuration);
+                    console.log("none sub category in enquiries : ==", configuration);
                     var configuration = ["0"];
                 }
 
@@ -2557,9 +2559,14 @@
                 if (theFor == 'Both') {
                     $(".both-price").show();
                     $('.enq_budget').hide();
-                } else {
+                } else if(theFor == 'Rent') {
                     $(".both-price").hide();
                     $('.enq_budget').show();
+                    $(".enq-purpose").hide();
+                } else{
+                    $(".both-price").hide();
+                    $('.enq_budget').show();
+                    $(".enq-purpose").show();
                 }
             }
             $(document).on('click', '.previousBtn1', function() {

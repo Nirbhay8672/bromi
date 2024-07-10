@@ -30,6 +30,13 @@
                                 >
                                     <i class="fa fa-user-plus"></i>
                                 </a>
+                                <a  
+                                    class="btn ms-3 custom-icon-theme-button tooltip-btn"
+                                    href="{{ route('admin.userRequest') }}"
+                                    data-tooltip="Partner Requests"
+                                >
+                                    <i class="fa fa-user-plus"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="card-body">
