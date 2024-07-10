@@ -347,7 +347,6 @@ class PartnerController extends Controller
 				$partnerReq->update(['status' => 'Active']);
 				$receiver = $partnerReq->user;
 				$sender = $partnerReq->requestSendingUser;
-				// Send notification to the sending user about the acceptance of the request.
 				$message = "$receiver->first_name $receiver->last_name has accepted your request regarding adding as partner.";
 
 				try {
@@ -366,15 +365,11 @@ class PartnerController extends Controller
 						Log::error("That's why notification not sent.");
 					}
 
-					// After notification logic, delete the partner record.
-					$dlt_partner = Partner::where('id', $request->id)->delete();
-
-					return response()->json(['success' => true, 'deleted_partner' => $dlt_partner]);
+					// $dlt_partner = Partner::where('id', $request->id)->delete();
+					// return response()->json(['success' => true, 'deleted_partner' => $dlt_partner]);
 				} catch (\Throwable $th) {
-					// If notification creation failed.
 					Log::error("On Accept add partner request attempt failed by user Id: $receiver->id");
 					Log::error("Error Message: " . $th->getMessage());
-
 					return response()->json(['success' => false, 'error' => $th->getMessage()]);
 				}
 			}
