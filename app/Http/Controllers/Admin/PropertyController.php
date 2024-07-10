@@ -18,6 +18,7 @@ use App\Models\PropertyReport;
 use App\Models\PropertyViewer;
 use App\Models\QuickSiteVisit;
 use App\Models\SharedProperty;
+use App\Models\ShareProperty;
 use App\Models\State;
 use App\Models\Taluka;
 use App\Models\User;
@@ -2517,6 +2518,7 @@ class PropertyController extends Controller
 
         $projects = Projects::all();
         $areas = Areas::where('user_id', Auth::user()->id)->get();
+        $shared=ShareProperty::where('property_id',$property->id)->get();
 
         $multiple_image = LandImages::where('pro_id', $property->id)->get();
         $construction_docs_list = LandImages::where('pro_id', $property->id)
@@ -2528,7 +2530,7 @@ class PropertyController extends Controller
             return $this->downloadImagesZip($selectedImages);
         }
 
-        return view('admin.properties.view', compact('property', 'configuration_name', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
+        return view('admin.properties.view', compact('property','shared','configuration_name', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
 
     // public function downloadZip($type, $prop)

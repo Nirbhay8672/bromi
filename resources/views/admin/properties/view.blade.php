@@ -36,6 +36,19 @@ use Illuminate\Support\Facades\DB;
     $terrace_salableArray=explode("_-||-_",$property->terrace_salable_area);
     $terrace_salable_units=$units->where('id',$terrace_salableArray[1])->first();
 
+    if($shared != null){
+            $shareProperty=[];
+        foreach ($shared as $key => $value) {
+            $user=App\Models\User::find($value->partner_id);
+            
+            $shareProperty[]=[
+                'name'=>$user->first_name." ".$user->middle_name." ".$user->last_name,
+                'contact'=>$user->mobile_number,
+                'position'=>$user->position,
+        ];
+        }
+    }
+
 ?>
 @extends('admin.layouts.app')
 @section('content')
@@ -97,6 +110,13 @@ use Illuminate\Support\Facades\DB;
                                                 aria-controls="v-property-viewer" aria-selected="false">Enquiry Visits
                                                 Logs</button>
                                         </li>
+                                        @if (count($shareProperty) != 0)  
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link mx-1" id="v-property-share-tab" data-bs-toggle="pill"
+                                                data-bs-target="#v-property-share" type="button" role="tab"
+                                                aria-controls="v-property-share" aria-selected="false">Shared property </button>
+                                        </li>
+                                        @endif
                                         <div class="row" style="display: contents;">
                                             <div class="col-md-1">
                                                 <a href={{ URL::to('admin/Properties') }}>
@@ -1335,8 +1355,43 @@ use Illuminate\Support\Facades\DB;
                                                         </div>
                                                     </div>
                                                 @endif 
-                                                    
+                                               
 
+                                                @if (count($shareProperty) != 0)                                                   
+                                                    <div class="row">
+                                                        <div class="form-group col-md-12 mt-1">
+                                                            <h5 class="border-style">Share Property Details</h5>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <table class="table custom-table-design">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">Name</th>
+                                                                        <th scope="col">Contact</th>
+                                                                        <th scope="col">Position</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                <tbody>
+                                                                    
+                                                                        @forelse ($shareProperty as $value)
+                                                                                <tr>
+                                                                                <td>{{ isset($value['name']) ? $value['name'] : '-' }}</td>
+                                                                                <td>{{ isset($value['contact']) ? $value['contact'] : '-' }}</td>
+                                                                                <td>{{ isset($value['position']) ? $value['position'] : '-' }}</td>
+
+                                                                            </tr>
+                                                                        @empty
+                                                                        @endforelse
+                                                                
+
+                                                                </tbody>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                @endif 
                                                 </div>
                                                 <div class="col-md-6 d-flex" style="height: 185px;">
                                                     <!-- First Image Section -->
@@ -2924,6 +2979,37 @@ use Illuminate\Support\Facades\DB;
                                                 </table>
                                             </div>
                                         </div>
+                                        @if (count($shareProperty) != 0)                                                   
+                                        <div class="tab-pane fade" id="v-property-share" role="tabpanel"
+                                            aria-labelledby="v-property-share-tab">
+                                                <div class="row">
+                                                    <div class="form-group col-md-12 mt-1">
+                                                        <h5 class="border-style">Share Property logs</h5>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <table class="table custom-table-design">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Name</th>
+                                                                    <th scope="col">Contact</th>
+                                                                    <th scope="col">Position</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @forelse ($shareProperty as $value)
+                                                                    <tr>
+                                                                        <td>{{ isset($value['name']) ? $value['name'] : '-' }}</td>
+                                                                        <td>{{ isset($value['contact']) ? $value['contact'] : '-' }}</td>
+                                                                        <td>{{ isset($value['position']) ? $value['position'] : '-' }}</td>
+                                                                    </tr>
+                                                                @empty
+                                                                @endforelse
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif 
                             </div>
                         </div>
                     </div>
