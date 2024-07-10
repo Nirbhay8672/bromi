@@ -38,15 +38,27 @@ class ProjectsController extends Controller
 		if ($request->ajax()) {
 
 			if(Auth::user()->parent_id) {
-				$data = Projects::with('Area', 'Builder', 'City', 'State')
-					->where('user_id',Auth::user()->id)
-					->orWhere('user_id',Auth::user()->parent_id)
-					->orderBy('id','desc');
+
+				$project_ids_array = [];
+	
+				if(Auth::user()->buildings) {
+					$project_is_string = str_replace("'", '"', Auth::user()->buildings);
+					$project_ids_array = json_decode($project_is_string, true);
+				}
+	
+				$data = Projects::with('Area', 'Builder', 'City', 'State')->where('user_id',Auth::user()->id);
+	
+				if(count($project_ids_array) > 0) {
+					$data->orWhereIn('id', $project_ids_array);
+				} else {
+					$data->orWhere('user_id',Auth::user()->parent_id);
+				}
+	
 			} else {
-				$data = Projects::with('Area', 'Builder', 'City', 'State')
-					->where('user_id',Auth::user()->id)
-					->orderBy('id','desc');
+				$data = Projects::with('Area', 'Builder', 'City', 'State')->where('user_id',Auth::user()->id);
 			}
+
+			$data->orderBy('id','desc');
 
 			$parts = explode('?', $request->location);
 

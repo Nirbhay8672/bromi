@@ -303,7 +303,7 @@ class UserController extends Controller
 
 		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$projects = Projects::get();
+		$projects = Projects::where('user_id',Auth::user()->id)->get();
 		$property_configuration_settings = DropdownSettings::where('user_id', 8)->get()->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
 		$roles =  Role::where('user_id', Session::get('parent_id'))->get();
@@ -316,7 +316,7 @@ class UserController extends Controller
 	{
 		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$projects = Projects::get();
+		$projects = Projects::where('user_id',Auth::user()->id)->get();
 		$property_configuration_settings = DropdownSettings::all()->unique('name')->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
 		$roles =  Role::where('user_id', Session::get('parent_id'))->get();
