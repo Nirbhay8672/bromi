@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Constants\Constants;
 use App\Http\Controllers\Controller;
+use App\Models\Areas;
 use App\Models\DropdownSettings;
 use App\Models\ShareProperty;
 use App\Models\SharedProperty;
@@ -12,6 +13,7 @@ use App\Models\UserNotifications;
 use App\Traits\HelperFn;
 use Illuminate\Http\Request;
 use App\Models\LandUnit;
+use App\Models\Projects;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -361,9 +363,17 @@ class ShareController extends Controller
                 ->rawColumns(['project_name',  'super_builtup_area', 'contact_name', 'remarks', 'property_unit_no', 'units', 'price', 'owner_details'])
                 ->make(true);
         }
+        $property_configuration_settings = DropdownSettings::get()->toArray();
+        $prop_type = [];
+        foreach ($property_configuration_settings as $key => $value) {
+            if (($value['name'] == 'Commercial' || $value['name'] == 'Residential') && str_contains($value['dropdown_for'], 'property_')) {
+                array_push($prop_type, $value['id']);
+            }
+        }
+        $areas = Areas::where('user_id', Auth::user()->id)->get();
+        $projects = Projects::whereNotNull('project_name')->where('id', '!=', 261)->get();
 
-
-        return view('admin.properties.shared_index');
+        return view('admin.properties.shared_index',compact('property_configuration_settings','prop_type','projects','areas'));
     }
     
      public function generateAreaUnitDetails($row, $type, $land_units)
