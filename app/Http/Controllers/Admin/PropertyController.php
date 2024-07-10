@@ -698,160 +698,6 @@ class PropertyController extends Controller
                                 if (!empty($vv[0][8])) {
                                     if ($vv[0][8] == "106" || $vv[0][8] == "34") {
                                         $fstatus = 'Furnished';
-
-
-
-                                        // if ($type == 'Office'){
-                                        //     <div class="dropdown-basic">
-                                        //         <div class="dropdown">
-                                        //             <i
-                                        //                 class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                                        //             <div
-                                        //                 class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                                        //                 <div class="row">
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>Seats:</b>
-                                        //                         {{ isset($vv[9][0]) && $vv[9][0] == '1' ? $vv[9][0] : 'No' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>Cabins:</b>
-                                        //                         {{ isset($vv[9][1]) && $vv[9][1] == '1' ? $vv[9][1] : 'No' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>Conference Room:</b>
-                                        //                         {{ isset($vv[9][2]) && $vv[9][2] == '1' ? $vv[9][2] : 'No' }}
-                                        //                     </div>
-                                        //                 </div>
-                                        //                 <hr>
-                                        //                 <div class="row">
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Pantry:</b>
-                                        //                         <span>{{ isset($vv[10][0]) && $vv[10][0] == 1 ? $vv[10][0] : 'No' }}</span>
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Reception:</b>
-                                        //                         <span>{{ isset($vv[10][1]) && $vv[10][1] == 1 ? $vv[10][1] : 'No' }}</span>
-                                        //                     </div>
-                                        //                 </div>
-                                        //             </div>
-                                        //         </div>
-                                        //     </div>
-                                        // } elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Plot'){
-                                        //     <div class="dropdown-basic">
-                                        //         <div class="dropdown">
-                                        //             <i
-                                        //                 class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                                        //             <div
-                                        //                 class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                                        //                 <div class="row">
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>Light:</b>
-                                        //                         {{ isset($vv[9][0]) && $vv[9][0] ? $vv[9][0] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>Fans:</b>
-                                        //                         {{ isset($vv[9][1]) && $vv[9][1] ? $vv[9][1] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>AC:</b>
-                                        //                         {{ isset($vv[9][2]) && $vv[9][2] ? $vv[9][2] : '-' }}
-                                        //                     </div>
-                                        //                 </div>
-                                        //                 <div class="row">
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>TV:</b>
-                                        //                         {{ isset($vv[9][3]) && $vv[9][3] ? $vv[9][3] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>Beds:</b>
-                                        //                         {{ isset($vv[9][4]) && $vv[9][4] ? $vv[9][4] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>Wardobe:</b>
-                                        //                         {{ isset($vv[9][5]) && $vv[9][5] ? $vv[9][5] : '-' }}
-                                        //                     </div>
-                                        //                 </div>
-                                        //                 <div class="row">
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>Geyser:</b>
-                                        //                         {{ isset($vv[9][6]) && $vv[9][6] ? $vv[9][6] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-4 d-flex justify-content-between">
-                                        //                         <b>Sofa:</b>
-                                        //                         {{ isset($vv[9][7]) && $vv[9][7] ? $vv[9][7] : '-' }}
-                                        //                     </div>
-                                        //                 </div>
-                                        //                 <hr>
-                                        //                 <div class="row">
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Washing Machine:</b>
-                                        //                         <span>{{ isset($vv[10][0]) && $vv[10][0] ? $vv[10][0] : '-' }}</span>
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Stove:</b>
-                                        //                         <span>{{ isset($vv[10][1]) && $vv[10][1] ? $vv[10][1] : '-' }}</span>
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Fridge:</b>
-                                        //                         {{ isset($vv[10][2]) && $vv[10][2] ? $vv[10][2] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Water Purifier:</b>
-                                        //                         {{ isset($vv[10][3]) && $vv[10][3] ? $vv[10][3] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Microwave:</b>
-                                        //                         {{ isset($vv[10][4]) && $vv[10][4] ? $vv[10][4] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Modular Kitchen:</b>
-                                        //                         {{ isset($vv[10][5]) && $vv[10][5] ? $vv[10][5] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Chimney:</b>
-                                        //                         {{ isset($vv[10][6]) && $vv[10][6] ? $vv[10][6] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Dinning Table:</b>
-                                        //                         {{ isset($vv[10][7]) && $vv[10][7] ? $vv[10][7] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Curtains:</b>
-                                        //                         {{ isset($vv[10][8]) && $vv[10][8] ? $vv[10][8] : '-' }}
-                                        //                     </div>
-                                        //                     <div
-                                        //                         class="col-6 d-flex justify-content-between">
-                                        //                         <b>Exhaust Fan:</b>
-                                        //                         {{ isset($vv[10][9]) && $vv[10][9] ? $vv[10][9] : '-' }}
-                                        //                     </div>
-                                        //                 </div>
-                                        //             </div>
-                                        //         </div>
-                                        //     </div>
-                                        // }
-
                                     } elseif ($vv[0][8] == "107" || $vv[0][8] == "35") {
                                         $fstatus = 'Semi Furnished';
                                     } elseif ($vv[0][8] == "108" || $vv[0][8] == "36") {
@@ -876,14 +722,112 @@ class PropertyController extends Controller
                         $row->image_path = '<img style="height:24px;float: right;bottom: 15px;position:relative;" src="' . asset('assets/prop_images/Red-Star.png') . '" alt="">';
                     }
                     try {
+                        $data = [];
+                        foreach(json_decode($row->unit_details) as $value){
+                            $data['light'] = isset($value[9][0]) && $value[9][0] ? $value[9][0] : '-';
+                            $data['fans'] = isset($value[9][1]) && $value[9][1] ? $value[9][1] : '-';
+                            $data['Ac'] = isset($value[9][2]) && $value[9][2] ? $value[9][2] : '-';
+                            $data['Tv'] = isset($value[9][3]) && $value[9][3] ? $value[9][3] : '-';
+                            $data['Beds'] = isset($value[9][4]) && $value[9][4] ? $value[9][4] : '-';
+                            $data['Wardobe'] = isset($value[9][5]) && $value[9][5] ? $value[9][5] : '-';
+                            $data['Geyser'] = isset($value[9][6]) && $value[9][6] ? $value[9][6] : '-';
+                            $data['Sofa'] = isset($value[9][7]) && $value[9][7] ? $value[9][7] : '-';
+                            $data['WashingMachine'] = isset($value[10][0]) && $value[10][0] ? $value[10][0] : '-';
+                            $data['Stove'] = isset($value[10][1]) && $value[10][1] ? $value[10][1] : '-';
+                            $data['Fridge'] = isset($value[10][2]) && $value[10][2] ? $value[10][2] : '-';
+                            $data['WaterPurifier'] = isset($value[10][3]) && $value[10][3] ? $value[10][3] : '-';
+                            $data['Microwave'] = isset($value[10][4]) && $value[10][4] ? $value[10][4] : '-';
+                            $data['ModularKitchen'] = isset($value[10][5]) && $value[10][5] ? $value[10][5] : '-';
+                            $data['Chimney'] = isset($value[10][6]) && $value[10][6] ? $value[10][6] : '-';
+                            $data['DinningTable'] = isset($value[10][7]) && $value[10][7] ? $value[10][7] : '-';
+                            $data['Curtains'] = isset($value[10][8]) && $value[10][8] ? $value[10][8] : '-';
+                            $data['ExhaustFan'] = isset($value[10][9]) && $value[10][9] ? $value[10][9] : '-';
+                        }
+                    
+                        $tooltipHtml = '';
+                        if ($fstatus === 'Furnished') {
+                            $tooltipHtml = '
+                            <div class="dropdown-basic">
+                                <div class="dropdown">
+                                    <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                    <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                        <div class="row">
+                                            <div class="col-4 d-flex justify-content-between">
+                                                <b>Light:</b> ' . $data['light'] . '
+                                            </div>
+                                            <div class="col-4 d-flex justify-content-between">
+                                                <b>Fans:</b> ' . $data['fans'] . '
+                                            </div>
+                                            <div class="col-4 d-flex justify-content-between">
+                                                <b>AC:</b> ' . $data['Ac'] . '
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4 d-flex justify-content-between">
+                                                <b>TV:</b> ' . $data['Tv'] . '
+                                            </div>
+                                            <div class="col-4 d-flex justify-content-between">
+                                                <b>Beds:</b> ' . $data['Beds'] . '
+                                            </div>
+                                            <div class="col-4 d-flex justify-content-between">
+                                                <b>Wardobe:</b> ' . $data['Wardobe'] . '
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4 d-flex justify-content-between">
+                                                <b>Geyser:</b> ' . $data['Geyser'] . '
+                                            </div>
+                                            <div class="col-4 d-flex justify-content-between">
+                                                <b>Sofa:</b> ' . $data['Sofa'] . '
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-6 d-flex justify-content-between">
+                                                <b>Washing Machine:</b> <span>' . $data['WashingMachine'] . '</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between">
+                                                <b>Stove:</b> <span>' . $data['Stove'] . '</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between">
+                                                <b>Fridge:</b> ' . $data['Fridge'] . '
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between">
+                                                <b>Water Purifier:</b> ' . $data['WaterPurifier'] . '
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between">
+                                                <b>Microwave:</b> ' . $data['Microwave'] . '
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between">
+                                                <b>Modular Kitchen:</b> ' . $data['ModularKitchen'] . '
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between">
+                                                <b>Chimney:</b> ' . $data['Chimney'] . '
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between">
+                                                <b>Dinning Table:</b> ' . $data['DinningTable'] . '
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between">
+                                                <b>Curtains:</b> ' . $data['Curtains'] . '
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between">
+                                                <b>Exhaust Fan:</b> ' . $data['ExhaustFan'] . '
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
+                        }
+                    
                         return '
                         <td style="vertical-align:top">
-                           ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
+                            ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
                             <font size="2" style="font-style:italic">
                             <br>
                             ' . $salable_area_print . '
                             </font>
-                            <br>' . $fstatus . $row->image_path . '
+                            <br>' . $row->image_path . '
+                            ' . $tooltipHtml . '
                         </td>';
                     } catch (\Throwable $th) {
                         dd($th);
