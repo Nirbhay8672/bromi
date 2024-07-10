@@ -93,63 +93,81 @@ class PropertyController extends Controller
                 ->where('properties.property_category', '!=', '262')
                 ->when($request->filter_by, function ($query) use ($request) {
                     if ($request->filter_by == 'reminder') {
-                        return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(7)->format('Y-m-d'));
+                        return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(7)->format('Y-m-d'))
+                                     ->where('properties.prop_status', 1);
                     } elseif ($request->filter_by == 'favourite') {
-                        return $query->where('is_favourite', 1);
+                        return $query->where('is_favourite', 1)
+                                     ->where('properties.prop_status', 1);
                     } elseif ($request->filter_by == 'new') {
-                        return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'));
+                        return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'))
+                                     ->where('properties.prop_status', 1);
                     }
                 })
                 ->when($request->filter_property_for || empty(Auth::user()->property_for_id), function ($query) use ($request) {
                     return $query->where(function ($query) use ($request) {
                         $query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
-                    });
+                    })->where('properties.prop_status', 1);
                 })
                 ->when($request->filter_property_type || empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
                     $filterPropertyType = intval($request->filter_property_type); // Convert to integer
-                    return $query->where('properties.property_type', $filterPropertyType);
+                    return $query->where('properties.property_type', $filterPropertyType)
+                                 ->where('properties.prop_status', 1);
                 })
-                ->when($request->filter_specific_type || empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {;
-                    return $query->where('properties.property_category', $request->filter_specific_type);
+                ->when($request->filter_specific_type || empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {
+                    return $query->where('properties.property_category', $request->filter_specific_type)
+                                 ->where('properties.prop_status', 1);
                 })
                 ->when($request->filter_configuration, function ($query) use ($request) {
-                    return $query->where('properties.configuration', $request->filter_configuration);
+                    return $query->where('properties.configuration', $request->filter_configuration)
+                                 ->where('properties.prop_status', 1);
                 })
                 ->when($request->filter_building_id, function ($query) use ($request) {
-                    return $query->whereIn('properties.project_id', ($request->filter_building_id));
+                    return $query->whereIn('properties.project_id', ($request->filter_building_id))
+                                 ->where('properties.prop_status', 1);
                 })
                 ->when($request->filter_area_id, function ($query) use ($request) {
-                    return $query->whereIn('projects.area_id', $request->filter_area_id);
+                    return $query->whereIn('projects.area_id', $request->filter_area_id)
+                                 ->where('properties.prop_status', 1);
                 })
                 ->when($request->filter_furnished_status, function ($query) use ($request) {
-                    return $query->where('furnished_status', $request->filter_furnished_status);
+                    return $query->where('furnished_status', $request->filter_furnished_status)
+                                 ->where('properties.prop_status', 1);
                 })
                 ->when($request->filter_availability_status, function ($query) use ($request) {
-                    return $query->where('properties.availability_status', $request->filter_availability_status);
+                    return $query->where('properties.availability_status', $request->filter_availability_status)
+                                 ->where('properties.prop_status', 1);
                 })
-                ->when($request->filter_owner_is, function ($query) use ($request) {;
-                    return $query->where('owner_is', $request->filter_owner_is);
+                ->when($request->filter_owner_is, function ($query) use ($request) {
+                    return $query->where('owner_is', $request->filter_owner_is)
+                                 ->where('properties.prop_status', 1);
                 })
-                ->when($request->filter_Property_priority, function ($query) use ($request) {;
-                    return $query->where('Property_priority', $request->filter_Property_priority);
+                ->when($request->filter_Property_priority, function ($query) use ($request) {
+                    return $query->where('Property_priority', $request->filter_Property_priority)
+                                 ->where('properties.prop_status', 1);
                 })
                 ->when(($request->filter_property_status || $request->filter_property_status == '0'), function ($query) use ($request) {
-                    return $query->where('properties.status', $request->filter_property_status);
+                    return $query->where('properties.status', $request->filter_property_status)
+                                 ->where('properties.prop_status', 1);
                 })
-                ->when($request->filter_from_date, function ($query) use ($request) {;
-                    return $query->whereDate('properties.created_at', '>=', $request->filter_from_date);
+                ->when($request->filter_from_date, function ($query) use ($request) {
+                    return $query->whereDate('properties.created_at', '>=', $request->filter_from_date)
+                                 ->where('properties.prop_status', 1);
                 })
-                ->when($request->filter_to_date, function ($query) use ($request) {;
-                    return $query->whereDate('properties.created_at', '<=', $request->filter_to_date);
+                ->when($request->filter_to_date, function ($query) use ($request) {
+                    return $query->whereDate('properties.created_at', '<=', $request->filter_to_date)
+                                 ->where('properties.prop_status', 1);
                 })
-                ->when($request->filter_is_terraced, function ($query) use ($request) {;
-                    return $query->where('properties.is_terrace', $request->filter_is_terraced);
+                ->when($request->filter_is_terraced, function ($query) use ($request) {
+                    return $query->where('properties.is_terrace', $request->filter_is_terraced)
+                                 ->where('properties.prop_status', 1);
                 })
-                ->when($request->filter_is_hot, function ($query) use ($request) {;
-                    return $query->where('hot_property', $request->filter_is_hot);
+                ->when($request->filter_is_hot, function ($query) use ($request) {
+                    return $query->where('hot_property', $request->filter_is_hot)
+                                 ->where('properties.prop_status', 1);
                 })
-                ->when($request->filter_is_preleased, function ($query) use ($request) {;
-                    return $query->where('is_pre_leased', $request->filter_is_preleased);
+                ->when($request->filter_is_preleased, function ($query) use ($request) {
+                    return $query->where('is_pre_leased', $request->filter_is_preleased)
+                                 ->where('properties.prop_status', 1);
                 })
                 ->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
                     if (!empty($enq)) {
@@ -264,6 +282,7 @@ class PropertyController extends Controller
                         // }
                     }
                 })
+                // ->where('prop_status', 1)
                 ->orderByRaw('CASE
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
@@ -470,10 +489,165 @@ class PropertyController extends Controller
                         $fstatus = '';
                         if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
                             $vv = json_decode($row->unit_details);
+                            // dd("vv",$vv[0][9]);
                             if (isset($vv[0][8])) {
                                 if (!empty($vv[0][8])) {
                                     if ($vv[0][8] == "106" || $vv[0][8] == "34") {
                                         $fstatus = 'Furnished';
+                                       
+                                       
+                                        
+                                        // if ($type == 'Office'){
+                                        //     <div class="dropdown-basic">
+                                        //         <div class="dropdown">
+                                        //             <i
+                                        //                 class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                        //             <div
+                                        //                 class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                        //                 <div class="row">
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>Seats:</b>
+                                        //                         {{ isset($vv[9][0]) && $vv[9][0] == '1' ? $vv[9][0] : 'No' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>Cabins:</b>
+                                        //                         {{ isset($vv[9][1]) && $vv[9][1] == '1' ? $vv[9][1] : 'No' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>Conference Room:</b>
+                                        //                         {{ isset($vv[9][2]) && $vv[9][2] == '1' ? $vv[9][2] : 'No' }}
+                                        //                     </div>
+                                        //                 </div>
+                                        //                 <hr>
+                                        //                 <div class="row">
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Pantry:</b>
+                                        //                         <span>{{ isset($vv[10][0]) && $vv[10][0] == 1 ? $vv[10][0] : 'No' }}</span>
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Reception:</b>
+                                        //                         <span>{{ isset($vv[10][1]) && $vv[10][1] == 1 ? $vv[10][1] : 'No' }}</span>
+                                        //                     </div>
+                                        //                 </div>
+                                        //             </div>
+                                        //         </div>
+                                        //     </div>
+                                        // } elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Plot'){
+                                        //     <div class="dropdown-basic">
+                                        //         <div class="dropdown">
+                                        //             <i
+                                        //                 class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                        //             <div
+                                        //                 class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                        //                 <div class="row">
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>Light:</b>
+                                        //                         {{ isset($vv[9][0]) && $vv[9][0] ? $vv[9][0] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>Fans:</b>
+                                        //                         {{ isset($vv[9][1]) && $vv[9][1] ? $vv[9][1] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>AC:</b>
+                                        //                         {{ isset($vv[9][2]) && $vv[9][2] ? $vv[9][2] : '-' }}
+                                        //                     </div>
+                                        //                 </div>
+                                        //                 <div class="row">
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>TV:</b>
+                                        //                         {{ isset($vv[9][3]) && $vv[9][3] ? $vv[9][3] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>Beds:</b>
+                                        //                         {{ isset($vv[9][4]) && $vv[9][4] ? $vv[9][4] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>Wardobe:</b>
+                                        //                         {{ isset($vv[9][5]) && $vv[9][5] ? $vv[9][5] : '-' }}
+                                        //                     </div>
+                                        //                 </div>
+                                        //                 <div class="row">
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>Geyser:</b>
+                                        //                         {{ isset($vv[9][6]) && $vv[9][6] ? $vv[9][6] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-4 d-flex justify-content-between">
+                                        //                         <b>Sofa:</b>
+                                        //                         {{ isset($vv[9][7]) && $vv[9][7] ? $vv[9][7] : '-' }}
+                                        //                     </div>
+                                        //                 </div>
+                                        //                 <hr>
+                                        //                 <div class="row">
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Washing Machine:</b>
+                                        //                         <span>{{ isset($vv[10][0]) && $vv[10][0] ? $vv[10][0] : '-' }}</span>
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Stove:</b>
+                                        //                         <span>{{ isset($vv[10][1]) && $vv[10][1] ? $vv[10][1] : '-' }}</span>
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Fridge:</b>
+                                        //                         {{ isset($vv[10][2]) && $vv[10][2] ? $vv[10][2] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Water Purifier:</b>
+                                        //                         {{ isset($vv[10][3]) && $vv[10][3] ? $vv[10][3] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Microwave:</b>
+                                        //                         {{ isset($vv[10][4]) && $vv[10][4] ? $vv[10][4] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Modular Kitchen:</b>
+                                        //                         {{ isset($vv[10][5]) && $vv[10][5] ? $vv[10][5] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Chimney:</b>
+                                        //                         {{ isset($vv[10][6]) && $vv[10][6] ? $vv[10][6] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Dinning Table:</b>
+                                        //                         {{ isset($vv[10][7]) && $vv[10][7] ? $vv[10][7] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Curtains:</b>
+                                        //                         {{ isset($vv[10][8]) && $vv[10][8] ? $vv[10][8] : '-' }}
+                                        //                     </div>
+                                        //                     <div
+                                        //                         class="col-6 d-flex justify-content-between">
+                                        //                         <b>Exhaust Fan:</b>
+                                        //                         {{ isset($vv[10][9]) && $vv[10][9] ? $vv[10][9] : '-' }}
+                                        //                     </div>
+                                        //                 </div>
+                                        //             </div>
+                                        //         </div>
+                                        //     </div>
+                                        // }
+
                                     } elseif ($vv[0][8] == "107" || $vv[0][8] == "35") {
                                         $fstatus = 'Semi Furnished';
                                     } elseif ($vv[0][8] == "108" || $vv[0][8] == "36") {
@@ -528,11 +702,9 @@ class PropertyController extends Controller
                     return $detail;
                 })
                 ->editColumn('unit_details', function ($row) {
-                    // dd($row->property_for);
                     $all_units = [];
                     if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
                         $vv = json_decode($row->unit_details);
-                        // dd($vv,"unit_details");
                         foreach ($vv as $key => $value) {
                             if ($value[2] == "Rent Out") {
                                 $all_units = [];
@@ -569,7 +741,6 @@ class PropertyController extends Controller
                             }
                         }
                     }
-                    // dd($all_units);
 
                     if (!empty($all_units)) {
                         $vvv = '';
