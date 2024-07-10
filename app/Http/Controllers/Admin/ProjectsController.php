@@ -37,9 +37,16 @@ class ProjectsController extends Controller
 	{
 		if ($request->ajax()) {
 
-			$data = Projects::with('Area', 'Builder', 'City', 'State')
-				->where('user_id',Auth::user()->id)
-				->orderBy('id','desc');
+			if(Auth::user()->parent_id) {
+				$data = Projects::with('Area', 'Builder', 'City', 'State')
+					->where('user_id',Auth::user()->id)
+					->orWhere('user_id',Auth::user()->parent_id)
+					->orderBy('id','desc');
+			} else {
+				$data = Projects::with('Area', 'Builder', 'City', 'State')
+					->where('user_id',Auth::user()->id)
+					->orderBy('id','desc');
+			}
 
 			$parts = explode('?', $request->location);
 
@@ -71,10 +78,16 @@ class ProjectsController extends Controller
 					return '';
 				})
 				->editColumn('select_checkbox', function ($row) {
-					$abc = '<div class="form-check checkbox checkbox-primary mb-0">
-					<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
-					<label class="form-check-label" for="checkbox-primary-' . $row->id . '"></label>
-					  </div>';
+
+					$abc = '';
+
+					if($row->user_id == Auth::user()->id) {
+						$abc = '<div class="form-check checkbox checkbox-primary mb-0">
+						<input class="form-check-input table_checkbox" data-id="' . $row->id . '" name="select_row[]" id="checkbox-primary-' . $row->id . '" type="checkbox">
+						<label class="form-check-label" for="checkbox-primary-' . $row->id . '"></label>
+						</div>';
+					}
+					
 					return $abc;
 				})
 				->editColumn('property_type', function ($row) {
@@ -100,11 +113,11 @@ class ProjectsController extends Controller
 						return ($var['name'] == 'project-delete');
 					});
 
-					if(count($edit_permission) > 0) {
+					if(count($edit_permission) > 0 && $row->user_id == Auth::user()->id) {
 						$buttons =  $buttons . '<a href="'.route('admin.project.edit',$row->id).'"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
 					}
 
-					if(count($delete_permission) > 0) {
+					if(count($delete_permission) > 0 && $row->user_id == Auth::user()->id) {
 						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProject(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
 					}
 
@@ -264,7 +277,7 @@ class ProjectsController extends Controller
 		}
 
 		if($request->id == '' || $request->id == null) {
-			$data->user_id = Session::get('parent_id');
+			$data->user_id = Auth::user()->id;
 			$data->added_by = Auth::user()->id;
 		}
 
