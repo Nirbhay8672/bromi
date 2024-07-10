@@ -146,7 +146,7 @@ class ShareController extends Controller
         //   dd("shared-properties Me working done  ===>");
         if ($request->ajax()) {
             $dropdowns = DropdownSettings::get()->toArray();
-             $land_units = LandUnit::all();
+            $land_units = LandUnit::all();
             $dropdownsarr = [];
             foreach ($dropdowns as $key => $value) {
                 $dropdownsarr[$value['id']] = $value;
@@ -159,12 +159,83 @@ class ShareController extends Controller
 
             // $data2 = SharedProperty::with('Property_details', 'User')->where('user_id', Auth::user()->id)->get();
 
+            // $data = DB::table('share_property')
+            //     ->select('share_property.*', 'properties.constructed_salable_area as constructed_salable_area', 'users.first_name as first_name', 'properties.salable_plot_area as salable_plot_area', 'properties.salable_area as salable_area', 'properties.configuration as property_configuration', 'properties.unit_details as unit_details', 'users.office_number as office_number', 'users.mobile_number as mobile_number', 'users.last_name as last_name', 'projects.project_name', 'properties.remarks as remarks', 'properties.property_category as property_category', 'properties.property_for as property_for', 'properties.location_link as property_link', 'areas.name as area_name')
+            //     ->leftJoin('properties', 'share_property.property_id', '=', 'properties.id')
+            //     ->leftJoin('projects', 'properties.project_id', '=', 'projects.id')
+            //     ->leftJoin('areas', 'projects.area_id', '=', 'areas.id')
+            //     ->leftJoin('users', 'share_property.user_id', '=', 'users.id')
+            //     ->where('share_property.partner_id', Auth::user()->id)
+            //     ->where('share_property.accepted', 1)
+            //     ->get();
+
+            // $data2 = DB::table('share_property')
+            //     ->select('share_property.*', 'properties.constructed_salable_area as constructed_salable_area', 'users.first_name as first_name', 'properties.salable_plot_area as salable_plot_area', 'properties.salable_area as salable_area', 'properties.unit_details as unit_details', 'properties.configuration as property_configuration', 'users.office_number as office_number', 'users.mobile_number as mobile_number', 'users.last_name as last_name', 'projects.project_name', 'properties.remarks as remarks', 'properties.property_category as property_category', 'properties.property_for as property_for', 'properties.location_link as property_link', 'areas.name as area_name')
+            //     ->leftJoin('properties', 'share_property.property_id', '=', 'properties.id')
+            //     ->leftJoin('projects', 'properties.project_id', '=', 'projects.id')
+            //     ->leftJoin('areas', 'projects.area_id', '=', 'areas.id')
+            //     ->leftJoin('users', 'share_property.user_id', '=', 'users.id')
+            //     ->where('share_property.user_id', Auth::user()->id)
+            //     ->get();
+            // $mergedData = $data->concat($data2);
             $data = DB::table('share_property')
                 ->select('share_property.*', 'properties.constructed_salable_area as constructed_salable_area', 'users.first_name as first_name', 'properties.salable_plot_area as salable_plot_area', 'properties.salable_area as salable_area', 'properties.configuration as property_configuration', 'properties.unit_details as unit_details', 'users.office_number as office_number', 'users.mobile_number as mobile_number', 'users.last_name as last_name', 'projects.project_name', 'properties.remarks as remarks', 'properties.property_category as property_category', 'properties.property_for as property_for', 'properties.location_link as property_link', 'areas.name as area_name')
                 ->leftJoin('properties', 'share_property.property_id', '=', 'properties.id')
                 ->leftJoin('projects', 'properties.project_id', '=', 'projects.id')
                 ->leftJoin('areas', 'projects.area_id', '=', 'areas.id')
                 ->leftJoin('users', 'share_property.user_id', '=', 'users.id')
+                ->when($request->filter_property_for || empty(Auth::user()->property_for_id), function ($query) use ($request) {
+                    return $query->where(function ($query) use ($request) {
+                        $query->where('properties.property_for', $request->filter_property_for)
+                            ->orWhere('properties.property_for', 'Both');
+                    });
+                })
+                ->when($request->filter_property_type || empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
+                    $filterPropertyType = intval($request->filter_property_type); // Convert to integer
+                    return $query->where('properties.property_type', $filterPropertyType);
+                })
+                ->when($request->filter_specific_type || empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {
+                    return $query->where('properties.property_category', $request->filter_specific_type);
+                })
+                ->when($request->filter_configuration, function ($query) use ($request) {
+                    return $query->where('properties.configuration', $request->filter_configuration);
+                })
+                ->when($request->filter_building_id, function ($query) use ($request) {
+                    return $query->whereIn('properties.project_id', ($request->filter_building_id));
+                })
+                ->when($request->filter_area_id, function ($query) use ($request) {
+                    return $query->whereIn('projects.area_id', $request->filter_area_id);
+                })
+                ->when($request->filter_furnished_status, function ($query) use ($request) {
+                    return $query->where('properties.furnished_status', $request->filter_furnished_status);
+                })
+                ->when($request->filter_availability_status, function ($query) use ($request) {
+                    return $query->where('properties.availability_status', $request->filter_availability_status);
+                })
+                ->when($request->filter_owner_is, function ($query) use ($request) {
+                    return $query->where('properties.owner_is', $request->filter_owner_is);
+                })
+                ->when($request->filter_Property_priority, function ($query) use ($request) {
+                    return $query->where('properties.Property_priority', $request->filter_Property_priority);
+                })
+                ->when(($request->filter_property_status || $request->filter_property_status == '0'), function ($query) use ($request) {
+                    return $query->where('properties.status', $request->filter_property_status);
+                })
+                ->when($request->filter_from_date, function ($query) use ($request) {
+                    return $query->whereDate('properties.created_at', '>=', $request->filter_from_date);
+                })
+                ->when($request->filter_to_date, function ($query) use ($request) {
+                    return $query->whereDate('properties.created_at', '<=', $request->filter_to_date);
+                })
+                ->when($request->filter_is_terraced, function ($query) use ($request) {
+                    return $query->where('properties.is_terrace', $request->filter_is_terraced);
+                })
+                ->when($request->filter_is_hot, function ($query) use ($request) {
+                    return $query->where('properties.hot_property', $request->filter_is_hot);
+                })
+                ->when($request->filter_is_preleased, function ($query) use ($request) {
+                    return $query->where('properties.is_pre_leased', $request->filter_is_preleased);
+                })
                 ->where('share_property.partner_id', Auth::user()->id)
                 ->where('share_property.accepted', 1)
                 ->get();
@@ -175,9 +246,63 @@ class ShareController extends Controller
                 ->leftJoin('projects', 'properties.project_id', '=', 'projects.id')
                 ->leftJoin('areas', 'projects.area_id', '=', 'areas.id')
                 ->leftJoin('users', 'share_property.user_id', '=', 'users.id')
+                ->when($request->filter_property_for || empty(Auth::user()->property_for_id), function ($query) use ($request) {
+                    return $query->where(function ($query) use ($request) {
+                        $query->where('properties.property_for', $request->filter_property_for)
+                            ->orWhere('properties.property_for', 'Both');
+                    });
+                })
+                ->when($request->filter_property_type || empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
+                    $filterPropertyType = intval($request->filter_property_type); // Convert to integer
+                    return $query->where('properties.property_type', $filterPropertyType);
+                })
+                ->when($request->filter_specific_type || empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {
+                    return $query->where('properties.property_category', $request->filter_specific_type);
+                })
+                ->when($request->filter_configuration, function ($query) use ($request) {
+                    return $query->where('properties.configuration', $request->filter_configuration);
+                })
+                ->when($request->filter_building_id, function ($query) use ($request) {
+                    return $query->whereIn('properties.project_id', ($request->filter_building_id));
+                })
+                ->when($request->filter_area_id, function ($query) use ($request) {
+                    return $query->whereIn('projects.area_id', $request->filter_area_id);
+                })
+                ->when($request->filter_furnished_status, function ($query) use ($request) {
+                    return $query->where('properties.furnished_status', $request->filter_furnished_status);
+                })
+                ->when($request->filter_availability_status, function ($query) use ($request) {
+                    return $query->where('properties.availability_status', $request->filter_availability_status);
+                })
+                ->when($request->filter_owner_is, function ($query) use ($request) {
+                    return $query->where('properties.owner_is', $request->filter_owner_is);
+                })
+                ->when($request->filter_Property_priority, function ($query) use ($request) {
+                    return $query->where('properties.Property_priority', $request->filter_Property_priority);
+                })
+                ->when(($request->filter_property_status || $request->filter_property_status == '0'), function ($query) use ($request) {
+                    return $query->where('properties.status', $request->filter_property_status);
+                })
+                ->when($request->filter_from_date, function ($query) use ($request) {
+                    return $query->whereDate('properties.created_at', '>=', $request->filter_from_date);
+                })
+                ->when($request->filter_to_date, function ($query) use ($request) {
+                    return $query->whereDate('properties.created_at', '<=', $request->filter_to_date);
+                })
+                ->when($request->filter_is_terraced, function ($query) use ($request) {
+                    return $query->where('properties.is_terrace', $request->filter_is_terraced);
+                })
+                ->when($request->filter_is_hot, function ($query) use ($request) {
+                    return $query->where('properties.hot_property', $request->filter_is_hot);
+                })
+                ->when($request->filter_is_preleased, function ($query) use ($request) {
+                    return $query->where('properties.is_pre_leased', $request->filter_is_preleased);
+                })
                 ->where('share_property.user_id', Auth::user()->id)
                 ->get();
+
             $mergedData = $data->concat($data2);
+
             // dd($mergedData);
             return DataTables::of($mergedData)
                 ->editColumn('project_name', function ($row) use ($request) {
@@ -189,7 +314,7 @@ class ShareController extends Controller
                     $last =     '</td>';
 
                     '</td>';
-                    return $first . $first_end . $second  . $third .$last;
+                    return $first . $first_end . $second  . $third . $last;
 
                     return '';
                 })
@@ -238,7 +363,7 @@ class ShareController extends Controller
                         }
                     }
 
-                   $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
+                    $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
                     if (empty($salable_area_print)) {
                         $salable_area_print = "Area Not Available";
                     }
@@ -373,10 +498,10 @@ class ShareController extends Controller
         $areas = Areas::where('user_id', Auth::user()->id)->get();
         $projects = Projects::whereNotNull('project_name')->where('id', '!=', 261)->get();
 
-        return view('admin.properties.shared_index',compact('property_configuration_settings','prop_type','projects','areas'));
+        return view('admin.properties.shared_index', compact('property_configuration_settings', 'prop_type', 'projects', 'areas'));
     }
-    
-     public function generateAreaUnitDetails($row, $type, $land_units)
+
+    public function generateAreaUnitDetails($row, $type, $land_units)
     {
         $area = '';
         $measure = '';

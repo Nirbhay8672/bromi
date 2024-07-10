@@ -158,7 +158,7 @@ class PartnerController extends Controller
 	 */
 	public function deletedPartner(Request $request)
 	{
-	    dd("bhrt mmm");
+	    // dd("bhrt mmm");
 		if (!empty($request->id)) {
 			$dlt_partner = Partner::where('id', $request->id)->delete();
 			return json_encode($dlt_partner);

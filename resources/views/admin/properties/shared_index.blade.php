@@ -4,7 +4,6 @@
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
-
                 </div>
             </div>
         </div>
@@ -27,10 +26,8 @@
                                     data-tooltip="Clear Filter" id="resetfilter"><i class="fa fa-refresh"></i></button>
                             </div>
                             </div>
-
                         </div>
                         <div class="card-body">
-
                             <div class="table-responsive">
                                 <table class="display" id="propertyTable">
                                     <thead>
@@ -47,12 +44,10 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
         </div>
+
         <div class="modal fade" id="filtermodal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
@@ -62,7 +57,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form class="form-bookmark needs-validation " method="post" id="filter_form" novalidate="">
+                        <form class="form-bookmark needs-validation" method="post" id="filter_form" novalidate="">
                             @csrf
                             <div>
                                 <div class="row">
@@ -100,14 +95,11 @@
                                             @endforelse
                                         </select>
                                     </div>
-
-
                                     <div class="form-group col-md-2 m-b-4 mb-3">
                                         <select class="form-select" id="filter_configuration">
                                             <option value="">Sub Category</option>
                                         </select>
                                     </div>
-
                                     <div class="form-group col-md-2 m-b-4 mb-3">
                                         <label class="select2_label" for="Select Project"> Project</label>
                                         <select class="form-select" id="filter_building_id" multiple>
@@ -125,7 +117,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
                                     <div class="form-group col-md-2 m-b-4 mb-3">
                                         <div>
                                             <label for="From Price">From Price</label>
@@ -153,21 +144,21 @@
                                     <div class="form-group col-md-2 m-b-4 mb-3">
                                         <label for="From Date">From Date</label>
                                         <div class="input-group">
-                                            <input class="form-control " id="filter_from_date" type="date"
+                                            <input class="form-control" id="filter_from_date" type="date"
                                                 data-language="en">
                                         </div>
                                     </div>
                                     <div class="form-group col-md-2 m-b-4 mb-3">
                                         <label for="To Date">To Date</label>
                                         <div class="input-group">
-                                            <input class="form-control " id="filter_to_date" type="date"
+                                            <input class="form-control" id="filter_to_date" type="date"
                                                 data-language="en">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button class="btn custom-theme-button" id="filtersearch">Filter</button>
+                                <button class="btn custom-theme-button" id="filtersearch" type="button">Filter</button>
                                 <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
                                     data-bs-dismiss="modal">Cancel</button>
                             </div>
@@ -202,67 +193,58 @@
                             d.filter_configuration = $('#filter_configuration').val();
                             d.filter_building_id = $('#filter_building_id').val();
                             d.filter_area_id = $('#filter_area_id').val();
-                            d.filter_availability_status = $('#filter_availability_status').val();
-                            d.filter_owner_is = $('#filter_owner_is').val();
-                            d.filter_Property_priority = $('#filter_Property_priority').val();
-                            d.filter_property_status = $('#filter_property_status').val();
-                            d.filter_from_date = $('#filter_from_date').val();
-                            d.filter_to_date = $('#filter_to_date').val();
                             d.filter_from_price = $('#filter_from_price').val();
                             d.filter_to_price = $('#filter_to_price').val();
                             d.filter_from_area = $('#filter_from_area').val();
                             d.filter_to_area = $('#filter_to_area').val();
-                            d.filter_measurement = $('#filter_measurement').val();
-                            d.filter_is_preleased = Number($('#filter_is_preleased').prop('checked'));
-                            d.search_enq = search_enq;
-                            d.match_property_type = Number($('#match_property_type').prop('checked'));
-                            d.match_specific_type = Number($('#match_specific_type').prop('checked'));
-                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop(
-                                'checked'));
-                            d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
-                            d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
-                            d.match_enquiry_size = Number($('#match_enquiry_size').prop('checked'));
-                            d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
-                            // d.match_building = Number($('#match_building').prop('checked'));
-                            d.filter_by = filter_by;
-                            d.location = window.location.href;
-                        },
-                    },
-                    columns: [{
-                            data: 'project_name',
-                            name: 'project_name'
-                        },
-                        {
-                            data: 'super_builtup_area',
-                            name: 'super_builtup_area'
-                        },
-                        {
-                            data: 'price',
-                            name: 'price'
-                        },
-                        {
-                            data: 'contact_name',
-                            name: 'contact_name'
+                            d.filter_from_date = $('#filter_from_date').val();
+                            d.filter_to_date = $('#filter_to_date').val();
                         }
+                    },
+                    columns: [
+                        { data: 'project_name', name: 'project_name' },
+                        { data: 'super_builtup_area', name: 'super_builtup_area' },
+                        { data: 'price', name: 'price' },
+                        { data: 'contact_name', name: 'contact_name' }
                     ],
-                    columnDefs: [{
-                            "width": "18%",
-                            "targets": 0
-                        },
-                        {
-                            "width": "18%",
-                            "targets": 1
-                        },
-                        {
-                            "width": "10%",
-                            "targets": 2
-                        },
-                        {
-                            "width": "15%",
-                            "targets": 3
-                        },
-                    ],
+                    columnDefs: [
+                        { "width": "18%", "targets": 0 },
+                        { "width": "18%", "targets": 1 },
+                        { "width": "10%", "targets": 2 },
+                        { "width": "15%", "targets": 3 }
+                    ]
                 });
+
+                $('#filtersearch').click(function() {
+                    $('#propertyTable').DataTable().ajax.reload();
+                    $('#filtermodal').modal('hide');
+                });
+
+                $('#resetfilter').click(function() {
+                    $('#filter_form')[0].reset();
+                    $('#propertyTable').DataTable().ajax.reload();
+                });
+
+                $(document).on('click', '#filtersearch', function(e) {
+                e.preventDefault();
+                search_enq = '';
+                $('#resetfilter').show();
+                $('#resetfilter').removeClass('d-none');
+                $('#propertyTable').DataTable().draw();
+                $('#filtermodal').modal('hide');
             });
+
+            $(document).on('click', '#resetfilter', function(e) {
+                e.preventDefault();
+                $(this).hide();
+                $('#filter_form').trigger("reset");
+                $('#propertyTable').DataTable().draw();
+                $('#filtermodal').modal('hide');
+                triggerResetFilter()
+            });
+
+            });
+
+
         </script>
     @endpush

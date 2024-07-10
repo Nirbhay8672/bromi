@@ -145,29 +145,28 @@
             }
 
             // Delete Partner
-            function deletePartner(data) {
-                console.log("deletd");
-                // Swal.fire({
-                //     title: "Are you sure?",
-                //     icon: "warning",
-                //     showCancelButton: true,
-                //     confirmButtonText: 'Yes',
-                // }).then(function(isConfirm) {
-                //     if (isConfirm.isConfirmed) {
-                //         var id = $(data).attr('data-id');
-                //         $.ajax({
-                //             type: "POST",
-                //             url: "{{ route('admin.deletePartner') }}",
-                //             data: {
-                //                 id: id,
-                //                 _token: '{{ csrf_token() }}'
-                //             },
-                //             success: function(data) {
-                //                 $('#sharedUserTable').DataTable().draw();
-                //             }
-                //         });
-                //     }
-                // })
+            function cancelRequest(data) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                }).then(function(isConfirm) {
+                    if (isConfirm.isConfirmed) {
+                        var id = $(data).attr('data-id');
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('admin.deletePartner') }}",
+                            data: {
+                                id: id,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+                                $('#sharedUserTable').DataTable().draw();
+                            }
+                        });
+                    }
+                })
 
             }
         </script>
