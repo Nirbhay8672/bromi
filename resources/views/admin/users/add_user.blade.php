@@ -118,7 +118,7 @@
                                                             </div>
                                                             <div class="form-group col-md-3 m-b-20 mb-3">
                                                                 <select class="form-select" id="property_for_id">
-                                                                    <option value="">Property For</option>
+                                                                    <option value="" disabled>Property For</option>
                                                                     <option value="Rent">Rent</option>
                                                                     <option value="Sell">Sell</option>
                                                                     <option value="Both">Both</option>
@@ -129,7 +129,7 @@
                                                             <div class="form-group col-md-3 m-b-20 mb-3">
                                                                 <label class="select2_label" for="Property Type">Property
                                                                     Type</label>
-                                                                <select class="form-select" id="property_type_id" multiple>
+                                                                <select class="form-select" id="property_type_id" onchange="setCategory()" multiple>
                                                                     <option
                                                                         data-parent_id="null"
                                                                         value="85"
@@ -146,16 +146,6 @@
                                                                     Type</label>
                                                                 <select class="form-select" id="specific_properties"
                                                                     multiple="multiple">
-                                                                    @forelse ($property_configuration_settings as $props)
-                                                                        @if ($props['dropdown_for'] == 'property_specific_type')
-                                                                            <option data-parent_id="{{ $props['parent_id'] }}"
-                                                                                value="{{ $props['id'] }}">
-                                                                                {{ $props['name'] }}
-                                                                            </option>
-                                                                            </option>
-                                                                        @endif
-                                                                    @empty
-                                                                    @endforelse
                                                                 </select>
                                                             </div>
 
@@ -170,12 +160,20 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
+
+                                                            <div class="form-group col-md-3 m-b-20 mb-3 mt-3">
+                                                                <select class="form-select" id="enquiry_permission">
+                                                                    <option value="" disabled>Enquiries Access</option>
+                                                                    <option value="all">All Enquiries</option>
+                                                                    <option value="only_assigned">Only Assigned</option>
+                                                                </select>
+                                                                <span id="enquiry_permission_error" class="text-danger invalid-error d-none"></span>
+                                                            </div>
                                                         </div>
 
                                                         <button
                                                             class="btn custom-theme-button nextBtn pull-right"
                                                             type="button"
-
                                                         >Next</button>
                                                     </div>
                                                 </div>
@@ -313,7 +311,7 @@
                                                             <div class="form-group col-md-4 m-b-20">
                                                                 <label class="select2_label"
                                                                     for="Reporting to person">Reporting to person</label>
-                                                                <select class="form-select" id="reporting_to" multiple>
+                                                                    <select class="form-select" id="reporting_to" multiple>
                                                                     @foreach ($employees as $employee)
                                                                         <option value="{{ $employee->id }}">
                                                                             {{ $employee->first_name . ' ' . $employee->last_name }}
@@ -371,6 +369,27 @@
         @push('scripts')
             <script src="{{ asset('admins/assets/js/form-wizard/form-wizard-two.js') }}"></script>
             <script>
+
+                function setCategory() {
+                    let property_types = $('#property_type_id').val();
+
+                    let category_option = document.getElementById('specific_properties');
+                    category_option.innerHTML = "";
+
+                    if(property_types.includes('87')) {
+                        category_option.innerHTML += '<option data-parent_id="87" value="254">Flat</option>';
+                        category_option.innerHTML += '<option data-parent_id="87" value="255">Vila/Bunglow</option>';
+                        category_option.innerHTML += '<option data-parent_id="87" value="256">Plot</option>';
+                        category_option.innerHTML += '<option data-parent_id="87" value="257">Penthouse</option>';
+                        category_option.innerHTML += '<option data-parent_id="87" value="258">Farmhouse</option>';
+                    }
+
+                    if(property_types.includes('85')) {
+                        category_option.innerHTML += '<option data-parent_id="87" value="259">Office</option>';
+                        category_option.innerHTML += '<option data-parent_id="87" value="260">Retail</option>';
+                        category_option.innerHTML += '<option data-parent_id="87" value="261">Storage/industrial</option>';
+                    }
+                }
 
                 var shouldchangecity = 1;
 
@@ -447,10 +466,17 @@
                             shouldchangecity = 1;
                             $('#specific_properties').val([]).trigger('change');
                             $('#buildings').val([]).trigger('change');
+                            $('#enquiry_permission').val([]).trigger('change');
                             $('#branch_id').val([]).trigger('change');
                             $('#reporting_to').val([]).trigger('change');
                             $('#property_type_id').val([]).trigger('change');
                             $('#role_id').val(dataa.role_id).trigger('change');
+                            
+                            try {
+                                $('#property_type_id').val(JSON.parse(dataa.property_type_id)).trigger('change');
+                            } catch (error) {
+                                //
+                            }
                             try {
                                 $('#specific_properties').val(JSON.parse(dataa.specific_properties)).trigger('change');
                             } catch (error) {
@@ -472,7 +498,7 @@
                                 //
                             }
                             try {
-                                $('#property_type_id').val(JSON.parse(dataa.property_type_id)).trigger('change');
+                                $('#enquiry_permission').val(dataa.enquiry_permission).trigger('change');
                             } catch (error) {
                                 //
                             }
@@ -536,6 +562,7 @@
                         form_data.set('property_type_id', JSON.stringify($('#property_type_id').val()));
                         form_data.set('specific_properties', JSON.stringify($('#specific_properties').val()));
                         form_data.set('buildings', JSON.stringify($('#buildings').val()));
+                        form_data.set('enquiry_permission', $('#enquiry_permission').val());
                         form_data.set('working', Number($('#working').prop('checked')));
 
                         form_data.set('id_type', $('#id_type').val());
