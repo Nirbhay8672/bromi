@@ -89,14 +89,20 @@ class PropertyController extends Controller
             }
             $dropdowns = $dropdownsarr;
             $isSubAdmin = User::where('id', Auth::id())->whereNotNull('parent_id')->first();
-            // $superAdmin = User::find($isSubAdmin->parent_id);
             if ($isSubAdmin) {
+                $superAdmin = User::find($isSubAdmin->parent_id);
+                // dd("issuper",$superAdmin->id,'303',"isSubAdmin",$isSubAdmin);
                 $propertyTypeIdArray = json_decode($isSubAdmin->property_type_id, true);
                 if (is_string($isSubAdmin->property_type_id)) {
                     $propertyTypeIdArray = explode(',', trim($isSubAdmin->property_type_id, '[]""'));
                     // $propertyTypeIdArray = array_map('intval', $propertyTypeIdArray);
                 }
-                $data = Properties::select('properties.*')->with('Projects.Area')
+                $dataSuperAdmin = Properties::select('properties.*')->with('Projects.Area')
+                ->join('projects', 'projects.id', '=', 'properties.project_id')
+                ->where('properties.user_id','=',$superAdmin->id)
+                ->get();
+
+                $dataSubAdmin = Properties::select('properties.*')->with('Projects.Area')
                     ->join('projects', 'projects.id', '=', 'properties.project_id')
                     ->where('properties.property_category', '!=', '256')
                     ->where('properties.property_category', '!=', '261')
@@ -289,7 +295,9 @@ class PropertyController extends Controller
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
 				END,  properties.id DESC');
-                // dd("data",$data);
+
+                $data = $dataSuperAdmin->union($dataSubAdmin)->get();
+                    dd("merged",$data);
             } else {
                 $data = Properties::select('properties.*')->with('Projects.Area')
                     ->join('projects', 'projects.id', '=', 'properties.project_id')
@@ -447,6 +455,7 @@ class PropertyController extends Controller
                                 }
                             }
 
+                            // size
                             if ($request->match_enquiry_size) {
                                 // dd("request->match_enquiry_size",$request->match_enquiry_size,"enq->area_from,enq->area_to",$enq->area_from, $enq->area_to,"Measure",$enq->area_from_measurement,"enq->property_type",$enq->property_type);
                                 // $query->where(function ($query) use ($enq) {
@@ -460,6 +469,8 @@ class PropertyController extends Controller
                                         // dd("inn");
                                         $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
                                             ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                        ->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                            ->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
                                             // ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
                                             // ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
                                             ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
@@ -469,9 +480,11 @@ class PropertyController extends Controller
                                         $area_to_int = (int) $enq->area_to;
                                         // dd("out",$area_from_int,$area_to_int);
                                         $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$area_from_int, $area_to_int])
-                                            ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
-                                            ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from_int, $enq->area_to_int])
-                                            ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                        ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                        ->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                        ->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                        // ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from_int, $enq->area_to_int])
+                                            // ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
                                             ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from_int, $enq->area_to_int])
                                             ->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$enq->area_from_measurement]);
                                     }
@@ -492,6 +505,7 @@ class PropertyController extends Controller
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
 				END,  properties.id DESC');
+                // dd("data 22",$data);
             }
             $parts = explode('?', $request->location);
 
@@ -745,6 +759,7 @@ class PropertyController extends Controller
                         }
                     
                         $tooltipHtml = '';
+                        // dd("fstatus",$fstatus);
                         if ($fstatus === 'Furnished') {
                             $tooltipHtml = '
                             <div class="dropdown-basic">
@@ -2485,28 +2500,28 @@ class PropertyController extends Controller
         $area_parts = explode("_-||-_", $property->salable_area);
         $area_size = str_replace(',', '', $area_parts[0]);
         $area_size_int = (int) str_replace(',', '', $area_parts[0]);
-        $constructed_area_parts = explode("_-||-_", $property->constructed_salable_area);
-        $constructed_area = str_replace(',', '', $constructed_area_parts[0]);
+        // $constructed_area_parts = explode("_-||-_", $property->constructed_salable_area);  //nahi user kevanu matching ma kyay
+        // $constructed_area = str_replace(',', '', $constructed_area_parts[0]);
         $salable_plot_area_part = explode("_-||-_", $property->salable_plot_area);
         $salable_plot_area = str_replace(',', '', $salable_plot_area_part[0]);
         $length_of_plot_part = explode("_-||-_", $property->length_of_plot);
         $length_of_plot = str_replace(',', '', $length_of_plot_part[0]);
-
         $constructed_area_unit = "";
         $area_size_unit = "";
         $length_of_plot_unit = "";
         $salable_plot_area_unit = "";
         $length_of_plot_part_unit = "";
-        if ($constructed_area !== "") {
-            $constructed_area_unit = str_replace(',', '', $constructed_area_parts[1]);
-        } else if ($area_size !== "") {
+        // if ($constructed_area !== "") {
+        //     $constructed_area_unit = str_replace(',', '', $constructed_area_parts[1]);
+        // } else 
+        if ($area_size !== "") {
             $area_size_unit = str_replace(',', '', $area_parts[1]);
         } else if ($salable_plot_area_part !== "") {
             $salable_plot_area_unit = str_replace(',', '', $salable_plot_area_part[1]);
         } else if ($length_of_plot_part !== "") {
             $length_of_plot_part_unit = $length_of_plot_part[1];
         }
-        // dd("salable_plot_area_part",$salable_plot_area_part[1],"constructed_area",$constructed_area,"22",$area_size,"33",$salable_plot_area,$length_of_plot,"part length",$length_of_plot_part);
+        // dd("salable_plot_area_part",$salable_plot_area_part[1],"22",$area_size,"33",$salable_plot_area,$length_of_plot,"part length",$length_of_plot_part);
         // matching
         // $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
         //     ->where('requirement_type', $property->property_type)
@@ -2566,8 +2581,6 @@ class PropertyController extends Controller
 
         // Initial debug dump to see the values before conditions
         // dd("Initial values",
-        // "constructed_area" , $constructed_area,
-        // "constructed_area_unit" , $constructed_area_unit,
         // "area_size" , $area_size,
         // "area_size_unit" , $area_size_unit,
         // "salable_plot_area" , $salable_plot_area,
@@ -2575,34 +2588,33 @@ class PropertyController extends Controller
         // "length_of_plot" , $length_of_plot,
         // "length_of_plot_unit" , $length_of_plot_unit
         // );
-
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
             ->whereJsonContains('configuration', $property->configuration)
-            ->when($raw_unit_price !== "", function ($query) use ($raw_unit_price) {
-                return $query->where('budget_from', '<=', $raw_unit_price)
-                    ->where('budget_to', '>=', $raw_unit_price);
+            ->when($raw_unit_price !== "", function ($query) use ($unit_price) {
+                return $query->where('budget_from', '<=', $unit_price)           //pr-office 
+                    ->where('budget_to', '>=', $unit_price);
             }, function ($query) use ($property) {
                 return $query->where('budget_from', '<=', $property->survey_price)
                     ->where('budget_to', '>=', $property->survey_price);
             })
-            ->when($constructed_area !== "", function ($query) use ($constructed_area, $salable_plot_area_part, $constructed_area_unit, $property) {
-                // dd(
-                //     "constructed_area condition",
-                //     "constructed_area",
-                //     $constructed_area,
-                //     "constructed_area_unit",
-                //     $constructed_area_unit,
-                // $property->property_category,
-                // "salable_plot_area_part",$salable_plot_area_part[1]
-                // );
-                if ($property->property_category !== "258" && $property->property_category !== '255') {
-                    return $query->where('area_from', '<=', $constructed_area)
-                        ->where('area_to', '>=', $constructed_area)
-                        ->where('area_from_measurement', $constructed_area_unit);
-                }
-            })
+            // ->when($constructed_area !== "", function ($query) use ($constructed_area, $salable_plot_area_part, $constructed_area_unit, $property) {
+            //     dd(
+            //         "constructed_area condition",
+            //         "constructed_area",
+            //         $constructed_area,
+            //         "constructed_area_unit",
+            //         $constructed_area_unit,
+            //     $property->property_category,
+            //     "salable_plot_area_part",$salable_plot_area_part[1]
+            //     );
+            //     if ($property->property_category !== "258" && $property->property_category !== '255') {
+            //         return $query->where('area_from', '<=', $constructed_area)
+            //             ->where('area_to', '>=', $constructed_area)
+            //             ->where('area_from_measurement', $constructed_area_unit);
+            //     }
+            // })
             ->when($area_size !== "", function ($query) use ($area_parts, $area_size, $area_size_int, $area_size_unit, $property) {
                 // dd("area_size condition",
                 //     "area_size" , $area_size,
@@ -2610,12 +2622,12 @@ class PropertyController extends Controller
                 //     "area_size_unit" , $area_size_unit,
                 //     "property_category" , $property->property_category
                 // );
-                if ($property->property_category !== "259" && $property->property_category !== "254") {
+                if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
                     return $query->where('area_from', '<=', $area_size)
                         ->where('area_to', '>=', $area_size)
                         ->where('area_from_measurement', $area_parts[1]);
                 } else {
-                    // dd("oyt",1100,$area_parts[1]);
+                    // dd("oyt",$area_size_int,$area_parts[1]);
                     return $query->where('area_from', '<=', $area_size_int)
                         ->where('area_to', '>=', $area_size_int)
                         ->where('area_from_measurement', $area_parts[1]);
@@ -2641,8 +2653,8 @@ class PropertyController extends Controller
                 //     "length_of_plot_part_unit" , $length_of_plot_part[1]
                 // );
                 return $query->where('area_from', '<=', $length_of_plot)
-                    ->where('area_to', '>=', $length_of_plot);
-                //  ->where('area_from_measurement', $length_of_plot_part[1]);
+                    ->where('area_to', '>=', $length_of_plot)
+                 ->where('area_from_measurement', $length_of_plot_part[1]);
             })
             ->get();
 

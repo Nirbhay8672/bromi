@@ -251,7 +251,7 @@ class EnquiriesController extends Controller
 								$query->where('enquiry_for', $enquiry_for);
 							}
 
-
+							// price
 							if ($request->match_budget_from_type) {
 								$survey_price = (int) $pro->survey_price; // Cast to integer
 								$unitDetails = json_decode($pro->unit_details, true);
@@ -314,18 +314,18 @@ class EnquiriesController extends Controller
 
 							// size range = prop salable area
 							if ($request->match_enquiry_size) {
-								// dd("match_enquiry_size ==>", $request->match_enquiry_size, ".1.", $pro->salable_area, ".2.", $pro->constructed_salable_area);
+								// dd("match_enquiry_size ==>", $request->match_enquiry_size, '==',$pro->salable_plot_area,".1.", $pro->salable_area, ".2.", $pro->constructed_salable_area);
 								$parts = explode("_-||-_", $pro->salable_area);
 								$result = $parts[0];
 								$result_unit = $parts[1];
 								$area_size_from = str_replace(',', '', $result);
 								$area_size_to = str_replace(',', '', $result);
 
-								$parts = explode("_-||-_", $pro->constructed_salable_area);
-								$result2 = $parts[0];
-								$result2_unit = $parts[1];
-								$area_from = str_replace(',', '', $result2);
-								$area_to = str_replace(',', '', $result2);
+								// $parts = explode("_-||-_", $pro->constructed_salable_area);
+								// $result2 = $parts[0];
+								// $result2_unit = $parts[1];
+								// $area_from = str_replace(',', '', $result2);
+								// $area_to = str_replace(',', '', $result2);
 
 								$parts3 = explode("_-||-_", $pro->salable_plot_area);
 								$result3 = $parts3[0];
@@ -336,11 +336,11 @@ class EnquiriesController extends Controller
 
 								// dd("area_size_from",$area_size_from,"area_size_to",$area_size_to,"pro->property_category",$pro->property_category,"salable_plot_area",$pro->salable_plot_area);
 
-								if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category !== "259" && $pro->property_category !== "260"  && $pro->property_category !== "254") {
-									// dd("inn");
+								if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category !== "259" && $pro->property_category !== "260"  && $pro->property_category !== "254" && $pro->property_category !== "256") {
+									// dd("inn",$pro->property_category);
 									$query->where('area_from', '<=', $area_size_from)
 										->where('area_to', '>=', $area_size_to);
-								} else if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category === "259" || $pro->property_category === "260" || $pro->property_category == "254") {
+								} else if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category === "259" || $pro->property_category === "256" || $pro->property_category === "260" || $pro->property_category == "254") {
 									// dd("outt");
 									$area_from_int = (int) $area_size_from;
 									$area_to_int = (int) $area_size_to;
@@ -349,27 +349,28 @@ class EnquiriesController extends Controller
 										->where('area_to', '>=', $area_to_int);
 								}
 
-								if ($area_from != '' && $area_to != '' && $result2_unit !== "") {
-									// dd("12");
-									$query->where('area_from', '<=', $area_from)
-										->where('area_to', '>=', $area_to);
-								} else if ($area_from3 != '' && $area_to3 != '' && $result3_unit !== "") {
-									// dd("area_from3",$area_from3,$area_to3);
-									$query->where('area_from', '<=', $area_from3)
-										->where('area_to', '>=', $area_from3);
-								}
+								// if ($area_from != '' && $area_to != '' && $result2_unit !== "") {
+								// 	// dd("12");
+								// 	$query->where('area_from', '<=', $area_from)
+								// 		->where('area_to', '>=', $area_to);
+								// } else if ($area_from3 != '' && $area_to3 != '' && $result3_unit !== "") {
+								// 	// dd("area_from3",$area_from3,$area_to3);
+								// 	$query->where('area_from', '<=', $area_from3)
+								// 		->where('area_to', '>=', $area_from3);
+								// }
 
 								if ($result_unit) {
 									$query->where('area_from_measurement', '=', $result_unit)
 										->where('area_to_measurement', '>=', $result_unit);
-								} else if ($result2_unit) {
-									$query->where('area_from_measurement', '=', $result2_unit)
-										->where('area_to_measurement', '>=', $result2_unit);
 								} else if ($result3_unit) {
 									// dd('result3_unit', $result3_unit);
 									$query->where('area_from_measurement', '=', $result3_unit)
 										->where('area_to_measurement', '>=', $result3_unit);
 								}
+								// else if ($result2_unit) {
+								// 	$query->where('area_from_measurement', '=', $result2_unit)
+								// 		->where('area_to_measurement', '>=', $result2_unit);
+								// } 
 							}
 						}
 					})

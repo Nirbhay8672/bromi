@@ -595,11 +595,10 @@
                                                                 @endif
                                                                 <td>{{ $category_prop }}</td>
                                                                 <td>{{ implode(', ', $configuration_name) }}</td>
-                                                                <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->constructed_salable_area)[0] .' '. $salable_units->unit_name}}</td>
+                                                                <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->salable_plot_area)[0] .' '. $salable_units->unit_name}}</td>
                                                                 <td>{{ json_decode($value->unit_details)[0][2] }}</td>
                                                                 @php
                                                                 $unitDetails = json_decode($value->unit_details, true); // Decode as an associative array
-                                                        
                                                                 $price = '-';
                                                         
                                                                 // Check if unitDetails is an array and has at least one element
