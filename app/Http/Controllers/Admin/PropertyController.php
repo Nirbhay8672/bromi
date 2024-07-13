@@ -102,7 +102,7 @@ class PropertyController extends Controller
                 ->where('properties.user_id','=',$superAdmin->id)
                 ->get();
 
-                $dataSubAdmin = Properties::select('properties.*')->with('Projects.Area')
+                $data = Properties::select('properties.*')->with('Projects.Area')
                     ->join('projects', 'projects.id', '=', 'properties.project_id')
                     ->where('properties.property_category', '!=', '256')
                     ->where('properties.property_category', '!=', '261')
@@ -296,8 +296,8 @@ class PropertyController extends Controller
 				ELSE 2
 				END,  properties.id DESC');
 
-                $data = $dataSuperAdmin->union($dataSubAdmin)->get();
-                    dd("merged",$data);
+                // $data = $dataSuperAdmin->union($dataSubAdmin)->get();
+                    // dd("merged",$data);
             } else {
                 $data = Properties::select('properties.*')->with('Projects.Area')
                     ->join('projects', 'projects.id', '=', 'properties.project_id')
