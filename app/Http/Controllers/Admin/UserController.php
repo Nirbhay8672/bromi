@@ -168,6 +168,40 @@ class UserController extends Controller
 			if (empty($data)) {
 				$data =  new User();
 			}
+
+			$state = State::find($request->state_id);
+			$city = City::find($request->city_id);
+
+			$new_state = new State();
+			$new_state->fill([
+				'name' => $state->name,
+				'user_id' => $data->id,
+			])->save();
+
+			$new_city = new City();
+			$new_city->fill([
+				'name' => $city->name,
+				'user_id' => $data->id,
+				'state_id' => $new_state->id,
+			])->save();
+
+			$allarea = Areas::where('city_id',$request->city_id)
+				->where('state_id',$request->state_id)
+				->get();
+				
+			foreach ($allarea as $area_obj)
+			{
+				$area = new Areas();
+
+				$area->fill([
+					'user_id' => $data->id,
+					'name' => $area_obj->name,
+					'city_id' => $new_city->id,
+					'pincode' => $area_obj->pincode,
+					'state_id' => $new_state->id,
+				])->save();
+			}
+
 		} else {
 			$data =  new User();
 		}
@@ -232,39 +266,6 @@ class UserController extends Controller
 		if (!empty($request->role_id)) {
 			$data->assignRole($request->input('role_id'));
 		}
-
-		$state = State::find($request->state_id);
-        $city = City::find($request->city_id);
-
-        $new_state = new State();
-        $new_state->fill([
-            'name' => $state->name,
-            'user_id' => $data->id,
-        ])->save();
-
-        $new_city = new City();
-        $new_city->fill([
-            'name' => $city->name,
-            'user_id' => $data->id,
-            'state_id' => $new_state->id,
-        ])->save();
-
-        $allarea = Areas::where('city_id',$request->city_id)
-            ->where('state_id',$request->state_id)
-            ->get();
-            
-        foreach ($allarea as $area_obj)
-        {
-            $area = new Areas();
-
-            $area->fill([
-                'user_id' => $data->id,
-                'name' => $area_obj->name,
-                'city_id' => $new_city->id,
-                'pincode' => $area_obj->pincode,
-                'state_id' => $new_state->id,
-            ])->save();
-        }
 
         $msg = "New user created.";
         // create notification for new user
