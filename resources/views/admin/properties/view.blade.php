@@ -1008,8 +1008,8 @@ use Illuminate\Support\Facades\DB;
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_79">
                                                                 <div>:
-                                                                    <a href="{{ $property->location_link ? $property->location_link : '#' }}" target="_blank">
-                                                                        <i class="cursor-pointer color-code-popover" data-bs-trigger="hover focus" style="color: #7fb927">  check on map  </i>
+                                                                    <a href="{{ $property->location_link ? $property->location_link : '#' }}" target="_blank">check on map
+                                                                        <!-- <i class="cursor-pointer color-code-popover" data-bs-trigger="hover focus" style="color: #7fb927">  check on map  </i> -->
                                                                     </a>
                                                                 </div>
                                                             </div>
@@ -2329,8 +2329,8 @@ use Illuminate\Support\Facades\DB;
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_79">
                                                                 <div>:
-                                                                    <a href="{{ $property->location_link ? $property->location_link : '#' }}" target="_blank">
-                                                                        <i class="cursor-pointer color-code-popover" data-bs-trigger="hover focus" style="color: #7fb927">  check on map  </i>
+                                                                    <a href="{{ $property->location_link ? $property->location_link : '#' }}" target="_blank">check on map
+                                                                        <!-- <i class="cursor-pointer color-code-popover" data-bs-trigger="hover focus" style="color: #7fb927">  check on map  </i> -->
                                                                     </a>
                                                                 </div>
                                                             </div>

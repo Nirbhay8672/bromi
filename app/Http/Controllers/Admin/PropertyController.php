@@ -106,7 +106,7 @@ class PropertyController extends Controller
                     ->where('properties.property_category', '!=', '261')
                     ->where('properties.property_category', '!=', '262');
 
-                if ($isSubAdmin->property_for_id) {
+                if ($isSubAdmin->property_for_id && $isSubAdmin->property_for_id !== "null") {
                     $data->where('properties.property_for', '=', $isSubAdmin->property_for_id);
                 } else {
                     $data->orWhere('properties.property_for', '=', 'Rent');

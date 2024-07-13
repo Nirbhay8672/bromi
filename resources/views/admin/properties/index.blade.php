@@ -833,8 +833,7 @@
                                 <span style="color: #FF0000" id="err_partner"></span>
                                 <div class="form-group m-b-4 mb-3 text-center">
                                     <button class="btn custom-theme-button" id="shareData" data-id=""
-                                        type="button">Share
-                                        Property</button>
+                                        type="button">Share Property</button>
                                 </div>
                             </div>
                         </form>

@@ -2389,7 +2389,7 @@
                     }).get();
                 } else {
                     console.log("none sub category in enquiries : ==", configuration);
-                    var configuration = ["0"];
+                    var configuration = 0;
                 }
 
                 if (!isValid) {
