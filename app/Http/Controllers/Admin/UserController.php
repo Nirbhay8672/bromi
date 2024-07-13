@@ -168,6 +168,40 @@ class UserController extends Controller
 			if (empty($data)) {
 				$data =  new User();
 			}
+
+			$state = State::find($request->state_id);
+			$city = City::find($request->city_id);
+
+			$new_state = new State();
+			$new_state->fill([
+				'name' => $state->name,
+				'user_id' => $data->id,
+			])->save();
+
+			$new_city = new City();
+			$new_city->fill([
+				'name' => $city->name,
+				'user_id' => $data->id,
+				'state_id' => $new_state->id,
+			])->save();
+
+			$allarea = Areas::where('city_id',$request->city_id)
+				->where('state_id',$request->state_id)
+				->get();
+				
+			foreach ($allarea as $area_obj)
+			{
+				$area = new Areas();
+
+				$area->fill([
+					'user_id' => $data->id,
+					'name' => $area_obj->name,
+					'city_id' => $new_city->id,
+					'pincode' => $area_obj->pincode,
+					'state_id' => $new_state->id,
+				])->save();
+			}
+
 		} else {
 			$data =  new User();
 		}
@@ -203,13 +237,14 @@ class UserController extends Controller
 		$data->property_type_id = $request->property_type_id;
 		$data->specific_properties = $request->specific_properties;
 		$data->buildings = $request->buildings;
+		$data->enquiry_permission = $request->enquiry_permission;
 		$data->working = $request->working;
 		$data->plan_id = Auth::user()->plan_id;
 
 		$data->subscribed_on = Auth::user()->subscribed_on;
 		$data->plan_expire_on = Auth::user()->plan_expire_on;
 		
-		$plan = Subplans::find(Auth::user()->plan_id);
+		$plan = Subplans::find(Auth::user()->plan_id);	
 		
 		if($plan) {
 			$data->total_user_limit = $plan->user_limit;
@@ -231,39 +266,6 @@ class UserController extends Controller
 		if (!empty($request->role_id)) {
 			$data->assignRole($request->input('role_id'));
 		}
-
-		$state = State::find($request->state_id);
-        $city = City::find($request->city_id);
-
-        $new_state = new State();
-        $new_state->fill([
-            'name' => $state->name,
-            'user_id' => $data->id,
-        ])->save();
-
-        $new_city = new City();
-        $new_city->fill([
-            'name' => $city->name,
-            'user_id' => $data->id,
-            'state_id' => $new_state->id,
-        ])->save();
-
-        $allarea = Areas::where('city_id',$request->city_id)
-            ->where('state_id',$request->state_id)
-            ->get();
-            
-        foreach ($allarea as $area_obj)
-        {
-            $area = new Areas();
-
-            $area->fill([
-                'user_id' => $data->id,
-                'name' => $area_obj->name,
-                'city_id' => $new_city->id,
-                'pincode' => $area_obj->pincode,
-                'state_id' => $new_state->id,
-            ])->save();
-        }
 
         $msg = "New user created.";
         // create notification for new user
@@ -303,7 +305,7 @@ class UserController extends Controller
 
 		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$projects = Projects::get();
+		$projects = Projects::where('user_id',Auth::user()->id)->get();
 		$property_configuration_settings = DropdownSettings::where('user_id', 8)->get()->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
 		$roles =  Role::where('user_id', Session::get('parent_id'))->get();
@@ -316,7 +318,7 @@ class UserController extends Controller
 	{
 		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$projects = Projects::get();
+		$projects = Projects::where('user_id',Auth::user()->id)->get();
 		$property_configuration_settings = DropdownSettings::all()->unique('name')->toArray();
 		$employees  = User::where('id', Session::get('parent_id'))->orWhere('parent_id', Session::get('parent_id'))->get();
 		$roles =  Role::where('user_id', Session::get('parent_id'))->get();
