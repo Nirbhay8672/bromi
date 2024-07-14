@@ -32,14 +32,20 @@ class ShareController extends Controller
                 /* $dataa = DB::table('share_property')
                     ->where('id', $request->id)
                     ->update(['accepted' => 1]); */
-                $sharedProp = SharedProperty::find($request->id)->load(['Partner', 'User']);
+                    // $sharedProp = SharedProperty::where('partner_id',$request->id);
+                    // // dd("share",$sharedProp,$request->id);
+                    // if ($sharedProp) {
+                    //     $sharedProp->update(['accepted' => 1]);
+                    //     return redirect()->route('admin.shared.properties');
+                    // }
+                $sharedProp = SharedProperty::where('partner_id',$request->id)->load(['Partner', 'User']);
                 $sharedProp->update(['accepted' => 1]);
                 $receiver = $sharedProp->Partner;
                 $sender = $sharedProp->User;
-
+                
+		
                 // send notification to the sending user about the acceptance of the request.
                 $message = "$receiver->first_name $receiver->last_name has accepted your request regarding property share.";
-                # code...
                 try {
                     UserNotifications::create([
                         "user_id" => (int) $sender->id,
@@ -54,6 +60,10 @@ class ShareController extends Controller
                         Log::error("User id: $sender->id does not have onesignal token");
                         Log::error("That's why notification not sent.");
                     }
+
+                    $deleted_prop = SharedProperty::where('id', $request->id)->delete();
+                // return response()->json(['success' => true, 'deleted_partner' => $deleted_prop]);
+
                     return redirect()->route('admin.shared.properties');
                 } catch (\Throwable $th) {
                     // if notificaton creation failed.
@@ -96,10 +106,11 @@ class ShareController extends Controller
         if ($request->ajax()) {
             $data = DB::table('share_property')
                 ->select([
-                    'share_property.id',
-                    'share_property.accepted',
-                    'projects.project_name',
-                    DB::raw("CONCAT(users.first_name ,'',users.last_name) AS user_name")
+                   'share_property.*',
+                    'projects.*',
+                    'properties.*',
+                    'users.*',
+                    DB::raw("CONCAT('<b>Name</b> :', users.first_name ,'  ',users.last_name,' <br> <b>Company</b> : ',users.company_name) AS user_name")
                 ])
                 ->join('properties', 'properties.id', 'share_property.property_id')
                 ->join('projects', 'projects.id', 'properties.project_id')
@@ -108,10 +119,31 @@ class ShareController extends Controller
                 ->get();
 
             return DataTables::of($data)
-                ->addColumn('project_name', function ($shared) {
-                    //  dd($shared->Property_details);
-                    if (!empty($shared->project_name)) {
-                        return ($shared->project_name);
+            ->addColumn('project_name', function ($row) {
+// dd("row->hot_property",$row->property_type);
+                    $first =  '<td style="vertical-align:top">
+                    <font size="3"><a href="" style="font-weight: bold;">' . (!empty($row->project_name) ? $row->project_name : "") . '</a>';
+
+                $first_middle = '';
+                // if (isset($row->Projects->is_prime) && $row->Projects->is_prime) {
+                //     $first_middle = '<img style="height:24px" src="' . asset('assets/images/primeProperty.png') . '" alt="">';
+                // }
+                if ($row->hot_property) {
+                    $first_middle = $first_middle . '<img style="height:24px" src="' . asset('assets/images/hotProperty.png') . '" alt="">';
+                }
+                $first_end = '</font>';
+                $second = '<br>Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font>';
+                $third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a>' : "");
+                $last = '</td>';
+                '</td>';
+                return $first . $first_middle . $first_end .$second .$third . $last;
+
+                return '';
+                })
+                ->addColumn('property_info', function ($shared) {
+                    if (!empty($shared->user_name)) {
+                        return $shared->user_name;
+                        // return $shared->User->first_name . ' ' . $shared->User->last_name . ' | ' . $shared->User->company_name;
                     } else {
                         return 'N/A';
                     }
@@ -134,7 +166,7 @@ class ShareController extends Controller
                     $buttons .=   ' <button data-id="' . $row->id . '" onclick=cancelRequest(this) class="btn btn-pill btn-primary" type="button">Cancel</button>';
                     return $buttons;
                 })
-                ->rawColumns(['project_name', 'user_name', 'Action'])
+                ->rawColumns(['project_name', 'property_info','user_name', 'Action'])
                 ->make(true);
         }
         return view('admin.properties.shared_requets');
@@ -237,7 +269,8 @@ class ShareController extends Controller
                     return $query->where('properties.is_pre_leased', $request->filter_is_preleased);
                 })
                 ->where('share_property.partner_id', Auth::user()->id)
-                ->where('share_property.accepted', 1)
+                // ->where('share_property.accepted', 1)
+                // ->where('properties.prop_status','=','1')
                 ->get();
 
             $data2 = DB::table('share_property')
@@ -300,10 +333,8 @@ class ShareController extends Controller
                 })
                 ->where('share_property.user_id', Auth::user()->id)
                 ->get();
-
             $mergedData = $data->concat($data2);
 
-            // dd($mergedData);
             return DataTables::of($mergedData)
                 ->editColumn('project_name', function ($row) use ($request) {
                     $first =  '<td style="vertical-align:top">
@@ -485,7 +516,11 @@ class ShareController extends Controller
                 ->editColumn('remarks', function ($row) {
                     return $row->remarks;
                 })
-                ->rawColumns(['project_name',  'super_builtup_area', 'contact_name', 'remarks', 'property_unit_no', 'units', 'price', 'owner_details'])
+                ->addColumn('action', function($row){
+                    return '
+                        <i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteShareProperty(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
+                })
+                ->rawColumns(['action','project_name',  'super_builtup_area', 'contact_name', 'remarks', 'property_unit_no', 'units', 'price', 'owner_details'])
                 ->make(true);
         }
         $property_configuration_settings = DropdownSettings::get()->toArray();
@@ -573,5 +608,16 @@ class ShareController extends Controller
         } else {
             return "Area Not Available";
         }
+    }
+
+
+    public function destroyShareProp(Request $request)
+    {
+        // dd("request->id asd",$request->id);
+        if (!empty($request->id)) {
+			$dlt_partner = ShareProperty::where('id', $request->id)->delete();
+			return json_encode($dlt_partner);
+		}
+      
     }
 }

@@ -36,6 +36,7 @@
                                             <th>Property info</th>
                                             <th>Price</th>
                                             <th>Contact</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -205,14 +206,16 @@
                         { data: 'project_name', name: 'project_name' },
                         { data: 'super_builtup_area', name: 'super_builtup_area' },
                         { data: 'price', name: 'price' },
-                        { data: 'contact_name', name: 'contact_name' }
+                        { data: 'contact_name', name: 'contact_name' },
+                        { data: 'action', name: 'action', orderable: false, searchable: false }
                     ],
                     columnDefs: [
                         { "width": "18%", "targets": 0 },
                         { "width": "18%", "targets": 1 },
                         { "width": "10%", "targets": 2 },
-                        { "width": "15%", "targets": 3 }
-                    ]
+                        { "width": "15%", "targets": 3 },
+                        { "width": "10%", "targets": 4 }
+                        ]
                 });
 
                 $('#filtersearch').click(function() {
@@ -245,6 +248,29 @@
 
             });
 
+            function deleteShareProperty(data) {
+                    Swal.fire({
+                        title: "Are you sure?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                    }).then(function(isConfirm) {
+                        if (isConfirm.isConfirmed) {
+                            var id = $(data).attr('data-id');
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ route('admin.deletedShareProp') }}",
+                                data: {
+                                    id: id,
+                                    _token: '{{ csrf_token() }}'
+                                },
+                                success: function(data) {
+                                    $('#propertyTable').DataTable().draw();
+                                }
+                            });
+                        }
+                    })
 
+                }
         </script>
     @endpush

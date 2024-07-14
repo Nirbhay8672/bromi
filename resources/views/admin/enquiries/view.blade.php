@@ -505,8 +505,8 @@
                                                     <table class="table table-responsive custom-table-design mb-3">
                                                         <thead>
                                                             <tr>
+                                                                <th scope="col" style="width: 70%;">Comment</th>
                                                                 <th scope="col">Added On</th>
-                                                                <th scope="col">Comment</th>
                                                                 <th scope="col">Added By</th>
 
                                                             </tr>
@@ -516,9 +516,17 @@
 
                                                             @forelse ($data->Comments as $value)
                                                                 <tr>
+                                                                    <td style="width: 70%;">
+                                                                        @if (strlen($value->comment) > 100)
+                                                                            <span class="comment-full">{{ $value->comment }}</span>
+                                                                            <span class="comment-short">{{ substr($value->comment, 0, 300) }}...</span>
+                                                                            <span class="read-more-btn read-more" style="cursor:pointer">Read More</span>
+                                                                        @else
+                                                                            {{ $value->comment }}
+                                                                        @endif
+                                                                    </td>
                                                                     <td>{{ \Carbon\Carbon::parse($value->created_at)->format('d-m-Y') }}
                                                                     </td>
-                                                                    <td>{{ $value->comment }}</td>
 
                                                                     <td>{{ isset($value->User->first_name) ? $value->User->first_name . ' ' . $value->User->last_name : '' }}
                                                                     </td>
@@ -1010,28 +1018,30 @@
                                                 <table class="table table-responsive custom-table-design mb-3">
                                                     <thead>
                                                         <tr>
+                                                            <th scope="col" style="width: 70%;">Comment</th>
                                                             <th scope="col">Added On</th>
-                                                            <th scope="col">Comment</th>
                                                             <th scope="col">Added By</th>
-
                                                         </tr>
                                                     </thead>
 
                                                     <tbody id="comments_container">
-
                                                         @forelse ($data->Comments as $value)
                                                             <tr>
-                                                                <td>{{ \Carbon\Carbon::parse($value->created_at)->format('d-m-Y') }}
-                                                                </td>
-                                                                <td>{{ $value->comment }}</td>
-
-                                                                <td>{{ isset($value->User->first_name) ? $value->User->first_name . ' ' . $value->User->last_name : '' }}
-                                                                </td>
+                                                            <td style="width: 70%;">
+                                                                @if (strlen($value->comment) > 100)
+                                                                    <span class="comment-full">{{ $value->comment }}</span>
+                                                                    <span class="comment-short">{{ substr($value->comment, 0, 300) }}...</span>
+                                                                    <span class="read-more-btn read-more" style="cursor:pointer">Read More</span>
+                                                                @else
+                                                                    {{ $value->comment }}
+                                                                @endif
+                                                            </td>
+                                                            <td>{{ \Carbon\Carbon::parse($value->created_at)->format('d-m-Y') }}</td>
+                                                            <td>{{ isset($value->User->first_name) ? $value->User->first_name . ' ' . $value->User->last_name : '' }}
+                                                            </td>
                                                             </tr>
                                                         @empty
                                                         @endforelse
-
-
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -1352,6 +1362,27 @@
     @endsection
     @push('scripts')
         <script>
+            $(document).ready(function() {
+                $('.comment-full').hide();
+                $('.read-more-btn').text('Read more');
+
+                $('.read-more-btn').on('click', function() {
+                    var $btn = $(this);
+                    var $fullComment = $btn.siblings('.comment-full');
+                    var $shortComment = $btn.siblings('.comment-short');
+                    
+                    if ($fullComment.is(':visible')) {
+                        $fullComment.hide();
+                        $shortComment.show();
+                        $btn.text('Read more');
+                    } else {
+                        $shortComment.hide();
+                        $fullComment.show();
+                        $btn.text('Read less');
+                    }
+                });
+            });
+            
             function Status(data) {
                 var id = $(data).attr('data-id');
                 var status = $(data).attr('data-status');

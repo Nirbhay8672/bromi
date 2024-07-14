@@ -90,37 +90,51 @@ class PropertyController extends Controller
             $dropdowns = $dropdownsarr;
             $isSubAdmin = User::where('id', Auth::id())->whereNotNull('parent_id')->first();
             if ($isSubAdmin) {
-                $superAdmin = User::find($isSubAdmin->parent_id);
-                // dd("issuper",$superAdmin->id,'303',"isSubAdmin",$isSubAdmin);
-                $propertyTypeIdArray = json_decode($isSubAdmin->property_type_id, true);
-                if (is_string($isSubAdmin->property_type_id)) {
-                    $propertyTypeIdArray = explode(',', trim($isSubAdmin->property_type_id, '[]""'));
-                    // $propertyTypeIdArray = array_map('intval', $propertyTypeIdArray);
+                if (($isSubAdmin->property_type_id)) {
+                    $propertyTypeIdArray = str_replace("'", '"', $isSubAdmin->property_type_id);
+                    $propertyTypeIdArray = json_decode($propertyTypeIdArray, true);
                 }
-                $dataSuperAdmin = Properties::select('properties.*')->with('Projects.Area')
-                ->join('projects', 'projects.id', '=', 'properties.project_id')
-                ->where('properties.user_id','=',$superAdmin->id)
-                ->get();
+                if (($isSubAdmin->property_type_id)) {
+                    $specificpropertieStr = str_replace("'", '"', $isSubAdmin->specific_properties);
+                    $subcategoryArray = json_decode($specificpropertieStr, true);
+                }
 
-                $dataSubAdmin = Properties::select('properties.*')->with('Projects.Area')
+                $data = Properties::query();
+                $data->select('properties.*')->with('Projects.Area')
                     ->join('projects', 'projects.id', '=', 'properties.project_id')
                     ->where('properties.property_category', '!=', '256')
                     ->where('properties.property_category', '!=', '261')
-                    ->where('properties.property_category', '!=', '262')
-                    ->where('properties.property_for', '=', $isSubAdmin->property_for_id)
-                    ->where('properties.property_type',  '=', $propertyTypeIdArray[0]) 
-                    ->when($request->filter_by, function ($query) use ($request) {
-                        if ($request->filter_by == 'reminder') {
-                            return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(7)->format('Y-m-d'))
-                                ->where('properties.prop_status', 1);
-                        } elseif ($request->filter_by == 'favourite') {
-                            return $query->where('is_favourite', 1)
-                                ->where('properties.prop_status', 1);
-                        } elseif ($request->filter_by == 'new') {
-                            return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'))
-                                ->where('properties.prop_status', 1);
-                        }
-                    })
+                    ->where('properties.property_category', '!=', '262');
+
+                if ($isSubAdmin->property_for_id && $isSubAdmin->property_for_id !== "null") {
+                    $data->where('properties.property_for', '=', $isSubAdmin->property_for_id);
+                } else {
+                    $data->orWhere('properties.property_for', '=', 'Rent');
+                    $data->orWhere('properties.property_for', '=', 'Sell');
+                    $data->orWhere('properties.property_for', '=', 'Both');
+                }
+                if (count($propertyTypeIdArray) > 0) {
+                    $data->whereIn('properties.property_type', $propertyTypeIdArray);
+                } else {
+                    $data->whereIn('properties.property_type', ["85", "87"]);
+                }
+                if (count($subcategoryArray) > 0) {
+                    $data->whereIn('properties.property_category', $subcategoryArray);
+                } else {
+                    $data->orWhereIn('properties.property_category', ["254", "255", "256", "257", "258", "259", "260", "261", "262"]);
+                }
+                $data->when($request->filter_by, function ($query) use ($request) {
+                    if ($request->filter_by == 'reminder') {
+                        return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(7)->format('Y-m-d'))
+                            ->where('properties.prop_status', 1);
+                    } elseif ($request->filter_by == 'favourite') {
+                        return $query->where('is_favourite', 1)
+                            ->where('properties.prop_status', 1);
+                    } elseif ($request->filter_by == 'new') {
+                        return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'))
+                            ->where('properties.prop_status', 1);
+                    }
+                })
                     ->when($request->filter_property_for || empty(Auth::user()->property_for_id), function ($query) use ($request) {
                         return $query->where(function ($query) use ($request) {
                             $query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
@@ -292,12 +306,9 @@ class PropertyController extends Controller
                     })
                     // ->where('prop_status', 1)
                     ->orderByRaw('CASE
-				WHEN properties.prop_status = 1 THEN 1
-				ELSE 2
-				END,  properties.id DESC');
-
-                $data = $dataSuperAdmin->union($dataSubAdmin)->get();
-                    dd("merged",$data);
+                        WHEN properties.prop_status = 1 THEN 1
+                        ELSE 2
+                        END,  properties.id DESC');
             } else {
                 $data = Properties::select('properties.*')->with('Projects.Area')
                     ->join('projects', 'projects.id', '=', 'properties.project_id')
@@ -469,7 +480,7 @@ class PropertyController extends Controller
                                         // dd("inn");
                                         $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
                                             ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
-                                        ->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                            ->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
                                             ->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
                                             // ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
                                             // ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
@@ -480,10 +491,10 @@ class PropertyController extends Controller
                                         $area_to_int = (int) $enq->area_to;
                                         // dd("out",$area_from_int,$area_to_int);
                                         $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$area_from_int, $area_to_int])
-                                        ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
-                                        ->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
-                                        ->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
-                                        // ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from_int, $enq->area_to_int])
+                                            ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                            ->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                            ->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                            // ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from_int, $enq->area_to_int])
                                             // ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
                                             ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from_int, $enq->area_to_int])
                                             ->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$enq->area_from_measurement]);
@@ -637,7 +648,6 @@ class PropertyController extends Controller
             //         }
             //     }
             // }
-            // dd("dataaa",$data);
             return DataTables::of($data)
                 ->editColumn('project_id', function ($row) use ($request) {
 
@@ -737,7 +747,7 @@ class PropertyController extends Controller
                     }
                     try {
                         $data = [];
-                        foreach(json_decode($row->unit_details) as $value){
+                        foreach (json_decode($row->unit_details) as $value) {
                             $data['light'] = isset($value[9][0]) && $value[9][0] ? $value[9][0] : '-';
                             $data['fans'] = isset($value[9][1]) && $value[9][1] ? $value[9][1] : '-';
                             $data['Ac'] = isset($value[9][2]) && $value[9][2] ? $value[9][2] : '-';
@@ -757,7 +767,7 @@ class PropertyController extends Controller
                             $data['Curtains'] = isset($value[10][8]) && $value[10][8] ? $value[10][8] : '-';
                             $data['ExhaustFan'] = isset($value[10][9]) && $value[10][9] ? $value[10][9] : '-';
                         }
-                    
+
                         $tooltipHtml = '';
                         // dd("fstatus",$fstatus);
                         if ($fstatus === 'Furnished') {
@@ -833,7 +843,7 @@ class PropertyController extends Controller
                                 </div>
                             </div>';
                         }
-                    
+
                         return '
                         <td style="vertical-align:top">
                             ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
@@ -1027,7 +1037,7 @@ class PropertyController extends Controller
                         ->first();
                     $permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
                     // bharat edit
-                    if (in_array('property-edit', $permissions)) {
+                    if (in_array('property-edit', $permissions) && $row->added_by == Auth::user()->id) {
                         $buttons = $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
                     }
                     if (in_array('property-delete', $permissions)) {
@@ -1941,6 +1951,7 @@ class PropertyController extends Controller
             ])->save();
             $data->project_id = $new_project->id;
         }
+        $surveyprice = str_replace(',', '', $request->survey_price);
 
         $data->property_for = $request->property_for;
         $data->res_more = $request->res_more;
@@ -2012,7 +2023,7 @@ class PropertyController extends Controller
         $data->unit_details = $request->unit_details;
         $data->survey_number = $request->survey_number;
         $data->survey_plot_size = $request->survey_plot_size;
-        $data->survey_price = $request->survey_price;
+        $data->survey_price = $surveyprice;
         $data->tp_number = $request->tp_number;
         $data->fp_number = $request->fp_number;
         $data->fp_plot_size = $request->fp_plot_size;
@@ -2591,7 +2602,7 @@ class PropertyController extends Controller
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
-            ->whereJsonContains('configuration', $property->configuration)
+            // ->whereJsonContains('configuration', $property->configuration)
             ->when($raw_unit_price !== "", function ($query) use ($unit_price) {
                 return $query->where('budget_from', '<=', $unit_price)           //pr-office 
                     ->where('budget_to', '>=', $unit_price);
@@ -2623,8 +2634,8 @@ class PropertyController extends Controller
                 //     "property_category" , $property->property_category
                 // );
                 if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
-                    return $query->where('area_from', '<=', $area_size)
-                        ->where('area_to', '>=', $area_size)
+                    return $query->where('area_from', '<=', 1200)
+                        ->where('area_to', '>=', 1200)
                         ->where('area_from_measurement', $area_parts[1]);
                 } else {
                     // dd("oyt",$area_size_int,$area_parts[1]);
@@ -2647,14 +2658,15 @@ class PropertyController extends Controller
                 }
                 // ->where('area_from_measurement', $salable_plot_area_unit);
             })
-            ->when($length_of_plot !== "", function ($query) use ($length_of_plot, $length_of_plot_part) {
+            ->when(($length_of_plot !== "" && $property->propety_category !== '256' && $property->propety_category !== null ), function ($query) use ($property,$length_of_plot, $length_of_plot_part) {
                 // dd("length_of_plot condition",
                 //     "length_of_plot" , $length_of_plot,
-                //     "length_of_plot_part_unit" , $length_of_plot_part[1]
+                //     "length_of_plot_part_unit" , $length_of_plot_part[1],
+                //     "property->propety_category",$property->propety_category,
                 // );
                 return $query->where('area_from', '<=', $length_of_plot)
                     ->where('area_to', '>=', $length_of_plot)
-                 ->where('area_from_measurement', $length_of_plot_part[1]);
+                    ->where('area_from_measurement', $length_of_plot_part[1]);
             })
             ->get();
 

@@ -26,6 +26,7 @@
                                     <thead>
                                         <tr>
                                             <th>Project Name</th>
+                                            <th>Property Info</th>
                                             <th>Request By</th>
                                             <th>Action</th>
 
@@ -118,6 +119,10 @@
                     columns: [{
                             data: 'project_name',
                             name: 'project_name'
+                        },
+                        {
+                            data: 'property_info',
+                            name: 'property_info'
                         },
                         {
                             data: 'user_name',

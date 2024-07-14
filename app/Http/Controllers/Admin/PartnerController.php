@@ -279,7 +279,8 @@ class PartnerController extends Controller
 	 */
 	public function users()
 	{
-		$users = Partner::with('user')->where('status', '=', 'Active')->get();
+		// changed by user list all displayed so
+		$users = Partner::with('user')->where('status', '=', 'Active')->where('user_id',Auth::user()->id)->withTrashed()->get();
 		return response()->json($users);
 	}
 
@@ -343,31 +344,45 @@ class PartnerController extends Controller
 	{
 		if ($request->ajax()) {
 			if (!empty($request->id)) {
-				$partnerReq = Partner::find($request->id)->load(['requestSendingUser', 'user']);
-				$partnerReq->update(['status' => 'Active']);
-				$receiver = $partnerReq->user;
-				$sender = $partnerReq->requestSendingUser;
-				$message = "$receiver->first_name $receiver->last_name has accepted your request regarding adding as partner.";
-
 				try {
+					// Find the Partner record and load related users
+					$partnerReq = Partner::find($request->id)->load(['requestSendingUser', 'user']);
+		
+					// Update the status to 'Active'
+					$partnerReq->update(['status' => 'Active']);
+		
+					// Get user objects
+					$receiver = $partnerReq->user;
+					$sender = $partnerReq->requestSendingUser;
+		
+					// Prepare notification message
+					$message = "$receiver->first_name $receiver->last_name has accepted your request regarding adding as partner.";
+		
+					// Create a user notification
 					UserNotifications::create([
 						"user_id" => (int) $sender->id,
 						"notification" => $message,
 						"notification_type" => Constants::PARTNER_REQUEST_ACCEPTED,
 						'by_user' => (int) $receiver->id,
 					]);
-
+		
+					// Send push notification if sender has OneSignal token
 					if (!empty($sender->onesignal_token)) {
 						HelperFn::sendPushNotification($sender->onesignal_token, $message);
 					} else {
 						Log::error("Accept Add Partner Request Error: ");
-						Log::error("User id: $sender->id does not have onesignal token");
+						Log::error("User id: $sender->id does not have OneSignal token");
 						Log::error("That's why notification not sent.");
 					}
-
-					// $dlt_partner = Partner::where('id', $request->id)->delete();
-					// return response()->json(['success' => true, 'deleted_partner' => $dlt_partner]);
+		
+					// Delete the Partner record
+					$deleted_partner = Partner::where('id', $request->id)->delete();
+		
+					// Return success response
+					return response()->json(['success' => true, 'deleted_partner' => $deleted_partner]);
+		
 				} catch (\Throwable $th) {
+					// Handle any errors
 					Log::error("On Accept add partner request attempt failed by user Id: $receiver->id");
 					Log::error("Error Message: " . $th->getMessage());
 					return response()->json(['success' => false, 'error' => $th->getMessage()]);

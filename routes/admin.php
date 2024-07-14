@@ -84,7 +84,7 @@ Route::group(['middleware' => 'revalidate'], function () {
     });
     
 	Route::group(['middleware' => ['auth', 'checkPlanExpiry']], function () {
-		Route::get('/', [HomeController::class, 'index'])->name('admin');
+		Route::get('/', [HomeController::class, 'index'])->middleware(['permission:view-dashboard'])->name('admin');
 		Route::post('/save-onesignal-id', function(Request $request) {
             try {
                 $user = Auth::user();
@@ -116,7 +116,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/import-village', [VillageController::class, 'importVillage'])->name('admin.importvillage');
 		
 		
-		Route::any('/Areas', [AreaController::class, 'index'])->name('admin.areas');
+		Route::any('/Areas', [AreaController::class, 'index'])->middleware(['permission:area-list'])->name('admin.areas');
 		Route::post('/get-area', [AreaController::class, 'getSpecificArea'])->name('admin.getArea');
 		Route::post('/save-area', [AreaController::class, 'saveArea'])->name('admin.saveArea');
 		Route::post('/import-area', [AreaController::class, 'importArea'])->name('admin.importarea');
@@ -131,7 +131,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-property', [PropertyController::class, 'destroy'])->name('admin.deleteProperty');
 		Route::post('/save-property', [PropertyController::class, 'saveProperty'])->name('admin.saveProperty');
         Route::get('/download-zip/{type}/{prop}', [PropertyController::class,'downloadZip'])->name('download.zip');
-
+		route::post('/share-prop-remove', [ShareController::class, 'destroyShareProp'])->name('admin.deletedShareProp');
 		Route::post('/import-property', [PropertyController::class, 'importProperty'])->name('admin.importproperty');
 		Route::post('/import-IndustrialProperty', [IndustrialPropertyController::class, 'importProperty'])->name('admin.importIndustrialproperty');
 		Route::get('/import-property-template', [PropertyController::class, 'importPropertyTemplate'])->name('admin.importpropertyTemplate');
