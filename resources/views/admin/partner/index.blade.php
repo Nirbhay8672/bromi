@@ -23,13 +23,13 @@
                                     data-tooltip="Add Partner"
                                 ><i class="fa fa-plus"></i></button>
 
-                                <a  
+                                {{-- <a  
                                     class="btn ms-3 custom-icon-theme-button tooltip-btn"
                                     href="{{ route('admin.partnerRequest') }}"
                                     data-tooltip="Requests"
                                 >
                                     <i class="fa fa-user-plus"></i>
-                                </a>
+                                </a> --}}
                                 <a  
                                     class="btn ms-3 custom-icon-theme-button tooltip-btn"
                                     href="{{ route('admin.userRequest') }}"

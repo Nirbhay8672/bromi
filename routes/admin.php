@@ -131,7 +131,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/delete-property', [PropertyController::class, 'destroy'])->name('admin.deleteProperty');
 		Route::post('/save-property', [PropertyController::class, 'saveProperty'])->name('admin.saveProperty');
         Route::get('/download-zip/{type}/{prop}', [PropertyController::class,'downloadZip'])->name('download.zip');
-
+		route::post('/share-prop-remove', [ShareController::class, 'destroyShareProp'])->name('admin.deletedShareProp');
 		Route::post('/import-property', [PropertyController::class, 'importProperty'])->name('admin.importproperty');
 		Route::post('/import-IndustrialProperty', [IndustrialPropertyController::class, 'importProperty'])->name('admin.importIndustrialproperty');
 		Route::get('/import-property-template', [PropertyController::class, 'importPropertyTemplate'])->name('admin.importpropertyTemplate');

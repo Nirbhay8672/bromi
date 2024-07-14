@@ -767,7 +767,7 @@ class PropertyController extends Controller
                             $data['Curtains'] = isset($value[10][8]) && $value[10][8] ? $value[10][8] : '-';
                             $data['ExhaustFan'] = isset($value[10][9]) && $value[10][9] ? $value[10][9] : '-';
                         }
-                    
+
                         $tooltipHtml = '';
                         // dd("fstatus",$fstatus);
                         if ($fstatus === 'Furnished') {
@@ -843,7 +843,7 @@ class PropertyController extends Controller
                                 </div>
                             </div>';
                         }
-                    
+
                         return '
                         <td style="vertical-align:top">
                             ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
@@ -1951,6 +1951,7 @@ class PropertyController extends Controller
             ])->save();
             $data->project_id = $new_project->id;
         }
+        $surveyprice = str_replace(',', '', $request->survey_price);
 
         $data->property_for = $request->property_for;
         $data->res_more = $request->res_more;
@@ -2022,7 +2023,7 @@ class PropertyController extends Controller
         $data->unit_details = $request->unit_details;
         $data->survey_number = $request->survey_number;
         $data->survey_plot_size = $request->survey_plot_size;
-        $data->survey_price = $request->survey_price;
+        $data->survey_price = $surveyprice;
         $data->tp_number = $request->tp_number;
         $data->fp_number = $request->fp_number;
         $data->fp_plot_size = $request->fp_plot_size;
@@ -2601,7 +2602,7 @@ class PropertyController extends Controller
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
-            ->whereJsonContains('configuration', $property->configuration)
+            // ->whereJsonContains('configuration', $property->configuration)
             ->when($raw_unit_price !== "", function ($query) use ($unit_price) {
                 return $query->where('budget_from', '<=', $unit_price)           //pr-office 
                     ->where('budget_to', '>=', $unit_price);
@@ -2633,8 +2634,8 @@ class PropertyController extends Controller
                 //     "property_category" , $property->property_category
                 // );
                 if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
-                    return $query->where('area_from', '<=', $area_size)
-                        ->where('area_to', '>=', $area_size)
+                    return $query->where('area_from', '<=', 1200)
+                        ->where('area_to', '>=', 1200)
                         ->where('area_from_measurement', $area_parts[1]);
                 } else {
                     // dd("oyt",$area_size_int,$area_parts[1]);
@@ -2657,10 +2658,11 @@ class PropertyController extends Controller
                 }
                 // ->where('area_from_measurement', $salable_plot_area_unit);
             })
-            ->when($length_of_plot !== "", function ($query) use ($length_of_plot, $length_of_plot_part) {
+            ->when(($length_of_plot !== "" && $property->propety_category !== '256' && $property->propety_category !== null ), function ($query) use ($property,$length_of_plot, $length_of_plot_part) {
                 // dd("length_of_plot condition",
                 //     "length_of_plot" , $length_of_plot,
-                //     "length_of_plot_part_unit" , $length_of_plot_part[1]
+                //     "length_of_plot_part_unit" , $length_of_plot_part[1],
+                //     "property->propety_category",$property->propety_category,
                 // );
                 return $query->where('area_from', '<=', $length_of_plot)
                     ->where('area_to', '>=', $length_of_plot)

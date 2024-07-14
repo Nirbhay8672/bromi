@@ -333,7 +333,6 @@ class ShareController extends Controller
                 })
                 ->where('share_property.user_id', Auth::user()->id)
                 ->get();
-// dd("dattaa",Auth::user()->id,$data);
             $mergedData = $data->concat($data2);
 
             return DataTables::of($mergedData)
@@ -517,7 +516,11 @@ class ShareController extends Controller
                 ->editColumn('remarks', function ($row) {
                     return $row->remarks;
                 })
-                ->rawColumns(['project_name',  'super_builtup_area', 'contact_name', 'remarks', 'property_unit_no', 'units', 'price', 'owner_details'])
+                ->addColumn('action', function($row){
+                    return '
+                        <i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteShareProperty(this) class="fs-22 py-2 mx-2 fa-trash pointer fa text-danger" type="button"></i>';
+                })
+                ->rawColumns(['action','project_name',  'super_builtup_area', 'contact_name', 'remarks', 'property_unit_no', 'units', 'price', 'owner_details'])
                 ->make(true);
         }
         $property_configuration_settings = DropdownSettings::get()->toArray();
@@ -605,5 +608,16 @@ class ShareController extends Controller
         } else {
             return "Area Not Available";
         }
+    }
+
+
+    public function destroyShareProp(Request $request)
+    {
+        // dd("request->id asd",$request->id);
+        if (!empty($request->id)) {
+			$dlt_partner = ShareProperty::where('id', $request->id)->delete();
+			return json_encode($dlt_partner);
+		}
+      
     }
 }

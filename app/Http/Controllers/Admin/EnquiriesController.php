@@ -236,10 +236,12 @@ class EnquiriesController extends Controller
 
 							if ($request->match_specific_sub_type) {
 								// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration,$pro->property_category);
-								if ($pro->property_category !== '258') {
+								if ($pro->property_category !== '258' && $pro->property_category !== '256') {
 									$query->whereJsonContains('configuration', ($pro->configuration));
 								} else if ($pro->property_category === '258') {
 									$query->whereJsonContains('configuration', (0));
+								}else if($pro->property_category == '256'){
+									$query->whereJsonContains('configuration', ["0"]);
 								}
 							}
 
@@ -257,7 +259,8 @@ class EnquiriesController extends Controller
 								$unit_price =  str_replace(',', '', $unitDetails[0][4]);
 								$sell_price = (int) str_replace(',', '', $unitDetails[0][3]);
 								$both_price =  str_replace(',', '', $unitDetails[0][7]);
-								// dd("match_budget_from_type", $request->match_budget_from_type, "..", $survey_price,"unit", $unit_price,"sell_price",$sell_price,"pro",$unitDetails[0][7],$pro->property_category);
+								// dd("pro",$pro);
+								// dd("match_budget_from_type", $request->match_budget_from_type, "pro->survey_price",$pro->survey_price,".survey.", $survey_price,"unit", $unit_price,"sell_price",$sell_price,"pro",$unitDetails[0][7],$pro->property_category);
 								if ($survey_price !== '' && $survey_price !== null && $survey_price !== 0) {
 									// dd('11');
 									// $query
