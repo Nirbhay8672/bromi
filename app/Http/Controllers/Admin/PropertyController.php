@@ -400,7 +400,10 @@ class PropertyController extends Controller
                                 $property_for = ($enq->enquiry_for == 'Buy') ? 'Sell' : $enq->enquiry_for;
                                 // dd("match_enquiry_for", $enq->enquiry_for, "..", $property_for);
                                 // dd($request->all(), $enq);
-                                $query->where('properties.property_for', $property_for);
+                                if (in_array($property_for, ['Rent', 'Sell'])) {
+                                    $query->where('properties.property_for', $property_for)
+                                          ->orWhere('properties.property_for', 'Both');
+                                }
                             }
                             //requirement ytpe
                             if ($request->match_property_type && !empty($enq->requirement_type)) {
@@ -1951,7 +1954,10 @@ class PropertyController extends Controller
             ])->save();
             $data->project_id = $new_project->id;
         }
-        $surveyprice = str_replace(',', '', $request->survey_price);
+        $surveyprice = 0.0; 
+        if ($request->survey_price) {
+            $surveyprice = str_replace(',', '', $request->survey_price);
+        }
 
         $data->property_for = $request->property_for;
         $data->res_more = $request->res_more;
@@ -2658,7 +2664,7 @@ class PropertyController extends Controller
                 }
                 // ->where('area_from_measurement', $salable_plot_area_unit);
             })
-            ->when(($length_of_plot !== "" && $property->propety_category !== '256' && $property->propety_category !== null ), function ($query) use ($property,$length_of_plot, $length_of_plot_part) {
+            ->when(($length_of_plot !== "" && $property->propety_category !== '256' && $property->propety_category !== null), function ($query) use ($property, $length_of_plot, $length_of_plot_part) {
                 // dd("length_of_plot condition",
                 //     "length_of_plot" , $length_of_plot,
                 //     "length_of_plot_part_unit" , $length_of_plot_part[1],

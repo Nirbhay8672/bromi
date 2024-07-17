@@ -134,7 +134,6 @@ class EnquiriesController extends Controller
 						return $query->where('requirement_type', $request->filter_property_type);
 					})
 					->when($request->filter_specific_type, function ($query) use ($request) {
-						// dd("oooo");
 						$query->where(function ($query) use ($request) {
 							$types = json_decode($request->filter_specific_type);
 							if (isset($types[0])) {
@@ -247,9 +246,11 @@ class EnquiriesController extends Controller
 
 							// Property For = Enquiry for
 							if ($request->match_enquiry_for) {
+								// dd("enquiry_for .. ",$pro->property_for,$request->match_enquiry_for);
 								$enquiry_for = ($pro->property_for == 'Sell') ? 'Buy' : $pro->property_for;
-								// dd("enquiry_for",$enquiry_for);
-								$query->where('enquiry_for', $enquiry_for);
+								if($enquiry_for !== 'Both'){
+									$query->where('enquiry_for', $enquiry_for);
+								}
 							}
 
 							// price
@@ -292,12 +293,12 @@ class EnquiriesController extends Controller
 									});
 								}
 
-								if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category !== "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category !== "254") {
-									// dd('113');
+								if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 &&  $pro->property_category !== "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category !== "254") {
+									// dd('selll',$sell_price);
 									$query
 										->where('budget_from', '<=', $sell_price)
 										->where('budget_to', '>=', $sell_price);
-								} else if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category === "259" && $pro->property_category === "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category === "256") {
+								} else if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category === "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category === "256") {
 									// dd('114');
 									$sell_price = str_replace(',', '', $unitDetails[0][3]);
 									$query
