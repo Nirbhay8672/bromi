@@ -262,6 +262,19 @@ class EnquiriesController extends Controller
 								$both_price =  str_replace(',', '', $unitDetails[0][7]);
 								// dd("pro",$pro);
 								// dd("match_budget_from_type", $request->match_budget_from_type, "pro->survey_price",$pro->survey_price,".survey.", $survey_price,"unit", $unit_price,"sell_price",$sell_price,"pro",$unitDetails[0][7],$pro->property_category);
+								if($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $unit_price !== 0){
+									// dd("Both props here",$unit_price,$sell_price,"15000",250000);
+									$query->where(function ($q) use ($unit_price, $sell_price) {
+										$q->where(function ($subQuery) use ($unit_price) {
+											$subQuery->where('budget_from', '<=', (float) $unit_price)
+													 ->where('budget_to', '>=', (float) $unit_price);
+										})
+										->orWhere(function ($subQuery) use ($sell_price) {
+											$subQuery->where('budget_from', '<=', $sell_price)
+													 ->where('budget_to', '>=', $sell_price);
+										});
+									});
+								}
 								if ($survey_price !== '' && $survey_price !== null && $survey_price !== 0) {
 									// dd('11');
 									// $query
