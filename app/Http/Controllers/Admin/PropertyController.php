@@ -445,7 +445,7 @@ class PropertyController extends Controller
 
                             //property price & unit_price
                             if ($request->match_budget_from_type) {
-                                // dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
+                                // dd("match_budget_from_type",$enq->enquiry_for, $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
                                 $budgetFrom = str_replace(',', '', $enq->budget_from);
                                 $budgetTo = str_replace(',', '', $enq->budget_to);
                                 $rentPrice = str_replace(',', '', $enq->rent_price);
@@ -453,7 +453,6 @@ class PropertyController extends Controller
                                 $sellPrice = str_replace(',', '', $enq->sell_price);
                                 $sellIntPrice = (int) str_replace(',', '', $enq->sell_price);
                                 if ($budgetFrom !== "" && $budgetTo !== "" && $enq->enquiry_for !== "Both") {
-                                    // dd("inn");
                                     $query->where(function ($query) use ($budgetFrom, $budgetTo, $enq) {
                                         $query->where(function ($query) use ($budgetFrom, $budgetTo) {
                                             $query->where('properties.survey_price', '>=', $budgetFrom)
@@ -466,7 +465,7 @@ class PropertyController extends Controller
                                                     ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
                                             }
                                         })->orWhere(function ($query) use ($budgetFrom, $budgetTo, $enq) {
-                                            if ($enq->enquiry_for == 'Sell') {
+                                            if ($enq->enquiry_for == 'Buy') {
                                                 $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
                                                     ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
                                             }

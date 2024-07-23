@@ -1524,6 +1524,8 @@ use Illuminate\Support\Facades\DB;
                                                                 if ($area_measure->isNotEmpty()) {
                                                                     $unit_name = $area_measure[0]->unit_name;
                                                                 }
+                                                                $budget_from_formatted = number_format($value->budget_from);
+                                                                $budget_to_formatted = number_format($value->budget_to);
                                                                 ?>
                                                                 <tr>
                                                                     <td><a href="{{ route('admin.view.enquiry', encrypt($value->id)) }}">{{ $value->client_name }}</a></td>
@@ -1532,8 +1534,8 @@ use Illuminate\Support\Facades\DB;
                                                                     <td>{{ $configuration_name }}</td> 
                                                                     <td>{{ $value->area_from .' '. $unit_name}}</td>
                                                                     <td>{{ $value->area_to .' '. $unit_name}}</td>
-                                                                    <td>{{ $value->budget_from }}</td>
-                                                                    <td>{{ $value->budget_to }}</td>
+                                                                    <td>{{ $budget_from_formatted }}</td>
+                                                                    <td>{{ $budget_to_formatted }}</td>
                                                                 </tr>
                                                                 @empty
                                                                 @endforelse
