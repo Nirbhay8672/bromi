@@ -2640,7 +2640,7 @@ class PropertyController extends Controller
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category);
         if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0) || ($unit_price !== "" && $unit_price !== 0  && $both_price !== '' && $both_price !== 0)) {
-            dd("tt sell_price",$sell_price,"unit_price",$unit_price,"both_price",$both_price);
+            // dd("tt sell_price",$sell_price,"unit_price",$unit_price,"both_price",$both_price);
             $enquiries = $enquiries->where(function ($q) use ($unit_price, $sell_price, $both_price) {
                 $q->where(function ($subQuery) use ($unit_price) {
                     $subQuery->where('budget_from', '<=', (float) $unit_price)
@@ -2661,12 +2661,16 @@ class PropertyController extends Controller
             $enquiries = $enquiries->when($unit_price !== "", function ($query) use ($unit_price) {
                 return $query->where('budget_from', '<=', $unit_price)
                     ->where('budget_to', '>=', $unit_price);
-            }, function ($query) use ($property, $sell_price) {
+            }, function ($query) use ($property, $sell_price,$both_price) {
                 return $query->where('budget_from', '<=', $property->survey_price)
                     ->where('budget_to', '>=', $property->survey_price)
                     ->orWhere(function ($subQuery) use ($sell_price) {
                         $subQuery->where('budget_from', '<=', $sell_price)
                             ->where('budget_to', '>=', $sell_price);
+                    })
+                    ->orWhere(function ($subQuery) use ($both_price) {
+                        $subQuery->where('budget_from', '<=', $both_price)
+                            ->where('budget_to', '>=', $both_price);
                     });
             });
         }
