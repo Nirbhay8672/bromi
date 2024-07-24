@@ -1762,8 +1762,8 @@ class EnquiriesController extends Controller
 							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
 					}
 				})->orWhere(function ($query) use ($budgetFrom, $budgetTo, $data) {
-					if ($data->enquiry_for == 'Sell') {
-						dd("sell",$data->enquiry_for);
+					if ($data->enquiry_for == 'Buy') {
+						// dd("sell",$data->enquiry_for);
 						$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
 							->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
 					}
