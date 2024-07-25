@@ -459,13 +459,32 @@
             window.location.href = $(this).val();
         })
 
-        $(document).on('keyup', ".indian_currency_amount", function() {
-            if (isNaN(($(this).val()).replaceAll(',', ''))) {
-                $(this).val('')
-            } else {
-                $(this).val(fmt($(this).val()));
+        // $(document).on('keyup', ".indian_currency_amount", function() {
+        //     if (isNaN(($(this).val()).replaceAll(',', ''))) {
+        //         $(this).val('')
+        //     } else {
+        //         $(this).val(fmt($(this).val()));
+        //     }
+        // });
+        
+         $(document).on('keyup', ".indian_currency_amount", function() {
+                // Remove commas from the current value
+                var originalValue = $(this).val().replaceAll(',', '');
+
+                // Check if the remaining value is a valid number
+                if (isNaN(originalValue)) {
+                    $(this).val(''); // Clear the input if it's not a valid number
+                } else {
+                    // Format the number in Indian currency style
+                    var formattedValue = numberWithCommas(originalValue);
+                    $(this).val(formattedValue); // Update the input with formatted value
+                }
+            });
+
+            // Function to format number with commas (Indian numbering system)
+            function numberWithCommas(x) {
+                return x.toString().replace(/\B(?=(\d{2})+(?!\d))/g, ",");
             }
-        });
 
         function fmt(s) {
             var newvalue = s.replace(/,/g, '');
