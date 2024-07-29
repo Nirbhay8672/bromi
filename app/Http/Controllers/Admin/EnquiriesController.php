@@ -234,15 +234,16 @@ class EnquiriesController extends Controller
 							}
 
 							if ($request->match_specific_sub_type) {
-								// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration,$pro->property_category);
-								if ($pro->property_category !== '258' && $pro->property_category !== '256') {
-									$query->whereJsonContains('configuration', ($pro->configuration));
-								} else if ($pro->property_category === '258') {
-									$query->whereJsonContains('configuration', (0));
-								} else if ($pro->property_category == '256') {
-									$query->whereJsonContains('configuration', ["0"]);
-								}
-							}
+                                // dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration,$pro->property_category);
+                                if ($pro->property_category !== '258' && $pro->property_category !== '256') {
+                                    $query->whereJsonContains('configuration', ($pro->configuration));
+                                } else if ($pro->property_category === '258') {
+                                    $query->whereJsonContains('configuration', ('0'));
+                                } else if ($pro->property_category == '256') {
+                                    $query->whereJsonContains('configuration', ["0"]);
+                                }
+                            }
+
 
 							// Property For = Enquiry for
 							if ($request->match_enquiry_for) {
