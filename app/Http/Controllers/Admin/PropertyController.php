@@ -674,7 +674,7 @@ class PropertyController extends Controller
             // }
             return DataTables::of($data)
                 ->editColumn('project_id', function ($row) use ($request) {
-
+                    $isShared = ShareProperty::where('property_id', $row->id)->where('user_id', Auth::user()->id)->first();
                     // $first = '<td style="vertical-align:top">
                     // 	<font size="3"><a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . ((isset($row->Projects->project_name)) ? $row->Projects->project_name : 'tests') . '</a>';
                     $first =  '<td style="vertical-align:top">
@@ -689,6 +689,7 @@ class PropertyController extends Controller
                     //     // return '<a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . $name . '</a>';
                     // }
                     $first_middle = '';
+                    $forth = '';
                     if (isset($row->Projects->is_prime) && $row->Projects->is_prime) {
                         $first_middle = '<img style="height:24px" src="' . asset('assets/images/primeProperty.png') . '" alt="">';
                     }
@@ -699,10 +700,16 @@ class PropertyController extends Controller
                     // $second = '<br> <a href="' . $row->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '    </font> </a>';
                     $second = '<br>Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font>';
                     $third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a>' : "");
+                    if ($isShared) {
+                        $forth = '<img style="height:24px;float:right;" src="' . asset('assets/images/sharedImg.png') . '" alt="">';
+                    }else {
+                        $forth = '';
+                    }
+
                     // $third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->created_at)->format('d-m-Y') . '</font>';
                     $last = '</td>';
                     '</td>';
-                    return $first . $first_middle . $first_end . $second . $third . $last;
+                    return  $first . $first_middle . $forth .  $first_end .   $second . $third . $last;
 
                     return '';
                 })
@@ -762,14 +769,14 @@ class PropertyController extends Controller
                         $salable_area_print = "Area Not Available";
                     }
 
-                   if ($row->Property_priority == "91") {
+                    if ($row->Property_priority == "91") {
                         $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Blue-Star.png') . '" alt="">';
                     } else if ($row->Property_priority == "90") {
                         $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Yellow-Star.png') . '" alt="">';
                     } else if ($row->Property_priority == "17") {
                         $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Red-Star.png') . '" alt="">';
                     }
-                   try {
+                    try {
                         $data = [
                             'Seats' => '-',
                             'Cabins' => '-',
@@ -2699,13 +2706,12 @@ class PropertyController extends Controller
                             ->where('budget_to', '>=', $both_price);
                     });
             });
-        }
-        else {
+        } else {
             // dd("sell_price",$sell_price,"unit_price",$unit_price,"property->survey_price",$property->survey_price,"both_price",$both_price);
             $enquiries = $enquiries->when($unit_price !== "", function ($query) use ($unit_price) {
                 return $query->where('budget_from', '<=', $unit_price)
                     ->where('budget_to', '>=', $unit_price);
-            }, function ($query) use ($property, $sell_price,$both_price) {
+            }, function ($query) use ($property, $sell_price, $both_price) {
                 return $query->where('budget_from', '<=', $property->survey_price)
                     ->where('budget_to', '>=', $property->survey_price)
                     ->orWhere(function ($subQuery) use ($sell_price) {
@@ -2718,7 +2724,7 @@ class PropertyController extends Controller
                     });
             });
         }
-        
+
         //  else {
         //     // dd("sell_price",$sell_price,"unit_price",$unit_price,"property->survey_price",$property->survey_price,"both_price",$both_price);
         //     $enquiries = $enquiries->when($unit_price !== "", function ($query) use ($unit_price) {
@@ -2730,7 +2736,7 @@ class PropertyController extends Controller
         //     });
         // }
 
-        $enquiries = $enquiries->when($area_size !== "", function ($query) use ($area_parts,$area_size, $area_size_int, $property) {
+        $enquiries = $enquiries->when($area_size !== "", function ($query) use ($area_parts, $area_size, $area_size_int, $property) {
             if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
                 return $query->where('area_from', '<=', $area_size)
                     ->where('area_to', '>=', $area_size)
