@@ -87,6 +87,7 @@ class CouponController extends Controller
 		$data->date_from = $request->date_from;
 		$data->date_to = $request->date_to;
 		$data->status = $request->status;
+		$data->one_time_use = $request->one_time_use;
 		$data->save();
 	}
 

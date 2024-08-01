@@ -97,6 +97,10 @@
 								<input class="form-check-input" id="status" type="checkbox" checked>
 								<label class="form-check-label" for="status">Active</label>
 							</div>
+							<div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
+								<input class="form-check-input" id="one_time_use" type="checkbox">
+								<label class="form-check-label" for="one_time_use">One Time Use</label>
+							</div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-5 m-b-10">
@@ -154,6 +158,7 @@
                     $('#date_from').val(dataa.date_from);
                     $('#date_to').val(dataa.date_to);
 					$('#status').prop('checked', Number(dataa.status));
+					$('#one_time_use').prop('checked', Number(dataa.one_time_use));
                     $('#couponModal').modal('show');
                 }
             });
@@ -289,6 +294,7 @@
                             date_from: $('#date_from').val(),
                             date_to: $('#date_to').val(),
                             status: Number($('#status').prop('checked')),
+                            one_time_use: Number($('#one_time_use').prop('checked')),
                             _token: '{{ csrf_token() }}',
                         },
                         success: function(data) {

@@ -213,6 +213,7 @@ class AdminLoginController extends Controller
             $validCoupon = Coupons::where('code', $request->coupon_code)
                 ->where('date_from', '<=', $currentDate)
                 ->where('date_to', '>=', $currentDate)
+                ->where('status', '1')
                 ->first();
             if (!$validCoupon || null == $validCoupon) {
                 throw new Exception ("Invalide coupon Code.", 400);
@@ -465,6 +466,16 @@ class AdminLoginController extends Controller
                         'coupon_applied' => $orderTags['couponCode'],
                         'discount' => $orderTags['discount']
                     ]);
+
+                    $usedCoupon = Coupons::where('code', $orderTags['couponCode'])->first();
+                    if ($usedCoupon) {
+                        if (!empty($usedCoupon->one_time_use) && $usedCoupon->one_time_use != '0') {
+                            $usedCoupon->status = '0';
+                            $usedCoupon->save();
+                        }
+                    } else {
+                        Log::info("Coupon Code not found: Auth\AdminLoginController: Line: 475" . $orderTags['couponCode']);
+                    }
                 }
                 
                 // if user purchases new subscription or user renew/upgrade a subscription
