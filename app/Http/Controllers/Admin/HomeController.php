@@ -544,6 +544,7 @@ class HomeController extends Controller
             $validCoupon = Coupons::where('code', $request->coupon_code)
                 ->where('date_from', '<=', $currentDate)
                 ->where('date_to', '>=', $currentDate)
+                ->where('status', '1')
                 ->first();
             if (!$validCoupon || null == $validCoupon) {
                 throw new Exception("Invalide coupon Code.", 400);
@@ -1049,6 +1050,17 @@ class HomeController extends Controller
                         'coupon_applied' => $orderTags['couponCode'],
                         'discount' => $orderTags['discount']
                     ]);
+
+                    $usedCoupon = Coupons::where('code', $orderTags['couponCode'])->first();
+                    if ($usedCoupon) {
+                        if (!empty($usedCoupon->one_time_use) && $usedCoupon->one_time_use != '0') {
+                            $usedCoupon->status = '0';
+                            $usedCoupon->save();
+                        }
+                    } else {
+                        Log::info("Coupon Code not found: Admin\HomeController: Line: 1057" . $orderTags['couponCode']);
+                    }
+                    
                 }
                 
                 $planExpiry = today()->addYear(1)->subDay();
