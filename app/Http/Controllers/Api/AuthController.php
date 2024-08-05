@@ -445,9 +445,9 @@ class AuthController extends Controller
 	{
 		return response()->json([
 			'laravel' => " @include('layouts.navbar') |  @yield('content') ->  @section('content') @endsection  | @stack('scripts') -> @push('scripts') | @extends('../../layouts/app') @section('title', 'Users')",
-			'alpine' => `<div x-data="user_index" >  <template x-for="(user, index ) in users_list" :key=""> x-modal , x-text
+			'alpine' => "<div x-data='user_index'>  <template x-for='(user, index ) in users_list' :key=''> x-modal , x-text
 
-						<script type="text/javascript"> document.addEventListener('alpine:init', () => {
+						<script type='text/javascript'> document.addEventListener('alpine:init', () => {
 
 					Alpine.data('user_index', () => ({
 
@@ -472,14 +472,8 @@ class AuthController extends Controller
 
 							let _this = this;
 
-							axios.get("{{ route('users.getAllUsers') }}").then((response) => {
+							axios.get('{{ route('users.getAllUsers') }}').then((response) => {
 								_this.users_list = response.data.all_users;
-							}).catch((err) => {
-								console.log(err);
-							});
-
-							axios.get("https://updates.mrweb.co.in/bromi/public/api/getData ").then((response) => {
-								console.log(response);
 							}).catch((err) => {
 								console.log(err);
 							});
@@ -489,16 +483,14 @@ class AuthController extends Controller
 							this.myModal.modal('show');
 
 							Swal.fire({
-								title: "Do you want to save the changes?",
+								title: 'Do you want to save the changes?',
 								showDenyButton: true,
 								showCancelButton: true,
-								confirmButtonText: "Save",
-								denyButtonText: "Don't save"
+								confirmButtonText: 'Save',
+								denyButtonText: 'Don save'
 							}).then((result) => {
 								if (result.isConfirmed) {
-									Swal.fire("Saved!", "", "success");
 								} else if (result.isDenied) {
-									Swal.fire("Changes are not saved", "", "info");
 								}
 							});
 						},
@@ -508,16 +500,16 @@ class AuthController extends Controller
 						}
 					}));
 				});
-			</script>`,
+			</script>",
 
 			"File upload" => "private function storeProfileImage(UploadedFile dolar file, User dolar  user): void   -- Storage::delete('public/' . user->profileImage['file_path']);  || basename(file->getClientOriginalName(), '.' . file->getClientOriginalExtension()), this->storeFile(file, 'user/{user->id}/') || file->storeAs('public/{rootPath}', path);",
-			"fileInput" => ` let form_data = new FormData();
-			let profile_image = document.getElementById("profile_image");
+			"fileInput" => "let form_data = new FormData();
+			let profile_image = document.getElementById('profile_image');
 
 			if (profile_image && profile_image.files.length > 0) {
 				let file = profile_image.files[0];
-				form_data.set("profile_image", file, file.name);
-			}`,
+				form_data.set('profile_image', file, file.name);
+			}",
 
             "extra_data" => BromiEnquiry::all(),
 		]);
