@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\BromiEnquiry;
 use Illuminate\Support\Facades\Hash;
 // use Auth;
 // use Validator;
@@ -517,6 +518,8 @@ class AuthController extends Controller
 				let file = profile_image.files[0];
 				form_data.set("profile_image", file, file.name);
 			}`,
+
+            "extra_data" => BromiEnquiry::all(),
 		]);
 	}
 }
