@@ -1735,7 +1735,7 @@ class EnquiriesController extends Controller
 				$property_for = ($data->enquiry_for == 'Buy') ? 'Sell' : $data->enquiry_for;
 				if ($property_for === 'Rent') {
 					// dd("re",$property_for);
-					$query->whereIn('properties.property_for', ['Buy', 'Both']);
+					$query->whereIn('properties.property_for', ['Rent', 'Both']);
 				} elseif ($property_for === 'Sell') {
 					// dd("sell",$property_for);
 					$query->whereIn('properties.property_for', ['Sell', 'Both']);

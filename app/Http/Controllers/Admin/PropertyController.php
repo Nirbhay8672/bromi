@@ -2750,9 +2750,13 @@ class PropertyController extends Controller
         });
 
         $enquiries = $enquiries->when($salable_plot_area !== "", function ($query) use ($property, $salable_plot_area, $salable_plot_area_part) {
-            if ($property->property_category !== '258') {
+            if ($property->property_category !== '258' && $property->property_category !== '255') {
                 return $query->where('area_from', '<=', $salable_plot_area)
                     ->where('area_to', '>=', $salable_plot_area)
+                    ->where('area_from_measurement', $salable_plot_area_part[1]);
+            } else if ($property->property_category == '255') {
+                return $query->where('area_from', '<=', (int) $salable_plot_area)
+                    ->where('area_to', '>=', (int) $salable_plot_area)
                     ->where('area_from_measurement', $salable_plot_area_part[1]);
             } else {
                 return $query;
