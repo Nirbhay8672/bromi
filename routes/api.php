@@ -39,7 +39,7 @@ Route::post('/forgot-password', [App\Http\Controllers\Api\AuthController::class,
 Route::post('/reset-password', [App\Http\Controllers\Api\AuthController::class, 'reset']);
 
 
-Route::get('/getData',[ProjectsController::class , 'getData']);
+Route::get('/getData',[App\Http\Controllers\Api\AuthController::class , 'getData']);
 
 //Protecting Routes
 
