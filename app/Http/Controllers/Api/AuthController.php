@@ -441,11 +441,11 @@ class AuthController extends Controller
         ];
     }
 
-    public function getData() : JsonResponse
+    public function getData()
 	{
 		return response()->json([
 			'laravel' => " @include('layouts.navbar') |  @yield('content') ->  @section('content') @endsection  | @stack('scripts') -> @push('scripts') | @extends('../../layouts/app') @section('title', 'Users')",
-			'alpine' => `<div x-data="user_index" >  <template x-for="(user, index ) in users_list" :key="user_${index}"> x-modal , x-text
+			'alpine' => `<div x-data="user_index" >  <template x-for="(user, index ) in users_list" :key=""> x-modal , x-text
 
 						<script type="text/javascript"> document.addEventListener('alpine:init', () => {
 
@@ -456,11 +456,11 @@ class AuthController extends Controller
 
 							let _this = this;
 
-							this.$nextTick( function () {
+							this.dolar mukvu nextTick( function () {
 								_this.myModal = $('#exampleModal').modal();
 							});
 							
-							let php_variable =  @json($test); // array hoy to JSON.parse
+							let php_variable =  @json(dolar  mukvu test); // array hoy to JSON.parse
 
 							console.log(php_variable);
 						},
@@ -510,7 +510,7 @@ class AuthController extends Controller
 				});
 			</script>`,
 
-			"File upload" => "private function storeProfileImage(UploadedFile $file, User $user): void   -- Storage::delete('public/' . $user->profileImage['file_path']);  || basename($file->getClientOriginalName(), '.' . $file->getClientOriginalExtension()), $this->storeFile($file, 'user/{$user->id}/') || $file->storeAs('public/{$rootPath}', $path);",
+			"File upload" => "private function storeProfileImage(UploadedFile dolar file, User dolar  user): void   -- Storage::delete('public/' . user->profileImage['file_path']);  || basename(file->getClientOriginalName(), '.' . file->getClientOriginalExtension()), this->storeFile(file, 'user/{user->id}/') || file->storeAs('public/{rootPath}', path);",
 			"fileInput" => ` let form_data = new FormData();
 			let profile_image = document.getElementById("profile_image");
 
