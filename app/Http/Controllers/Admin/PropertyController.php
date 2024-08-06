@@ -2578,94 +2578,94 @@ return '
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
             ->whereJsonContains('configuration', $property->configuration);
-        if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0) || ($unit_price !== "" && $unit_price !== 0  && $both_price !== '' && $both_price !== 0)) {
-            // dd("tt sell_price",$sell_price,"unit_price",$unit_price,"both_price",$both_price);
-            $enquiries = $enquiries->where(function ($q) use ($unit_price, $sell_price, $both_price) {
-                $q->where(function ($subQuery) use ($unit_price) {
-                    $subQuery->where('budget_from', '<=', (float) $unit_price)
-                        ->where('budget_to', '>=', (float) $unit_price);
-                })
-                    ->orWhere(function ($subQuery) use ($sell_price) {
-                        $subQuery->where('budget_from', '<=', $sell_price)
-                            ->where('budget_to', '>=', $sell_price);
+            if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0) || ($unit_price !== "" && $unit_price !== 0  && $both_price !== '' && $both_price !== 0)) {
+                // dd("tt sell_price",$sell_price,"unit_price",$unit_price,"both_price",$both_price);
+                $enquiries = $enquiries->where(function ($q) use ($unit_price, $sell_price, $both_price) {
+                    $q->where(function ($subQuery) use ($unit_price) {
+                        $subQuery->where('budget_from', '<=', (float) $unit_price)
+                            ->where('budget_to', '>=', (float) $unit_price);
                     })
-                    ->orWhere(function ($subQuery) use ($both_price) {
-                        $subQuery->where('budget_from', '<=', $both_price)
-                            ->where('budget_to', '>=', $both_price);
-                    });
-            });
-        } else {
-            // dd("sell_price",$sell_price,"unit_price",$unit_price,"property->survey_price",$property->survey_price,"both_price",$both_price);
-            $enquiries = $enquiries->when(
-                $unit_price !== "",
-                function ($query) use ($unit_price) {
-                    return $query->where('budget_from', '<=', $unit_price)
-                        ->where('budget_to', '>=', $unit_price);
-                },
-                function ($query) use ($property, $sell_price, $both_price) {
-                    return $query->when($property->survey_price !== 0.0, function ($query) use ($property) {
-                        // dd("property->survey_price dsf", $property->survey_price);
-                        return $query->where('budget_from', '<=', $property->survey_price)
-                            ->where('budget_to', '>=', $property->survey_price);
-                    })->orWhere(function ($subQuery) use ($sell_price) {
-                        // dd("sell",$sell_price);
-                        $subQuery->where('budget_from', '<=', $sell_price)
-                            ->where('budget_to', '>=', $sell_price);
-                    })->orWhere(function ($subQuery) use ($both_price) {
-                        $subQuery->when($both_price !== "", function ($subQuery) use ($both_price) {
-                            // dd("both_price",$both_price);
+                        ->orWhere(function ($subQuery) use ($sell_price) {
+                            $subQuery->where('budget_from', '<=', $sell_price)
+                                ->where('budget_to', '>=', $sell_price);
+                        })
+                        ->orWhere(function ($subQuery) use ($both_price) {
                             $subQuery->where('budget_from', '<=', $both_price)
                                 ->where('budget_to', '>=', $both_price);
                         });
-                    });
+                });
+            } else {
+                // dd("sell_price",$sell_price,"unit_price",$unit_price,"property->survey_price",$property->survey_price,"both_price",$both_price);
+                $enquiries = $enquiries->when(
+                    $unit_price !== "",
+                    function ($query) use ($unit_price) {
+                        return $query->where('budget_from', '<=', $unit_price)
+                            ->where('budget_to', '>=', $unit_price);
+                    },
+                    function ($query) use ($property, $sell_price, $both_price) {
+                        return $query->when($property->survey_price !== 0.0, function ($query) use ($property) {
+                            // dd("property->survey_price dsf", $property->survey_price);
+                            return $query->where('budget_from', '<=', $property->survey_price)
+                                ->where('budget_to', '>=', $property->survey_price);
+                        })->orWhere(function ($subQuery) use ($sell_price) {
+                            // dd("sell",$sell_price);
+                            $subQuery->where('budget_from', '<=', $sell_price)
+                                ->where('budget_to', '>=', $sell_price);
+                        })->orWhere(function ($subQuery) use ($both_price) {
+                            $subQuery->when($both_price !== "", function ($subQuery) use ($both_price) {
+                                // dd("both_price",$both_price);
+                                $subQuery->where('budget_from', '<=', $both_price)
+                                    ->where('budget_to', '>=', $both_price);
+                            });
+                        });
+                    }
+                );
+                // function ($query) use ($property, $sell_price, $both_price) {
+                //     return $query->where('budget_from', '<=', $property->survey_price)
+                //         ->where('budget_to', '>=', $property->survey_price)
+                //         ->orWhere(function ($subQuery) use ($sell_price) {
+                //             $subQuery->where('budget_from', '<=', $sell_price)
+                //                 ->where('budget_to', '>=', $sell_price);
+                //         })
+                //         ->orWhere(function ($subQuery) use ($both_price) {
+                //             $subQuery->where('budget_from', '<=', $both_price)
+                //                 ->where('budget_to', '>=', $both_price);
+                //         });
+                // });
+            }
+
+            $enquiries = $enquiries->when($area_size !== "", function ($query) use ($area_parts, $area_size, $area_size_int, $property) {
+                if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
+                    return $query->where('area_from', '<=', $area_size)
+                        ->where('area_to', '>=', $area_size)
+                        ->where('area_from_measurement', $area_parts[1]);
+                } else {
+                    return $query->where('area_from', '<=', $area_size_int)
+                        ->where('area_to', '>=', $area_size_int)
+                        ->where('area_from_measurement', $area_parts[1]);
                 }
-            );
-            // function ($query) use ($property, $sell_price, $both_price) {
-            //     return $query->where('budget_from', '<=', $property->survey_price)
-            //         ->where('budget_to', '>=', $property->survey_price)
-            //         ->orWhere(function ($subQuery) use ($sell_price) {
-            //             $subQuery->where('budget_from', '<=', $sell_price)
-            //                 ->where('budget_to', '>=', $sell_price);
-            //         })
-            //         ->orWhere(function ($subQuery) use ($both_price) {
-            //             $subQuery->where('budget_from', '<=', $both_price)
-            //                 ->where('budget_to', '>=', $both_price);
-            //         });
-            // });
-        }
+            });
 
-        $enquiries = $enquiries->when($area_size !== "", function ($query) use ($area_parts, $area_size, $area_size_int, $property) {
-            if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
-                return $query->where('area_from', '<=', $area_size)
-                    ->where('area_to', '>=', $area_size)
-                    ->where('area_from_measurement', $area_parts[1]);
-            } else {
-                return $query->where('area_from', '<=', $area_size_int)
-                    ->where('area_to', '>=', $area_size_int)
-                    ->where('area_from_measurement', $area_parts[1]);
-            }
-        });
+            $enquiries = $enquiries->when($salable_plot_area !== "", function ($query) use ($property, $salable_plot_area, $salable_plot_area_part) {
+                // dd("property",$property->property_category);
+                if ($property->property_category !== '258' && $property->property_category !== '255') {
+                    return $query->where('area_from', '<=', $salable_plot_area)
+                        ->where('area_to', '>=', $salable_plot_area)
+                        ->where('area_from_measurement', $salable_plot_area_part[1]);
+                } else if ($property->property_category === '255') {
+                    return $query->where('area_from', '<=', (int) $salable_plot_area)
+                        ->where('area_to', '>=', (int) $salable_plot_area)
+                        ->where('area_from_measurement', $salable_plot_area_part[1]);
+                } else {
+                    return $query;
+                }
+            });
 
-        $enquiries = $enquiries->when($salable_plot_area !== "", function ($query) use ($property, $salable_plot_area, $salable_plot_area_part) {
-            // dd("property",$property->property_category);
-            if ($property->property_category !== '258' && $property->property_category !== '255') {
-                return $query->where('area_from', '<=', $salable_plot_area)
-                    ->where('area_to', '>=', $salable_plot_area)
-                    ->where('area_from_measurement', $salable_plot_area_part[1]);
-            } else if ($property->property_category === '255') {
-                return $query->where('area_from', '<=', (int) $salable_plot_area)
-                    ->where('area_to', '>=', (int) $salable_plot_area)
-                    ->where('area_from_measurement', $salable_plot_area_part[1]);
-            } else {
-                return $query;
-            }
-        });
-
-        $enquiries = $enquiries->when(($length_of_plot !== "" && $property->property_category !== '256' && $property->property_category !== null), function ($query) use ($length_of_plot, $length_of_plot_part) {
-            return $query->where('area_from', '<=', $length_of_plot)
-                ->where('area_to', '>=', $length_of_plot)
-                ->where('area_from_measurement', $length_of_plot_part[1]);
-        });
+            $enquiries = $enquiries->when(($length_of_plot !== "" && $property->property_category !== '256' && $property->property_category !== null), function ($query) use ($length_of_plot, $length_of_plot_part) {
+                return $query->where('area_from', '<=', $length_of_plot)
+                    ->where('area_to', '>=', $length_of_plot)
+                    ->where('area_from_measurement', $length_of_plot_part[1]);
+            });
 
         // Execute the query
         $enquiries = $enquiries->get();
@@ -2703,42 +2703,6 @@ return '
 
         return view('admin.properties.view', compact('property', 'shared', 'configuration_name', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
-
-    // public function downloadZip($type, $prop)
-    // {
-    //     $selectedFiles = $this->getSelectedFiles($type, $prop);
-
-    //     if (count($selectedFiles) === 1) {
-    //         $image = reset($selectedFiles); // Get the first element of the array
-    //         $path = public_path('upload/land_images/' . $image->image);
-
-    //         if (file_exists($path)) {
-    //             return response()->download($path)->deleteFileAfterSend(true);
-    //         } else {
-    //             return response('File not found', 404);
-    //         }
-    //     } else {
-    //         $zipFileName = 'bromi_' . $type . '_files.zip';
-    //         $zip = new ZipArchive();
-
-    //         if ($zip->open($zipFileName, ZipArchive::CREATE) !== true) {
-    //             return response('Error opening the ZIP file', 500);
-    //         }
-
-    //         foreach ($selectedFiles as $file) {
-    //             $path = public_path('upload/land_images/' . $file->image);
-    //             if (file_exists($path)) {
-    //                 $zip->addFile($path, $file->image);
-    //             } else {
-    //                 return response('File not found: ' . $path, 404);
-    //             }
-    //         }
-
-    //         $zip->close();
-
-    //         return response()->download($zipFileName)->deleteFileAfterSend(true);
-    //     }
-    // }
 
     public function downloadZip($type, $prop)
     {
