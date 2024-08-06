@@ -4938,17 +4938,18 @@
                 }
 
                 if ($("#owner_contact_specific_no").val().trim() === "") {
-                    $("#owner_contact_specific_no_error").text("contact field is required").show();
-                    allFieldsValid = false;
-
-                } else {
                     $("#owner_contact_specific_no_error").hide();
-                    // allFieldsValid = true;
+                    // allFieldsValid = false;
+
+                } else if(!/^\d{10}$/.test($("#owner_contact_specific_no").val().trim())) {
+                    $("#owner_contact_specific_no_error").text("Contact number must be exactly 10 digits").show();
+                    allFieldsValid = false;
+                    
                 }
 
                 if ($("#property_email").val().trim() === "") {
-                    $("#property_email_error").text("Email field is required").show();
-                    allFieldsValid = false;
+                    $("#property_email_error").hide();
+                    // allFieldsValid = false;
                 } else {
                     // Check if the entered email format is valid
                     var email = $("#property_email").val().trim();

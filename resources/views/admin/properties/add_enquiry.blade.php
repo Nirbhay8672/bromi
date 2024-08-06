@@ -1110,15 +1110,38 @@
                 return value !== '' && isValidEmail;
             }
 
+            if ($("#client_mobile").val().trim() === "") {
+                    $("#client_mobile_error").hide();
+                    // allFieldsValid = false;
 
+                } else if(!/^\d{10}$/.test($("#client_mobile").val().trim())) {
+                    $("#client_mobile_error").text("Contact number must be exactly 10 digits").show();
+                    allFieldsValid = false;
+                    
+                }
+
+                if ($("#client_email").val().trim() === "") {
+                    $("#client_email_error").hide();
+                    // allFieldsValid = false;
+                } else {
+                    // Check if the entered email format is valid
+                    var email = $("#client_email").val().trim();
+                    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(email)) {
+                        $("#client_email_error").text("Please enter a valid email address").show();
+                        allFieldsValid = false;
+                    } else {
+                        $("#client_email_error").hide();
+                    }
+                }
             function validateForm() {
                 isValid = true;
                 isValid = validateField('#client_name', '#client_name_error', 'client name field is required') && isValid;
-                isValid = validateMobileNumber('#client_mobile', '#client_mobile_error', 'Client mobile field is required',
-                    'Invalid mobile number format') && isValid;
+                // isValid = validateMobileNumber('#client_mobile', '#client_mobile_error', 'Client mobile field is required',
+                //     'Invalid mobile number format') && isValid;
                 // isValid = validateField('#client_email', '#client_email_error', 'client email field is required') && isValid;
-                isValid = validateEmail('#client_email', '#client_email_error', 'Client email field is required',
-                    'Invalid email format') && isValid;
+                // isValid = validateEmail('#client_email', '#client_email_error', 'Client email field is required',
+                //     'Invalid email format') && isValid;
                 return isValid;
             }
 
