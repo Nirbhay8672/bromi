@@ -255,82 +255,144 @@ class EnquiriesController extends Controller
 							}
 
 							// price
+							// if ($request->match_budget_from_type) {
+							// 	$survey_price = (int) $pro->survey_price; // Cast to integer
+							// 	$unitDetails = json_decode($pro->unit_details, true);
+							// 	$unit_price =  str_replace(',', '', $unitDetails[0][4]);
+							// 	$sell_price = (int) str_replace(',', '', $unitDetails[0][3]);
+							// 	$both_price =  str_replace(',', '', $unitDetails[0][7]);
+							// 	dd("unitDetails",$unitDetails,"match_budget_from_type", $request->match_budget_from_type, "pro->survey_price",$pro->survey_price,".survey.", $survey_price,"unit", $unit_price,"sell_price",$sell_price,"pro",$unitDetails[0][7],$pro->property_category);
+							// 	if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '') || ($unit_price !== "" && $unit_price !== 0 && $both_price !== '' && $both_price !== 0) || ($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0)) {
+							// 		$query->where(function ($q) use ($unit_price, $sell_price, $both_price) {
+							// 			$q->where(function ($subQuery) use ($unit_price) {
+							// 				$subQuery->where('budget_from', '<=', (float) $unit_price)
+							// 					->where('budget_to', '>=', (float) $unit_price);
+							// 			})
+							// 				->orWhere(function ($subQuery) use ($sell_price) {
+							// 					$subQuery->where('budget_from', '<=', $sell_price)
+							// 						->where('budget_to', '>=', $sell_price);
+							// 				})
+							// 				->orWhere(function ($subQuery) use ($both_price) {
+							// 					$subQuery->where('budget_from', '<=', $both_price)
+							// 						->where('budget_to', '>=', $both_price);
+							// 				});
+							// 		});
+							// 	} else {
+							// 		if ($survey_price !== '' && $survey_price !== null && $survey_price !== 0) {
+							// 			// dd('11');
+							// 			// $query
+							// 			// 	->where('budget_from', '<=', $survey_price)
+							// 			// 	->where('budget_to', '>=', $survey_price);
+							// 			$query->where(function ($q) use ($survey_price) {
+							// 				$q->where('budget_from', '<=', $survey_price)
+							// 					->where('budget_to', '>=', $survey_price);
+							// 			})->orWhere(function ($q) use ($survey_price) {
+							// 				$q->where('rent_price', '<=', $survey_price)
+							// 					->where('sell_price', '>=', $survey_price);
+							// 			});
+							// 		} else if ($unit_price !== '' && $unit_price !== null && $unit_price !== 0) {
+							// 			// dd('1st',$unit_price);
+							// 			// $query
+							// 			// 	->where('budget_from', '<=', $unit_price)  
+							// 			// 	->where('budget_to', '>=', $unit_price);
+
+							// 			$query->where(function ($q) use ($unit_price) {
+							// 				$q->where('budget_from', '<=', (float) $unit_price)
+							// 					->where('budget_to', '>=', (float) $unit_price);
+							// 			})->orWhere(function ($q) use ($unitDetails, $pro) {
+							// 				// dd("inn","sd",$pro->property_category,"===",$unitDetails[0][4],$unitDetails[0][3]);
+							// 				if ($pro->property_category !== '259') {
+							// 					// dd("in",$unitDetails[0][4]);
+							// 					$q->where('rent_price', '=', $unitDetails[0][4])
+							// 						->where('sell_price', '=', $unitDetails[0][3]);
+							// 				}
+							// 			});
+							// 		}
+
+							// 		if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 &&  $pro->property_category !== "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category !== "254") {
+							// 			// dd('2nd selll',$sell_price);
+							// 			$query
+							// 				->where('budget_from', '<=', $sell_price)
+							// 				->where('budget_to', '>=', $sell_price);
+							// 		} else if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category === "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category === "256") {
+							// 			// dd('114');
+							// 			$sell_price = str_replace(',', '', $unitDetails[0][3]);
+							// 			$query
+							// 				->where('budget_from', '<=', $sell_price)
+							// 				->where('budget_to', '>=', $sell_price);
+							// 		}
+							// 	}
+
+							// 	// if ($both_price !== '' && $both_price !== null && $both_price !== 0 && $pro->property_category === "261") {
+							// 	// 	// dd("both_price",$both_price,$unitDetails[0][7]);
+							// 	// 	$query
+							// 	// 		->where('budget_from', '<=', $both_price)
+							// 	// 		->where('budget_to', '>=', $both_price);
+							// 	// }
+							// }
+
+							// price multi units details 
 							if ($request->match_budget_from_type) {
 								$survey_price = (int) $pro->survey_price; // Cast to integer
 								$unitDetails = json_decode($pro->unit_details, true);
-								$unit_price =  str_replace(',', '', $unitDetails[0][4]);
-								$sell_price = (int) str_replace(',', '', $unitDetails[0][3]);
-								$both_price =  str_replace(',', '', $unitDetails[0][7]);
-								// dd("match_budget_from_type", $request->match_budget_from_type, "pro->survey_price",$pro->survey_price,".survey.", $survey_price,"unit", $unit_price,"sell_price",$sell_price,"pro",$unitDetails[0][7],$pro->property_category);
-								if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '') || ($unit_price !== "" && $unit_price !== 0 && $both_price !== '' && $both_price !== 0) || ($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0)) {
-									$query->where(function ($q) use ($unit_price, $sell_price, $both_price) {
-										$q->where(function ($subQuery) use ($unit_price) {
-											$subQuery->where('budget_from', '<=', (float) $unit_price)
-												->where('budget_to', '>=', (float) $unit_price);
-										})
-											->orWhere(function ($subQuery) use ($sell_price) {
+							
+								$query->where(function ($q) use ($unitDetails, $survey_price, $pro) {
+									foreach ($unitDetails as $unit) {
+										$unit_price =  str_replace(',', '', $unit[4]); // Assuming the price is at index 4
+										$sell_price = (int) str_replace(',', '', $unit[3]); // Assuming the sell price is at index 3
+										$both_price =  str_replace(',', '', $unit[7]); // Assuming the both price is at index 7
+							
+										if (($unit_price !== 0 && $sell_price !== 0) || ($unit_price !== 0 && $both_price !== 0) || ($unit_price !== 0 && $sell_price !== 0)) {
+											$q->orWhere(function ($subQuery) use ($unit_price, $sell_price, $both_price) {
+												$subQuery->where(function ($subSubQuery) use ($unit_price) {
+													$subSubQuery->where('budget_from', '<=', $unit_price)
+														->where('budget_to', '>=', $unit_price);
+												})
+												->orWhere(function ($subSubQuery) use ($sell_price) {
+													$subSubQuery->where('budget_from', '<=', $sell_price)
+														->where('budget_to', '>=', $sell_price);
+												})
+												->orWhere(function ($subSubQuery) use ($both_price) {
+													$subSubQuery->where('budget_from', '<=', $both_price)
+														->where('budget_to', '>=', $both_price);
+												});
+											});
+										} else if ($survey_price !== 0) {
+											$q->orWhere(function ($subQuery) use ($survey_price) {
+												$subQuery->where('budget_from', '<=', $survey_price)
+													->where('budget_to', '>=', $survey_price)
+													->orWhere('rent_price', '<=', $survey_price)
+													->where('sell_price', '>=', $survey_price);
+											});
+										} else if ($unit_price !== 0) {
+											$q->orWhere(function ($subQuery) use ($unit_price, $unit, $pro) {
+												$subQuery->where('budget_from', '<=', $unit_price)
+													->where('budget_to', '>=', $unit_price)
+													->orWhere(function ($subSubQuery) use ($unit, $pro) {
+														if ($pro->property_category !== '259') {
+															$subSubQuery->where('rent_price', '=', $unit[4])
+																->where('sell_price', '=', $unit[3]);
+														}
+													});
+											});
+										} else if ($sell_price !== 0 && !in_array($pro->property_category, ["260", "261", "256", "254"])) {
+											$q->orWhere(function ($subQuery) use ($sell_price) {
 												$subQuery->where('budget_from', '<=', $sell_price)
 													->where('budget_to', '>=', $sell_price);
-											})
-											->orWhere(function ($subQuery) use ($both_price) {
-												$subQuery->where('budget_from', '<=', $both_price)
-													->where('budget_to', '>=', $both_price);
 											});
-									});
-								} else {
-									if ($survey_price !== '' && $survey_price !== null && $survey_price !== 0) {
-										// dd('11');
-										// $query
-										// 	->where('budget_from', '<=', $survey_price)
-										// 	->where('budget_to', '>=', $survey_price);
-										$query->where(function ($q) use ($survey_price) {
-											$q->where('budget_from', '<=', $survey_price)
-												->where('budget_to', '>=', $survey_price);
-										})->orWhere(function ($q) use ($survey_price) {
-											$q->where('rent_price', '<=', $survey_price)
-												->where('sell_price', '>=', $survey_price);
-										});
-									} else if ($unit_price !== '' && $unit_price !== null && $unit_price !== 0) {
-										// dd('1st',$unit_price);
-										// $query
-										// 	->where('budget_from', '<=', $unit_price)  
-										// 	->where('budget_to', '>=', $unit_price);
-
-										$query->where(function ($q) use ($unit_price) {
-											$q->where('budget_from', '<=', (float) $unit_price)
-												->where('budget_to', '>=', (float) $unit_price);
-										})->orWhere(function ($q) use ($unitDetails, $pro) {
-											// dd("inn","sd",$pro->property_category,"===",$unitDetails[0][4],$unitDetails[0][3]);
-											if ($pro->property_category !== '259') {
-												// dd("in",$unitDetails[0][4]);
-												$q->where('rent_price', '=', $unitDetails[0][4])
-													->where('sell_price', '=', $unitDetails[0][3]);
-											}
-										});
+										} else if ($sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category === "260") {
+											$sell_price = (int) str_replace(',', '', $unit[3]);
+											$q->orWhere(function ($subQuery) use ($sell_price) {
+												$subQuery->where('budget_from', '<=', $sell_price)
+													->where('budget_to', '>=', $sell_price);
+											});
+										}
 									}
-
-									if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 &&  $pro->property_category !== "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category !== "254") {
-										// dd('2nd selll',$sell_price);
-										$query
-											->where('budget_from', '<=', $sell_price)
-											->where('budget_to', '>=', $sell_price);
-									} else if ($sell_price !== '' && $sell_price !== null  && $sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category === "260" && $pro->property_category !== "261" && $pro->property_category !== "256" && $pro->property_category === "256") {
-										// dd('114');
-										$sell_price = str_replace(',', '', $unitDetails[0][3]);
-										$query
-											->where('budget_from', '<=', $sell_price)
-											->where('budget_to', '>=', $sell_price);
-									}
-								}
-
-								// if ($both_price !== '' && $both_price !== null && $both_price !== 0 && $pro->property_category === "261") {
-								// 	// dd("both_price",$both_price,$unitDetails[0][7]);
-								// 	$query
-								// 		->where('budget_from', '<=', $both_price)
-								// 		->where('budget_to', '>=', $both_price);
-								// }
+								});
+							
+								// Add additional conditions if needed
 							}
-
+							
 
 							// size range = prop salable area
 							if ($request->match_enquiry_size) {
@@ -1735,7 +1797,7 @@ class EnquiriesController extends Controller
 				$property_for = ($data->enquiry_for == 'Buy') ? 'Sell' : $data->enquiry_for;
 				if ($property_for === 'Rent') {
 					// dd("re",$property_for);
-					$query->whereIn('properties.property_for', ['Buy', 'Both']);
+					$query->whereIn('properties.property_for', ['Rent', 'Both']);
 				} elseif ($property_for === 'Sell') {
 					// dd("sell",$property_for);
 					$query->whereIn('properties.property_for', ['Sell', 'Both']);

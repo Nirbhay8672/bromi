@@ -803,133 +803,91 @@ class PropertyController extends Controller
                             'Curtains' => '-',
                             'ExhaustFan' => '-'
                         ];
-
-                        foreach (json_decode($row->unit_details) as $value) {
-                            if ($row->property_category === '259') {
-                                $data['Seats'] = isset($value[9][0]) && $value[9][0] ? $value[9][0] : '-';
-                                $data['Cabins'] = isset($value[9][1]) && $value[9][1] ? $value[9][1] : '-';
-                                $data['ConferenceRoom'] = isset($value[9][2]) && $value[9][2] ? $value[9][2] : '-';
-                                $data['Pantry'] = isset($value[10][0]) && $value[10][0] ? $value[10][0] : '-';
-                                $data['Reception'] = isset($value[10][2]) && $value[10][2] ? $value[10][2] : '-';
-                            } else {
-                                $data['Light'] = isset($value[9][0]) && $value[9][0] ? $value[9][0] : '-';
-                                $data['Fans'] = isset($value[9][1]) && $value[9][1] ? $value[9][1] : '-';
-                                $data['Ac'] = isset($value[9][2]) && $value[9][2] ? $value[9][2] : '-';
-                                $data['Stove'] = isset($value[10][1]) && $value[10][1] ? $value[10][1] : '-';
-                                $data['Fridge'] = isset($value[10][2]) && $value[10][2] ? $value[10][2] : '-';
-                            }
-
-                            $data['Tv'] = isset($value[9][3]) && $value[9][3] ? $value[9][3] : '-';
-                            $data['Beds'] = isset($value[9][4]) && $value[9][4] ? $value[9][4] : '-';
-                            $data['Wardobe'] = isset($value[9][5]) && $value[9][5] ? $value[9][5] : '-';
-                            $data['Geyser'] = isset($value[9][6]) && $value[9][6] ? $value[9][6] : '-';
-                            $data['Sofa'] = isset($value[9][7]) && $value[9][7] ? $value[9][7] : '-';
-                            $data['WashingMachine'] = isset($value[10][0]) && $value[10][0] ? $value[10][0] : '-';
-                            $data['WaterPurifier'] = isset($value[10][3]) && $value[10][3] ? $value[10][3] : '-';
-                            $data['Microwave'] = isset($value[10][4]) && $value[10][4] ? $value[10][4] : '-';
-                            $data['ModularKitchen'] = isset($value[10][5]) && $value[10][5] ? $value[10][5] : '-';
-                            $data['Chimney'] = isset($value[10][6]) && $value[10][6] ? $value[10][6] : '-';
-                            $data['DinningTable'] = isset($value[10][7]) && $value[10][7] ? $value[10][7] : '-';
-                            $data['Curtains'] = isset($value[10][8]) && $value[10][8] ? $value[10][8] : '-';
-                            $data['ExhaustFan'] = isset($value[10][9]) && $value[10][9] ? $value[10][9] : '-';
-                        }
-
-                        $tooltipHtml = '';
-                        if ($fstatus === 'Furnished') {
-                            // $tooltipHtml = '<div class="dropdown-basic" style=position:relative;float:right;>
-                            //     <div class="dropdown">
-                            //         <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                            //         <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                            //             <div class="row">';
-
-                            $tooltipHtml = '<div class="dropdown-basic" style="position:relative; float:right; right: ' . ($row->Property_priority == "" ? '25px' : '0') . ';">';
-                            $tooltipHtml .= '<div class="dropdown">
-                            <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                            <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                                <div class="row">';
-
-                            if ($row->property_category === '259') {
-                                foreach (['Seats', 'Cabins', 'ConferenceRoom', 'Pantry', 'Reception'] as $attribute) {
-                                    $tooltipHtml .= '<div class="col-4 d-flex justify-content-between">
-                                        <b>' . $attribute . ':</b> ' . $data[$attribute] . '
-                                    </div>';
-                                }
-                            } else {
-                                $tooltipHtml .= '<div class="col-4 d-flex justify-content-between">
-                                    <b>Light:</b> ' . $data['Light'] . '
+                        // dd(json_decode($row->unit_details));
+                        $value=json_decode($row->unit_details)[0];
+                        $tooltipHtml = '<div class="dropdown-basic" style="position:relative; float:right;">
+                    <div class="dropdown">
+                        <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                        <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                            <div class="row">
+                                <div class="col-4 d-flex justify-content-between">
+                                    ' . (isset($value[9][0]) && $value[9][0] ? "<b>Light:</b> " . $value[9][0] : "") . '
                                 </div>
                                 <div class="col-4 d-flex justify-content-between">
-                                    <b>Fans:</b> ' . $data['Fans'] . '
+                                    ' . (isset($value[9][1]) && $value[9][1] ? "<b>Fans:</b> " . $value[9][1] : "") . '
                                 </div>
                                 <div class="col-4 d-flex justify-content-between">
-                                    <b>AC:</b> ' . $data['Ac'] . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    <b>Stove:</b> ' . $data['Stove'] . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    <b>Fridge:</b> ' . $data['Fridge'] . '
-                                </div>';
-                            }
-
-                            $tooltipHtml .= '
-                                <div class="col-4 d-flex justify-content-between">
-                                    <b>TV:</b> ' . $data['Tv'] . '
-                                </div>
-                                <div class="col-4 d-flex justify-content-between">
-                                    <b>Beds:</b> ' . $data['Beds'] . '
-                                </div>
-                                <div class="col-4 d-flex justify-content-between">
-                                    <b>Wardobe:</b> ' . $data['Wardobe'] . '
-                                </div>
-                                <div class="col-4 d-flex justify-content-between">
-                                    <b>Geyser:</b> ' . $data['Geyser'] . '
-                                </div>
-                                <div class="col-4 d-flex justify-content-between">
-                                    <b>Sofa:</b> ' . $data['Sofa'] . '
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-6 d-flex justify-content-between">
-                                        <b>Washing Machine:</b> ' . $data['WashingMachine'] . '
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-between">
-                                        <b>Water Purifier:</b> ' . $data['WaterPurifier'] . '
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-between">
-                                        <b>Microwave:</b> ' . $data['Microwave'] . '
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-between">
-                                        <b>Modular Kitchen:</b> ' . $data['ModularKitchen'] . '
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-between">
-                                        <b>Chimney:</b> ' . $data['Chimney'] . '
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-between">
-                                        <b>Dinning Table:</b> ' . $data['DinningTable'] . '
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-between">
-                                        <b>Curtains:</b> ' . $data['Curtains'] . '
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-between">
-                                        <b>Exhaust Fan:</b> ' . $data['ExhaustFan'] . '
-                                    </div>
+                                    ' . (isset($value[9][2]) && $value[9][2] ? "<b>AC:</b> " . $value[9][2] : "") . '
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-4 d-flex justify-content-between">
+                                    ' . (isset($value[9][3]) && $value[9][3] ? "<b>TV:</b> " . $value[9][3] : "") . '
+                                </div>
+                                <div class="col-4 d-flex justify-content-between">
+                                    ' . (isset($value[9][4]) && $value[9][4] ? "<b>Beds:</b> " . $value[9][4] : "") . '
+                                </div>
+                                <div class="col-4 d-flex justify-content-between">
+                                    ' . (isset($value[9][5]) && $value[9][5] ? "<b>Wardrobe:</b> " . $value[9][5] : "") . '
+                                </div>
                             </div>
-                            </div>';
-                        }
+                            <div class="row">
+                                <div class="col-4 d-flex justify-content-between">
+                                    ' . (isset($value[9][6]) && $value[9][6] ? "<b>Geyser:</b> " . $value[9][6] : "") . '
+                                </div>
+                                <div class="col-4 d-flex justify-content-between">
+                                    ' . (isset($value[9][7]) && $value[9][7] ? "<b>Sofa:</b> " . $value[9][7] : "") . '
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-6 d-flex justify-content-between">
+                                    ' . (isset($value[10][0]) && $value[10][0] ? "<b>Washing Machine:</b> <span>" . $value[10][0] . "</span>" : "") . '
+                                </div>
+                                <div class="col-6 d-flex justify-content-between">
+                                    ' . (isset($value[10][1]) && $value[10][1] ? "<b>Stove:</b> <span>" . $value[10][1] . "</span>" : "") . '
+                                </div>
+                                <div class="col-6 d-flex justify-content-between">
+                                    ' . (isset($value[10][2]) && $value[10][2] ? "<b>Fridge:</b> " . $value[10][2] : "") . '
+                                </div>
+                                <div class="col-6 d-flex justify-content-between">
+                                    ' . (isset($value[10][3]) && $value[10][3] ? "<b>Water Purifier:</b> " . $value[10][3] : "") . '
+                                </div>
+                                <div class="col-6 d-flex justify-content-between">
+                                    ' . (isset($value[10][4]) && $value[10][4] ? "<b>Microwave:</b> " . $value[10][4] : "") . '
+                                </div>
+                                <div class="col-6 d-flex justify-content-between">
+                                    ' . (isset($value[10][5]) && $value[10][5] ? "<b>Modular Kitchen:</b> " . $value[10][5] : "") . '
+                                </div>
+                                <div class="col-6 d-flex justify-content-between">
+                                    ' . (isset($value[10][6]) && $value[10][6] ? "<b>Chimney:</b> " . $value[10][6] : "") . '
+                                </div>
+                                <div class="col-6 d-flex justify-content-between">
+                                    ' . (isset($value[10][7]) && $value[10][7] ? "<b>Dinning Table:</b> " . $value[10][7] : "") . '
+                                </div>
+                                <div class="col-6 d-flex justify-content-between">
+                                    ' . (isset($value[10][8]) && $value[10][8] ? "<b>Curtains:</b> " . $value[10][8] : "") . '
+                                </div>
+                                <div class="col-6 d-flex justify-content-between">
+                                    ' . (isset($value[10][9]) && $value[10][9] ? "<b>Exhaust Fan:</b> " . $value[10][9] : "") . '
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>';
 
-                        return '
-                        <td style="vertical-align:top">
-                            ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
-                            <font size="2" style="font-style:italic">
-                            <br>
-                            ' . $salable_area_print . '
-                            </font>
-                            <br>' . $row->image_path . '
-                            ' . $fstatus . '' . $tooltipHtml . '
-                        </td>';
+return '
+    <td style="vertical-align:top">
+        ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
+        <font size="2" style="font-style:italic">
+        <br>
+        ' . $salable_area_print . '
+        </font>
+        <br>' . $row->image_path . '
+        ' . $fstatus . '
+        ' . $tooltipHtml . '
+    </td>';
+
                     } catch (\Throwable $th) {
                         dd($th);
                     }
@@ -1411,19 +1369,19 @@ class PropertyController extends Controller
         }
 
         if ($type == 'Flat') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Constructed Builtup Area', 'Constructed Carpet Area', 'Salable Plot Area', 'Constructed Salable Area', 'Terrace Carpet Area', 'Carpet Measurement', 'Super Builtup Measurement', 'Builtup Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Two wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'remarks', 'prop status'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Constructed Builtup Area', 'Constructed Carpet Area', 'Salable Plot Area', 'Constructed Salable Area', 'Terrace Carpet Area', 'Carpet Measurement', 'Super Builtup Measurement', 'Builtup Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Two wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'remarks'];
         } else if ($type == 'Vila/Bunglow') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3', 'remarks', 'prop status'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Wing 2', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Wing 3', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3', 'remarks'];
         } else if ($type == 'Land,Plot') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Carpet Plot Area', 'Salable Area', 'Length of plot', 'Width of plot', 'Total No. of units', 'No Of Floors Allowed', 'No Of Side Open', 'Hot', 'Favourite', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'remarks', 'prop status'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Carpet Plot Area', 'Salable Area', 'Length of plot', 'Width of plot', 'Total No. of units', 'No Of Floors Allowed', 'No Of Side Open', 'Hot', 'Favourite', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'remarks'];
         } else if ($type == 'Penthouse') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Constructed Builtup Area', 'Constructed Carpet Area', 'Salable Plot Area', 'Constructed Salable Area', 'Terrace Carpet Area', 'Carpet Measurement', 'Super Builtup Measurement', 'Builtup Area', 'Terrace Carpet Area', 'Terrace Salable Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Balcony', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'remarks', 'prop status'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Constructed Builtup Area', 'Constructed Carpet Area', 'Salable Plot Area', 'Constructed Salable Area', 'Terrace Carpet Area', 'Carpet Measurement', 'Super Builtup Measurement', 'Builtup Area', 'Terrace Carpet Area', 'Terrace Salable Area', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'No Of Balcony', 'No Of Bathrooms', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'remarks'];
         } else if ($type == 'Farmhouse') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'district', 'taluka', 'village', 'zone', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3', 'remarks', 'prop status'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'district', 'taluka', 'village', 'zone', 'Constructed Carpet Area', 'Constructed Salable Area', 'Constructed Builtup Area', 'Salable Plot Area', 'Carpet Plot Area', 'No Of Balcony', 'Total No. of units', 'No. of room', 'No Of Bathrooms', 'No Of Side Open', 'Servant Room', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'Unit 2', 'Available Status 2', 'Price Rent 2', 'Price 2', 'Furnished Status 2', 'Unit 3', 'Available Status 3', 'Price Rent 3', 'Price 3', 'Furnished Status 3', 'remarks'];
         } else if ($type == 'Office') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Constructed Builtup Area', 'Constructed Carpet Area', 'Salable Plot Area', 'Constructed Salable Area', 'Terrace Carpet Area', 'Carpet Measurement', 'Super Builtup Measurement', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Washrooms', 'Four Wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'remarks', 'prop status'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Constructed Builtup Area', 'Constructed Carpet Area', 'Salable Plot Area', 'Constructed Salable Area', 'Terrace Carpet Area', 'Carpet Measurement', 'Super Builtup Measurement', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'Property On Floor', 'No Of Elavators', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Washrooms', 'Four Wheeler Parking', 'Availability', 'Age of Property', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'remarks'];
         } else if ($type == 'Retail') {
-            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Constructed Builtup Area', 'Constructed Carpet Area', 'Salable Plot Area', 'Constructed Salable Area', 'Terrace Carpet Area', 'Carpet Measurement', 'Super Builtup Measurement', 'Opening Width', 'Ceiling Height', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'No Of Elavators', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Washrooms', 'Four Wheeler Parking', 'Two wheeler Parking', 'Availability', 'Age of Property', 'Two Road Corner', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'remarks', 'prop status'];
+            $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Salable Area', 'Carpet Area', 'Constructed Builtup Area', 'Constructed Carpet Area', 'Salable Plot Area', 'Constructed Salable Area', 'Terrace Carpet Area', 'Carpet Measurement', 'Super Builtup Measurement', 'Opening Width', 'Ceiling Height', 'Total Units in project', 'Total no. of floor', 'Total Units in tower', 'No Of Elavators', 'Service Elavator', 'Servant Room', 'Hot', 'Favourite', 'Washrooms', 'Four Wheeler Parking', 'Two wheeler Parking', 'Availability', 'Age of Property', 'Two Road Corner', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'remarks'];
         } else if ($type == 'Storage/industrial') {
             $allFields = ['Property For', 'Property Type', 'Category', 'Subcategory', 'Project', 'city', 'address', 'location link', 'Constructed Carpet Area', 'Constructed Salable Area', 'Salable Plot Area', 'Carpet Plot Area', 'Centre Height', 'Hot', 'Favourite', 'Four Wheeler Parking', 'Two wheeler Parking', 'Availability', 'Age of Property', 'Pollution Control Board', 'EC NOC', 'Bail Membership', 'Discharge', 'Gas', 'Power', 'Water', 'Machinery', 'ETL CEPT NLTL', 'Owner is', 'Owner Name', 'Contact', 'Email', 'NRI', 'Other contact', 'Other contact No.', 'Key available at', 'Wing 1', 'Unit 1', 'Available Status 1', 'Price Rent 1', 'Price 1', 'Furnished Status 1', 'remarks'];
         } else if ($type == 'Plot,Land') {
@@ -1612,7 +1570,6 @@ class PropertyController extends Controller
         $writer->save(public_path('imports/property_sample.xlsx'));
         return redirect(asset('imports/property_sample.xlsx'));
     }
-
     public function exportProperty(Request $request)
     {
         $properties = "";
@@ -2611,78 +2568,7 @@ class PropertyController extends Controller
         } else if ($length_of_plot_part !== "") {
             $length_of_plot_part_unit = $length_of_plot_part[1];
         }
-        // dd("salable_plot_area_part",$salable_plot_area_part[1],"22",$area_size,"33",$salable_plot_area,$length_of_plot,"part length",$length_of_plot_part);
-
-        // $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
-        //     ->where('requirement_type', $property->property_type)
-        //     ->where('property_type', $property->property_category)
-        //     // ->whereJsonContains('configuration', $property->configuration)
-        //     ->when($raw_unit_price !== "", function ($query) use ($unit_price) {
-        //         return $query->where('budget_from', '<=', $unit_price)           //pr-office 
-        //             ->where('budget_to', '>=', $unit_price);
-        //     }, function ($query) use ($property) {
-        //         return $query->where('budget_from', '<=', $property->survey_price)
-        //             ->where('budget_to', '>=', $property->survey_price);
-        //     })
-        //     // ->when($constructed_area !== "", function ($query) use ($constructed_area, $salable_plot_area_part, $constructed_area_unit, $property) {
-        //     //     dd(
-        //     //         "constructed_area condition",
-        //     //         "constructed_area",
-        //     //         $constructed_area,
-        //     //         "constructed_area_unit",
-        //     //         $constructed_area_unit,
-        //     //     $property->property_category,
-        //     //     "salable_plot_area_part",$salable_plot_area_part[1]
-        //     //     );
-        //     //     if ($property->property_category !== "258" && $property->property_category !== '255') {
-        //     //         return $query->where('area_from', '<=', $constructed_area)
-        //     //             ->where('area_to', '>=', $constructed_area)
-        //     //             ->where('area_from_measurement', $constructed_area_unit);
-        //     //     }
-        //     // })
-        //     ->when($area_size !== "", function ($query) use ($area_parts, $area_size, $area_size_int, $area_size_unit, $property) {
-        //         // dd("area_size condition",
-        //         //     "area_size" , $area_size,
-        //         //     "area_size_int" , $area_size_int,
-        //         //     "area_size_unit" , $area_size_unit,
-        //         //     "property_category" , $property->property_category
-        //         // );
-        //         if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
-        //             return $query->where('area_from', '<=', 1200)
-        //                 ->where('area_to', '>=', 1200)
-        //                 ->where('area_from_measurement', $area_parts[1]);
-        //         } else {
-        //             // dd("oyt",$area_size_int,$area_parts[1]);
-        //             return $query->where('area_from', '<=', $area_size_int)
-        //                 ->where('area_to', '>=', $area_size_int)
-        //                 ->where('area_from_measurement', $area_parts[1]);
-        //         }
-        //     })
-        //     ->when($salable_plot_area !== "", function ($query) use ($property, $salable_plot_area_part, $salable_plot_area, $salable_plot_area_unit) {
-        //         // dd("salable_plot_area condition",
-        //         //     "salable_plot_area" , $salable_plot_area,
-        //         //     "salable_plot_area_unit" , $salable_plot_area_unit
-        //         // );
-        //         if ($property->property_category !== '258') {
-        //             return $query->where('area_from', '<=', $salable_plot_area)
-        //                 ->where('area_to', '>=', $salable_plot_area)
-        //                 ->where('area_from_measurement', $salable_plot_area_part[1]);
-        //         } else {
-        //             return "";
-        //         }
-        //         // ->where('area_from_measurement', $salable_plot_area_unit);
-        //     })
-        //     ->when(($length_of_plot !== "" && $property->propety_category !== '256' && $property->propety_category !== null), function ($query) use ($property, $length_of_plot, $length_of_plot_part) {
-        //         // dd("length_of_plot condition",
-        //         //     "length_of_plot" , $length_of_plot,
-        //         //     "length_of_plot_part_unit" , $length_of_plot_part[1],
-        //         //     "property->propety_category",$property->propety_category,
-        //         // );
-        //         return $query->where('area_from', '<=', $length_of_plot)
-        //             ->where('area_to', '>=', $length_of_plot)
-        //             ->where('area_from_measurement', $length_of_plot_part[1]);
-        //     })
-        //     ->get();
+        // dd("con",$property->configuration);
 
         //2nd
         $unit_price =  str_replace(',', '', $unitDetails[0][4]);
@@ -2690,80 +2576,96 @@ class PropertyController extends Controller
         $both_price =  str_replace(',', '', $unitDetails[0][7]);
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
-            ->where('property_type', $property->property_category);
-        if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0) || ($unit_price !== "" && $unit_price !== 0  && $both_price !== '' && $both_price !== 0)) {
-            // dd("tt sell_price",$sell_price,"unit_price",$unit_price,"both_price",$both_price);
-            $enquiries = $enquiries->where(function ($q) use ($unit_price, $sell_price, $both_price) {
-                $q->where(function ($subQuery) use ($unit_price) {
-                    $subQuery->where('budget_from', '<=', (float) $unit_price)
-                        ->where('budget_to', '>=', (float) $unit_price);
-                })
-                    ->orWhere(function ($subQuery) use ($sell_price) {
-                        $subQuery->where('budget_from', '<=', $sell_price)
-                            ->where('budget_to', '>=', $sell_price);
+            ->where('property_type', $property->property_category)
+            ->whereJsonContains('configuration', $property->configuration);
+            if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0) || ($unit_price !== "" && $unit_price !== 0  && $both_price !== '' && $both_price !== 0)) {
+                // dd("tt sell_price",$sell_price,"unit_price",$unit_price,"both_price",$both_price);
+                $enquiries = $enquiries->where(function ($q) use ($unit_price, $sell_price, $both_price) {
+                    $q->where(function ($subQuery) use ($unit_price) {
+                        $subQuery->where('budget_from', '<=', (float) $unit_price)
+                            ->where('budget_to', '>=', (float) $unit_price);
                     })
-                    ->orWhere(function ($subQuery) use ($both_price) {
-                        $subQuery->where('budget_from', '<=', $both_price)
-                            ->where('budget_to', '>=', $both_price);
-                    });
-            });
-        } else {
-            // dd("sell_price",$sell_price,"unit_price",$unit_price,"property->survey_price",$property->survey_price,"both_price",$both_price);
-            $enquiries = $enquiries->when($unit_price !== "", function ($query) use ($unit_price) {
-                return $query->where('budget_from', '<=', $unit_price)
-                    ->where('budget_to', '>=', $unit_price);
-            }, function ($query) use ($property, $sell_price, $both_price) {
-                return $query->where('budget_from', '<=', $property->survey_price)
-                    ->where('budget_to', '>=', $property->survey_price)
-                    ->orWhere(function ($subQuery) use ($sell_price) {
-                        $subQuery->where('budget_from', '<=', $sell_price)
-                            ->where('budget_to', '>=', $sell_price);
-                    })
-                    ->orWhere(function ($subQuery) use ($both_price) {
-                        $subQuery->where('budget_from', '<=', $both_price)
-                            ->where('budget_to', '>=', $both_price);
-                    });
-            });
-        }
-
-        //  else {
-        //     // dd("sell_price",$sell_price,"unit_price",$unit_price,"property->survey_price",$property->survey_price,"both_price",$both_price);
-        //     $enquiries = $enquiries->when($unit_price !== "", function ($query) use ($unit_price) {
-        //         return $query->where('budget_from', '<=', $unit_price)
-        //             ->where('budget_to', '>=', $unit_price);
-        //     }, function ($query) use ($property) {
-        //         return $query->where('budget_from', '<=', $property->survey_price)
-        //             ->where('budget_to', '>=', $property->survey_price);
-        //     });
-        // }
-
-        $enquiries = $enquiries->when($area_size !== "", function ($query) use ($area_parts, $area_size, $area_size_int, $property) {
-            if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
-                return $query->where('area_from', '<=', $area_size)
-                    ->where('area_to', '>=', $area_size)
-                    ->where('area_from_measurement', $area_parts[1]);
+                        ->orWhere(function ($subQuery) use ($sell_price) {
+                            $subQuery->where('budget_from', '<=', $sell_price)
+                                ->where('budget_to', '>=', $sell_price);
+                        })
+                        ->orWhere(function ($subQuery) use ($both_price) {
+                            $subQuery->where('budget_from', '<=', $both_price)
+                                ->where('budget_to', '>=', $both_price);
+                        });
+                });
             } else {
-                return $query->where('area_from', '<=', $area_size_int)
-                    ->where('area_to', '>=', $area_size_int)
-                    ->where('area_from_measurement', $area_parts[1]);
+                // dd("sell_price",$sell_price,"unit_price",$unit_price,"property->survey_price",$property->survey_price,"both_price",$both_price);
+                $enquiries = $enquiries->when(
+                    $unit_price !== "",
+                    function ($query) use ($unit_price) {
+                        return $query->where('budget_from', '<=', $unit_price)
+                            ->where('budget_to', '>=', $unit_price);
+                    },
+                    function ($query) use ($property, $sell_price, $both_price) {
+                        return $query->when($property->survey_price !== 0.0, function ($query) use ($property) {
+                            // dd("property->survey_price dsf", $property->survey_price);
+                            return $query->where('budget_from', '<=', $property->survey_price)
+                                ->where('budget_to', '>=', $property->survey_price);
+                        })->orWhere(function ($subQuery) use ($sell_price) {
+                            // dd("sell",$sell_price);
+                            $subQuery->where('budget_from', '<=', $sell_price)
+                                ->where('budget_to', '>=', $sell_price);
+                        })->orWhere(function ($subQuery) use ($both_price) {
+                            $subQuery->when($both_price !== "", function ($subQuery) use ($both_price) {
+                                // dd("both_price",$both_price);
+                                $subQuery->where('budget_from', '<=', $both_price)
+                                    ->where('budget_to', '>=', $both_price);
+                            });
+                        });
+                    }
+                );
+                // function ($query) use ($property, $sell_price, $both_price) {
+                //     return $query->where('budget_from', '<=', $property->survey_price)
+                //         ->where('budget_to', '>=', $property->survey_price)
+                //         ->orWhere(function ($subQuery) use ($sell_price) {
+                //             $subQuery->where('budget_from', '<=', $sell_price)
+                //                 ->where('budget_to', '>=', $sell_price);
+                //         })
+                //         ->orWhere(function ($subQuery) use ($both_price) {
+                //             $subQuery->where('budget_from', '<=', $both_price)
+                //                 ->where('budget_to', '>=', $both_price);
+                //         });
+                // });
             }
-        });
 
-        $enquiries = $enquiries->when($salable_plot_area !== "", function ($query) use ($property, $salable_plot_area, $salable_plot_area_part) {
-            if ($property->property_category !== '258') {
-                return $query->where('area_from', '<=', $salable_plot_area)
-                    ->where('area_to', '>=', $salable_plot_area)
-                    ->where('area_from_measurement', $salable_plot_area_part[1]);
-            } else {
-                return $query;
-            }
-        });
+            $enquiries = $enquiries->when($area_size !== "", function ($query) use ($area_parts, $area_size, $area_size_int, $property) {
+                if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
+                    return $query->where('area_from', '<=', $area_size)
+                        ->where('area_to', '>=', $area_size)
+                        ->where('area_from_measurement', $area_parts[1]);
+                } else {
+                    return $query->where('area_from', '<=', $area_size_int)
+                        ->where('area_to', '>=', $area_size_int)
+                        ->where('area_from_measurement', $area_parts[1]);
+                }
+            });
 
-        $enquiries = $enquiries->when(($length_of_plot !== "" && $property->property_category !== '256' && $property->property_category !== null), function ($query) use ($length_of_plot, $length_of_plot_part) {
-            return $query->where('area_from', '<=', $length_of_plot)
-                ->where('area_to', '>=', $length_of_plot)
-                ->where('area_from_measurement', $length_of_plot_part[1]);
-        });
+            $enquiries = $enquiries->when($salable_plot_area !== "", function ($query) use ($property, $salable_plot_area, $salable_plot_area_part) {
+                // dd("property",$property->property_category);
+                if ($property->property_category !== '258' && $property->property_category !== '255') {
+                    return $query->where('area_from', '<=', $salable_plot_area)
+                        ->where('area_to', '>=', $salable_plot_area)
+                        ->where('area_from_measurement', $salable_plot_area_part[1]);
+                } else if ($property->property_category === '255') {
+                    return $query->where('area_from', '<=', (int) $salable_plot_area)
+                        ->where('area_to', '>=', (int) $salable_plot_area)
+                        ->where('area_from_measurement', $salable_plot_area_part[1]);
+                } else {
+                    return $query;
+                }
+            });
+
+            $enquiries = $enquiries->when(($length_of_plot !== "" && $property->property_category !== '256' && $property->property_category !== null), function ($query) use ($length_of_plot, $length_of_plot_part) {
+                return $query->where('area_from', '<=', $length_of_plot)
+                    ->where('area_to', '>=', $length_of_plot)
+                    ->where('area_from_measurement', $length_of_plot_part[1]);
+            });
 
         // Execute the query
         $enquiries = $enquiries->get();
@@ -2801,42 +2703,6 @@ class PropertyController extends Controller
 
         return view('admin.properties.view', compact('property', 'shared', 'configuration_name', 'multiple_image', 'construction_docs_list', 'dropdowns', 'land_units', 'configuration_name', 'enquiries', 'visits', 'prop_type', 'projects', 'areas'));
     }
-
-    // public function downloadZip($type, $prop)
-    // {
-    //     $selectedFiles = $this->getSelectedFiles($type, $prop);
-
-    //     if (count($selectedFiles) === 1) {
-    //         $image = reset($selectedFiles); // Get the first element of the array
-    //         $path = public_path('upload/land_images/' . $image->image);
-
-    //         if (file_exists($path)) {
-    //             return response()->download($path)->deleteFileAfterSend(true);
-    //         } else {
-    //             return response('File not found', 404);
-    //         }
-    //     } else {
-    //         $zipFileName = 'bromi_' . $type . '_files.zip';
-    //         $zip = new ZipArchive();
-
-    //         if ($zip->open($zipFileName, ZipArchive::CREATE) !== true) {
-    //             return response('Error opening the ZIP file', 500);
-    //         }
-
-    //         foreach ($selectedFiles as $file) {
-    //             $path = public_path('upload/land_images/' . $file->image);
-    //             if (file_exists($path)) {
-    //                 $zip->addFile($path, $file->image);
-    //             } else {
-    //                 return response('File not found: ' . $path, 404);
-    //             }
-    //         }
-
-    //         $zip->close();
-
-    //         return response()->download($zipFileName)->deleteFileAfterSend(true);
-    //     }
-    // }
 
     public function downloadZip($type, $prop)
     {
