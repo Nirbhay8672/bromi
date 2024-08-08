@@ -95,11 +95,6 @@
                                                             </div>
                                                         </div>
                                                         <div class="row mt-2">
-                                                            <div class="form-group col-md-3 m-b-20">
-                                                                <label for="Driving License">Driving License</label>
-                                                                <input class="form-control" name="driving_license"
-                                                                    id="driving_license" type="text" autocomplete="off">
-                                                            </div>
                                                             <div class="form-group col-md-3 m-b-4">
                                                                 <select class="form-select" id="status">
                                                                     <option value="">Status</option>
@@ -270,6 +265,7 @@
                                                                 <option value="">Select Id Type</option>
                                                                 <option value="aadhaar_card">Aadhaar Card</option>
                                                                 <option value="election_card">Election Card</option>
+                                                                <option value="driving_license">Driving License</option>
                                                                 </select>
                                                             </div>
 
@@ -446,7 +442,6 @@
                             $('#last_name').val(dataa.last_name)
                             $('#birth_date').val(dataa.birth_date)
                             $('#hire_date').val(dataa.hire_date)
-                            $('#driving_license').val(dataa.driving_license)
                             $('#status').val(dataa.status).trigger('change');
                             $('#address').val(dataa.address)
                             $('#pincode').val(dataa.pincode)
@@ -543,7 +538,6 @@
                         form_data.set('last_name', $('#last_name').val());
                         form_data.set('birth_date', $('#birth_date').val());
                         form_data.set('hire_date', $('#hire_date').val());
-                        form_data.set('driving_license', $('#driving_license').val());
                         form_data.set('status', $('#status').val());
                         form_data.set('address', $('#address').val());
                         form_data.set('pincode', $('#pincode').val());

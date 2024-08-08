@@ -22,8 +22,9 @@
                             >
                                 <i class="fa fa-backward"></i>
                             </a></h5>
+                            
                             @can('user-create')
-                                @if(intval($total_user) < Auth::user()->total_user_limit)
+                                @if(intval($total_user) < $plan_details->user_limit)
                                     <a  
                                         class="btn custom-icon-theme-button tooltip-btn"
                                         href="{{route('admin.user.add')}}"
@@ -32,13 +33,11 @@
                                         <i class="fa fa-plus"></i>
                                     </a>
                                 @else
-                                    <button
+                                    <a
                                         class="btn ms-3 custom-icon-theme-button tooltip-btn"
-                                        type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#planModal"
-                                        data-tooltip="Filter"
-                                    ><i class="fa fa-wrench"></i></button>
+                                        href="{{ route('admin.plans') }}"
+                                        data-tooltip="Upgrade Plan"
+                                    ><i class="fa fa-wrench"></i></a>
                                     <strong class="ms-3 text-danger">You have exceeded your user limit</strong>
                                 @endif
                             @endcan
