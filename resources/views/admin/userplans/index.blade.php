@@ -52,6 +52,8 @@
                                             <ul class="pricing-inner">
                                                 <li>
                                                     <h6>Upto {{$plan->user_limit}} users</h6>
+                                                    <br>
+                                                    <h6>Free {{$plan->free_user}} users</h6>
                                                 </li>
                                                 @if (!empty($plan->details) && !empty(explode('_---_',json_decode($plan->details,true))))
                                                 @foreach (explode('_---_',json_decode($plan->details,true)) as $feature)
