@@ -92,6 +92,17 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                {{-- <div class="form-group col-md-8 m-b-20">
+                                                                    <div class="fname">
+                                                                        <label for="Mobile">Mobile</label>
+                                                                        <input class="form-control" name="client_mobile"
+                                                                            style="border-right:2px solid #1d2848 !important; border-top-right-radius: 5px;border-bottom-right-radius: 5px"
+                                                                            id="client_mobile" type="text"
+                                                                            autocomplete="off">
+                                                                    </div>
+                                                                    <div class="invalid-feedback" id="client_mobile_error"
+                                                                        style="display: block;color:red;"></div>
+                                                                </div> --}}
                                                                 <div class="form-group col-md-8 m-b-20">
                                                                     <div class="fname">
                                                                         <label for="Mobile">Mobile</label>
@@ -105,6 +116,16 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                       {{--  <div class="form-group col-md-3 m-b-20">
+                                                            <div class="fname">
+                                                                <label for="Email">Email</label>
+                                                                <input class="form-control" name="client_email"
+                                                                    id="client_email" type="text" autocomplete="off"
+                                                                    style="text-transform: lowercase;">
+                                                            </div>
+                                                            <div class="invalid-feedback" id="client_email_error"
+                                                                style="display: block;color:red;"></div>
+                                                        </div> --}}
                                                         <div class="form-group col-md-3 m-b-20">
                                                             <div class="fname">
                                                                 <label for="Email">Email</label>
@@ -1061,89 +1082,111 @@
                 return isValid;
             }
 
-            function validateMobileNumber(field, errorField, requiredErrorMessage, invalidErrorMessage) {
-                var value = $(field).val().trim();
-                var isValidMobileNumber = /^\d{10}$/.test(value);
 
-                if (value === '') {
-                    $(errorField).text(requiredErrorMessage);
-                } else if (!isValidMobileNumber) {
-                    $(errorField).text(invalidErrorMessage);
-                } else {
-                    $(errorField).text('');
-                }
+/**************************************/
+function validateMobileNumber(field, errorField, invalidErrorMessage) {
+    var value = $(field).val().trim();
+    var isValidMobileNumber = /^\d{10}$/.test(value);
+    var hasNonDigits = /[^0-9]/.test(value);
+    
+    if (value !== '') {
+        if (hasNonDigits || value.length < 10) {
+            $(errorField).text(invalidErrorMessage);
+        } else {
+            $(errorField).text('');
+        }
+    } else {
+        $(errorField).text('');
+    }
 
-                $(field).toggleClass('is-invalid', value === '' || !isValidMobileNumber);
-                return value !== '' && isValidMobileNumber;
-            }
+    $(field).toggleClass('is-invalid', hasNonDigits || value.length > 10);
+    return value === '' || isValidMobileNumber;
+}
 
-            function validateOtherMobileNumber(field, errorField, invalidErrorMessage) {
-                var value = $(field).val().trim();
-                var isValidMobileNumber = /^\d{10}$/.test(value);
-                console.log("isValidMobileNumber =", isValidMobileNumber);
+function validateEmail(field, errorField, invalidFormatMessage) {
+    var value = $(field).val().trim();
+    var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-                if (!isValidMobileNumber && value !== '') {
-                    console.log("entered ==");
-                    $(errorField).text(invalidErrorMessage);
-                } else {
-                    console.log("not entered ==");
-                    $(errorField).text('');
-                }
+    if (value !== '' && !isValidEmail) {
+        $(errorField).text(invalidFormatMessage);
+    } else {
+        $(errorField).text('');
+    }
 
-                $(field).toggleClass('is-invalid', !isValidMobileNumber && value !== '');
-                return isValidMobileNumber || value === '';
-            }
+    $(field).toggleClass('is-invalid', value !== '' && !isValidEmail);
+    return value === '' || isValidEmail;
+}
 
-            function validateEmail(field, errorField, requiredMessage, invalidFormatMessage) {
-                var value = $(field).val().trim();
-                var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+function validateForm() {
+    var isValid = true;
+    isValid = validateField('#client_name', '#client_name_error', 'Client name field is required') && isValid;
+    isValid = validateMobileNumber('#client_mobile', '#client_mobile_error', 'Invalid mobile number format') && isValid;
+    isValid = validateEmail('#client_email', '#client_email_error', 'Invalid email format') && isValid;
+    return isValid;
+}
+/******************************************/
 
-                if (value === '') {
-                    $(errorField).text(requiredMessage);
-                } else if (!isValidEmail) {
-                    $(errorField).text(invalidFormatMessage);
-                } else {
-                    $(errorField).text('');
-                }
 
-                $(field).toggleClass('is-invalid', value === '' || !isValidEmail);
-                return value !== '' && isValidEmail;
-            }
+            // function validateMobileNumber(field, errorField, requiredErrorMessage, invalidErrorMessage) {
+            //     var value = $(field).val().trim();
+            //     var isValidMobileNumber = /^\d{10}$/.test(value);
 
-            if ($("#client_mobile").val().trim() === "") {
-                    $("#client_mobile_error").hide();
-                    // allFieldsValid = false;
+            //     if (value === '') {
+            //         $(errorField).text(requiredErrorMessage);
+            //     } else if (!isValidMobileNumber) {
+            //         $(errorField).text(invalidErrorMessage);
+            //     } else {
+            //         $(errorField).text('');
+            //     }
 
-                } else if(!/^\d{10}$/.test($("#client_mobile").val().trim())) {
-                    $("#client_mobile_error").text("Contact number must be exactly 10 digits").show();
-                    allFieldsValid = false;
-                    
-                }
+            //     $(field).toggleClass('is-invalid', value === '' || !isValidMobileNumber);
+            //     return value !== '' && isValidMobileNumber;
+            // }
 
-                if ($("#client_email").val().trim() === "") {
-                    $("#client_email_error").hide();
-                    // allFieldsValid = false;
-                } else {
-                    // Check if the entered email format is valid
-                    var email = $("#client_email").val().trim();
-                    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailPattern.test(email)) {
-                        $("#client_email_error").text("Please enter a valid email address").show();
-                        allFieldsValid = false;
-                    } else {
-                        $("#client_email_error").hide();
-                    }
-                }
-            function validateForm() {
-                isValid = true;
-                isValid = validateField('#client_name', '#client_name_error', 'client name field is required') && isValid;
-                // isValid = validateMobileNumber('#client_mobile', '#client_mobile_error', 'Client mobile field is required',
-                //     'Invalid mobile number format') && isValid;
-                // isValid = validateField('#client_email', '#client_email_error', 'client email field is required') && isValid;
-                // isValid = validateEmail('#client_email', '#client_email_error', 'Client email field is required',
-                //     'Invalid email format') && isValid;
-                return isValid;
-            }
+            // function validateOtherMobileNumber(field, errorField, invalidErrorMessage) {
+            //     var value = $(field).val().trim();
+            //     var isValidMobileNumber = /^\d{10}$/.test(value);
+            //     console.log("isValidMobileNumber =", isValidMobileNumber);
+
+            //     if (!isValidMobileNumber && value !== '') {
+            //         console.log("entered ==");
+            //         $(errorField).text(invalidErrorMessage);
+            //     } else {
+            //         console.log("not entered ==");
+            //         $(errorField).text('');
+            //     }
+
+            //     $(field).toggleClass('is-invalid', !isValidMobileNumber && value !== '');
+            //     return isValidMobileNumber || value === '';
+            // }
+
+            // function validateEmail(field, errorField, requiredMessage, invalidFormatMessage) {
+            //     var value = $(field).val().trim();
+            //     var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+            //     if (value === '') {
+            //         $(errorField).text(requiredMessage);
+            //     } else if (!isValidEmail) {
+            //         $(errorField).text(invalidFormatMessage);
+            //     } else {
+            //         $(errorField).text('');
+            //     }
+
+            //     $(field).toggleClass('is-invalid', value === '' || !isValidEmail);
+            //     return value !== '' && isValidEmail;
+            // }
+
+           
+            // function validateForm() {
+            //     isValid = true;
+            //     isValid = validateField('#client_name', '#client_name_error', 'client name field is required') && isValid;
+            //     isValid = validateMobileNumber('#client_mobile', '#client_mobile_error', 'Client mobile field is required',
+            //         'Invalid mobile number format') && isValid;
+            //     // isValid = validateField('#client_email', '#client_email_error', 'client email field is required') && isValid;
+            //     isValid = validateEmail('#client_email', '#client_email_error', 'Client email field is required',
+            //         'Invalid email format') && isValid;
+            //     return isValid;
+            // }
 
             function validateNumericField(field, errorField, errorMessage) {
                 var value = $(field).val().trim();
