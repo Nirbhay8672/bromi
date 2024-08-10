@@ -661,6 +661,9 @@
         
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script>
+
+            let total_paid_user = JSON.parse(@json($user->total_paid_user));
+                  
             function setDetails(gstType) {
                 let amount = $('#usersLimitPrice').val();
                 let userCount = $('#valueBox').val();
@@ -708,12 +711,12 @@
                     // Get the value entered in the value box
                     const value = parseInt($('#valueBox').val());
 
-                    if (value <= 0 || (value > 3 && usersLimitPrice.value <= 0)) {
+                    if (value <= 0 || (value > parseInt(total_paid_user) && usersLimitPrice.value <= 0)) {
                         $('#pay-now-btn').hide();
                     } else {
                         $('#pay-now-btn').show();
                     }
-                    if (value > 3) {
+                    if (value > parseInt(total_paid_user)) {
                         $('#valueBox').val(value - 1); 
                         return false;
                     }

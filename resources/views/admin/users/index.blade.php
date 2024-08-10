@@ -24,7 +24,7 @@
                             </a></h5>
                             
                             @can('user-create')
-                                @if(intval($total_user) < $plan_details->user_limit)
+                                @if(auth::user()->total_free_user > 1)
                                     <a  
                                         class="btn custom-icon-theme-button tooltip-btn"
                                         href="{{route('admin.user.add')}}"
