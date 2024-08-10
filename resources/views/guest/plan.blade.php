@@ -92,7 +92,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="couponModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="couponModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop='static'>
             <div class="modal-dialog modal-l" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
