@@ -287,7 +287,14 @@ class AdminLoginController extends Controller
             }
             $user  = User::find($request->user_id);
             $usersLimit = $planDetails->user_limit ?? 1;
-            
+            $free_users = $planDetails->free_user;
+
+            $total_paid_users = $usersLimit - 1;
+
+            if( $free_users > 0 ) {
+                $total_paid_users = $usersLimit - $free_users;
+            }
+             
             $amountToPay = (int) $planDetails->price;
             $couponCode = null;
             $discount = 0;
@@ -332,6 +339,8 @@ class AdminLoginController extends Controller
                     "discount" => "$discount",
                     "gst_amt" => "$request->gst_amt",
                     "gst_type" => "$request->gst_amt_type",
+                    "free_users" => "$free_users",
+                    "paid_users" => "$total_paid_users",
                 ],
                 "order_meta" => [
                     "return_url" => route('payment-success') . '?order_id={order_id}&order_token={order_token}'
@@ -488,7 +497,9 @@ class AdminLoginController extends Controller
                         'plan_expire_on' => $planExpiry,
                         'payment_id' => $lastPaymentId,
                         'total_user_limit' => $orderTags['user_limit'],
-                        'subscribed_on' => Carbon::now()->format('Y-m-d')
+                        'subscribed_on' => Carbon::now()->format('Y-m-d'),
+                        'total_free_user' => $orderTags['free_users'],
+                        'total_paid_user' => $orderTags['paid_users'],
                     ])->save();
                 }
 
