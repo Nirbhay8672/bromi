@@ -556,8 +556,12 @@ class HomeController extends Controller
             if ($usedCoupon) {
                 throw new Exception("Coupon Code alreay used.", 400);
             }
-            // get plan and give discount price
-            $planPrice = Subplans::find($request->plan_id)->price; 
+            if (empty($request->payment_for)) {
+                // get plan and give discount price
+                $planPrice = Subplans::find($request->plan_id)->price; 
+            } else {
+                $planPrice = $request->amount;
+            }
             if ($validCoupon->discount_type == 1) {
                 $percent = (((int) $validCoupon->amount_off) /100);
                 $discount = $planPrice*$percent;
@@ -586,6 +590,7 @@ class HomeController extends Controller
             return response()->json([
                 'error' => true,
                 'message' => $msg,
+                'error_details' => $th->getMessage(),
                 'data' => null
             ]);
         }
@@ -780,6 +785,12 @@ class HomeController extends Controller
             $transaction_goal = $request->transaction_goal;
             $planPrice = ($request->users_limit_price + $request->gst_amt);
             $usersLimit = $request->users_limit;
+
+            if (!empty($request->discounted_price)) {
+                $planPrice = $request->discounted_price;
+                $couponCode = $request->coupon_code;
+                $discount = $request->discount;
+            }
             
             if (empty($planPrice) || $planPrice <= 0) {
                 Session::put('message', 'Amount is required.');
@@ -813,7 +824,9 @@ class HomeController extends Controller
                     "user_limit" => "$usersLimit",
                     "user_id" => "$user->id",
                     "transaction_goal" => "$transaction_goal",
+                    "couponCode" => "$couponCode",
                     "order_amount" => "$request->users_limit_price",
+                    "discount" => "$discount",
                     "gst_amt" => "$request->gst_amt",
                     "gst_type" => "$request->gst_amt_type",
                 ],
@@ -1050,7 +1063,6 @@ class HomeController extends Controller
                         'coupon_applied' => $orderTags['couponCode'],
                         'discount' => $orderTags['discount']
                     ]);
-
                     $usedCoupon = Coupons::where('code', $orderTags['couponCode'])->first();
                     if ($usedCoupon) {
                         if (!empty($usedCoupon->one_time_use) && $usedCoupon->one_time_use != '0') {
@@ -1231,8 +1243,8 @@ class HomeController extends Controller
 			->select([
 				'payments.*',
 				'subplans.name AS plan_name',
-			])->where('payments.user_id',Auth::user()->id)->get();
-
+			])->where('payments.user_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+// dd($transactions);
 		$tickets = DB::table('tickets')
 			->join('categories','categories.id','tickets.category_id')
 			->select([

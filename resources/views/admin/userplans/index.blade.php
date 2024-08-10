@@ -122,7 +122,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="couponModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="couponModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop='static'>
             <div class="modal-dialog modal-l" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -303,6 +303,7 @@
         
         myModalEl.addEventListener('show.bs.modal', function (event) {
             $('#plan-discount-col').text('0');
+            $('#coupon_code_msg').text('');
         });
             
         myModalEl.addEventListener('shown.bs.modal', function (event) {

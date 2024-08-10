@@ -225,11 +225,13 @@
                                                         $gst_type = Auth::user()->state->gst_type;
                                                         Session::put('transaction_goal', 'add_user');
                                                     @endphp
+                                                    <input type="hidden" id="cpn_code" name="coupon_code", value=''>
                                                     <input type="hidden" name="transaction_goal", value='add_user'>
                                                     <input type="hidden" id="userLimit" name="users_limit" value="0">
                                                     <input type="hidden" name="gst_amt" value="" class="form-control mt-2" id="gstAmt">
                                                     <input type="hidden" name="gst_amt_type" class="form-control mt-2" value="{{ $gst_type }}" id="gstAmtType">
-                                                    
+                                                    <input type="hidden" name="discounted_price" value="" class="form-control mt-2" id="discounted_price">
+                                                    <input type="hidden" name="discount" value="" class="form-control mt-2" id="discount">
                                                     <button style="display: none;"
                                                         class="btn btn-primary btn-lg pay-now"
                                                         id="pay-now-btn" 
@@ -448,6 +450,30 @@
                                                         <h5>Valid Till :
                                                             {{ \Carbon\Carbon::parse($user->plan_expire_on)->format('d/m/Y') }}
                                                         </h5>
+                                                        @php
+                                                        $lastPay = \App\Models\Payment::where('user_id', Auth::user()->id)->get()->last();
+                                                        @endphp
+                                                        <p class="border-top mt-3" ></p>
+                                                        <h4>Last Payment</h4>
+                                                        <p class="border-top mt-3" ></p>
+                                                        <div class="row mt-3">
+                                                            <div class="col-12 d-flex">
+                                                                <div class="col-6">
+                                                                    <strong>Paid For</strong>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <strong>Amount</strong>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 d-flex">
+                                                                <div class="col-6">
+                                                                    <strong class="text-muted">{{ucfirst(str_replace('_', ' ', $lastPay->transaction_goal))}}</strong>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <strong class="text-muted">{{ $lastPay->payment_amount }}</strong>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -470,7 +496,7 @@
                                                             <th>Transaction Date Time</th>
                                                             <th>Order Id</th>
                                                             <th>Amount</th>
-                                                            <th>Currency</th>
+                                                            <th>Plan For</th>
                                                             <th>Plan Name</th>
                                                             <th>Status</th>
                                                         </tr>
@@ -482,7 +508,17 @@
                                                             <td>{{ $transaction->payment_completion_time ? \Carbon\Carbon::parse($transaction->payment_completion_time)->format('d/m/Y h:i:s A') : '-' }}</td>
                                                             <td>{{ $transaction->order_id }}</td>
                                                             <td>{{ $transaction->payment_amount }}</td>
-                                                            <td>{{ $transaction->payment_currency }}</td>
+                                                            <td>
+                                                                @php
+                                                                    if (in_array($transaction->transaction_goal, ['new_subscription', 'renew_subscription'])) {
+                                                                        echo 'Annual';
+                                                                    } else {
+                                                                        echo ucfirst(str_replace('_',' ',$transaction->transaction_goal));
+                                                                    }
+                                                                    
+                                                                @endphp
+                                                                {{-- {{ ucfirst(str_replace('_',' ',$transaction->transaction_goal)) }} --}}
+                                                            </td>
                                                             <td>{{ $transaction->plan_name }}</td>
                                                             <td>{{ $transaction->payment_status }}</td>
                                                         </tr>
@@ -546,7 +582,7 @@
         $state_encoded = json_encode($states);
         @endphp
         {{-- increase user limit modal --}}
-        <div class="modal fade" id="userLimitModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="userLimitModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop='static'>
             <div class="modal-dialog modal-l" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -554,6 +590,23 @@
                         <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                     </div>
                     <div class="modal-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <div class="d-flex  flex-column">
+                                <input
+                                    class="form-control p-2 m-r-10"
+                                    type="text"
+                                    {{-- name="coupon_code" --}}
+                                    id="coupon_code"
+                                    {{-- onkeydown="checkavailable()" --}}
+                                    placeholder="Enter coupon code"
+                                >
+                                <p class="text-danger" id="coupon_code_msg"></p>
+                            </div>
+                            <span>
+                                <button class="btn btn-sm btn-primary rounded" id="apply-btn" type="button">Apply</button>
+                            </span>
+                        </div>
+                        
                         <div id="plan-details" class="m-b-20">
                             <div class="plan-row">
                                 <div class="plan-column">
@@ -563,6 +616,14 @@
                                 <div class="plan-column">
                                     <span class="plan-label">Gross</span>
                                     <span id="plan-price-col">0</span>
+                                </div>
+                                <div class="plan-column">
+                                    <span class="plan-label">Discount</span>
+                                    <span id="plan-discount-col">0</span>
+                                </div>
+                                <div class="plan-column">
+                                    <span class="plan-label">Subtotal</span>
+                                    <span id="plan-price-gross">0</span>
                                 </div>
                                 <div class="plan-column d-none" id="cgst">
                                     <span class="plan-label">cgst(9%)</span>
@@ -625,6 +686,7 @@
                 let totalAmt = parseFloat(gst) + parseFloat(amount);
                 gstAMT.value = gst;
                 $('#plan-price-col').text(parseFloat(amount).toFixed(2));
+                $('#plan-price-gross').text(parseFloat(amount).toFixed(2));
                 $('#user-count-col').text(userCount);
                 planPriceAmt.textContent  = (totalAmt).toFixed(2);
             }
@@ -668,7 +730,67 @@
                     // Update the value of the users limit price input
                     usersLimitPrice.value = totalPrice;
                 });
-            });                                        
+            });    
+            
+            $(document).on('click', '#apply-btn', function() {
+                let couponCode = $('#coupon_code').val();
+                if (!couponCode || '' == couponCode || null == couponCode) {
+                    $('#coupon_code_msg').text('Please enter a valid coupon code.');
+                    return;
+                }
+                // send ajax request.
+                $('#coupon_code_msg').text('');
+                let amount = document.getElementById('usersLimitPrice').value;
+                let btnVal = $('#apply-btn').text();
+                $('#apply-btn').html(btnVal + ' <span class="spinner-border spinner-border-sm"></span>');
+                //  after successfull ajax response
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('admin.apply-coupon') }}",
+                    data: {
+                        coupon_code: couponCode,
+                        amount: amount,
+                        payment_for: 'add_more_users',
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        $('#apply-btn').html(btnVal);
+                        
+                        if (response.error) {
+                            $('#coupon_code_msg').text(response.message);
+                            return;
+                        }
+                        if (response.data.gst_type == 'intra_state') {
+                            $('#cgst-col').text(parseFloat(response.data.gst/2).toFixed(2))
+                            $('#sgst-col').text(parseFloat(response.data.gst/2).toFixed(2))
+                            $('#sgst').removeClass('d-none');
+                            $('#cgst').removeClass('d-none');
+                        } else {
+                            $('#igst-col').text(parseFloat(response.data.gst).toFixed(2))
+                            $('#igst').removeClass('d-none');
+                        }
+                        let totalAmt = parseFloat(response.data.gst) + parseFloat(response.data.price_after_discount);
+                        $('#coupon_code_msg').text(response.message);
+                        $('#pay_without_coupon').text('Proceed to pay');
+                        $('#plan-discount-col').text(parseFloat(response.data.discount).toFixed(2));
+                        $('#plan-price-gross').html(response.data.price_after_discount.toFixed(2));
+                        $('#plan-price-amt').html(totalAmt.toFixed(2));
+                        $('#discounted_price').val(totalAmt.toFixed(2));
+                        $('#discount').val(parseFloat(response.data.discount).toFixed(2));
+                        $('#gstAmt').val(parseFloat(response.data.gst).toFixed(2));
+                        $('#gstAmtType').val(response.data.gst_type);
+                        $('#cpn_code').val(couponCode);
+                        let pPrice = parseFloat($('#plan-price-amt').text());
+                        console.log(pPrice);
+                        // sendAjaxForPriceUpdate(pPrice);
+
+                    },
+                    error: (error) => console.log(error)
+                });
+                
+            });
+            
         </script>
         
         @push('scripts')
