@@ -2917,8 +2917,7 @@ class PropertyController extends Controller
 
     public function editProperty(Request $request)
     {
-        $data['projects'] = Projects::whereNotNull('project_name')->get();
-        // $data['areas']         = Areas::all();
+        $data['projects'] = Projects::where('user_id', Auth::user()->id)->whereNotNull('project_name')->get();        // $data['areas']         = Areas::all();
         $conatcts_numbers = [];
         $data['contacts'] = Enquiries::get();
         // $data['cities'] = City::orderBy('name')->get();
@@ -2955,8 +2954,7 @@ class PropertyController extends Controller
 
     public function addProperty(Request $request)
     {
-        $data['projects'] = Projects::whereNotNull('project_name')->get();
-        // $data['areas']         = Areas::all();
+        $data['projects'] = Projects::where('user_id', Auth::user()->id)->whereNotNull('project_name')->get();        // $data['areas']         = Areas::all();
         $conatcts_numbers = [];
         $data['contacts'] = Enquiries::get();
         // $data['cities'] = City::orderBy('name')->get();
