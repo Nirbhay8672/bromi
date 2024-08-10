@@ -129,9 +129,11 @@
                                     style="border: 1px solid black;border-radius:5px;">
                                     <option value=""> Contact</option>
                                     @forelse ($conatcts_numbers as $number)
-                                        <option value="{{ $number['number'] }}">{{ $number['name'] }}
+                                    @if (!empty($number['number']))
+                                    <option value="{{ $number['number'] }}">{{ $number['name'] }}
                                             ({{ $number['number'] }})
                                         </option>
+                                        @endif
                                     @empty
                                     @endforelse
                                 </select>

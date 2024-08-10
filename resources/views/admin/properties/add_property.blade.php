@@ -3466,12 +3466,13 @@
                     $('.the_price').hide()
                 }
                 if (theFor2 == 'Storage/industrial' && (theFor == 'Sell' || theFor == 'Both')) {
-                    $('.the_plotting').show();
-                    $('.the_constructed_plot_price').show();
-                    $('.the_price').hide();
-                } else if (theFor2 == 'Storage/industrial' && (theFor == 'Rent')) {
-                    $('.the_plotting').hide();
+                    // $('.the_plotting').show();
+                    // $('.the_constructed_plot_price').show();
+                    $('.the_price').show();
                 }
+                //  else if (theFor2 == 'Storage/industrial' && (theFor == 'Rent')) {
+                //     $('.the_plotting').hide();
+                // }
 
                 if (theFor2 == 'Plot' || theFor2 == 'Storage/industrial' || theFor2 == 'Land') {
                     $('.the_furnished_status').hide();
@@ -3814,7 +3815,7 @@
                         'div_care_taker', 'div_document_section',
                     ];
                     addAddAreaButtons(['the_carpet_plot_area', 'the_constructed_carpet_area'], ['Add Carpet plot Area',
-                        'Add Constructed Carpet Area'
+                        // 'Add Constructed Carpet Area'
                     ]);
                 } else if (category_type == 'Land') {
                     showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
@@ -3881,11 +3882,12 @@
                     $('.property-type-element[data-property-id="256"]').hide();
                 }
 
-                if (theFor === 'Sell' && parent_val == '85') {
-                    $('.property-type-element[data-property-id="262"]').show();
-                } else {
-                    $('.property-type-element[data-property-id="262"]').hide();
-                }
+                // Land category hide/show
+                // if (theFor === 'Sell' && parent_val == '85') {
+                //     $('.property-type-element[data-property-id="262"]').show();
+                // } else {
+                //     $('.property-type-element[data-property-id="262"]').hide();
+                // }
 
             }
 
