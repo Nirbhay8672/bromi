@@ -908,8 +908,7 @@ class PropertyController extends Controller
                                                 </div>
                                             </div>
                                         </div>';
-                            }
-                            else{
+                            } else {
                                 $tooltipHtml = "";
                             }
                         }
@@ -1152,28 +1151,35 @@ class PropertyController extends Controller
                         $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
                     }
                     $vvv = '';
-                    // dd("row",$row);
                     if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
                         $cd = json_decode($row->other_contact_details);
                         foreach ($cd as $key => $value) {
-                            // dd("value",$value);
-                            if ($vvv == '') {
-                                $space = '';
-                            } else {
-                                $space = '<br> ';
-                            }
-                            // $vvv = $vvv . $space . $value[0] . ' : ' . $value[1];
-                            $vvv = $vvv . $space . $value[1];
+                            $space = $vvv == '' ? '' : '<br> ';
+
+                            $other_name = $value[0];
+                            $other_position = $value[3];
+                            $contact = $value[1];
+                            $vvv .= $space . $other_name . ' - ' . $other_position . ' - ' . $contact;
                         }
-                        // if ($vvv) {
-                        //     $vvv = $vvv . '<br> ' . $row->care_taker_name . ' : ' . $row->care_taker_contact;
-                        // }
                     }
-                    // dd("vvv",$vvv);
+                    $owner_type = '';
+                    if ($row->owner_is == '111') {
+                        $owner_type = 'Individual';
+                    } elseif ($row->owner_is == '112') {
+                        $owner_type = 'Investor';
+                    } elseif ($row->owner_is == '110') {
+                        $owner_type = 'Builder';
+                    }
+
+                    $other_details = $owner_type . ' - ' . $row->owner_name . ' - ' . $row->owner_contact;
                     $contact_info = ($vvv != "") ? $vvv : ' ';
                     // $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
-                    $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
-                    // $buttons =  $buttons . '<i title="Contacts"  data-bs-content="' . $contact_info . '" class="fa fs-22 py-2 mx-2 fa fa-phone-square fa-2x"></i><br>';
+                    // $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
+                    $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body" data-bs-content="'
+                        . ($other_details  != ' ' ? $other_details  : '')
+                        . ($other_details  != ' ' && $contact_info ? '<br>' : '')
+                        . ($contact_info ? $contact_info : '')
+                        . '" data-bs-trigger="hover focus"></i>';
                     return $buttons;
                 })
                 ->rawColumns(['select_checkbox', 'project_id', 'unit_details', 'updated_at', 'property_category', 'contact_details', 'price', 'Actions2', 'status_change'])
