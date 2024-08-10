@@ -428,6 +428,8 @@
                                                                 </div>
                                                             </div>
                                                             <div class="pricing-list h-100">
+                                                                <p>Upto {{ $plan->user_limit }} Users</p>
+                                                                <p>Free {{ $plan->free_user }} Users</p>
                                                                 @if (!empty($plan->details) && !empty(explode('_---_', json_decode($plan->details, true))))
                                                                 <h3>Features</h3>
                                                                 @foreach (explode('_---_', json_decode($plan->details, true)) as $feature)

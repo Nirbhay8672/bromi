@@ -2,6 +2,7 @@
     $type = isset($dropdowns[$property->property_category]['name']) ? $dropdowns[$property->property_category]['name'] : '';
 @endphp
 <?php
+    use App\Traits\HelperFn;
 use Illuminate\Support\Facades\DB;
     $units=DB::table('land_units')->get();
     
@@ -1171,10 +1172,10 @@ use Illuminate\Support\Facades\DB;
                                                                                                         <hr>
                                                                                                         <div class="row">
                                                                                                             <div class="col-6 d-flex justify-content-between">
-                                                                                                                <b>Pantry:</b> <span>{{(isset($value[10][0]) && $value[10][0] == 1)? $value[10][0] : 'No' }}</span>
+                                                                                                                <b>Pantry:</b> <span>{{(isset($value[10][0]) && $value[10][0] == 1)? 'Yes' : 'No' }}</span>
                                                                                                             </div>
                                                                                                             <div class="col-6 d-flex justify-content-between">
-                                                                                                                <b>Reception:</b> <span>{{(isset($value[10][1]) && $value[10][1] == 1)? $value[10][1] : 'No' }}</span>
+                                                                                                                <b>Reception:</b> <span>{{(isset($value[10][1]) && $value[10][1] == 1)? 'Yes' : 'No' }}</span>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
@@ -1475,8 +1476,8 @@ use Illuminate\Support\Facades\DB;
                                                                 if ($area_measure->isNotEmpty()) {
                                                                     $unit_name = $area_measure[0]->unit_name;
                                                                 }
-                                                                $budget_from_formatted = number_format($value->budget_from);
-                                                                $budget_to_formatted = number_format($value->budget_to);
+                                                                $budget_from_formatted = App\Traits\HelperFn::formatIndianCurrency($value->budget_from);
+                                                                $budget_to_formatted = App\Traits\HelperFn::formatIndianCurrency($value->budget_to);
                                                                 ?>
                                                                 <tr>
                                                                     <td><a href="{{ route('admin.view.enquiry', encrypt($value->id)) }}">{{ $value->client_name }}</a></td>
@@ -1485,8 +1486,8 @@ use Illuminate\Support\Facades\DB;
                                                                     <td>{{ $configuration_name }}</td> 
                                                                     <td>{{ $value->area_from .' '. $unit_name}}</td>
                                                                     <td>{{ $value->area_to .' '. $unit_name}}</td>
-                                                                    <td>{{ $budget_from_formatted }}</td>
-                                                                    <td>{{ $budget_to_formatted }}</td>
+                                                                    <td>₹ {{ $budget_from_formatted }}</td>
+                                                                    <td>₹ {{ $budget_to_formatted }}</td>
                                                                 </tr>
                                                                 @empty
                                                                 @endforelse
@@ -2630,8 +2631,7 @@ use Illuminate\Support\Facades\DB;
                                                     <div class="modal-content" style="max-height: 80%; height: auto; width: 40%;">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="imageLabel">Property Images</h5>
-                                                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal"
-                                aria-label="Close"> </button>
+                                                            <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div id="imageSlider" class="image-slider">
@@ -2860,10 +2860,8 @@ use Illuminate\Support\Facades\DB;
                                                             <th scope="col">Area To</th>
                                                             <th scope="col">Budget From</th>
                                                             <th scope="col">Budget To</th>
-
                                                         </tr>
                                                     </thead>
-
                                                     <tbody id="matching_container">
                                                         @forelse ($enquiries as $value)
                                                         <?php
@@ -2872,6 +2870,8 @@ use Illuminate\Support\Facades\DB;
                                                         if ($area_measure->isNotEmpty()) {
                                                             $unit_name = $area_measure[0]->unit_name;
                                                         }
+                                                        $budget_from_formatted = App\Traits\HelperFn::formatIndianCurrency($value->budget_from);
+                                                        $budget_to_formatted = App\Traits\HelperFn::formatIndianCurrency($value->budget_to);
                                                         ?>
                                                         <tr>
                                                             <td><a href="{{ route('admin.view.enquiry', encrypt($value->id)) }}">{{ $value->client_name }}</a></td>
@@ -2880,8 +2880,8 @@ use Illuminate\Support\Facades\DB;
                                                             <td>{{ $configuration_name }}</td> 
                                                             <td>{{ $value->area_from .' '. $unit_name}}</td>
                                                             <td>{{ $value->area_to .' '. $unit_name}}</td>
-                                                            <td>{{ $value->budget_from }}</td>
-                                                            <td>{{ $value->budget_to }}</td>
+                                                            <td>₹ {{ $budget_from_formatted }}</td>
+                                                            <td>₹ {{ $budget_to_formatted }}</td>
                                                         </tr>
                                                         @empty
                                                         @endforelse

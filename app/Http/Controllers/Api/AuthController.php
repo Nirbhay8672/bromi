@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\BromiEnquiry;
 use Illuminate\Support\Facades\Hash;
 // use Auth;
 // use Validator;
@@ -439,4 +440,78 @@ class AuthController extends Controller
             'message' => 'You have successfully logged out and the token was successfully deleted'
         ];
     }
+
+    public function getData()
+	{
+		return response()->json([
+			'laravel' => " @include('layouts.navbar') |  @yield('content') ->  @section('content') @endsection  | @stack('scripts') -> @push('scripts') | @extends('../../layouts/app') @section('title', 'Users')",
+			'alpine' => "<div x-data='user_index'>  <template x-for='(user, index ) in users_list' :key=''> x-modal , x-text
+
+						<script type='text/javascript'> document.addEventListener('alpine:init', () => {
+
+					Alpine.data('user_index', () => ({
+
+						init() {
+							this.reload();
+
+							let _this = this;
+
+							this.dolar mukvu nextTick( function () {
+								_this.myModal = $('#exampleModal').modal();
+							});
+							
+							let php_variable =  @json(dolar  mukvu test); // array hoy to JSON.parse
+
+							console.log(php_variable);
+						},
+
+						users_list: [],
+						myModal: null,
+
+						reload() {
+
+							let _this = this;
+
+							axios.get('{{ route('users.getAllUsers') }}').then((response) => {
+								_this.users_list = response.data.all_users;
+							}).catch((err) => {
+								console.log(err);
+							});
+						},
+
+						openModal(user = null ) {
+							this.myModal.modal('show');
+
+							Swal.fire({
+								title: 'Do you want to save the changes?',
+								showDenyButton: true,
+								showCancelButton: true,
+								confirmButtonText: 'Save',
+								denyButtonText: 'Don save'
+							}).then((result) => {
+								if (result.isConfirmed) {
+								} else if (result.isDenied) {
+								}
+							});
+						},
+
+						closeModal() {
+							this.myModal.modal('hide');
+						}
+					}));
+				});
+			</script>",
+
+			"File upload" => "private function storeProfileImage(UploadedFile dolar file, User dolar  user): void   -- Storage::delete('public/' . user->profileImage['file_path']);  || basename(file->getClientOriginalName(), '.' . file->getClientOriginalExtension()), this->storeFile(file, 'user/{user->id}/') || file->storeAs('public/{rootPath}', path);",
+			"fileInput" => "let form_data = new FormData();
+			let profile_image = document.getElementById('profile_image');
+
+			if (profile_image && profile_image.files.length > 0) {
+				let file = profile_image.files[0];
+				form_data.set('profile_image', file, file.name);
+			}",
+
+            "extra_data" => BromiEnquiry::all(),
+		]);
+	}
 }

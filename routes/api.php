@@ -1,6 +1,8 @@
 <?php
 
 // use Illuminate\Http\Request;
+
+use App\Http\Controllers\Admin\ProjectsController;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\HomeController;
 // // use App\Http\Controllers\Api\ApiController;
@@ -36,6 +38,8 @@ Route::post('/city', [App\Http\Controllers\Api\AuthController::class, 'getcity']
 Route::post('/forgot-password', [App\Http\Controllers\Api\AuthController::class, 'sendResetLinkEmail']);
 Route::post('/reset-password', [App\Http\Controllers\Api\AuthController::class, 'reset']);
 
+
+Route::get('/getData',[App\Http\Controllers\Api\AuthController::class , 'getData']);
 
 //Protecting Routes
 

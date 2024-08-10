@@ -27,6 +27,7 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#planModal"
                                 data-tooltip="Add Plan"
+                                onclick="resetData()"
                             ><i class="fa fa-plus"></i></button>
                         </div>
                         <div class="card-body">
@@ -37,6 +38,8 @@
                                             <th>Name</th>
                                             <th>Price</th>
                                             <th>Extra User Price</th>
+                                            <th>Upto Users</th>
+                                            <th>Free users</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -65,6 +68,7 @@
                         <div class="row">
 
                             <div class="form-group col-md-4 m-b-20">
+                                <label for="plan_name">Plan Name</label>
                                 <div class="fname">
                                     <input
                                         class="form-control"
@@ -75,10 +79,12 @@
                                         required=""
                                         autocomplete="off"
                                     >
+                                    <span class="text-danger error_span" id="error_name"></span>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-4 m-b-20">
+                                <label for="plan_price">Plan Price</label>
                                 <div class="fname">
                                     <input
                                         class="form-control"
@@ -89,24 +95,28 @@
                                         required=""
                                         autocomplete="off"
                                     >
+                                    <span class="text-danger error_span" id="error_price"></span>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-4 m-b-20">
+                                <label for="user_limit">Upto User</label>
                                 <div class="fname">
                                     <input
                                         class="form-control"
                                         name="user_limit"
                                         id="user_limit"
                                         type="text"
-                                        placeholder="User Limit"
+                                        placeholder="Upto user"
                                         required=""
                                         autocomplete="off"
                                     >
+                                    <span class="text-danger error_span" id="error_user_limit"></span>
                                 </div>
                             </div>
                             
                             <div class="form-group col-md-4 m-b-20">
+                                <label for="extra_user_price">Extra User Price</label>
                                 <div class="fname">
                                     <input
                                         class="form-control"
@@ -117,19 +127,39 @@
                                         required=""
                                         autocomplete="off"
                                     >
+                                    <span class="text-danger error_span" id="error_extra_user_price"></span>
                                 </div>
                             </div>
 
-                            <div class="col-md-5 m-b-20">
-                                <button onclick=addFeature() class="btn btn-pill btn-primary" type="button">Add
-                                    Feature</button>
+                            <div class="form-group col-md-4 m-b-20">
+                                <label for="free_user">Free User</label>
+                                <div class="fname">
+                                    <input
+                                        class="form-control"
+                                        name="free_user"
+                                        id="free_user"
+                                        type="text"
+                                        placeholder="Free User"
+                                        required=""
+                                        autocomplete="off"
+                                    >
+                                    <span class="text-danger error_span" id="error_free_user"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-5 m-b-20">
+                                    <button onclick=addFeature() class="btn btn-pill btn-primary" type="button">Add
+                                        Feature</button>
+                                </div>
                             </div>
 
                             <div class="" id="feature-container">
                             </div>
                         </div>
-                        <button class="btn btn-secondary" id="savePlan">Save</button>
-                        <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+
+                        <button class="btn custom-theme-button" id="savePlan">Save</button>
+                        <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
                     </form>
                 </div>
             </div>
@@ -139,6 +169,7 @@
 @push('scripts')
     <script>
         function getPlan(data) {
+
             $('#modal_form').trigger("reset");
             var id = $(data).attr('data-id');
             $.ajax({
@@ -159,6 +190,7 @@
                     $('#plan_price').val(dataa.price);
                     $('#user_limit').val(dataa.user_limit);
                     $('#extra_user_price').val(dataa.extra_user_price);
+                    $('#free_user').val(dataa.free_user);
                     if (featurestring != '') {
                         features = featurestring.split('_---_')
                         $('#feature-container').html('');
@@ -229,6 +261,15 @@
             $('#feature-container').append(inp)
         }
 
+        function resetData() {
+            let all_error = document.querySelectorAll('.error_span');
+
+            all_error.forEach(element => {
+                let erorr_span = document.getElementById(element.id);
+                erorr_span.classList.add('d-none');
+            });
+        }
+
         function deletePlan(data) {
             var id = $(data).attr('data-id');
             $.ajax({
@@ -262,6 +303,14 @@
                         name: 'Extra User Price'
                     },
                     {
+                        data: 'user_limit',
+                        name: 'Upto Users'
+                    },
+                    {
+                        data: 'free_user',
+                        name: 'Free Users'
+                    },
+                    {
                         data: 'Actions',
                         name: 'Actions'
                     },
@@ -269,12 +318,14 @@
             });
 
             $(document).on('click', '#savePlan', function(e) {
+
                 e.preventDefault();
                 var id = $('#this_data_id').val()
                 var features = [];
                 $('input[name="features[]"]').each(function() {
                     features.push($(this).val());
                 });
+
                 $.ajax({
                     type: "POST",
                     url: "{{ route('superadmin.savePlan') }}",
@@ -284,12 +335,26 @@
                         price: $('#plan_price').val(),
                         user_limit: $('#user_limit').val(),
                         extra_user_price: $('#extra_user_price').val(),
+                        free_user: $('#free_user').val(),
                         features: features,
                         _token: '{{ csrf_token() }}',
                     },
                     success: function(data) {
                         $('#planTable').DataTable().draw();
                         $('#planModal').modal('hide');
+                    },
+                    error: function(xhr) {
+
+                        resetData();
+
+                        // Handle validation errors
+                        var errors = xhr.responseJSON.errors;
+                        
+                        Object.entries(errors).forEach((error , key ) => {
+                            let error_element = document.getElementById(`error_${error[0]}`);
+                            error_element.classList.remove('d-none');
+                            error_element.innerHTML = error[1][0];
+                        });
                     }
                 });
             })
