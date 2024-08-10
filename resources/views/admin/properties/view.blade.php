@@ -1152,108 +1152,172 @@ use Illuminate\Support\Facades\DB;
                                                                                                 </div>
                                                                                                 <!--new -->
                                                                                              @if (!empty($dropdowns[$value[8]]['name']) &&( $dropdowns[$value[8]]['name'] !== 'Unfurnished'))
-                                                                                        @isset($value[9])
-                                                                                            @if ($type == 'Office')
-                                                                                            <div class="dropdown-basic">
-                                                                                                <div class="dropdown">
-                                                                                                    <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                                                                                                    <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                                                                                                        <div class="row">
-                                                                                                            <div class="col-4 d-flex justify-content-between">
-                                                                                                                <b>Seats:</b> {{isset($value[9][0]) && $value[9][0] == '1' ? $value[9][0] : 'No' }}
-                                                                                                            </div>
-                                                                                                            <div class="col-4 d-flex justify-content-between">
-                                                                                                                <b>Cabins:</b> {{isset($value[9][1]) && $value[9][1] == '1' ? $value[9][1] : 'No' }}
-                                                                                                            </div>
-                                                                                                            <div class="col-4 d-flex justify-content-between">
-                                                                                                                <b>Conference Room:</b> {{isset($value[9][2])&& $value[9][2] == '1' ? $value[9][2] : 'No'}}
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <hr>
-                                                                                                        <div class="row">
-                                                                                                            <div class="col-6 d-flex justify-content-between">
-                                                                                                                <b>Pantry:</b> <span>{{(isset($value[10][0]) && $value[10][0] == 1)? 'Yes' : 'No' }}</span>
-                                                                                                            </div>
-                                                                                                            <div class="col-6 d-flex justify-content-between">
-                                                                                                                <b>Reception:</b> <span>{{(isset($value[10][1]) && $value[10][1] == 1)? 'Yes' : 'No' }}</span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            @elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Plot')
-                                                                                                <div class="dropdown-basic">
-                                                                                                    <div class="dropdown">
-                                                                                                        <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                                                                                                        <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Light:</b> {{isset($value[9][0])&& $value[9][0] ? $value[9][0] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Fans:</b> {{isset($value[9][1]) && $value[9][1] ? $value[9][1] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>AC:</b> {{isset($value[9][2]) && $value[9][2] ? $value[9][2] : '-' }}
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>TV:</b> {{isset($value[9][3]) && $value[9][3] ? $value[9][3] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Beds:</b> {{isset($value[9][4]) && $value[9][4] ? $value[9][4] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Wardobe:</b> {{isset($value[9][5]) && $value[9][5] ? $value[9][5] : '-' }}
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Geyser:</b> {{isset($value[9][6]) && $value[9][6] ? $value[9][6] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Sofa:</b> {{isset($value[9][7]) && $value[9][7] ? $value[9][7] : '-' }}
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <hr>
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Washing Machine:</b> <span>{{(isset($value[10][0]) && $value[10][0]) ? $value[10][0] : '-' }}</span>
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Stove:</b> <span>{{(isset($value[10][1]) && $value[10][1]) ? $value[10][1] : '-' }}</span>
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Fridge:</b> {{(isset($value[10][2]) && $value[10][2]) ? $value[10][2] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Water Purifier:</b> {{(isset($value[10][3]) && $value[10][3]) ? $value[10][3] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Microwave:</b> {{(isset($value[10][4]) && $value[10][4]) ? $value[10][4] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Modular Kitchen:</b> {{(isset($value[10][5]) && $value[10][5]) ? $value[10][5] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Chimney:</b> {{(isset($value[10][6]) && $value[10][6]) ? $value[10][6] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Dinning Table:</b> {{(isset($value[10][7]) && $value[10][7]) ? $value[10][7] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Curtains:</b> {{(isset($value[10][8]) && $value[10][8]) ? $value[10][8] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Exhaust Fan:</b> {{(isset($value[10][9]) && $value[10][9]) ? $value[10][9] : '-' }}
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            @endif
-                                                                                        @endisset
+                                                                                             @isset($value[9])
+                                                                                             @if ($type == 'Office')
+                                                                                             <div class="dropdown-basic">
+                                                                                                 <div class="dropdown">
+                                                                                                     <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                                                                                     <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                                                                                         <div class="row">
+                                                                                                             @if(isset($value[9][0]) && $value[9][0] != '0' && $value[9][0] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>Seats:</b> {{ $value[9][0] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[9][1]) && $value[9][1] != '0' && $value[9][1] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>Cabins:</b> {{ $value[9][1] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[9][2]) && $value[9][2] != '0' && $value[9][2] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>Conference Room:</b> {{ $value[9][2] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                                         </div>
+                                                                                                         <hr>
+                                                                                                         <div class="row">
+                                                                                                             @if(isset($value[10][0]) && $value[10][0] != '0' && $value[10][0] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Pantry:</b> <span>{{ $value[10][0] == 1 ? 'Yes' : 'No' }}</span>
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[10][1]) && $value[10][1] != '0' && $value[10][1] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Reception:</b> <span>{{ $value[10][1] == 1 ? 'Yes' : 'No' }}</span>
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                                         </div>
+                                                                                                     </div>
+                                                                                                 </div>
+                                                                                             </div>
+                                                                                             @elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Plot')
+                                                                                             <div class="dropdown-basic">
+                                                                                                 <div class="dropdown">
+                                                                                                     <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                                                                                     <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                                                                                         <div class="row">
+                                                                                                             @if(isset($value[9][0]) && $value[9][0] != '0' && $value[9][0] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>Light:</b> {{ $value[9][0] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[9][1]) && $value[9][1] != '0' && $value[9][1] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>Fans:</b> {{ $value[9][1] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[9][2]) && $value[9][2] != '0' && $value[9][2] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>AC:</b> {{ $value[9][2] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                                         </div>
+                                                                                                         <div class="row">
+                                                                                                             @if(isset($value[9][3]) && $value[9][3] != '0' && $value[9][3] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>TV:</b> {{ $value[9][3] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[9][4]) && $value[9][4] != '0' && $value[9][4] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>Beds:</b> {{ $value[9][4] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[9][5]) && $value[9][5] != '0' && $value[9][5] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>Wardrobe:</b> {{ $value[9][5] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                                         </div>
+                                                                                                         <div class="row">
+                                                                                                             @if(isset($value[9][6]) && $value[9][6] != '0' && $value[9][6] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>Geyser:</b> {{ $value[9][6] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[9][7]) && $value[9][7] != '0' && $value[9][7] != '')
+                                                                                                             <div class="col-4 d-flex justify-content-between">
+                                                                                                                 <b>Sofa:</b> {{ $value[9][7] }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                                         </div>
+                                                                                                         <hr>
+                                                                                                         <div class="row">
+                                                                                                             @if(isset($value[10][0]) && $value[10][0] != '0' && $value[10][0] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Washing Machine:</b> <span>{{ $value[10][0] == 1 ? 'Yes' : 'No' }}</span>
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[10][1]) && $value[10][1] != '0' && $value[10][1] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Stove:</b> <span>{{ $value[10][1] == 1 ? 'Yes' : 'No' }}</span>
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[10][2]) && $value[10][2] != '0' && $value[10][2] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Fridge:</b> {{ $value[10][2] == 1 ? 'Yes' : 'No' }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[10][3]) && $value[10][3] != '0' && $value[10][3] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Water Purifier:</b> {{ $value[10][3] == 1 ? 'Yes' : 'No' }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[10][4]) && $value[10][4] != '0' && $value[10][4] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Microwave:</b> {{ $value[10][4] == 1 ? 'Yes' : 'No' }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[10][5]) && $value[10][5] != '0' && $value[10][5] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Modular Kitchen:</b> {{ $value[10][5] == 1 ? 'Yes' : 'No' }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[10][6]) && $value[10][6] != '0' && $value[10][6] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Chimney:</b> {{ $value[10][6] == 1 ? 'Yes' : 'No' }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[10][7]) && $value[10][7] != '0' && $value[10][7] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Dining Table:</b> {{ $value[10][7] == 1 ? 'Yes' : 'No' }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[10][8]) && $value[10][8] != '0' && $value[10][8] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Curtains:</b> {{ $value[10][8] == 1 ? 'Yes' : 'No' }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                         
+                                                                                                             @if(isset($value[10][9]) && $value[10][9] != '0' && $value[10][9] != '')
+                                                                                                             <div class="col-6 d-flex justify-content-between">
+                                                                                                                 <b>Exhaust Fan:</b> {{ $value[10][9] == 1 ? 'Yes' : 'No' }}
+                                                                                                             </div>
+                                                                                                             @endif
+                                                                                                         </div>
+                                                                                                     </div>
+                                                                                                 </div>
+                                                                                             </div>
+                                                                                             @endif
+                                                                                         @endisset
+                                                                                         
 																					@endif
                                                                                             </div>
                                                                                         </td>
@@ -2426,108 +2490,172 @@ use Illuminate\Support\Facades\DB;
 																					</div>
 																					 <!--new code-->
 																				@if (!empty($dropdowns[$value[8]]['name']) &&( $dropdowns[$value[8]]['name'] !== 'Unfurnished'))
-                                                                                        @isset($value[9])
-                                                                                            @if ($type == 'Office')
-                                                                                            <div class="dropdown-basic">
-                                                                                                <div class="dropdown">
-                                                                                                    <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                                                                                                    <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                                                                                                        <div class="row">
-                                                                                                            <div class="col-4 d-flex justify-content-between">
-                                                                                                                <b>Seats:</b> {{isset($value[9][0]) && $value[9][0] == '1' ? $value[9][0] : 'No' }}
-                                                                                                            </div>
-                                                                                                            <div class="col-4 d-flex justify-content-between">
-                                                                                                                <b>Cabins:</b> {{isset($value[9][1]) && $value[9][1] == '1' ? $value[9][1] : 'No' }}
-                                                                                                            </div>
-                                                                                                            <div class="col-4 d-flex justify-content-between">
-                                                                                                                <b>Conference Room:</b> {{isset($value[9][2])&& $value[9][2] == '1' ? $value[9][2] : 'No'}}
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <hr>
-                                                                                                        <div class="row">
-                                                                                                            <div class="col-6 d-flex justify-content-between">
-                                                                                                                <b>Pantry:</b> <span>{{(isset($value[10][0]) && $value[10][0] == 1)? $value[10][0] : 'No' }}</span>
-                                                                                                            </div>
-                                                                                                            <div class="col-6 d-flex justify-content-between">
-                                                                                                                <b>Reception:</b> <span>{{(isset($value[10][1]) && $value[10][1] == 1)? $value[10][1] : 'No' }}</span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
+                                                                                @isset($value[9])
+                                                                                @if ($type == 'Office')
+                                                                                <div class="dropdown-basic">
+                                                                                    <div class="dropdown">
+                                                                                        <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                                                                        <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                                                                            <div class="row">
+                                                                                                @if(isset($value[9][0]) && $value[9][0] != '0' && $value[9][0] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>Seats:</b> {{ $value[9][0] }}
                                                                                                 </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[9][1]) && $value[9][1] != '0' && $value[9][1] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>Cabins:</b> {{ $value[9][1] }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[9][2]) && $value[9][2] != '0' && $value[9][2] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>Conference Room:</b> {{ $value[9][2] }}
+                                                                                                </div>
+                                                                                                @endif
                                                                                             </div>
-                                                                                            @elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Plot')
-                                                                                                <div class="dropdown-basic">
-                                                                                                    <div class="dropdown">
-                                                                                                        <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                                                                                                        <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Light:</b> {{isset($value[9][0])&& $value[9][0] ? $value[9][0] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Fans:</b> {{isset($value[9][1]) && $value[9][1] ? $value[9][1] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>AC:</b> {{isset($value[9][2]) && $value[9][2] ? $value[9][2] : '-' }}
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>TV:</b> {{isset($value[9][3]) && $value[9][3] ? $value[9][3] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Beds:</b> {{isset($value[9][4]) && $value[9][4] ? $value[9][4] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Wardobe:</b> {{isset($value[9][5]) && $value[9][5] ? $value[9][5] : '-' }}
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Geyser:</b> {{isset($value[9][6]) && $value[9][6] ? $value[9][6] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-4 d-flex justify-content-between">
-                                                                                                                    <b>Sofa:</b> {{isset($value[9][7]) && $value[9][7] ? $value[9][7] : '-' }}
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <hr>
-                                                                                                            <div class="row">
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Washing Machine:</b> <span>{{(isset($value[10][0]) && $value[10][0]) ? $value[10][0] : '-' }}</span>
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Stove:</b> <span>{{(isset($value[10][1]) && $value[10][1]) ? $value[10][1] : '-' }}</span>
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Fridge:</b> {{(isset($value[10][2]) && $value[10][2]) ? $value[10][2] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Water Purifier:</b> {{(isset($value[10][3]) && $value[10][3]) ? $value[10][3] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Microwave:</b> {{(isset($value[10][4]) && $value[10][4]) ? $value[10][4] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Modular Kitchen:</b> {{(isset($value[10][5]) && $value[10][5]) ? $value[10][5] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Chimney:</b> {{(isset($value[10][6]) && $value[10][6]) ? $value[10][6] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Dinning Table:</b> {{(isset($value[10][7]) && $value[10][7]) ? $value[10][7] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Curtains:</b> {{(isset($value[10][8]) && $value[10][8]) ? $value[10][8] : '-' }}
-                                                                                                                </div>
-                                                                                                                <div class="col-6 d-flex justify-content-between">
-                                                                                                                    <b>Exhaust Fan:</b> {{(isset($value[10][9]) && $value[10][9]) ? $value[10][9] : '-' }}
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
+                                                                                            <hr>
+                                                                                            <div class="row">
+                                                                                                @if(isset($value[10][0]) && $value[10][0] != '0' && $value[10][0] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Pantry:</b> <span>{{ $value[10][0] == 1 ? 'Yes' : 'No' }}</span>
                                                                                                 </div>
-                                                                                            @endif
-                                                                                        @endisset
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[10][1]) && $value[10][1] != '0' && $value[10][1] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Reception:</b> <span>{{ $value[10][1] == 1 ? 'Yes' : 'No' }}</span>
+                                                                                                </div>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                @elseif ($type !== 'Land' && $type !== 'Storage/industrial' && $type !== 'Plot')
+                                                                                <div class="dropdown-basic">
+                                                                                    <div class="dropdown">
+                                                                                        <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                                                                        <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                                                                            <div class="row">
+                                                                                                @if(isset($value[9][0]) && $value[9][0] != '0' && $value[9][0] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>Light:</b> {{ $value[9][0] }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[9][1]) && $value[9][1] != '0' && $value[9][1] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>Fans:</b> {{ $value[9][1] }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[9][2]) && $value[9][2] != '0' && $value[9][2] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>AC:</b> {{ $value[9][2] }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                @if(isset($value[9][3]) && $value[9][3] != '0' && $value[9][3] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>TV:</b> {{ $value[9][3] }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[9][4]) && $value[9][4] != '0' && $value[9][4] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>Beds:</b> {{ $value[9][4] }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[9][5]) && $value[9][5] != '0' && $value[9][5] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>Wardrobe:</b> {{ $value[9][5] }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                @if(isset($value[9][6]) && $value[9][6] != '0' && $value[9][6] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>Geyser:</b> {{ $value[9][6] }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[9][7]) && $value[9][7] != '0' && $value[9][7] != '')
+                                                                                                <div class="col-4 d-flex justify-content-between">
+                                                                                                    <b>Sofa:</b> {{ $value[9][7] }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                            <hr>
+                                                                                            <div class="row">
+                                                                                                @if(isset($value[10][0]) && $value[10][0] != '0' && $value[10][0] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Washing Machine:</b> <span>{{ $value[10][0] == 1 ? 'Yes' : 'No' }}</span>
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[10][1]) && $value[10][1] != '0' && $value[10][1] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Stove:</b> <span>{{ $value[10][1] == 1 ? 'Yes' : 'No' }}</span>
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[10][2]) && $value[10][2] != '0' && $value[10][2] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Fridge:</b> {{ $value[10][2] == 1 ? 'Yes' : 'No' }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[10][3]) && $value[10][3] != '0' && $value[10][3] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Water Purifier:</b> {{ $value[10][3] == 1 ? 'Yes' : 'No' }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[10][4]) && $value[10][4] != '0' && $value[10][4] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Microwave:</b> {{ $value[10][4] == 1 ? 'Yes' : 'No' }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[10][5]) && $value[10][5] != '0' && $value[10][5] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Modular Kitchen:</b> {{ $value[10][5] == 1 ? 'Yes' : 'No' }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[10][6]) && $value[10][6] != '0' && $value[10][6] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Chimney:</b> {{ $value[10][6] == 1 ? 'Yes' : 'No' }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[10][7]) && $value[10][7] != '0' && $value[10][7] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Dining Table:</b> {{ $value[10][7] == 1 ? 'Yes' : 'No' }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[10][8]) && $value[10][8] != '0' && $value[10][8] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Curtains:</b> {{ $value[10][8] == 1 ? 'Yes' : 'No' }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                            
+                                                                                                @if(isset($value[10][9]) && $value[10][9] != '0' && $value[10][9] != '')
+                                                                                                <div class="col-6 d-flex justify-content-between">
+                                                                                                    <b>Exhaust Fan:</b> {{ $value[10][9] == 1 ? 'Yes' : 'No' }}
+                                                                                                </div>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                @endif
+                                                                            @endisset
+                                                                            
 																					@endif
 																				</div>
 																			</td>
