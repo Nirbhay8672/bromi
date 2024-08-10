@@ -23,47 +23,47 @@
                                 <div class="col">
 
                                     @can('property-create')
-                                    <a class="btn custom-icon-theme-button tooltip-btn"
-                                        href="{{ route('admin.property.add') }}" data-tooltip="Add Property">
-                                        <i class="fa fa-plus"></i>
-                                    </a>
+                                        <a class="btn custom-icon-theme-button tooltip-btn"
+                                            href="{{ route('admin.property.add') }}" data-tooltip="Add Property">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
                                     @endcan
 
                                     @can('search-property')
-                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
-                                        data-bs-toggle="modal" data-bs-target="#filtermodal" data-tooltip="Filter"><i
-                                            class="fa fa-filter"></i></button>
+                                        <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
+                                            data-bs-toggle="modal" data-bs-target="#filtermodal" data-tooltip="Filter"><i
+                                                class="fa fa-filter"></i></button>
                                     @endcan
 
                                     <button class="btn ms-3 custom-icon-theme-button"
                                         style="background-color: #FF0000 !important;display: none; " type="button"
-                                        data-tooltip="Clear Filter" id="resetfilter"><i
-                                            class="fa fa-refresh"></i></button>
+                                        data-tooltip="Clear Filter" id="resetfilter"><i class="fa fa-refresh"></i></button>
 
-                                    <button class="btn ms-3 btn-warning tooltip-btn d-none" style="border-radius: 5px;" type="button" data-tooltip="Clear Filter"
-                                        id="resetfilter" style="display: none;"><i class="fa fa-refresh"></i></button>
+                                    <button class="btn ms-3 btn-warning tooltip-btn d-none" style="border-radius: 5px;"
+                                        type="button" data-tooltip="Clear Filter" id="resetfilter"
+                                        style="display: none;"><i class="fa fa-refresh"></i></button>
                                     <button class="btn matchbutton ms-3 custom-icon-theme-button tooltip-btn" type="button"
                                         data-bs-toggle="modal" data-bs-target="#matchModal" data-tooltip="Matching"><i
                                             class="fa fa-random"></i></button>
 
-                                            @can('export-property')
-                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn"
-                                        onclick="exportProperties()" type="button" data-tooltip="Export"><i
-                                            class="fa fa-upload"></i></button>
-                                            @endcan
+                                    @can('export-property')
+                                        <button class="btn ms-3 custom-icon-theme-button tooltip-btn"
+                                            onclick="exportProperties()" type="button" data-tooltip="Export"><i
+                                                class="fa fa-upload"></i></button>
+                                    @endcan
 
 
-                                    @can('import-property')        
-                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn"
-                                        onclick="importProperties()" type="button" data-tooltip="Import"><i
-                                            class="fa fa-download"></i></button>
-                                            @endcan
+                                    @can('import-property')
+                                        <button class="btn ms-3 custom-icon-theme-button tooltip-btn"
+                                            onclick="importProperties()" type="button" data-tooltip="Import"><i
+                                                class="fa fa-download"></i></button>
+                                    @endcan
 
                                     @can('property-create')
-                                    <button class="btn text-white delete_table_row ms-3 tooltip-btn"
-                                        style="border-radius: 5px;display: none;background-color:red"
-                                        onclick="deleteTableRow()" type="button" data-tooltip="Delete"><i
-                                            class="fa fa-trash"></i></button>
+                                        <button class="btn text-white delete_table_row ms-3 tooltip-btn"
+                                            style="border-radius: 5px;display: none;background-color:red"
+                                            onclick="deleteTableRow()" type="button" data-tooltip="Delete"><i
+                                                class="fa fa-trash"></i></button>
                                     @endcan
 
                                     <button class="btn share_table_row ms-3 tooltip-btn"
@@ -129,10 +129,10 @@
                                     style="border: 1px solid black;border-radius:5px;">
                                     <option value=""> Contact</option>
                                     @forelse ($conatcts_numbers as $number)
-                                    @if (!empty($number['number']))
-                                    <option value="{{ $number['number'] }}">{{ $number['name'] }}
-                                            ({{ $number['number'] }})
-                                        </option>
+                                        @if (!empty($number['number']))
+                                            <option value="{{ $number['number'] }}">{{ $number['name'] }}
+                                                ({{ $number['number'] }})
+                                            </option>
                                         @endif
                                     @empty
                                     @endforelse
