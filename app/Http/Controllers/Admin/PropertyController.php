@@ -804,79 +804,117 @@ class PropertyController extends Controller
                             'ExhaustFan' => '-'
                         ];
                         // dd(json_decode($row->unit_details));
-                        $value=json_decode($row->unit_details)[0];
-                        $tooltipHtml = '<div class="dropdown-basic" style="position:relative; float:right;">
-                    <div class="dropdown">
-                        <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                        <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                            <div class="row">
-                                <div class="col-4 d-flex justify-content-between">
-                                    ' . (isset($value[9][0]) && $value[9][0] ? "<b>Light:</b> " . $value[9][0] : "") . '
+                        $value = json_decode($row->unit_details)[0];
+                        $tooltipHtml = "";
+                        if ($fstatus === 'Furnished' || $fstatus === 'Semi Furnished' || $fstatus === 'Can Furnished') {
+                            if ($row->property_category == '259') //ofice
+                            {
+                                // dd("value[10][0]", $value[10][0]);
+                                $tooltipHtml = '<div class="dropdown-basic" style="position:relative; float:right;">
+                                <div class="dropdown">
+                                    <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                    <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                        <div class="row">
+                                            <div class="col-4 d-flex justify-content-between">
+                                                ' . (isset($value[9][0]) && $value[9][0] ? "<b>Seats:</b> " . $value[9][0] : "") . '
+                                            </div>
+                                            <div class="col-4 d-flex justify-content-between">
+                                                ' . (isset($value[9][1]) && $value[9][1] ? "<b>Cabins:</b> " . $value[9][1] : "") . '
+                                            </div>
+                                            <div class="col-4 d-flex justify-content-between">
+                                                ' . (isset($value[9][2]) && $value[9][2] ? "<b>Conference Room:</b> " . $value[9][2] : "") . '
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-6 d-flex justify-content-between">
+                                              ' . (isset($value[10][0]) ? "<b>Pantry:</b> <span>" . ($value[10][0] == 1 ? 'Yes' : 'No') . "</span>" : "") . '
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between">
+                                            ' . (isset($value[10][1]) ? "<b>Reception:</b> <span>" . ($value[10][1] == 1 ? 'Yes' : 'No') . "</span>" : "") . '
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-4 d-flex justify-content-between">
-                                    ' . (isset($value[9][1]) && $value[9][1] ? "<b>Fans:</b> " . $value[9][1] : "") . '
-                                </div>
-                                <div class="col-4 d-flex justify-content-between">
-                                    ' . (isset($value[9][2]) && $value[9][2] ? "<b>AC:</b> " . $value[9][2] : "") . '
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4 d-flex justify-content-between">
-                                    ' . (isset($value[9][3]) && $value[9][3] ? "<b>TV:</b> " . $value[9][3] : "") . '
-                                </div>
-                                <div class="col-4 d-flex justify-content-between">
-                                    ' . (isset($value[9][4]) && $value[9][4] ? "<b>Beds:</b> " . $value[9][4] : "") . '
-                                </div>
-                                <div class="col-4 d-flex justify-content-between">
-                                    ' . (isset($value[9][5]) && $value[9][5] ? "<b>Wardrobe:</b> " . $value[9][5] : "") . '
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4 d-flex justify-content-between">
-                                    ' . (isset($value[9][6]) && $value[9][6] ? "<b>Geyser:</b> " . $value[9][6] : "") . '
-                                </div>
-                                <div class="col-4 d-flex justify-content-between">
-                                    ' . (isset($value[9][7]) && $value[9][7] ? "<b>Sofa:</b> " . $value[9][7] : "") . '
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-6 d-flex justify-content-between">
-                                    ' . (isset($value[10][0]) && $value[10][0] ? "<b>Washing Machine:</b> <span>" . $value[10][0] . "</span>" : "") . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    ' . (isset($value[10][1]) && $value[10][1] ? "<b>Stove:</b> <span>" . $value[10][1] . "</span>" : "") . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    ' . (isset($value[10][2]) && $value[10][2] ? "<b>Fridge:</b> " . $value[10][2] : "") . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    ' . (isset($value[10][3]) && $value[10][3] ? "<b>Water Purifier:</b> " . $value[10][3] : "") . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    ' . (isset($value[10][4]) && $value[10][4] ? "<b>Microwave:</b> " . $value[10][4] : "") . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    ' . (isset($value[10][5]) && $value[10][5] ? "<b>Modular Kitchen:</b> " . $value[10][5] : "") . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    ' . (isset($value[10][6]) && $value[10][6] ? "<b>Chimney:</b> " . $value[10][6] : "") . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    ' . (isset($value[10][7]) && $value[10][7] ? "<b>Dinning Table:</b> " . $value[10][7] : "") . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    ' . (isset($value[10][8]) && $value[10][8] ? "<b>Curtains:</b> " . $value[10][8] : "") . '
-                                </div>
-                                <div class="col-6 d-flex justify-content-between">
-                                    ' . (isset($value[10][9]) && $value[10][9] ? "<b>Exhaust Fan:</b> " . $value[10][9] : "") . '
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>';
+                            </div>';
+                            } else if ($row->property_category !== '262' && $row->property_category !== '261' && $row->property_category !== '256') {
+                                $tooltipHtml = '<div class="dropdown-basic" style="position:relative; float:right;">
+                                            <div class="dropdown">
+                                                <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                                <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                                    <div class="row">
+                                                        <div class="col-4 d-flex justify-content-between">
+                                                            ' . (isset($value[9][0]) && $value[9][0] ? "<b>Light:</b> " . $value[9][0] : "") . '
+                                                        </div>
+                                                        <div class="col-4 d-flex justify-content-between">
+                                                            ' . (isset($value[9][1]) && $value[9][1] ? "<b>Fans:</b> " . $value[9][1] : "") . '
+                                                        </div>
+                                                        <div class="col-4 d-flex justify-content-between">
+                                                            ' . (isset($value[9][2]) && $value[9][2] ? "<b>AC:</b> " . $value[9][2] : "") . '
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-4 d-flex justify-content-between">
+                                                            ' . (isset($value[9][3]) && $value[9][3] ? "<b>TV:</b> " . $value[9][3] : "") . '
+                                                        </div>
+                                                        <div class="col-4 d-flex justify-content-between">
+                                                            ' . (isset($value[9][4]) && $value[9][4] ? "<b>Beds:</b> " . $value[9][4] : "") . '
+                                                        </div>
+                                                        <div class="col-4 d-flex justify-content-between">
+                                                            ' . (isset($value[9][5]) && $value[9][5] ? "<b>Wardrobe:</b> " . $value[9][5] : "") . '
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-4 d-flex justify-content-between">
+                                                            ' . (isset($value[9][6]) && $value[9][6] ? "<b>Geyser:</b> " . $value[9][6] : "") . '
+                                                        </div>
+                                                        <div class="col-4 d-flex justify-content-between">
+                                                            ' . (isset($value[9][7]) && $value[9][7] ? "<b>Sofa:</b> " . $value[9][7] : "") . '
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex justify-content-between">
+                                                            ' . (isset($value[10][0]) && $value[10][0] ? "<b>Washing Machine:</b> <span>" . $value[10][0] . "</span>" : "") . '
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-between">
+                                                            ' . (isset($value[10][1]) && $value[10][1] ? "<b>Stove:</b> <span>" . $value[10][1] . "</span>" : "") . '
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-between">
+                                                            ' . (isset($value[10][2]) && $value[10][2] ? "<b>Fridge:</b> " . $value[10][2] : "") . '
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-between">
+                                                            ' . (isset($value[10][3]) && $value[10][3] ? "<b>Water Purifier:</b> " . $value[10][3] : "") . '
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-between">
+                                                            ' . (isset($value[10][4]) && $value[10][4] ? "<b>Microwave:</b> " . $value[10][4] : "") . '
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-between">
+                                                            ' . (isset($value[10][5]) && $value[10][5] ? "<b>Modular Kitchen:</b> " . $value[10][5] : "") . '
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-between">
+                                                            ' . (isset($value[10][6]) && $value[10][6] ? "<b>Chimney:</b> " . $value[10][6] : "") . '
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-between">
+                                                            ' . (isset($value[10][7]) && $value[10][7] ? "<b>Dinning Table:</b> " . $value[10][7] : "") . '
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-between">
+                                                            ' . (isset($value[10][8]) && $value[10][8] ? "<b>Curtains:</b> " . $value[10][8] : "") . '
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-between">
+                                                            ' . (isset($value[10][9]) && $value[10][9] ? "<b>Exhaust Fan:</b> " . $value[10][9] : "") . '
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>';
+                            }
+                            else{
+                                $tooltipHtml = "";
+                            }
+                        }
 
-return '
+                        return '
     <td style="vertical-align:top">
         ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
         <font size="2" style="font-style:italic">
@@ -887,7 +925,6 @@ return '
         ' . $fstatus . '
         ' . $tooltipHtml . '
     </td>';
-
                     } catch (\Throwable $th) {
                         dd($th);
                     }
@@ -2570,7 +2607,7 @@ return '
         }
         // dd("con",$property->configuration);
 
-        //2nd
+        // matching view
         $unit_price =  str_replace(',', '', $unitDetails[0][4]);
         $sell_price = (int) str_replace(',', '', $unitDetails[0][3]);
         $both_price =  str_replace(',', '', $unitDetails[0][7]);
@@ -2578,94 +2615,94 @@ return '
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
             ->whereJsonContains('configuration', $property->configuration);
-            if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0) || ($unit_price !== "" && $unit_price !== 0  && $both_price !== '' && $both_price !== 0)) {
-                // dd("tt sell_price",$sell_price,"unit_price",$unit_price,"both_price",$both_price);
-                $enquiries = $enquiries->where(function ($q) use ($unit_price, $sell_price, $both_price) {
-                    $q->where(function ($subQuery) use ($unit_price) {
-                        $subQuery->where('budget_from', '<=', (float) $unit_price)
-                            ->where('budget_to', '>=', (float) $unit_price);
+        if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0) || ($unit_price !== "" && $unit_price !== 0  && $both_price !== '' && $both_price !== 0)) {
+            // dd("tt sell_price",$sell_price,"unit_price",$unit_price,"both_price",$both_price);
+            $enquiries = $enquiries->where(function ($q) use ($unit_price, $sell_price, $both_price) {
+                $q->where(function ($subQuery) use ($unit_price) {
+                    $subQuery->where('budget_from', '<=', (float) $unit_price)
+                        ->where('budget_to', '>=', (float) $unit_price);
+                })
+                    ->orWhere(function ($subQuery) use ($sell_price) {
+                        $subQuery->where('budget_from', '<=', $sell_price)
+                            ->where('budget_to', '>=', $sell_price);
                     })
-                        ->orWhere(function ($subQuery) use ($sell_price) {
-                            $subQuery->where('budget_from', '<=', $sell_price)
-                                ->where('budget_to', '>=', $sell_price);
-                        })
-                        ->orWhere(function ($subQuery) use ($both_price) {
+                    ->orWhere(function ($subQuery) use ($both_price) {
+                        $subQuery->where('budget_from', '<=', $both_price)
+                            ->where('budget_to', '>=', $both_price);
+                    });
+            });
+        } else {
+            // dd("sell_price",$sell_price,"unit_price",$unit_price,"property->survey_price",$property->survey_price,"both_price",$both_price);
+            $enquiries = $enquiries->when(
+                $unit_price !== "",
+                function ($query) use ($unit_price) {
+                    return $query->where('budget_from', '<=', $unit_price)
+                        ->where('budget_to', '>=', $unit_price);
+                },
+                function ($query) use ($property, $sell_price, $both_price) {
+                    return $query->when($property->survey_price !== 0.0, function ($query) use ($property) {
+                        // dd("property->survey_price dsf", $property->survey_price);
+                        return $query->where('budget_from', '<=', $property->survey_price)
+                            ->where('budget_to', '>=', $property->survey_price);
+                    })->orWhere(function ($subQuery) use ($sell_price) {
+                        // dd("sell",$sell_price);
+                        $subQuery->where('budget_from', '<=', $sell_price)
+                            ->where('budget_to', '>=', $sell_price);
+                    })->orWhere(function ($subQuery) use ($both_price) {
+                        $subQuery->when($both_price !== "", function ($subQuery) use ($both_price) {
+                            dd("both_price", $both_price);
                             $subQuery->where('budget_from', '<=', $both_price)
                                 ->where('budget_to', '>=', $both_price);
                         });
-                });
+                    });
+                }
+            );
+            // function ($query) use ($property, $sell_price, $both_price) {
+            //     return $query->where('budget_from', '<=', $property->survey_price)
+            //         ->where('budget_to', '>=', $property->survey_price)
+            //         ->orWhere(function ($subQuery) use ($sell_price) {
+            //             $subQuery->where('budget_from', '<=', $sell_price)
+            //                 ->where('budget_to', '>=', $sell_price);
+            //         })
+            //         ->orWhere(function ($subQuery) use ($both_price) {
+            //             $subQuery->where('budget_from', '<=', $both_price)
+            //                 ->where('budget_to', '>=', $both_price);
+            //         });
+            // });
+        }
+
+        $enquiries = $enquiries->when($area_size !== "", function ($query) use ($area_parts, $area_size, $area_size_int, $property) {
+            if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
+                return $query->where('area_from', '<=', $area_size)
+                    ->where('area_to', '>=', $area_size)
+                    ->where('area_from_measurement', $area_parts[1]);
             } else {
-                // dd("sell_price",$sell_price,"unit_price",$unit_price,"property->survey_price",$property->survey_price,"both_price",$both_price);
-                $enquiries = $enquiries->when(
-                    $unit_price !== "",
-                    function ($query) use ($unit_price) {
-                        return $query->where('budget_from', '<=', $unit_price)
-                            ->where('budget_to', '>=', $unit_price);
-                    },
-                    function ($query) use ($property, $sell_price, $both_price) {
-                        return $query->when($property->survey_price !== 0.0, function ($query) use ($property) {
-                            // dd("property->survey_price dsf", $property->survey_price);
-                            return $query->where('budget_from', '<=', $property->survey_price)
-                                ->where('budget_to', '>=', $property->survey_price);
-                        })->orWhere(function ($subQuery) use ($sell_price) {
-                            // dd("sell",$sell_price);
-                            $subQuery->where('budget_from', '<=', $sell_price)
-                                ->where('budget_to', '>=', $sell_price);
-                        })->orWhere(function ($subQuery) use ($both_price) {
-                            $subQuery->when($both_price !== "", function ($subQuery) use ($both_price) {
-                                // dd("both_price",$both_price);
-                                $subQuery->where('budget_from', '<=', $both_price)
-                                    ->where('budget_to', '>=', $both_price);
-                            });
-                        });
-                    }
-                );
-                // function ($query) use ($property, $sell_price, $both_price) {
-                //     return $query->where('budget_from', '<=', $property->survey_price)
-                //         ->where('budget_to', '>=', $property->survey_price)
-                //         ->orWhere(function ($subQuery) use ($sell_price) {
-                //             $subQuery->where('budget_from', '<=', $sell_price)
-                //                 ->where('budget_to', '>=', $sell_price);
-                //         })
-                //         ->orWhere(function ($subQuery) use ($both_price) {
-                //             $subQuery->where('budget_from', '<=', $both_price)
-                //                 ->where('budget_to', '>=', $both_price);
-                //         });
-                // });
+                return $query->where('area_from', '<=', $area_size_int)
+                    ->where('area_to', '>=', $area_size_int)
+                    ->where('area_from_measurement', $area_parts[1]);
             }
+        });
 
-            $enquiries = $enquiries->when($area_size !== "", function ($query) use ($area_parts, $area_size, $area_size_int, $property) {
-                if ($property->property_category !== "259" && $property->property_category !== "260" && $property->property_category !== "254") {
-                    return $query->where('area_from', '<=', $area_size)
-                        ->where('area_to', '>=', $area_size)
-                        ->where('area_from_measurement', $area_parts[1]);
-                } else {
-                    return $query->where('area_from', '<=', $area_size_int)
-                        ->where('area_to', '>=', $area_size_int)
-                        ->where('area_from_measurement', $area_parts[1]);
-                }
-            });
+        $enquiries = $enquiries->when($salable_plot_area !== "", function ($query) use ($property, $salable_plot_area, $salable_plot_area_part) {
+            // dd("property",$property->property_category);
+            if ($property->property_category !== '258' && $property->property_category !== '255') {
+                return $query->where('area_from', '<=', $salable_plot_area)
+                    ->where('area_to', '>=', $salable_plot_area)
+                    ->where('area_from_measurement', $salable_plot_area_part[1]);
+            } else if ($property->property_category === '255') {
+                return $query->where('area_from', '<=', (int) $salable_plot_area)
+                    ->where('area_to', '>=', (int) $salable_plot_area)
+                    ->where('area_from_measurement', $salable_plot_area_part[1]);
+            } else {
+                return $query;
+            }
+        });
 
-            $enquiries = $enquiries->when($salable_plot_area !== "", function ($query) use ($property, $salable_plot_area, $salable_plot_area_part) {
-                // dd("property",$property->property_category);
-                if ($property->property_category !== '258' && $property->property_category !== '255') {
-                    return $query->where('area_from', '<=', $salable_plot_area)
-                        ->where('area_to', '>=', $salable_plot_area)
-                        ->where('area_from_measurement', $salable_plot_area_part[1]);
-                } else if ($property->property_category === '255') {
-                    return $query->where('area_from', '<=', (int) $salable_plot_area)
-                        ->where('area_to', '>=', (int) $salable_plot_area)
-                        ->where('area_from_measurement', $salable_plot_area_part[1]);
-                } else {
-                    return $query;
-                }
-            });
-
-            $enquiries = $enquiries->when(($length_of_plot !== "" && $property->property_category !== '256' && $property->property_category !== null), function ($query) use ($length_of_plot, $length_of_plot_part) {
-                return $query->where('area_from', '<=', $length_of_plot)
-                    ->where('area_to', '>=', $length_of_plot)
-                    ->where('area_from_measurement', $length_of_plot_part[1]);
-            });
+        $enquiries = $enquiries->when(($length_of_plot !== "" && $property->property_category !== '256' && $property->property_category !== null), function ($query) use ($length_of_plot, $length_of_plot_part) {
+            return $query->where('area_from', '<=', $length_of_plot)
+                ->where('area_to', '>=', $length_of_plot)
+                ->where('area_from_measurement', $length_of_plot_part[1]);
+        });
 
         // Execute the query
         $enquiries = $enquiries->get();
@@ -2687,7 +2724,7 @@ return '
 
         $visits = QuickSiteVisit::with('Enquiry')->where('property_list', 'like', '%"' . $property->id . '"%')->whereNotNull('visit_status')->orderBy('id', 'DESC')->get();
 
-        $projects = Projects::all();
+        $projects = Projects::where('user_id', Auth::user()->id)->get();
         $areas = Areas::where('user_id', Auth::user()->id)->get();
         $shared = ShareProperty::where('property_id', $property->id)->get();
 
