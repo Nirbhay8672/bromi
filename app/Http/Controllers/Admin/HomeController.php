@@ -784,7 +784,17 @@ class HomeController extends Controller
             $user  = Auth::user();
             $transaction_goal = $request->transaction_goal;
             $planPrice = ($request->users_limit_price + $request->gst_amt);
+
+			$planDetails = Subplans::find($user->plan_id);
+
             $usersLimit = $request->users_limit;
+			$free_users = $planDetails->free_user;
+
+            $total_paid_users = $usersLimit - 1;
+
+            if( $free_users > 0 ) {
+                $total_paid_users = $usersLimit - $free_users;
+            }
 
             if (!empty($request->discounted_price)) {
                 $planPrice = $request->discounted_price;
@@ -829,6 +839,8 @@ class HomeController extends Controller
                     "discount" => "$discount",
                     "gst_amt" => "$request->gst_amt",
                     "gst_type" => "$request->gst_amt_type",
+					"free_users" => "$free_users",
+                    "paid_users" => "$total_paid_users",
                 ],
                 "order_meta" => [
                     "return_url" => route('admin.paymentSuccess') . '?order_id={order_id}&order_token={order_token}'
@@ -1086,8 +1098,10 @@ class HomeController extends Controller
                         'plan_type' => $orderTags['plan_type'],
                         'plan_expire_on' => $planExpiry,
                         'payment_id' => $paymentInDb->id,
-                        // 'total_user_limit' => $orderTags['user_limit'],
-                        'subscribed_on' => Carbon::now()->format('Y-m-d')
+                        'total_user_limit' => $orderTags['user_limit'],
+                        'subscribed_on' => Carbon::now()->format('Y-m-d'),
+						'total_free_user' => $orderTags['free_users'],
+                        'total_paid_user' => $orderTags['paid_users'],
                     ])->save();
 
                     $totalUserCreated = $user->total_user_created ?? 0;
