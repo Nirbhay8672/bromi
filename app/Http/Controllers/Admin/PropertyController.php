@@ -1152,9 +1152,11 @@ class PropertyController extends Controller
                         $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
                     }
                     $vvv = '';
+                    // dd("row",$row);
                     if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
                         $cd = json_decode($row->other_contact_details);
                         foreach ($cd as $key => $value) {
+                            // dd("value",$value);
                             if ($vvv == '') {
                                 $space = '';
                             } else {
@@ -1167,9 +1169,10 @@ class PropertyController extends Controller
                         //     $vvv = $vvv . '<br> ' . $row->care_taker_name . ' : ' . $row->care_taker_contact;
                         // }
                     }
+                    // dd("vvv",$vvv);
                     $contact_info = ($vvv != "") ? $vvv : ' ';
                     // $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
-                    $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : 'No Contacts') . '" data-bs-trigger="hover focus"></i>';
+                    $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
                     // $buttons =  $buttons . '<i title="Contacts"  data-bs-content="' . $contact_info . '" class="fa fs-22 py-2 mx-2 fa fa-phone-square fa-2x"></i><br>';
                     return $buttons;
                 })
