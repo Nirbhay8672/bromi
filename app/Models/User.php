@@ -76,8 +76,9 @@ class User extends Authenticatable
 		'is_verified',
 		'payment_id',
         'total_extra_users_added',
-        'total_user_created'
-
+        'total_user_created',
+        'total_free_user',
+        'total_paid_user',
 	];
 
 	/**
