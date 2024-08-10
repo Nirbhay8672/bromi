@@ -4936,16 +4936,21 @@
                     $("#owner_info_name_error").hide();
                     // allFieldsValid = true;
                 }
-
-                if ($("#owner_contact_specific_no").val().trim() === "") {
+                var contactNumber = $("#owner_contact_specific_no").val().trim();
+               if (contactNumber.length == 10) {
+                console.log('done');
                     $("#owner_contact_specific_no_error").hide();
-                    // allFieldsValid = false;
-
-                } else if(!/^\d{10}$/.test($("#owner_contact_specific_no").val().trim())) {
+                } else if( contactNumber !== "") {
+                    console.log('not null');
                     $("#owner_contact_specific_no_error").text("Contact number must be exactly 10 digits").show();
+                    // $("#owner_contact_specific_no_error").hide();
                     allFieldsValid = false;
-                    
+                }else if($("#owner_contact_specific_no").val().trim() === "") {
+                    console.log('nullnumber');
+                    $("#owner_contact_specific_no_error").hide();
+                    // allFieldsValid = true;
                 }
+                
 
                 if ($("#property_email").val().trim() === "") {
                     $("#property_email_error").hide();
