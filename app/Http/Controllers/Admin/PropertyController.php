@@ -778,153 +778,166 @@ class PropertyController extends Controller
                         $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Red-Star.png') . '" alt="">';
                     }
                     try {
-                        $data = [
-                            'Seats' => '-',
-                            'Cabins' => '-',
-                            'ConferenceRoom' => '-',
-                            'Pantry' => '-',
-                            'Reception' => '-',
-                            'Light' => '-',
-                            'Fans' => '-',
-                            'Ac' => '-',
-                            'Stove' => '-',
-                            'Fridge' => '-',
-                            'Tv' => '-',
-                            'Beds' => '-',
-                            'Wardobe' => '-',
-                            'Geyser' => '-',
-                            'Sofa' => '-',
-                            'WashingMachine' => '-',
-                            'WaterPurifier' => '-',
-                            'Microwave' => '-',
-                            'ModularKitchen' => '-',
-                            'Chimney' => '-',
-                            'DinningTable' => '-',
-                            'Curtains' => '-',
-                            'ExhaustFan' => '-'
-                        ];
-                        // dd(json_decode($row->unit_details));
                         $value = json_decode($row->unit_details)[0];
                         $tooltipHtml = "";
                         if ($fstatus === 'Furnished' || $fstatus === 'Semi Furnished' || $fstatus === 'Can Furnished') {
-                            if ($row->property_category == '259') //ofice
+                            if ($row->property_category == '259') // Office
                             {
-                                // dd("value[10][0]", $value[10][0]);
                                 $tooltipHtml = '<div class="dropdown-basic" style="position:relative; float:right;">
-                                <div class="dropdown">
-                                    <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                                    <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                                        <div class="row">
-                                            <div class="col-4 d-flex justify-content-between">
-                                                ' . (isset($value[9][0]) && $value[9][0] ? "<b>Seats:</b> " . $value[9][0] : "") . '
-                                            </div>
-                                            <div class="col-4 d-flex justify-content-between">
-                                                ' . (isset($value[9][1]) && $value[9][1] ? "<b>Cabins:</b> " . $value[9][1] : "") . '
-                                            </div>
-                                            <div class="col-4 d-flex justify-content-between">
-                                                ' . (isset($value[9][2]) && $value[9][2] ? "<b>Conference Room:</b> " . $value[9][2] : "") . '
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row">
-                                            <div class="col-6 d-flex justify-content-between">
-                                              ' . (isset($value[10][0]) ? "<b>Pantry:</b> <span>" . ($value[10][0] == 1 ? 'Yes' : 'No') . "</span>" : "") . '
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between">
-                                            ' . (isset($value[10][1]) ? "<b>Reception:</b> <span>" . ($value[10][1] == 1 ? 'Yes' : 'No') . "</span>" : "") . '
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>';
+                                                <div class="dropdown">
+                                                    <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                                    <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                                        <div class="row">';
+
+                                // Check if value[9][0] is not empty
+                                if (isset($value[9][0]) && $value[9][0] !== "0") {
+                                    $tooltipHtml .= '<div class="col-4 d-flex justify-content-between">
+                                                        <b>Seats:</b> ' . $value[9][0] . '
+                                                     </div>';
+                                }
+
+                                // Continue with other conditions
+                                $tooltipHtml .= (isset($value[9][1]) && $value[9][1] !== "0") ?
+                                    '<div class="col-4 d-flex justify-content-between">
+                                                    <b>Cabins:</b> ' . $value[9][1] . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[9][2]) && $value[9][2] !== "0") ?
+                                    '<div class="col-4 d-flex justify-content-between">
+                                                    <b>Conference Room:</b> ' . $value[9][2] . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= '</div><hr><div class="row">';
+
+                                $tooltipHtml .= (isset($value[10][0]) && $value[10][0] !== "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                                    <b>Pantry:</b> <span>' . ($value[10][0] == 1 ? 'Yes' : 'No') . '</span>
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[10][1]) && $value[10][1] !== "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                                    <b>Reception:</b> <span>' . ($value[10][1] == 1 ? 'Yes' : 'No') . '</span>
+                                                 </div>' : '';
+
+                                $tooltipHtml .= '</div></div></div></div>';
                             } else if ($row->property_category !== '262' && $row->property_category !== '261' && $row->property_category !== '256') {
                                 $tooltipHtml = '<div class="dropdown-basic" style="position:relative; float:right;">
-                                            <div class="dropdown">
-                                                <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                                                <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                                                    <div class="row">
-                                                        <div class="col-4 d-flex justify-content-between">
-                                                            ' . (isset($value[9][0]) && $value[9][0] ? "<b>Light:</b> " . $value[9][0] : "") . '
-                                                        </div>
-                                                        <div class="col-4 d-flex justify-content-between">
-                                                            ' . (isset($value[9][1]) && $value[9][1] ? "<b>Fans:</b> " . $value[9][1] : "") . '
-                                                        </div>
-                                                        <div class="col-4 d-flex justify-content-between">
-                                                            ' . (isset($value[9][2]) && $value[9][2] ? "<b>AC:</b> " . $value[9][2] : "") . '
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4 d-flex justify-content-between">
-                                                            ' . (isset($value[9][3]) && $value[9][3] ? "<b>TV:</b> " . $value[9][3] : "") . '
-                                                        </div>
-                                                        <div class="col-4 d-flex justify-content-between">
-                                                            ' . (isset($value[9][4]) && $value[9][4] ? "<b>Beds:</b> " . $value[9][4] : "") . '
-                                                        </div>
-                                                        <div class="col-4 d-flex justify-content-between">
-                                                            ' . (isset($value[9][5]) && $value[9][5] ? "<b>Wardrobe:</b> " . $value[9][5] : "") . '
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-4 d-flex justify-content-between">
-                                                            ' . (isset($value[9][6]) && $value[9][6] ? "<b>Geyser:</b> " . $value[9][6] : "") . '
-                                                        </div>
-                                                        <div class="col-4 d-flex justify-content-between">
-                                                            ' . (isset($value[9][7]) && $value[9][7] ? "<b>Sofa:</b> " . $value[9][7] : "") . '
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="row">
-                                                        <div class="col-6 d-flex justify-content-between">
-                                                            ' . (isset($value[10][0]) && $value[10][0] ? "<b>Washing Machine:</b> <span>" . $value[10][0] . "</span>" : "") . '
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-between">
-                                                            ' . (isset($value[10][1]) && $value[10][1] ? "<b>Stove:</b> <span>" . $value[10][1] . "</span>" : "") . '
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-between">
-                                                            ' . (isset($value[10][2]) && $value[10][2] ? "<b>Fridge:</b> " . $value[10][2] : "") . '
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-between">
-                                                            ' . (isset($value[10][3]) && $value[10][3] ? "<b>Water Purifier:</b> " . $value[10][3] : "") . '
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-between">
-                                                            ' . (isset($value[10][4]) && $value[10][4] ? "<b>Microwave:</b> " . $value[10][4] : "") . '
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-between">
-                                                            ' . (isset($value[10][5]) && $value[10][5] ? "<b>Modular Kitchen:</b> " . $value[10][5] : "") . '
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-between">
-                                                            ' . (isset($value[10][6]) && $value[10][6] ? "<b>Chimney:</b> " . $value[10][6] : "") . '
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-between">
-                                                            ' . (isset($value[10][7]) && $value[10][7] ? "<b>Dinning Table:</b> " . $value[10][7] : "") . '
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-between">
-                                                            ' . (isset($value[10][8]) && $value[10][8] ? "<b>Curtains:</b> " . $value[10][8] : "") . '
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-between">
-                                                            ' . (isset($value[10][9]) && $value[10][9] ? "<b>Exhaust Fan:</b> " . $value[10][9] : "") . '
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>';
-                            }
-                            else{
+                                                <div class="dropdown">
+                                                    <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                                    <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                                        <div class="row">';
+
+                                $tooltipHtml .= (isset($value[9][0]) && $value[9][0] != "0") ?
+                                    '<div class="col-4 d-flex justify-content-between">
+                                                    <b>Light:</b> ' . $value[9][0] . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[9][1]) && $value[9][1] != "0") ?
+                                    '<div class="col-4 d-flex justify-content-between">
+                                                    <b>Fans:</b> ' . $value[9][1] . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[9][2]) && $value[9][2] != "0") ?
+                                    '<div class="col-4 d-flex justify-content-between">
+                                                    <b>AC:</b> ' . $value[9][2] . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= '</div><div class="row">';
+
+                                $tooltipHtml .= (isset($value[9][3]) && $value[9][3] != "0") ?
+                                    '<div class="col-4 d-flex justify-content-between">
+                                                    <b>TV:</b> ' . $value[9][3] . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[9][4]) && $value[9][4] != "0") ?
+                                    '<div class="col-4 d-flex justify-content-between">
+                                                    <b>Beds:</b> ' . $value[9][4] . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[9][5]) && $value[9][5] != "0") ?
+                                    '<div class="col-4 d-flex justify-content-between">
+                                                    <b>Wardrobe:</b> ' . $value[9][5] . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= '</div><div class="row">';
+
+                                $tooltipHtml .= (isset($value[9][6]) && $value[9][6] != "0") ?
+                                    '<div class="col-4 d-flex justify-content-between">
+                                                    <b>Geyser:</b> ' . $value[9][6] . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[9][7]) && $value[9][7] != "0") ?
+                                    '<div class="col-4 d-flex justify-content-between">
+                                                    <b>Sofa:</b> ' . $value[9][7] . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= '</div><hr><div class="row">';
+
+                                $tooltipHtml .= (isset($value[10][0]) && $value[10][0] != "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                    <b>Washing Machine:</b> <span>' . ($value[10][0] == '1' ? 'Yes' : 'No') . '</span>
+                                </div>' : '';
+                                $tooltipHtml .= (isset($value[10][1]) && $value[10][1] != "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                        <b>Stove:</b> <span>'  . ($value[10][1] == '1' ? 'Yes' : 'No') . '</span>
+                                        </div>' : '';
+
+                                $tooltipHtml .= (isset($value[10][2]) && $value[10][2] != "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                                    <b>Fridge:</b> ' . ($value[10][2] == '1' ? 'Yes' : 'No') . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[10][3]) && $value[10][3] != "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                                    <b>Water Purifier:</b> ' . ($value[10][3] == '1' ? 'Yes' : 'No') . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[10][4]) && $value[10][4] != "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                                    <b>Microwave:</b> ' . ($value[10][4] == '1' ? 'Yes' : 'No') . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[10][5]) && $value[10][5] != "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                                    <b>Modular Kitchen:</b> ' . ($value[10][5] == '1' ? 'Yes' : 'No') . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[10][6]) && $value[10][6] != "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                                    <b>Chimney:</b> ' . ($value[10][6] == '1' ? 'Yes' : 'No') . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[10][7]) && $value[10][7] != "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                                    <b>Dining Table:</b> ' . ($value[10][7] == '1' ? 'Yes' : 'No') . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[10][8]) && $value[10][8] != "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                                    <b>Curtains:</b> ' . ($value[10][8] == '1' ? 'Yes' : 'No') . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= (isset($value[10][9]) && $value[10][9] != "0") ?
+                                    '<div class="col-6 d-flex justify-content-between">
+                                                    <b>Exhaust Fan:</b> ' . ($value[10][9] == '1' ? 'Yes' : 'No') . '
+                                                 </div>' : '';
+
+                                $tooltipHtml .= '</div></div></div></div>';
+                            } else {
                                 $tooltipHtml = "";
                             }
                         }
-
                         return '
-    <td style="vertical-align:top">
-        ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
-        <font size="2" style="font-style:italic">
-        <br>
-        ' . $salable_area_print . '
-        </font>
-        <br>' . $row->image_path . '
-        ' . $fstatus . '
-        ' . $tooltipHtml . '
-    </td>';
+                        <td style="vertical-align:top">
+                            ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
+                            <font size="2" style="font-style:italic">
+                            <br>
+                            ' . $salable_area_print . '
+                            </font>
+                            <br>' . $row->image_path . '
+                            ' . $fstatus . '
+                            ' . $tooltipHtml . '
+                        </td>';
                     } catch (\Throwable $th) {
                         dd($th);
                     }
@@ -1152,28 +1165,35 @@ class PropertyController extends Controller
                         $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
                     }
                     $vvv = '';
-                    // dd("row",$row);
                     if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
                         $cd = json_decode($row->other_contact_details);
                         foreach ($cd as $key => $value) {
-                            // dd("value",$value);
-                            if ($vvv == '') {
-                                $space = '';
-                            } else {
-                                $space = '<br> ';
-                            }
-                            // $vvv = $vvv . $space . $value[0] . ' : ' . $value[1];
-                            $vvv = $vvv . $space . $value[1];
+                            $space = $vvv == '' ? '' : '<br> ';
+
+                            $other_name = $value[0];
+                            $other_position = $value[3];
+                            $contact = $value[1];
+                            $vvv .= $space . $other_name . ' - ' . $other_position . ' - ' . $contact;
                         }
-                        // if ($vvv) {
-                        //     $vvv = $vvv . '<br> ' . $row->care_taker_name . ' : ' . $row->care_taker_contact;
-                        // }
                     }
-                    // dd("vvv",$vvv);
+                    $owner_type = '';
+                    if ($row->owner_is == '111') {
+                        $owner_type = 'Individual';
+                    } elseif ($row->owner_is == '112') {
+                        $owner_type = 'Investor';
+                    } elseif ($row->owner_is == '110') {
+                        $owner_type = 'Builder';
+                    }
+
+                    $other_details = $owner_type . ' - ' . $row->owner_name . ' - ' . $row->owner_contact;
                     $contact_info = ($vvv != "") ? $vvv : ' ';
                     // $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
-                    $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
-                    // $buttons =  $buttons . '<i title="Contacts"  data-bs-content="' . $contact_info . '" class="fa fs-22 py-2 mx-2 fa fa-phone-square fa-2x"></i><br>';
+                    // $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
+                    $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body" data-bs-content="'
+                        . ($other_details  != ' ' ? $other_details  : '')
+                        . ($other_details  != ' ' && $contact_info ? '<br>' : '')
+                        . ($contact_info ? $contact_info : '')
+                        . '" data-bs-trigger="hover focus"></i>';
                     return $buttons;
                 })
                 ->rawColumns(['select_checkbox', 'project_id', 'unit_details', 'updated_at', 'property_category', 'contact_details', 'price', 'Actions2', 'status_change'])
