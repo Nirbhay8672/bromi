@@ -66,7 +66,7 @@
 											<form action="{{route('admin.savePlan')}}" method="post">
 												@csrf
 												@if ($t_goal = Session::get('transaction_goal'))
-                                                    <input type="hidden" name="transaction_goal", value={{ $t_goal ?? 'new_subscription' }}>
+                                                    <input type="hidden" name="transaction_goal" value={{ $t_goal ?? 'new_subscription' }}>
                                                 @endif
                                                 
 												<input type="hidden" name="plan_id" value="{{ $plan->id }}">
