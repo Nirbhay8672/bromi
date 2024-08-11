@@ -795,7 +795,8 @@ class HomeController extends Controller
             if( $free_users > 0 ) {
                 $total_paid_users = $usersLimit - $free_users;
             }
-
+            $couponCode = null;
+            $discount = 0;
             if (!empty($request->discounted_price)) {
                 $planPrice = $request->discounted_price;
                 $couponCode = $request->coupon_code;
@@ -873,7 +874,7 @@ class HomeController extends Controller
             //throw $th;
             // dd($th);
             Session::put('message', $th->getMessage());
-            return redirect()->route('admin.plans');
+            return redirect()->route('admin.profile.details');
         }
     }
 	
