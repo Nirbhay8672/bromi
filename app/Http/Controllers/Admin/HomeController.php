@@ -881,17 +881,32 @@ class HomeController extends Controller
 	public function plan_save(Request $request)
     {
         try {
-            $transaction_goal = Session::get('transaction_goal') ?? 'new_subscription';;
+            $transaction_goal = Session::get('transaction_goal') ?? 'new_subscription';
+
             $planDetails = Subplans::find($request->plan_id);
-            if (!$planDetails) {
+            
+			if (!$planDetails) {
                 Session::put('message', 'Invalid Plan.');
                 return redirect('/admin');
             }
+
             $user  = Auth::user();
+
             $usersLimit = $planDetails->user_limit ?? 1;
+            $free_users = $planDetails->free_user;
+
+            $total_paid_users = $usersLimit - 1;
+
+            if( $free_users > 0 ) {
+                $total_paid_users = $usersLimit - $free_users;
+            }
+
             $amountToPay = $planDetails->price;
+
             $couponCode = null;
+
             $discount = 0;
+
             if (!empty($request->discounted_price)) {
                 $amountToPay = $request->discounted_price;
                 $couponCode = $request->coupon_code;
@@ -927,7 +942,7 @@ class HomeController extends Controller
                 "order_tags" => [
                     "plan_id" => "$planDetails->id",
                     "plan_type" => "$planDetails->plan_type",
-                    "user_limit" => "$usersLimit",
+                    "user_limit" => "$planDetails->user_limit",
                     "user_id" => "$user->id",
                     "transaction_goal" => "$transaction_goal",
                     "couponCode" => "$couponCode",
@@ -935,6 +950,8 @@ class HomeController extends Controller
                     "discount" => "$discount",
                     "gst_amt" => "$request->gst_amt",
                     "gst_type" => "$request->gst_amt_type",
+					"free_users" => "$free_users",
+                    "paid_users" => "$total_paid_users",
                 ],
                 "order_meta" => [
                     "return_url" => route('admin.paymentSuccess') . '?order_id={order_id}&order_token={order_token}'
@@ -1104,17 +1121,6 @@ class HomeController extends Controller
 						'total_free_user' => $orderTags['free_users'],
                         'total_paid_user' => $orderTags['paid_users'],
                     ])->save();
-
-                    $totalUserCreated = $user->total_user_created ?? 0;
-                    $extraUsers = $user->total_extra_users_added ?? 0;
-    
-                    $totalUserLimit = $user->total_user_limit + $extraUsers ;
-                    $totalUserLimit = $totalUserLimit - $totalUserCreated ;
-    
-                    $totalUserLimit = $totalUserLimit + $orderTags['user_limit'];
-                    $user->fill([
-                        'total_user_limit' => $totalUserLimit,
-                    ])->save();
                     
                 } else {
                     // add more users template
@@ -1122,7 +1128,6 @@ class HomeController extends Controller
                     $freeUsersAdded = $user->total_free_user ?? 0;
                     $totalPaidUsers = $user->total_paid_user ?? 0;
                     $user->fill([
-                        'total_extra_users_added' => $extraUsers + $orderTags['user_limit'],
                         'total_free_user' => $freeUsersAdded + $orderTags['user_limit'],
                         'total_paid_user' => $totalPaidUsers - $orderTags['user_limit'],
                     ])->save();

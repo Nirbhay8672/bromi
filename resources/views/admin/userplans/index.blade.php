@@ -68,13 +68,14 @@
 												@if ($t_goal = Session::get('transaction_goal'))
                                                     <input type="hidden" name="transaction_goal", value={{ $t_goal ?? 'new_subscription' }}>
                                                 @endif
-												<input type="hidden" name="plan_id" value="{{$plan->id}}">
+                                                
+												<input type="hidden" name="plan_id" value="{{ $plan->id }}">
 
                                                 <?php
+
                                                 $gstType = Auth::user()->state->gst_type; // gst_type
                                                 $gst = $plan->price * 0.18;
                                                 ?>
-
 
                                                     @if($current_plan['id'] == $plan->id)
 
@@ -86,7 +87,6 @@
                                                             >Active Plan</button>
                                                         @else
                                                        
-
                                                             <button
                                                                 class="btn btn-primary btn-lg"
                                                                 type="button"

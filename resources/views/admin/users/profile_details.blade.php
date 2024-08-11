@@ -199,12 +199,14 @@
                                         </div>
                                         
                                         @if (Auth::user()->role_id == 1)
-                                            <div class="userpro-box" style="margin-top:10px;background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
+                                            <div class="userpro-box" style="margin-top:100px;background-color: #e8e9ec !important;border:1px solid black;border-radius:5px;">
+
+                                                @if(Auth::user()->total_paid_user > 0 )
                                                 <div class="">
                                                     <p class="mb-0">
-                                                        <strong>Add More Users</strong>
+                                                        <h3>Add More Users</h3>
                                                         
-                                                        <p><small>(Per User Price: <span id="perUserPrice">{{$user->Plan->extra_user_price ?? '0' }}</span>/-)</small></p>
+                                                        <p><strong>( Per User Price: <span id="perUserPrice">{{$user->Plan->extra_user_price ?? '0' }}</span>/- )</strong></p>
                                                         @if (empty($user->Plan->extra_user_price))
                                                             <p class="m-0 text-danger" style="font-size:10px;">Extra user price not available.</p>
                                                         @endif
@@ -217,7 +219,7 @@
                                                 </fieldset>
 
                                                 <form id="userLimitForm" action="{{route('admin.increaseUserLimit')}}" method="post">
-                                                    <p class="price-section mt-2 mb-0"> 
+                                                    <p class="price-section mt-4 mb-0"> 
                                                         <strong>Total: <input type="text" id="usersLimitPrice" name="users_limit_price" readonly class="total-price" value="0"></strong>
                                                     </p>
                                                     @csrf
@@ -233,7 +235,7 @@
                                                     <input type="hidden" name="discounted_price" value="" class="form-control mt-2" id="discounted_price">
                                                     <input type="hidden" name="discount" value="" class="form-control mt-2" id="discount">
                                                     <button style="display: none;"
-                                                        class="btn btn-primary btn-lg pay-now"
+                                                        class="btn btn-primary btn-lg pay-now mt-5"
                                                         id="pay-now-btn" 
                                                         type="button"
                                                         data-bs-toggle="modal"
@@ -248,6 +250,16 @@
                                                     >Continue</button>
                                                     
                                                 </form>
+
+                                                @else
+
+                                                    <strong>No more paid user please purchase plan</strong>
+
+                                                    <div class="pricing-list mt-3">
+                                                        <a href="{{ route('admin.plans') }}" class="btn btn-secondary mt-2 " style="border-radius: 5px;">Purchase Plan</a>
+                                                    </div>
+                                                    
+                                                @endif
                                             </div>
                                         @endif
                                     </div>
