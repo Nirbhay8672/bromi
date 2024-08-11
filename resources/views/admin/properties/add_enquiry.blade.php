@@ -116,7 +116,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                       {{--  <div class="form-group col-md-3 m-b-20">
+                                                        {{--  <div class="form-group col-md-3 m-b-20">
                                                             <div class="fname">
                                                                 <label for="Email">Email</label>
                                                                 <input class="form-control" name="client_email"
@@ -1083,110 +1083,68 @@
             }
 
 
-/**************************************/
-function validateMobileNumber(field, errorField, invalidErrorMessage) {
-    var value = $(field).val().trim();
-    var isValidMobileNumber = /^\d{10}$/.test(value);
-    var hasNonDigits = /[^0-9]/.test(value);
-    
-    if (value !== '') {
-        if (hasNonDigits || value.length < 10) {
-            $(errorField).text(invalidErrorMessage);
-        } else {
-            $(errorField).text('');
-        }
-    } else {
-        $(errorField).text('');
-    }
+            /**************************************/
+            function validateMobileNumber(field, errorField, invalidErrorMessage) {
+                var value = $(field).val().trim();
+                var isValidMobileNumber = /^\d{10}$/.test(value);
+                var hasNonDigits = /[^0-9]/.test(value);
 
-    $(field).toggleClass('is-invalid', hasNonDigits || value.length > 10);
-    return value === '' || isValidMobileNumber;
-}
+                if (value !== '') {
+                    if (hasNonDigits || value.length < 10) {
+                        $(errorField).text(invalidErrorMessage);
+                    } else {
+                        $(errorField).text('');
+                    }
+                } else {
+                    $(errorField).text('');
+                }
 
-function validateEmail(field, errorField, invalidFormatMessage) {
-    var value = $(field).val().trim();
-    var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+                $(field).toggleClass('is-invalid', hasNonDigits || value.length > 10);
 
-    if (value !== '' && !isValidEmail) {
-        $(errorField).text(invalidFormatMessage);
-    } else {
-        $(errorField).text('');
-    }
-
-    $(field).toggleClass('is-invalid', value !== '' && !isValidEmail);
-    return value === '' || isValidEmail;
-}
-
-function validateForm() {
-    var isValid = true;
-    isValid = validateField('#client_name', '#client_name_error', 'Client name field is required') && isValid;
-    isValid = validateMobileNumber('#client_mobile', '#client_mobile_error', 'Invalid mobile number format') && isValid;
-    isValid = validateEmail('#client_email', '#client_email_error', 'Invalid email format') && isValid;
-    return isValid;
-}
-/******************************************/
-
-
-            // function validateMobileNumber(field, errorField, requiredErrorMessage, invalidErrorMessage) {
+                return value === '' || isValidMobileNumber;
+            }
+            // function validateMobileNumber(field, errorField, invalidErrorMessage) {
             //     var value = $(field).val().trim();
             //     var isValidMobileNumber = /^\d{10}$/.test(value);
+            //     var hasNonDigits = /[^0-9]/.test(value);
 
-            //     if (value === '') {
-            //         $(errorField).text(requiredErrorMessage);
-            //     } else if (!isValidMobileNumber) {
-            //         $(errorField).text(invalidErrorMessage);
+            //     if (value !== '') {
+            //         if (hasNonDigits || value.length < 10) {
+            //             $(errorField).text(invalidErrorMessage);
+            //         } else {
+            //             $(errorField).text('');
+            //         }
             //     } else {
             //         $(errorField).text('');
             //     }
 
-            //     $(field).toggleClass('is-invalid', value === '' || !isValidMobileNumber);
-            //     return value !== '' && isValidMobileNumber;
+            //     $(field).toggleClass('is-invalid', hasNonDigits || value.length > 10);
+            //     return value === '' || isValidMobileNumber;
             // }
 
-            // function validateOtherMobileNumber(field, errorField, invalidErrorMessage) {
-            //     var value = $(field).val().trim();
-            //     var isValidMobileNumber = /^\d{10}$/.test(value);
-            //     console.log("isValidMobileNumber =", isValidMobileNumber);
+            function validateEmail(field, errorField, invalidFormatMessage) {
+                var value = $(field).val().trim();
+                var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-            //     if (!isValidMobileNumber && value !== '') {
-            //         console.log("entered ==");
-            //         $(errorField).text(invalidErrorMessage);
-            //     } else {
-            //         console.log("not entered ==");
-            //         $(errorField).text('');
-            //     }
+                if (value !== '' && !isValidEmail) {
+                    $(errorField).text(invalidFormatMessage);
+                } else {
+                    $(errorField).text('');
+                }
 
-            //     $(field).toggleClass('is-invalid', !isValidMobileNumber && value !== '');
-            //     return isValidMobileNumber || value === '';
-            // }
+                $(field).toggleClass('is-invalid', value !== '' && !isValidEmail);
+                return value === '' || isValidEmail;
+            }
 
-            // function validateEmail(field, errorField, requiredMessage, invalidFormatMessage) {
-            //     var value = $(field).val().trim();
-            //     var isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-            //     if (value === '') {
-            //         $(errorField).text(requiredMessage);
-            //     } else if (!isValidEmail) {
-            //         $(errorField).text(invalidFormatMessage);
-            //     } else {
-            //         $(errorField).text('');
-            //     }
-
-            //     $(field).toggleClass('is-invalid', value === '' || !isValidEmail);
-            //     return value !== '' && isValidEmail;
-            // }
-
+            function validateForm() {
+                var isValid = true;
+                isValid = validateField('#client_name', '#client_name_error', 'Client name field is required') && isValid;
+                isValid = validateMobileNumber('#client_mobile', '#client_mobile_error', 'Invalid mobile number format') &&
+                    isValid;
+                isValid = validateEmail('#client_email', '#client_email_error', 'Invalid email format') && isValid;
+                return isValid;
+            }
            
-            // function validateForm() {
-            //     isValid = true;
-            //     isValid = validateField('#client_name', '#client_name_error', 'client name field is required') && isValid;
-            //     isValid = validateMobileNumber('#client_mobile', '#client_mobile_error', 'Client mobile field is required',
-            //         'Invalid mobile number format') && isValid;
-            //     // isValid = validateField('#client_email', '#client_email_error', 'client email field is required') && isValid;
-            //     isValid = validateEmail('#client_email', '#client_email_error', 'Client email field is required',
-            //         'Invalid email format') && isValid;
-            //     return isValid;
-            // }
 
             function validateNumericField(field, errorField, errorMessage) {
                 var value = $(field).val().trim();
@@ -2391,6 +2349,7 @@ function validateForm() {
             $(document).on('click', '#saveEnquiry', function(e) {
 
                 var contact_details = [];
+                var isValid = true;
                 $("#all_contacts [name=contact_person_name]").each(function(index) {
                     cona_arr = []
                     unique_id = $(this).closest('.form-group').attr('data-contact_id');
@@ -2400,15 +2359,15 @@ function validateForm() {
                         .val();
                     nri = $("[data-contact_id=" + unique_id + "] input[name=contact_nri]").prop('checked')
 
-                    // let isContactNumberValid = validateMobileNumber("[data-contact_id=" + unique_id + "] input[name=contact_person_no]", "#contact_person_no_error" + unique_id, "Number field is required", "Invalid mobile number format");
-                    // isValid = isContactNumberValid && isValid;
-                    if (no) {
-                        let isContactNumberValid = validateOtherMobileNumber(
-                            "[data-contact_id=" + unique_id + "] input[name=contact_person_no]",
-                            "#contact_person_no_error" + unique_id,
-                            "Invalid mobile number format"
-                        );
-                        isValid = isContactNumberValid && isValid;
+                    var isContactNumberValid = validateMobileNumber(
+                        "[data-contact_id=" + unique_id + "] input[name=contact_person_no]",
+                        "#contact_person_no_error" + unique_id,
+                        "Invalid mobile number format"
+                    );
+
+                    // Update isValid only if the current field is invalid
+                    if (!isContactNumberValid) {
+                        isValid = false;
                     }
 
                     cona_arr.push(name)
@@ -2420,6 +2379,9 @@ function validateForm() {
                         contact_details.push(cona_arr);
                     }
                 });
+                if (!isValid) {
+                    e.preventDefault(); // Prevent form submission if validation fails
+                }
                 contact_details = JSON.stringify(contact_details);
                 //bharat add subcategory done
                 var configuration = '';
@@ -2625,11 +2587,11 @@ function validateForm() {
                 if (theFor == 'Both') {
                     $(".both-price").show();
                     $('.enq_budget').hide();
-                } else if(theFor == 'Rent') {
+                } else if (theFor == 'Rent') {
                     $(".both-price").hide();
                     $('.enq_budget').show();
                     $(".enq-purpose").hide();
-                } else{
+                } else {
                     $(".both-price").hide();
                     $('.enq_budget').show();
                     $(".enq-purpose").show();
