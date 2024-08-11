@@ -806,32 +806,7 @@
                                                                 style="display: none;color:red;"></div>
                                                         </div>
 
-                                                        <div class="col-md-4 the_constructed_carpet_area">
-                                                            <div class="input-group">
-                                                                <div class="form-group col-md-7 m-b-20">
-                                                                    <label for="Constructed Carpet Area">Constructed Carpet
-                                                                        Area</label>
-                                                                    <input class="form-control"
-                                                                        name="constructed_carpet_area"
-                                                                        id="constructed_carpet_area" type="text"
-                                                                        autocomplete="off">
-                                                                </div>
-
-                                                                <div class="input-group-append col-md-5 m-b-20">
-                                                                    <div class="form-group form_measurement">
-                                                                        <select
-                                                                            class="form-select measure_select measure_square"
-                                                                            id="constructed_carpet_area_measurement">
-                                                                            @foreach ($land_units as $land_unit)
-                                                                                <option value="{{ $land_unit->id }}"
-                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
-                                                                                    {{ $land_unit->unit_name }}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                       
 
                                                         <div class="col-md-3 the_carpet_plot_area" >
                                                             <div class="input-group">
@@ -856,6 +831,33 @@
                                                                     </div>
                                                                 </div>
 
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-4 the_constructed_carpet_area">
+                                                            <div class="input-group">
+                                                                <div class="form-group col-md-7 m-b-20">
+                                                                    <label for="Constructed Carpet Area">Constructed Carpet
+                                                                        Area</label>
+                                                                    <input class="form-control"
+                                                                        name="constructed_carpet_area"
+                                                                        id="constructed_carpet_area" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="constructed_carpet_area_measurement">
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -3814,7 +3816,7 @@
                         'the_furnished_status', 'the_two_wheller_Parking', 'div_road_width', 'cl-locality',
                         'div_care_taker', 'div_document_section',
                     ];
-                    addAddAreaButtons(['the_carpet_plot_area', 'the_constructed_carpet_area'], ['Add Carpet plot Area',
+                    addAddAreaButtons(['the_carpet_plot_area'], ['Add Carpet plot Area',
                         // 'Add Constructed Carpet Area'
                     ]);
                 } else if (category_type == 'Land') {
