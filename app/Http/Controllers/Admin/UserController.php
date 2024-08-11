@@ -170,6 +170,12 @@ class UserController extends Controller
 			}
 		} else {
 			$data =  new User();
+
+			$user = User::find(Auth::user()->id);
+
+			$user->fill([
+				'total_free_user' => $user->total_free_user - 1, 
+			])->save();
 		}
 		if (!empty($request->password)) {
 			$data->password = Hash::make($request->password);

@@ -34,7 +34,7 @@
                                     </a>
                                 @else
                                     <a
-                                        class="btn ms-3 custom-icon-theme-button tooltip-btn"
+                                        class="btn custom-icon-theme-button tooltip-btn"
                                         href="{{ route('admin.profile.details') }}"
                                         data-tooltip="Upgrade Plan Or Add Users"
                                     ><i class="fa fa-wrench"></i></a>
