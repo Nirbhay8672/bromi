@@ -1118,8 +1118,10 @@ class HomeController extends Controller
                 } else {
                     // add more users template
                     $extraUsers = $user->total_extra_users_added ?? 0;
+                    $freeUsersAdded = $user->total_free_user ?? 0;
                     $user->fill([
                         'total_extra_users_added' => $extraUsers + $orderTags['user_limit'],
+                        'total_free_user' => $freeUsersAdded + $orderTags['user_limit'],
                     ])->save();
                     $paymentInDb->update(['extra_users_added' => $orderTags['user_limit']]);
                 }
