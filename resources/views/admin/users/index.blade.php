@@ -35,8 +35,8 @@
                                 @else
                                     <a
                                         class="btn ms-3 custom-icon-theme-button tooltip-btn"
-                                        href="{{ route('admin.plans') }}"
-                                        data-tooltip="Upgrade Plan"
+                                        href="{{ route('admin.profile.details') }}"
+                                        data-tooltip="Upgrade Plan Or Add Users"
                                     ><i class="fa fa-wrench"></i></a>
                                     <strong class="ms-3 text-danger">You have exceeded your user limit</strong>
                                 @endif
