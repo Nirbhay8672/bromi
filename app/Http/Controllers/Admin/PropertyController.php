@@ -492,52 +492,52 @@ class PropertyController extends Controller
                             // }
 
                             // Property price & unit_price
-if ($request->match_budget_from_type) {
-    $budgetFrom = str_replace(',', '', $enq->budget_from);
-    $budgetTo = str_replace(',', '', $enq->budget_to);
-    $rentPrice = str_replace(',', '', $enq->rent_price);
-    $sellPrice = str_replace(',', '', $enq->sell_price);
+                            if ($request->match_budget_from_type) {
+                                $budgetFrom = str_replace(',', '', $enq->budget_from);
+                                $budgetTo = str_replace(',', '', $enq->budget_to);
+                                $rentPrice = str_replace(',', '', $enq->rent_price);
+                                $sellPrice = str_replace(',', '', $enq->sell_price);
 
-    if ($budgetFrom !== "" && $budgetTo !== "" && $enq->enquiry_for !== "Both") {
-        $query->where(function ($query) use ($budgetFrom, $budgetTo, $enq) {
-            $query->where(function ($query) use ($budgetFrom, $budgetTo) {
-                $query->where('properties.survey_price', '>=', $budgetFrom)
-                    ->where('properties.survey_price', '<=', $budgetTo);
-            })->orWhere(function ($query) use ($budgetFrom, $budgetTo, $enq) {
-                // Rent type properties
-                if ($enq->enquiry_for == 'Rent') {
-                    $query->where(function ($query) use ($budgetFrom, $budgetTo) {
-                        for ($i = 0; $i < 2; $i++) { // assuming maximum 2 arrays to check
-                            $query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-                                  ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-                        }
-                    });
-                }
-            })->orWhere(function ($query) use ($budgetFrom, $budgetTo, $enq) {
-                if ($enq->enquiry_for == 'Buy') {
-                    $query->where(function ($query) use ($budgetFrom, $budgetTo) {
-                        for ($i = 0; $i < 2; $i++) {
-                            $query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-                                  ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-                        }
-                    });
-                }
-            })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-                $query->where(function ($query) use ($budgetFrom, $budgetTo) {
-                    for ($i = 0; $i < 2; $i++) {
-                        $query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-                              ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-                    }
-                });
-            });
-        });
-    } else {
-        $query->where(function ($query) use ($rentPrice, $sellPrice) {
-            $query->where('properties.survey_price', '>=', $rentPrice)
-                ->where('properties.survey_price', '<=', $sellPrice);
-        });
-    }
-}
+                                if ($budgetFrom !== "" && $budgetTo !== "" && $enq->enquiry_for !== "Both") {
+                                    $query->where(function ($query) use ($budgetFrom, $budgetTo, $enq) {
+                                        $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                                            $query->where('properties.survey_price', '>=', $budgetFrom)
+                                                ->where('properties.survey_price', '<=', $budgetTo);
+                                        })->orWhere(function ($query) use ($budgetFrom, $budgetTo, $enq) {
+                                            // Rent type properties
+                                            if ($enq->enquiry_for == 'Rent') {
+                                                $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                                                    for ($i = 0; $i < 2; $i++) { // assuming maximum 2 arrays to check
+                                                        $query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+                                                            ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+                                                    }
+                                                });
+                                            }
+                                        })->orWhere(function ($query) use ($budgetFrom, $budgetTo, $enq) {
+                                            if ($enq->enquiry_for == 'Buy') {
+                                                $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                                                    for ($i = 0; $i < 2; $i++) {
+                                                        $query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+                                                            ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+                                                    }
+                                                });
+                                            }
+                                        })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+                                            $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                                                for ($i = 0; $i < 2; $i++) {
+                                                    $query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+                                                        ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+                                                }
+                                            });
+                                        });
+                                    });
+                                } else {
+                                    $query->where(function ($query) use ($rentPrice, $sellPrice) {
+                                        $query->where('properties.survey_price', '>=', $rentPrice)
+                                            ->where('properties.survey_price', '<=', $sellPrice);
+                                    });
+                                }
+                            }
 
 
                             // size
@@ -867,7 +867,7 @@ if ($request->match_budget_from_type) {
                                                  </div>' : '';
 
                                 $tooltipHtml .= '</div></div></div></div>';
-                            } else if ($row->property_category !== '262' && $row->property_category !== '261' && $row->property_category !== '256') {
+                            } else if ($row->property_category !== '260' && $row->property_category !== '262' && $row->property_category !== '261' && $row->property_category !== '256') {
                                 $tooltipHtml = '<div class="dropdown-basic" style="position:relative; float:right;">
                                                 <div class="dropdown">
                                                     <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
@@ -970,6 +970,18 @@ if ($request->match_budget_from_type) {
                                                  </div>' : '';
 
                                 $tooltipHtml .= '</div></div></div></div>';
+                            } else if ($row->property_category == '260') {
+                                $tooltipHtml = '<div class="dropdown-basic" style="position:relative; float:right;">
+                                <div class="dropdown">
+                                    <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                    <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                        <div class="row">';
+                                $tooltipHtml .= (isset($value[9][0]) && $value[9][0] != "0") ?
+                                    '<div class="col-12 d-flex justify-content-between">
+                                    <b>Remarks:</b> ' . $value[9][0] . '
+                                 </div>' : '';
+
+                                 $tooltipHtml .= '</div></div></div></div>';
                             } else {
                                 $tooltipHtml = "";
                             }
