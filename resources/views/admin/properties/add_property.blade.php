@@ -4942,7 +4942,6 @@
                 }
                 var contactNumber = $("#owner_contact_specific_no").val().trim();
                if (contactNumber.length == 10) {
-                console.log('done');
                     $("#owner_contact_specific_no_error").hide();
                 } else if( contactNumber !== "") {
                     console.log('not null');
@@ -4982,6 +4981,7 @@
                     return
                 } else {
                     console.log("success run :", allFieldsValid);
+                    $(this).prop('disabled', true);                    
                 }
 
                 // save property

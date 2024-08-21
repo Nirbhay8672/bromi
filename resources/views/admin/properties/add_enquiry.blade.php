@@ -2425,6 +2425,7 @@
                     return
                 } else {
                     console.log("true redirect :", isValid);
+                    $(this).prop('disabled', true);
                 }
                 var id = $('#this_data_id').val()
                 $.ajax({
