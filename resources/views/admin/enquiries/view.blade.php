@@ -624,15 +624,15 @@
                                                                     }
                                                                 }
                                                                 @endphp
-                                                                <td>{{ $price }}</td>
+                                                                <td>₹ {{ $price }}</td>
 
                                                                     <td>
                                                                         @if ($value->Property_priority == "91")
-                                                                            High
+                                                                            Low
                                                                         @elseif ($value->Property_priority == "90")
                                                                             Medium
                                                                         @elseif ($value->Property_priority == "17")
-                                                                            Low
+                                                                            High
                                                                         @endif
                                                                     </td><td>{{ \Carbon\Carbon::parse($value->updated_at)->format('d-m-Y') }}
                                                                     </td>
