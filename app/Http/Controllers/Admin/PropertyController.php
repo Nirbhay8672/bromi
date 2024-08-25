@@ -972,17 +972,22 @@ class PropertyController extends Controller
                                 $tooltipHtml .= '</div></div></div></div>';
                             } else if ($row->property_category == '260') {
                                 $tooltipHtml = '<div class="dropdown-basic" style="position:relative; float:right;">
-                                <div class="dropdown">
-                                    <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
-                                    <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
-                                        <div class="row">';
+                                    <div class="dropdown">
+                                        <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
+                                        <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
+                                            <div class="row">';
+                                
                                 $tooltipHtml .= (isset($value[9][0]) && $value[9][0] != "0") ?
-                                    '<div class="col-12 d-flex justify-content-between">
-                                    <b>Remarks:</b> ' . $value[9][0] . '
-                                 </div>' : '';
-
-                                 $tooltipHtml .= '</div></div></div></div>';
-                            } else {
+                                    '<div class="col-12">
+                                        <b class="m-2">Remarks:</b>
+                                        <span class="short-text">' . substr($value[9][0], 0, 100) . '...</span>
+                                        <span class="full-text d-none">' . $value[9][0] . '</span>
+                                        <a href="#" class="read-more-link">Read More</a>
+                                    </div>' : '';
+                            
+                                $tooltipHtml .= '</div></div></div></div>';
+                            }
+                            else {
                                 $tooltipHtml = "";
                             }
                         }
