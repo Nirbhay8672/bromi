@@ -1316,22 +1316,26 @@ use Illuminate\Support\Facades\DB;
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                            @elseif ($type == 'Retail')
+                                                                                                @elseif ($type == 'Retail')
                                                                                                 <div class="dropdown-basic">
                                                                                                     <div class="dropdown">
                                                                                                         <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
                                                                                                         <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
                                                                                                             <div class="row">
                                                                                                                 @if(isset($value[9][0]) && $value[9][0] != '0' && $value[9][0] != '')
-                                                                                                                <div class="col-12 d-flex justify-content-between">
-                                                                                                                    <b>Remarks:</b> {{ $value[9][0] }}
+                                                                                                                <div class="col-12">
+                                                                                                                    <b>Remarks :</b>
+                                                                                                                    <span class="short-text">{{ Str::limit($value[9][0], 100) }}...</span>
+                                                                                                                    <span class="full-text d-none">{{ $value[9][0] }}</span>
+                                                                                                                    <a href="#" class="read-more-link">Read More</a>
                                                                                                                 </div>
                                                                                                                 @endif
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
+                                                                                                </div>
                                                                                                 @endif
-                                                                                            @endisset
+                                                                                                @endisset
                                                                                             @endif
                                                                                             </div>
                                                                                         </td>
@@ -2498,12 +2502,10 @@ use Illuminate\Support\Facades\DB;
                                                                             @if ($type === "Vila/Bunglow" || $type === "Farmhouse" || $type === 'Penthouse' || 
                                                                             $type === "Retail" || $type === "Flat" || $type === "Farmhouse" || $type === "Office")
                                                                             <td>
-                                                                                {{-- @dd("off 0",$type) --}}
 																				<div class="d-flex">
 																					<div class="me-2">
 																						{{ isset($value[8]) ? (isset($dropdowns[$value[8]]['name']) ? $dropdowns[$value[8]]['name'] : '-') : '-' }}
 																					</div>
-																					 <!--new code-->
 																				@if (!empty($dropdowns[$value[8]]['name']) &&( $dropdowns[$value[8]]['name'] !== 'Unfurnished'))
                                                                                 @isset($value[9])
                                                                                 @if ($type == 'Office')
@@ -2668,22 +2670,28 @@ use Illuminate\Support\Facades\DB;
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                @elseif ($type == 'Retail')
+                                                                                    @elseif ($type == 'Retail')
                                                                                     <div class="dropdown-basic">
                                                                                         <div class="dropdown">
                                                                                             <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
                                                                                             <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
                                                                                                 <div class="row">
                                                                                                     @if(isset($value[9][0]) && $value[9][0] != '0' && $value[9][0] != '')
-                                                                                                    <div class="col-12 d-flex justify-content-between">
-                                                                                                        <b>Remarks:</b> {{ $value[9][0] }}
+                                                                                                    <div class="col-12">
+                                                                                                        <b>Remarks :</b>
+                                                                                                        <span class="short-text">{{ Str::limit($value[9][0], 100) }}...</span>
+                                                                                                        <span class="full-text d-none">{{ $value[9][0] }}</span>
+                                                                                                        <a href="#" class="read-more-link">Read More</a>
                                                                                                     </div>
                                                                                                     @endif
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
+                                                                                    </div>
                                                                                     @endif
-                                                                                @endisset
+                                                                                    @endisset
+                                                                                    
+
 																				@endif
 																				</div>
 																			</td>
@@ -3516,6 +3524,27 @@ use Illuminate\Support\Facades\DB;
     @push('scripts')
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.3/dist/js/bootstrap.bundle.min.js"></script> --}}
     <script>
+    $(document).ready(function() {
+        $(document).on('click', '.read-more-link', function(e) {
+            e.preventDefault();
+            
+            var $this = $(this);
+            var $shortText = $this.siblings('.short-text');
+            var $fullText = $this.siblings('.full-text');
+console.log("read click");
+
+            if ($shortText.is(':visible')) {
+                $shortText.addClass('d-none');
+                $fullText.removeClass('d-none');
+                $this.text('Read Less');
+            } else {
+                $shortText.removeClass('d-none');
+                $fullText.addClass('d-none');
+                $this.text('Read More');
+            }
+        });
+    });
+
          function removeImage(element) {
             var imageId = element.getAttribute('data-image-id');
             var slideElement = element.closest('.slide');
