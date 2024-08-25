@@ -856,6 +856,26 @@
     @endsection
     @push('scripts')
         <script>
+            $(document).on('click', '.read-more-link', function(e) {
+                e.preventDefault();
+                console.log("read more ==");
+
+
+                var $this = $(this);
+                var $shortText = $this.siblings('.short-text');
+                var $fullText = $this.siblings('.full-text');
+
+                if ($shortText.is(':visible')) {
+                    $shortText.addClass('d-none');
+                    $fullText.removeClass('d-none');
+                    $this.text('Read Less');
+                } else {
+                    $shortText.removeClass('d-none');
+                    $fullText.addClass('d-none');
+                    $this.text('Read More');
+                }
+            });
+
             $(document).ready(function() {
                 // Check or uncheck checkboxes based on PHP variables
                 $('#match_enquiry_for').prop('checked', <?= $matchEnquiryFor === '1' ? 'true' : 'false' ?>);
