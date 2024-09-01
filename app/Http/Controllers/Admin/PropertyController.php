@@ -1331,45 +1331,59 @@ class PropertyController extends Controller
     }
 
     public function generateAreaUnitDetails($row, $type, $land_units)
-    {
-        $area = '';
-        $measure = '';
-        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
-            $area = explode('_-||-_', $row->salable_area)[0];
-            $measure = explode('_-||-_', $row->salable_area)[1];
-        } elseif ($type == 'Storage/industrial') {
-            $area = explode('_-||-_', $row->salable_plot_area)[0];
-            $measure = explode('_-||-_', $row->salable_plot_area)[1];
-        } elseif ($type == 'Vila/Bunglow') {
-            $salable = explode('_-||-_', $row->salable_plot_area)[0];
-            $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
-            $measure = explode('_-||-_', $row->constructed_salable_area)[1];
-            if (empty($salable)) {
-                $salable = '';
-            }
-            // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-            $area = "P:" . $salable . ' - C: ' . $constructed;
-        } elseif ($type == 'Farmhouse') {
-            $area = explode('_-||-_', $row->salable_plot_area)[0];
-            $measure = explode('_-||-_', $row->salable_plot_area)[1];
-        }
+	{
+		$area = '';
+		$measure = '';
+		if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+			$area = explode('_-||-_', $row->salable_area)[0];
+			$measure = explode('_-||-_', $row->salable_area)[1];
+		} elseif ($type == 'Storage/industrial') {
+			$area = explode('_-||-_', $row->salable_plot_area)[0];
+			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+			$measure = explode('_-||-_', $row->salable_plot_area)[1];
+			if (empty($salable)) {
+				$salable = '';
+			}
+			$res = $area ? "P:" . $area : "";
+			if ($res) {
+				$constructed = $constructed ? " - C: " . $constructed : "";
+			} else {
+				$constructed = $constructed ? " C: " . $constructed : "";
+			}
+			$area = $res . $constructed;
+		} elseif ($type == 'Vila/Bunglow') {
+			$salable = explode('_-||-_', $row->salable_plot_area)[0];
+			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+			$measure = explode('_-||-_', $row->constructed_salable_area)[1];
+			if (empty($salable)) {
+				$salable = '';
+			}
+			$res = $salable ? "P:" . $salable : "";
+			if ($res) {
+				$constructed = $constructed ? " - C: " . $constructed : "";
+			} else {
+				$constructed = $constructed ? " C: " . $constructed : "";
+			}
+			$area = $res . $constructed;
+		} elseif ($type == 'Farmhouse') {
+			$area = explode('_-||-_', $row->salable_plot_area)[0];
+			$measure = explode('_-||-_', $row->salable_plot_area)[1];
+		}
+		$unit_name = '';
+		foreach ($land_units as $unit) {
+			if ($unit->id == $measure) {
+				$unit_name = $unit->unit_name;
+				break;
+			}
+		}
 
-        // Find the land unit name corresponding to the measure
-        $unit_name = '';
-        foreach ($land_units as $unit) {
-            if ($unit->id == $measure) {
-                $unit_name = $unit->unit_name;
-                break;
-            }
-        }
-
-        if (!empty($area) && !empty($unit_name)) {
-            $formattedArea = $area . ' ' . $unit_name;
-            return $formattedArea;
-        } else {
-            return "Area Not Available";
-        }
-    }
+		if (!empty($area) && !empty($unit_name)) {
+			$formattedArea = $area . ' ' . $unit_name;
+			return $formattedArea;
+		} else {
+			return "Area Not Available";
+		}
+	}
 
     public function sendRequest(Request $request)
     {

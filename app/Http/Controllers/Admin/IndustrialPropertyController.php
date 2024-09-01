@@ -181,14 +181,6 @@ class IndustrialPropertyController extends Controller
 
 					return '';
 				})
-				// ->editColumn('area_id', function ($row) {
-				// 	if (isset($row->Locality->name)) {
-				// 		return $row->Locality->name;
-				// 	}
-				// })
-				// ->editColumn('property_for', function ($row) use ($dropdowns) {
-				// 	return $row->property_for;
-				// })
 				->editColumn('property_for', function ($row) use ($dropdowns, $land_units) {
 					// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
 					$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk', 'Plotting', 'Test', 'testw');
@@ -202,12 +194,7 @@ class IndustrialPropertyController extends Controller
 
 					if (!is_null($row->configuration)) {
 						$catId = (int) $row->configuration;
-						// dd("cat id :",$catId);
-						//$getsub_category = Helper::getsubcategory($catId);
 						$getsub_category = $new_array[$catId];
-						// dd($getsub_category);
-
-						// dd($catId,$getsub_category);
 						if (!is_null($getsub_category)) {
 							$sub_cat = ' | ' . $getsub_category;
 							if ($sub_cat == " | Agricultural/Farm Land") {
@@ -215,10 +202,7 @@ class IndustrialPropertyController extends Controller
 							}
 						}
 					}
-					//$category = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | '. $dropdowns[$row->property_category]['name'] : '');
 					$category = $sub_cat;
-					// BHARAT HIDE FURNISHED
-					// dd($row->property_category,"fr");
 					if ($row->property_category == '256') {
 						$fstatus = '';
 					} else {
@@ -260,22 +244,6 @@ class IndustrialPropertyController extends Controller
 					}
 				})
 
-				// ->editColumn('configuration', function ($row) use ($dropdowns) {
-				// 	$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk', 'test', 'Plotting');
-				// 	$sub_cat = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | ' . $dropdowns[$row->property_category]['name'] : '');
-				// 	if (!is_null($row->configuration)) {
-				// 		$catId = (int)$row->configuration;
-				// 		$getsub_category = $new_array[$catId];
-				// 		if (!is_null($getsub_category)) {
-				// 			$sub_cat = '  ' . $getsub_category;
-				// 			if ($sub_cat == " | Agricultural/Farm Land") {
-				// 				$sub_cat = " | Agricultural";
-				// 			}
-				// 		}
-				// 	}
-				// 	$category = $sub_cat;
-				// 	return $category;
-				// })
 				->editColumn('unit_details', function ($row) {
 					// dd($row->property_for);
 					$all_units = [];
@@ -361,66 +329,66 @@ class IndustrialPropertyController extends Controller
 					return $detail;
 				})
 				->editColumn('price', function ($row) {
-                    //$all_units = [];
-                    $all_units = [];
-                    // dd($row->unit_details,"price",$row->property_for);
-                    if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
-                        $vv = json_decode($row->unit_details);
-                        // dd($vv,"price");
-                        $all_units_length = count($all_units);
-                        //price
-                        foreach ($vv as $key => $value) {
-                            $price = '';
-                            if ($row->property_for === 'Both') {
-                                if (!empty($value['7']) && !empty($value['4'])) {
-                                    $price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['7'];
-                                } elseif (!empty($value['3']) && !empty($value['4'])) {
-                                    $price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['3'];
-                                }
-                            } else {
-                                if (!empty($value['7'])) {
-                                    $price = ' ₹ ' . $value['7'];
-                                } else if (!empty($value['4'])) {
-                                    $price = ' ₹ ' . $value['4'];
-                                } else if (!empty($value['3'])) {
-                                    $price = ' ₹ ' . $value['3'];
-                                }
-                            }
-                            $data = [];
-                            $data[0] = $value[0];
-                            $data[1] = $value[1];
-                            $data[2] = $price;
-                            array_push($all_units, $data);
-                        }
-                    }
-                    // dd("all2",$all_units);
+					//$all_units = [];
+					$all_units = [];
+					// dd($row->unit_details,"price",$row->property_for);
+					if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+						$vv = json_decode($row->unit_details);
+						// dd($vv,"price");
+						$all_units_length = count($all_units);
+						//price
+						foreach ($vv as $key => $value) {
+							$price = '';
+							if ($row->property_for === 'Both') {
+								if (!empty($value['7']) && !empty($value['4'])) {
+									$price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['7'];
+								} elseif (!empty($value['3']) && !empty($value['4'])) {
+									$price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['3'];
+								}
+							} else {
+								if (!empty($value['7'])) {
+									$price = ' ₹ ' . $value['7'];
+								} else if (!empty($value['4'])) {
+									$price = ' ₹ ' . $value['4'];
+								} else if (!empty($value['3'])) {
+									$price = ' ₹ ' . $value['3'];
+								}
+							}
+							$data = [];
+							$data[0] = $value[0];
+							$data[1] = $value[1];
+							$data[2] = $price;
+							array_push($all_units, $data);
+						}
+					}
+					// dd("all2",$all_units);
 
-                    if (!empty($all_units)) {
-                        $vvv = '';
-                        $unit_wing = '';
-                        // foreach ($all_units as $key => $value) {
-                        //     $vvv = $vvv .  ((!empty($value[2])) ? $value[2] . ' ' : ''); // . ((!empty($value[1])) ? $value[1] : '');
-                        // }
+					if (!empty($all_units)) {
+						$vvv = '';
+						$unit_wing = '';
+						// foreach ($all_units as $key => $value) {
+						//     $vvv = $vvv .  ((!empty($value[2])) ? $value[2] . ' ' : ''); // . ((!empty($value[1])) ? $value[1] : '');
+						// }
 
-                        // return $vvv;
-                        $all_units_length = count($all_units);
-                        if ($all_units_length > 2) {
-                            foreach ($all_units as $key => $value) {
-                                $vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
-                                $vvv = $vvv . ' - ' . ((!empty($value[2])) ? $value[2] : '');
-                            }
-                            $second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2] : '') . ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $unit_wing . $vvv . '" data-bs-trigger="hover focus"></i>';
-                            // $second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
-                            return $second;
-                        } else {
-                            foreach ($all_units as $key => $value) {
-                                $vvv = $vvv . ((!empty($value[2])) ? $value[2] . '<br>' : '');
-                            }
-                            return $vvv;
-                        }
-                    }
-                    return;
-                })
+						// return $vvv;
+						$all_units_length = count($all_units);
+						if ($all_units_length > 2) {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
+								$vvv = $vvv . ' - ' . ((!empty($value[2])) ? $value[2] : '');
+							}
+							$second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2] : '') . ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $unit_wing . $vvv . '" data-bs-trigger="hover focus"></i>';
+							// $second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
+							return $second;
+						} else {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv . ((!empty($value[2])) ? $value[2] . '<br>' : '');
+							}
+							return $vvv;
+						}
+					}
+					return;
+				})
 				->addColumn('actions', function ($row) use ($land_units) {
 					$buttons = '';
 					$building_name = '';
@@ -483,29 +451,29 @@ class IndustrialPropertyController extends Controller
 							}
 						}
 					}
-					
-                    $owner_type = '';
-                    if ($row->owner_is == '111') {
-                        $owner_type = 'Individual';
-                    } elseif ($row->owner_is == '112') {
-                        $owner_type = 'Investor';
-                    } elseif ($row->owner_is == '110') {
-                        $owner_type = 'Builder';
-                    }
 
-					if($row->owner_contact){
+					$owner_type = '';
+					if ($row->owner_is == '111') {
+						$owner_type = 'Individual';
+					} elseif ($row->owner_is == '112') {
+						$owner_type = 'Investor';
+					} elseif ($row->owner_is == '110') {
+						$owner_type = 'Builder';
+					}
+
+					if ($row->owner_contact) {
 						$other_details = $owner_type . ' - ' . $row->owner_name . ' - ' . $row->owner_contact;
 					}
 					$other_details = "";
-                    $contact_info = ($vvv != "") ? $vvv : ' ';
-                    // $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
-                    // $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
-                    $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body" data-bs-content="'
-                        . ($other_details  != ' ' ? $other_details  : '')
-                        . ($other_details  != ' ' && $contact_info ? '<br>' : '')
-                        . ($contact_info ? $contact_info : '')
-                        . '" data-bs-trigger="hover focus"></i>';
-                    return $buttons;
+					$contact_info = ($vvv != "") ? $vvv : ' ';
+					// $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
+					// $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
+					$buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body" data-bs-content="'
+						. ($other_details  != ' ' ? $other_details  : '')
+						. ($other_details  != ' ' && $contact_info ? '<br>' : '')
+						. ($contact_info ? $contact_info : '')
+						. '" data-bs-trigger="hover focus"></i>';
+					return $buttons;
 				})
 				->rawColumns(['project_id', 'contact_details', 'price', 'property_for', 'unit_details', 'actions', 'select_checkbox'])
 				->make(true);
@@ -561,7 +529,13 @@ class IndustrialPropertyController extends Controller
 			if (empty($salable)) {
 				$salable = '';
 			}
-			$area = "P:" . $area . ' - C: ' . $constructed;
+			$res = $area ? "P:" . $area : "";
+			if ($res) {
+				$constructed = $constructed ? " - C: " . $constructed : "";
+			} else {
+				$constructed = $constructed ? " C: " . $constructed : "";
+			}
+			$area = $res . $constructed;
 		} elseif ($type == 'Vila/Bunglow') {
 			$salable = explode('_-||-_', $row->salable_plot_area)[0];
 			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
@@ -569,14 +543,17 @@ class IndustrialPropertyController extends Controller
 			if (empty($salable)) {
 				$salable = '';
 			}
-			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-			$area = "P:" . $salable . ' - C: ' . $constructed;
+			$res = $salable ? "P:" . $salable : "";
+			if ($res) {
+				$constructed = $constructed ? " - C: " . $constructed : "";
+			} else {
+				$constructed = $constructed ? " C: " . $constructed : "";
+			}
+			$area = $res . $constructed;
 		} elseif ($type == 'Farmhouse') {
 			$area = explode('_-||-_', $row->salable_plot_area)[0];
 			$measure = explode('_-||-_', $row->salable_plot_area)[1];
 		}
-
-		// Find the land unit name corresponding to the measure
 		$unit_name = '';
 		foreach ($land_units as $unit) {
 			if ($unit->id == $measure) {
@@ -592,47 +569,6 @@ class IndustrialPropertyController extends Controller
 			return "Area Not Available";
 		}
 	}
-
-	// 	public function generateAreaUnitDetails($row, $type, $land_units)
-	//     {
-	//         $area = '';
-	//         $measure = '';
-	//         if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
-	//             $area = explode('_-||-_', $row->salable_area)[0];
-	//             $measure = explode('_-||-_', $row->salable_area)[1];
-	//         } elseif ($type == 'Storage/industrial') {
-	//             $area = explode('_-||-_', $row->salable_plot_area)[0];
-	//             $measure = explode('_-||-_', $row->salable_plot_area)[1];
-	//         } elseif ($type == 'Vila/Bunglow') {
-	//             $salable = explode('_-||-_', $row->salable_plot_area)[0];
-	//             $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
-	//             $measure = explode('_-||-_', $row->constructed_salable_area)[1];
-	//             if (empty($salable)) {
-	//                 $salable = '';
-	//             }
-	//             // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-	//             $area = "P:" . $salable . ' - C: ' . $constructed;
-	//         } elseif ($type == 'Farmhouse') {
-	//             $area = explode('_-||-_', $row->salable_plot_area)[0];
-	//             $measure = explode('_-||-_', $row->salable_plot_area)[1];
-	//         }
-
-	//         // Find the land unit name corresponding to the measure
-	//         $unit_name = '';
-	//         foreach ($land_units as $unit) {
-	//             if ($unit->id == $measure) {
-	//                 $unit_name = $unit->unit_name;
-	//                 break;
-	//             }
-	//         }
-
-	//         if (!empty($area) && !empty($unit_name)) {
-	//             $formattedArea = $area . ' ' . $unit_name;
-	//             return $formattedArea;
-	//         } else {
-	//             return "Area Not Available";
-	//         }
-	//     }
 
 	public function generateAreaDetails($row, $type, $dropdowns)
 	{
