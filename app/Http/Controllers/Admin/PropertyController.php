@@ -1266,7 +1266,10 @@ class PropertyController extends Controller
                 ->rawColumns(['select_checkbox', 'project_id', 'unit_details', 'updated_at', 'property_category', 'contact_details', 'price', 'Actions2', 'status_change'])
                 ->make(true);
         }
-        $projects = Projects::whereNotNull('project_name')->where('id', '!=', 261)->get();
+        $projects = Projects::whereNotNull('project_name')
+        ->where('id', '!=', 261)
+        ->where('user_id', Auth::user()->id)
+        ->get();
         $areas = Areas::where('user_id', Auth::user()->id)->get();
         $conatcts_numbers = [];
         $contacts = Enquiries::get();

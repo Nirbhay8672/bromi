@@ -498,7 +498,7 @@ class IndustrialPropertyController extends Controller
 				}
 			}
 		}
-		$projects = Projects::orderBy('project_name')->get();
+		$projects = Projects::orderBy('project_name')->where('user_id', Auth::user()->id)->get();
 		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$cities = City::orderBy('name')->get();
 		$states = State::orderBy('name')->get();
