@@ -40,10 +40,10 @@ class IndustrialPropertyController extends Controller
 			$land_units = LandUnit::all();
 			$dropdownsarr = [];
 			$enq = '';
-            if (!empty($request->search_enq)) {
-                $enq = Enquiries::find($request->search_enq);
-            }
-			
+			if (!empty($request->search_enq)) {
+				$enq = Enquiries::find($request->search_enq);
+			}
+
 			foreach ($dropdowns as $key => $value) {
 				$dropdownsarr[$value['id']] = $value;
 			}
@@ -55,97 +55,97 @@ class IndustrialPropertyController extends Controller
 				}
 			}
 			$data = Properties::with('Projects', 'Locality')->where('property_category', $indId)
-			->when($request->filter_building_id, function ($query) use ($request) {
-				return $query->whereIn('properties.project_id', ($request->filter_building_id));
-			})
-			->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
-				// dd($request->filter_property_type,"...",Auth::user()->property_type);
-				return $query->where(function ($query) use ($request) {
-					$query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
-				});
-			})
-			->when($request->filter_specific_type && empty(Auth::user()->property_category), function ($query) use ($request) {
-				// dd($request->filter_specific_type,"...",Auth::user()->property_category);
-				return $query->where(function ($query) use ($request) {
-					$query->where('properties.property_category', $request->filter_specific_type);
-				});
-			})
-			->when($request->filter_configuration && empty(Auth::user()->configuration), function ($query) use ($request) {
-				// dd($request->filter_configuration,"...",Auth::user()->configuration);
-				return $query->where(function ($query) use ($request) {
-					$query->where('properties.configuration', $request->filter_configuration);
-				});
-			})
-			// ->when(($request->filter_area_id), function ($query) use ($request) {
-			// 	// dd($request->filter_area_id);
-			// 	return $query->whereIn('projects.area_id', '3812');
-			// })
-			->when(($request->filter_area_id), function ($query) use ($request) {
-				// Assuming $request->filter_area_id is a string
-				return $query->where('projects.area_id', '3812');
-			})
-			
-			->when($request->filter_source_of_property && empty(Auth::user()->source_of_property), function ($query) use ($request) {
-				// dd($request->filter_source_of_property,"...",Auth::user()->source_of_property);
-				return $query->where(function ($query) use ($request) {
-					$query->where('properties.source_of_property', $request->filter_source_of_property);
-				});
-			})
-			->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
-				if (!empty($enq)) {
-					// property for
-					if ($request->match_enquiry_for) {
-						$property_for = ($enq->enquiry_for == 'Buy') ? 'Sell' : $enq->enquiry_for;
-						// dd("match_enquiry_for", $enq->enquiry_for, "..", $property_for);
-						// dd($request->all(), $enq);
-						$query->where('properties.property_for', $property_for);
-					}
-					//requirement ytpe
-					if ($request->match_property_type && !empty($enq->requirement_type)) {
-						// dd("match_property_type", $enq->requirement_type, "..", $request->match_property_type);
-						$query->where('properties.property_type', $enq->requirement_type);
-					}
-					//property category
-					if ($request->match_specific_type && !empty($enq->property_type)) {
-						// dd("match_specific_type", $enq->property_type, "..", $request->match_specific_type);
-						$query->where('properties.property_category', $enq->property_type);
-					}
-					// property Sub Category
-					if ($request->match_specific_sub_type && !empty($enq->configuration)) {
-						// dd("match_specific_sub_type", $enq->configuration, "..", $request->match_specific_sub_type);
-						$query->where('properties.configuration', json_decode($enq->configuration));
-					}
-					//property price & unit_price
-					if ($request->match_budget_from_type) {
-						// dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
-						$budgetFrom = str_replace(',', '', $enq->budget_from);
-						$budgetTo = str_replace(',', '', $enq->budget_to);
-						$query->where(function ($query) use ($budgetFrom, $budgetTo) {
-							$query->where(function ($query) use ($budgetFrom, $budgetTo) {
-								$query->where('properties.survey_price', '>=', $budgetFrom)
-									->where('properties.survey_price', '<=', $budgetTo);
-							})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-								$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-									->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-							})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-								$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-									->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-							});
-						});
-					}
+				->when($request->filter_building_id, function ($query) use ($request) {
+					return $query->whereIn('properties.project_id', ($request->filter_building_id));
+				})
+				->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
+					// dd($request->filter_property_type,"...",Auth::user()->property_type);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
+					});
+				})
+				->when($request->filter_specific_type && empty(Auth::user()->property_category), function ($query) use ($request) {
+					// dd($request->filter_specific_type,"...",Auth::user()->property_category);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.property_category', $request->filter_specific_type);
+					});
+				})
+				->when($request->filter_configuration && empty(Auth::user()->configuration), function ($query) use ($request) {
+					// dd($request->filter_configuration,"...",Auth::user()->configuration);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.configuration', $request->filter_configuration);
+					});
+				})
+				// ->when(($request->filter_area_id), function ($query) use ($request) {
+				// 	// dd($request->filter_area_id);
+				// 	return $query->whereIn('projects.area_id', '3812');
+				// })
+				->when(($request->filter_area_id), function ($query) use ($request) {
+					// Assuming $request->filter_area_id is a string
+					return $query->where('projects.area_id', '3812');
+				})
 
-					if ($request->match_enquiry_size) {
-						$query->where(function ($query) use ($enq) {
-							$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
-								->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
-								->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
-								->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
-						});
+				->when($request->filter_source_of_property && empty(Auth::user()->source_of_property), function ($query) use ($request) {
+					// dd($request->filter_source_of_property,"...",Auth::user()->source_of_property);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.source_of_property', $request->filter_source_of_property);
+					});
+				})
+				->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
+					if (!empty($enq)) {
+						// property for
+						if ($request->match_enquiry_for) {
+							$property_for = ($enq->enquiry_for == 'Buy') ? 'Sell' : $enq->enquiry_for;
+							// dd("match_enquiry_for", $enq->enquiry_for, "..", $property_for);
+							// dd($request->all(), $enq);
+							$query->where('properties.property_for', $property_for);
+						}
+						//requirement ytpe
+						if ($request->match_property_type && !empty($enq->requirement_type)) {
+							// dd("match_property_type", $enq->requirement_type, "..", $request->match_property_type);
+							$query->where('properties.property_type', $enq->requirement_type);
+						}
+						//property category
+						if ($request->match_specific_type && !empty($enq->property_type)) {
+							// dd("match_specific_type", $enq->property_type, "..", $request->match_specific_type);
+							$query->where('properties.property_category', $enq->property_type);
+						}
+						// property Sub Category
+						if ($request->match_specific_sub_type && !empty($enq->configuration)) {
+							// dd("match_specific_sub_type", $enq->configuration, "..", $request->match_specific_sub_type);
+							$query->where('properties.configuration', json_decode($enq->configuration));
+						}
+						//property price & unit_price
+						if ($request->match_budget_from_type) {
+							// dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
+							$budgetFrom = str_replace(',', '', $enq->budget_from);
+							$budgetTo = str_replace(',', '', $enq->budget_to);
+							$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+								$query->where(function ($query) use ($budgetFrom, $budgetTo) {
+									$query->where('properties.survey_price', '>=', $budgetFrom)
+										->where('properties.survey_price', '<=', $budgetTo);
+								})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+									$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+										->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+								})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+									$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+										->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+								});
+							});
+						}
+
+						if ($request->match_enquiry_size) {
+							$query->where(function ($query) use ($enq) {
+								$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+									->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+									->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+									->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
+							});
+						}
 					}
-				}
-			})
-			
-			->orderBy('id', 'desc')->get();
+				})
+
+				->orderBy('id', 'desc')->get();
 
 			return DataTables::of($data)
 				->editColumn('project_id', function ($row) use ($request) {
@@ -168,7 +168,7 @@ class IndustrialPropertyController extends Controller
 					// $second = '<br> <a href="' . $row->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '    </font> </a>';
 					$second = '<br>Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font>';
 					$third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a>' : "");
-				// 	$third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->created_at)->format('d-m-Y') . '</font>';
+					// 	$third = '<br> <font size="2" style="font-style:italic">Added On: ' . Carbon::parse($row->created_at)->format('d-m-Y') . '</font>';
 					$last = '</td>';
 					'</td>';
 					return
@@ -190,10 +190,10 @@ class IndustrialPropertyController extends Controller
 				// 	return $row->property_for;
 				// })
 				->editColumn('property_for', function ($row) use ($dropdowns, $land_units) {
-				// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
-				$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk','Plotting', 'Test', 'testw');
+					// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
+					$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk', 'Plotting', 'Test', 'testw');
 
-				if ($row->property_for == 'Both') {
+					if ($row->property_for == 'Both') {
 						$forr = 'Rent & Sell';
 					} else {
 						$forr = $row->property_for;
@@ -240,7 +240,7 @@ class IndustrialPropertyController extends Controller
 							}
 						}
 					}
-                    $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
+					$salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
 					if (empty($salable_area_print)) {
 						$salable_area_print = "";
 					}
@@ -360,98 +360,97 @@ class IndustrialPropertyController extends Controller
 					};
 					return $detail;
 				})
-
 				->editColumn('price', function ($row) {
-					//$all_units = [];
-					$all_units = [];
-					// dd($row->unit_details,"price",$row->property_for);
-					if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
-						$vv = json_decode($row->unit_details);
-						// dd($vv,"price");
-						$all_units_length = count($all_units);
-						//price
-						foreach ($vv as $key => $value) {
-							$price = '';
-							if ($row->property_for === 'Both') {
-								if (!empty($value['7']) && !empty($value['4'])) {
-									$price = '  R : ' . $value['4'] . '<br>' . '  S : ' . $value['7'];
-								} elseif (!empty($value['3']) && !empty($value['4'])) {
-									$price = '  R : ' . $value['4'] . '<br>' . '  S : ' . $value['3'];
-								}
-							} else {
-								if (!empty($value['7'])) {
-									$price = $value['7'];
-								} else if (!empty($value['4'])) {
-									$price = $value['4'];
-								} else if (!empty($value['3'])) {
-									$price = $value['3'];
-								}
-							}
-							$data = [];
-							$data[0] = $value[0];
-							$data[1] = $value[1];
-							$data[2] = $price;
-							array_push($all_units, $data);
-						}
-					}
-					// dd("all2",$all_units);
+                    //$all_units = [];
+                    $all_units = [];
+                    // dd($row->unit_details,"price",$row->property_for);
+                    if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+                        $vv = json_decode($row->unit_details);
+                        // dd($vv,"price");
+                        $all_units_length = count($all_units);
+                        //price
+                        foreach ($vv as $key => $value) {
+                            $price = '';
+                            if ($row->property_for === 'Both') {
+                                if (!empty($value['7']) && !empty($value['4'])) {
+                                    $price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['7'];
+                                } elseif (!empty($value['3']) && !empty($value['4'])) {
+                                    $price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['3'];
+                                }
+                            } else {
+                                if (!empty($value['7'])) {
+                                    $price = ' ₹ ' . $value['7'];
+                                } else if (!empty($value['4'])) {
+                                    $price = ' ₹ ' . $value['4'];
+                                } else if (!empty($value['3'])) {
+                                    $price = ' ₹ ' . $value['3'];
+                                }
+                            }
+                            $data = [];
+                            $data[0] = $value[0];
+                            $data[1] = $value[1];
+                            $data[2] = $price;
+                            array_push($all_units, $data);
+                        }
+                    }
+                    // dd("all2",$all_units);
 
-					if (!empty($all_units)) {
-						$vvv = '';
-						$unit_wing = '';
-						// foreach ($all_units as $key => $value) {
-						//     $vvv = $vvv .  ((!empty($value[2])) ? $value[2] . ' ' : ''); // . ((!empty($value[1])) ? $value[1] : '');
-						// }
+                    if (!empty($all_units)) {
+                        $vvv = '';
+                        $unit_wing = '';
+                        // foreach ($all_units as $key => $value) {
+                        //     $vvv = $vvv .  ((!empty($value[2])) ? $value[2] . ' ' : ''); // . ((!empty($value[1])) ? $value[1] : '');
+                        // }
 
-						// return $vvv;
-						$all_units_length = count($all_units);
-						if ($all_units_length > 2) {
-							foreach ($all_units as $key => $value) {
-								$vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
-								$vvv = $vvv . ' - ' . ((!empty($value[2])) ? $value[2] : '');
-							}
-							$second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2] : '') . ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $unit_wing . $vvv . '" data-bs-trigger="hover focus"></i>';
-							// $second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
-							return $second;
-						} else {
-							foreach ($all_units as $key => $value) {
-								$vvv = $vvv . ((!empty($value[2])) ? $value[2] . '<br>' : '');
-							}
-							return $vvv;
-						}
-					}
-					return;
-				})
-				->addColumn('actions', function ($row) use($land_units) {
+                        // return $vvv;
+                        $all_units_length = count($all_units);
+                        if ($all_units_length > 2) {
+                            foreach ($all_units as $key => $value) {
+                                $vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
+                                $vvv = $vvv . ' - ' . ((!empty($value[2])) ? $value[2] : '');
+                            }
+                            $second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2] : '') . ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $unit_wing . $vvv . '" data-bs-trigger="hover focus"></i>';
+                            // $second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
+                            return $second;
+                        } else {
+                            foreach ($all_units as $key => $value) {
+                                $vvv = $vvv . ((!empty($value[2])) ? $value[2] . '<br>' : '');
+                            }
+                            return $vvv;
+                        }
+                    }
+                    return;
+                })
+				->addColumn('actions', function ($row) use ($land_units) {
 					$buttons = '';
 					$building_name = '';
-                    $area = '';
-                    $config = '';
+					$area = '';
+					$config = '';
 					$vvv = '';
 					$user = User::with(['roles', 'roles.permissions'])
-                        ->where('id', Auth::user()->id)
-                        ->first();
+						->where('id', Auth::user()->id)
+						->first();
 					$permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
 
 					if (isset($row->Projects->project_name)) {
-                        $building_name = $row->Projects->project_name;
-                    }
-                    if (isset($row->Projects->Area->name)) {
-                        $area = $row->Projects->Area->name;
-                    }
-                    if (isset($dropdowns[$row->property_category]['name'])) {
-                        $config = $dropdowns[$row->property_category]['name'];
-                    }
+						$building_name = $row->Projects->project_name;
+					}
+					if (isset($row->Projects->Area->name)) {
+						$area = $row->Projects->Area->name;
+					}
+					if (isset($dropdowns[$row->property_category]['name'])) {
+						$config = $dropdowns[$row->property_category]['name'];
+					}
 
 					$building_name = urlencode($building_name);
-                    $area = urlencode($area);
-                    $config = urlencode($config);
-                    $price = urlencode($row->price);
-                    $property_for = urlencode(($row->property_for == 'Both') ? 'Rent & Sell' : '');
-                    $details = urlencode($this->generateAreaUnitDetails($row, $config, $land_units));
-                    $location_link = urlencode($row->location_link);
+					$area = urlencode($area);
+					$config = urlencode($config);
+					$price = urlencode($row->price);
+					$property_for = urlencode(($row->property_for == 'Both') ? 'Rent & Sell' : '');
+					$details = urlencode($this->generateAreaUnitDetails($row, $config, $land_units));
+					$location_link = urlencode($row->location_link);
 					$message = "$building_name | $area \n $config | $details | $price \n Available For : $property_for\n\n | Link: $location_link";
-                    $sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
+					$sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
 
 					if (in_array('industrial-property-edit', $permissions)) {
 						$buttons =  $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
@@ -463,55 +462,76 @@ class IndustrialPropertyController extends Controller
 					}
 
 
-                    $buttons = $buttons . '<i title="Send On Whatsapp" data-share_string="' . $sharestring . '"  onclick=openwamodel(this)  class="fa fs-22 py-2 mx-2 fa-whatsapp text-success"></i><br>';
+					$buttons = $buttons . '<i title="Send On Whatsapp" data-share_string="' . $sharestring . '"  onclick=openwamodel(this)  class="fa fs-22 py-2 mx-2 fa-whatsapp text-success"></i><br>';
 					$buttons = $buttons . '<i title="Matching Enquiry" data-id="' . $row->id . '" onclick=matchingEnquiry(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
-				
-					if (in_array('shared-property', $permissions)) {
-                        $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
-                    }
-                
-					if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
-                        $cd = json_decode($row->other_contact_details);
-                        foreach ($cd as $key => $value) {
-                            if ($vvv == '') {
-                                $space = '';
-                            } else {
-                                $space = '<br> ';
-                            }
-                            $vvv = $vvv . $space . $value[1];
-                        }
-                    }
-                    $contact_info = ($vvv != "") ? $vvv : ' ';
 
-					$buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : 'No Contacts') . '" data-bs-trigger="hover focus"></i>';
-                   
-					return $buttons;
+					if (in_array('shared-property', $permissions)) {
+						$buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
+					}
+
+					$vvv = '';
+					if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
+						$cd = json_decode($row->other_contact_details);
+						$vvv = ''; // Ensure this variable is initialized
+						foreach ($cd as $key => $value) {
+							if (!empty($value[1])) { // Check if $contact is not empty
+								$space = $vvv == '' ? '' : '<br>';
+								$other_name = $value[0];
+								$other_position = $value[3];
+								$contact = $value[1];
+								$vvv .= $space . $other_name . ' - ' . $other_position . ' - ' . $contact;
+							}
+						}
+					}
+					
+                    $owner_type = '';
+                    if ($row->owner_is == '111') {
+                        $owner_type = 'Individual';
+                    } elseif ($row->owner_is == '112') {
+                        $owner_type = 'Investor';
+                    } elseif ($row->owner_is == '110') {
+                        $owner_type = 'Builder';
+                    }
+
+					if($row->owner_contact){
+						$other_details = $owner_type . ' - ' . $row->owner_name . ' - ' . $row->owner_contact;
+					}
+					$other_details = "";
+                    $contact_info = ($vvv != "") ? $vvv : ' ';
+                    // $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
+                    // $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
+                    $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body" data-bs-content="'
+                        . ($other_details  != ' ' ? $other_details  : '')
+                        . ($other_details  != ' ' && $contact_info ? '<br>' : '')
+                        . ($contact_info ? $contact_info : '')
+                        . '" data-bs-trigger="hover focus"></i>';
+                    return $buttons;
 				})
 				->rawColumns(['project_id', 'contact_details', 'price', 'property_for', 'unit_details', 'actions', 'select_checkbox'])
 				->make(true);
 		}
 		$conatcts_numbers = [];
-        $contacts = Enquiries::get();
+		$contacts = Enquiries::get();
 
-        foreach ($contacts as $key => $value) {
-            if (!empty($value->client_mobile) && !empty($value->client_name)) {
-                $arr = [];
-                $arr['name'] = $value->client_name;
-                $arr['number'] = $value->client_mobile;
-                array_push($conatcts_numbers, $arr);
-            }
-            if (!empty($value->other_contacts)) {
-                $val = json_decode($value->other_contacts);
-                foreach ($val as $key1 => $value1) {
-                    $arr = [];
-                    $arr['name'] = $value1[0];
-                    $arr['number'] = $value1[1];
-                    array_push($conatcts_numbers, $arr);
-                }
-            }
-        }
+		foreach ($contacts as $key => $value) {
+			if (!empty($value->client_mobile) && !empty($value->client_name)) {
+				$arr = [];
+				$arr['name'] = $value->client_name;
+				$arr['number'] = $value->client_mobile;
+				array_push($conatcts_numbers, $arr);
+			}
+			if (!empty($value->other_contacts)) {
+				$val = json_decode($value->other_contacts);
+				foreach ($val as $key1 => $value1) {
+					$arr = [];
+					$arr['name'] = $value1[0];
+					$arr['number'] = $value1[1];
+					array_push($conatcts_numbers, $arr);
+				}
+			}
+		}
 		$projects = Projects::orderBy('project_name')->get();
-		$areas = Areas::where('user_id',Auth::user()->id)->orderBy('name')->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		$cities = City::orderBy('name')->get();
 		$states = State::orderBy('name')->get();
 		$property_configuration_settings = DropdownSettings::get()->toArray();
@@ -524,96 +544,96 @@ class IndustrialPropertyController extends Controller
 				array_push($prop_type, $value['id']);
 			}
 		}
-		return view('admin.properties.industrial_index', compact('projects','conatcts_numbers', 'property_configuration_settings', 'areas', 'cities', 'states', 'prop_type'));
+		return view('admin.properties.industrial_index', compact('projects', 'conatcts_numbers', 'property_configuration_settings', 'areas', 'cities', 'states', 'prop_type'));
 	}
-	
+
 	public function generateAreaUnitDetails($row, $type, $land_units)
-    {
-        $area = '';
-        $measure = '';
-        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
-            $area = explode('_-||-_', $row->salable_area)[0];
-            $measure = explode('_-||-_', $row->salable_area)[1];
-        } elseif ($type == 'Storage/industrial') {
-             $area = explode('_-||-_', $row->salable_plot_area)[0];
+	{
+		$area = '';
+		$measure = '';
+		if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+			$area = explode('_-||-_', $row->salable_area)[0];
+			$measure = explode('_-||-_', $row->salable_area)[1];
+		} elseif ($type == 'Storage/industrial') {
+			$area = explode('_-||-_', $row->salable_plot_area)[0];
 			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
-            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+			$measure = explode('_-||-_', $row->salable_plot_area)[1];
 			if (empty($salable)) {
-                $salable = '';
-            }
-            $area = "P:" . $area . ' - C: ' . $constructed;
-        } elseif ($type == 'Vila/Bunglow') {
-            $salable = explode('_-||-_', $row->salable_plot_area)[0];
-            $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
-            $measure = explode('_-||-_', $row->constructed_salable_area)[1];
-            if (empty($salable)) {
-                $salable = '';
-            }
-            // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-            $area = "P:" . $salable . ' - C: ' . $constructed;
-        } elseif ($type == 'Farmhouse') {
-            $area = explode('_-||-_', $row->salable_plot_area)[0];
-            $measure = explode('_-||-_', $row->salable_plot_area)[1];
-        }
+				$salable = '';
+			}
+			$area = "P:" . $area . ' - C: ' . $constructed;
+		} elseif ($type == 'Vila/Bunglow') {
+			$salable = explode('_-||-_', $row->salable_plot_area)[0];
+			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+			$measure = explode('_-||-_', $row->constructed_salable_area)[1];
+			if (empty($salable)) {
+				$salable = '';
+			}
+			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+			$area = "P:" . $salable . ' - C: ' . $constructed;
+		} elseif ($type == 'Farmhouse') {
+			$area = explode('_-||-_', $row->salable_plot_area)[0];
+			$measure = explode('_-||-_', $row->salable_plot_area)[1];
+		}
 
-        // Find the land unit name corresponding to the measure
-        $unit_name = '';
-        foreach ($land_units as $unit) {
-            if ($unit->id == $measure) {
-                $unit_name = $unit->unit_name;
-                break;
-            }
-        }
+		// Find the land unit name corresponding to the measure
+		$unit_name = '';
+		foreach ($land_units as $unit) {
+			if ($unit->id == $measure) {
+				$unit_name = $unit->unit_name;
+				break;
+			}
+		}
 
-        if (!empty($area) && !empty($unit_name)) {
-            $formattedArea = $area . ' ' . $unit_name;
-            return $formattedArea;
-        } else {
-            return "Area Not Available";
-        }
-    }
-    
-// 	public function generateAreaUnitDetails($row, $type, $land_units)
-//     {
-//         $area = '';
-//         $measure = '';
-//         if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
-//             $area = explode('_-||-_', $row->salable_area)[0];
-//             $measure = explode('_-||-_', $row->salable_area)[1];
-//         } elseif ($type == 'Storage/industrial') {
-//             $area = explode('_-||-_', $row->salable_plot_area)[0];
-//             $measure = explode('_-||-_', $row->salable_plot_area)[1];
-//         } elseif ($type == 'Vila/Bunglow') {
-//             $salable = explode('_-||-_', $row->salable_plot_area)[0];
-//             $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
-//             $measure = explode('_-||-_', $row->constructed_salable_area)[1];
-//             if (empty($salable)) {
-//                 $salable = '';
-//             }
-//             // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-//             $area = "P:" . $salable . ' - C: ' . $constructed;
-//         } elseif ($type == 'Farmhouse') {
-//             $area = explode('_-||-_', $row->salable_plot_area)[0];
-//             $measure = explode('_-||-_', $row->salable_plot_area)[1];
-//         }
+		if (!empty($area) && !empty($unit_name)) {
+			$formattedArea = $area . ' ' . $unit_name;
+			return $formattedArea;
+		} else {
+			return "Area Not Available";
+		}
+	}
 
-//         // Find the land unit name corresponding to the measure
-//         $unit_name = '';
-//         foreach ($land_units as $unit) {
-//             if ($unit->id == $measure) {
-//                 $unit_name = $unit->unit_name;
-//                 break;
-//             }
-//         }
+	// 	public function generateAreaUnitDetails($row, $type, $land_units)
+	//     {
+	//         $area = '';
+	//         $measure = '';
+	//         if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+	//             $area = explode('_-||-_', $row->salable_area)[0];
+	//             $measure = explode('_-||-_', $row->salable_area)[1];
+	//         } elseif ($type == 'Storage/industrial') {
+	//             $area = explode('_-||-_', $row->salable_plot_area)[0];
+	//             $measure = explode('_-||-_', $row->salable_plot_area)[1];
+	//         } elseif ($type == 'Vila/Bunglow') {
+	//             $salable = explode('_-||-_', $row->salable_plot_area)[0];
+	//             $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+	//             $measure = explode('_-||-_', $row->constructed_salable_area)[1];
+	//             if (empty($salable)) {
+	//                 $salable = '';
+	//             }
+	//             // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+	//             $area = "P:" . $salable . ' - C: ' . $constructed;
+	//         } elseif ($type == 'Farmhouse') {
+	//             $area = explode('_-||-_', $row->salable_plot_area)[0];
+	//             $measure = explode('_-||-_', $row->salable_plot_area)[1];
+	//         }
 
-//         if (!empty($area) && !empty($unit_name)) {
-//             $formattedArea = $area . ' ' . $unit_name;
-//             return $formattedArea;
-//         } else {
-//             return "Area Not Available";
-//         }
-//     }
-    
+	//         // Find the land unit name corresponding to the measure
+	//         $unit_name = '';
+	//         foreach ($land_units as $unit) {
+	//             if ($unit->id == $measure) {
+	//                 $unit_name = $unit->unit_name;
+	//                 break;
+	//             }
+	//         }
+
+	//         if (!empty($area) && !empty($unit_name)) {
+	//             $formattedArea = $area . ' ' . $unit_name;
+	//             return $formattedArea;
+	//         } else {
+	//             return "Area Not Available";
+	//         }
+	//     }
+
 	public function generateAreaDetails($row, $type, $dropdowns)
 	{
 		$area = '';
@@ -635,7 +655,7 @@ class IndustrialPropertyController extends Controller
 			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
 			if (!empty($salable) && (!empty($constructed))) {
 				$area = "P:" . $salable . ' - C: ' . $constructed;
-			}else{
+			} else {
 				$area = "";
 			}
 		} elseif ($type == 'Farmhouse') {
@@ -655,7 +675,7 @@ class IndustrialPropertyController extends Controller
 	public function saveProperty(Request $request)
 	{
 		if (!empty($request->id) && $request->id != '') {
-	
+
 			$data = IndustrialProperty::find($request->id);
 			if (empty($data)) {
 				$data =  new IndustrialProperty();
@@ -1010,7 +1030,7 @@ class IndustrialPropertyController extends Controller
 			return json_encode($data);
 		}
 
-		if (!empty($request->allids) && isset(json_decode($request->allids)[0]) ) {
+		if (!empty($request->allids) && isset(json_decode($request->allids)[0])) {
 			$data = IndustrialProperty::whereIn('id', json_decode($request->allids))->delete();
 		}
 	}

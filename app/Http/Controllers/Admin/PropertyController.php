@@ -1230,16 +1230,19 @@ class PropertyController extends Controller
                     }
                     $vvv = '';
                     if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
-                        $cd = json_decode($row->other_contact_details);
-                        foreach ($cd as $key => $value) {
-                            $space = $vvv == '' ? '' : '<br> ';
+						$cd = json_decode($row->other_contact_details);
+						$vvv = ''; // Ensure this variable is initialized
+						foreach ($cd as $key => $value) {
+							if (!empty($value[1])) { // Check if $contact is not empty
+								$space = $vvv == '' ? '' : '<br>';
+								$other_name = $value[0];
+								$other_position = $value[3];
+								$contact = $value[1];
+								$vvv .= $space . $other_name . ' - ' . $other_position . ' - ' . $contact;
+							}
+						}
+					}
 
-                            $other_name = $value[0];
-                            $other_position = $value[3];
-                            $contact = $value[1];
-                            $vvv .= $space . $other_name . ' - ' . $other_position . ' - ' . $contact;
-                        }
-                    }
                     $owner_type = '';
                     if ($row->owner_is == '111') {
                         $owner_type = 'Individual';
