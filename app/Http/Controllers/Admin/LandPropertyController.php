@@ -265,52 +265,66 @@ class LandPropertyController extends Controller
 				// 	return $s_number . $t_number . $f_number;
 				// })
 				->editColumn('price', function ($row) {
-					$all_units = [];
-					if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
-						$vv = json_decode($row->unit_details);
-						$all_units_length = count($all_units);
-						foreach ($vv as $key => $value) {
-							$price = '';
-							if ($row->property_for === 'Both') {
-								if (!empty($value['7']) && !empty($value['4'])) {
-									$price = '  R : ' . $value['4'] . '<br>' . '  S : ' . $value['7'];
-								} elseif (!empty($value['3']) && !empty($value['4'])) {
-									$price = '  R : ' .  $value['4'] . '<br>' . '  S : ' . $value['3'];
-								}
-							} else {
-								$r_price = !empty($value['4']) ? '  R : ' . $value['4'] : null;
-								$s_price = !empty($row->survey_price) ? '  S : ' . $row->survey_price : null;
-								$t_price = !empty($row->fp_plot_price) ? '  F :' . $row->fp_plot_price : null;
-								$price = implode('<br>', array_filter([$r_price, $s_price, $t_price]));
-							}
-							$data = [];
-							$data[0] = $value[0];
-							$data[1] = $value[1];
-							$data[2] = $price;
-							array_push($all_units, $data);
-						}
-					}
+                    //$all_units = [];
+                    $all_units = [];
+                    // dd($row->unit_details,"price",$row->property_for);
+                    if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+                        $vv = json_decode($row->unit_details);
+                        // dd($vv,"price");
+                        $all_units_length = count($all_units);
+                        //price
+                        foreach ($vv as $key => $value) {
+                            $price = '';
+                            if ($row->property_for === 'Both') {
+                                if (!empty($value['7']) && !empty($value['4'])) {
+                                    $price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['7'];
+                                } elseif (!empty($value['3']) && !empty($value['4'])) {
+                                    $price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['3'];
+                                }
+                            } else {
+                                if (!empty($value['7'])) {
+                                    $price = ' ₹ ' . $value['7'];
+                                } else if (!empty($value['4'])) {
+                                    $price = ' ₹ ' . $value['4'];
+                                } else if (!empty($value['3'])) {
+                                    $price = ' ₹ ' . $value['3'];
+                                }
+                            }
+                            $data = [];
+                            $data[0] = $value[0];
+                            $data[1] = $value[1];
+                            $data[2] = $price;
+                            array_push($all_units, $data);
+                        }
+                    }
+                    // dd("all2",$all_units);
 
-					if (!empty($all_units)) {
-						$vvv = '';
-						$unit_wing = '';
-						$all_units_length = count($all_units);
-						if ($all_units_length > 2) {
-							foreach ($all_units as $key => $value) {
-								$vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
-								$vvv = $vvv . ' - ' . ((!empty($value[2])) ? $value[2] : '');
-							}
-							$second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2]  : '')  .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $unit_wing . $vvv . '" data-bs-trigger="hover focus"></i>';
-							return $second;
-						} else {
-							foreach ($all_units as $key => $value) {
-								$vvv = $vvv .   ((!empty($value[2])) ? $value[2] . '<br>' : '');
-							}
-							return $vvv;
-						}
-					}
-					return;
-				})
+                    if (!empty($all_units)) {
+                        $vvv = '';
+                        $unit_wing = '';
+                        // foreach ($all_units as $key => $value) {
+                        //     $vvv = $vvv .  ((!empty($value[2])) ? $value[2] . ' ' : ''); // . ((!empty($value[1])) ? $value[1] : '');
+                        // }
+
+                        // return $vvv;
+                        $all_units_length = count($all_units);
+                        if ($all_units_length > 2) {
+                            foreach ($all_units as $key => $value) {
+                                $vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
+                                $vvv = $vvv . ' - ' . ((!empty($value[2])) ? $value[2] : '');
+                            }
+                            $second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2] : '') . ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $unit_wing . $vvv . '" data-bs-trigger="hover focus"></i>';
+                            // $second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
+                            return $second;
+                        } else {
+                            foreach ($all_units as $key => $value) {
+                                $vvv = $vvv . ((!empty($value[2])) ? $value[2] . '<br>' : '');
+                            }
+                            return $vvv;
+                        }
+                    }
+                    return;
+                })
 				->editColumn('unit_details', function ($row) {
 					if (isset($row->survey_number) || isset($row->tp_number) || isset($row->fp_number)) {
 						$s_number = (!empty($row->survey_number) ? '<br>S No: ' . $row->survey_number : "");
@@ -456,22 +470,43 @@ class LandPropertyController extends Controller
                         $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
                     }
                     
+					$vvv = '';
 					if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
-                        $cd = json_decode($row->other_contact_details);
-                        foreach ($cd as $key => $value) {
-                            if ($vvv == '') {
-                                $space = '';
-                            } else {
-                                $space = '<br> ';
-                            }
-                            $vvv = $vvv . $space . $value[1];
-                        }
+						$cd = json_decode($row->other_contact_details);
+						$vvv = ''; // Ensure this variable is initialized
+						foreach ($cd as $key => $value) {
+							if (!empty($value[1])) { // Check if $contact is not empty
+								$space = $vvv == '' ? '' : '<br>';
+								$other_name = $value[0];
+								$other_position = $value[3];
+								$contact = $value[1];
+								$vvv .= $space . $other_name . ' - ' . $other_position . ' - ' . $contact;
+							}
+						}
+					}
+					
+                    $owner_type = '';
+                    if ($row->owner_is == '111') {
+                        $owner_type = 'Individual';
+                    } elseif ($row->owner_is == '112') {
+                        $owner_type = 'Investor';
+                    } elseif ($row->owner_is == '110') {
+                        $owner_type = 'Builder';
                     }
-                    $contact_info = ($vvv != "") ? $vvv : ' ';
 
-					$buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : 'No Contacts') . '" data-bs-trigger="hover focus"></i>';
-                   
-					return $buttons;
+					if($row->owner_contact){
+						$other_details = $owner_type . ' - ' . $row->owner_name . ' - ' . $row->owner_contact;
+					}
+					$other_details = "";
+                    $contact_info = ($vvv != "") ? $vvv : ' ';
+                    // $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
+                    // $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
+                    $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body" data-bs-content="'
+                        . ($other_details  != ' ' ? $other_details  : '')
+                        . ($other_details  != ' ' && $contact_info ? '<br>' : '')
+                        . ($contact_info ? $contact_info : '')
+                        . '" data-bs-trigger="hover focus"></i>';
+                    return $buttons;
 				})
 				->rawColumns(['project_id', 'property_category', 'unit_details', 'price', 'actions', 'select_checkbox'])
 				->make(true);
