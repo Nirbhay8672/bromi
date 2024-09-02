@@ -789,8 +789,8 @@
                                                             <h6><b>Budget</b></h6>
                                                         </div>
                                                         <div class="form-group col-8 m-b-10 data_conent_34">
-                                                            <div>: {{ $data->budget_from ? $data->budget_from : '0' }} to
-                                                                {{ $data->budget_to }}
+                                                            <div>:₹ {{ $data->budget_from ? $data->budget_from : '0' }} to
+                                                                ₹ {{ $data->budget_to }}
                                                             </div>
                                                         </div>
                                                         <div class="form-group col-4 m-b-10 data_conent_35">
@@ -1131,7 +1131,7 @@
                                                                 }
                                                             }
                                                             @endphp
-                                                            <td>{{ $price }}</td>
+                                                            <td>₹ {{ $price }}</td>
 
                                                                 <td>
                                                                     @if ($value->Property_priority == "91")
