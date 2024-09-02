@@ -1068,6 +1068,22 @@
         <script>
             let isValid = true;
 
+            // $(document).on('keyup', ".indian_currency_amount", function() {
+            //     if (isNaN(($(this).val()).replaceAll(',', ''))) {
+            //         $(this).val('')
+            //     } else {
+            //         $(this).val(fmt($(this).val()));
+            //     }
+            // });
+
+            function fmt(s) {
+                if (!s || isNaN(s)) return ''; // Handle non-numeric or empty values
+                var newvalue = s.replace(/,/g, '');
+                var valuewithcomma = Number(newvalue).toLocaleString('en-IN');
+                return valuewithcomma;
+            }
+
+
             function validateField(inputSelector, errorSelector, errorMessage) {
                 let isValidField = $(inputSelector).val().trim() !== '';
                 $(inputSelector).toggleClass('is-invalid', !isValidField);
@@ -1144,7 +1160,7 @@
                 isValid = validateEmail('#client_email', '#client_email_error', 'Invalid email format') && isValid;
                 return isValid;
             }
-           
+
 
             function validateNumericField(field, errorField, errorMessage) {
                 var value = $(field).val().trim();
@@ -1798,8 +1814,13 @@
                         $('#enquiry_source').val(data.enquiry_source).trigger('change');
 
                         $('#furnished_status').val(JSON.parse(data.furnished_status)).trigger('change');
-                        $('#budget_from').val(data.budget_from);
-                        $('#budget_to').val(data.budget_to);
+                        // $('#budget_from').val(data.budget_from);
+                        // $('#budget_to').val(data.budget_to);
+                        let formattedBudgetFrom = fmt(data.budget_from.toString());
+                        let formattedBudgetTo = fmt(data.budget_to.toString());
+                        $('#budget_from').val(formattedBudgetFrom);
+                        $('#budget_to').val(formattedBudgetTo);
+
                         $('#rent_price').val(data.rent_price);
                         $('#sell_price').val(data.sell_price);
                         $('#purpose').val(data.purpose).trigger('change');;
@@ -2579,11 +2600,11 @@
                     $('.enquiry-type-element[data-enquiry-id="256"]').hide();
                 }
 
-                if (theFor == 'Rent' || theFor == 'Both') {
-                    $('.enquiry-type-element[data-enquiry-id="262"]').hide();
-                } else if (parent_val == '85') {
-                    $('.enquiry-type-element[data-enquiry-id="262"]').show();
-                }
+                // if (theFor == 'Rent' || theFor == 'Both') {
+                //     $('.enquiry-type-element[data-enquiry-id="262"]').hide();
+                // } else if (parent_val == '85') {
+                //     $('.enquiry-type-element[data-enquiry-id="262"]').show();
+                // }
 
                 if (theFor == 'Both') {
                     $(".both-price").show();

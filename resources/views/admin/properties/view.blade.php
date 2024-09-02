@@ -1130,14 +1130,12 @@ use Illuminate\Support\Facades\DB;
                                                                                     <td>{{ isset($value[0]) ? ucfirst(strtolower($value[0])) : '-' }}</td>
 																					@endif
 																					<td>{{ isset($value[1]) ? $value[1] : '-' }}</td>
-																					@if (
-																						($type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse' || $type == 'Storage/industrial') &&
-																							($property->property_for == 'Sell' || $property->property_for == 'Both'))
-																						<td>{{ isset($value[7]) ? $value[7] : '-' }}</td>
+																					@if (($type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse' || $type == 'Storage/industrial') && ($property->property_for == 'Sell' || $property->property_for == 'Both'))
+																						<td>{{ !empty($value[7]) ? '₹ '. $value[7] : '-' }}</td>
 																					@else
-																						<td>{{ isset($value[3]) ? $value[3] : '-' }}</td>
+                                                                                    <td>{{ !empty($value[3]) ? '₹ '. $value[3] : '-' }}</td>
 																					@endif
-																					<td>{{ !empty(isset($value[4])) ? $value[4] : '-' }}</td>
+																					<td>{{ !empty(($value[4])) ? '₹ '. $value[4] : '-' }}</td>
                                                                                     @if ($type === 'Vila/Bunglow' ||
                                                                                         $type === 'Farmhouse' ||
                                                                                         $type === 'Penthouse' ||
@@ -2486,18 +2484,14 @@ use Illuminate\Support\Facades\DB;
 																			<td>{{ isset($value[0]) ? ucfirst(strtolower($value[0])) : '-' }}
 																				</td>
 																			@endif
-																			<td>{{ isset($value[1]) ? $value[1] : '-' }}
+																			<td> {{ isset($value[1]) ? $value[1] : '-' }}
 																			</td>
-																			@if (
-																				($type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse' || $type == 'Storage/industrial') &&
-																					($property->property_for == 'Sell' || $property->property_for == 'Both'))
-																				<td>{{ isset($value[7]) ? $value[7] : '-' }}
-																				</td>
-																			@else
-																				<td>{{ isset($value[3]) ? $value[3] : '-' }}
-																				</td>
-																			@endif
-																			<td>{{ !empty(isset($value[4])) ? $value[4] : '-' }}
+																			@if (($type == 'Vila/Bunglow' || $type == 'Penthouse' || $type == 'Farmhouse' || $type == 'Storage/industrial') && ($property->property_for == 'Sell' || $property->property_for == 'Both'))
+                                                                                <td>{{ !empty($value[7]) ? '₹ '. $value[7] : '-' }}</td>
+                                                                            @else
+                                                                            <td>{{ !empty($value[3]) ? '₹ '. $value[3] : '-' }}</td>
+                                                                            @endif
+                                                                            <td>{{ !empty(($value[4])) ? '₹ '. $value[4] : '-' }}</td>
 																			</td>
                                                                             @if ($type === "Vila/Bunglow" || $type === "Farmhouse" || $type === 'Penthouse' || 
                                                                             $type === "Retail" || $type === "Flat" || $type === "Farmhouse" || $type === "Office")
