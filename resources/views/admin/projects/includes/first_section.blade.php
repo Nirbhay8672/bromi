@@ -6,6 +6,7 @@
                 <div>
                     <label><b>Builder Information</b></label>
                 </div>
+                @if ($role != 'builder')
                 <div class="form-group col-md-3 m-b-4 mb-3">
                     <select class="form-select" id="builder_id" :class="errors.hasOwnProperty('builder_id') ? 'is-invalid' : ''">
                         <option value=""> Builder Name</option>
@@ -19,6 +20,7 @@
                         <span x-text="errors.builder_id"></span>
                     </div>
                 </div>
+                @endif
                 <div class="form-group col-md-6 m-b-4 mb-3">
                     <div class="fname" :class="website == '' ? '' : 'focused' ">
                         <label for="Project Name">Website</label>

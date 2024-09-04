@@ -69,11 +69,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
         </div>
         <div class="modal fade" id="branchModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">

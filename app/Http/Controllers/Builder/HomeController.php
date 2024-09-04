@@ -187,7 +187,9 @@ class HomeController extends Controller
 
 		$land_units = DB::table('land_units')->get();
 
-		return view('builder.projects.add_project_new', compact('cities', 'land_units', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city'), $data);
+		$role = 'builder';
+
+		return view('admin.projects.add_project_new', compact('cities', 'land_units', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city' , 'role'), $data);
 	}
 
 	public function editproject(Projects $id){
@@ -213,7 +215,9 @@ class HomeController extends Controller
 
 		$land_units = DB::table('land_units')->get();
 
-		return view('builder.projects.add_project_new', compact('cities', 'land_units', 'states', 'areas', 'builders','project_configuration_settings', 'id','first_state','first_city'), $data);
+		$role = 'builder';
+
+		return view('builder.projects.add_project_new', compact('cities', 'land_units', 'states', 'areas', 'builders','project_configuration_settings', 'id','first_state','first_city', 'role'), $data);
 	}
 
 	public function storeFile(UploadedFile $file)

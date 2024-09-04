@@ -292,14 +292,14 @@
                                     <div class="form-group col-md-auto mb-3">
                                         <a
                                             class="add_constructed_carpet_area" style="color:#0078DB!important"
-                                            @click="tower_detail.is_carpet = !tower_detail.is_carpet" href="javascript:void(0)"> + Add Carpet Size
+                                            @click="tower_detail.is_carpet = !tower_detail.is_carpet" href="javascript:void(0)"> <span x-text="tower_detail.is_carpet ? '- Remove Carpet Area' : '+ Add Carpet Area'"></span> 
                                         </a>
                                     </div>
 
                                     <div class="form-group col-md-auto mb-3">
                                         <a
                                             class="add_constructed_carpet_area" style="color:#0078DB!important"
-                                            @click="tower_detail.is_built_up = !tower_detail.is_built_up" href="javascript:void(0)"> + Add BuiltUp Size
+                                            @click="tower_detail.is_built_up = !tower_detail.is_built_up" href="javascript:void(0)"> <span x-text="tower_detail.is_built_up ? '- Remove BuiltUp Area' : '+ Add BuiltUp Area'"></span>
                                         </a>
                                     </div>
                                 </div>
@@ -604,11 +604,11 @@
                                 
                                 <div class="row">
                                     <div class="form-group col-md-auto mb-3">
-                                        <a style="color:#0078DB!important" @click="unit.has_built_up = !unit.has_built_up" href="javascript:void(0)" data-bs-original-title="" title=""> + Add Built Up Area
+                                        <a style="color:#0078DB!important" @click="unit.has_built_up = !unit.has_built_up" href="javascript:void(0)" data-bs-original-title="" title=""> <span x-text="unit.has_built_up ? '- Remove Built Up Area' : '+ Add Built Up Area' "></span>
                                         </a>
                                     </div>
                                     <div class="form-group col-md-auto mb-3">
-                                        <a style="color:#0078DB!important" @click="unit.has_carpet = !unit.has_carpet" href="javascript:void(0)" data-bs-original-title="" title=""> + Add Carpet Area
+                                        <a style="color:#0078DB!important" @click="unit.has_carpet = !unit.has_carpet" href="javascript:void(0)" data-bs-original-title="" title=""> <span x-text="unit.has_built_up ? '- Remove Carpet Area' : '+ Add Carpet Area' "></span>
                                         </a>
                                     </div>
                                 </div>
@@ -2030,14 +2030,14 @@
                                     <div class="form-group col-md-auto mb-3">
                                         <a
                                             class="add_constructed_carpet_area" style="color:#0078DB!important"
-                                            @click="tower_detail.is_carpet = !tower_detail.is_carpet" href="javascript:void(0)"> + Add Carpet Size
+                                            @click="tower_detail.is_carpet = !tower_detail.is_carpet" href="javascript:void(0)"> <span x-text="tower_detail.is_carpet ? '- Remove Carpet Area' : '+ Add Carpet Area'"></span>
                                         </a>
                                     </div>
 
                                     <div class="form-group col-md-auto mb-3">
                                         <a
                                             class="add_constructed_carpet_area" style="color:#0078DB!important"
-                                            @click="tower_detail.is_built_up = !tower_detail.is_built_up" href="javascript:void(0)"> + Add BuiltUp Size
+                                            @click="tower_detail.is_built_up = !tower_detail.is_built_up" href="javascript:void(0)"> <span x-text="tower_detail.is_built_up ? '- Remove BuiltUp Area' : '+ Add BuiltUp Area'"></span> 
                                         </a>
                                     </div>
                                 </div>
@@ -2267,15 +2267,32 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" x-show="if_office_or_retail.number_of_tower > 1">
-                                    <div class="form-group col-md-3">
-                                        <button
-                                            class="btn btn-primary btn-air-primary"
-                                            type="button"
-                                            @click="addRetailUnitDetails()"
-                                        >Add Floors</button>
+                                <template x-if="index == 0">
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
+                                            <button
+                                                class="btn btn-primary"
+                                                style="border-radius: 5px;"
+                                                type="button"
+                                                @click="addRetailUnitDetails()"
+                                            >+ Floor</button>
+                                        </div>
                                     </div>
-                                </div>
+                                </template>
+
+                                <template x-if="index != 0">
+                                    <div class="row">
+                                        <div class="form-group col-md-3">
+                                            <button
+                                                class="btn btn-primary"
+                                                style="border-radius: 5px;"
+                                                type="button"
+                                                @click="removeRetailUnitDetails(index)"
+                                            >- Floor</button>
+                                        </div>
+                                    </div>
+                                </template>
+
                             </div>
                         </template>
                     </template>

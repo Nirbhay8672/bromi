@@ -661,7 +661,9 @@ class ProjectsController extends Controller
 
 		$land_units = DB::table('land_units')->get();
 
-		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city','land_units'), $data);
+		$role = 'admin';
+
+		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings','first_state','first_city','land_units', 'role'), $data);
 	}
 
 
@@ -688,7 +690,9 @@ class ProjectsController extends Controller
 
 		$land_units = DB::table('land_units')->get();
 
-		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings', 'id','first_state','first_city','land_units'), $data);
+		$role = 'admin';
+
+		return view('admin.projects.add_project_new', compact('cities', 'states', 'areas', 'builders','project_configuration_settings', 'id','first_state','first_city','land_units', 'role'), $data);
 	}
 
 

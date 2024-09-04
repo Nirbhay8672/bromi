@@ -54,7 +54,7 @@
                                 <div class="col-md-8 col-lg-9 border-start ps-4">
                                     <form class="form-bookmark needs-validation modal_form">
 
-                                        @include('builder.projects.includes.first_section')
+                                        @include('admin.projects.includes.first_section')
 
                                         @include('builder.projects.includes.second_section')
                                         
