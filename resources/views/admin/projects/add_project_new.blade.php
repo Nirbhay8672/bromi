@@ -1,4 +1,5 @@
-@extends('admin.layouts.app')
+@extends($role == 'admin' ? 'admin.layouts.app' : ( $role == 'builder' ? 'builder.layouts.app' : 'superadmin.layouts.superapp' ) )
+
 @section('content')
     @php
         $is_dynamic_form = true;
@@ -17,13 +18,37 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h5 class="mb-3">Project & Builder Information <a class="btn custom-icon-theme-button tooltip-btn"
-                                href="{{ route('admin.projects') }}"
-                                data-tooltip="Back"
-                                style="float: inline-end;"
-                            >
-                                <i class="fa fa-backward"></i>
-                            </a></h5>
+
+                            @if($role == 'admin')
+                                <h5 class="mb-3">Project & Builder Information <a class="btn custom-icon-theme-button tooltip-btn"
+                                    href="{{ route('admin.projects') }}"
+                                    data-tooltip="Back"
+                                    style="float: inline-end;"
+                                >
+                                    <i class="fa fa-backward"></i>
+                                </a></h5>
+                            @endif
+
+                            @if($role == 'builder')
+                                <h5 class="mb-3">Project Information <a class="btn custom-icon-theme-button tooltip-btn"
+                                    href="{{ route('builder.projects') }}"
+                                    data-tooltip="Back"
+                                    style="float: inline-end;"
+                                >
+                                    <i class="fa fa-backward"></i>
+                                </a></h5>
+                            @endif
+
+                            @if($role == 'superadmin')
+                                <h5 class="mb-3">Project & Builder Information <a class="btn custom-icon-theme-button tooltip-btn"
+                                    href="{{ route('superadmin.projects') }}"
+                                    data-tooltip="Back"
+                                    style="float: inline-end;"
+                                >
+                                    <i class="fa fa-backward"></i>
+                                </a></h5>
+                            @endif
+                          
                             <template x-if="id != ''"><strong>Update Project</strong></template>
                             <template x-if="id == ''"><strong>Create Project</strong></template>
                         </div>
@@ -367,6 +392,8 @@
             
             $first_state = json_encode($first_state);
             $first_city = json_encode($first_city);
+
+            $user_role = json_encode($role);
         @endphp
     </div>
 @endsection
@@ -388,6 +415,8 @@
         var cities = @Json($city_encoded);
         var states = @Json($state_encoded);
         var areas = @Json($area_encoded);
+
+        let user_role = {!! json_encode($role) !!};
 
         citiesar = JSON.parse(cities);
     	areass = JSON.parse(areas);
@@ -1609,25 +1638,24 @@
                 },
 
                 addRetailUnitDetails() {
-                    if(this.if_office_or_retail.number_of_tower > 0) {
-                        this.if_retail_tower_details = [];
-                        for (let index = 0; index < this.if_office_or_retail.number_of_tower; index++) {
-                            this.if_retail_tower_details.push({
-                                floor_name : '',
-                                tower_name : '',
-                                sub_category : '',
-                                size_from : '',
-                                size_to : '',
-                                front_opening : '',
-                                number_of_each_floor : '',
-                                ceiling_height : '',
+                    this.if_retail_tower_details.push({
+                        floor_name : '',
+                        tower_name : '',
+                        sub_category : '',
+                        size_from : '',
+                        size_to : '',
+                        front_opening : '',
+                        number_of_each_floor : '',
+                        ceiling_height : '',
 
-                                size_from_map_unit  : '',
-                                size_to_map_unit  : '',
-                                tower_ceiling_map_unit  : '',
-                            });
-                        }
-                    }
+                        size_from_map_unit  : '',
+                        size_to_map_unit  : '',
+                        tower_ceiling_map_unit  : '',
+                    });
+                },
+
+                removeRetailUnitDetails(index) {
+                    this.if_retail_tower_details.splice(index , 1);
                 },
 
                 addUnitDetail() {
@@ -1768,7 +1796,7 @@
 
                     for (let index = 0; index < this.total_floor_for_parking; index++) {
                         this.parking_details.push({
-                            floor_number : index,
+                            floor_number : index == 0 ? 'Ground Floor' : `Basement ${index}`,
                             ev_charging_point : '',
                             hydraulic_parking : '',
                             height_of_basement : '',
@@ -1909,7 +1937,6 @@
                     let is_valid = true;
 
                     let fields = [
-                        'builder_id',
                         'website',
                         'project_name',
                         'address',
@@ -1917,17 +1944,15 @@
                         'state_id',
                         'city_id',
                         'pincode',
-                        'rera',
-                        'land_size',
-                        'land_size_unit',
-                        'rera_number',
-                        'project_status',
-                        'status',
                     ];
+
+                    if(user_role == 'admin' || user_role == 'superadmin') {
+                        fields.push('builder_id');
+                    } 
 
                     fields.forEach(field => {
                         let ele = document.getElementById(field);
-
+ 
                         if(ele) {
                             if(ele.value == '') {
                                 let error_field = document.getElementById(`err_${field}`);
@@ -2022,908 +2047,908 @@
                         }
                     }
 
-                    if(this.property_type == 85)
-                    {
-                        if(this.property_category == 259 || this.property_category == 260) 
-                        {
-                            // propert type = 85 commertical
-                            // category = 259 Office
-                            // sub category = 1 office space
+                    // if(this.property_type == 85)
+                    // {
+                    //     if(this.property_category == 259 || this.property_category == 260) 
+                    //     {
+                    //         // propert type = 85 commertical
+                    //         // category = 259 Office
+                    //         // sub category = 1 office space
 
-                            if(this.if_office_or_retail.number_of_tower == '') {
-                                let number_of_tower = document.getElementById('85_if_office_or_retail_number_of_tower');
-                                if(number_of_tower) {
-                                    let err_number_of_tower = document.getElementById('err_85_if_office_or_retail_number_of_tower');
-                                    err_number_of_tower.classList.remove("d-none");
-                                    is_valid = false;
-                                }
-                            } else {
-                                if (isNaN(this.if_office_or_retail.number_of_tower)) {
-                                    let err_number_of_tower = document.getElementById('err_85_if_office_or_retail_number_of_tower');
-                                    if(err_number_of_tower) {
-                                        err_number_of_tower.innerText = 'Number of tower must be number';
-                                        err_number_of_tower.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(this.if_office_or_retail.number_of_tower == '') {
+                    //             let number_of_tower = document.getElementById('85_if_office_or_retail_number_of_tower');
+                    //             if(number_of_tower) {
+                    //                 let err_number_of_tower = document.getElementById('err_85_if_office_or_retail_number_of_tower');
+                    //                 err_number_of_tower.classList.remove("d-none");
+                    //                 is_valid = false;
+                    //             }
+                    //         } else {
+                    //             if (isNaN(this.if_office_or_retail.number_of_tower)) {
+                    //                 let err_number_of_tower = document.getElementById('err_85_if_office_or_retail_number_of_tower');
+                    //                 if(err_number_of_tower) {
+                    //                     err_number_of_tower.innerText = 'Number of tower must be number';
+                    //                     err_number_of_tower.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.if_office_or_retail.number_of_floor == '') {
-                                let number_of_floor = document.getElementById('85_if_office_or_retail_number_of_floor');
-                                if(number_of_floor) {
-                                    let err_number_of_floor = document.getElementById('err_85_if_office_or_retail_number_of_floor');
-                                    err_number_of_floor.classList.remove("d-none");
-                                    is_valid = false;
-                                }
-                            } else {
-                                if (isNaN(this.if_office_or_retail.number_of_floor)) {
-                                    let err_number_of_floor = document.getElementById('err_85_if_office_or_retail_number_of_floor');
-                                    if(err_number_of_floor) {
-                                        err_number_of_floor.innerText = 'Number of floor must be number';
-                                        err_number_of_floor.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(this.if_office_or_retail.number_of_floor == '') {
+                    //             let number_of_floor = document.getElementById('85_if_office_or_retail_number_of_floor');
+                    //             if(number_of_floor) {
+                    //                 let err_number_of_floor = document.getElementById('err_85_if_office_or_retail_number_of_floor');
+                    //                 err_number_of_floor.classList.remove("d-none");
+                    //                 is_valid = false;
+                    //             }
+                    //         } else {
+                    //             if (isNaN(this.if_office_or_retail.number_of_floor)) {
+                    //                 let err_number_of_floor = document.getElementById('err_85_if_office_or_retail_number_of_floor');
+                    //                 if(err_number_of_floor) {
+                    //                     err_number_of_floor.innerText = 'Number of floor must be number';
+                    //                     err_number_of_floor.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.if_office_or_retail.number_of_unit == '') {
-                                let number_of_unit = document.getElementById('85_if_office_or_retail_number_of_unit');
-                                if(number_of_unit) {
-                                    let err_number_of_unit = document.getElementById('err_85_if_office_or_retail_number_of_unit');
-                                    err_number_of_unit.classList.remove("d-none");
-                                    is_valid = false;
-                                }
-                            } else {
-                                if (isNaN(this.if_office_or_retail.number_of_unit)) {
-                                    let err_number_of_unit = document.getElementById('err_85_if_office_or_retail_number_of_unit');
-                                    if(err_number_of_unit) {
-                                        err_number_of_unit.innerText = 'Number of unit must be number';
-                                        err_number_of_unit.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(this.if_office_or_retail.number_of_unit == '') {
+                    //             let number_of_unit = document.getElementById('85_if_office_or_retail_number_of_unit');
+                    //             if(number_of_unit) {
+                    //                 let err_number_of_unit = document.getElementById('err_85_if_office_or_retail_number_of_unit');
+                    //                 err_number_of_unit.classList.remove("d-none");
+                    //                 is_valid = false;
+                    //             }
+                    //         } else {
+                    //             if (isNaN(this.if_office_or_retail.number_of_unit)) {
+                    //                 let err_number_of_unit = document.getElementById('err_85_if_office_or_retail_number_of_unit');
+                    //                 if(err_number_of_unit) {
+                    //                     err_number_of_unit.innerText = 'Number of unit must be number';
+                    //                     err_number_of_unit.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.if_office_or_retail.number_of_lift == '') {
-                                let number_of_lift = document.getElementById('85_if_office_or_retail_number_of_lift');
-                                if(number_of_lift) {
-                                    let err_number_of_lift = document.getElementById('err_85_if_office_or_retail_number_of_lift');
-                                    err_number_of_lift.classList.remove("d-none");
-                                    is_valid = false;
-                                }
-                            } else {
-                                if (isNaN(this.if_office_or_retail.number_of_lift)) {
-                                    let err_number_of_lift = document.getElementById('err_85_if_office_or_retail_number_of_lift');
-                                    if(err_number_of_lift) {
-                                        err_number_of_lift.innerText = 'Number of lift must be number';
-                                        err_number_of_lift.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(this.if_office_or_retail.number_of_lift == '') {
+                    //             let number_of_lift = document.getElementById('85_if_office_or_retail_number_of_lift');
+                    //             if(number_of_lift) {
+                    //                 let err_number_of_lift = document.getElementById('err_85_if_office_or_retail_number_of_lift');
+                    //                 err_number_of_lift.classList.remove("d-none");
+                    //                 is_valid = false;
+                    //             }
+                    //         } else {
+                    //             if (isNaN(this.if_office_or_retail.number_of_lift)) {
+                    //                 let err_number_of_lift = document.getElementById('err_85_if_office_or_retail_number_of_lift');
+                    //                 if(err_number_of_lift) {
+                    //                     err_number_of_lift.innerText = 'Number of lift must be number';
+                    //                     err_number_of_lift.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.if_office_or_retail.number_of_unit_each_block == '') {
-                                let number_of_unit_each_block = document.getElementById('85_if_office_or_retail_number_of_unit_each_block');
-                                if(number_of_unit_each_block) {
-                                    let err_number_of_unit_each_block = document.getElementById('err_85_if_office_or_retail_number_of_unit_each_block');
-                                    err_number_of_unit_each_block.classList.remove("d-none");
-                                    is_valid = false;
-                                }
-                            } else {
-                                if (isNaN(this.if_office_or_retail.number_of_unit_each_block)) {
-                                    let err_number_of_unit_each_block = document.getElementById('err_85_if_office_or_retail_number_of_unit_each_block');
-                                    if(err_number_of_unit_each_block) {
-                                        err_number_of_unit_each_block.innerText = 'Number of unit each block must be number';
-                                        err_number_of_unit_each_block.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(this.if_office_or_retail.number_of_unit_each_block == '') {
+                    //             let number_of_unit_each_block = document.getElementById('85_if_office_or_retail_number_of_unit_each_block');
+                    //             if(number_of_unit_each_block) {
+                    //                 let err_number_of_unit_each_block = document.getElementById('err_85_if_office_or_retail_number_of_unit_each_block');
+                    //                 err_number_of_unit_each_block.classList.remove("d-none");
+                    //                 is_valid = false;
+                    //             }
+                    //         } else {
+                    //             if (isNaN(this.if_office_or_retail.number_of_unit_each_block)) {
+                    //                 let err_number_of_unit_each_block = document.getElementById('err_85_if_office_or_retail_number_of_unit_each_block');
+                    //                 if(err_number_of_unit_each_block) {
+                    //                     err_number_of_unit_each_block.innerText = 'Number of unit each block must be number';
+                    //                     err_number_of_unit_each_block.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.if_office_or_retail.front_road_width == '') {
-                                let front_road_width = document.getElementById('85_if_office_or_retail_front_road_width');
-                                if(front_road_width) {
-                                    let err_front_road_width = document.getElementById('err_85_if_office_or_retail_front_road_width');
-                                    err_front_road_width.classList.remove("d-none");
-                                    is_valid = false;
-                                }
-                            } else {
-                                if (isNaN(this.if_office_or_retail.front_road_width)) {
-                                    let err_front_road_width = document.getElementById('err_85_if_office_or_retail_front_road_width');
-                                    if(err_front_road_width) {
-                                        err_front_road_width.innerText = 'Number of front raod width must be number';
-                                        err_front_road_width.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(this.if_office_or_retail.front_road_width == '') {
+                    //             let front_road_width = document.getElementById('85_if_office_or_retail_front_road_width');
+                    //             if(front_road_width) {
+                    //                 let err_front_road_width = document.getElementById('err_85_if_office_or_retail_front_road_width');
+                    //                 err_front_road_width.classList.remove("d-none");
+                    //                 is_valid = false;
+                    //             }
+                    //         } else {
+                    //             if (isNaN(this.if_office_or_retail.front_road_width)) {
+                    //                 let err_front_road_width = document.getElementById('err_85_if_office_or_retail_front_road_width');
+                    //                 if(err_front_road_width) {
+                    //                     err_front_road_width.innerText = 'Number of front raod width must be number';
+                    //                     err_front_road_width.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.property_category == 259) {
-                                this.if_office_tower_details.forEach((office_tower , index) => {
+                    //         if(this.property_category == 259) {
+                    //             this.if_office_tower_details.forEach((office_tower , index) => {
 
-                                    Object.entries(office_tower).forEach((key_name) => {
-                                        if(key_name[1] == '' && !['is_carpet','is_built_up','carpet','carpet_to','built_up','built_up_to'].includes(key_name[0])) {
-                                            let error_element = document.getElementById(`err_259_tower_detail_${key_name[0]}_${index}`);
-                                            if(error_element) {
-                                                error_element.classList.remove('d-none');
-                                                is_valid = false;
-                                            }
-                                        }
+                    //                 Object.entries(office_tower).forEach((key_name) => {
+                    //                     if(key_name[1] == '' && !['is_carpet','is_built_up','carpet','carpet_to','built_up','built_up_to'].includes(key_name[0])) {
+                    //                         let error_element = document.getElementById(`err_259_tower_detail_${key_name[0]}_${index}`);
+                    //                         if(error_element) {
+                    //                             error_element.classList.remove('d-none');
+                    //                             is_valid = false;
+                    //                         }
+                    //                     }
 
-                                        if(key_name[0] == 'carpet' || key_name[0] == 'carpet_to') {
-                                            if(office_tower.is_carpet) {
-                                                if(key_name[1] == '') {
-                                                    let error_element = document.getElementById(`err_259_tower_detail_${key_name[0]}_${index}`);
-                                                    if(error_element) {
-                                                        error_element.classList.remove('d-none');
-                                                        is_valid = false;
-                                                    }
-                                                } 
-                                            }
-                                        }
+                    //                     if(key_name[0] == 'carpet' || key_name[0] == 'carpet_to') {
+                    //                         if(office_tower.is_carpet) {
+                    //                             if(key_name[1] == '') {
+                    //                                 let error_element = document.getElementById(`err_259_tower_detail_${key_name[0]}_${index}`);
+                    //                                 if(error_element) {
+                    //                                     error_element.classList.remove('d-none');
+                    //                                     is_valid = false;
+                    //                                 }
+                    //                             } 
+                    //                         }
+                    //                     }
 
-                                        if(key_name[0] == 'built_up' || key_name[0] == 'built_up_to') {
-                                            if(office_tower.is_built_up) {
-                                                if(key_name[1] == '') {
-                                                    let error_element = document.getElementById(`err_259_tower_detail_${key_name[0]}_${index}`);
-                                                    if(error_element) {
-                                                        error_element.classList.remove('d-none');
-                                                        is_valid = false;
-                                                    }
-                                                } 
-                                            }
-                                        }
-                                    });
-                                });
-                            }
+                    //                     if(key_name[0] == 'built_up' || key_name[0] == 'built_up_to') {
+                    //                         if(office_tower.is_built_up) {
+                    //                             if(key_name[1] == '') {
+                    //                                 let error_element = document.getElementById(`err_259_tower_detail_${key_name[0]}_${index}`);
+                    //                                 if(error_element) {
+                    //                                     error_element.classList.remove('d-none');
+                    //                                     is_valid = false;
+                    //                                 }
+                    //                             } 
+                    //                         }
+                    //                     }
+                    //                 });
+                    //             });
+                    //         }
 
-                            if(this.property_category == 260) {
-                                this.if_retail_tower_details.forEach((retail_tower , index) => {
-                                    Object.entries(retail_tower).forEach((key_name) => {
-                                        if(key_name[1] == '' && key_name[0] != 'sub_category') {
-                                            let error_element = document.getElementById(`err_260_retail_tower_${key_name[0]}_${index}`);
-                                            if(error_element) {
-                                                error_element.classList.remove('d-none');
-                                                is_valid = false;
-                                            }
-                                        }
-                                    });
-                                });
-                            }
-                        }
+                    //         if(this.property_category == 260) {
+                    //             this.if_retail_tower_details.forEach((retail_tower , index) => {
+                    //                 Object.entries(retail_tower).forEach((key_name) => {
+                    //                     if(key_name[1] == '' && key_name[0] != 'sub_category') {
+                    //                         let error_element = document.getElementById(`err_260_retail_tower_${key_name[0]}_${index}`);
+                    //                         if(error_element) {
+                    //                             error_element.classList.remove('d-none');
+                    //                             is_valid = false;
+                    //                         }
+                    //                     }
+                    //                 });
+                    //             });
+                    //         }
+                    //     }
 
-                        if(this.property_category == 261) {
+                    //     if(this.property_category == 261) {
 
-                            this.if_ware_cold_ind_plot.types.forEach((cold_ind_plot , index) => {
-                                Object.entries(cold_ind_plot).forEach((key_name) => {
-                                    if(key_name[1] == '' && !['construced_area_from','construced_area_to'].includes(key_name[0])) {
-                                        let error_element = document.getElementById(`err_cold_ind_plot_${key_name[0]}_${index}`);
-                                        if(error_element) {
-                                            error_element.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
+                    //         this.if_ware_cold_ind_plot.types.forEach((cold_ind_plot , index) => {
+                    //             Object.entries(cold_ind_plot).forEach((key_name) => {
+                    //                 if(key_name[1] == '' && !['construced_area_from','construced_area_to'].includes(key_name[0])) {
+                    //                     let error_element = document.getElementById(`err_cold_ind_plot_${key_name[0]}_${index}`);
+                    //                     if(error_element) {
+                    //                         error_element.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
 
-                                    if(['construced_area_from','construced_area_to'].includes(key_name[0])) {
+                    //                 if(['construced_area_from','construced_area_to'].includes(key_name[0])) {
 
-                                        if(this.sub_category_single != 10) {
-                                            if(key_name[1] == '') {
-                                                let error_element = document.getElementById(`err_cold_ind_plot_${key_name[0]}_${index}`);
-                                                if(error_element) {
-                                                    error_element.classList.remove('d-none');
-                                                    is_valid = false;
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-                            });
+                    //                     if(this.sub_category_single != 10) {
+                    //                         if(key_name[1] == '') {
+                    //                             let error_element = document.getElementById(`err_cold_ind_plot_${key_name[0]}_${index}`);
+                    //                             if(error_element) {
+                    //                                 error_element.classList.remove('d-none');
+                    //                                 is_valid = false;
+                    //                             }
+                    //                         }
+                    //                     }
+                    //                 }
+                    //             });
+                    //         });
 
-                            this.extra_facilities.forEach((facility , index) => {
-                                if(facility.detail == '') {
-                                    let error_element = document.getElementById(`err_extra_detail_${index}`);
-                                    if(error_element) {
-                                        error_element.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            });
+                    //         this.extra_facilities.forEach((facility , index) => {
+                    //             if(facility.detail == '') {
+                    //                 let error_element = document.getElementById(`err_extra_detail_${index}`);
+                    //                 if(error_element) {
+                    //                     error_element.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         });
 
-                            if(this.storage_industrial.ec)
-                            { 
-                                if(this.storage_industrial.ec_detail == '') {
-                                    let ec = document.getElementById('err_ec_detail');
-                                    if(ec) {
-                                        ec.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(this.storage_industrial.ec)
+                    //         { 
+                    //             if(this.storage_industrial.ec_detail == '') {
+                    //                 let ec = document.getElementById('err_ec_detail');
+                    //                 if(ec) {
+                    //                     ec.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.storage_industrial.gas)
-                            { 
-                                if(this.storage_industrial.gas_detail == '') {
-                                    let gas = document.getElementById('err_gas_detail');
-                                    if(gas) {
-                                        gas.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(this.storage_industrial.gas)
+                    //         { 
+                    //             if(this.storage_industrial.gas_detail == '') {
+                    //                 let gas = document.getElementById('err_gas_detail');
+                    //                 if(gas) {
+                    //                     gas.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.storage_industrial.pcb)
-                            { 
-                                if(this.storage_industrial.pcb_detail == '') {
-                                    let pcb = document.getElementById('err_pcb_detail');
-                                    if(pcb) {
-                                        pcb.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(this.storage_industrial.pcb)
+                    //         { 
+                    //             if(this.storage_industrial.pcb_detail == '') {
+                    //                 let pcb = document.getElementById('err_pcb_detail');
+                    //                 if(pcb) {
+                    //                     pcb.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.storage_industrial.power)
-                            { 
-                                if(this.storage_industrial.power_detail == '') {
-                                    let power = document.getElementById('err_power_detail');
-                                    if(power) {
-                                        power.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(this.storage_industrial.power)
+                    //         { 
+                    //             if(this.storage_industrial.power_detail == '') {
+                    //                 let power = document.getElementById('err_power_detail');
+                    //                 if(power) {
+                    //                     power.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.storage_industrial.water)
-                            { 
-                                if(this.storage_industrial.water_detail == '') {
-                                    let water = document.getElementById('err_water_detail');
-                                    if(water) {
-                                        water.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    //         if(this.storage_industrial.water)
+                    //         { 
+                    //             if(this.storage_industrial.water_detail == '') {
+                    //                 let water = document.getElementById('err_water_detail');
+                    //                 if(water) {
+                    //                     water.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // }
 
-                    if(this.property_type == 87) {
+                    // if(this.property_type == 87) {
 
-                        if(this.property_category == 254 || this.property_category == 257) {
+                    //     if(this.property_category == 254 || this.property_category == 257) {
 
-                            if(this.is_flat_or_penthouse.number_of_towers == '')
-                            { 
-                                let err_flat_number_of_tower = document.getElementById('err_flat_number_of_towers');
-                                if(err_flat_number_of_tower) {
-                                    err_flat_number_of_tower.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
+                    //         if(this.is_flat_or_penthouse.number_of_towers == '')
+                    //         { 
+                    //             let err_flat_number_of_tower = document.getElementById('err_flat_number_of_towers');
+                    //             if(err_flat_number_of_tower) {
+                    //                 err_flat_number_of_tower.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
 
-                            if(this.is_flat_or_penthouse.number_of_floors == '')
-                            { 
-                                let err_flat_number_of_floors = document.getElementById('err_flat_number_of_floors');
-                                if(err_flat_number_of_floors) {
-                                    err_flat_number_of_floors.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
+                    //         if(this.is_flat_or_penthouse.number_of_floors == '')
+                    //         { 
+                    //             let err_flat_number_of_floors = document.getElementById('err_flat_number_of_floors');
+                    //             if(err_flat_number_of_floors) {
+                    //                 err_flat_number_of_floors.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
 
-                            if(this.is_flat_or_penthouse.total_units == '')
-                            { 
-                                let err_flat_total_units = document.getElementById('err_flat_total_units');
-                                if(err_flat_total_units) {
-                                    err_flat_total_units.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
+                    //         if(this.is_flat_or_penthouse.total_units == '')
+                    //         { 
+                    //             let err_flat_total_units = document.getElementById('err_flat_total_units');
+                    //             if(err_flat_total_units) {
+                    //                 err_flat_total_units.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
 
-                            if(this.is_flat_or_penthouse.number_of_elevator == '')
-                            { 
-                                let err_flat_number_of_elevator = document.getElementById('err_flat_number_of_elevator');
-                                if(err_flat_number_of_elevator) {
-                                    err_flat_number_of_elevator.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
+                    //         if(this.is_flat_or_penthouse.number_of_elevator == '')
+                    //         { 
+                    //             let err_flat_number_of_elevator = document.getElementById('err_flat_number_of_elevator');
+                    //             if(err_flat_number_of_elevator) {
+                    //                 err_flat_number_of_elevator.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
 
-                            this.if_residential_only_wings.wing_details.forEach((res_wing , index) => {
-                                Object.entries(res_wing).forEach((key_name) => {
-                                    if(key_name[1] == '' && key_name[0] != 'sub_categories') {
-                                        let error_element = document.getElementById(`err_first_res_wing_${key_name[0]}_${index}`);
-                                        if(error_element) {
-                                            error_element.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
+                    //         this.if_residential_only_wings.wing_details.forEach((res_wing , index) => {
+                    //             Object.entries(res_wing).forEach((key_name) => {
+                    //                 if(key_name[1] == '' && key_name[0] != 'sub_categories') {
+                    //                     let error_element = document.getElementById(`err_first_res_wing_${key_name[0]}_${index}`);
+                    //                     if(error_element) {
+                    //                         error_element.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
 
-                                    if(key_name[0] == 'sub_categories') {
-                                        let first_categories_select = document.getElementById(`sub_category_of_wings_${index}`);
+                    //                 if(key_name[0] == 'sub_categories') {
+                    //                     let first_categories_select = document.getElementById(`sub_category_of_wings_${index}`);
 
-                                        if(first_categories_select) {
-                                            if(first_categories_select.value == '') {
-                                                let error_element = document.getElementById(`err_first_res_wing_${key_name[0]}_${index}`);
-                                                if(error_element) {
-                                                    error_element.classList.remove('d-none');
-                                                    is_valid = false;
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-                            });
+                    //                     if(first_categories_select) {
+                    //                         if(first_categories_select.value == '') {
+                    //                             let error_element = document.getElementById(`err_first_res_wing_${key_name[0]}_${index}`);
+                    //                             if(error_element) {
+                    //                                 error_element.classList.remove('d-none');
+                    //                                 is_valid = false;
+                    //                             }
+                    //                         }
+                    //                     }
+                    //                 }
+                    //             });
+                    //         });
 
-                            this.if_residential_only_units.unit_details.forEach((res_unit_details , index) => {
+                    //         this.if_residential_only_units.unit_details.forEach((res_unit_details , index) => {
 
-                                let wing_element = document.getElementById(`wing_array_${index}`);
+                    //             let wing_element = document.getElementById(`wing_array_${index}`);
                                 
-                                if(wing_element) {
-                                    if(wing_element.value == '') {
-                                        let err_wing = document.getElementById(`err_if_residential_only_units_wing_${index}`);
-                                        if(err_wing) {
-                                            err_wing.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
-                                }
+                    //             if(wing_element) {
+                    //                 if(wing_element.value == '') {
+                    //                     let err_wing = document.getElementById(`err_if_residential_only_units_wing_${index}`);
+                    //                     if(err_wing) {
+                    //                         err_wing.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
+                    //             }
 
-                                if(res_unit_details.has_built_up) {
-                                    if(res_unit_details.built_up == '') {
-                                        let error_built_up_from = document.getElementById(`err_if_residential_only_units_built_up_${index}`);
-                                        if(error_built_up_from) {
-                                            error_built_up_from.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
+                    //             if(res_unit_details.has_built_up) {
+                    //                 if(res_unit_details.built_up == '') {
+                    //                     let error_built_up_from = document.getElementById(`err_if_residential_only_units_built_up_${index}`);
+                    //                     if(error_built_up_from) {
+                    //                         error_built_up_from.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
 
-                                    if(res_unit_details.built_up_to == '') {
-                                        let error_built_up_to = document.getElementById(`err_if_residential_only_units_built_up_to_${index}`);
-                                        if(error_built_up_to) {
-                                            error_built_up_to.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
-                                }
+                    //                 if(res_unit_details.built_up_to == '') {
+                    //                     let error_built_up_to = document.getElementById(`err_if_residential_only_units_built_up_to_${index}`);
+                    //                     if(error_built_up_to) {
+                    //                         error_built_up_to.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
+                    //             }
 
-                                if(res_unit_details.has_carpet) {
-                                    if(res_unit_details.carpet_area == '') {
-                                        let error_carpet_area_from = document.getElementById(`err_if_residential_only_units_carpet_area_${index}`);
-                                        if(error_carpet_area_from) {
-                                            error_carpet_area_from.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
+                    //             if(res_unit_details.has_carpet) {
+                    //                 if(res_unit_details.carpet_area == '') {
+                    //                     let error_carpet_area_from = document.getElementById(`err_if_residential_only_units_carpet_area_${index}`);
+                    //                     if(error_carpet_area_from) {
+                    //                         error_carpet_area_from.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
 
-                                    if(res_unit_details.carpet_area_to == '') {
-                                        let error_carpet_to = document.getElementById(`err_if_residential_only_units_carpet_area_to_${index}`);
-                                        if(error_carpet_to) {
-                                            error_carpet_to.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
-                                }
+                    //                 if(res_unit_details.carpet_area_to == '') {
+                    //                     let error_carpet_to = document.getElementById(`err_if_residential_only_units_carpet_area_to_${index}`);
+                    //                     if(error_carpet_to) {
+                    //                         error_carpet_to.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
+                    //             }
 
-                                Object.entries(res_unit_details).forEach((key_name) => {
+                    //             Object.entries(res_unit_details).forEach((key_name) => {
 
-                                    let res_only_unit_fields = [
-                                        'saleable',
-                                        'saleable_to',
-                                        'wash_area',
-                                        'balcony',
-                                        'floor_height',
-                                        'ceiling_height',
-                                    ];
+                    //                 let res_only_unit_fields = [
+                    //                     'saleable',
+                    //                     'saleable_to',
+                    //                     'wash_area',
+                    //                     'balcony',
+                    //                     'floor_height',
+                    //                     'ceiling_height',
+                    //                 ];
 
-                                    if(key_name[1] == '' && res_only_unit_fields.includes(key_name[0])) {
-                                        let error_element = document.getElementById(`err_if_residential_only_units_${key_name[0]}_${index}`);
-                                        if(error_element) {
-                                            error_element.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
-                                });
-                            });
-                        }
+                    //                 if(key_name[1] == '' && res_only_unit_fields.includes(key_name[0])) {
+                    //                     let error_element = document.getElementById(`err_if_residential_only_units_${key_name[0]}_${index}`);
+                    //                     if(error_element) {
+                    //                         error_element.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
+                    //             });
+                    //         });
+                    //     }
 
-                        if(this.property_category == 255) {
-                            this.if_residential_only_wings.wing_details.forEach((res_wing , index) => {
-                                Object.entries(res_wing).forEach((key_name) => {
-                                    if(key_name[1] == '' && key_name[0] != 'sub_categories') {
-                                        let error_element = document.getElementById(`err_first_res_wing_${key_name[0]}_${index}`);
-                                        if(error_element) {
-                                            error_element.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
+                    //     if(this.property_category == 255) {
+                    //         this.if_residential_only_wings.wing_details.forEach((res_wing , index) => {
+                    //             Object.entries(res_wing).forEach((key_name) => {
+                    //                 if(key_name[1] == '' && key_name[0] != 'sub_categories') {
+                    //                     let error_element = document.getElementById(`err_first_res_wing_${key_name[0]}_${index}`);
+                    //                     if(error_element) {
+                    //                         error_element.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
 
-                                    if(key_name[0] == 'sub_categories') {
-                                        let first_categories_select = document.getElementById(`sub_category_of_wings_${index}`);
+                    //                 if(key_name[0] == 'sub_categories') {
+                    //                     let first_categories_select = document.getElementById(`sub_category_of_wings_${index}`);
 
-                                        if(first_categories_select) {
-                                            if(first_categories_select.value == '') {
-                                                let error_element = document.getElementById(`err_first_res_wing_${key_name[0]}_${index}`);
-                                                if(error_element) {
-                                                    error_element.classList.remove('d-none');
-                                                    is_valid = false;
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-                            });
+                    //                     if(first_categories_select) {
+                    //                         if(first_categories_select.value == '') {
+                    //                             let error_element = document.getElementById(`err_first_res_wing_${key_name[0]}_${index}`);
+                    //                             if(error_element) {
+                    //                                 error_element.classList.remove('d-none');
+                    //                                 is_valid = false;
+                    //                             }
+                    //                         }
+                    //                     }
+                    //                 }
+                    //             });
+                    //         });
 
-                            this.if_residential_only_units.unit_details.forEach((res_unit_details , index) => {
+                    //         this.if_residential_only_units.unit_details.forEach((res_unit_details , index) => {
 
-                                let wing_element = document.getElementById(`wing_array_${index}`);
+                    //             let wing_element = document.getElementById(`wing_array_${index}`);
 
-                                if(wing_element) {
-                                    if(wing_element.value == '') {
-                                        let err_wing = document.getElementById(`err_if_residential_only_units_wing_${index}`);
-                                        if(err_wing) {
-                                            err_wing.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
-                                }
+                    //             if(wing_element) {
+                    //                 if(wing_element.value == '') {
+                    //                     let err_wing = document.getElementById(`err_if_residential_only_units_wing_${index}`);
+                    //                     if(err_wing) {
+                    //                         err_wing.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
+                    //             }
 
-                                if(res_unit_details.has_built_up) {
-                                    if(res_unit_details.built_up == '') {
-                                        let error_built_up_from = document.getElementById(`err_if_residential_only_units_built_up_${index}`);
-                                        if(error_built_up_from) {
-                                            error_built_up_from.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
+                    //             if(res_unit_details.has_built_up) {
+                    //                 if(res_unit_details.built_up == '') {
+                    //                     let error_built_up_from = document.getElementById(`err_if_residential_only_units_built_up_${index}`);
+                    //                     if(error_built_up_from) {
+                    //                         error_built_up_from.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
 
-                                    if(res_unit_details.built_up_to == '') {
-                                        let error_built_up_to = document.getElementById(`err_if_residential_only_units_built_up_to_${index}`);
-                                        if(error_built_up_to) {
-                                            error_built_up_to.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
-                                }
+                    //                 if(res_unit_details.built_up_to == '') {
+                    //                     let error_built_up_to = document.getElementById(`err_if_residential_only_units_built_up_to_${index}`);
+                    //                     if(error_built_up_to) {
+                    //                         error_built_up_to.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
+                    //             }
 
-                                if(res_unit_details.has_carpet) {
-                                    if(res_unit_details.carpet_area == '') {
-                                        let error_carpet_area_from = document.getElementById(`err_if_residential_only_units_carpet_area_${index}`);
-                                        if(error_carpet_area_from) {
-                                            error_carpet_area_from.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
+                    //             if(res_unit_details.has_carpet) {
+                    //                 if(res_unit_details.carpet_area == '') {
+                    //                     let error_carpet_area_from = document.getElementById(`err_if_residential_only_units_carpet_area_${index}`);
+                    //                     if(error_carpet_area_from) {
+                    //                         error_carpet_area_from.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
 
-                                    if(res_unit_details.carpet_area_to == '') {
-                                        let error_carpet_to = document.getElementById(`err_if_residential_only_units_carpet_area_to_${index}`);
-                                        if(error_carpet_to) {
-                                            error_carpet_to.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
-                                }
+                    //                 if(res_unit_details.carpet_area_to == '') {
+                    //                     let error_carpet_to = document.getElementById(`err_if_residential_only_units_carpet_area_to_${index}`);
+                    //                     if(error_carpet_to) {
+                    //                         error_carpet_to.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
+                    //             }
 
-                                Object.entries(res_unit_details).forEach((key_name) => {
+                    //             Object.entries(res_unit_details).forEach((key_name) => {
 
-                                    let res_only_unit_fields = [
-                                        'saleable',
-                                        'saleable_to',
-                                        'wash_area',
-                                        'balcony',
-                                        'floor_height',
-                                        'ceiling_height',
-                                    ];
+                    //                 let res_only_unit_fields = [
+                    //                     'saleable',
+                    //                     'saleable_to',
+                    //                     'wash_area',
+                    //                     'balcony',
+                    //                     'floor_height',
+                    //                     'ceiling_height',
+                    //                 ];
 
-                                    if(key_name[1] == '' && res_only_unit_fields.includes(key_name[0])) {
-                                        let error_element = document.getElementById(`err_if_residential_only_units_${key_name[0]}_${index}`);
-                                        if(error_element) {
-                                            error_element.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
-                                });
-                            });
-                        }
+                    //                 if(key_name[1] == '' && res_only_unit_fields.includes(key_name[0])) {
+                    //                     let error_element = document.getElementById(`err_if_residential_only_units_${key_name[0]}_${index}`);
+                    //                     if(error_element) {
+                    //                         error_element.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
+                    //             });
+                    //         });
+                    //     }
 
-                        if(this.property_category == 256 || this.property_category == 258) {
+                    //     if(this.property_category == 256 || this.property_category == 258) {
 
-                            if(this.if_farm_plot_land.total_open_area == '')
-                            { 
-                                let err_open_area = document.getElementById('err_if_farm_plot_land_total_open_area');
-                                if(err_open_area) {
-                                    err_open_area.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
+                    //         if(this.if_farm_plot_land.total_open_area == '')
+                    //         { 
+                    //             let err_open_area = document.getElementById('err_if_farm_plot_land_total_open_area');
+                    //             if(err_open_area) {
+                    //                 err_open_area.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
 
-                            if(this.if_farm_plot_land.total_number_of_plot == '')
-                            { 
-                                let err_number_of_plot = document.getElementById('err_if_farm_plot_land_total_number_of_plot');
-                                if(err_number_of_plot) {
-                                    err_number_of_plot.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
+                    //         if(this.if_farm_plot_land.total_number_of_plot == '')
+                    //         { 
+                    //             let err_number_of_plot = document.getElementById('err_if_farm_plot_land_total_number_of_plot');
+                    //             if(err_number_of_plot) {
+                    //                 err_number_of_plot.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
 
-                            if(this.if_farm_plot_land.multiple_theme_phase) {
+                    //         if(this.if_farm_plot_land.multiple_theme_phase) {
 
-                                if(this.if_farm_plot_land.phase_name == '')
-                                { 
-                                    let err_phase_name = document.getElementById('err_if_farm_plot_land_phase_name');
-                                    if(err_phase_name) {
-                                        err_phase_name.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
+                    //             if(this.if_farm_plot_land.phase_name == '')
+                    //             { 
+                    //                 let err_phase_name = document.getElementById('err_if_farm_plot_land_phase_name');
+                    //                 if(err_phase_name) {
+                    //                     err_phase_name.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
 
-                                if(this.if_farm_plot_land.plot_size_from == '')
-                                { 
-                                    let err_plot_size_from = document.getElementById('err_if_farm_plot_land_plot_size_from');
-                                    if(err_plot_size_from) {
-                                        err_plot_size_from.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
+                    //             if(this.if_farm_plot_land.plot_size_from == '')
+                    //             { 
+                    //                 let err_plot_size_from = document.getElementById('err_if_farm_plot_land_plot_size_from');
+                    //                 if(err_plot_size_from) {
+                    //                     err_plot_size_from.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
 
-                                if(this.if_farm_plot_land.plot_size_to == '')
-                                { 
-                                    let err_plot_size_to = document.getElementById('err_if_farm_plot_land_plot_size_to');
-                                    if(err_plot_size_to) {
-                                        err_plot_size_to.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
+                    //             if(this.if_farm_plot_land.plot_size_to == '')
+                    //             { 
+                    //                 let err_plot_size_to = document.getElementById('err_if_farm_plot_land_plot_size_to');
+                    //                 if(err_plot_size_to) {
+                    //                     err_plot_size_to.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
 
-                                if(this.if_farm_plot_land.add_carpet_plot_size) {
+                    //             if(this.if_farm_plot_land.add_carpet_plot_size) {
                                     
-                                    if(this.if_farm_plot_land.carpet_plot_size == '')
-                                    { 
-                                        let err_carpet_plot_size = document.getElementById('err_if_farm_plot_land_carpet_plot_size');
-                                        if(err_carpet_plot_size) {
-                                            err_carpet_plot_size.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
+                    //                 if(this.if_farm_plot_land.carpet_plot_size == '')
+                    //                 { 
+                    //                     let err_carpet_plot_size = document.getElementById('err_if_farm_plot_land_carpet_plot_size');
+                    //                     if(err_carpet_plot_size) {
+                    //                         err_carpet_plot_size.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
 
-                                    if(this.if_farm_plot_land.carpet_plot_size_to == '')
-                                    { 
-                                        let err_carpet_plot_size_to = document.getElementById('err_if_farm_plot_land_carpet_plot_size_to');
-                                        if(err_carpet_plot_size_to) {
-                                            err_carpet_plot_size_to.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
-                                    }
-                                }
-                            }
+                    //                 if(this.if_farm_plot_land.carpet_plot_size_to == '')
+                    //                 { 
+                    //                     let err_carpet_plot_size_to = document.getElementById('err_if_farm_plot_land_carpet_plot_size_to');
+                    //                     if(err_carpet_plot_size_to) {
+                    //                         err_carpet_plot_size_to.classList.remove('d-none');
+                    //                         is_valid = false;
+                    //                     }
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(this.if_farm_plot_land.plot_with_construcation) {
+                    //         if(this.if_farm_plot_land.plot_with_construcation) {
 
-                                if(this.if_farm_plot_land.constructed_saleable_area == '')
-                                { 
-                                    let err_constructed_saleable_area = document.getElementById('err_if_farm_plot_land_constructed_saleable_area');
-                                    if(err_constructed_saleable_area) {
-                                        err_constructed_saleable_area.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
+                    //             if(this.if_farm_plot_land.constructed_saleable_area == '')
+                    //             { 
+                    //                 let err_constructed_saleable_area = document.getElementById('err_if_farm_plot_land_constructed_saleable_area');
+                    //                 if(err_constructed_saleable_area) {
+                    //                     err_constructed_saleable_area.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
 
-                                if(this.if_farm_plot_land.constructed_saleable_area_to == '')
-                                { 
-                                    let err_constructed_saleable_area_to = document.getElementById('err_if_farm_plot_land_constructed_saleable_area_to');
-                                    if(err_constructed_saleable_area_to) {
-                                        err_constructed_saleable_area_to.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    //             if(this.if_farm_plot_land.constructed_saleable_area_to == '')
+                    //             { 
+                    //                 let err_constructed_saleable_area_to = document.getElementById('err_if_farm_plot_land_constructed_saleable_area_to');
+                    //                 if(err_constructed_saleable_area_to) {
+                    //                     err_constructed_saleable_area_to.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
+                    //     }
+                    // }
 
-                    if(this.property_type == 88) {
+                    // if(this.property_type == 88) {
 
-                        if(this.if_office_or_retail.number_of_tower == '') {
-                            let number_of_tower = document.getElementById('88_if_office_or_retail_number_of_tower');
-                            if(number_of_tower) {
-                                let err_number_of_tower = document.getElementById('err_88_if_office_or_retail_number_of_tower');
-                                err_number_of_tower.classList.remove("d-none");
-                                is_valid = false;
-                            }
-                        } else {
-                            if (isNaN(this.if_office_or_retail.number_of_tower)) {
-                                let err_number_of_tower = document.getElementById('err_88_if_office_or_retail_number_of_tower');
-                                if(err_number_of_tower) {
-                                    err_number_of_tower.innerText = 'Number of tower must be number';
-                                    err_number_of_tower.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
-                        }
+                    //     if(this.if_office_or_retail.number_of_tower == '') {
+                    //         let number_of_tower = document.getElementById('88_if_office_or_retail_number_of_tower');
+                    //         if(number_of_tower) {
+                    //             let err_number_of_tower = document.getElementById('err_88_if_office_or_retail_number_of_tower');
+                    //             err_number_of_tower.classList.remove("d-none");
+                    //             is_valid = false;
+                    //         }
+                    //     } else {
+                    //         if (isNaN(this.if_office_or_retail.number_of_tower)) {
+                    //             let err_number_of_tower = document.getElementById('err_88_if_office_or_retail_number_of_tower');
+                    //             if(err_number_of_tower) {
+                    //                 err_number_of_tower.innerText = 'Number of tower must be number';
+                    //                 err_number_of_tower.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
+                    //     }
 
-                        if(this.if_office_or_retail.number_of_floor == '') {
-                            let number_of_floor = document.getElementById('88_if_office_or_retail_number_of_floor');
-                            if(number_of_floor) {
-                                let err_number_of_floor = document.getElementById('err_88_if_office_or_retail_number_of_floor');
-                                err_number_of_floor.classList.remove("d-none");
-                                is_valid = false;
-                            }
-                        } else {
-                            if (isNaN(this.if_office_or_retail.number_of_floor)) {
-                                let err_number_of_floor = document.getElementById('err_88_if_office_or_retail_number_of_floor');
-                                if(err_number_of_floor) {
-                                    err_number_of_floor.innerText = 'Number of floor must be number';
-                                    err_number_of_floor.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
-                        }
+                    //     if(this.if_office_or_retail.number_of_floor == '') {
+                    //         let number_of_floor = document.getElementById('88_if_office_or_retail_number_of_floor');
+                    //         if(number_of_floor) {
+                    //             let err_number_of_floor = document.getElementById('err_88_if_office_or_retail_number_of_floor');
+                    //             err_number_of_floor.classList.remove("d-none");
+                    //             is_valid = false;
+                    //         }
+                    //     } else {
+                    //         if (isNaN(this.if_office_or_retail.number_of_floor)) {
+                    //             let err_number_of_floor = document.getElementById('err_88_if_office_or_retail_number_of_floor');
+                    //             if(err_number_of_floor) {
+                    //                 err_number_of_floor.innerText = 'Number of floor must be number';
+                    //                 err_number_of_floor.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
+                    //     }
 
-                        if(this.if_office_or_retail.number_of_unit_each_block == '') {
-                            let number_of_unit = document.getElementById('88_if_office_or_retail_number_of_unit_each_block');
-                            if(number_of_unit) {
-                                let err_number_of_unit = document.getElementById('err_88_if_office_or_retail_number_of_unit_each_block');
-                                err_number_of_unit.classList.remove("d-none");
-                                is_valid = false;
-                            }
-                        } else {
-                            if (isNaN(this.if_office_or_retail.number_of_unit)) {
-                                let err_number_of_unit = document.getElementById('err_88_if_office_or_retail_number_of_unit_each_block');
-                                if(err_number_of_unit) {
-                                    err_number_of_unit.innerText = 'Number of unit must be number';
-                                    err_number_of_unit.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
-                        }
+                    //     if(this.if_office_or_retail.number_of_unit_each_block == '') {
+                    //         let number_of_unit = document.getElementById('88_if_office_or_retail_number_of_unit_each_block');
+                    //         if(number_of_unit) {
+                    //             let err_number_of_unit = document.getElementById('err_88_if_office_or_retail_number_of_unit_each_block');
+                    //             err_number_of_unit.classList.remove("d-none");
+                    //             is_valid = false;
+                    //         }
+                    //     } else {
+                    //         if (isNaN(this.if_office_or_retail.number_of_unit)) {
+                    //             let err_number_of_unit = document.getElementById('err_88_if_office_or_retail_number_of_unit_each_block');
+                    //             if(err_number_of_unit) {
+                    //                 err_number_of_unit.innerText = 'Number of unit must be number';
+                    //                 err_number_of_unit.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
+                    //     }
 
-                        if(this.if_office_or_retail.number_of_lift == '') {
-                            let number_of_lift = document.getElementById('88_if_office_or_retail_number_of_lift');
-                            if(number_of_lift) {
-                                let err_number_of_lift = document.getElementById('err_88_if_office_or_retail_number_of_lift');
-                                err_number_of_lift.classList.remove("d-none");
-                                is_valid = false;
-                            }
-                        } else {
-                            if (isNaN(this.if_office_or_retail.number_of_lift)) {
-                                let err_number_of_lift = document.getElementById('err_88_if_office_or_retail_number_of_lift');
-                                if(err_number_of_lift) {
-                                    err_number_of_lift.innerText = 'Number of lift must be number';
-                                    err_number_of_lift.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
-                        }
+                    //     if(this.if_office_or_retail.number_of_lift == '') {
+                    //         let number_of_lift = document.getElementById('88_if_office_or_retail_number_of_lift');
+                    //         if(number_of_lift) {
+                    //             let err_number_of_lift = document.getElementById('err_88_if_office_or_retail_number_of_lift');
+                    //             err_number_of_lift.classList.remove("d-none");
+                    //             is_valid = false;
+                    //         }
+                    //     } else {
+                    //         if (isNaN(this.if_office_or_retail.number_of_lift)) {
+                    //             let err_number_of_lift = document.getElementById('err_88_if_office_or_retail_number_of_lift');
+                    //             if(err_number_of_lift) {
+                    //                 err_number_of_lift.innerText = 'Number of lift must be number';
+                    //                 err_number_of_lift.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
+                    //     }
 
-                        if(this.if_office_or_retail.front_road_width == '') {
-                            let front_road_width = document.getElementById('88_if_office_or_retail_front_road_width');
-                            if(front_road_width) {
-                                let err_front_road_width = document.getElementById('err_88_if_office_or_retail_front_road_width');
-                                err_front_road_width.classList.remove("d-none");
-                                is_valid = false;
-                            }
-                        } else {
-                            if (isNaN(this.if_office_or_retail.front_road_width)) {
-                                let err_front_road_width = document.getElementById('err_88_if_office_or_retail_front_road_width');
-                                if(err_front_road_width) {
-                                    err_front_road_width.innerText = 'Number of front raod width must be number';
-                                    err_front_road_width.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            }
-                        }
+                    //     if(this.if_office_or_retail.front_road_width == '') {
+                    //         let front_road_width = document.getElementById('88_if_office_or_retail_front_road_width');
+                    //         if(front_road_width) {
+                    //             let err_front_road_width = document.getElementById('err_88_if_office_or_retail_front_road_width');
+                    //             err_front_road_width.classList.remove("d-none");
+                    //             is_valid = false;
+                    //         }
+                    //     } else {
+                    //         if (isNaN(this.if_office_or_retail.front_road_width)) {
+                    //             let err_front_road_width = document.getElementById('err_88_if_office_or_retail_front_road_width');
+                    //             if(err_front_road_width) {
+                    //                 err_front_road_width.innerText = 'Number of front raod width must be number';
+                    //                 err_front_road_width.classList.remove('d-none');
+                    //                 is_valid = false;
+                    //             }
+                    //         }
+                    //     }
 
-                        this.if_office_tower_details.forEach((office_tower , index) => {
+                    //     this.if_office_tower_details.forEach((office_tower , index) => {
 
-                            Object.entries(office_tower).forEach((key_name) => {
-                                if(key_name[1] == '' && !['is_carpet','is_built_up','carpet','carpet_to','built_up','built_up_to'].includes(key_name[0])) {
-                                    let error_element = document.getElementById(`err_88_tower_detail_${key_name[0]}_${index}`);
-                                    if(error_element) {
-                                        error_element.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
+                    //         Object.entries(office_tower).forEach((key_name) => {
+                    //             if(key_name[1] == '' && !['is_carpet','is_built_up','carpet','carpet_to','built_up','built_up_to'].includes(key_name[0])) {
+                    //                 let error_element = document.getElementById(`err_88_tower_detail_${key_name[0]}_${index}`);
+                    //                 if(error_element) {
+                    //                     error_element.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
 
-                                if(key_name[0] == 'carpet' || key_name[0] == 'carpet_to') {
-                                    if(office_tower.is_carpet) {
-                                        if(key_name[1] == '') {
-                                            let error_element = document.getElementById(`err_88_tower_detail_${key_name[0]}_${index}`);
-                                            if(error_element) {
-                                                error_element.classList.remove('d-none');
-                                                is_valid = false;
-                                            }
-                                        }
-                                    }
-                                }
+                    //             if(key_name[0] == 'carpet' || key_name[0] == 'carpet_to') {
+                    //                 if(office_tower.is_carpet) {
+                    //                     if(key_name[1] == '') {
+                    //                         let error_element = document.getElementById(`err_88_tower_detail_${key_name[0]}_${index}`);
+                    //                         if(error_element) {
+                    //                             error_element.classList.remove('d-none');
+                    //                             is_valid = false;
+                    //                         }
+                    //                     }
+                    //                 }
+                    //             }
 
-                                if(key_name[0] == 'built_up' || key_name[0] == 'built_up_to') {
-                                    if(office_tower.is_built_up) {
-                                        if(key_name[1] == '') {
-                                            let error_element = document.getElementById(`err_88_tower_detail_${key_name[0]}_${index}`);
-                                            if(error_element) {
-                                                error_element.classList.remove('d-none');
-                                                is_valid = false;
-                                            }
-                                        } 
-                                    }
-                                }
-                            });
-                        });
+                    //             if(key_name[0] == 'built_up' || key_name[0] == 'built_up_to') {
+                    //                 if(office_tower.is_built_up) {
+                    //                     if(key_name[1] == '') {
+                    //                         let error_element = document.getElementById(`err_88_tower_detail_${key_name[0]}_${index}`);
+                    //                         if(error_element) {
+                    //                             error_element.classList.remove('d-none');
+                    //                             is_valid = false;
+                    //                         }
+                    //                     } 
+                    //                 }
+                    //             }
+                    //         });
+                    //     });
 
                         
-                        this.if_retail_tower_details.forEach((retail_tower , index) => {
-                            Object.entries(retail_tower).forEach((key_name) => {
-                                if(key_name[1] == '' && key_name[0] != 'sub_category') {
-                                    let error_element = document.getElementById(`err_88_89_retail_tower_${key_name[0]}_${index}`);
-                                    if(error_element) {
-                                        error_element.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            });
-                        });
-                    }
+                    //     this.if_retail_tower_details.forEach((retail_tower , index) => {
+                    //         Object.entries(retail_tower).forEach((key_name) => {
+                    //             if(key_name[1] == '' && key_name[0] != 'sub_category') {
+                    //                 let error_element = document.getElementById(`err_88_89_retail_tower_${key_name[0]}_${index}`);
+                    //                 if(error_element) {
+                    //                     error_element.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         });
+                    //     });
+                    // }
 
-                    if(this.property_type == 89) {
-                        if(this.is_flat_or_penthouse.number_of_towers == '')
-                        { 
-                            let err_89_flat_number_of_tower = document.getElementById('err_89_flat_number_of_towers');
-                            if(err_89_flat_number_of_tower) {
-                                err_89_flat_number_of_tower.classList.remove('d-none');
-                                is_valid = false;
-                            }
-                        }
+                    // if(this.property_type == 89) {
+                    //     if(this.is_flat_or_penthouse.number_of_towers == '')
+                    //     { 
+                    //         let err_89_flat_number_of_tower = document.getElementById('err_89_flat_number_of_towers');
+                    //         if(err_89_flat_number_of_tower) {
+                    //             err_89_flat_number_of_tower.classList.remove('d-none');
+                    //             is_valid = false;
+                    //         }
+                    //     }
 
-                        if(this.is_flat_or_penthouse.number_of_floors == '')
-                        { 
-                            let err_89_flat_number_of_floors = document.getElementById('err_89_flat_number_of_floors');
-                            if(err_89_flat_number_of_floors) {
-                                err_89_flat_number_of_floors.classList.remove('d-none');
-                                is_valid = false;
-                            }
-                        }
+                    //     if(this.is_flat_or_penthouse.number_of_floors == '')
+                    //     { 
+                    //         let err_89_flat_number_of_floors = document.getElementById('err_89_flat_number_of_floors');
+                    //         if(err_89_flat_number_of_floors) {
+                    //             err_89_flat_number_of_floors.classList.remove('d-none');
+                    //             is_valid = false;
+                    //         }
+                    //     }
 
-                        if(this.is_flat_or_penthouse.total_units == '')
-                        { 
-                            let err_89_flat_total_units = document.getElementById('err_89_flat_total_units');
-                            if(err_89_flat_total_units) {
-                                err_89_flat_total_units.classList.remove('d-none');
-                                is_valid = false;
-                            }
-                        }
+                    //     if(this.is_flat_or_penthouse.total_units == '')
+                    //     { 
+                    //         let err_89_flat_total_units = document.getElementById('err_89_flat_total_units');
+                    //         if(err_89_flat_total_units) {
+                    //             err_89_flat_total_units.classList.remove('d-none');
+                    //             is_valid = false;
+                    //         }
+                    //     }
 
-                        if(this.is_flat_or_penthouse.number_of_elevator == '')
-                        { 
-                            let err_89_flat_number_of_elevator = document.getElementById('err_89_flat_number_of_elevator');
-                            if(err_89_flat_number_of_elevator) {
-                                err_89_flat_number_of_elevator.classList.remove('d-none');
-                                is_valid = false;
-                            }
-                        }
+                    //     if(this.is_flat_or_penthouse.number_of_elevator == '')
+                    //     { 
+                    //         let err_89_flat_number_of_elevator = document.getElementById('err_89_flat_number_of_elevator');
+                    //         if(err_89_flat_number_of_elevator) {
+                    //             err_89_flat_number_of_elevator.classList.remove('d-none');
+                    //             is_valid = false;
+                    //         }
+                    //     }
 
-                        this.if_residential_only_wings.wing_details.forEach((res_wing , index) => {
-                            Object.entries(res_wing).forEach((key_name) => {
-                                if(key_name[1] == '' && key_name[0] != 'sub_categories') {
-                                    let error_element = document.getElementById(`err_second_res_wing_${key_name[0]}_${index}`);
-                                    if(error_element) {
-                                        error_element.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
+                    //     this.if_residential_only_wings.wing_details.forEach((res_wing , index) => {
+                    //         Object.entries(res_wing).forEach((key_name) => {
+                    //             if(key_name[1] == '' && key_name[0] != 'sub_categories') {
+                    //                 let error_element = document.getElementById(`err_second_res_wing_${key_name[0]}_${index}`);
+                    //                 if(error_element) {
+                    //                     error_element.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
 
-                                if(key_name[0] == 'sub_categories') {
-                                    let first_categories_select = document.getElementById(`extra_sub_category_of_wings_${index}`);
+                    //             if(key_name[0] == 'sub_categories') {
+                    //                 let first_categories_select = document.getElementById(`extra_sub_category_of_wings_${index}`);
 
-                                    if(first_categories_select) {
-                                        if(first_categories_select.value == '') {
-                                            let error_element = document.getElementById(`err_second_res_wing_${key_name[0]}_${index}`);
-                                            if(error_element) {
-                                                error_element.classList.remove('d-none');
-                                                is_valid = false;
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-                        });
+                    //                 if(first_categories_select) {
+                    //                     if(first_categories_select.value == '') {
+                    //                         let error_element = document.getElementById(`err_second_res_wing_${key_name[0]}_${index}`);
+                    //                         if(error_element) {
+                    //                             error_element.classList.remove('d-none');
+                    //                             is_valid = false;
+                    //                         }
+                    //                     }
+                    //                 }
+                    //             }
+                    //         });
+                    //     });
 
-                        this.if_residential_only_units.unit_details.forEach((res_unit_details , index) => {
+                    //     this.if_residential_only_units.unit_details.forEach((res_unit_details , index) => {
 
-                            let wing_element = document.getElementById(`second_wing_array_${index}`);
+                    //         let wing_element = document.getElementById(`second_wing_array_${index}`);
 
-                            if(wing_element) {
-                                if(wing_element.value == '') {
-                                    let err_wing = document.getElementById(`err_second_if_residential_only_units_wing_${index}`);
-                                    if(err_wing) {
-                                        err_wing.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //         if(wing_element) {
+                    //             if(wing_element.value == '') {
+                    //                 let err_wing = document.getElementById(`err_second_if_residential_only_units_wing_${index}`);
+                    //                 if(err_wing) {
+                    //                     err_wing.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(res_unit_details.has_built_up) {
-                                if(res_unit_details.built_up == '') {
-                                    let error_built_up_from = document.getElementById(`err_second_if_residential_only_units_built_up_${index}`);
-                                    if(error_built_up_from) {
-                                        error_built_up_from.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
+                    //         if(res_unit_details.has_built_up) {
+                    //             if(res_unit_details.built_up == '') {
+                    //                 let error_built_up_from = document.getElementById(`err_second_if_residential_only_units_built_up_${index}`);
+                    //                 if(error_built_up_from) {
+                    //                     error_built_up_from.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
 
-                                if(res_unit_details.built_up_to == '') {
-                                    let error_built_up_to = document.getElementById(`err_second_if_residential_only_units_built_up_to_${index}`);
-                                    if(error_built_up_to) {
-                                        error_built_up_to.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //             if(res_unit_details.built_up_to == '') {
+                    //                 let error_built_up_to = document.getElementById(`err_second_if_residential_only_units_built_up_to_${index}`);
+                    //                 if(error_built_up_to) {
+                    //                     error_built_up_to.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            if(res_unit_details.has_carpet) {
-                                if(res_unit_details.carpet_area == '') {
-                                    let error_carpet_area_from = document.getElementById(`err_second_if_residential_only_units_carpet_area_${index}`);
-                                    if(error_carpet_area_from) {
-                                        error_carpet_area_from.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
+                    //         if(res_unit_details.has_carpet) {
+                    //             if(res_unit_details.carpet_area == '') {
+                    //                 let error_carpet_area_from = document.getElementById(`err_second_if_residential_only_units_carpet_area_${index}`);
+                    //                 if(error_carpet_area_from) {
+                    //                     error_carpet_area_from.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
 
-                                if(res_unit_details.carpet_area_to == '') {
-                                    let error_carpet_to = document.getElementById(`err_second_if_residential_only_units_carpet_area_to_${index}`);
-                                    if(error_carpet_to) {
-                                        error_carpet_to.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            }
+                    //             if(res_unit_details.carpet_area_to == '') {
+                    //                 let error_carpet_to = document.getElementById(`err_second_if_residential_only_units_carpet_area_to_${index}`);
+                    //                 if(error_carpet_to) {
+                    //                     error_carpet_to.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         }
 
-                            Object.entries(res_unit_details).forEach((key_name) => {
+                    //         Object.entries(res_unit_details).forEach((key_name) => {
 
-                                let res_only_unit_fields = [
-                                    'saleable',
-                                    'saleable_to',
-                                    'wash_area',
-                                    'wash_area_to',
-                                    'balcony',
-                                    'balcony_to',
-                                    'floor_height',
-                                    'ceiling_height',
-                                ];
+                    //             let res_only_unit_fields = [
+                    //                 'saleable',
+                    //                 'saleable_to',
+                    //                 'wash_area',
+                    //                 'wash_area_to',
+                    //                 'balcony',
+                    //                 'balcony_to',
+                    //                 'floor_height',
+                    //                 'ceiling_height',
+                    //             ];
 
-                                if(key_name[1] == '' && res_only_unit_fields.includes(key_name[0])) {
-                                    let error_element = document.getElementById(`err_second_if_residential_only_units_${key_name[0]}_${index}`);
-                                    if(error_element) {
-                                        error_element.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
-                            });
-                        });
+                    //             if(key_name[1] == '' && res_only_unit_fields.includes(key_name[0])) {
+                    //                 let error_element = document.getElementById(`err_second_if_residential_only_units_${key_name[0]}_${index}`);
+                    //                 if(error_element) {
+                    //                     error_element.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
+                    //         });
+                    //     });
 
                          
-                        this.if_retail_tower_details.forEach((retail_tower , index) => {
-                            Object.entries(retail_tower).forEach((key_name) => {
-                                if(key_name[1] == '' && key_name[0] != 'sub_category') {
-                                    let error_element = document.getElementById(`err_88_89_retail_tower_${key_name[0]}_${index}`);
-                                    if(error_element) {
-                                        error_element.classList.remove('d-none');
-                                        is_valid = false;
-                                    }
-                                }
+                    //     this.if_retail_tower_details.forEach((retail_tower , index) => {
+                    //         Object.entries(retail_tower).forEach((key_name) => {
+                    //             if(key_name[1] == '' && key_name[0] != 'sub_category') {
+                    //                 let error_element = document.getElementById(`err_88_89_retail_tower_${key_name[0]}_${index}`);
+                    //                 if(error_element) {
+                    //                     error_element.classList.remove('d-none');
+                    //                     is_valid = false;
+                    //                 }
+                    //             }
 
-                                if(key_name[0] == 'sub_category') {
+                    //             if(key_name[0] == 'sub_category') {
 
-                                    let first_categories_selection = document.getElementById(`extra_floor_category_${index}`);
+                    //                 let first_categories_selection = document.getElementById(`extra_floor_category_${index}`);
 
-                                    if(first_categories_selection) {
-                                        if(first_categories_selection.value == '') {
-                                            let error_element = document.getElementById(`err_88_89_retail_tower_${key_name[0]}_${index}`);
-                                            if(error_element) {
-                                                error_element.classList.remove('d-none');
-                                                is_valid = false;
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-                        });
-                    }
+                    //                 if(first_categories_selection) {
+                    //                     if(first_categories_selection.value == '') {
+                    //                         let error_element = document.getElementById(`err_88_89_retail_tower_${key_name[0]}_${index}`);
+                    //                         if(error_element) {
+                    //                             error_element.classList.remove('d-none');
+                    //                             is_valid = false;
+                    //                         }
+                    //                     }
+                    //                 }
+                    //             }
+                    //         });
+                    //     });
+                    // }
 
                     return is_valid;
                 },
@@ -3144,7 +3169,19 @@
 
                     form_data.set('other_documents', JSON.stringify(this.other_documents));
 
-                    let url = "{{ route('admin.saveProject') }}";
+                    let url = null;
+
+                    if(user_role == 'admin') {
+                        url = "{{ route('admin.saveProject') }}";
+                    }
+
+                    if(user_role == 'builder') {
+                        url = "{{ route('builder.saveProject') }}";
+                    }
+
+                    if(user_role == 'superadmin') {
+                        url = "{{ route('superadmin.saveProject') }}";
+                    }
                     
                     axios.post(url, form_data, {
                         headers: {
@@ -3152,7 +3189,21 @@
                         },
                     })
                     .then((res) => {
-                        var redirect_url = "{{route('admin.projects')}}";
+
+                        var redirect_url = null;
+
+                        if(user_role == 'admin') {
+                            redirect_url = "{{ route('admin.projects') }}";
+                        }
+
+                        if(user_role == 'builder') {
+                            redirect_url = "{{ route('builder.projects') }}";
+                        }
+
+                        if(user_role == 'superadmin') {
+                            redirect_url = "{{ route('superadmin.projects') }}";
+                        }
+
                         window.location.href = redirect_url;
                     })
                     .catch((err) => {
@@ -3270,11 +3321,26 @@
                 })
             });
 
+
+            let url_for_datatable = null;
+            
+            if(user_role == 'admin') {
+                url_for_datatable = "{{ route('admin.projects') }}";
+            }
+
+            if(user_role == 'builder') {
+                url_for_datatable = "{{ route('builder.projects') }}";
+            }
+
+            if(user_role == 'superadmin') {
+                url_for_datatable = "{{ route('superadmin.projects') }}";
+            }
+
 			$('#projectTable').DataTable({
 				processing: true,
 				serverSide: true,
 				ajax: {
-					url: "{{ route('admin.projects') }}",
+					url: url_for_datatable,
 					data: function(d) {
 						d.go_data_id = go_data_id;
 					}
@@ -3285,7 +3351,7 @@
 						name: 'select_checkbox',
 						orderable: false
 					},
-				{
+				    {
 						data: 'project_name',
 						name: 'project_name'
 					},
@@ -3518,9 +3584,24 @@
 				confirmButtonText: 'Yes',
 			}).then(function(isConfirm) {
 				if (isConfirm.isConfirmed) {
+
+                    let url_for_delete = null;
+            
+                    if(user_role == 'admin') {
+                        url_for_delete = "{{ route('admin.deleteProject') }}";
+                    }
+
+                    if(user_role == 'builder') {
+                        url_for_delete = "{{ route('builder.deleteProject') }}";
+                    }
+
+                    if(user_role == 'superadmin') {
+                        url_for_delete = "{{ route('superadmin.deleteProject') }}";
+                    }
+
 					$.ajax({
 						type: "POST",
-						url: "{{ route('admin.deleteProject') }}",
+						url: url_for_delete,
 						data: {
 							allids: JSON.stringify(rowss),
 							_token: '{{ csrf_token() }}'
@@ -3558,9 +3639,24 @@
 			}).then(function(isConfirm) {
 				if (isConfirm.isConfirmed) {
 					var id = $(data).attr('data-id');
+
+                    let url_for_single_delete = null;
+
+                    if(user_role == 'admin') {
+                        url_for_single_delete = "{{ route('admin.deleteProject') }}";
+                    }
+
+                    if(user_role == 'builder') {
+                        url_for_single_delete = "{{ route('builder.deleteProject') }}";
+                    }
+
+                    if(user_role == 'superadmin') {
+                        url_for_single_delete = "{{ route('superadmin.deleteProject') }}";
+                    }
+
 					$.ajax({
 						type: "POST",
-						url: "{{ route('admin.deleteProject') }}",
+						url: url_for_single_delete,
 						data: {
 							id: id,
 							_token: '{{ csrf_token() }}'
@@ -3721,151 +3817,6 @@
 				return false; // for demo
 			}
 		});
-
-
-		$(document).on('click', '#saveProject', function(e) {
-			e.preventDefault();
-			$("#modal_form").validate();
-			if (!$("#modal_form").valid()) {
-				return
-			}
-			$(this).prop('disabled', true);
-			var amenities = []
-			var contact_details = [];
-			var tower_details = [];
-			var unit_details = [];
-			$(".project_amenity").each(function(index) {
-				if ($(this).prop('checked')) {
-					amenities.push(1);
-				} else {
-					amenities.push(0);
-				}
-			});
-			amenities = JSON.stringify(amenities);
-
-			$("#all_contacts [name=contact_person_name]").each(function(index) {
-				cona_arr = []
-				unique_id = $(this).parent().attr('data-contact_id');
-				name = $(this).val();
-				no = $("[data-contact_id=" + unique_id + "] input[name=contact_person_no]").val();
-				typee = $("[data-contact_id=" + unique_id + "] input[name=contact_person_type]").val();
-				cona_arr.push(name)
-				cona_arr.push(no)
-				cona_arr.push(typee)
-				if (filtercona_arr(cona_arr)) {
-					contact_details.push(cona_arr);
-				}
-			});
-			contact_details = JSON.stringify(contact_details);
-
-			$("#all_towers [name=tower_name]").each(function(index) {
-				cona_arr = []
-				unique_id = $(this).parent().attr('data-contact_id');
-				name = $(this).val();
-				tower_total_units = $("[data-contact_id=" + unique_id + "] [name=tower_total_units]")
-					.val();
-				total_floor = $("[data-contact_id=" + unique_id + "] [name=total_floor]").val();
-				cona_arr.push(name);
-				cona_arr.push(tower_total_units);
-				cona_arr.push(total_floor);
-				if (filtercona_arr(cona_arr)) {
-					tower_details.push(cona_arr);
-				}
-			})
-
-			tower_details = JSON.stringify(tower_details);
-
-			$("#all_unit_types [name=type_plan_name]").each(function(index) {
-				cona_arr = []
-				unique_id = $(this).parent().attr('data-contact_id');
-				type_plan_name = $(this).val();
-				requirement_type = $("[data-contact_id=" + unique_id + "] [name=requirement_type]").val();
-				configuration = $("[data-contact_id=" + unique_id + "] [name=configuration]").val();
-				builtuparea = $("[data-contact_id=" + unique_id +
-					"] [name=builtup_area]").val();
-				builtup_area_measurement = $("[data-contact_id=" + unique_id +
-					"] [name=builtup_area_measurement]").val();
-				rera_area = $("[data-contact_id=" + unique_id + "] [name=rera_area]").val();
-				rera_area_measurement = $("[data-contact_id=" + unique_id +
-					"] [name=rera_area_measurement]").val();
-				wash_area = $("[data-contact_id=" + unique_id + "] [name=wash_area]").val();
-				wash_area_measurement = $("[data-contact_id=" + unique_id +
-					"] [name=wash_area_measurement]").val();
-				balcony_area = $("[data-contact_id=" + unique_id + "] [name=balcony_area]").val();
-				balcony_area_measurement = $("[data-contact_id=" + unique_id +
-					"] [name=balcony_area_measurement]").val();
-				carpet_area = $("[data-contact_id=" + unique_id + "] [name=carpet_area]").val();
-				carpet_area_measurement = $("[data-contact_id=" + unique_id +
-					"] [name=carpet_area_measurement]").val();
-				terrace_carpet_area = $("[data-contact_id=" + unique_id + "] [name=terrace_carpet_area]")
-					.val();
-				terrace_carpet_area_measurement = $("[data-contact_id=" + unique_id +
-					"] [name=terrace_carpet_area_measurement]").val();
-				terrace_super_builtup_area = $("[data-contact_id=" + unique_id +
-					"] [name=terrace_super_builtup_area]").val();
-				terrace_super_builtup_area_measurement = $("[data-contact_id=" + unique_id +
-					"] [name=terrace_super_builtup_area_measurement]").val();
-
-				cona_arr.push(type_plan_name)
-				cona_arr.push(requirement_type)
-				cona_arr.push(configuration)
-				cona_arr.push(builtuparea)
-				cona_arr.push(builtup_area_measurement)
-				cona_arr.push(rera_area)
-				cona_arr.push(rera_area_measurement)
-				cona_arr.push(wash_area)
-				cona_arr.push(wash_area_measurement)
-				cona_arr.push(balcony_area)
-				cona_arr.push(balcony_area_measurement)
-				cona_arr.push(carpet_area)
-				cona_arr.push(carpet_area_measurement)
-				cona_arr.push(terrace_carpet_area)
-				cona_arr.push(terrace_carpet_area_measurement)
-				cona_arr.push(terrace_super_builtup_area)
-				cona_arr.push(terrace_super_builtup_area_measurement)
-				if (filtercona_arr(cona_arr)) {
-					unit_details.push(cona_arr);
-				}
-			});
-			unit_details = JSON.stringify(unit_details);
-
-			var id = $('#this_data_id').val()
-			$.ajax({
-				type: "POST",
-				url: "{{ route('admin.saveProject') }}",
-				data: {
-					id: id,
-					project_name: $('#project_name').val(),
-					builder_id: $('#builder_id').val(),
-					area_id: $('#area_id').val(),
-					state_id: $('#state_id').val(),
-					city_id: $('#city_id').val(),
-					address: $('#address').val(),
-					pincode: $('#pincode').val(),
-					status: Number($('#status').prop('checked')),
-					email: $('#email').val(),
-					floor_count: $('#floor_count').val(),
-					unit_no: $('#unit_no').val(),
-					lift_count: $('#lift_count').val(),
-					property_type: JSON.stringify($('#property_type').val()),
-					project_description: $('#project_description').val(),
-					contact_details: contact_details,
-					amenities: amenities,
-					tower_details: tower_details,
-					unit_details: unit_details,
-					building_posession: $('#building_posession').val(),
-					is_prime: Number($('#prime_project').prop('checked')),
-					restrictions: $('#restrictions').val(),
-					project_status: $('#project_status').val(),
-					building_quality: $('#building_quality').val(),
-					_token: '{{ csrf_token() }}'
-				},
-				success: function(data) {
-					var redirect_url = "{{route('admin.projects')}}";
-                    window.location.href = redirect_url;
-				}
-			});
-		})
 
 		function floatingField(){
 			//changed by Subhash

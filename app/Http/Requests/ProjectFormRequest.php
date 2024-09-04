@@ -31,15 +31,8 @@ class ProjectFormRequest extends FormRequest
 			'city' => 'required',
 			'state' => 'required',
 			'pincode' => 'required',
-			'land_area' => 'required',
-			'rera_number' => 'required|unique:projects,rera_number,'.$this->id,
-
-			'project_status' => 'required',
-			'project_status_question' => 'required',
-
+			'rera_number' => 'unique:projects,rera_number,'.$this->id,
 			'propery_type' => 'required',
-			'amenities' => 'required|min:1',
-			'remark' => 'required',
 		];
 
 		if($this->id == '' || $this->id == null) {
