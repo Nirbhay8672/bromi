@@ -2179,6 +2179,7 @@ class PropertyController extends Controller
         $data->service_elavator = $request->service_elavator;
         $data->servant_room = $request->servant_room;
         $data->hot_property = $request->hot_property;
+        $data->week_end_villa = $request->week_end_villa;
         $data->is_favourite = $request->is_favourite;
         $data->front_road_width = $request->front_road_width;
         $data->construction_allowed_for = is_array($request->construction_allowed_for) ? implode(",", $request->construction_allowed_for) : $request->construction_allowed_for;
