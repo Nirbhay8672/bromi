@@ -194,6 +194,10 @@ class PropertyController extends Controller
                         return $query->where('properties.is_terrace', $request->filter_is_terraced)
                             ->where('properties.prop_status', 1);
                     })
+                    ->when($request->filter_is_weekend, function ($query) use ($request) {
+                        return $query->where('properties.week_end_villa', $request->filter_is_weekend)
+                            ->where('properties.prop_status', 1);
+                    })
                     ->when($request->filter_is_hot, function ($query) use ($request) {
                         return $query->where('hot_property', $request->filter_is_hot)
                             ->where('properties.prop_status', 1);
@@ -398,6 +402,11 @@ class PropertyController extends Controller
                     })
                     ->when($request->filter_is_terraced, function ($query) use ($request) {
                         return $query->where('properties.is_terrace', $request->filter_is_terraced)
+                            ->where('properties.prop_status', 1);
+                    })
+                    ->when($request->filter_is_weekend, function ($query) use ($request) {
+                        // dd("week end",$request->filter_is_weekend);
+                        return $query->where('properties.week_end_villa', $request->filter_is_weekend)
                             ->where('properties.prop_status', 1);
                     })
                     ->when($request->filter_is_hot, function ($query) use ($request) {
