@@ -1378,6 +1378,13 @@
                                                                 <label class="form-check-label" for="hot_property">Hot
                                                                 </label>
                                                             </div>
+                                                            <div
+                                                                class="form-check checkbox the_week_end_villa checkbox-solid-success mb-0 col-md-2 m-b-20">
+                                                                <input class="form-check-input" id="week_end_villa"
+                                                                    type="checkbox">
+                                                                <label class="form-check-label"
+                                                                    for="week_end_villa">Weekend</label>
+                                                            </div>
                                                             {{-- <div
                                                                 class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20">
                                                                 <input class="form-check-input" id="is_favourite"
@@ -4490,6 +4497,7 @@
                         $('#service_elavator').prop('checked', Number(data.service_elavator)).trigger('change');
                         $('#servant_room').prop('checked', Number(data.servant_room)).trigger('change');
                         $('#hot_property').prop('checked', Number(data.hot_property)).trigger('change');
+                        $('#week_end_villa').prop('checked', Number(data.week_end_villa)).trigger('change');
                         $('#is_favourite').prop('checked', Number(data.is_favourite)).trigger('change');
                         $('#is_pre_leased').prop('checked', Number(data.is_pre_leased)).trigger('change');
                         $('#is_terrace').prop('checked', Number(data.is_terrace)).trigger('change');
@@ -5052,6 +5060,7 @@
                         service_elavator: Number($('#service_elavator').prop('checked')),
                         servant_room: Number($('#servant_room').prop('checked')),
                         hot_property: Number($('#hot_property').prop('checked')),
+                        week_end_villa: Number($('#week_end_villa').prop('checked')),                        
                         is_favourite: Number($('#is_favourite').prop('checked')),
                         is_terrace: Number($('#is_terrace').prop('checked')),
                         washrooms2_type: $('input[name=washrooms2_type]:checked').val(),
