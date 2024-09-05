@@ -4388,7 +4388,6 @@
 
             function getProperty() {
                 var id = '{{ isset($current_id) ? $current_id : 'null' }}';
-                console.log("idddd", id);
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.getProperty') }}",
