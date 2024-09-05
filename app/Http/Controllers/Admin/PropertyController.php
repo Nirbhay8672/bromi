@@ -2758,7 +2758,7 @@ class PropertyController extends Controller
                             ->where('budget_to', '>=', $sell_price);
                     })->orWhere(function ($subQuery) use ($both_price) {
                         $subQuery->when($both_price !== "", function ($subQuery) use ($both_price) {
-                            dd("both_price", $both_price);
+                            // dd("both_price", $both_price);
                             $subQuery->where('budget_from', '<=', $both_price)
                                 ->where('budget_to', '>=', $both_price);
                         });

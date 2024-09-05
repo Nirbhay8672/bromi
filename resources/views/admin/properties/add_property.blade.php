@@ -1019,6 +1019,30 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        
+                                                        <div class="col-md-3 the_carpet_area_edit">
+                                                            <div class="input-group">
+                                                                <div class="form-group col-md-7 m-b-20">
+                                                                    <label for="Carpet Area">Carpet Area</label>
+                                                                    <input class="form-control" name="carpet_area"
+                                                                        id="carpet_area_edit" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="carpet_area_measurement">
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                         <div class="col-md-3 the_builtup_area">
                                                             <div class="input-group">
@@ -4405,6 +4429,16 @@
                         } else {
                             $('.the_carpet_plot_area').hide(); // Hide the section if value is empty
                         }
+                        
+                          let carpetAreaVal = setSplitedValue(data.carpet_area, 1);
+                        if (carpetAreaVal != "") {
+                            $('#add_area_button_container').hide(); // Hide the button
+                            $('.the_carpet_area_edit').show(); // Show the section
+                        } else {
+                            $('#area_details_the_carpet_area').show(); // Show the button
+                            $('.the_carpet_area_edit').hide(); // Hide the section if value is empty
+                        }
+
                         const ceilingHeight = data.ceiling_height;
                         let parts = ceilingHeight.split('_-||-_');
                         $('#this_data_id').val(data.id);
@@ -4457,6 +4491,7 @@
                         $('#salable_area').val(setSplitedValue(data.salable_area, 1));
                         $('#salable_area_measurement').val(setSplitedValue(data.salable_area, 2));
                         $('#carpet_area').val(setSplitedValue(data.carpet_area, 1));
+                        $('#carpet_area_edit').val(setSplitedValue(data.carpet_area, 1));
                         $('#carpet_area_measurement').val(setSplitedValue(data.carpet_area, 2));
                         $('#storage_centre_height').val(setSplitedValue(data.storage_centre_height, 1));
                         $('#storage_centre_height_measurement').val(setSplitedValue(data.storage_centre_height,
