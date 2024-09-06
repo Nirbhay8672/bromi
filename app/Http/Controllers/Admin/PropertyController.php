@@ -3040,13 +3040,14 @@ class PropertyController extends Controller
         // $data['states'] = State::orderBy('name')->get();
         $data['cities'] = City::orderBy('name')->where('user_id', Auth::user()->id)->get();
         $data['states'] = State::orderBy('name')->where('user_id', Auth::user()->id)->get();
+
         $data['areas'] = Areas::orderBy('name')
             ->where('user_id', Auth::user()->id)
             ->where('status', 1)
             ->get();
-        $data['districts'] = District::orderBy('name')->get();
-        $data['talukas'] = Taluka::orderBy('name')->get();
-        $data['villages'] = Village::orderBy('name')->get();
+        $data['districts'] = District::orderBy('name')->where('user_id', Auth::user()->id)->get();
+        $data['talukas'] = Taluka::orderBy('name')->where('user_id', Auth::user()->id)->get();
+        $data['villages'] = Village::orderBy('name')->where('user_id', Auth::user()->id)->get();
         $data['current_id'] = $request->id;
         $data['property_configuration_settings'] = DropdownSettings::get()->toArray();
         $prop_type = [];
@@ -3065,6 +3066,9 @@ class PropertyController extends Controller
         $data['land_units'] = FacadesDB::table('land_units')->get();
         $data['country_codes']  = DB::table('countries')->get();
 
+        $data['first_city'] = City::where('user_id',Auth::user()->id)->first();
+        $data['first_district'] = District::where('user_id',Auth::user()->id)->first();
+
         return view('admin.properties.add_property', $data, compact('edit_category', 'edit_configuration'));
     }
 
@@ -3082,9 +3086,9 @@ class PropertyController extends Controller
             ->where('user_id', Auth::user()->id)
             ->where('status', 1)
             ->get();
-        $data['districts'] = District::orderBy('name')->get();
-        $data['talukas'] = Taluka::orderBy('name')->get();
-        $data['villages'] = Village::orderBy('name')->get();
+        $data['districts'] = District::orderBy('name')->where('user_id', Auth::user()->id)->get();
+        $data['talukas'] = Taluka::orderBy('name')->where('user_id', Auth::user()->id)->get();
+        $data['villages'] = Village::orderBy('name')->where('user_id', Auth::user()->id)->get();
         $parent_id = Session::get('parent_id');
         $amenities = DropdownSettings::where('user_id', $parent_id)->where('dropdown_for', 'property_amenities')->get()->toArray();
         foreach ($data['contacts'] as $key => $value) {
@@ -3118,6 +3122,9 @@ class PropertyController extends Controller
         $data['property_const_docs'] = PropertyConstructionDocs::all();
         $data['land_units'] = FacadesDB::table('land_units')->get();
         $data['country_codes']  = DB::table('countries')->get();
+
+        $data['first_city'] = City::where('user_id',Auth::user()->id)->first();
+        $data['first_district'] = District::where('user_id',Auth::user()->id)->first();
 
         return view('admin.properties.add_property', $data);
     }
