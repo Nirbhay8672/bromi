@@ -545,8 +545,7 @@
                                                             </select>
                                                             <div id="project_id_error" style="color: red"></div>
                                                         </div>
-
-                                                        {{-- state city --}}
+                                                        
                                                         @php
                                                             $authStateId = Auth::user()->state_id;
                                                         @endphp
@@ -4356,8 +4355,8 @@
             });
 
             function getProperty() {
-                var id = '{{ isset($current_id) ? $current_id : 'null' }}';
-                console.log("idddd", id);
+                var id = "{{ isset($current_id) ? $current_id : null }}";
+
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.getProperty') }}",
@@ -4366,7 +4365,17 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
-                        if (data == '') {
+
+                        if (data == null || data == '') {
+                            
+                            let first_city = @json($first_city);
+                            $('#state-dropdown').val(first_city.id).trigger('change');
+
+                            if($('#district_id')) {
+                                let first_district = @json($first_district);
+                                $('#district_id').val(first_district.id).trigger('change');
+                            }
+
                             return
                         }
                         //Disable Price on Land
@@ -4390,7 +4399,8 @@
                         });
                         // edit property selected valdata.width_of_plot, 1
                         data = JSON.parse(data);
-                        let carpetVal = setSplitedValue(data.carpet_plot_area, 1);
+
+                        let carpetVal = setSplitedValue(data.carpet_plot_area ?? 0, 1);
                         if (carpetVal != "") {
                             console.log("carpet VAl", carpetVal);
                             $('#carpet_plot_area').val(carpetVal); // Set the value
