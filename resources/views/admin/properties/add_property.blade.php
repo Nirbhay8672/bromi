@@ -1018,6 +1018,30 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        
+                                                        <div class="col-md-3 the_carpet_area_edit">
+                                                            <div class="input-group">
+                                                                <div class="form-group col-md-7 m-b-20">
+                                                                    <label for="Carpet Area">Carpet Area</label>
+                                                                    <input class="form-control" name="carpet_area"
+                                                                        id="carpet_area_edit" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="carpet_area_measurement">
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                         <div class="col-md-3 the_builtup_area">
                                                             <div class="input-group">
@@ -1376,6 +1400,13 @@
                                                                     type="checkbox">
                                                                 <label class="form-check-label" for="hot_property">Hot
                                                                 </label>
+                                                            </div>
+                                                            <div
+                                                                class="form-check checkbox the_week_end_villa checkbox-solid-success mb-0 col-md-2 m-b-20">
+                                                                <input class="form-check-input" id="week_end_villa"
+                                                                    type="checkbox">
+                                                                <label class="form-check-label"
+                                                                    for="week_end_villa">Weekend</label>
                                                             </div>
                                                             {{-- <div
                                                                 class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20">
@@ -4356,7 +4387,6 @@
 
             function getProperty() {
                 var id = "{{ isset($current_id) ? $current_id : null }}";
-
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.getProperty') }}",
@@ -4408,6 +4438,16 @@
                         } else {
                             $('.the_carpet_plot_area').hide(); // Hide the section if value is empty
                         }
+                        
+                          let carpetAreaVal = setSplitedValue(data.carpet_area, 1);
+                        if (carpetAreaVal != "") {
+                            $('#add_area_button_container').hide(); // Hide the button
+                            $('.the_carpet_area_edit').show(); // Show the section
+                        } else {
+                            $('#area_details_the_carpet_area').show(); // Show the button
+                            $('.the_carpet_area_edit').hide(); // Hide the section if value is empty
+                        }
+
                         const ceilingHeight = data.ceiling_height;
                         let parts = ceilingHeight.split('_-||-_');
                         $('#this_data_id').val(data.id);
@@ -4460,6 +4500,7 @@
                         $('#salable_area').val(setSplitedValue(data.salable_area, 1));
                         $('#salable_area_measurement').val(setSplitedValue(data.salable_area, 2));
                         $('#carpet_area').val(setSplitedValue(data.carpet_area, 1));
+                        $('#carpet_area_edit').val(setSplitedValue(data.carpet_area, 1));
                         $('#carpet_area_measurement').val(setSplitedValue(data.carpet_area, 2));
                         $('#storage_centre_height').val(setSplitedValue(data.storage_centre_height, 1));
                         $('#storage_centre_height_measurement').val(setSplitedValue(data.storage_centre_height,
@@ -4500,6 +4541,7 @@
                         $('#service_elavator').prop('checked', Number(data.service_elavator)).trigger('change');
                         $('#servant_room').prop('checked', Number(data.servant_room)).trigger('change');
                         $('#hot_property').prop('checked', Number(data.hot_property)).trigger('change');
+                        $('#week_end_villa').prop('checked', Number(data.week_end_villa)).trigger('change');
                         $('#is_favourite').prop('checked', Number(data.is_favourite)).trigger('change');
                         $('#is_pre_leased').prop('checked', Number(data.is_pre_leased)).trigger('change');
                         $('#is_terrace').prop('checked', Number(data.is_terrace)).trigger('change');
@@ -5062,6 +5104,7 @@
                         service_elavator: Number($('#service_elavator').prop('checked')),
                         servant_room: Number($('#servant_room').prop('checked')),
                         hot_property: Number($('#hot_property').prop('checked')),
+                        week_end_villa: Number($('#week_end_villa').prop('checked')),                        
                         is_favourite: Number($('#is_favourite').prop('checked')),
                         is_terrace: Number($('#is_terrace').prop('checked')),
                         washrooms2_type: $('input[name=washrooms2_type]:checked').val(),

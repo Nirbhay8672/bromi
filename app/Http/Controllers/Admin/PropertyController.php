@@ -194,6 +194,10 @@ class PropertyController extends Controller
                         return $query->where('properties.is_terrace', $request->filter_is_terraced)
                             ->where('properties.prop_status', 1);
                     })
+                    ->when($request->filter_is_weekend, function ($query) use ($request) {
+                        return $query->where('properties.week_end_villa', $request->filter_is_weekend)
+                            ->where('properties.prop_status', 1);
+                    })
                     ->when($request->filter_is_hot, function ($query) use ($request) {
                         return $query->where('hot_property', $request->filter_is_hot)
                             ->where('properties.prop_status', 1);
@@ -398,6 +402,11 @@ class PropertyController extends Controller
                     })
                     ->when($request->filter_is_terraced, function ($query) use ($request) {
                         return $query->where('properties.is_terrace', $request->filter_is_terraced)
+                            ->where('properties.prop_status', 1);
+                    })
+                    ->when($request->filter_is_weekend, function ($query) use ($request) {
+                        // dd("week end",$request->filter_is_weekend);
+                        return $query->where('properties.week_end_villa', $request->filter_is_weekend)
                             ->where('properties.prop_status', 1);
                     })
                     ->when($request->filter_is_hot, function ($query) use ($request) {
@@ -2179,6 +2188,7 @@ class PropertyController extends Controller
         $data->service_elavator = $request->service_elavator;
         $data->servant_room = $request->servant_room;
         $data->hot_property = $request->hot_property;
+        $data->week_end_villa = $request->week_end_villa;
         $data->is_favourite = $request->is_favourite;
         $data->front_road_width = $request->front_road_width;
         $data->construction_allowed_for = is_array($request->construction_allowed_for) ? implode(",", $request->construction_allowed_for) : $request->construction_allowed_for;
@@ -2757,7 +2767,6 @@ class PropertyController extends Controller
                             ->where('budget_to', '>=', $sell_price);
                     })->orWhere(function ($subQuery) use ($both_price) {
                         $subQuery->when($both_price !== "", function ($subQuery) use ($both_price) {
-                            dd("both_price", $both_price);
                             $subQuery->where('budget_from', '<=', $both_price)
                                 ->where('budget_to', '>=', $both_price);
                         });

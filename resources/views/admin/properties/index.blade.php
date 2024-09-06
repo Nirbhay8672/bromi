@@ -651,6 +651,10 @@
                                         <input class="form-check-input" id="filter_is_terraced" type="checkbox">
                                         <label class="form-check-label" for="filter_is_terraced">Terrace</label>
                                     </div>
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                        <input class="form-check-input" id="filter_is_weekend" type="checkbox">
+                                        <label class="form-check-label" for="filter_is_weekend">Weekend</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="text-center">
@@ -1196,6 +1200,7 @@
                             d.filter_is_preleased = Number($('#filter_is_preleased').prop('checked'));
                             d.filter_is_hot = Number($('#filter_is_hot').prop('checked'));
                             d.filter_is_terraced = Number($('#filter_is_terraced').prop('checked'));
+                            d.filter_is_weekend = Number($('#filter_is_weekend').prop('checked'));                            
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
