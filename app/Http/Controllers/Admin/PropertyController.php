@@ -3066,6 +3066,7 @@ class PropertyController extends Controller
         $data['land_units'] = FacadesDB::table('land_units')->get();
         $data['country_codes']  = DB::table('countries')->get();
 
+        $data['first_state'] = State::where('user_id',Auth::user()->id)->first();
         $data['first_city'] = City::where('user_id',Auth::user()->id)->first();
         $data['first_district'] = District::where('user_id',Auth::user()->id)->first();
 
@@ -3123,6 +3124,7 @@ class PropertyController extends Controller
         $data['land_units'] = FacadesDB::table('land_units')->get();
         $data['country_codes']  = DB::table('countries')->get();
 
+        $data['first_state'] = State::where('user_id',Auth::user()->id)->first();
         $data['first_city'] = City::where('user_id',Auth::user()->id)->first();
         $data['first_district'] = District::where('user_id',Auth::user()->id)->first();
 
