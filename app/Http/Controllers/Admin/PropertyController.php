@@ -226,17 +226,20 @@ class PropertyController extends Controller
                                 // dd("match_property_type", $enq->requirement_type, "..", $request->match_property_type);
                                 $query->where('properties.property_type', $enq->requirement_type);
                             }
+
+                            //weekend
+                            if ($request->match_enquiry_weekend && ($enq->weekend_enq == '1')) {
+                                // dd("sad",$enq->weekend_enq);
+                                // $query->where('properties.week_end_villa', $enq->weekend_enq);
+                                $query->where('properties.week_end_villa', $enq->weekend_enq);
+                            }
+                            
                             //property category
                             if ($request->match_specific_type && !empty($enq->property_type)) {
                                 // dd("match_specific_type", $enq->property_type, "..", $request->match_specific_type);
                                 $query->where('properties.property_category', $enq->property_type);
                             }
 
-                            // property Sub Category
-                            // if ($request->match_specific_sub_type && !empty($enq->configuration)) {
-                            //     dd("match_specific_sub_type", $enq->configuration, "..", $request->match_specific_sub_type);
-                            //     $query->where('properties.configuration', json_decode($enq->configuration));
-                            // }
                             if ($request->match_specific_sub_type && !empty($enq->configuration)) {
                                 $configurations = json_decode($enq->configuration, true);
                                 if (is_array($configurations)) {
@@ -442,64 +445,18 @@ class PropertyController extends Controller
                                 $query->where('properties.property_category', $enq->property_type);
                             }
 
-                            // property Sub Category
-                            // if ($request->match_specific_sub_type && !empty($enq->configuration)) {
-                            //     dd("match_specific_sub_type", $enq->configuration, "..", $request->match_specific_sub_type);
-                            //     $query->where('properties.configuration', json_decode($enq->configuration));
-                            // }
                             if ($request->match_specific_sub_type && !empty($enq->configuration)) {
                                 $configurations = json_decode($enq->configuration, true);
                                 if (is_array($configurations)) {
                                     $query->whereIn('properties.configuration', $configurations);
                                 }
                             }
-
-                            //property price & unit_price
-                            // if ($request->match_budget_from_type) {
-                            //     // dd("match_budget_from_type",$enq->enquiry_for, $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
-                            //     $budgetFrom = str_replace(',', '', $enq->budget_from);
-                            //     $budgetTo = str_replace(',', '', $enq->budget_to);
-                            //     $rentPrice = str_replace(',', '', $enq->rent_price);
-                            //     $rentIntPrice = (int) str_replace(',', '', $enq->rent_price);
-                            //     $sellPrice = str_replace(',', '', $enq->sell_price);
-                            //     $sellIntPrice = (int) str_replace(',', '', $enq->sell_price);
-                            //     if ($budgetFrom !== "" && $budgetTo !== "" && $enq->enquiry_for !== "Both") {
-                            //         $query->where(function ($query) use ($budgetFrom, $budgetTo, $enq) {
-                            //             $query->where(function ($query) use ($budgetFrom, $budgetTo) {
-                            //                 $query->where('properties.survey_price', '>=', $budgetFrom)
-                            //                     ->where('properties.survey_price', '<=', $budgetTo);
-                            //             })->orWhere(function ($query) use ($budgetFrom, $budgetTo, $enq) {
-                            //                 // rent type prop.
-                            //                 if ($enq->enquiry_for == 'Rent') {
-                            //                     // dd("Rent");
-                            //                     $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-                            //                         ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-                            //                 }
-                            //             })->orWhere(function ($query) use ($budgetFrom, $budgetTo, $enq) {
-                            //                 if ($enq->enquiry_for == 'Buy') {
-                            //                     $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-                            //                         ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-                            //                 }
-                            //             })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
-                            //                 $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-                            //                     ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
-                            //             });
-                            //         });
-                            //     } else {
-                            //         // dd("oo",$rentPrice, $sellPrice);
-                            //         $query->where(function ($query) use ($rentPrice, $sellPrice, $sellIntPrice, $rentIntPrice) {
-                            //             $query->where(function ($query) use ($rentPrice, $sellPrice) {
-                            //                 $query->where('properties.survey_price', '>=', $rentPrice)
-                            //                     ->where('properties.survey_price', '<=', $sellPrice);
-                            //             })->orWhere(function ($query) use ($rentIntPrice) {
-                            //                 $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) = ?', $rentIntPrice);
-                            //             })->orWhere(function ($query) use ($sellIntPrice) {
-                            //                 $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) = ?', $sellIntPrice);
-                            //             });
-                            //         });
-                            //     }
-                            // }
-
+                            if ($request->match_enquiry_weekend && ($enq->weekend_enq == '1')) {
+                                // dd("asdads",$enq->weekend_enq);
+                                // $query->where('properties.week_end_villa', $enq->weekend_enq);
+                                $query->where('properties.week_end_villa', $enq->weekend_enq);
+                            }
+                            
                             // Property price & unit_price
                             if ($request->match_budget_from_type) {
                                 $budgetFrom = str_replace(',', '', $enq->budget_from);
@@ -547,7 +504,6 @@ class PropertyController extends Controller
                                     });
                                 }
                             }
-
 
                             // size
                             if ($request->match_enquiry_size) {
@@ -2731,6 +2687,7 @@ class PropertyController extends Controller
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
+            ->where('weekend_enq', $property->week_end_villa)
             ->whereJsonContains('configuration', $property->configuration);
         if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0) || ($unit_price !== "" && $unit_price !== 0  && $both_price !== '' && $both_price !== 0)) {
             // dd("tt sell_price",$sell_price,"unit_price",$unit_price,"both_price",$both_price);
