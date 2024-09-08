@@ -1017,8 +1017,30 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        </div>         
+                                                        <div class="col-md-3 the_carpet_area_edit" style="display: none">
+                                                            <div class="input-group">
+                                                                <div class="form-group col-md-7 m-b-20">
+                                                                    <label for="Carpet Area">Carpet Area</label>
+                                                                    <input class="form-control" name="carpet_area"
+                                                                        id="carpet_area_edit" type="text"
+                                                                        autocomplete="off">
+                                                                </div>
+                                                                <div class="input-group-append col-md-5 m-b-20">
+                                                                    <div class="form-group form_measurement">
+                                                                        <select
+                                                                            class="form-select measure_select measure_square"
+                                                                            id="carpet_area_measurement">
+                                                                            @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-
                                                         <div class="col-md-3 the_builtup_area">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
@@ -3737,7 +3759,7 @@
                         'the_total_no_of_units', 'the_no_of_side_open', 'the_servent_room',
                         'div_flat_details_5', 'div_flat_details_4', 'div_property_source', 'div_checkboxes1',
                         'div_flat_details_7', 'div_flat_details_8', 'div_care_taker', 'div_availability_status',
-                        'the_furnished_status', 'div_amenities', 'cl-locality', 'div_document_section',
+                        'the_furnished_status', 'div_amenities', 'cl-locality', 'div_document_section','the_week_end_villa'
                         // 'the_no_of_room',
                     ];
                     addAddAreaButtons(['the_carpet_plot_area', 'the_constructed_carpet_area',
@@ -3850,7 +3872,7 @@
                     'the_total_no_of_units', 'the_no_of_room', 'the_no_of_bathrooms',
                     'the_no_of_balcony', 'the_no_of_floors_allowed', 'the_no_of_side_open', 'the_servent_room',
                     'the_service_elavator', 'the_two_wheller_Parking', 'the_constructed_plot_price', 'the_1rk',
-                    'the_source_refrence', 'the_pre_leased_remarks', 'div_available_from'
+                    'the_source_refrence', 'the_pre_leased_remarks', 'div_available_from','the_week_end_villa'
                 ]
                 for (let i = 0; i < hidefields.length; i++) {
                     $('.' + hidefields[i]).hide();

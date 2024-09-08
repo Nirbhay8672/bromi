@@ -212,6 +212,10 @@ class EnquiriesController extends Controller
 					->when($request->filter_new_enquiry, function ($query) use ($request) {
 						return $query->doesntHave('activeProgress');
 					})
+					->when($request->week_end_enq, function ($query) use ($request) {
+						return $query->where('weekend_enq', $request->week_end_enq);
+					})
+					
 					->when($request->filter_draft, function ($query) use ($request) {
 						return $query->whereDate('created_at', '<=', $request->filter_draft);
 					})
@@ -1479,6 +1483,7 @@ class EnquiriesController extends Controller
 		$data->project_status = $request->project_status;
 		$data->area_ids = $request->area_ids;
 		$data->is_preleased = $request->is_preleased;
+		$data->weekend_enq = $request->weekend_enq;
 		$data->other_contacts = $request->other_contacts;
 		$data->telephonic_discussion = $request->telephonic_discussion;
 		$data->highlights = $request->highlights;

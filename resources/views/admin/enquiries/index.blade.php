@@ -666,6 +666,10 @@
                                         <input class="form-check-input" id="filter_new_enquiry" type="checkbox">
                                         <label class="form-check-label" for="filter_new_enquiry">New Enquiry</label>
                                     </div>
+                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                        <input class="form-check-input" id="week_end_enq" type="checkbox">
+                                        <label class="form-check-label" for="week_end_enq">Weekend</label>
+                                    </div>
                                     {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
                                         <input class="form-check-input" id="filter_draft" type="checkbox">
                                         <label class="form-check-label" for="filter_draft">Draft Enquiry</label>
@@ -1767,6 +1771,7 @@
                             d.filter_to_area = $('#filter_to_area').val();
                             d.filter_favourite = Number($('#filter_favourite').prop('checked'));
                             d.filter_new_enquiry = Number($('#filter_new_enquiry').prop('checked'));
+                            d.week_end_enq = Number($('#week_end_enq').prop('checked'));                            
                             // d.filter_draft = Number($('#filter_draft').prop('checked'));
                             // d.filter_prospect = Number($('#filter_prospect').prop('checked'));
                             d.go_data_id = go_data_id;
