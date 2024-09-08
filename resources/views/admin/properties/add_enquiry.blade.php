@@ -980,6 +980,13 @@
                                                             <label class="form-check-label"
                                                                 for="is_preleased">Pre-leased</label>
                                                         </div>
+                                                        <div
+                                                            class="form-check checkbox the_week_end_enq checkbox-solid-success mb-0 col-md-2 m-b-20" style="display: none">
+                                                            <input class="form-check-input" id="weekend_enq"
+                                                                type="checkbox">
+                                                            <label class="form-check-label"
+                                                                for="weekend_enq">Weekend</label>
+                                                        </div>
                                                     </div>
                                                     <button class="btn btn-primary previousBtn1 me-2" type="button"
                                                         style="border-radius: 5px;">Previous</button>
@@ -1446,27 +1453,36 @@
                     $('.div_flat_type').show()
                     $(".f-status").show();
                     $('.the_1rk').show()
+                    $(".the_week_end_enq").hide();
                 } else if (category_type == 'Penthouse') {
                     $(".f-status").show();
+                    $(".the_week_end_enq").hide();
                     $('.div_flat_type').show()
                 } else if (category_type == 'Office') {
                     $(".f-status").show();
+                    $(".the_week_end_enq").hide();
                     $('.div_office_type').show()
                 } else if (category_type == 'Retail') {
                     $(".f-status").show();
+                    $(".the_week_end_enq").hide();
                     $('.div_retail_type').show()
                 } else if (category_type == 'Storage/industrial') {
                     $(".f-status").hide();
+                    $(".the_week_end_enq").hide();
                     $('.div_storage_type').show()
                 } else if (category_type == 'Land') {
                     $('.div_plot_type').show()
+                    $(".the_week_end_enq").hide();
                     $(".f-status").hide();
                 } else if (category_type == 'Farmhouse') {
                     $('.div_farm_house').show()
+                    $(".the_week_end_enq").hide();
                 } else if (category_type == 'Plot') {
                     $(".f-status").show();
                     $('.div_land_plot').show()
+                    $(".the_week_end_enq").hide();
                 } else if (category_type == 'Vila/Bunglow') {
+                    $(".the_week_end_enq").show();
                     $(".f-status").show();
                     $('.div_vila_type').show()
                 }
@@ -1820,7 +1836,6 @@
                         let formattedBudgetTo = fmt(data.budget_to.toString());
                         $('#budget_from').val(formattedBudgetFrom);
                         $('#budget_to').val(formattedBudgetTo);
-
                         $('#rent_price').val(data.rent_price);
                         $('#sell_price').val(data.sell_price);
                         $('#purpose').val(data.purpose).trigger('change');;
@@ -1828,9 +1843,9 @@
                         $('#enquiry_status').val(data.enquiry_status).trigger('change');
                         $('#project_status').val(data.project_status).trigger('change');
                         $('#country_code').val(data.country_id).trigger('change');
-
                         $('#area_ids').val(JSON.parse(data.area_ids)).trigger('change');
                         $('#is_preleased').prop('checked', Number(data.is_preleased));
+                        $('#weekend_enq').prop('checked', Number(data.weekend_enq));                        
                         $('#telephonic_discussion').val(data.telephonic_discussion);
                         $('#highlights').val(data.highlights);
                         $('#enquiry_city_id').val(data.enquiry_city_id).trigger('change');
@@ -2484,6 +2499,7 @@
                         project_status: $('#project_status').val(),
                         area_ids: JSON.stringify($('#area_ids').val()),
                         is_preleased: Number($('#is_preleased').prop('checked')),
+                        weekend_enq: Number($('#weekend_enq').prop('checked')),
                         other_contacts: contact_details,
                         telephonic_discussion: $('#telephonic_discussion').val(),
                         highlights: $('#highlights').val(),

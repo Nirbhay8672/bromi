@@ -1479,6 +1479,7 @@ class EnquiriesController extends Controller
 		$data->project_status = $request->project_status;
 		$data->area_ids = $request->area_ids;
 		$data->is_preleased = $request->is_preleased;
+		$data->weekend_enq = $request->weekend_enq;
 		$data->other_contacts = $request->other_contacts;
 		$data->telephonic_discussion = $request->telephonic_discussion;
 		$data->highlights = $request->highlights;

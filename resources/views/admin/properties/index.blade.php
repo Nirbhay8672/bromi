@@ -772,6 +772,12 @@
                                                 <label class="form-check-label" for="match_enquiry_size">Property
                                                     Size</label>
                                             </div>
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                                <input class="form-check-input" checked id="match_enq_weekend"
+                                                    type="checkbox">
+                                                <label class="form-check-label" for="match_enq_weekend">Property
+                                                    Weekend</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
