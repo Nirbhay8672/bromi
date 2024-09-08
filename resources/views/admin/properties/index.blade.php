@@ -774,9 +774,9 @@
                                                     Size</label>
                                             </div>
                                             <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
-                                                <input class="form-check-input" checked id="match_enq_weekend"
+                                                <input class="form-check-input" checked id="match_enquiry_weekend"
                                                     type="checkbox">
-                                                <label class="form-check-label" for="match_enq_weekend">Property
+                                                <label class="form-check-label" for="match_enquiry_weekend">Property
                                                     Weekend</label>
                                             </div>
                                         </div>
@@ -857,11 +857,13 @@
         <?php
         $matchEnquiryFor = isset($_GET['match_enquiry_for']) ? $_GET['match_enquiry_for'] : null;
         $matchPropertyType = isset($_GET['match_property_type']) ? $_GET['match_property_type'] : null;
+        $matchEnqWeekend = isset($_GET['match_enquiry_weekend']) ? $_GET['match_enquiry_weekend'] : null;
         $matchSpecificType = isset($_GET['match_specific_type']) ? $_GET['match_specific_type'] : null;
         $matchSpecificSubType = isset($_GET['match_specific_sub_type']) ? $_GET['match_specific_sub_type'] : null;
         $matchBudgetType = isset($_GET['match_budget_from_type']) ? $_GET['match_budget_from_type'] : null;
         $matchEnqSize = isset($_GET['match_enquiry_size']) ? $_GET['match_enquiry_size'] : null;
         $matchEnqSource = isset($_GET['match_inquiry_source']) ? $_GET['match_inquiry_source'] : null;
+        // dd($matchEnqWeekend,$matchSpecificType);
         // dd($matchEnquiryFor,$matchPropertyType,$matchBudgetType,$matchSpecificType,$matchEnqSize,$matchEnqSource);
         ?>
     @endsection
@@ -891,6 +893,7 @@
                 // Check or uncheck checkboxes based on PHP variables
                 $('#match_enquiry_for').prop('checked', <?= $matchEnquiryFor === '1' ? 'true' : 'false' ?>);
                 $('#match_property_type').prop('checked', <?= $matchPropertyType === '1' ? 'true' : 'false' ?>);
+                $('#match_enquiry_weekend').prop('checked', <?= $matchEnqWeekend === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_type').prop('checked', <?= $matchSpecificType === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_sub_type').prop('checked', <?= $matchSpecificSubType === '1' ? 'true' : 'false' ?>);
                 $('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
@@ -1149,12 +1152,12 @@ console.log("propId :",propId);
                 //     $('#matchModal').modal('hide');
                 // });
                 if (window.location.pathname.toLowerCase() === '/admin/properties' && window.location.search === '') {
-                    $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                    $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_enquiry_weekend,#match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
                         .prop('checked', true);
                 }
                 $('#match_enquiry_all').on('change', function() {
                     let isChecked = $(this).prop('checked');
-                    $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
+                    $('#match_enquiry_for, #match_property_type, #match_enquiry_weekend, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
                         .prop('checked', isChecked);
                 });
 
@@ -1165,6 +1168,7 @@ console.log("propId :",propId);
                     let selectedCheckboxes = {
                         match_enquiry_for: $('#match_enquiry_for').prop('checked') ? 1 : 0,
                         match_property_type: $('#match_property_type').prop('checked') ? 1 : 0,
+                        match_enquiry_weekend: $('#match_enquiry_weekend').prop('checked') ? 1 : 0,
                         match_specific_type: $('#match_specific_type').prop('checked') ? 1 : 0,
                         match_specific_sub_type: $('#match_specific_sub_type').prop('checked') ? 1 : 0,
                         match_budget_from_type: $('#match_budget_from_type').prop('checked') ? 1 : 0,
@@ -1219,6 +1223,7 @@ console.log("propId :",propId);
                             d.filter_is_weekend = Number($('#filter_is_weekend').prop('checked'));
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
+                            d.match_enquiry_weekend = Number($('#match_enquiry_weekend').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
                             d.match_specific_sub_type = Number($('#match_specific_sub_type').prop(
                                 'checked'));

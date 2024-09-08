@@ -237,6 +237,11 @@ class EnquiriesController extends Controller
 								$query->where('property_type',   $pro->property_category);
 							}
 
+							if ($request->match_enquiry_weekend && ($pro->week_end_villa == '1')) {
+								// dd("pro->week_end_villa",$pro->week_end_villa);
+								$query->where('weekend_enq',   $pro->week_end_villa);
+							}
+
 							if ($request->match_specific_sub_type) {
                                 // dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration,$pro->property_category);
                                 if ($pro->property_category !== '258' && $pro->property_category !== '256') {
@@ -247,7 +252,6 @@ class EnquiriesController extends Controller
                                     $query->whereJsonContains('configuration', ["0"]);
                                 }
                             }
-
 
 							// Property For = Enquiry for
 							if ($request->match_enquiry_for) {
@@ -1809,6 +1813,7 @@ class EnquiriesController extends Controller
 				} 
 			})
 			->where('properties.property_category', $data->property_type)
+			->where('properties.week_end_villa', $data->weekend_enq)
 			->where(function ($query) use ($configurations, $data, $property_for) {
 				// dd($data->property_type,"configurations",$configurations,$property_for);
 				if ($data->property_type !== '256') {
