@@ -545,8 +545,7 @@
                                                             </select>
                                                             <div id="project_id_error" style="color: red"></div>
                                                         </div>
-
-                                                        {{-- state city --}}
+                                                        
                                                         @php
                                                             $authStateId = Auth::user()->state_id;
                                                         @endphp
@@ -1018,8 +1017,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        
+                                                        </div>         
                                                         <div class="col-md-3 the_carpet_area_edit" style="display: none">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
@@ -1043,7 +1041,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                         <div class="col-md-3 the_builtup_area">
                                                             <div class="input-group">
                                                                 <div class="form-group col-md-7 m-b-20">
@@ -1401,13 +1398,6 @@
                                                                     type="checkbox">
                                                                 <label class="form-check-label" for="hot_property">Hot
                                                                 </label>
-                                                            </div>
-                                                            <div
-                                                                class="form-check checkbox the_week_end_villa checkbox-solid-success mb-0 col-md-2 m-b-20">
-                                                                <input class="form-check-input" id="week_end_villa"
-                                                                    type="checkbox">
-                                                                <label class="form-check-label"
-                                                                    for="week_end_villa">Weekend</label>
                                                             </div>
                                                             {{-- <div
                                                                 class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-20">
@@ -4387,7 +4377,8 @@
             });
 
             function getProperty() {
-                var id = '{{ isset($current_id) ? $current_id : 'null' }}';
+                var id = "{{ isset($current_id) ? $current_id : null }}";
+
                 $.ajax({
                     type: "POST",
                     url: "{{ route('admin.getProperty') }}",
@@ -4396,7 +4387,22 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
-                        if (data == '') {
+
+                        if (data == null || data == '') {
+
+                            let first_city = @json($first_city);
+                            $('#state-dropdown').val(first_city.id).trigger('change');
+
+                            if($('#district_id')) {
+                                let first_district = @json($first_district);
+                                $('#district_id').val(first_district.id).trigger('change');
+                            }
+
+                            if($('#state_id')) {
+                                let first_state = @json($first_state);
+                                $('#state_id').val(first_district.id).trigger('change');
+                            }
+
                             return
                         }
                         //Disable Price on Land
@@ -4420,7 +4426,8 @@
                         });
                         // edit property selected valdata.width_of_plot, 1
                         data = JSON.parse(data);
-                        let carpetVal = setSplitedValue(data.carpet_plot_area, 1);
+
+                        let carpetVal = setSplitedValue(data.carpet_plot_area ?? 0, 1);
                         if (carpetVal != "") {
                             console.log("carpet VAl", carpetVal);
                             $('#carpet_plot_area').val(carpetVal); // Set the value
@@ -4428,16 +4435,6 @@
                         } else {
                             $('.the_carpet_plot_area').hide(); // Hide the section if value is empty
                         }
-                        
-                          let carpetAreaVal = setSplitedValue(data.carpet_area, 1);
-                        if (carpetAreaVal != "") {
-                            $('#add_area_button_container').hide(); // Hide the button
-                            $('.the_carpet_area_edit').show(); // Show the section
-                        } else {
-                            $('#area_details_the_carpet_area').show(); // Show the button
-                            $('.the_carpet_area_edit').hide(); // Hide the section if value is empty
-                        }
-
                         const ceilingHeight = data.ceiling_height;
                         let parts = ceilingHeight.split('_-||-_');
                         $('#this_data_id').val(data.id);
@@ -4490,7 +4487,6 @@
                         $('#salable_area').val(setSplitedValue(data.salable_area, 1));
                         $('#salable_area_measurement').val(setSplitedValue(data.salable_area, 2));
                         $('#carpet_area').val(setSplitedValue(data.carpet_area, 1));
-                        $('#carpet_area_edit').val(setSplitedValue(data.carpet_area, 1));
                         $('#carpet_area_measurement').val(setSplitedValue(data.carpet_area, 2));
                         $('#storage_centre_height').val(setSplitedValue(data.storage_centre_height, 1));
                         $('#storage_centre_height_measurement').val(setSplitedValue(data.storage_centre_height,
@@ -4531,7 +4527,6 @@
                         $('#service_elavator').prop('checked', Number(data.service_elavator)).trigger('change');
                         $('#servant_room').prop('checked', Number(data.servant_room)).trigger('change');
                         $('#hot_property').prop('checked', Number(data.hot_property)).trigger('change');
-                        $('#week_end_villa').prop('checked', Number(data.week_end_villa)).trigger('change');
                         $('#is_favourite').prop('checked', Number(data.is_favourite)).trigger('change');
                         $('#is_pre_leased').prop('checked', Number(data.is_pre_leased)).trigger('change');
                         $('#is_terrace').prop('checked', Number(data.is_terrace)).trigger('change');
@@ -5094,7 +5089,6 @@
                         service_elavator: Number($('#service_elavator').prop('checked')),
                         servant_room: Number($('#servant_room').prop('checked')),
                         hot_property: Number($('#hot_property').prop('checked')),
-                        week_end_villa: Number($('#week_end_villa').prop('checked')),                        
                         is_favourite: Number($('#is_favourite').prop('checked')),
                         is_terrace: Number($('#is_terrace').prop('checked')),
                         washrooms2_type: $('input[name=washrooms2_type]:checked').val(),

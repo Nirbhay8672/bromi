@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Areas;
 use App\Models\Branches;
 use App\Models\City;
+use App\Models\District;
 use App\Models\State;
 use Illuminate\Support\Facades\Hash;
 use \Illuminate\Http\Request;
@@ -235,10 +236,17 @@ class RegisterController extends Controller
             'state_id' => $new_state->id,
         ])->save();
 
+        $new_district = new District();
+
+        $new_district->fill([
+            'name' => $city->name,
+            'state_id' => $new_state->id,
+            'user_id' => $user->id,
+        ])->save();
+
         $allarea = SuperAreas::where('super_city_id', $request->city_id)
             ->where('state_id', $request->state_id)
             ->get();
-
 
         foreach ($allarea as $area_obj) {
             $area = new Areas();

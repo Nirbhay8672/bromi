@@ -79,7 +79,7 @@
 
                                                     @if($current_plan['id'] == $plan->id)
 
-                                                        @if($display_button)
+                                                        @if($display_button && Auth::user()->total_paid_user > 0 )
                                                             <button
                                                                     class="btn btn-primary btn-lg"
                                                                     type="button"
@@ -95,9 +95,7 @@
                                                                 data-bs-target="#couponModal"
                                                                 onclick="setDetails({{ $plan->id }}, {{ $plan->price }}, '{{ $plan->name }}', '{{ $gstType }}', '{{ $gst }}')"
                                                             >Renew</button>
-                                                           
                                                         @endif
-
                                                     @else
                                                         @if($plan->price > $current_plan['price'] )
                                                             <button

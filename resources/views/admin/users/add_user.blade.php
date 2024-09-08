@@ -427,6 +427,13 @@
                         },
                         success: function(data) {
                             if (data == '') {
+
+                                let first_state = @json($first_state);
+                                let first_city = @json($first_city);
+
+                                $('#state_id').val(first_state.id).trigger('change');
+                                $('#city_id').val(first_city.id).trigger('change');
+
                                 return
                             }
                             dataa = JSON.parse(data).data;
