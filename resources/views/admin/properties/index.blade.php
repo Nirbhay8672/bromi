@@ -651,7 +651,8 @@
                                         <input class="form-check-input" id="filter_is_terraced" type="checkbox">
                                         <label class="form-check-label" for="filter_is_terraced">Terrace</label>
                                     </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
+                                    <div class="form-check checkbox the_filter_weekend checkbox-solid-success mb-0 col-md-3 m-b-20"
+                                        style="display: none">
                                         <input class="form-check-input" id="filter_is_weekend" type="checkbox">
                                         <label class="form-check-label" for="filter_is_weekend">Weekend</label>
                                     </div>
@@ -1009,6 +1010,15 @@
                 // $('#propertyTable').DataTable().draw();
                 //     $('#matchModal').modal('hide');
 
+
+                // if (configuration.includes("15")) {
+                //     $('.the_filter_weekend').show();
+                // } else {
+                //     $('.the_filter_weekend').hide();
+                // }
+                let propId = $(data).attr('data-id');
+console.log("propId :",propId);
+
                 $('#matchagain').attr('data-id', $(data).attr('data-id'));
 
                 // urll = matching_enquiry_url + '?pro=' + encryptSimpleString($(data).attr('data-id'));
@@ -1206,7 +1216,7 @@
                             d.filter_is_preleased = Number($('#filter_is_preleased').prop('checked'));
                             d.filter_is_hot = Number($('#filter_is_hot').prop('checked'));
                             d.filter_is_terraced = Number($('#filter_is_terraced').prop('checked'));
-                            d.filter_is_weekend = Number($('#filter_is_weekend').prop('checked'));                            
+                            d.filter_is_weekend = Number($('#filter_is_weekend').prop('checked'));
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
