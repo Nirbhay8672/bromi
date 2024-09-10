@@ -1931,6 +1931,8 @@
                         id: enquiryID, // Pass the enquiryID directly
                     },
                     success: function(data) {
+                        console.log("data :",data.weekend_enq);
+                        
                         if (typeof data.configuration === "string") {
                             try {
                                 data.configuration = JSON.parse(data.configuration);
@@ -1942,7 +1944,7 @@
 
                         if (Array.isArray(data.configuration)) {
                             let configValue = data.configuration[0]; // Access the first element
-                            if (configValue === "15") {
+                            if (configValue === "15" && data.weekend_enq == '1') {
                                 $('.the_matching_weekend').show();
                             } else {
                                 $('.the_matching_weekend').hide();

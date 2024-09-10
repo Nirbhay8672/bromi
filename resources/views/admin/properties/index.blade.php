@@ -1034,10 +1034,10 @@
                     type: "GET",
                     url: "{{ route('admin.property.category') }}",
                     data: {
-                        id: propId, // Pass the enquiryID directly
+                        id: propId, 
                     },
                     success: function(data) {
-                        if (data.configuration === "15") {
+                        if (data.configuration === "15" && data.week_end_villa == '1') {
                             $('.the_prop_weekend').show();
                         } else {
                             $('.the_prop_weekend').hide();
