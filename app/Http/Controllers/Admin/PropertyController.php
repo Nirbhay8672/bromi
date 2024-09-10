@@ -3118,6 +3118,15 @@ class PropertyController extends Controller
             ->get(["name", "id"]);
         return response()->json($data);
     }
+
+    public function getPropertyCategory(Request $request)
+	{
+		$propID = $request->query('id');
+		$property = Properties::find($propID);
+		$ppropertyCategory = $property->pluck('configuration')->first();
+		return response()->json($property);
+	}
+
     public function getPropertyConfiguration(Request $request)
     {
         $selectedCategory = $request->query('selectedCategory');

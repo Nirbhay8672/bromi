@@ -135,6 +135,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::post('/import-property', [PropertyController::class, 'importProperty'])->name('admin.importproperty');
 		Route::post('/import-IndustrialProperty', [IndustrialPropertyController::class, 'importProperty'])->name('admin.importIndustrialproperty');
 		Route::get('/import-property-template', [PropertyController::class, 'importPropertyTemplate'])->name('admin.importpropertyTemplate');
+		Route::get('/admin/property/category', [PropertyController::class, 'getpropertyCategory'])->name('admin.property.category');
 		Route::get('/import-industrialproperty-template', [IndustrialPropertyController::class, 'importPropertyTemplate'])->name('admin.importindustrialpropertyTemplate');
 		Route::get('/admin/enquiry/category', [EnquiriesController::class, 'getEnquiryCategory'])->name('admin.enquiry.category');
 		Route::get('/import-enquiry-template', [EnquiriesController::class, 'importEnquiryTemplate'])->name('admin.importenquiryTemplate');

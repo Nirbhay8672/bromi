@@ -773,7 +773,8 @@
                                                 <label class="form-check-label" for="match_enquiry_size">Property
                                                     Size</label>
                                             </div>
-                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                            <div class="form-check checkbox  the_prop_weekend checkbox-solid-success mb-0 m-b-10"
+                                                style="display: none">
                                                 <input class="form-check-input" checked id="match_enquiry_weekend"
                                                     type="checkbox">
                                                 <label class="form-check-label" for="match_enquiry_weekend">Property
@@ -1020,12 +1021,32 @@
                 //     $('.the_filter_weekend').hide();
                 // }
                 let propId = $(data).attr('data-id');
-console.log("propId :",propId);
+                console.log("propId :", propId);
 
                 $('#matchagain').attr('data-id', $(data).attr('data-id'));
-
+                getPropertyCategory(propId)
                 // urll = matching_enquiry_url + '?pro=' + encryptSimpleString($(data).attr('data-id'));
                 // window.location = urll;
+            }
+
+            function getPropertyCategory(propId) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('admin.property.category') }}",
+                    data: {
+                        id: propId, // Pass the enquiryID directly
+                    },
+                    success: function(data) {
+                        if (data.configuration === "15") {
+                            $('.the_prop_weekend').show();
+                        } else {
+                            $('.the_prop_weekend').hide();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
             }
 
             $(document).on("click", ".open_modal_with_this", function(e) {
