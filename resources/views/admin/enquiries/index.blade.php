@@ -48,10 +48,10 @@
                             <div class="col">
 
                                 @can('enquiry-create')
-                                <a class="btn custom-icon-theme-button tooltip-btn" href="{{ route('admin.enquiry.add') }}"
-                                    data-tooltip="Add Enquiry">
-                                    <i class="fa fa-plus"></i>
-                                </a>
+                                    <a class="btn custom-icon-theme-button tooltip-btn" href="{{ route('admin.enquiry.add') }}"
+                                        data-tooltip="Add Enquiry">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
                                 @endcan
 
                                 <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
@@ -59,25 +59,25 @@
                                         class="fa fa-filter"></i></button>
 
                                 <button class="btn ms-3 custom-icon-theme-button tooltip-btn"
-                                    style="background-color: #FF0000 !important;display: none;" type="button" data-tooltip="Clear Filter"
-                                    id="resetfilter"><i class="fa fa-refresh"></i></button>
+                                    style="background-color: #FF0000 !important;display: none;" type="button"
+                                    data-tooltip="Clear Filter" id="resetfilter"><i class="fa fa-refresh"></i></button>
 
                                 <button class="btn matchbutton ms-3 custom-icon-theme-button tooltip-btn" type="button"
                                     data-bs-toggle="modal" data-bs-target="#matchModal" data-tooltip="Matching"><i
                                         class="fa fa-random"></i></button>
 
                                 @can('export-enquiry')
-                                <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="exportEnquiry()"
-                                    type="button" data-tooltip="Export"><i class="fa fa-upload"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="exportEnquiry()"
+                                        type="button" data-tooltip="Export"><i class="fa fa-upload"></i></button>
                                 @endcan
 
                                 <button class="btn ms-3 custom-icon-theme-button tooltip-btn" onclick="importEnquiries()"
                                     type="button" data-tooltip="Import"><i class="fa fa-download"></i></button>
 
                                 @can('enquiry-delete')
-                                <button class="btn text-white delete_table_row ms-3 tooltip-btn"
-                                    style="border-radius: 5px;display: none;background-color:red" onclick="deleteTableRow()"
-                                    type="button" data-tooltip="Delete"><i class="fa fa-trash"></i></button>
+                                    <button class="btn text-white delete_table_row ms-3 tooltip-btn"
+                                        style="border-radius: 5px;display: none;background-color:red" onclick="deleteTableRow()"
+                                        type="button" data-tooltip="Delete"><i class="fa fa-trash"></i></button>
                                 @endcan
                             </div>
                         </div>
@@ -649,13 +649,13 @@
                                     </div>
                                     <div class="form-group col-md-3 m-b-20">
                                         <label for="From Budget">From Area</label>
-                                        <input class="form-control" name="filter_from_area"
-                                            id="filter_from_area" type="text" autocomplete="off">
+                                        <input class="form-control" name="filter_from_area" id="filter_from_area"
+                                            type="text" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-3 m-b-20">
                                         <label for="To Budget">To Area</label>
-                                        <input class="form-control" name="filter_to_area"
-                                            id="filter_to_area" type="text" autocomplete="off">
+                                        <input class="form-control" name="filter_to_area" id="filter_to_area"
+                                            type="text" autocomplete="off">
                                     </div>
                                     <hr class="color-hr">
                                     <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
@@ -1309,7 +1309,7 @@
                                                 type="checkbox">
                                             <label class="form-check-label" for="match_enquiry_size">Enquiry Size</label>
                                         </div>
-                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                        <div class="form-check checkbox the_matching_weekend checkbox-solid-success mb-0 m-b-10" style="display: none">
                                             <input class="form-check-input" checked id="match_enquiry_weekend"
                                                 type="checkbox">
                                             <label class="form-check-label" for="match_enquiry_weekend">Property
@@ -1444,7 +1444,7 @@
                 $('#match_specific_type').prop('checked', <?= $matchSpecificType === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_sub_type').prop('checked', <?= $matchSpecificSubType === '1' ? 'true' : 'false' ?>);
                 $('#match_enquiry_weekend').prop('checked', <?= $matchEnquiryWeekend === '1' ? 'true' : 'false' ?>);
-                
+
                 $('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
                 $('#match_enquiry_size').prop('checked', <?= $matchEnqSize === '1' ? 'true' : 'false' ?>);
                 $('#match_inquiry_source').prop('checked', <?= $matchEnqSource === '1' ? 'true' : 'false' ?>);
@@ -1781,14 +1781,15 @@
                             d.filter_to_area = $('#filter_to_area').val();
                             d.filter_favourite = Number($('#filter_favourite').prop('checked'));
                             d.filter_new_enquiry = Number($('#filter_new_enquiry').prop('checked'));
-                            d.week_end_enq = Number($('#week_end_enq').prop('checked'));                            
+                            d.week_end_enq = Number($('#week_end_enq').prop('checked'));
                             // d.filter_draft = Number($('#filter_draft').prop('checked'));
                             // d.filter_prospect = Number($('#filter_prospect').prop('checked'));
                             d.go_data_id = go_data_id;
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
                             d.match_specific_type = Number($('#match_specific_type').prop('checked'));
-                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop('checked'));
+                            d.match_specific_sub_type = Number($('#match_specific_sub_type').prop(
+                                'checked'));
                             d.match_enquiry_weekend = Number($('#match_enquiry_weekend').prop('checked'));
                             d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
                             d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
@@ -1930,7 +1931,26 @@
                         id: enquiryID, // Pass the enquiryID directly
                     },
                     success: function(data) {
-                        console.log("Dataaaa :", data);
+                        if (typeof data.configuration === "string") {
+                            try {
+                                data.configuration = JSON.parse(data.configuration);
+                                console.log("Parsed data.configuration:", data.configuration);
+                            } catch (e) {
+                                console.error("Error parsing configuration:", e);
+                            }
+                        }
+
+                        if (Array.isArray(data.configuration)) {
+                            let configValue = data.configuration[0]; // Access the first element
+                            if (configValue === "15") {
+                                $('.the_matching_weekend').show();
+                            } else {
+                                $('.the_matching_weekend').hide();
+                            }
+                        } else {
+                            console.log("data.configuration is still not an array after parsing");
+                        }
+
                     },
                     error: function(xhr, status, error) {
                         console.error("Error:", error);
