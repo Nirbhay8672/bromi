@@ -1037,7 +1037,7 @@
                         id: propId, // Pass the enquiryID directly
                     },
                     success: function(data) {
-                        if (data.configuration === "15") {
+                        if (data.configuration === "15" && data.week_end_villa == '1') {
                             $('.the_prop_weekend').show();
                         } else {
                             $('.the_prop_weekend').hide();
