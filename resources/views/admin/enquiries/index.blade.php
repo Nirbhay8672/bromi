@@ -670,14 +670,6 @@
                                         <input class="form-check-input" id="week_end_enq" type="checkbox">
                                         <label class="form-check-label" for="week_end_enq">Weekend</label>
                                     </div>
-                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="filter_draft" type="checkbox">
-                                        <label class="form-check-label" for="filter_draft">Draft Enquiry</label>
-                                    </div> --}}
-                                    {{-- <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="filter_prospect" type="checkbox">
-                                        <label class="form-check-label" for="filter_prospect">Potential Prospect</label>
-                                    </div> --}}
                                 </div>
                             </div>
 
