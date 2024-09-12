@@ -1782,8 +1782,6 @@
                             d.filter_favourite = Number($('#filter_favourite').prop('checked'));
                             d.filter_new_enquiry = Number($('#filter_new_enquiry').prop('checked'));
                             d.week_end_enq = Number($('#week_end_enq').prop('checked'));
-                            // d.filter_draft = Number($('#filter_draft').prop('checked'));
-                            // d.filter_prospect = Number($('#filter_prospect').prop('checked'));
                             d.go_data_id = go_data_id;
                             d.search_enq = search_enq;
                             d.match_property_type = Number($('#match_property_type').prop('checked'));
