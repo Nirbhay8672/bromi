@@ -26,34 +26,28 @@ class ProjectFormRequest extends FormRequest
     {
         $rules = [
 			'project_name' => 'required',
-			'address' => 'required',
 			'locality' => 'required',
 			'city' => 'required',
 			'state' => 'required',
-			'pincode' => 'required',
-			'rera_number' => 'unique:projects,rera_number,'.$this->id,
+			'rera_number' => 'nullable:projects,rera_number,'.$this->id,
 			'propery_type' => 'required',
 		];
 
 		if($this->id == '' || $this->id == null) {
-			$rules['document_category'] = 'required';
-			$rules['document_image'] = 'required|file|mimes:jpeg,png|max:2000'; 
-			$rules['catlog_file'] = 'required|file|max:500000'; 
+			$rules['document_category'] = 'nullable';
+			$rules['document_image'] = 'nullable|mimes:jpeg,png,pdf|max:2000'; 
+			$rules['catlog_file'] = 'nullable|mimes:jpeg,png,pdf|max:500000'; 
 		} else {
-			$rules['document_image'] = 'file|mimes:jpeg,png|max:2000'; 
-			$rules['catlog_file'] = 'file|max:500000';
+			$rules['document_image'] = 'nullable|mimes:jpeg,png,pdf|max:2000'; 
+			$rules['catlog_file'] = 'nullable|mimes:jpeg,png,pdf|max:500000';
 			
 			$data = Projects::find((int) $this->id);
 			
 			if($data->is_indirectly_store == 1) {
-		    	$rules['document_category'] = 'required';
-    			$rules['document_image'] = 'required|file|mimes:jpeg,png|max:2000'; 
-    			$rules['catlog_file'] = 'required|file|max:500000';
+		    	$rules['document_category'] = 'nullable';
+    			$rules['document_image'] = 'nullable|mimes:jpeg,png,pdf|max:2000'; 
+    			$rules['catlog_file'] = 'nullable|mimes:jpeg,png,pdf|max:500000';
 			}
-		}
-		
-		if($this->document_image) {
-			$rules['document_category'] = 'required';
 		}
 
         return $rules;

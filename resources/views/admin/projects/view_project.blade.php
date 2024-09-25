@@ -183,49 +183,61 @@
                                                     <div class="form-group col-8 m-b-20 data_conent_1">
                                                         <div>: {{ $project->project_name }}</div>
                                                     </div>
+
+                                                    @if($project->website)
                                                     <div class="form-group col-4 m-b-20 data_conent_3">
                                                         <h6><b>Website</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_3">
                                                         <div style="text-transform: lowercase !important;">: {{ $project->website }}</div>
                                                     </div>
+                                                    @endif
+                                                    
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Project Status</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_4">
                                                         <div>: {{ $project->project_status == 142 ? 'Ready Possession' : 'Under Construction' }}</div>
                                                     </div>
+
                                                     @if ($project->project_status == 142)
                                                         <div class="form-group col-4 m-b-20 data_conent_4">
                                                             <h6><b>Age of property</b></h6>
+                                                        </div>
+                                                        <div class="form-group col-8 m-b-20 data_conent_4">
+                                                            <div>: {{ $project->project_status_question }}</div>
                                                         </div>
                                                     @endif
                                                     @if ($project->project_status == 143)
                                                         <div class="form-group col-4 m-b-20 data_conent_4">
                                                             <h6><b>Possession month & year</b></h6>
                                                         </div>
+                                                        <div class="form-group col-8 m-b-20 data_conent_4">
+                                                            <div>: {{ $project->project_status_question }}</div>
+                                                        </div>
                                                     @endif
-                                                    <div class="form-group col-8 m-b-20 data_conent_4">
-                                                        <div>: {{ $project->project_status_question }}</div>
-                                                    </div>
+
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Builder Name</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_4">
                                                         <div>: {{ $project->builder_name }}</div>
                                                     </div>
+
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Rera Number</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_4">
                                                         <div style="text-transform: none !important;">: {{ $project->rera_number }}</div>
                                                     </div>
+                                                    @if($project->land_area)
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Total Land Area</b></h6>
                                                     </div>
                                                     <div class="form-group col-8 m-b-20 data_conent_4">
                                                         <div style="text-transform: none !important;">: {{ $project->land_area }} {{ $map_unit[$project->land_size_unit] ?? '-' }}</div>
                                                     </div>
+                                                    @endif
                                                     <div class="form-group col-4 m-b-20 data_conent_4">
                                                         <h6><b>Remark</b></h6>
                                                     </div>
@@ -826,7 +838,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($project->amenity_array as $index => $amenity)
+                                                        @foreach ($project->amenity_array ?? [] as $index => $amenity)
                                                             <tr>
                                                                 <td>{{ $index + 1 }}</td>
                                                                 <td>{{ Str::title(str_replace('_', ' ', $amenity)) }}</td>
@@ -863,7 +875,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>{{ $docu_types[$project->document_category] }}</td>
+                                                            <td>{{ $docu_types[$project->document_category] ?? '' }}</td>
                                                             <td><span class="text-primary" style="cursor: pointer;" onclick="openDocument(`{{ $project->document_image }}`)">{{ $project->document_image }}</span></td>
                                                         </tr>
                                                         @foreach($project->other_documents as $other_doc)

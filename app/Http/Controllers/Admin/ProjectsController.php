@@ -84,6 +84,12 @@ class ProjectsController extends Controller
 					}
 					return '';
 				})
+				->editColumn('address', function ($row) {
+					if ($row->address != 'null') {
+						return $row->address;
+					}
+					return '-';
+				})
 				->editColumn('builder_id', function ($row) {
 					if (isset($row->Builder->name)) {
 						return $row->Builder->name;

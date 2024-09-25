@@ -511,7 +511,10 @@
                         this.other_contact_details = JSON.parse(project_data['contact_details']) ?? [{'name' : '','mobile' : '','email' : '','designation' : ''}];
 
                         this.project_name = project_data['project_name'];
-                        this.address = project_data['address'];
+
+                        if(project_data['address'] != 'null') {
+                            this.address = project_data['address'];
+                        }
 
                         $("#area_id").val(project_data['area_id']).trigger('change');
                         
@@ -867,8 +870,11 @@
                         this.free_alloted_for_two_wheeler = parking_data['free_alloted_for_two_wheeler'] == 'true' ? true : false;
                         this.available_for_purchase = parking_data['available_for_purchase'] == 'true' ? true : false;
                         
-                        this.total_number_of_parking = parking_data['total_number_of_parking'];
-                        this.total_floor_for_parking = parking_data['total_floor_for_parking'];
+                        this.total_number_of_parking = parking_data['total_number_of_parking'] ?? 0;
+                        
+                        if(parking_data['total_floor_for_parking'] != 'null') {
+                            this.total_floor_for_parking = parking_data['total_floor_for_parking'];
+                        }
 
                         this.parking_details = JSON.parse(parking_data['parking_details']);
 
@@ -880,7 +886,11 @@
 
                         this.nextTickForDynamicAddfloor();
 
-                        this.amenities = JSON.parse(project_data['amenities']);
+                        if(project_data['amenities']) {
+                            this.amenities = JSON.parse(project_data['amenities']);     
+                        } else {
+                            this.amenities = [];
+                        }
 
                         $('#image_category').val(project_data['document_category']).trigger('change');
 
@@ -1937,13 +1947,10 @@
                     let is_valid = true;
 
                     let fields = [
-                        'website',
                         'project_name',
-                        'address',
                         'area_id',
                         'state_id',
                         'city_id',
-                        'pincode',
                     ];
 
                     if(user_role == 'admin' || user_role == 'superadmin') {
@@ -1966,13 +1973,13 @@
 
                     this.other_contact_details.forEach((conatct_obj , index) => {
                         Object.entries(conatct_obj).forEach((key_name) => {
-                            if(key_name[1] == '') {
-                                let error_element = document.getElementById(`err_other_contact_${key_name[0]}_${index}`);
-                                if(error_element) {
-                                    error_element.classList.remove('d-none');
-                                    is_valid = false;
-                                }
-                            } else {
+                            // if(key_name[1] == '') {
+                            //     let error_element = document.getElementById(`err_other_contact_${key_name[0]}_${index}`);
+                            //     if(error_element) {
+                            //         error_element.classList.remove('d-none');
+                            //         is_valid = false;
+                            //     }
+                            // } else {
                                 if(key_name[0] == 'email') {
                                     var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
                                     if (!key_name[1].match(validRegex)) {
@@ -1994,7 +2001,7 @@
                                         }
                                     }
                                 }
-                            }
+                            // }
                         });
                     });
 
@@ -3136,7 +3143,10 @@
                     }
 
                     form_data.set('parking_details', JSON.stringify(this.parking_details));
-                    form_data.set('amenities', this.amenities.length > 0 ? JSON.stringify(this.amenities) : '' );
+
+                    if(this.amenities) {
+                        form_data.set('amenities', this.amenities.length > 0 ? JSON.stringify(this.amenities) : '' );
+                    }
                     
                     form_data.set('document_category', $('#image_category').val() ?? '');
                     let document_image = document.getElementById('document_image');

@@ -2386,7 +2386,8 @@
                                     </div>
                                     <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_wing_${index}`">Wing name is required.</span>
                                 </div>
-                                <div class="row mt-4">
+
+                                <div class="form-group col-md-9">
                                     <div class="input-group mb-3">
                                         <div class="form-group col-md-3 m-b-10">
                                             <div class="fname" :class="unit.saleable == '' ? '' : 'focused' ">
@@ -2402,7 +2403,7 @@
                                             </div>
                                             <span class="text-danger new_error d-none" :id="`err_if_residential_only_units_saleable_to_${index}`">Saleable to is required.</span>
                                         </div>
-                                        <div class="form-group col-md-3 m-b-10">
+                                        <div class="form-group col-md-2 m-b-10">
                                             <select class="form-select form_measurement measure_select" :id="`saleable_area_select_${index}`">
                                                 @forEach($land_units as $land_unit)
                                                     <option value="{{ $land_unit->id }}" {{ $land_unit->id == 1 ? 'selected' : '' }}>{{ $land_unit->unit_name }}</option>
@@ -2513,7 +2514,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-4 d-none">
                                     <div class="input-group">
                                         <div class="form-group col-md-7 m-b-20">
                                             <div class="fname" :class="unit.floor_height == '' ? '' : 'focused' ">
