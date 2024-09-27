@@ -1973,14 +1973,23 @@
 
                     this.other_contact_details.forEach((conatct_obj , index) => {
                         Object.entries(conatct_obj).forEach((key_name) => {
-                            // if(key_name[1] == '') {
-                            //     let error_element = document.getElementById(`err_other_contact_${key_name[0]}_${index}`);
-                            //     if(error_element) {
-                            //         error_element.classList.remove('d-none');
-                            //         is_valid = false;
-                            //     }
-                            // } else {
-                                if(key_name[0] == 'email') {
+
+                            if(key_name[0] == 'name') {
+                                if (key_name[1] == '') {
+                                    let error_element = document.getElementById(`err_other_contact_${key_name[0]}_${index}`);
+
+                                    if(error_element) {
+                                        error_element.innerText = 'Name field is required.';
+                                        error_element.classList.remove('d-none');
+                                        is_valid = false;
+                                    }
+                                }
+                            }
+
+                            if(key_name[0] == 'email') {
+                                console.log();
+                                if (key_name[1] != '')
+                                {
                                     var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
                                     if (!key_name[1].match(validRegex)) {
                                         let error_element = document.getElementById(`err_other_contact_${key_name[0]}_${index}`);
@@ -1990,18 +1999,19 @@
                                             is_valid = false;
                                         }
                                     }
-                                }
-                                if(key_name[0] == 'mobile') {
-                                    if (key_name[1].length != 10 || isNaN(key_name[1])) {
-                                        let error_element = document.getElementById(`err_other_contact_${key_name[0]}_${index}`);
-                                        error_element.innerText = 'Enter valid mobile number';
-                                        if(error_element) {
-                                            error_element.classList.remove('d-none');
-                                            is_valid = false;
-                                        }
+                                } 
+                            }
+
+                            if(key_name[0] == 'mobile') {
+                                if (key_name[1].length != 10 || isNaN(key_name[1])) {
+                                    let error_element = document.getElementById(`err_other_contact_${key_name[0]}_${index}`);
+                                    error_element.innerText = 'Enter valid mobile number';
+                                    if(error_element) {
+                                        error_element.classList.remove('d-none');
+                                        is_valid = false;
                                     }
                                 }
-                            // }
+                            }
                         });
                     });
 
