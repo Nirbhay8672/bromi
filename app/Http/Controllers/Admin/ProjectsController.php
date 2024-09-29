@@ -262,9 +262,9 @@ class ProjectsController extends Controller
 		}
 	}
 
-	public function storeFile(UploadedFile $file)
+	public function storeFile(UploadedFile $file , $name = null)
     {
-        $path = "file_".time().(string) random_int(0,5).'.'.$file->getClientOriginalExtension();
+        $path = "file_".time().(string) random_int(0,5).$name.'.'.$file->getClientOriginalExtension();
 		$file->storeAs("public/file_image/", $path);
         return $path;
     }
@@ -276,6 +276,12 @@ class ProjectsController extends Controller
 		if($request->id == '' || $request->id == null) {
 			$data = new Projects();
 		} else {
+
+			foreach (json_decode($request->removed_files) ?? [] as $file_name) {
+				$filePath = storage_path("app/public/file_image/{$file_name}");
+				unlink($filePath);
+			}
+
 			Projects::where('id', (int) $request->id)
 				->update([
 					'property_type' => null,
@@ -293,6 +299,20 @@ class ProjectsController extends Controller
 			);
 
 			$data = Projects::find((int) $request->id);
+
+			if($data->catlog_file != '') {
+				if(in_array($data->catlog_file , json_decode($request->removed_files)) ) {
+					$data->catlog_file = null;
+				}
+			}
+
+			if($data->document_image != '') {
+				if(in_array($data->document_image , json_decode($request->removed_files)) ) {
+					$data->document_image = null;
+				}
+			}
+
+			$data->other_documents = $request->other_document_array;
 		}
 
 		if($request->id == '' || $request->id == null) {
@@ -418,12 +438,12 @@ class ProjectsController extends Controller
 		if($request->document_image) {
 			$data->document_category = $request->document_category;
 			$document_image = $request->document_image;
-			$data->document_image = $this->storeFile($document_image);
+			$data->document_image = $this->storeFile($document_image , '1');
 		}
 
 		if($request->catlog_file) {
 			$catlot_file = $request->catlog_file;
-			$data->catlog_file = $this->storeFile($catlot_file);
+			$data->catlog_file = $this->storeFile($catlot_file , '2');
 		}
 
 		$other_documents = json_decode($request->other_documents);

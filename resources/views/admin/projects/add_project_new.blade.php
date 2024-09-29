@@ -287,16 +287,29 @@
                                                                     <span x-text="errors.document_category"></span>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group col-md-6 m-b-4 mb-3">
-                                                                <div class="fname">
-                                                                    <div class="fvalue">
-                                                                        <input class="form-control" :class="errors.hasOwnProperty('document_image') ? 'is-invalid' : ''" accept="image/*,.pdf" type="file" id="document_image" name="document_image">
-                                                                        <div class="invalid-feedback">
-                                                                            <span x-text="errors.document_image"></span>
+
+                                                            <template x-if="existing_doc_file">
+                                                                <div class="form-group col-md-6 m-b-4 mb-3">
+                                                                    Selected File -
+                                                                    <span class="text-primary" style="cursor: pointer;text-transform:none;" @click="openDocument(existing_doc_file)" x-text="existing_doc_file"></span>
+                                                                    <button class="btn btn-primary btn-sm ms-3" style="border-radius:5px;" @click="removeFile(existing_doc_file , 'existing_doc_file')">Remove File</button>
+                                                                </div>
+                                                            </template>
+
+                                                            <template x-if="!existing_doc_file">
+                                                                <div class="form-group col-md-6 m-b-4 mb-3">
+                                                                    <div class="fname">
+                                                                        <div class="fvalue">
+                                                                            <input class="form-control" :class="errors.hasOwnProperty('document_image') ? 'is-invalid' : ''" accept="image/*,.pdf" type="file" id="document_image" name="document_image">
+                                                                            <div class="invalid-feedback">
+                                                                                <span x-text="errors.document_image"></span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </template>
+
+
                                                             <div class="form-group col-md-1 m-b-4 mb-3">
                                                                 <button class="btn btn-primary" style="border-radius:5px;" type="button" @click="addOtherImageOrDoc()" title="">+</button>
                                                             </div>
@@ -305,6 +318,7 @@
 
                                                     <div class="row">
                                                     <template x-for="(other_doc, index) in other_documents">
+
                                                         <div class="row">
                                                             <div class="form-group col-md-4 m-b-4 mt-1">
                                                                 <select class="form-select" :id="`other_doc_${index}`" x-model="other_doc.document_type">
@@ -318,35 +332,59 @@
                                                                     <option value="6">Other</option>
                                                                 </select>
                                                             </div>
-                                                            <div class="form-group col-md-6 m-b-4 mb-3">
-                                                                <div class="fname">
-                                                                    <div class="fvalue">
-                                                                        <input class="form-control" accept="image/*,.pdf" type="file" :id="`document_image_${index}`" name="document_image">
+
+                                                            <template x-if="other_doc.file != ''">
+                                                                <div class="form-group col-md-6 m-b-4 mb-3">
+                                                                    Selected File -
+                                                                    <span class="text-primary" style="cursor: pointer;text-transform:none;" @click="openDocument(other_doc.file)" x-text="other_doc.file"></span>
+                                                                    <button class="btn btn-primary btn-sm ms-3" style="border-radius:5px;" @click="removeOtherDoc(other_doc.file , index)">Remove File</button>
+                                                                </div>
+                                                            </template>
+
+                                                            <template x-if="other_doc.file == '' || other_doc.file == null">
+                                                                <div class="form-group col-md-6 m-b-4 mb-3">
+                                                                    <div class="fname">
+                                                                        <div class="fvalue">
+                                                                            <input class="form-control" accept="image/*,.pdf" type="file" :id="`document_image_${index}`" name="document_image">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </template>
+
                                                             <div class="form-group col-md-1 m-b-4 mb-3">
                                                                 <button class="btn btn-primary" style="border-radius:5px;" type="button" @click="removeOtherImageOrDoc(index)" title="">-</button>
                                                             </div>
                                                         </div>
                                                     </template>
                                                     </div>
-                                                    
+
+                                                    <hr>
 
                                                     <div class="row mt-3">
                                                         <div>
                                                             <label><b>Catlog File</b></label>
                                                         </div>
-                                                        <div class="form-group col-md-6 m-b-4 mb-3">
-                                                            <div class="fname">
-                                                                <div class="fvalue">
-                                                                    <input class="form-control" :class="errors.hasOwnProperty('catlog_file') ? 'is-invalid' : ''" accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf" type="file" id="catlog_file" name="catlog_file">
-                                                                    <div class="invalid-feedback">
-                                                                        <span x-text="errors.catlog_file"></span>
+
+                                                        <template x-if="exist_catelog_file">
+                                                            <div>
+                                                                Selected File -
+                                                                <span class="text-primary" style="cursor: pointer;text-transform:none;" @click="openDocument(exist_catelog_file)" x-text="exist_catelog_file"></span>
+                                                                <button class="btn btn-primary btn-sm ms-3" style="border-radius:5px;" @click="removeFile(exist_catelog_file, 'exist_catelog_file')">Remove File</button>
+                                                            </div>
+                                                        </template>
+
+                                                        <template x-if="!exist_catelog_file">
+                                                            <div class="form-group col-md-6 m-b-4 mb-3">
+                                                                <div class="fname">
+                                                                    <div class="fvalue">
+                                                                        <input class="form-control" :class="errors.hasOwnProperty('catlog_file') ? 'is-invalid' : ''" accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf" type="file" id="catlog_file" name="catlog_file">
+                                                                        <div class="invalid-feedback">
+                                                                            <span x-text="errors.catlog_file"></span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </template>
                                                     </div>
 
                                                     <hr>
@@ -894,7 +932,16 @@
 
                         $('#image_category').val(project_data['document_category']).trigger('change');
 
+                        if(project_data['document_image'] != '') {
+                            this.existing_doc_file = project_data['document_image'];
+                        }
+
+                        if(project_data['catlog_file'] != '') {
+                            this.exist_catelog_file = project_data['catlog_file'];
+                        }
+
                         this.other_documents = project_data['other_documents'];
+
                         let _this_doc = this;
 
                         this.$nextTick(function () {
@@ -926,6 +973,38 @@
                 number_of_unit_in_project : '',  
 
                 project_status_question : '',
+
+                exist_catelog_file : null,
+                existing_doc_file : null,
+
+                removed_files : [],
+
+                openDocument(file_name) {
+                    let filename = file_name;
+
+                    let url = '';
+
+                    if(user_role == 'admin') {
+                        url = '{{ route("admin.project.document", ["filename" => ":filename"]) }}';
+                    }
+
+                    if(user_role == 'builder') {
+                        url = '{{ route("builder.project.document", ["filename" => ":filename"]) }}';
+                    }
+
+                    if(user_role == 'superadmin') {
+                        url = '{{ route("superadmin.project.document", ["filename" => ":filename"]) }}';
+                    }
+
+                    url = url.replace(':filename', filename);
+
+                    window.open(url, '_blank');
+                },
+
+                removeFile(file_name , key) {
+                    this.removed_files.push(file_name);
+                    this[key] = null;
+                },
 
                 addOtherContact() {
                     this.other_contact_details.push({
@@ -1875,7 +1954,21 @@
                     this.setSelect2ForOtherDoc();
                 },
 
+                removeOtherDoc(file_name , index) {
+
+                    if(file_name != '') {
+                        this.removed_files.push(file_name);
+                        this.other_documents[index].file = '';
+                    }
+                },
+
                 removeOtherImageOrDoc(index) {
+
+                    if(this.other_documents[index].file != '') {
+                        this.removed_files.push(this.other_documents[index].file);
+                        this.other_documents[index].file = '';
+                    }
+
                     this.other_documents.splice(index, 1);
                 },
 
@@ -3188,6 +3281,10 @@
                     });
 
                     form_data.set('other_documents', JSON.stringify(this.other_documents));
+
+                    form_data.set('removed_files', JSON.stringify(this.removed_files));
+
+                    form_data.set('other_document_array' , JSON.stringify(this.other_documents));
 
                     let url = null;
 
