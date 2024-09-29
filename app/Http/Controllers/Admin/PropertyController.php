@@ -2096,7 +2096,6 @@ class PropertyController extends Controller
         if ($request->survey_price) {
             $surveyprice = str_replace(',', '', $request->survey_price);
         }
-
         $data->property_for = $request->property_for;
         $data->res_more = $request->res_more;
         $data->property_type = $request->property_type;
