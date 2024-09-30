@@ -795,20 +795,6 @@
 				}
 			}
 
-
-
-            var uploadField = document.getElementById("building_images");
-
-            uploadField.onchange = function() {
-                if (this.files[0].size > 2097152) {
-                    uploadField.value = '';
-                    Swal.fire({
-                        title: "Maximum file size limit is 2MB",
-                        icon: "warning",
-                    })
-                };
-            };
-
             function deleteProject(data) {
                 Swal.fire({
                     title: "Are you sure?",

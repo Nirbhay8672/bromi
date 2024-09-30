@@ -98,18 +98,6 @@
         });
     })
 
-    var uploadField = document.getElementById("land_images");
-
-    uploadField.onchange = function() {
-        if (this.files[0].size > 2097152) {
-            uploadField.value = '';
-            Swal.fire({
-                title: "Maximum file size limit is 2MB",
-                icon: "warning",
-            })
-        };
-    };
-
     $(document).on('change', '#village_id', function(e) {
         setTimeout(() => {
             vill = $('#village_id').select2().find(":selected").attr("data-parent_id")
