@@ -1270,7 +1270,7 @@
                                                 type="checkbox">
                                             <label class="form-check-label" for="match_enquiry_for">Enquiry For</label>
                                         </div>
-                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10 the_enquiry_sub_cat">
                                             <input class="form-check-input" checked id="match_specific_sub_type"
                                                 type="checkbox">
                                             <label class="form-check-label" for="match_specific_sub_type">Enquiry Sub
@@ -1939,8 +1939,12 @@
                             } else {
                                 $('.the_matching_weekend').hide();
                             }
-                        } else {
-                            console.log("data.configuration is still not an array after parsing");
+                        }else if(data.configuration == 0){
+                            console.log("Is land category :");
+                            $('.the_enquiry_sub_cat').hide();
+                        }else {
+                            $('.the_enquiry_sub_cat').show();
+                            console.log("data.configuration is still not an array after parsing : ");
                         }
 
                     },

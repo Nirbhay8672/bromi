@@ -580,7 +580,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10">
+                                            <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10 prop_sub_category">
                                                 <input class="form-check-input" checked id="match_specific_sub_type"
                                                     type="checkbox">
                                                 <label class="form-check-label" for="match_specific_sub_type">Property Sub
@@ -792,8 +792,34 @@
 
                 function matchingEnquiry(data) {
                     $('#matchModal').modal('show');
+                    let propId = $(data).attr('data-id');
+                console.log("propId :", propId);
+
                     $('#matchagain').attr('data-id', $(data).attr('data-id'));
+                    getPropertyCategory(propId)
                 }
+
+                function getPropertyCategory(propId) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('admin.property.category') }}",
+                    data: {
+                        id: propId, 
+                    },
+                    success: function(data) {
+                        console.log("data.configuration :",data);
+                        
+                        if (data.property_category === "256") {
+                            $('.prop_sub_category').hide();
+                        } else {
+                            $('.prop_sub_category').show();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
+            }
 
                 function shareTableRow() {
                 var msg = '';

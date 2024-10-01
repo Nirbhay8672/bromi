@@ -1037,7 +1037,9 @@
                         id: propId, 
                     },
                     success: function(data) {
-                        if (data.configuration === "15" && data.week_end_villa == '1') {
+                        console.log("data.configuration matching  :",data).property_category;
+                        
+                        if (data.property_category === "255" && data.week_end_villa == '1') {
                             $('.the_prop_weekend').show();
                         } else {
                             $('.the_prop_weekend').hide();
