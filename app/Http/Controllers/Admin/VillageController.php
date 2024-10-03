@@ -154,6 +154,7 @@ class VillageController extends Controller
 					$new_district->fill([
 						'name' => $district_obj->name,
 						'user_id' => Auth::user()->id,
+						'state_id' => $district_obj->state_id,
 					])->save();
 
 					$district_id = $new_district->id;
