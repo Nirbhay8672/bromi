@@ -134,13 +134,14 @@ class TalukaController extends Controller
 					$new_district_id = $district->id;
 					    
 					if(!$current_user_district) {
-						$new_state = new District();
-						$new_state->fill([
+						$new_dist = new District();
+						$new_dist->fill([
 							'name' => $district->name,
+							'state_id' => $district->state_id,
 							'user_id' => Auth::user()->id,
 						])->save();
 						
-						$new_district_id = $new_state->id;
+						$new_district_id = $new_dist->id;
 					} else {
 						$new_district_id = $current_user_district->id;
 					}

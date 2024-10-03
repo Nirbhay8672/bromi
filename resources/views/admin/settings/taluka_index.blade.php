@@ -30,6 +30,7 @@
                                         data-bs-toggle="modal"
                                         data-bs-target="#cityModal"
                                         data-tooltip="Add Taluka"
+                                        onclick="reset()"
                                     ><i class="fa fa-plus"></i></button>
 
                                     <button
@@ -313,6 +314,11 @@
                     }
                 });
             })
+
+            function reset() {
+                $('#modal_form').trigger("reset");
+                $('#district_id').val('').trigger('change')
+            }
 
             function getCity(data) {
                 $('#modal_form').trigger("reset");
