@@ -422,4 +422,15 @@ class SuperSettingController extends Controller
 
 		return response()->download($filePath, 'villages.csv');
 	}
+
+	public function viewSampleFile($filename)
+    {
+        $filePath = public_path("sample/{$filename}");
+
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+
+		return response()->download($filePath);
+    }
 }

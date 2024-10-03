@@ -1104,6 +1104,15 @@ Helper::set_default_measuerement();
             var valuewithcomma = Number(newvalue).toLocaleString('en-IN');
             return valuewithcomma;
         }
+
+        function openDocument(file_name) {
+            let filename = file_name;
+            let url = '{{ route("superadmin.sample", ["filename" => ":filename"]) }}';
+            url = url.replace(':filename', filename);
+
+            window.open(url);
+        }
+
         </script>
         <!-- login js-->
         <!-- Plugin used-->
