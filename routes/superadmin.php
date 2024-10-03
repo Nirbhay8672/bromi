@@ -181,5 +181,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 		Route::get('/district-template', [SuperSettingController::class, 'districtTemplate'])->name('superadmin.districtTemplate');
 		Route::get('/taluka-template', [SuperSettingController::class, 'talukaTemplate'])->name('superadmin.talukaTemplate');
 		Route::get('/village-template', [SuperSettingController::class, 'villageTemplate'])->name('superadmin.villageTemplate');
+
+		Route::get('/view-sample/{filename}', [SuperSettingController::class, 'viewSampleFile'])->name('superadmin.sample');
 	});
 });

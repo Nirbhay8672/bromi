@@ -119,6 +119,13 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <i class="fa fa-arrow-right me-2"></i><span class="text-primary" style="cursor: pointer;" onclick="openDocument('cities.csv')">Sample File</span>
+                                </div>
+                            </div>
+
                             <div class="mt-5">
                                 <button class="btn custom-theme-button" type="submit">Import</button>
                             </div>
@@ -155,6 +162,7 @@
                                 </div>
                                 <input type="hidden" name="this_data_id" id="this_data_id">
                             </div>
+
                             <div class="text-center">
                                 <button class="btn custom-theme-button" type="button" id="saveCity">Save</button>
                                 <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>

@@ -87,6 +87,13 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <i class="fa fa-arrow-right me-2"></i><span class="text-primary" style="cursor: pointer;" onclick="openDocument('states.csv')">Sample File</span>
+                                </div>
+                            </div>
+
                             <div class="mt-5">
                                 <button class="btn custom-theme-button" type="submit">Import</button>
                             </div>
@@ -138,6 +145,7 @@
     @endsection
     @push('scripts')
         <script>
+
             $(document).ready(function() {
 
                 $('#stateTable').DataTable({

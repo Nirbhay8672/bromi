@@ -98,8 +98,10 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-md-5 mt-3">
-                                <a id="import_url" href="{{ route('superadmin.districtTemplate') }}" target="_blank">Download Sample file</a>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <i class="fa fa-arrow-right me-2"></i><span class="text-primary" style="cursor: pointer;" onclick="openDocument('districts.csv')">Sample File</span>
+                                </div>
                             </div>
                             
                             <div class="mt-3">
