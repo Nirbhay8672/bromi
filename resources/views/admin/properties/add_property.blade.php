@@ -606,33 +606,38 @@
                                                                     data-error="#taluka_id_error">
                                                                     <option value=""> Taluka</option>
                                                                     @foreach ($talukas as $taluka)
-                                                                        <option data-parent_id="{{ $taluka->district_id }}"
-                                                                            value="{{ $taluka->id }}">{{ $taluka->name }}
+                                                                        <option
+                                                                            data-parent_id="{{ $taluka->district_id }}"
+                                                                            value="{{ $taluka->id }}">
+                                                                            {{ $taluka->name }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
                                                                 <div id="taluka_id_error" style="color: red"></div>
                                                             </div>
-                                                            <div class="form-group col-md-2 m-b-4 mb-3 div_extra_land_details">
+                                                            <div
+                                                                class="form-group col-md-2 m-b-4 mb-3 div_extra_land_details">
                                                                 <select class="form-select" id="village_id"
                                                                     data-error="#village_id_error">
                                                                     <option value=""> Village</option>
                                                                     @foreach ($villages as $village)
                                                                         <option data-parent_id="{{ $village->taluka_id }}"
-                                                                            value="{{ $village->id }}">{{ $village->name }}
+                                                                            value="{{ $village->id }}">
+                                                                            {{ $village->name }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
                                                                 <div id="village_id_error" style="color: red"></div>
                                                             </div>
-    
+
                                                             <div class="form-group col-md-3 m-b-4 mb-3">
                                                                 <select class="form-select" id="zone"
                                                                     data-error="#zone_id_error">
                                                                     <option value="">Zone</option>
                                                                     @forelse ($property_configuration_settings as $props)
                                                                         @if ($props['dropdown_for'] == 'property_zone')
-                                                                            <option data-parent_id="{{ $props['parent_id'] }}"
+                                                                            <option
+                                                                                data-parent_id="{{ $props['parent_id'] }}"
                                                                                 value="{{ $props['id'] }}">
                                                                                 {{ $props['name'] }}
                                                                             </option>
@@ -643,7 +648,7 @@
                                                                 <div id="zone_id_error" style="color: red"></div>
                                                             </div>
                                                         </div>
-    
+
                                                         <div class="col-md-5 m-b-4 mb-3">
                                                             <div>
                                                                 <label for="Addresss">Address</label>
@@ -666,7 +671,7 @@
                                                                 style="display: none;color:red;"></div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="row div_area_size_details" id="">
                                                         <div>
                                                             <label><b>Area Size</b></label>
@@ -3174,6 +3179,8 @@
         // {{-- Hide field comment by Bharat-script --}}
         function toggleProjectDropdown(input) {
             var hideElement = document.getElementById('project_hide');
+            console.log("input.value :", input.value);
+
             if (input.value === '10') {
                 hideElement.style.display = 'none';
             } else if (input.value === '11') {
@@ -4308,6 +4315,8 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
+                    console.log("datadata : ", data);
+
 
                     if (data == null || data == '') {
 
@@ -4347,7 +4356,10 @@
                     });
                     // edit property selected valdata.width_of_plot, 1
                     data = JSON.parse(data);
-
+                    if (data.property_category == '262') {
+                        $('#project_hide').hide()
+                        $('.the-city-field').hide()
+                    }
                     let carpetVal = setSplitedValue(data.carpet_plot_area ?? 0, 1);
                     if (carpetVal != "") {
                         console.log("carpet VAl", carpetVal);
