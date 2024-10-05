@@ -774,7 +774,7 @@
                                                     Size</label>
                                             </div>
                                             <div class="form-check checkbox  the_prop_weekend checkbox-solid-success mb-0 m-b-10"
-                                                style="display: none">
+                                                style="">
                                                 <input class="form-check-input" checked id="match_enquiry_weekend"
                                                     type="checkbox">
                                                 <label class="form-check-label" for="match_enquiry_weekend">Property
