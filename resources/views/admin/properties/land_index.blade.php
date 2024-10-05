@@ -182,6 +182,38 @@
                                                 <option value="">Sub Category</option>
                                             </select>
                                         </div>
+
+                                        <div class="form-group col-md-2 m-b-4 mb-3">
+                                            <label class="select2_label" for="Select Project"> Project</label>
+                                            <select class="form-select" id="filter_building_id" multiple>
+                                                @foreach ($projects as $building)
+                                                <option value="{{ $building->id }}">{{ $building->project_name }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-2 m-b-4 mb-3">
+                                            <label class="select2_label" for="Select Area"> Locality</label>
+                                            <select class="form-select" id="filter_area_id" multiple>
+                                                @foreach ($areas as $area)
+                                                <option value="{{ $area->id }}">{{ $area->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-3 m-b-4 mb-3">
+                                            <select class="form-select" id="filter_Property_priority">
+                                                <option value="">Priority</option>
+                                                @forelse ($property_configuration_settings as $props)
+                                                    @if ($props['dropdown_for'] == 'property_priority_type')
+                                                        <option data-parent_id="{{ $props['parent_id'] }}"
+                                                            value="{{ $props['id'] }}">{{ $props['name'] }}
+                                                        </option>
+                                                    @endif
+                                                @empty
+                                                @endforelse
+                                            </select>
+                                        </div>
+
                                         <div class="form-group col-md-4 m-b-4 mb-3">
                                             <select class="form-select" id="filter_district_id">
                                                 <option value=""> District</option>
@@ -208,13 +240,31 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        {{-- <div class="form-group col-md-3 m-b-4 mb-3">
-                                            <select class="form-select" id="filter_status">
-                                                <option value=""> Status</option>
-                                                <option value="1">Available</option>
-                                                <option value="2">Sold Out</option>
-                                            </select>
-                                        </div> --}}
+
+                                        <div class="form-group col-md-2 m-b-4 mb-3">
+                                            <div>
+                                                <label for="From Price">From Price</label>
+                                                <input class="form-control indian_currency_amount" name="filter_from_price"
+                                                    id="filter_from_price" type="text" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-2 mb-3">
+                                            <div>
+                                                <label for="To Price">To Price</label>
+                                                <input class="form-control indian_currency_amount" name="filter_to_price"
+                                                    id="filter_to_price" type="text" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-2 m-b-20">
+                                            <label for="From Area">From Area</label>
+                                            <input class="form-control" name="filter_from_area" id="filter_from_area"
+                                                type="text" autocomplete="off">
+                                        </div>
+                                        <div class="form-group col-md-2 m-b-20">
+                                            <label for="To Area">To Area</label>
+                                            <input class="form-control" name="filter_to_area" id="filter_to_area"
+                                                type="text" autocomplete="off">
+                                        </div>
                                     </div>
                                 </div>
                                 <button class="btn btn-secondary" id="filtersearch">Filter</button>
@@ -904,6 +954,15 @@
                                 d.filter_specific_type = $('#filter_specific_type').val();
                                 d.filter_district_id = $('#filter_district_id').val();
                                 d.filter_configuration = $('#filter_configuration').val();
+
+                                d.filter_building_id = $('#filter_building_id').val();
+                                d.filter_area_id = $('#filter_area_id').val();
+                                d.filter_Property_priority = $('#filter_Property_priority').val();
+                                d.filter_from_price = $('#filter_from_price').val();
+                                d.filter_to_price = $('#filter_to_price').val();
+                                d.filter_from_area = $('#filter_from_area').val();
+                                d.filter_to_area = $('#filter_to_area').val();
+                            
                                 d.filter_taluka_id = $('#filter_taluka_id').val();
                                 d.filter_village_id = $('#filter_village_id').val();
                                 d.search_enq = search_enq;

@@ -562,7 +562,7 @@
                                                             <div id="state_id_error" style="color: red"></div>
                                                         </div>
 
-                                                        <div class="form-group col-md-3 m-b-4 mb-3">
+                                                        <div class="form-group col-md-3 m-b-4 mb-3 the-city-field">
                                                             <select id="state-dropdown" class="form-control"
                                                                 data-error="#city_id_error">
                                                                 <option value="">Select City</option>
@@ -589,7 +589,61 @@
                                                             </select>
                                                             <div id="locality_id_error" style="color: red"></div>
                                                         </div>
-
+                                                        <div class="row div_property_address" id="">
+                                                            <div class="form-group col-md-3 mb-3 div_extra_land_details">
+                                                                <select class="form-select" id="district_id"
+                                                                    data-error="#district_id_error">
+                                                                    <option value=""> District</option>
+                                                                    @foreach ($districts as $disctrict)
+                                                                        <option value="{{ $disctrict->id }}">
+                                                                            {{ $disctrict->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <div id="district_id_error" style="color: red"></div>
+                                                            </div>
+                                                            <div class="form-group col-md-2 mb-3 div_extra_land_details">
+                                                                <select class="form-select" id="taluka_id"
+                                                                    data-error="#taluka_id_error">
+                                                                    <option value=""> Taluka</option>
+                                                                    @foreach ($talukas as $taluka)
+                                                                        <option data-parent_id="{{ $taluka->district_id }}"
+                                                                            value="{{ $taluka->id }}">{{ $taluka->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <div id="taluka_id_error" style="color: red"></div>
+                                                            </div>
+                                                            <div class="form-group col-md-2 m-b-4 mb-3 div_extra_land_details">
+                                                                <select class="form-select" id="village_id"
+                                                                    data-error="#village_id_error">
+                                                                    <option value=""> Village</option>
+                                                                    @foreach ($villages as $village)
+                                                                        <option data-parent_id="{{ $village->taluka_id }}"
+                                                                            value="{{ $village->id }}">{{ $village->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <div id="village_id_error" style="color: red"></div>
+                                                            </div>
+    
+                                                            <div class="form-group col-md-3 m-b-4 mb-3">
+                                                                <select class="form-select" id="zone"
+                                                                    data-error="#zone_id_error">
+                                                                    <option value="">Zone</option>
+                                                                    @forelse ($property_configuration_settings as $props)
+                                                                        @if ($props['dropdown_for'] == 'property_zone')
+                                                                            <option data-parent_id="{{ $props['parent_id'] }}"
+                                                                                value="{{ $props['id'] }}">
+                                                                                {{ $props['name'] }}
+                                                                            </option>
+                                                                        @endif
+                                                                    @empty
+                                                                    @endforelse
+                                                                </select>
+                                                                <div id="zone_id_error" style="color: red"></div>
+                                                            </div>
+                                                        </div>
+    
                                                         <div class="col-md-5 m-b-4 mb-3">
                                                             <div>
                                                                 <label for="Addresss">Address</label>
@@ -612,61 +666,7 @@
                                                                 style="display: none;color:red;"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="row div_property_address" id="">
-                                                        <div class="form-group col-md-3 mb-3 div_extra_land_details">
-                                                            <select class="form-select" id="district_id"
-                                                                data-error="#district_id_error">
-                                                                <option value=""> District</option>
-                                                                @foreach ($districts as $disctrict)
-                                                                    <option value="{{ $disctrict->id }}">
-                                                                        {{ $disctrict->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            <div id="district_id_error" style="color: red"></div>
-                                                        </div>
-                                                        <div class="form-group col-md-2 mb-3 div_extra_land_details">
-                                                            <select class="form-select" id="taluka_id"
-                                                                data-error="#taluka_id_error">
-                                                                <option value=""> Taluka</option>
-                                                                @foreach ($talukas as $taluka)
-                                                                    <option data-parent_id="{{ $taluka->district_id }}"
-                                                                        value="{{ $taluka->id }}">{{ $taluka->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <div id="taluka_id_error" style="color: red"></div>
-                                                        </div>
-                                                        <div class="form-group col-md-2 m-b-4 mb-3 div_extra_land_details">
-                                                            <select class="form-select" id="village_id"
-                                                                data-error="#village_id_error">
-                                                                <option value=""> Village</option>
-                                                                @foreach ($villages as $village)
-                                                                    <option data-parent_id="{{ $village->taluka_id }}"
-                                                                        value="{{ $village->id }}">{{ $village->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <div id="village_id_error" style="color: red"></div>
-                                                        </div>
-
-                                                        <div class="form-group col-md-3 m-b-4 mb-3">
-                                                            <select class="form-select" id="zone"
-                                                                data-error="#zone_id_error">
-                                                                <option value="">Zone</option>
-                                                                @forelse ($property_configuration_settings as $props)
-                                                                    @if ($props['dropdown_for'] == 'property_zone')
-                                                                        <option data-parent_id="{{ $props['parent_id'] }}"
-                                                                            value="{{ $props['id'] }}">
-                                                                            {{ $props['name'] }}
-                                                                        </option>
-                                                                    @endif
-                                                                @empty
-                                                                @endforelse
-                                                            </select>
-                                                            <div id="zone_id_error" style="color: red"></div>
-                                                        </div>
-                                                    </div>
-
+                                                    
                                                     <div class="row div_area_size_details" id="">
                                                         <div>
                                                             <label><b>Area Size</b></label>
@@ -2945,103 +2945,19 @@
                     isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
                         'Salable plot area field is required') && isValid;
                 }
-                // if (officeConf || flateConfiguration) {
-                //     isValid = validateField('#property_on_floors', '#property_on_floors_error',
-                //         'units floor field is required') && isValid;
-                // }
-                // if (flateConfiguration) {
-                //     // isValid = validateField('#builtup_area', '#builtup_area_error',
-                //     //     'Built up area field is required') && isValid;
-                //     isValid = validateField('#no_of_bathrooms', '#no_of_bathrooms_error',
-                //         'no of bathroom field is required') && isValid;
-                // }
-                // if (retailConfiguration) {
-                //     isValid = validateField('#entrance_width', '#entrance_width_error',
-                //         'entrance width field is required') && isValid;
-                // }
-
-                // if (storageConfiguration == '7' || storageConfiguration == '8' || storageConfiguration == '9') {
-                //     isValid = validateField('#constructed_salable_area', '#constructed_salable_area_error',
-                //         'constructed salable area field is required') && isValid;
-                // }
-                // if (villaConfiguration || farmConf) {
-                //     isValid = validateField('#no_of_balcony', '#no_of_balcony_error',
-                //         'no of balcony field is required') && isValid;
-                //     isValid = validateField('#total_no_of_units', '#total_no_of_units_error',
-                //         'units field is required') && isValid;
-                //     isValid = validateField('#no_of_side_open', '#no_of_side_open_error',
-                //         'no of side open field is required') && isValid;
-                //     isValid = validateField('#no_of_bathrooms', '#no_of_bathrooms_error',
-                //         'no of bathroom field is required') && isValid;
-                // }
-                // if (farmConf) {
-                //     isValid = validateField('#no_of_room', '#no_of_room_error',
-                //         'rooms field is required') && isValid;
-                // }
-                // if (landConfiguration) {
-                //     // console.log("valid land prop");
-                //     // isValid = validateField('#length_of_plot', '#length_of_plot_error',
-                //     //     'length of plot field is required') && isValid;
-                //     //     Valid = validateField('#width_of_plot', '#width_of_plot_error',
-                //     //     'length of plot field is required') && isValid;
-
-                // }
                 if (storageConfiguration) {
                     console.log("enter in storage center ==");
-                    // isValid = validateField('#salable_plot_area', '#salable_plot_area_error',
-                    //     'Salable plot area field is required') && isValid;
                     isValid = validateField('#storage_centre_height', '#storage_centre_height_error',
                         'center height field is required') && isValid;
-                    // isValid = validateField('#front_road_width', '#front_road_width_error',
-                    //     'front road side field is required') && isValid;
-                    // isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
-                    //     'total units field is required') && isValid;
-                    // isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
-                    //     'two wheel parking field is required') && isValid;
                 }
                 if (flateConfiguration || officeConf || retailConfiguration) {
                     isValid = validateFloat('#ceiling_height', '#ceiling_height_error',
                         'ceiling height field is required and must be a number', numberRegex) && isValid;
-
-                    // isValid = validateField('#total_units_in_project', '#total_units_in_project_error',
-                    //     'total units field is required') && isValid;
-                    // isValid = validateField('#total_no_of_floor', '#total_no_of_floor_error',
-                    //     'no of floor field is required') && isValid;
-                    // isValid = validateField('#total_units_in_tower', '#total_units_in_tower_error',
-                    //     'unit tower field is required') && isValid;
-                    // isValid = validateField('#no_of_elavators', '#no_of_elavators_error',
-                    //     'elavators field is required') && isValid;
-                    // isValid = validateField('#twowheeler_parking', '#twowheeler_parking_error',
-                    //     'two wheel parking field is required') && isValid;
                 }
-                // if (penthouseConf) {
-                //     isValid = validateField('#no_of_balcony', '#no_of_balcony_error',
-                //         'no of balcony field is required') && isValid;
-                //     isValid = validateField('#terrace_salable_area', '#terrace_salable_area_error',
-                //         'terrace salable area field is required') && isValid;
-                // }
-                // isValid = validateField('#property_link', '#property_link_error',
-                //     'Location Link field is required') && isValid;
-                isValid = validateField('#address', '#address_error',
-                    'address field is required') && isValid;
-                // isValid = validateField('#fourwheller_parking', '#fourwheller_parking_error',
-                //     'four wheel parking field is required') && isValid;
-                // isValid = validateField('#remarks', '#remarks_error',
-                //     'remarks field is required') && isValid;
+                // isValid = validateField('#address', '#address_error',
+                //     'address field is required') && isValid;
                 return isValid;
             }
-
-            // Update theForLand when plot_type is clicked
-            $(document).on('change', 'input[name=plot_type]', function() {
-                theForLand = $(this).attr('data-val');
-                // if (theForLand === 'agriculture') {
-                //     console.log("location show ==")
-                //     $(".location_link_cls").show();
-                // } else {
-                //     console.log("location hide ==")
-                //     $(".location_link_cls").hide();
-                // }
-            });
 
             // Validation on 2ndstep submit
             const stateLength = $('#state_id').find('option').length;
@@ -3072,12 +2988,6 @@
                 if (theForLand === 'commercial' || theForLand === 'agriculture' || farmConf) {
                     isValid = validateDropdown($('#zone'), $('#zone_id_error'),
                         'Zone field is required') && isValid;
-                    // isValid = validateDropdown($('#village_id'), $('#village_id_error'),
-                    //     'Village field is required') && isValid;
-                    // isValid = validateDropdown($('#taluka_id'), $('#taluka_id_error'),
-                    //     'Taluka field is required') && isValid;
-                    // isValid = validateDropdown($('#district_id'), $('#district_id_error'),
-                    //     'District field is required') && isValid;
                 }
 
                 if (isValid) {
@@ -3664,8 +3574,9 @@
             if (theFor == 'commercial') {
                 console.log("comm ==");
                 $('.div_borewell').hide()
+                $('.the-city-field').hide()
                 $('.div_extra_land_details').show()
-                $(".cl-locality").show();
+                // $(".cl-locality").show();
             } else if (theFor == 'agriculture') {
                 console.log("agriii ==");
                 $('.div_construction_allowed_for').hide()
@@ -3676,6 +3587,7 @@
                 $('.div_tp_details').hide()
                 $('.div_extra_land_details').show()
                 $(".cl-locality").hide();
+                $('.the-city-field').hide()
             } else if (theFor == 'industrial') {
                 console.log("industrial ==");
                 $('.div_construction_allowed_for').hide()
@@ -3683,6 +3595,7 @@
                 $('.div_construction_docs_allowed_for').hide()
                 $('.div_borewell').hide()
                 $('.div_extra_land_details').hide()
+                $('.the-city-field').hide()
                 $(".cl-locality").show();
             }
         });

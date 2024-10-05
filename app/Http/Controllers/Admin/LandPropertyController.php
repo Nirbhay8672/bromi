@@ -40,9 +40,9 @@ class LandPropertyController extends Controller
 			$dropdownsarr = [];
 			$land_units = LandUnit::all();
 			$enq = '';
-            if (!empty($request->search_enq)) {
-                $enq = Enquiries::find($request->search_enq);
-            }
+			if (!empty($request->search_enq)) {
+				$enq = Enquiries::find($request->search_enq);
+			}
 			foreach ($dropdowns as $key => $value) {
 				$dropdownsarr[$value['id']] = $value;
 			}
@@ -60,47 +60,47 @@ class LandPropertyController extends Controller
 				->where('property_category', $indId[0])
 				->orWhere('property_category', $indId[1])
 				// Filter Section
-				// ->when($request->filter_property_for || empty(Auth::user()->property_for_id), function ($query) use ($request) {
-				// 	return $query->where(function ($query) use ($request) {
-				// 		$query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
-				// 	});
-				// })
-				// ->when($request->filter_property_type || empty(Auth::user()->property_type), function ($query) use ($request) {
-				// 	// dd($request->filter_property_type,"...",Auth::user()->property_type);
-				// 	return $query->where(function ($query) use ($request) {
-				// 		$query->where('properties.property_type', $request->filter_property_type);
-				// 	});
-				// })
-				// ->when($request->filter_specific_type || empty(Auth::user()->property_category), function ($query) use ($request) {
-				// 	// dd($request->filter_specific_type,"...",Auth::user()->property_category);
-				// 	return $query->where(function ($query) use ($request) {
-				// 		$query->where('properties.property_category', $request->filter_specific_type);
-				// 	});
-				// })
-				// ->when($request->filter_configuration || empty(Auth::user()->configuration), function ($query) use ($request) {
-				// 	// dd($request->filter_configuration,"...",Auth::user()->configuration);
-				// 	return $query->where(function ($query) use ($request) {
-				// 		$query->where('properties.configuration', $request->filter_configuration);
-				// 	});
-				// })
-				// ->when($request->filter_district_id || empty(Auth::user()->district_id), function ($query) use ($request) {
-				// 	// dd($request->filter_district_id,"...",Auth::user()->district_id);
-				// 	return $query->where(function ($query) use ($request) {
-				// 		$query->where('properties.district_id', $request->filter_district_id);
-				// 	});
-				// })
-				// ->when($request->filter_taluka_id || empty(Auth::user()->taluka_id), function ($query) use ($request) {
-				// 	// dd($request->filter_taluka_id,"...",Auth::user()->filter_taluka_id);
-				// 	return $query->where(function ($query) use ($request) {
-				// 		$query->where('properties.taluka_id', $request->filter_taluka_id);
-				// 	});
-				// })
-				// ->when($request->filter_village_id || empty(Auth::user()->village_id), function ($query) use ($request) {
-				// 	// dd($request->filter_village_id,"...",Auth::user()->village_id);
-				// 	return $query->where(function ($query) use ($request) {
-				// 		$query->where('properties.village_id', $request->filter_village_id);
-				// 	});
-				// })
+				->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
+					});
+				})
+				->when($request->filter_property_type && empty(Auth::user()->property_type), function ($query) use ($request) {
+					// dd($request->filter_property_type,"...",Auth::user()->property_type);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.property_type', $request->filter_property_type);
+					});
+				})
+				->when($request->filter_specific_type && empty(Auth::user()->property_category), function ($query) use ($request) {
+					// dd($request->filter_specific_type,"...",Auth::user()->property_category);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.property_category', $request->filter_specific_type);
+					});
+				})
+				->when($request->filter_configuration && empty(Auth::user()->configuration), function ($query) use ($request) {
+					// dd($request->filter_configuration,"...",Auth::user()->configuration);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.configuration', $request->filter_configuration);
+					});
+				})
+				->when($request->filter_district_id && empty(Auth::user()->district_id), function ($query) use ($request) {
+					// dd($request->filter_district_id,"...",Auth::user()->district_id);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.district_id', $request->filter_district_id);
+					});
+				})
+				->when($request->filter_taluka_id && empty(Auth::user()->taluka_id), function ($query) use ($request) {
+					// dd($request->filter_taluka_id,"...",Auth::user()->filter_taluka_id);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.taluka_id', $request->filter_taluka_id);
+					});
+				})
+				->when($request->filter_village_id && empty(Auth::user()->village_id), function ($query) use ($request) {
+					// dd($request->filter_village_id,"...",Auth::user()->village_id);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.village_id', $request->filter_village_id);
+					});
+				})
 				->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
 					if (!empty($enq)) {
 						// property for
@@ -143,7 +143,7 @@ class LandPropertyController extends Controller
 								});
 							});
 						}
-	
+
 						if ($request->match_enquiry_size) {
 							$query->where(function ($query) use ($enq) {
 								$query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
@@ -154,9 +154,9 @@ class LandPropertyController extends Controller
 					}
 				})
 				->orderBy('id', 'desc')->get();
-				// dd("data",$data);
-			
-				return DataTables::of($data)
+			// dd("data",$data);
+
+			return DataTables::of($data)
 				->editColumn('project_id', function ($row) {
 					if (isset($row->Projects->project_name) || isset($row->Village->name)) {
 						$project_name =  '<td style="vertical-align:top">
@@ -183,9 +183,9 @@ class LandPropertyController extends Controller
 
 					return '';
 				})
-				->editColumn('property_category', function ($row) use ($dropdowns,$land_units) {
+				->editColumn('property_category', function ($row) use ($dropdowns, $land_units) {
 					// $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '4+bhk');
-					$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk','Test', 'testw');
+					$new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk', 'Test', 'testw');
 					if ($row->property_for == 'Both') {
 						$forr = 'Rent & Sell';
 					} else {
@@ -210,33 +210,13 @@ class LandPropertyController extends Controller
 					}
 					//$category = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | '. $dropdowns[$row->property_category]['name'] : '');
 					$category = $sub_cat;
-					// BHARAT HIDE FURNISHED
-					// dd($row->property_category,"fr");
-					// if ($row->property_category == '256') {
-					// 	$fstatus  = '';
-					// } else {
-					// 	$fstatus  = 'Unfurnished';
-					// 	if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
-					// 		$vv = json_decode($row->unit_details);
-					// 		if (isset($vv[0][8])) {
-					// 			if (!empty($vv[0][8])) {
-					// 				if ($vv[0][8] == "106" || $vv[0][8] == "34") {
-					// 					$fstatus = 'Furnished';
-					// 				} elseif ($vv[0][8] == "107" || $vv[0][8] == "35") {
-					// 					$fstatus = 'Semi Furnished';
-					// 				} elseif ($vv[0][8] == "108" || $vv[0][8] == "36") {
-					// 					$fstatus = 'Unfurnished';
-					// 				} else {
-					// 					$fstatus = 'Can Furnished';
-					// 				}
-					// 			}
-					// 		}
-					// 	}
-					// }
 
 					$salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
 					if (empty($salable_area_print)) {
 						$salable_area_print = "";
+					} else {
+						$area_parts = explode('_-||-_', $row->length_of_plot);
+						$salable_area_print = $area_parts[0] .' '. $area_parts[1];
 					}
 
 					try {
@@ -252,79 +232,73 @@ class LandPropertyController extends Controller
 						dd($th);
 					}
 				})
-				// ->editColumn('details', function ($row) {
-				// 	if (isset($row->survey_number) || isset($row->tp_number) || isset($row->fp_number)) {
-				// 		$s_number = (!empty($row->survey_number) ? '<br>S No: ' . $row->survey_number : "");
-				// 		$t_number = (!empty($row->tp_number) ? '<br>TP No: ' . $row->tp_number : "");
-				// 		$f_number = (!empty($row->fp_number) ? '<br>FP No: ' . $row->fp_number : "");
-				// 	} else {
-				// 		$s_number = '';
-				// 		$t_number = '-';
-				// 		$f_number = '';
-				// 	}
-				// 	return $s_number . $t_number . $f_number;
-				// })
 				->editColumn('price', function ($row) {
-                    //$all_units = [];
-                    $all_units = [];
-                    // dd($row->unit_details,"price",$row->property_for);
-                    if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
-                        $vv = json_decode($row->unit_details);
-                        // dd($vv,"price");
-                        $all_units_length = count($all_units);
-                        //price
-                        foreach ($vv as $key => $value) {
-                            $price = '';
-                            if ($row->property_for === 'Both') {
-                                if (!empty($value['7']) && !empty($value['4'])) {
-                                    $price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['7'];
-                                } elseif (!empty($value['3']) && !empty($value['4'])) {
-                                    $price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['3'];
-                                }
-                            } else {
-                                if (!empty($value['7'])) {
-                                    $price = ' ₹ ' . $value['7'];
-                                } else if (!empty($value['4'])) {
-                                    $price = ' ₹ ' . $value['4'];
-                                } else if (!empty($value['3'])) {
-                                    $price = ' ₹ ' . $value['3'];
-                                }
-                            }
-                            $data = [];
-                            $data[0] = $value[0];
-                            $data[1] = $value[1];
-                            $data[2] = $price;
-                            array_push($all_units, $data);
-                        }
-                    }
-                    // dd("all2",$all_units);
+					//$all_units = [];
+					$all_units = [];
 
-                    if (!empty($all_units)) {
-                        $vvv = '';
-                        $unit_wing = '';
-                        // foreach ($all_units as $key => $value) {
-                        //     $vvv = $vvv .  ((!empty($value[2])) ? $value[2] . ' ' : ''); // . ((!empty($value[1])) ? $value[1] : '');
-                        // }
+					// dd($row->unit_details,"price",$row->property_for);
+					if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+						$vv = json_decode($row->unit_details);
+						// dd($vv,"price");
+						$all_units_length = count($all_units);
+						//price
+						foreach ($vv as $key => $value) {
+							$price = '';
+							if ($row->property_for === 'Both') {
+								if (!empty($value['7']) && !empty($value['4'])) {
+									$price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['7'];
+								} elseif (!empty($value['3']) && !empty($value['4'])) {
+									$price = '  R : ₹ ' . $value['4'] . '<br>' . '  S : ₹ ' . $value['3'];
+								}
+							} else {
+								if (!empty($value['7'])) {
+									$price = ' ₹ ' . $value['7'];
+								} else if (!empty($value['4'])) {
+									$price = ' ₹ ' . $value['4'];
+								} else if (!empty($value['3'])) {
+									$price = ' ₹ ' . $value['3'];
+								}
+							}
+							$data = [];
+							$data[0] = $value[0];
+							$data[1] = $value[1];
+							$data[2] = $price;
+							array_push($all_units, $data);
+						}
+					}
+					if ($row) {
+						$survey_price = $row->survey_price;
+						$fp_plot_price = $row->fp_plot_price;
+						$formatted_price = "S: " . $survey_price . "\n FP: " . $fp_plot_price;
+					}
 
-                        // return $vvv;
-                        $all_units_length = count($all_units);
-                        if ($all_units_length > 2) {
-                            foreach ($all_units as $key => $value) {
-                                $vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
-                                $vvv = $vvv . ' - ' . ((!empty($value[2])) ? $value[2] : '');
-                            }
-                            $second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2] : '') . ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $unit_wing . $vvv . '" data-bs-trigger="hover focus"></i>';
-                            // $second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
-                            return $second;
-                        } else {
-                            foreach ($all_units as $key => $value) {
-                                $vvv = $vvv . ((!empty($value[2])) ? $value[2] . '<br>' : '');
-                            }
-                            return $vvv;
-                        }
-                    }
-                    return;
-                })
+
+					if (!empty($all_units)) {
+						$vvv = '';
+						$unit_wing = '';
+						// foreach ($all_units as $key => $value) {
+						//     $vvv = $vvv .  ((!empty($value[2])) ? $value[2] . ' ' : ''); // . ((!empty($value[1])) ? $value[1] : '');
+						// }
+
+						// return $vvv;
+						$all_units_length = count($all_units);
+						if ($all_units_length > 2) {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
+								$vvv = $vvv . ' - ' . ((!empty($value[2])) ? $value[2] : '');
+							}
+							$second = '' . ((!empty($all_units[0][2])) ? $all_units[0][2] : '') . ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $unit_wing . $vvv . '" data-bs-trigger="hover focus"></i>';
+							// $second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
+							return $second;
+						} else {
+							foreach ($all_units as $key => $value) {
+								$vvv = $vvv . ((!empty($value[2])) ? $value[2] . '<br>' : '');
+							}
+						}
+					}
+					return $vvv . nl2br($formatted_price);;
+					// return  $survey_price . $fp_plot_price;
+				})
 				->editColumn('unit_details', function ($row) {
 					if (isset($row->survey_number) || isset($row->tp_number) || isset($row->fp_number)) {
 						$s_number = (!empty($row->survey_number) ? '<br>S No: ' . $row->survey_number : "");
@@ -332,66 +306,57 @@ class LandPropertyController extends Controller
 						$f_number = (!empty($row->fp_number) ? '<br>FP No: ' . $row->fp_number : "");
 					} else {
 						$s_number = '';
-						$t_number = '-';
+						$t_number = '';
 						$f_number = '';
 					}
-					return $s_number . $t_number . $f_number;
-					// $all_units = [];
-					// if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
-					// 	$vv = json_decode($row->unit_details);
-					// 	foreach ($vv as $key => $value) {
-					// 		if ($value[2] == "Rent Out") {
-					// 			$all_units = ['Rent Out'];
-					// 		} else if ($value[2] == "Sold Out") {
-					// 			$all_units = ['Sold Out'];
-					// 		} else if ($row->property_for === 'Both') {
-					// 			$price = '';
-					// 			if (!empty($value['7'])) {
-					// 				$price = $value['7'];
-					// 			} else if (!empty($value['4'])) {
-					// 				$price = $value['4'];
-					// 			} else if (!empty($value['3'])) {
-					// 				$price = $value['3'];
-					// 			}
-					// 			$data = [];
-					// 			$data[0] = $value[0];
-					// 			$data[1] = $value[1];
-					// 			$data[2] = $price;
-					// 			array_push($all_units, $data);
-					// 		} else {
-					// 			$price = '';
-					// 			if (!empty($value['7'])) {
-					// 				$price = $value['7'];
-					// 			} else if (!empty($value['4'])) {
-					// 				$price = $value['4'];
-					// 			} else if (!empty($value['3'])) {
-					// 				$price = $value['3'];
-					// 			}
-					// 			$data = [];
-					// 			$data[0] = $value[0];
-					// 			$data[1] = $value[1];
-					// 			$data[2] = $price;
-					// 			array_push($all_units, $data);
-					// 		}
-					// 	}
-					// }
-					// if (!empty($all_units)) {
-					// 	$vvv = '';
-					// 	$all_units_length = count($all_units);
-					// 	if ($all_units_length > 2) {
-					// 		foreach ($all_units as $key => $value) {
-					// 			$vvv = $vvv . '<br> ' . ((!empty($value[0])) ? $value[0] . '-' : '') . '' . $value[1];
-					// 		}
-					// 		$second = '' . ((!empty($all_units[0][0])) ? $all_units[0][0] . '-' : '') . '' . $all_units[0][1] .  ' <i class="fa ml-1 fa-info-circle cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $vvv . '" data-bs-trigger="hover focus"></i>';
-					// 		return $second;
-					// 	} else {
-					// 		foreach ($all_units as $key => $value) {
-					// 			$vvv = $vvv .  ((!empty($value[0])) ? $value[0] . '-' : ' ') . ((!empty($value[1])) ? $value[1] . '<br>' : '');
-					// 		}
-					// 		return $vvv;
-					// 	}
-					// }
-					// return;
+					$all_units = [];
+					if (!empty($row->unit_details) && !empty(json_decode($row->unit_details)[0])) {
+						$vv = json_decode($row->unit_details);
+						foreach ($vv as $key => $value) {
+							if ($value[2] == "Rent Out") {
+								$all_units = ['Rent Out'];
+							} else if ($value[2] == "Sold Out") {
+								$all_units = ['Sold Out'];
+							} else if ($row->property_for === 'Both') {
+								$price = '';
+								if (!empty($value['7'])) {
+									$price = $value['7'];
+								} else if (!empty($value['4'])) {
+									$price = $value['4'];
+								} else if (!empty($value['3'])) {
+									$price = $value['3'];
+								}
+								$data = [];
+								$data[0] = $value[0];
+								$data[1] = $value[1];
+								$data[2] = $price;
+								array_push($all_units, $data);
+							} else {
+								$price = '';
+								if (!empty($value['7'])) {
+									$price = $value['7'];
+								} else if (!empty($value['4'])) {
+									$price = $value['4'];
+								} else if (!empty($value['3'])) {
+									$price = $value['3'];
+								}
+								$data = [];
+								$data[0] = $value[0];
+								$data[1] = $value[1];
+								$data[2] = $price;
+								array_push($all_units, $data);
+							}
+						}
+					}
+					if (!empty($all_units)) {
+						$vvv = '';
+						$all_units_length = count($all_units);
+
+						foreach ($all_units as $key => $value) {
+							$vvv = $vvv .  ((!empty($value[1])) ? $value[1]  : ' ');
+						}
+					}
+					return $s_number . $t_number . $f_number . $vvv;
 				})
 				// ->editColumn('contact_details', function ($row) {
 				// 	$detail = '';
@@ -424,36 +389,36 @@ class LandPropertyController extends Controller
 
 				// 	return $buttons;
 				// })
-				->addColumn('actions', function ($row) use($land_units) {
+				->addColumn('actions', function ($row) use ($land_units) {
 					$buttons = '';
 					$building_name = '';
-                    $area = '';
-                    $config = '';
+					$area = '';
+					$config = '';
 					$vvv = '';
 					$user = User::with(['roles', 'roles.permissions'])
-                        ->where('id', Auth::user()->id)
-                        ->first();
+						->where('id', Auth::user()->id)
+						->first();
 					$permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
 
 					if (isset($row->Projects->project_name)) {
-                        $building_name = $row->Projects->project_name;
-                    }
-                    if (isset($row->Projects->Area->name)) {
-                        $area = $row->Projects->Area->name;
-                    }
-                    if (isset($dropdowns[$row->property_category]['name'])) {
-                        $config = $dropdowns[$row->property_category]['name'];
-                    }
+						$building_name = $row->Projects->project_name;
+					}
+					if (isset($row->Projects->Area->name)) {
+						$area = $row->Projects->Area->name;
+					}
+					if (isset($dropdowns[$row->property_category]['name'])) {
+						$config = $dropdowns[$row->property_category]['name'];
+					}
 
 					$building_name = urlencode($building_name);
-                    $area = urlencode($area);
-                    $config = urlencode($config);
-                    $price = urlencode($row->price);
-                    $property_for = urlencode(($row->property_for == 'Both') ? 'Rent & Sell' : '');
-                    $details = urlencode($this->generateAreaUnitDetails($row, $config, $land_units));
-                    $location_link = urlencode($row->location_link);
+					$area = urlencode($area);
+					$config = urlencode($config);
+					$price = urlencode($row->price);
+					$property_for = urlencode(($row->property_for == 'Both') ? 'Rent & Sell' : '');
+					$details = urlencode($this->generateAreaUnitDetails($row, $config, $land_units));
+					$location_link = urlencode($row->location_link);
 					$message = "$building_name | $area \n $config | $details | $price \n Available For : $property_for\n\n | Link: $location_link";
-                    $sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
+					$sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
 
 					if (in_array('land-property-edit', $permissions)) {
 						$buttons =  $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
@@ -462,14 +427,14 @@ class LandPropertyController extends Controller
 					if (in_array('land-property-delete', $permissions)) {
 						$buttons =  $buttons . '<i role="button" title="Delete" data-id="' . $row->id . '" onclick=deleteProperty(this) class="fa-trash pointer fa fs-22 py-2 mx-2 text-danger" type="button"></i>';
 					}
-					
-                    $buttons = $buttons . '<i title="Send On Whatsapp" data-share_string="' . $sharestring . '"  onclick=openwamodel(this)  class="fa fs-22 py-2 mx-2 fa-whatsapp text-success"></i><br>';
+
+					$buttons = $buttons . '<i title="Send On Whatsapp" data-share_string="' . $sharestring . '"  onclick=openwamodel(this)  class="fa fs-22 py-2 mx-2 fa-whatsapp text-success"></i><br>';
 					$buttons = $buttons . '<i title="Matching Enquiry" data-id="' . $row->id . '" onclick=matchingEnquiry(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
-					
+
 					if (in_array('shared-property', $permissions)) {
-                        $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
-                    }
-                    
+						$buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
+					}
+
 					$vvv = '';
 					if (!empty($row->other_contact_details) && !empty(json_decode($row->other_contact_details))) {
 						$cd = json_decode($row->other_contact_details);
@@ -484,34 +449,33 @@ class LandPropertyController extends Controller
 							}
 						}
 					}
-					
-                    $owner_type = '';
-                    if ($row->owner_is == '111') {
-                        $owner_type = 'Individual';
-                    } elseif ($row->owner_is == '112') {
-                        $owner_type = 'Investor';
-                    } elseif ($row->owner_is == '110') {
-                        $owner_type = 'Builder';
-                    }
 
-					if($row->owner_contact){
+					$owner_type = '';
+					if ($row->owner_is == '111') {
+						$owner_type = 'Individual';
+					} elseif ($row->owner_is == '112') {
+						$owner_type = 'Investor';
+					} elseif ($row->owner_is == '110') {
+						$owner_type = 'Builder';
+					}
+
+					if ($row->owner_contact) {
 						$other_details = $owner_type . ' - ' . $row->owner_name . ' - ' . $row->owner_contact;
 					}
 					$other_details = "";
-                    $contact_info = ($vvv != "") ? $vvv : ' ';
-                    // $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
-                    // $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
-                    $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body" data-bs-content="'
-                        . ($other_details  != ' ' ? $other_details  : '')
-                        . ($other_details  != ' ' && $contact_info ? '<br>' : '')
-                        . ($contact_info ? $contact_info : '')
-                        . '" data-bs-trigger="hover focus"></i>';
-                    return $buttons;
+					$contact_info = ($vvv != "") ? $vvv : ' ';
+					// $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
+					// $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';
+					$buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body" data-bs-content="'
+						. ($other_details  != ' ' ? $other_details  : '')
+						. ($other_details  != ' ' && $contact_info ? '<br>' : '')
+						. ($contact_info ? $contact_info : '')
+						. '" data-bs-trigger="hover focus"></i>';
+					return $buttons;
 				})
 				->rawColumns(['project_id', 'property_category', 'unit_details', 'price', 'actions', 'select_checkbox'])
 				->make(true);
-		
-			}
+		}
 		$areas = Areas::orderBy('name')->get();
 		$cities = City::orderBy('name')->get();
 		$states = State::orderBy('name')->get();
@@ -529,26 +493,28 @@ class LandPropertyController extends Controller
 			}
 		}
 		$conatcts_numbers = [];
-        $contacts = Enquiries::get();
+		$contacts = Enquiries::get();
 
-        foreach ($contacts as $key => $value) {
-            if (!empty($value->client_mobile) && !empty($value->client_name)) {
-                $arr = [];
-                $arr['name'] = $value->client_name;
-                $arr['number'] = $value->client_mobile;
-                array_push($conatcts_numbers, $arr);
-            }
-            if (!empty($value->other_contacts)) {
-                $val = json_decode($value->other_contacts);
-                foreach ($val as $key1 => $value1) {
-                    $arr = [];
-                    $arr['name'] = $value1[0];
-                    $arr['number'] = $value1[1];
-                    array_push($conatcts_numbers, $arr);
-                }
-            }
-        }
-		return view('admin.properties.land_index', compact('conatcts_numbers','property_configuration_settings', 'areas', 'cities', 'states', 'districts', 'talukas', 'villages', 'prop_type'));
+		foreach ($contacts as $key => $value) {
+			if (!empty($value->client_mobile) && !empty($value->client_name)) {
+				$arr = [];
+				$arr['name'] = $value->client_name;
+				$arr['number'] = $value->client_mobile;
+				array_push($conatcts_numbers, $arr);
+			}
+			if (!empty($value->other_contacts)) {
+				$val = json_decode($value->other_contacts);
+				foreach ($val as $key1 => $value1) {
+					$arr = [];
+					$arr['name'] = $value1[0];
+					$arr['number'] = $value1[1];
+					array_push($conatcts_numbers, $arr);
+				}
+			}
+		}
+		$projects = Projects::where('user_id', Auth::user()->id)->get();
+		$areas = Areas::where('user_id', Auth::user()->id)->get();
+		return view('admin.properties.land_index', compact('projects', 'areas', 'conatcts_numbers', 'property_configuration_settings', 'areas', 'cities', 'states', 'districts', 'talukas', 'villages', 'prop_type'));
 	}
 
 
@@ -635,6 +601,9 @@ class LandPropertyController extends Controller
 		} elseif ($type == 'Farmhouse') {
 			$area = explode('_-||-_', $row->salable_plot_area)[0];
 			$measure = explode('_-||-_', $row->salable_plot_area)[1];
+		} elseif ($type == 'Land') {
+			$area = explode('_-||-_', $row->survey_plot_size)[0];
+			$measure = explode('_-||-_', $row->survey_plot_size)[1];
 		}
 		$unit_name = '';
 		foreach ($land_units as $unit) {
@@ -643,7 +612,7 @@ class LandPropertyController extends Controller
 				break;
 			}
 		}
-
+		// dd("unit_name",$unit_name);
 		if (!empty($area) && !empty($unit_name)) {
 			$formattedArea = $area . ' ' . $unit_name;
 			return $formattedArea;
@@ -698,7 +667,7 @@ class LandPropertyController extends Controller
 		$landId = $request->input('land_id');
 		$proId = $request->input('pro_id');
 		$images = $request->file('images');
-		$const_doc_types = ($request->input('const_doc_type')); 
+		$const_doc_types = ($request->input('const_doc_type'));
 		$construction_documents = ($request->file('construction_docs'));
 		$documents = $request->file('documents');
 
@@ -733,7 +702,7 @@ class LandPropertyController extends Controller
 					$path = public_path() . config('constant.construction_images_url');
 					File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
 					$moved = $constDocs->move($path, $fileName);
-					
+
 					// Store the document details in the database
 					if ($moved) {
 						$land_image = new LandImages();
