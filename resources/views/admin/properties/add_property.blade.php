@@ -3180,8 +3180,6 @@
         // {{-- Hide field comment by Bharat-script --}}
         function toggleProjectDropdown(input) {
             var hideElement = document.getElementById('project_hide');
-            console.log("input.value :", input.value);
-
             if (input.value === '10') {
                 hideElement.style.display = 'none';
             } else if (input.value === '11') {
