@@ -3594,7 +3594,8 @@
                 $('.div_tp_details').hide()
                 $('.div_extra_land_details').show()
                 $(".cl-locality").hide();
-                
+            $('.state-hide').hide();
+
                 $('.the-city-field').hide()
             } else if (theFor == 'industrial') {
                 console.log("industrial ==");
@@ -3604,6 +3605,8 @@
                 $('.div_borewell').hide()
                 $('.div_extra_land_details').hide()
                 $('.the-city-field').hide()
+            $('.state-hide').hide();
+
                 $(".cl-locality").show();
             }
         });
