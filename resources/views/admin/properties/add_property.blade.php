@@ -2883,6 +2883,10 @@
                 if ($('input[name=property_category]:checked').attr('data-val') == 'Land') {
                     landConfiguration = $('input[name=plot_type]:checked').val();
                     console.log("landConfiguration ==", landConfiguration);
+                    if(landConfiguration === 10 || landConfiguration === 11){
+                        alert("land here")
+                        $('.state-hide').hide();
+                    }
 
 
                 }
