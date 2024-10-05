@@ -2971,7 +2971,7 @@
                 $('input[name=plot_type]:checked').trigger('change');
                 // var isValid = true;
                 var isValid = validateForm();
-                if (stateLength > 2) {
+                if (stateLength > 2 && (!landCategory)) {
                     console.log("enter in state ==");
                     isValid = validateDropdown($('#state_id'), $('#state_id_error'),
                         'State field is required.') && isValid;
