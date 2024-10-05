@@ -631,7 +631,29 @@
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-4 mb-3">
-                                                                <select class="form-select" id="zone"
+                                                                <div>
+                                                                
+                                                                    <label for="Addresss">Address</label>
+                                                                    <input class="form-control" type="text" value=""
+                                                                        name="address" id="address">
+                                                                </div>
+                                                                <div class="invalid-feedback" id="address_error"
+                                                                    style="display: none;color:red;"></div>
+                                                                
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-5 m-b-4 mb-3">
+                                                                <label for="Link">Location Link</label>
+                                                                <input class="form-control"
+                                                                    style="text-transform: lowercase !important;"
+                                                                    name="property_link" id="property_link"
+                                                                    type="text" autocomplete="off">
+                                                           
+                                                        </div>
+                                                        <div
+                                                            class="row col-md-5 m-b-4 mb-3  div_flat_details_7 mb-3 location_link_cls">
+                                                            <select class="form-select" id="zone"
                                                                     data-error="#zone_id_error">
                                                                     <option value="">Zone</option>
                                                                     @forelse ($property_configuration_settings as $props)
@@ -646,27 +668,7 @@
                                                                     @endforelse
                                                                 </select>
                                                                 <div id="zone_id_error" style="color: red"></div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-5 m-b-4 mb-3">
-                                                            <div>
-                                                                <label for="Addresss">Address</label>
-                                                                <input class="form-control" type="text" value=""
-                                                                    name="address" id="address">
-                                                            </div>
-                                                            <div class="invalid-feedback" id="address_error"
-                                                                style="display: none;color:red;"></div>
-                                                        </div>
-                                                        <div
-                                                            class="row col-md-7 div_flat_details_7 mb-3 location_link_cls">
-                                                            <div class="form-group col-md-9">
-                                                                <label for="Link">Location Link</label>
-                                                                <input class="form-control"
-                                                                    style="text-transform: lowercase !important;"
-                                                                    name="property_link" id="property_link"
-                                                                    type="text" autocomplete="off">
-                                                            </div>
+                                                                
                                                             <div class="invalid-feedback" id="property_link_error"
                                                                 style="display: none;color:red;"></div>
                                                         </div>
