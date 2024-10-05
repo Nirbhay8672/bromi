@@ -652,7 +652,7 @@
                                         <label class="form-check-label" for="filter_is_terraced">Terrace</label>
                                     </div>
                                     <div class="form-check checkbox the_filter_weekend checkbox-solid-success mb-0 col-md-3 m-b-20"
-                                        style="display: none">
+                                        style="">
                                         <input class="form-check-input" id="filter_is_weekend" type="checkbox">
                                         <label class="form-check-label" for="filter_is_weekend">Weekend</label>
                                     </div>
@@ -774,7 +774,7 @@
                                                     Size</label>
                                             </div>
                                             <div class="form-check checkbox  the_prop_weekend checkbox-solid-success mb-0 m-b-10"
-                                                style="">
+                                                style="display: none">
                                                 <input class="form-check-input" checked id="match_enquiry_weekend"
                                                     type="checkbox">
                                                 <label class="form-check-label" for="match_enquiry_weekend">Property
