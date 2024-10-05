@@ -216,7 +216,7 @@ class LandPropertyController extends Controller
 						$salable_area_print = "";
 					} else {
 						$area_parts = explode('_-||-_', $row->length_of_plot);
-						$salable_area_print = $area_parts[0] .' '. $area_parts[1];
+						$salable_area_print = $area_parts[0] . ' ' . $area_parts[1];
 					}
 
 					try {
@@ -269,7 +269,15 @@ class LandPropertyController extends Controller
 					if ($row) {
 						$survey_price = $row->survey_price;
 						$fp_plot_price = $row->fp_plot_price;
-						$formatted_price = "S: " . $survey_price . "\n FP: " . $fp_plot_price;
+						$formatted_price = '';
+
+						if (!empty($survey_price)) {
+							$formatted_price .= "S: " . $survey_price . "\n";
+						}
+
+						if (!empty($fp_plot_price)) {
+							$formatted_price .= "FP: " . $fp_plot_price;
+						}
 					}
 
 
