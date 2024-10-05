@@ -2884,7 +2884,7 @@
                     landConfiguration = $('input[name=plot_type]:checked').val();
                     console.log("landConfiguration ==", landConfiguration);
                     if(landConfiguration === 10 || landConfiguration === 11){
-                        alert("land here")
+                        // alert("land here")
                         $('.state-hide').hide();
                     }
 
