@@ -2072,7 +2072,7 @@ class EnquiriesController extends Controller
 		$areas = Areas::where('user_id', Auth::user()->id)->orderBy('name')->get();
 		// dd("area",$areas);
 		$employees = User::where('parent_id', Session::get('parent_id'))->orWhere('id', Session::get('parent_id'))->get();
-		$districts = District::orderBy('name')->get();
+		$districts = District::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$talukas   = Taluka::orderBy('name')->get();
 		$villages  = Village::orderBy('name')->get();
 		$land_units = DB::table('land_units')->get();
