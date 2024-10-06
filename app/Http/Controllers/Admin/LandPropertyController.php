@@ -232,9 +232,12 @@ class LandPropertyController extends Controller
 					$salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
 					if (empty($salable_area_print)) {
 						$salable_area_print = "";
-					} else {
+					} 
+					else {
 						$area_parts = explode('_-||-_', $row->length_of_plot);
-						$salable_area_print = $area_parts[0] . ' ' . $area_parts[1];
+						if($area_parts[0] !== "" && $area_parts[1] !== null){
+							$salable_area_print = $area_parts[0] . ' ' . $area_parts[1];
+						}
 					}
 
 					try {
