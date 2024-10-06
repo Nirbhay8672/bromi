@@ -372,6 +372,7 @@ class PropertyController extends Controller
                             ->where('properties.prop_status', 1);
                     })
                     ->when($request->filter_area_id, function ($query) use ($request) {
+
                         return $query->whereIn('projects.area_id', $request->filter_area_id)
                             ->where('properties.prop_status', 1);
                     })

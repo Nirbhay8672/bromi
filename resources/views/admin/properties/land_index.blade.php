@@ -737,6 +737,15 @@
         @push('scripts')
             @include('admin.properties.land_form_javascript')
             <script>
+
+function formatToIndianCurrency(value) {
+    return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR'
+    }).format(value);
+}
+
+
                 var search_enq = '';
             $(document).ready(function() {
                 // var queryString = window.location.search;
@@ -973,7 +982,8 @@
                                 d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
                                 d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
                                 d.match_enquiry_size = Number($('#match_enquiry_size').prop('checked'));
-                                // d.filter_status = $('#filter_status').val();
+                                d.location = window.location.href;
+
                             },
                         },
                         columns: [{
@@ -1173,7 +1183,9 @@
                             $('#survey_number').val(data.survey_number)
                             $('#plot_size').val(data.plot_size)
                             $('#plot_measurement').val(data.plot_measurement).trigger('change');
-                            $('#price').val(data.price)
+                            let formattedPrice = formatToIndianCurrency(data.price);
+                            $('#price').val(formattedPrice)
+
                             $('#tp_number').val(data.tp_number)
                             $('#fp_number').val(data.fp_number)
                             $('#plot2_size').val(data.plot2_size)
