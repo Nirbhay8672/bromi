@@ -2083,17 +2083,11 @@
                                                                     <div class="form-group form_measurement">
                                                                         <select class="form-select measure_select"
                                                                             id="survey_plot_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
+                                                                             @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -2133,17 +2127,11 @@
                                                                     <div class="form-group form_measurement">
                                                                         <select class="form-select measure_select"
                                                                             id="plot2_measurement">
-                                                                            @forelse ($property_configuration_settings as $props)
-                                                                                @if ($props['dropdown_for'] == 'property_measurement_type')
-                                                                                    <option
-                                                                                        @if ($props['id'] == Session::get('default_measurement')) selected @endif
-                                                                                        data-parent_id="{{ $props['parent_id'] }}"
-                                                                                        value="{{ $props['id'] }}">
-                                                                                        {{ $props['name'] }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @empty
-                                                                            @endforelse
+                                                                             @foreach ($land_units as $land_unit)
+                                                                                <option value="{{ $land_unit->id }}"
+                                                                                    {{ $land_unit->id == 1 ? 'selected' : '' }}>
+                                                                                    {{ $land_unit->unit_name }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
                                                                 </div>

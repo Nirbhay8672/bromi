@@ -228,17 +228,11 @@ class LandPropertyController extends Controller
 					}
 					//$category = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | '. $dropdowns[$row->property_category]['name'] : '');
 					$category = $sub_cat;
-
-					$salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
+					$type = $dropdowns[$row->property_category]['name'];
+					$salable_area_print = $this->generateAreaUnitDetails($row, $type, $land_units);
 					if (empty($salable_area_print)) {
 						$salable_area_print = "";
 					} 
-					else {
-						$area_parts = explode('_-||-_', $row->length_of_plot);
-						if($area_parts[0] !== "" && $area_parts[1] !== null){
-							$salable_area_print = $area_parts[0] . ' ' . $area_parts[1];
-						}
-					}
 
 					try {
 						return '
@@ -447,7 +441,7 @@ class LandPropertyController extends Controller
 					$config = urlencode($config);
 					$price = urlencode($row->price);
 					$property_for = urlencode(($row->property_for == 'Both') ? 'Rent & Sell' : '');
-					$details = urlencode($this->generateAreaUnitDetails($row, $config, $land_units));
+					$details = "";
 					$location_link = urlencode($row->location_link);
 					$message = "$building_name | $area \n $config | $details | $price \n Available For : $property_for\n\n | Link: $location_link";
 					$sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
@@ -634,8 +628,15 @@ class LandPropertyController extends Controller
 			$area = explode('_-||-_', $row->salable_plot_area)[0];
 			$measure = explode('_-||-_', $row->salable_plot_area)[1];
 		} elseif ($type == 'Land') {
-			$area = explode('_-||-_', $row->survey_plot_size)[0];
-			$measure = explode('_-||-_', $row->survey_plot_size)[1];
+			if (($row->survey_plot_size)[0]) {
+				$area = explode('_-||-_', $row->survey_plot_size)[0];
+				$measure = explode('_-||-_', $row->survey_plot_size)[1];
+			} 
+			if (($row->fp_plot_size)[0]) {
+				$area = explode('_-||-_', $row->fp_plot_size)[0];
+				$measure = explode('_-||-_', $row->fp_plot_size)[1];
+			}
+		
 		}
 		$unit_name = '';
 		foreach ($land_units as $unit) {
@@ -644,7 +645,6 @@ class LandPropertyController extends Controller
 				break;
 			}
 		}
-		// dd("unit_name",$unit_name);
 		if (!empty($area) && !empty($unit_name)) {
 			$formattedArea = $area . ' ' . $unit_name;
 			return $formattedArea;
