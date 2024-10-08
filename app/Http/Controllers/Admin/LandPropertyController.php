@@ -20,8 +20,6 @@ use App\Models\State;
 use App\Models\Taluka;
 use App\Models\User;
 use App\Models\Village;
-use App\Traits\HelperFn;
-
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -58,61 +56,46 @@ class LandPropertyController extends Controller
 					}
 				}
 			}
-			// dd("indId",$indId);
 			$data = Properties::with('Projects', 'Locality', 'Village')
-				// ->join('Projects', 'Projects.id', '=', 'properties.project_id')
+				->where('property_category', $indId[0])
+				->orWhere('property_category', $indId[1])
 				// Filter Section
-				->when($request->filter_property_for, function ($query) use ($request) {
+				->when($request->filter_property_for && empty(Auth::user()->property_for_id), function ($query) use ($request) {
 					return $query->where(function ($query) use ($request) {
-						// dd("req",$request->filter_property_for);
-						$query->where('properties.property_for', $request->filter_property_for)->orWhere('properties.property_for', 'Both');
+						$query->where('properties.property_for', $request->filter_property_for)->orWhere('property_for', 'Both');
 					});
 				})
-				->when($request->filter_property_type, function ($query) use ($request) {
+				->when($request->filter_property_type && empty(Auth::user()->property_type), function ($query) use ($request) {
 					// dd($request->filter_property_type,"...",Auth::user()->property_type);
-					$filterPropertyType = intval($request->filter_property_type); // Convert to integer
-					return $query->where('properties.property_type', $filterPropertyType)
-						->where('properties.prop_status', 1);
-				})
-				->when($request->filter_specific_type, function ($query) use ($request) {
-					// dd($request->filter_specific_type,"...",Auth::user()->property_category);
-					return $query->where('properties.property_category', $request->filter_specific_type)
-						->where('properties.prop_status', 1);
-				})
-				->when($request->filter_configuration, function ($query) use ($request) {
-					// dd($request->filter_configuration,"...",Auth::user()->configuration);
-					return $query->where('properties.configuration', $request->filter_configuration)
-						->where('properties.prop_status', 1);
-				})
-				->when($request->filter_building_id, function ($query) use ($request) {
-					return $query->whereIn('properties.project_id', ($request->filter_building_id))
-						->where('properties.prop_status', 1);
-				})
-				->when($request->filter_area_id, function ($query) use ($request) {
-					// dd($request->filter_area_id,"Re");
-					return $query->whereIn('projects.area_id', $request->filter_area_id);
-					// ->where('properties.prop_status', 1);
-				})
-				->when($request->filter_Property_priority, function ($query) use ($request) {
-					return $query->where('Property_priority', $request->filter_Property_priority)
-						->where('properties.prop_status', 1);
-				})
-				->when($request->filter_area_id, function ($query) use ($request) {
-					return $query->whereIn('projects.area_id', $request->filter_area_id);
-				})
-				->when($request->filter_district_id, function ($query) use ($request) {
 					return $query->where(function ($query) use ($request) {
-						// dd($request->filter_district_id,".ll..");
+						$query->where('properties.property_type', $request->filter_property_type);
+					});
+				})
+				->when($request->filter_specific_type && empty(Auth::user()->property_category), function ($query) use ($request) {
+					// dd($request->filter_specific_type,"...",Auth::user()->property_category);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.property_category', $request->filter_specific_type);
+					});
+				})
+				->when($request->filter_configuration && empty(Auth::user()->configuration), function ($query) use ($request) {
+					// dd($request->filter_configuration,"...",Auth::user()->configuration);
+					return $query->where(function ($query) use ($request) {
+						$query->where('properties.configuration', $request->filter_configuration);
+					});
+				})
+				->when($request->filter_district_id && empty(Auth::user()->district_id), function ($query) use ($request) {
+					// dd($request->filter_district_id,"...",Auth::user()->district_id);
+					return $query->where(function ($query) use ($request) {
 						$query->where('properties.district_id', $request->filter_district_id);
 					});
 				})
-				->when($request->filter_taluka_id, function ($query) use ($request) {
+				->when($request->filter_taluka_id && empty(Auth::user()->taluka_id), function ($query) use ($request) {
 					// dd($request->filter_taluka_id,"...",Auth::user()->filter_taluka_id);
 					return $query->where(function ($query) use ($request) {
 						$query->where('properties.taluka_id', $request->filter_taluka_id);
 					});
 				})
-				->when($request->filter_village_id, function ($query) use ($request) {
+				->when($request->filter_village_id && empty(Auth::user()->village_id), function ($query) use ($request) {
 					// dd($request->filter_village_id,"...",Auth::user()->village_id);
 					return $query->where(function ($query) use ($request) {
 						$query->where('properties.village_id', $request->filter_village_id);
@@ -170,9 +153,8 @@ class LandPropertyController extends Controller
 						}
 					}
 				})
-				->whereIn('property_category', $indId)
-				->orderBy('properties.id', 'desc')  // Explicitly specify the table
-				->get();
+				->orderBy('id', 'desc')->get();
+			// dd("data",$data);
 
 			return DataTables::of($data)
 				->editColumn('project_id', function ($row) {
@@ -228,11 +210,14 @@ class LandPropertyController extends Controller
 					}
 					//$category = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | '. $dropdowns[$row->property_category]['name'] : '');
 					$category = $sub_cat;
-					$type = $dropdowns[$row->property_category]['name'];
-					$salable_area_print = $this->generateAreaUnitDetails($row, $type, $land_units);
+
+					$salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
 					if (empty($salable_area_print)) {
 						$salable_area_print = "";
-					} 
+					} else {
+						$area_parts = explode('_-||-_', $row->length_of_plot);
+						$salable_area_print = $area_parts[0] .' '. $area_parts[1];
+					}
 
 					try {
 						return '
@@ -284,18 +269,7 @@ class LandPropertyController extends Controller
 					if ($row) {
 						$survey_price = $row->survey_price;
 						$fp_plot_price = $row->fp_plot_price;
-						$formatted_price  = '';
-						// Format the survey_price to Indian currency format
-						if (!empty($survey_price)) {
-							$formatted_survey_price = '₹ ' . HelperFn::formatIndianCurrency($survey_price);
-							$formatted_price .= "S: " . $formatted_survey_price . "\n";
-						}
-
-						// Format the fp_plot_price to Indian currency format
-						if (!empty($fp_plot_price)) {
-							$formatted_fp_plot_price = '₹ ' . HelperFn::formatIndianCurrency($fp_plot_price);
-							$formatted_price .= "FP: " . $formatted_fp_plot_price;
-						}
+						$formatted_price = "S: " . $survey_price . "\n FP: " . $fp_plot_price;
 					}
 
 
@@ -441,7 +415,7 @@ class LandPropertyController extends Controller
 					$config = urlencode($config);
 					$price = urlencode($row->price);
 					$property_for = urlencode(($row->property_for == 'Both') ? 'Rent & Sell' : '');
-					$details = "";
+					$details = urlencode($this->generateAreaUnitDetails($row, $config, $land_units));
 					$location_link = urlencode($row->location_link);
 					$message = "$building_name | $area \n $config | $details | $price \n Available For : $property_for\n\n | Link: $location_link";
 					$sharestring = 'https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' . $message;
@@ -505,9 +479,9 @@ class LandPropertyController extends Controller
 		$areas = Areas::orderBy('name')->get();
 		$cities = City::orderBy('name')->get();
 		$states = State::orderBy('name')->get();
-		$districts = District::orderBy('name')->where('user_id', Auth::user()->id)->get();
-		$talukas = Taluka::orderBy('name')->where('user_id', Auth::user()->id)->get();
-		$villages = Village::orderBy('name')->where('user_id', Auth::user()->id)->get();
+		$districts = District::orderBy('name')->get();
+		$talukas = Taluka::orderBy('name')->get();
+		$villages = Village::orderBy('name')->get();
 		$property_configuration_settings = DropdownSettings::get()->toArray();
 		$prop_type = [];
 		foreach ($property_configuration_settings as $key => $value) {
@@ -628,15 +602,8 @@ class LandPropertyController extends Controller
 			$area = explode('_-||-_', $row->salable_plot_area)[0];
 			$measure = explode('_-||-_', $row->salable_plot_area)[1];
 		} elseif ($type == 'Land') {
-			if (($row->survey_plot_size)[0]) {
-				$area = explode('_-||-_', $row->survey_plot_size)[0];
-				$measure = explode('_-||-_', $row->survey_plot_size)[1];
-			} 
-			if (($row->fp_plot_size)[0]) {
-				$area = explode('_-||-_', $row->fp_plot_size)[0];
-				$measure = explode('_-||-_', $row->fp_plot_size)[1];
-			}
-		
+			$area = explode('_-||-_', $row->survey_plot_size)[0];
+			$measure = explode('_-||-_', $row->survey_plot_size)[1];
 		}
 		$unit_name = '';
 		foreach ($land_units as $unit) {
@@ -645,6 +612,7 @@ class LandPropertyController extends Controller
 				break;
 			}
 		}
+		// dd("unit_name",$unit_name);
 		if (!empty($area) && !empty($unit_name)) {
 			$formattedArea = $area . ' ' . $unit_name;
 			return $formattedArea;
