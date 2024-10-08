@@ -373,6 +373,61 @@ class AdminLoginController extends Controller
         }
 	}
 
+    public function customLogin()
+    {
+        $user_email =  User::where('email', $request->email)->first();
+		$ip = $request->ip();
+
+		if (!empty($user_email)) {
+			LoggedIn::create(['user_id' => $user_email->parent_id,'employee_id' => $user_email->id, 'ipaddress' => $ip]);
+		}
+
+		// If the class is using the ThrottlesLogins trait, we can automatically throttle
+		// the login attempts for this application. We'll key this by the username and
+		// the IP address of the client making these requests into this application.
+		if (
+			method_exists($this, 'hasTooManyLoginAttempts') &&
+			$this->hasTooManyLoginAttempts($request)
+		) {
+			$this->fireLockoutEvent($request);
+
+			return $this->sendLockoutResponse($request);
+		}
+
+		if ($this->attemptLogin($request)) {
+			if ($request->hasSession()) {
+				$request->session()->put('auth.password_confirmed_at', time());
+			}
+			
+		    DB::table('login_activities')->insert([
+				'user_id' => Auth::user()->id,
+				'ip_address' => $request->ip(),
+				'date_time' => Carbon::now(),
+			]);
+
+			if(Auth::user()->plan_id == null) {
+			    Session::put('user_id', Auth::user()->id);
+			    $this->guard()->logout();
+			    return redirect()->route('subscription');
+			}
+
+			$role = Role::find(Auth::user()->role_id);
+
+			if(strpos($role->name, 'Builder') !== false){
+				return redirect()->route('builder.home');
+			}
+
+			return $this->sendLoginResponse($request);
+		}
+
+		// If the login attempt was unsuccessful we will increment the number of attempts
+		// to login and redirect the user back to the login form. Of course, when this
+		// user surpasses their maximum number of attempts they will get locked out.
+		$this->incrementLoginAttempts($request);
+
+		return $this->sendFailedLoginResponse($request);
+    }
+
 	public function paymentSuccess(Request $request)
 	{
         try {
@@ -558,7 +613,6 @@ class AdminLoginController extends Controller
                     Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
                 }
                 Session::put('plan_id', $orderTags['plan_id']);
-                Session::put('parent_id', $user->id);
                 return redirect('/admin');
             } else {
                 // dd('payment failed.');
