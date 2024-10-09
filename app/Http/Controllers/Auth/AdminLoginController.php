@@ -23,7 +23,7 @@ use PgSql\Lob;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Schema;
 
 class AdminLoginController extends Controller
 {
@@ -60,12 +60,15 @@ class AdminLoginController extends Controller
 
 	public function login(Request $request)
 	{
-
 		$this->validateLogin($request);
+        // create temp_pass in users if not exist to temporarily save password to re-generate session
+        if (!Schema::hasColumn('users', 'temp_pass')) {
+            DB::statement("ALTER TABLE users ADD temp_pass VARCHAR(255) NULL");
+        }
 		$user_email =  User::where('email', $request->email)->first();
 		$ip = $request->ip();
-
-		if (!empty($user_email)) {
+        
+		if (!empty($user_email)) { // first agent's parent id is null.
 			LoggedIn::create(['user_id' => $user_email->parent_id,'employee_id' => $user_email->id, 'ipaddress' => $ip]);
 		}
 
@@ -85,7 +88,19 @@ class AdminLoginController extends Controller
 			if ($request->hasSession()) {
 				$request->session()->put('auth.password_confirmed_at', time());
 			}
-			
+
+            // only run for first time login
+            $user = Auth::user();
+            
+            if (!empty($user) && empty($user->temp_pass)) {
+                $base64 = base64_encode($request->email);
+                $user->temp_pass = $base64;
+                $user->save();
+            } else {
+                $user->temp_pass = null;
+                $user->save();
+            }
+            
 		    DB::table('login_activities')->insert([
 				'user_id' => Auth::user()->id,
 				'ip_address' => $request->ip(),
@@ -465,8 +480,9 @@ class AdminLoginController extends Controller
                 if (empty($lastPaymentId)) {
                     $lastPaymentId = $paymentInDb->id;
                 }
+
+                Auth::login($user);
                 
-                // Auth::login($user);
                 $planExpiry = today()->addYear(1)->subDay();
                 
                 // adjust coupon details
@@ -557,10 +573,11 @@ class AdminLoginController extends Controller
                 if (!empty(config('mail.mailers.smtp.password'))) {
                     Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
                 }
-                // Session::put('plan_id', $orderTags['plan_id']);
+                Session::put('plan_id', $orderTags['plan_id']);
 
-                Session::flash('success', 'Payment is successful. Kindly login to continue.');
-                return redirect('admin/login');
+                // Session::flash('success', 'Payment is successful. Kindly login to continue.');
+                // return redirect('admin/login');
+                return redirect('admin');
 
             } else {
                 // dd('payment failed.');

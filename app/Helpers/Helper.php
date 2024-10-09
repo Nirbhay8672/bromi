@@ -302,8 +302,13 @@ class Helper
 
 	public static function enquiry_counts()
 	{
-
-		$arr['new_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->doesntHave('Progress')->count();
+        if (!empty(Auth::user()->temp_pass)) {
+            $arr['new_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->where('user_id', Auth::user()->id)->doesntHave('Progress')->count();
+            $arr['miss_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->where('user_id', Auth::user()->id)->whereDate('created_at', '<', Carbon::now()->format('Y-m-d'))->count();
+        } else {
+            $arr['new_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->doesntHave('Progress')->count();
+            $arr['miss_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->whereDate('created_at', '<', Carbon::now()->format('Y-m-d'))->count();
+        }
 		$arr['today_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->whereDate('created_at', '=', Carbon::now()->format('Y-m-d'))->count();
 
 		$arr['tomo_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->whereHas('activeProgress', function ($query) {
@@ -322,7 +327,7 @@ class Helper
 			$query->whereDate('nfd', '<=', Carbon::now()->endOfWeek())->whereDate('nfd', '>=', Carbon::now()->endOfWeek()->subDay());
 		})->count();
 		
-		$arr['miss_counts'] = Enquiries::with('Employee', 'Progress', 'activeProgress')->whereDate('created_at', '<', Carbon::now()->format('Y-m-d'))->count();
+		
 
 		return $arr;
 	}
