@@ -384,6 +384,7 @@
                         category_option.innerHTML += '<option data-parent_id="87" value="259">Office</option>';
                         category_option.innerHTML += '<option data-parent_id="87" value="260">Retail</option>';
                         category_option.innerHTML += '<option data-parent_id="87" value="261">Storage/industrial</option>';
+                        category_option.innerHTML += '<option data-parent_id="87" value="262">Land</option>';
                     }
                 }
 

@@ -149,8 +149,6 @@ class UserController extends Controller
 			'last_name' => 'required',
 			'birth_date' => 'required',
 			'hire_date' => 'required',
-			"address" => 'required',
-			"pincode" => 'required|numeric|digits:6',
 			"city_id" => 'required',
 			"state_id" => 'required',
 			"mobile_number" => 'required|numeric|digits:10|unique:users,mobile_number,' . $request->id ?? 0,
