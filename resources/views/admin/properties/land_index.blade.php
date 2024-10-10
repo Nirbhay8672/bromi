@@ -35,7 +35,8 @@
 
 
                                     <button class="btn ms-3 custom-icon-theme-button" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#filtermodal" id="filterBtn" title="Filter"><i class="fa fa-filter"></i></button>
+                                        data-bs-target="#filtermodal" id="filterBtn" title="Filter"><i
+                                            class="fa fa-filter"></i></button>
 
 
                                     <button class="btn ms-3 custom-icon-theme-button" type="button" title="Clear Filter"
@@ -218,14 +219,15 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-md-3 m-b-4 mb-3 filter-village">
-                                            <select class="form-select" id="filter_village_id">
-                                                <option value=""> Village</option>
+                                            <label class="select2_label" for="Select Village"> Village</label>
+                                            <select class="form-select" id="filter_village_id" multiple>
                                                 @foreach ($villages as $village)
                                                     <option data-parent_id="{{ $village->taluka_id }}"
                                                         value="{{ $village->id }}">{{ $village->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
+
                                         <div class="form-group col-md-4 m-b-4 mb-3" id="filter_priority">
                                             <select class="form-select" id="filter_Property_priority">
                                                 <option value="">Priority</option>
@@ -754,6 +756,7 @@
             @include('admin.properties.land_form_javascript')
             <script>
                 let isPropCatFilter = 0;
+
                 function formatToIndianCurrency(value) {
                     return new Intl.NumberFormat('en-IN', {
                         style: 'currency',
@@ -796,8 +799,9 @@
                 $(document).ready(function() {
                     $('#filterBtn').click(function() {
                         isPropCatFilter = 1;
-                        alert("isPropCatFilter",isPropCatFilter)
-                        handleFilterTypeChange(); 
+                        console.log("isPropCatFilter :", isPropCatFilter);
+
+                        handleFilterTypeChange();
                     });
 
                     // Check or uncheck checkboxes based on PHP variables
@@ -857,43 +861,52 @@
                 });
 
                 function handleFilterTypeChange() {
-                        const parent_value = $('#filter_property_type').val(); // Get the value of the dropdown
-                        if (parent_value === '87') {
-                            $('.filter-district').hide();
-                            $('.filter-taluka').hide();
-                            $('.filter-village').hide();
-                            $('.filter-locality').show();
-                            $('.filter-project').show();
-                            $('#filter_priority').removeClass('col-md-3').addClass('col-md-4');
-                        } else if (parent_value === '85') {
-                            $('.filter-project').hide();
-                            $('.filter-locality').hide();
-                            $('.filter-district').show();
-                            $('.filter-taluka').show();
-                            $('.filter-village').show();
-                            $('#filter_priority').removeClass('col-md-4').addClass('col-md-3');
-                        }
+                    const parent_value = $('#filter_property_type').val(); // Get the value of the dropdown
+                    if (parent_value === '87') {
+                        $('.filter-district').hide();
+                        $('.filter-taluka').hide();
+                        $('.filter-village').hide();
+                        $('.filter-locality').show();
+                        $('.filter-project').show();
+                        $('#filter_priority').removeClass('col-md-3').addClass('col-md-4');
+                    } else if (parent_value === '85') {
+                        $('.filter-project').hide();
+                        $('.filter-locality').hide();
+                        $('.filter-district').show();
+                        $('.filter-taluka').show();
+                        $('.filter-village').show();
+                        $('#filter_priority').removeClass('col-md-4').addClass('col-md-3');
                     }
-               
+                }
+
                 $(document).on('change', '#filter_property_type', function(e) {
-                    var parent_value = $(this).val();
+                    let parent_value = $(this).val();
+                    console.log("isPropCatFilter --------", isPropCatFilter);
+
+                    if (isPropCatFilter === '1') {
+                        parent_value = 87;
+                        console.log("parent_value", parent_value);
+                    } else {
+                        let parent_value = $(this).val();
+
+                    }
                     console.log("filter type changed : ", parent_value);
                     handleFilterTypeChange();
 
-                    $("#filter_specific_type option , #filter_configuration option").each(function() {
-                        if (parent_value !== '') {
-                            if ($(this).attr('value') != '') {
-                                if ($(this).attr('data-parent_id') == '' || $(this).attr('data-parent_id') !=
-                                    parent_value) {
-                                    $(this).hide();
-                                } else {
-                                    $(this).show();
-                                }
-                            }
-                        } else {
-                            $(this).show();
-                        }
-                    });
+                    // $("#filter_specific_type option , #filter_configuration option").each(function() {
+                    //     if (parent_value !== '') {
+                    //         if ($(this).attr('value') != '') {
+                    //             if ($(this).attr('data-parent_id') == '' || $(this).attr('data-parent_id') !=
+                    //                 parent_value) {
+                    //                 $(this).hide();
+                    //             } else {
+                    //                 $(this).show();
+                    //             }
+                    //         }
+                    //     } else {
+                    //         $(this).show();
+                    //     }
+                    // });
                 });
 
                 function matchingEnquiry(data) {
@@ -941,7 +954,6 @@
                             });
                         }
                     })
-                    console.log("msg ::", msg);
                     $('#shar_string').val('https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' + msg)
                     $('#whatsappModal').modal('show');
                 }
@@ -965,8 +977,6 @@
                             if (xhr.readyState === XMLHttpRequest.DONE) {
                                 if (xhr.status === 200) {
                                     var data = JSON.parse(xhr.responseText);
-                                    console.log("Subcat Filter data == ", data);
-
                                     var subCategorySelect = document.getElementById('filter_configuration');
                                     subCategorySelect.innerHTML = '<option value="">Sub Category</option>';
 
@@ -1005,9 +1015,6 @@
                         ajax: {
                             url: "{{ route('admin.land.properties') }}",
                             data: function(d) {
-                                console.log("vall 11", $('#filter_property_type').val(), "--", $(
-                                    '#filter_property_for').val());
-
                                 d.filter_property_for = $('#filter_property_for').val();
                                 d.filter_property_type = $('#filter_property_type').val();
                                 d.filter_specific_type = $('#filter_specific_type').val();
@@ -1208,8 +1215,16 @@
                 $(document).on('click', '#resetfilter', function(e) {
                     e.preventDefault();
                     $(this).hide();
+                    isPropCatFilter = 0;
                     $('#filter_form').trigger("reset");
                     $('#propertyTable').DataTable().draw();
+                    if ($('#filter_property_type option[value=""]').length === 0) {
+                        // If it doesn't exist, add the option
+                        $('#filter_property_type').prepend('<option value="">Property Type</option>');
+                    } else {
+                        // If it exists, remove the option
+                        $('#filter_property_type option[value=""]').remove();
+                    }
                     $('#filtermodal').modal('hide');
                     triggerResetFilter()
                 });

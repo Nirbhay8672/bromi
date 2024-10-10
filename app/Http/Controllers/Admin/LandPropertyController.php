@@ -87,16 +87,12 @@ class LandPropertyController extends Controller
                         ->where('properties.prop_status', 1);
                 })
                 ->when($request->filter_area_id, function ($query) use ($request) {
-                    // dd($request->filter_area_id,"Re");
-                    return $query->whereIn('projects.area_id', $request->filter_area_id)
+                    return $query->whereIn('properties.locality_id', $request->filter_area_id)
                         ->where('properties.prop_status', 1);
                 })
                 ->when($request->filter_Property_priority, function ($query) use ($request) {
                     return $query->where('Property_priority', $request->filter_Property_priority)
                         ->where('properties.prop_status', 1);
-                })
-                ->when($request->filter_area_id, function ($query) use ($request) {
-                    return $query->whereIn('projects.area_id', $request->filter_area_id);
                 })
                 ->when($request->filter_district_id, function ($query) use ($request) {
                     return $query->where(function ($query) use ($request) {
@@ -113,7 +109,7 @@ class LandPropertyController extends Controller
                 ->when($request->filter_village_id, function ($query) use ($request) {
                     // dd($request->filter_village_id,"...",Auth::user()->village_id);
                     return $query->where(function ($query) use ($request) {
-                        $query->where('properties.village_id', $request->filter_village_id);
+                        $query->whereIn('properties.village_id', $request->filter_village_id);
                     });
                 })
                 ->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
