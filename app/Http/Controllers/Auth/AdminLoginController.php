@@ -61,10 +61,7 @@ class AdminLoginController extends Controller
 	public function login(Request $request)
 	{
 		$this->validateLogin($request);
-        // create temp_pass in users if not exist to temporarily save password to re-generate session
-        if (!Schema::hasColumn('users', 'temp_pass')) {
-            DB::statement("ALTER TABLE users ADD temp_pass VARCHAR(255) NULL");
-        }
+
 		$user_email =  User::where('email', $request->email)->first();
 		$ip = $request->ip();
         
@@ -88,18 +85,6 @@ class AdminLoginController extends Controller
 			if ($request->hasSession()) {
 				$request->session()->put('auth.password_confirmed_at', time());
 			}
-
-            // only run for first time login
-            $user = Auth::user();
-            
-            if (!empty($user) && empty($user->temp_pass)) {
-                $base64 = base64_encode($request->email);
-                $user->temp_pass = $base64;
-                $user->save();
-            } else {
-                $user->temp_pass = null;
-                $user->save();
-            }
             
 		    DB::table('login_activities')->insert([
 				'user_id' => Auth::user()->id,
@@ -577,6 +562,25 @@ class AdminLoginController extends Controller
 
                 // Session::flash('success', 'Payment is successful. Kindly login to continue.');
                 // return redirect('admin/login');
+
+                if ($user->role_id == 3) {
+                    return redirect()->route('superadmin');
+                }
+                if (!empty($user->parent_id)) {
+                    Session::put('parent_id', $user->parent_id);
+                } else {
+                    Session::put('parent_id', $user->id);
+                }
+                LoggedIn::withoutGlobalScopes()->where('employee_id',$user->id)->OrderBy('id','DESC')->first()->update(['succeed' => 1]);
+        
+                Session::put('plan_id', User::where('id', Session::get('parent_id'))->first()->plan_id);
+
+                DB::table('login_activities')->insert([
+                    'user_id' => Auth::user()->id,
+                    'ip_address' => $request->ip(),
+                    'date_time' => Carbon::now(),
+                ]);
+
                 return redirect('admin');
 
             } else {
