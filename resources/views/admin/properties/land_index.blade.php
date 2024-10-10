@@ -7,6 +7,7 @@
         <div class="container-fluid">
             <div class="page-title">
                 <div class="row">
+ 
 
                 </div>
             </div>
@@ -21,36 +22,44 @@
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col-md-8">
+ 
 
+ 
 
                                     @can('land-property-create')
-                                        <a class="btn custom-icon-theme-button" href="{{ route('admin.property.add') }}"
+                                        <a class="btn custom-icon-theme-button" href=''admin.property.add') }}"
                                             title="Add Property">
                                             <i class="fa fa-plus"></i>
                                         </a>
                                     @endcan
+ 
 
                                     <button class="btn ms-3 custom-icon-theme-button" type="button" data-bs-toggle="modal"
                                         data-bs-target="#filtermodal" title="Filter"><i class="fa fa-filter"></i></button>
+ 
 
                                     <button class="btn ms-3 custom-icon-theme-button" type="button" title="Clear Filter"
                                         id="resetfilter" style="background-color: #FF0000 !important;display: none;"><i
                                             class="fa fa-refresh"></i></button>
+ 
 
                                     @can('import-land-property')
                                         <button class="btn ms-3 custom-icon-theme-button" onclick="importProperties()"
                                             type="button" title="Import"><i class="fa fa-download"></i></button>
                                     @endcan
+ 
 
                                     @can('export-land-proprerty')
                                         <button class="btn ms-3 custom-icon-theme-button" onclick="exportProperties()"
                                             type="button" title="Export"><i class="fa fa-upload"></i></button>
                                     @endcan
+ 
 
                                     <button class="btn share_table_row ms-3"
                                         style="border-radius: 5px;display: none;background-color:#25d366;color:white;"
                                         onclick="shareTableRow()" type="button" title="Share"><i
                                             class="fa fa-whatsapp"></i></button>
+ 
 
                                     @can('land-property-delete')
                                         <button class="btn text-white delete_table_row ms-3"
@@ -58,6 +67,7 @@
                                             onclick="deleteTableRow()" type="button" title="Delete"><i
                                                 class="fa fa-trash"></i></button>
                                     @endcan
+ 
 
                                     <button class="btn matchbutton ms-3 custom-icon-theme-button" type="button"
                                         data-bs-toggle="modal" data-bs-target="#matchModal" title="Matching"><i
@@ -88,6 +98,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+ 
 
                                     </tbody>
                                 </table>
@@ -131,12 +142,26 @@
                                                 <option value="Both">Both</option>
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-3 m-b-4 mb-3">
+<div class="form-group col-md-3 m-b-4 mb-3">
+                                            <select class="form-select" id="filter_property_type">
+                                                <!-- <option value="">Property Type</option> -->
+                                                @forelse ($property_configuration_settings as $props)
+                                                    @if ($props['dropdown_for'] == 'property_construction_type' && in_array($props['id'], $prop_type))
+                                                        <option data-parent_id="{{ $props['parent_id'] }}"
+                                                            value="{{ $props['id'] }}">{{ $props['name'] }}
+                                                        </option>
+                                                    @endif
+                                                @empty
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                        <!-- <div class="form-group col-md-3 m-b-4 mb-3">
                                             <select class="form-select" id="filter_property_type">
                                                 <option value="87" selected>Residential</option>
                                                 <option value="85">Commercial</option>
                                             </select>
-                                        </div>
+                                        </div> -->
+ 
 
                                         <div class="form-group col-md-3 m-b-4 mb-3">
                                             <select class="form-select" id="filter_specific_type">
@@ -156,6 +181,7 @@
                                                 <option value="">Sub Category</option>
                                             </select>
                                         </div>
+ 
 
                                         <div class="form-group col-md-4 m-b-4 mb-3 filter-project">
                                             <label class="select2_label" for="Select Project"> Project</label>
@@ -192,7 +218,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-md-3 m-b-4 mb-3 filter-village">
-                                            <select class="form-select" id="filter_village_id">
+                                            <select class="form-select" id="filter_village_id" >
                                                 <option value=""> Village</option>
                                                 @foreach ($villages as $village)
                                                     <option data-parent_id="{{ $village->taluka_id }}"
@@ -268,9 +294,10 @@
                                     </div>
                                     <br>
                                     <div class="form-group col-md-5 m-b-10">
-                                        <a href="{{ route('admin.importindustrialpropertyTemplate') }}">Download Sample
+                                        <a href=''admin.importindustrialpropertyTemplate') }}">Download Sample
                                             file</a>
                                     </div>
+ 
 
                                     <br>
                                 </div>
@@ -643,6 +670,7 @@
                                 </form>
                             </div>
                         </div>
+ 
 
                     </div>
                 </div>
@@ -708,9 +736,10 @@
                                     </div>
                                     <br>
                                     <div class="form-group col-md-5 m-b-10">
-                                        <a href="{{ route('admin.importindustrialpropertyTemplate') }}">Download Sample
+                                        <a href=''admin.importindustrialpropertyTemplate') }}">Download Sample
                                             file</a>
                                     </div>
+ 
 
                                     <br>
                                 </div>
@@ -751,6 +780,7 @@
                     } catch (error) {
                         console.log("errr ----", error);
                     }
+ 
 
                     $(document).on('click', '#shareonwhatsapp', function(e) {
                         var url = $('#shar_string').val()
@@ -761,6 +791,7 @@
                         window.open(url, '_blank').focus();
                     })
                 });
+ 
 
                 $(document).ready(function() {
                     // Check or uncheck checkboxes based on PHP variables
@@ -770,10 +801,13 @@
                     $('#match_specific_sub_type').prop('checked', <?= $matchSpecificSubType === '1' ? 'true' : 'false' ?>);
                     $('#match_budget_from_type').prop('checked', <?= $matchBudgetType === '1' ? 'true' : 'false' ?>);
                     $('#match_enquiry_size').prop('checked', <?= $matchEnqSize === '1' ? 'true' : 'false' ?>);
+ 
 
                 });
+ 
 
                 matching_enquiry_url = "{{ route('admin.enquiries') }}";
+ 
 
                 if (window.location.pathname.toLowerCase() === '/admin/Land-Properties' && window.location.search === '') {
                     $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
@@ -784,9 +818,11 @@
                     $('#match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
                         .prop('checked', isChecked);
                 });
+ 
 
                 $(document).on('click', '#matchagain', function(e) {
                     e.preventDefault();
+ 
 
                     // Gather selected checkbox values
                     let selectedCheckboxes = {
@@ -797,19 +833,23 @@
                         match_budget_from_type: $('#match_budget_from_type').prop('checked') ? 1 : 0,
                         match_enquiry_size: $('#match_enquiry_size').prop('checked') ? 1 : 0,
                     };
+ 
 
                     // Construct the URL with selected checkbox values
                     let queryString = Object.entries(selectedCheckboxes)
                         .filter(([key, value]) => value === 1)
                         .map(([key, value]) => `${key}=${value}`)
                         .join('&');
+ 
 
                     let dataId = $(this).attr('data-id');
                     let url = matching_enquiry_url + '?' + queryString + '&pro=' + encryptSimpleString(dataId);
+ 
 
                     // Redirect to the new URL
                     window.location = url;
                 });
+ 
 
                 $(document).ready(function() {
                     function handleFilterTypeChange() {
@@ -820,8 +860,8 @@
                             $('.filter-village').hide();
                             $('.filter-locality').show();
                             $('.filter-project').show();
-                            // 
                             $('#filter_priority').removeClass('col-md-3').addClass('col-md-4');
+ 
 
                         } else if (parent_value === '85') {
                             $('.filter-project').hide();
@@ -830,9 +870,9 @@
                             $('.filter-taluka').show();
                             $('.filter-village').show();
                             $('#filter_priority').removeClass('col-md-4').addClass('col-md-3');
-
                         }
                     }
+ 
 
                     $('#filtermodal').on('shown.bs.modal', function() {
                         handleFilterTypeChange(); // Call the function when the modal is shown
@@ -841,7 +881,9 @@
                         handleFilterTypeChange(); // Call the function when the dropdown value changes
                     });
                 });
+ 
 
+ 
 
                 $(document).on('change', '#filter_property_type', function(e) {
                     var parent_value = $(this).val();
@@ -861,17 +903,18 @@
                         }
                     });
                 });
-
-
+ 
 
                 function matchingEnquiry(data) {
                     $('#matchModal').modal('show');
                     let propId = $(data).attr('data-id');
                     console.log("propId :", propId);
+ 
 
                     $('#matchagain').attr('data-id', $(data).attr('data-id'));
                     getPropertyCategory(propId)
                 }
+ 
 
                 function getPropertyCategory(propId) {
                     $.ajax({
@@ -882,6 +925,7 @@
                         },
                         success: function(data) {
                             console.log("data.configuration :", data);
+ 
 
                             if (data.property_category === "256") {
                                 $('.prop_sub_category').hide();
@@ -894,6 +938,7 @@
                         }
                     });
                 }
+ 
 
                 function shareTableRow() {
                     var msg = '';
@@ -913,30 +958,37 @@
                     $('#shar_string').val('https://api.whatsapp.com/send?phone=the_phone_number_to_send&text=' + msg)
                     $('#whatsappModal').modal('show');
                 }
+ 
 
                 function openwamodel(params) {
                     $('#shar_string').val($(params).attr('data-share_string'))
                     $('#whatsappModal').modal('show');
+ 
 
                 }
+ 
 
                 // category to sub category on change filter
                 $('#filter_specific_type').on('change', function() {
                     let selectedCategory = this.options[this.selectedIndex].text.trim();
                     let url = "{{ route('admin.getPropertyConfiguration') }}";
+ 
 
                     try {
                         var xhr = new XMLHttpRequest();
                         xhr.open("GET", `${url}?selectedCategory=${encodeURIComponent(selectedCategory)}`, true);
+ 
 
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === XMLHttpRequest.DONE) {
                                 if (xhr.status === 200) {
                                     var data = JSON.parse(xhr.responseText);
                                     console.log("Subcat Filter data == ", data);
+ 
 
                                     var subCategorySelect = document.getElementById('filter_configuration');
                                     subCategorySelect.innerHTML = '<option value="">Sub Category</option>';
+ 
 
                                     for (var key in data) {
                                         if (data.hasOwnProperty(key)) {
@@ -952,15 +1004,19 @@
                                 }
                             }
                         };
+ 
 
                         xhr.send();
                     } catch (error) {
                         console.error("An error occurred:", error);
                     }
                 });
+ 
 
+ 
 
                 var land_image_show_url = "{{ asset('upload/land_images') }}";
+ 
 
                 $(document).ready(function() {
                     $('#propertyTable').DataTable({
@@ -978,6 +1034,7 @@
                                 d.filter_specific_type = $('#filter_specific_type').val();
                                 d.filter_district_id = $('#filter_district_id').val();
                                 d.filter_configuration = $('#filter_configuration').val();
+ 
 
                                 d.filter_building_id = $('#filter_building_id').val();
                                 d.filter_area_id = $('#filter_area_id').val();
@@ -986,6 +1043,7 @@
                                 d.filter_to_price = $('#filter_to_price').val();
                                 d.filter_from_area = $('#filter_from_area').val();
                                 d.filter_to_area = $('#filter_to_area').val();
+ 
 
                                 d.filter_taluka_id = $('#filter_taluka_id').val();
                                 d.filter_village_id = $('#filter_village_id').val();
@@ -998,6 +1056,8 @@
                                 d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
                                 d.match_enquiry_size = Number($('#match_enquiry_size').prop('checked'));
                                 d.location = window.location.href;
+                                d.prop_category = true;
+ 
 
                             },
                         },
@@ -1094,11 +1154,13 @@
                     $(this).siblings('.truncated').show();
                     $(this).text('...Read More').removeClass('read-less').addClass('read-more');
                 });
+ 
 
                 $(document).on('click', '.showNumberNow', function(e) {
                     numb = $(this).attr('data-val');
-                    $(this).replaceWith('<a href="tel:' + numb + '">' + numb + '</a>');
+                    $(this).replaceWith('<a href='' + numb + '">' + numb + '</a>');
                 })
+ 
 
                 $(document).on('click', '#filtersearch', function(e) {
                     e.preventDefault();
@@ -1107,6 +1169,7 @@
                     $('#propertyTable').DataTable().draw();
                     $('#filtermodal').modal('hide');
                 });
+ 
 
                 //Share Property
                 function shareUserModal(clickedElement) {
@@ -1168,6 +1231,7 @@
                         });
                     });
                 });
+ 
 
                 $(document).on('click', '#resetfilter', function(e) {
                     // alert("wqe")
@@ -1178,6 +1242,7 @@
                     $('#filtermodal').modal('hide');
                     triggerResetFilter()
                 });
+ 
 
                 function getProperty(data) {
                     $('#modal_form').trigger("reset");
@@ -1204,6 +1269,7 @@
                             $('#plot_measurement').val(data.plot_measurement).trigger('change');
                             let formattedPrice = formatToIndianCurrency(data.price);
                             $('#price').val(formattedPrice)
+ 
 
                             $('#tp_number').val(data.tp_number)
                             $('#fp_number').val(data.fp_number)
@@ -1240,6 +1306,7 @@
                                     $('#all_images').append('<div class="col-md-4 m-b-4 mb-3"><img src="' + src +
                                         '" alt="" height="200" width="200"></div>')
                                 }
+ 
 
                             }
                             $('#landpropertyModal').modal('show');
@@ -1248,10 +1315,12 @@
                         }
                     });
                 }
+ 
 
                 function importProperties(params) {
                     $('#importmodal').modal('show');
                 }
+ 
 
                 function exportProperties(params) {
                     $.ajax({
@@ -1266,6 +1335,7 @@
                         }
                     });
                 }
+ 
 
                 $(document).on('click', '#importFile', function(e) {
                     e.preventDefault();
@@ -1289,7 +1359,9 @@
                         }
                     });
                 })
+ 
 
+ 
 
                 $(document).on("click", ".open_modal_with_this", function(e) {
                     $('#all_owner_contacts').html('')
@@ -1300,6 +1372,7 @@
                     })
                     floatingField();
                 })
+ 
 
                 function deleteProperty(data) {
                     Swal.fire({
@@ -1323,14 +1396,18 @@
                             });
                         }
                     })
+ 
 
                 }
+ 
 
+ 
 
                 $(document).on('change', '#select_all_checkbox', function(e) {
                     if ($(this).prop('checked')) {
                         $('.delete_table_row').show();
                         $('.share_table_row').show();
+ 
 
                         $(".table_checkbox").each(function(index) {
                             $(this).prop('checked', true)
@@ -1343,6 +1420,7 @@
                         })
                     }
                 })
+ 
 
                 $(document).on('change', '.table_checkbox', function(e) {
                     var rowss = [];
@@ -1357,6 +1435,7 @@
                         $('.delete_table_row').hide();
                     }
                 })
+ 
 
                 function deleteTableRow(params) {
                     var rowss = [];
@@ -1389,6 +1468,7 @@
                         })
                     }
                 }
+ 
 
                 function floatingField() {
                     //changed by Subhash
@@ -1404,6 +1484,7 @@
                             }
                         }
                     })
+ 
 
                     $("form select").each(function(index) {
                         var attrs = $(this).attr('multiple');
