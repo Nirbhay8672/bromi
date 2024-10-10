@@ -1170,7 +1170,7 @@
                 });
 
                 $(document).on('click', '#resetfilter', function(e) {
-                    alert("wqe")
+                    // alert("wqe")
                     e.preventDefault();
                     $(this).hide();
                     $('#filter_form').trigger("reset");

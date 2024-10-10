@@ -3578,7 +3578,7 @@
                 $('.div_construction_docs_allowed_for').hide()
                 $('.the_no_of_floors_allowed').hide()
                 $('.div_plot_ind_common').hide()
-                $('.div_tp_details').hide()
+                // $('.div_tp_details').hide()
                 $('.div_extra_land_details').show()
                 $(".cl-locality").hide();
             $('.state-hide').hide();
@@ -3760,6 +3760,9 @@
                     // 'Add Constructed Carpet Area'
                 ]);
             } else if (category_type == 'Land') {
+                // state-hide
+                $('.state-hide').hide()
+
                 showfields = ['div_plot_type', 'div_flat_details', 'div_flat_details_2', 'div_property_address',
                     'div_area_size_details', 'div_borewell',
                     'the_length_of_plot', 'the_width_of_plot',
@@ -3768,7 +3771,7 @@
                     'div_property_source', 'div_checkboxes1', 'div_construction_allowed_for', 'div_tp_details',
                     'div_flat_details_8', 'div_plot_ind_common', 'div_document_section', 'div_survey_details',
                     'div_road_width', 'div_construction_docs_allowed_for', 'div_extra_land_details',
-                    'location_link_cls'
+                    'location_link_cls',
                 ];
             }
             for (let i = 0; i < showfields.length; i++) {
@@ -4306,9 +4309,6 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(data) {
-                    console.log("datadata : ", data);
-
-
                     if (data == null || data == '') {
 
                         let first_city = @json($first_city);
@@ -4327,24 +4327,24 @@
                         return
                     }
                     //Disable Price on Land
-                    var $price1 = $('#price');
-                    var $price2 = $('#price2');
+                    // var $price1 = $('#price');
+                    // var $price2 = $('#price2');
 
-                    $price1.on('input', function() {
-                        if ($(this).val() !== '') {
-                            $price2.prop('disabled', true);
-                        } else {
-                            $price2.prop('disabled', false);
-                        }
-                    });
+                    // $price1.on('input', function() {
+                    //     if ($(this).val() !== '') {
+                    //         $price2.prop('disabled', true);
+                    //     } else {
+                    //         $price2.prop('disabled', false);
+                    //     }
+                    // });
 
-                    $price2.on('input', function() {
-                        if ($(this).val() !== '') {
-                            $price1.prop('disabled', true);
-                        } else {
-                            $price1.prop('disabled', false);
-                        }
-                    });
+                    // $price2.on('input', function() {
+                    //     if ($(this).val() !== '') {
+                    //         $price1.prop('disabled', true);
+                    //     } else {
+                    //         $price1.prop('disabled', false);
+                    //     }
+                    // });
                     // edit property selected valdata.width_of_plot, 1
                     data = JSON.parse(data);
                     if (data.property_category == '262') {
@@ -4377,9 +4377,9 @@
                         $('input[name=storage_type][value=' + data.configuration + ']').prop('checked', true)
                     }
                     $('#price').val(data.survey_price);
-                    if (data.survey_price !== '') {
-                        $('#price2').prop('disabled', true);
-                    }
+                    // if (data.survey_price !== '') {
+                    //     $('#price2').prop('disabled', true);
+                    // }
                     $('#price2').val(data.fp_plot_price);
 
                     $('#remarks').val(data.remarks);

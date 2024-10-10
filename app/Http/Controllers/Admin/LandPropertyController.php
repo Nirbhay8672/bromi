@@ -68,12 +68,12 @@ class LandPropertyController extends Controller
 						$query->where('properties.property_for', $request->filter_property_for)->orWhere('properties.property_for', 'Both');
 					});
 				})
-				->when($request->filter_property_type, function ($query) use ($request) {
-					// dd($request->filter_property_type,"...",Auth::user()->property_type);
-					$filterPropertyType = intval($request->filter_property_type); // Convert to integer
-					return $query->where('properties.property_type', $filterPropertyType)
-						->where('properties.prop_status', 1);
-				})
+				// ->when($request->filter_property_type, function ($query) use ($request) {
+				// // 	dd($request->filter_property_type,"...",Auth::user()->property_type);
+				// 	$filterPropertyType = intval($request->filter_property_type); // Convert to integer
+				// 	return $query->where('properties.property_type', $filterPropertyType)
+				// 		->where('properties.prop_status', 1);
+				// })
 				->when($request->filter_specific_type, function ($query) use ($request) {
 					// dd($request->filter_specific_type,"...",Auth::user()->property_category);
 					return $query->where('properties.property_category', $request->filter_specific_type)
