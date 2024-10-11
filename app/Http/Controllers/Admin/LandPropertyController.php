@@ -30,12 +30,12 @@ use Yajra\DataTables\Facades\DataTables;
 
 class LandPropertyController extends Controller
 {
-	public function __construct()
-	{
-		$this->middleware('auth');
-	}
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
-	public function index(Request $request)
+    public function index(Request $request)
     {
         if ($request->ajax()) {
             $dropdowns = DropdownSettings::get()->toArray();
@@ -68,12 +68,11 @@ class LandPropertyController extends Controller
                         $query->where('properties.property_for', $request->filter_property_for)->orWhere('properties.property_for', 'Both');
                     });
                 })
-                // ->when($request->filter_property_type, function ($query) use ($request) {
-                //  dd($request->filter_property_type,"aaaaa",$request->prop_category,"...",Auth::user()->property_type);
-                //  $filterPropertyType = intval($request->filter_property_type); // Convert to integer
-                //  return $query->where('properties.property_type', $filterPropertyType)
-                //      ->where('properties.prop_status', 1);
-                // })
+                ->when($request->filter_property_type && Auth::user()->property_type_id && $request->isPropCatFilter === '1', function ($query) use ($request) {
+                    $filterPropertyType = intval($request->filter_property_type); // Convert to integer
+                    return $query->where('properties.property_type', $filterPropertyType)
+                        ->where('properties.prop_status', 1);
+                })
                 ->when($request->filter_specific_type, function ($query) use ($request) {
                     // dd($request->filter_specific_type,"...",Auth::user()->property_category);
                     return $query->where('properties.property_category', $request->filter_specific_type);
@@ -88,16 +87,12 @@ class LandPropertyController extends Controller
                         ->where('properties.prop_status', 1);
                 })
                 ->when($request->filter_area_id, function ($query) use ($request) {
-                    // dd($request->filter_area_id,"Re");
-                    return $query->whereIn('projects.area_id', $request->filter_area_id)
-                    ->where('properties.prop_status', 1);
+                    return $query->whereIn('properties.locality_id', $request->filter_area_id)
+                        ->where('properties.prop_status', 1);
                 })
                 ->when($request->filter_Property_priority, function ($query) use ($request) {
                     return $query->where('Property_priority', $request->filter_Property_priority)
                         ->where('properties.prop_status', 1);
-                })
-                ->when($request->filter_area_id, function ($query) use ($request) {
-                    return $query->whereIn('projects.area_id', $request->filter_area_id);
                 })
                 ->when($request->filter_district_id, function ($query) use ($request) {
                     return $query->where(function ($query) use ($request) {
@@ -114,7 +109,7 @@ class LandPropertyController extends Controller
                 ->when($request->filter_village_id, function ($query) use ($request) {
                     // dd($request->filter_village_id,"...",Auth::user()->village_id);
                     return $query->where(function ($query) use ($request) {
-                        $query->where('properties.village_id', $request->filter_village_id);
+                        $query->whereIn('properties.village_id', $request->filter_village_id);
                     });
                 })
                 ->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
@@ -172,7 +167,7 @@ class LandPropertyController extends Controller
                 ->whereIn('property_category', $indId)
                 ->orderBy('properties.id', 'desc')  // Explicitly specify the table
                 ->get();
-               
+
 
             return DataTables::of($data)
                 ->editColumn('project_id', function ($row) {
@@ -458,7 +453,7 @@ class LandPropertyController extends Controller
                     $buttons = $buttons . '<i title="Matching Enquiry" data-id="' . $row->id . '" onclick=matchingEnquiry(this) class="fa fs-22 py-2 mx-2 fa-plane text-info"></i>';
 
                     if (in_array('shared-property', $permissions)) {
-                        $buttons = $buttons . '<a  href='' data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
+                        $buttons = $buttons . '<a  href="javascript:void(0)" data-id="' . $row->id . '" onclick="shareUserModal(this)"><i title="Share"   class="fa fa-clipboard fs-22 py-2 mx-2 text-secondary"></i> </a>';
                     }
 
                     $vvv = '';
@@ -544,267 +539,266 @@ class LandPropertyController extends Controller
     }
 
 
-	public function saveProperty(Request $request)
-	{
-		if (!empty($request->id) && $request->id != '') {
+    public function saveProperty(Request $request)
+    {
+        if (!empty($request->id) && $request->id != '') {
 
-			$data = LandProperty::find($request->id);
-			if (empty($data)) {
-				$data =  new LandProperty();
-			}
-		} else {
-			$data =  new LandProperty();
-		}
-		$data->user_id = Session::get('parent_id');
-		$data->added_by = Auth::user()->id;
-		$data->specific_type = $request->specific_type;
-		$data->district_id = $request->district_id;
-		$data->taluka_id = $request->taluka_id;
-		$data->village_id = $request->village_id;
-		$data->zone = $request->zone;
-		$data->fsi = $request->fsi;
-		$data->configuration = $request->configuration;
-		$data->survey_number = $request->survey_number;
-		$data->plot_size = $request->plot_size;
-		$data->plot_measurement = $request->plot_measurement;
-		$data->price = $request->price;
-		$data->tp_number = $request->tp_number;
-		$data->fp_number = $request->fp_number;
-		$data->plot2_size = $request->plot2_size;
-		$data->plot2_measurement = $request->plot2_measurement;
-		$data->price2 = $request->price2;
-		$data->address = $request->address;
-		$data->remarks = $request->remarks;
-		$data->status = $request->status;
-		$data->location_url = $request->location_url;
-		$data->property_source = $request->property_source;
-		$data->refrence = $request->refrence;
-		$data->owner_details = $request->owner_details;
-		$data->save();
-		if (!empty($request->plot_measurement)) {
-			Helper::add_default_measuerement($request->plot_measurement);
-		}
-		if (!empty($request->plot2_measurement)) {
-			Helper::add_default_measuerement($request->plot2_measurement);
-		}
-	}
+            $data = LandProperty::find($request->id);
+            if (empty($data)) {
+                $data =  new LandProperty();
+            }
+        } else {
+            $data =  new LandProperty();
+        }
+        $data->user_id = Session::get('parent_id');
+        $data->added_by = Auth::user()->id;
+        $data->specific_type = $request->specific_type;
+        $data->district_id = $request->district_id;
+        $data->taluka_id = $request->taluka_id;
+        $data->village_id = $request->village_id;
+        $data->zone = $request->zone;
+        $data->fsi = $request->fsi;
+        $data->configuration = $request->configuration;
+        $data->survey_number = $request->survey_number;
+        $data->plot_size = $request->plot_size;
+        $data->plot_measurement = $request->plot_measurement;
+        $data->price = $request->price;
+        $data->tp_number = $request->tp_number;
+        $data->fp_number = $request->fp_number;
+        $data->plot2_size = $request->plot2_size;
+        $data->plot2_measurement = $request->plot2_measurement;
+        $data->price2 = $request->price2;
+        $data->address = $request->address;
+        $data->remarks = $request->remarks;
+        $data->status = $request->status;
+        $data->location_url = $request->location_url;
+        $data->property_source = $request->property_source;
+        $data->refrence = $request->refrence;
+        $data->owner_details = $request->owner_details;
+        $data->save();
+        if (!empty($request->plot_measurement)) {
+            Helper::add_default_measuerement($request->plot_measurement);
+        }
+        if (!empty($request->plot2_measurement)) {
+            Helper::add_default_measuerement($request->plot2_measurement);
+        }
+    }
 
-	public function generateAreaUnitDetails($row, $type, $land_units)
-	{
-		$area = '';
-		$measure = '';
-		if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
-			$area = explode('_-||-_', $row->salable_area)[0];
-			$measure = explode('_-||-_', $row->salable_area)[1];
-		} elseif ($type == 'Storage/industrial') {
-			$area = explode('_-||-_', $row->salable_plot_area)[0];
-			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
-			$measure = explode('_-||-_', $row->salable_plot_area)[1];
-			if (empty($salable)) {
-				$salable = '';
-			}
-			$res = $area ? "P:" . $area : "";
-			if ($res) {
-				$constructed = $constructed ? " - C: " . $constructed : "";
-			} else {
-				$constructed = $constructed ? " C: " . $constructed : "";
-			}
-			$area = $res . $constructed;
-		} elseif ($type == 'Vila/Bunglow') {
-			$salable = explode('_-||-_', $row->salable_plot_area)[0];
-			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
-			$measure = explode('_-||-_', $row->constructed_salable_area)[1];
-			if (empty($salable)) {
-				$salable = '';
-			}
-			$res = $salable ? "P:" . $salable : "";
-			if ($res) {
-				$constructed = $constructed ? " - C: " . $constructed : "";
-			} else {
-				$constructed = $constructed ? " C: " . $constructed : "";
-			}
-			$area = $res . $constructed;
-		} elseif ($type == 'Farmhouse') {
-			$area = explode('_-||-_', $row->salable_plot_area)[0];
-			$measure = explode('_-||-_', $row->salable_plot_area)[1];
-		} elseif ($type == 'Land') {
-			if (($row->survey_plot_size)[0]) {
-				$area = explode('_-||-_', $row->survey_plot_size)[0];
-				$measure = explode('_-||-_', $row->survey_plot_size)[1];
-			} 
-			if (($row->fp_plot_size)[0]) {
-				$area = explode('_-||-_', $row->fp_plot_size)[0];
-				$measure = explode('_-||-_', $row->fp_plot_size)[1];
-			}
-		
-		}
-		$unit_name = '';
-		foreach ($land_units as $unit) {
-			if ($unit->id == $measure) {
-				$unit_name = $unit->unit_name;
-				break;
-			}
-		}
-		if (!empty($area) && !empty($unit_name)) {
-			$formattedArea = $area . ' ' . $unit_name;
-			return $formattedArea;
-		} else {
-			return "Area Not Available";
-		}
-	}
+    public function generateAreaUnitDetails($row, $type, $land_units)
+    {
+        $area = '';
+        $measure = '';
+        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+            $area = explode('_-||-_', $row->salable_area)[0];
+            $measure = explode('_-||-_', $row->salable_area)[1];
+        } elseif ($type == 'Storage/industrial') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+            if (empty($salable)) {
+                $salable = '';
+            }
+            $res = $area ? "P:" . $area : "";
+            if ($res) {
+                $constructed = $constructed ? " - C: " . $constructed : "";
+            } else {
+                $constructed = $constructed ? " C: " . $constructed : "";
+            }
+            $area = $res . $constructed;
+        } elseif ($type == 'Vila/Bunglow') {
+            $salable = explode('_-||-_', $row->salable_plot_area)[0];
+            $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+            $measure = explode('_-||-_', $row->constructed_salable_area)[1];
+            if (empty($salable)) {
+                $salable = '';
+            }
+            $res = $salable ? "P:" . $salable : "";
+            if ($res) {
+                $constructed = $constructed ? " - C: " . $constructed : "";
+            } else {
+                $constructed = $constructed ? " C: " . $constructed : "";
+            }
+            $area = $res . $constructed;
+        } elseif ($type == 'Farmhouse') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+        } elseif ($type == 'Land') {
+            if (($row->survey_plot_size)[0]) {
+                $area = explode('_-||-_', $row->survey_plot_size)[0];
+                $measure = explode('_-||-_', $row->survey_plot_size)[1];
+            }
+            if (($row->fp_plot_size)[0]) {
+                $area = explode('_-||-_', $row->fp_plot_size)[0];
+                $measure = explode('_-||-_', $row->fp_plot_size)[1];
+            }
+        }
+        $unit_name = '';
+        foreach ($land_units as $unit) {
+            if ($unit->id == $measure) {
+                $unit_name = $unit->unit_name;
+                break;
+            }
+        }
+        if (!empty($area) && !empty($unit_name)) {
+            $formattedArea = $area . ' ' . $unit_name;
+            return $formattedArea;
+        } else {
+            return "Area Not Available";
+        }
+    }
 
-	public function generateLandAreaDetails($row, $type, $dropdowns)
-	{
-		$area = '';
-		$measure = '';
+    public function generateLandAreaDetails($row, $type, $dropdowns)
+    {
+        $area = '';
+        $measure = '';
 
-		if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
-			$area = explode('_-||-_', $row->salable_area)[0];
-			$measure = explode('_-||-_', $row->salable_area)[1];
-		} elseif ($type == 'Storage/industrial') {
-			$area = explode('_-||-_', $row->salable_plot_area)[0];
-			$measure = explode('_-||-_', $row->salable_plot_area)[1];
-		} elseif ($type == 'Vila/Bunglow') {
-			$salable = explode('_-||-_', $row->salable_plot_area)[0];
-			$constructed = explode('_-||-_', $row->constructed_salable_area)[0];
-			$measure = explode('_-||-_', $row->constructed_salable_area)[1];
-			if (empty($salable)) {
-				$salable = '';
-			}
-			// $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
-			$area = "P:" . $salable . ' - C: ' . $constructed;
-		} elseif ($type == 'Farmhouse') {
-			$area = explode('_-||-_', $row->salable_plot_area)[0];
-			$measure = explode('_-||-_', $row->salable_plot_area)[1];
-		}
+        if ($type == 'Office' || $type == 'Retail' || $type == 'Flat' || $type == 'Penthouse' || $type == 'Plot') {
+            $area = explode('_-||-_', $row->salable_area)[0];
+            $measure = explode('_-||-_', $row->salable_area)[1];
+        } elseif ($type == 'Storage/industrial') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+        } elseif ($type == 'Vila/Bunglow') {
+            $salable = explode('_-||-_', $row->salable_plot_area)[0];
+            $constructed = explode('_-||-_', $row->constructed_salable_area)[0];
+            $measure = explode('_-||-_', $row->constructed_salable_area)[1];
+            if (empty($salable)) {
+                $salable = '';
+            }
+            // $area = "C:" . $constructed . ' ' . $dropdowns[$measure]['name'] . ' - P: ' . $salable;
+            $area = "P:" . $salable . ' - C: ' . $constructed;
+        } elseif ($type == 'Farmhouse') {
+            $area = explode('_-||-_', $row->salable_plot_area)[0];
+            $measure = explode('_-||-_', $row->salable_plot_area)[1];
+        }
 
-		if (!empty($area) && !empty($measure)) {
-			$formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
-			return $formattedArea;
-		} else {
-			return "Area Not Available";
-		}
-	}
+        if (!empty($area) && !empty($measure)) {
+            $formattedArea = $area . ' ' . $dropdowns[$measure]['name'];
+            return $formattedArea;
+        } else {
+            return "Area Not Available";
+        }
+    }
 
-	public function getSpecificProperty(Request $request)
-	{
-		if (!empty($request->id)) {
-			$data = LandProperty::with('Images')->where('id', $request->id)->first()->toArray();
-			return json_encode($data);
-		}
-	}
+    public function getSpecificProperty(Request $request)
+    {
+        if (!empty($request->id)) {
+            $data = LandProperty::with('Images')->where('id', $request->id)->first()->toArray();
+            return json_encode($data);
+        }
+    }
 
-	public function saveLandImages(Request $request)
-	{
-		$landId = $request->input('land_id');
-		$proId = $request->input('pro_id');
-		$images = $request->file('images');
-		$const_doc_types = ($request->input('const_doc_type'));
-		$construction_documents = ($request->file('construction_docs'));
-		$documents = $request->file('documents');
+    public function saveLandImages(Request $request)
+    {
+        $landId = $request->input('land_id');
+        $proId = $request->input('pro_id');
+        $images = $request->file('images');
+        $const_doc_types = ($request->input('const_doc_type'));
+        $construction_documents = ($request->file('construction_docs'));
+        $documents = $request->file('documents');
 
-		// if (!empty($construction_documents)) {
-		// 	foreach ($construction_documents as $key => $constDocs) {
-		// 		$ext = $constDocs->getClientOriginalExtension();
-		// 		$fileName = str_replace('.' . $ext, '', $constDocs->getClientOriginalName()) . "-" . time() . '.' . $ext;
-		// 		$fileName = str_replace('#', '', $fileName);
-		// 		$path = public_path() . config('constant.construction_images_url');
-		// 		File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
-		// 		$moved = $constDocs->move($path, $fileName);
-		// 		if ($moved) {
-		// 			$land_image = new LandImages();
-		// 			$land_image->land_id = $landId;
-		// 			$land_image->construction_documents = $fileName;
-		// 			$land_image->user_id = Auth::user()->id;
-		// 			$land_image->pro_id = $proId;
-		// 			$land_image->const_doc_type = $const_doc_types;
-		// 			$land_image->save();
-		// 		}
-		// 	}
-		// }
-		if (!empty($construction_documents) && is_array($construction_documents)) {
-			// Iterate through each construction document
-			foreach ($construction_documents as $key => $constDocs) {
-				// Check if the corresponding type exists
-				if (isset($const_doc_types[$key])) {
-					// Process the document
-					$ext = $constDocs->getClientOriginalExtension();
-					$fileName = str_replace('.' . $ext, '', $constDocs->getClientOriginalName()) . "-" . time() . '.' . $ext;
-					$fileName = str_replace('#', '', $fileName);
-					$path = public_path() . config('constant.construction_images_url');
-					File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
-					$moved = $constDocs->move($path, $fileName);
+        // if (!empty($construction_documents)) {
+        // 	foreach ($construction_documents as $key => $constDocs) {
+        // 		$ext = $constDocs->getClientOriginalExtension();
+        // 		$fileName = str_replace('.' . $ext, '', $constDocs->getClientOriginalName()) . "-" . time() . '.' . $ext;
+        // 		$fileName = str_replace('#', '', $fileName);
+        // 		$path = public_path() . config('constant.construction_images_url');
+        // 		File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
+        // 		$moved = $constDocs->move($path, $fileName);
+        // 		if ($moved) {
+        // 			$land_image = new LandImages();
+        // 			$land_image->land_id = $landId;
+        // 			$land_image->construction_documents = $fileName;
+        // 			$land_image->user_id = Auth::user()->id;
+        // 			$land_image->pro_id = $proId;
+        // 			$land_image->const_doc_type = $const_doc_types;
+        // 			$land_image->save();
+        // 		}
+        // 	}
+        // }
+        if (!empty($construction_documents) && is_array($construction_documents)) {
+            // Iterate through each construction document
+            foreach ($construction_documents as $key => $constDocs) {
+                // Check if the corresponding type exists
+                if (isset($const_doc_types[$key])) {
+                    // Process the document
+                    $ext = $constDocs->getClientOriginalExtension();
+                    $fileName = str_replace('.' . $ext, '', $constDocs->getClientOriginalName()) . "-" . time() . '.' . $ext;
+                    $fileName = str_replace('#', '', $fileName);
+                    $path = public_path() . config('constant.construction_images_url');
+                    File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
+                    $moved = $constDocs->move($path, $fileName);
 
-					// Store the document details in the database
-					if ($moved) {
-						$land_image = new LandImages();
-						$land_image->land_id = $landId;
-						$land_image->construction_documents = $fileName;
-						$land_image->user_id = Auth::user()->id;
-						$land_image->pro_id = $proId;
-						$land_image->const_doc_type = $const_doc_types[$key]; // Assign the corresponding type
-						$land_image->save();
-					}
-				}
-			}
-		}
-		if ((!empty($images) && is_array($images)) || (!empty($documents) && is_array($documents))) {
-			if (!empty($images)) {
-				foreach ($images as $key => $image) {
-					$ext = $image->getClientOriginalExtension();
-					$fileName = str_replace('.' . $ext, '', $image->getClientOriginalName()) . "-" . time() . '.' . $ext;
-					$fileName = str_replace('#', '', $fileName);
-					$path = public_path() . config('constant.land_images_url');
-					File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
-					$moved = $image->move($path, $fileName);
-					if ($moved) {
-						$land_image = new LandImages();
-						$land_image->land_id = $landId;
-						$land_image->image = $fileName;
-						$land_image->user_id = Auth::user()->id;
-						$land_image->pro_id = $proId;
-						$land_image->save();
-					}
-				}
-			}
-			if (!empty($documents)) {
-				foreach ($documents as $key => $document) {
-					// Process document files
-					$ext = $document->getClientOriginalExtension();
-					$fileName = str_replace('.' . $ext, '', $document->getClientOriginalName()) . "-" . time() . '.' . $ext;
-					$fileName = str_replace('#', '', $fileName);
-					$path = public_path() . config('constant.land_images_url'); // Use the same path as images
-					File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
-					$moved = $document->move($path, $fileName);
-					if ($moved) {
-						$land_image = new LandImages();
-						$land_image->land_id = $landId;
-						$land_image->image = $fileName;
-						$land_image->user_id = Auth::user()->id;
-						$land_image->pro_id = $proId;
-						$land_image->save();
-					}
-				}
-			}
-		}
+                    // Store the document details in the database
+                    if ($moved) {
+                        $land_image = new LandImages();
+                        $land_image->land_id = $landId;
+                        $land_image->construction_documents = $fileName;
+                        $land_image->user_id = Auth::user()->id;
+                        $land_image->pro_id = $proId;
+                        $land_image->const_doc_type = $const_doc_types[$key]; // Assign the corresponding type
+                        $land_image->save();
+                    }
+                }
+            }
+        }
+        if ((!empty($images) && is_array($images)) || (!empty($documents) && is_array($documents))) {
+            if (!empty($images)) {
+                foreach ($images as $key => $image) {
+                    $ext = $image->getClientOriginalExtension();
+                    $fileName = str_replace('.' . $ext, '', $image->getClientOriginalName()) . "-" . time() . '.' . $ext;
+                    $fileName = str_replace('#', '', $fileName);
+                    $path = public_path() . config('constant.land_images_url');
+                    File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
+                    $moved = $image->move($path, $fileName);
+                    if ($moved) {
+                        $land_image = new LandImages();
+                        $land_image->land_id = $landId;
+                        $land_image->image = $fileName;
+                        $land_image->user_id = Auth::user()->id;
+                        $land_image->pro_id = $proId;
+                        $land_image->save();
+                    }
+                }
+            }
+            if (!empty($documents)) {
+                foreach ($documents as $key => $document) {
+                    // Process document files
+                    $ext = $document->getClientOriginalExtension();
+                    $fileName = str_replace('.' . $ext, '', $document->getClientOriginalName()) . "-" . time() . '.' . $ext;
+                    $fileName = str_replace('#', '', $fileName);
+                    $path = public_path() . config('constant.land_images_url'); // Use the same path as images
+                    File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
+                    $moved = $document->move($path, $fileName);
+                    if ($moved) {
+                        $land_image = new LandImages();
+                        $land_image->land_id = $landId;
+                        $land_image->image = $fileName;
+                        $land_image->user_id = Auth::user()->id;
+                        $land_image->pro_id = $proId;
+                        $land_image->save();
+                    }
+                }
+            }
+        }
 
-		$allImagesAndDocuments = LandImages::where('land_id', $landId)->pluck('image')->toArray();
+        $allImagesAndDocuments = LandImages::where('land_id', $landId)->pluck('image')->toArray();
 
-		$response = [
-			'images_and_documents' => $allImagesAndDocuments,
-		];
+        $response = [
+            'images_and_documents' => $allImagesAndDocuments,
+        ];
 
-		return response()->json($response);
-	}
+        return response()->json($response);
+    }
 
-	public function destroy(Request $request)
-	{
-		if (!empty($request->id)) {
-			$data = LandProperty::where('id', $request->id)->delete();
-			return json_encode($data);
-		}
-		if (!empty($request->allids) && isset(json_decode($request->allids)[0])) {
-			$data = LandProperty::whereIn('id', json_decode($request->allids))->delete();
-		}
-	}
+    public function destroy(Request $request)
+    {
+        if (!empty($request->id)) {
+            $data = LandProperty::where('id', $request->id)->delete();
+            return json_encode($data);
+        }
+        if (!empty($request->allids) && isset(json_decode($request->allids)[0])) {
+            $data = LandProperty::whereIn('id', json_decode($request->allids))->delete();
+        }
+    }
 }
