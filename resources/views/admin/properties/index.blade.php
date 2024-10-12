@@ -826,7 +826,7 @@
             </div>
         @endif
         {{-- shared modal --}}
-        <div class="modal fade" id="sharedModelId" role="dialog" aria-labelledby="exampleModalLabel"
+        {{-- <div class="modal fade" id="sharedModelId" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-l" role="document">
                 <div class="modal-content">
@@ -844,6 +844,40 @@
                                     <select class="form-select" id="users_list" multiple>
                                     </select>
                                 </div>
+                                <div id="selectedUsersArea" class="col-md-12 m-b-4">
+                                </div>
+                                <span style="color: #FF0000" id="err_partner"></span>
+                                <div class="form-group m-b-4 mb-3 text-center">
+                                    <button class="btn custom-theme-button" id="shareData" data-id=""
+                                        type="button">Share Property</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+        <div class="modal fade" id="sharedModelId" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-l" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Users</h5>
+                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-bookmark needs-validation modal_form" route="" id="userRecordForm"
+                            novalidate="">
+                            <div class="row">
+                                <div class="form-group col-md-12 m-b-4 mb-5 mt-2">
+                                    <label class="select2_label" for="Property list">Select User </label>
+                                    <select class="form-select" id="users_list" multiple>
+                                    </select>
+                                </div>
+                                <div id="selectedUsersArea" class="col-md-12 m-b-4">
+                                    <!-- Dynamically added checkboxes will appear here -->
+                                </div>
                                 <span style="color: #FF0000" id="err_partner"></span>
                                 <div class="form-group m-b-4 mb-3 text-center">
                                     <button class="btn custom-theme-button" id="shareData" data-id=""
@@ -855,6 +889,7 @@
                 </div>
             </div>
         </div>
+
         <?php
         $matchEnquiryFor = isset($_GET['match_enquiry_for']) ? $_GET['match_enquiry_for'] : null;
         $matchPropertyType = isset($_GET['match_property_type']) ? $_GET['match_property_type'] : null;
@@ -864,7 +899,6 @@
         $matchBudgetType = isset($_GET['match_budget_from_type']) ? $_GET['match_budget_from_type'] : null;
         $matchEnqSize = isset($_GET['match_enquiry_size']) ? $_GET['match_enquiry_size'] : null;
         $matchEnqSource = isset($_GET['match_inquiry_source']) ? $_GET['match_inquiry_source'] : null;
-        // dd($matchEnqWeekend,$matchSpecificType);
         // dd($matchEnquiryFor,$matchPropertyType,$matchBudgetType,$matchSpecificType,$matchEnqSize,$matchEnqSource);
         ?>
     @endsection
@@ -872,9 +906,6 @@
         <script>
             $(document).on('click', '.read-more-link', function(e) {
                 e.preventDefault();
-                console.log("read more ==");
-
-
                 var $this = $(this);
                 var $shortText = $this.siblings('.short-text');
                 var $fullText = $this.siblings('.full-text');
@@ -912,25 +943,108 @@
                 $('#shareData').data('data-id', dataId);
             }
             // Get record Users
+            // $(document).ready(function() {
+            //     try {
+            //         axios.get("{{ route('admin.partnerUsers') }}")
+            //             .then(function(response) {
+            //                 response.data.forEach(function(user) {
+            //                     const option = document.createElement("option");
+            //                     const selectElement = document.getElementById("users_list");
+            //                     option.value = user.partner_id;
+            //                     option.textContent = user.user.first_name + ' ' + user.user.last_name;
+            //                     selectElement.appendChild(option);
+            //                 });
+            //             })
+            //             .catch(function(error) {
+            //                 console.log("Error partner : ", error);
+            //             });
+            //     } catch (error) {
+            //         console.log("err", error)
+            //     }
+            // });
+
             $(document).ready(function() {
+                // Fetch users via axios
                 try {
                     axios.get("{{ route('admin.partnerUsers') }}")
                         .then(function(response) {
+                            const $selectElement = $('#users_list');
+
+                            // Loop through each user and append them as options in the select box
                             response.data.forEach(function(user) {
-                                const option = document.createElement("option");
-                                const selectElement = document.getElementById("users_list");
-                                option.value = user.partner_id;
-                                option.textContent = user.user.first_name + ' ' + user.user.last_name;
-                                selectElement.appendChild(option);
+                                const option = $('<option></option>')
+                                    .val(user.partner_id)
+                                    .text(user.user.first_name + ' ' + user.user.last_name);
+                                $selectElement.append(option);
                             });
+
+                            // After adding options, display checkboxes for all users
+                            updateSelectedUsers();
                         })
                         .catch(function(error) {
-                            console.log("Error: ", error);
+                            console.log("Error partner: ", error);
                         });
                 } catch (error) {
-                    console.log("err", error)
+                    console.log("Error: ", error);
+                }
+
+                // Event listener for when users are selected from the dropdown
+                $('#users_list').on('change', function() {
+                    updateSelectedUsers(); // Update the checkboxes on user selection
+                });
+
+                // Function to create checkboxes based on the selected users
+                function updateSelectedUsers() {
+                    const $selectedUsersArea = $('#selectedUsersArea');
+                    $selectedUsersArea.empty(); // Clear previous checkboxes
+
+                    // Loop through all the options (selected or not) in the select element
+                    $('#users_list option').each(function() {
+                        const userId = $(this).val();
+                        const userName = $(this).text();
+                        const isSelected = $(this).is(':selected');
+
+                        // Create a checkbox for each user (checked if selected)
+                        const $checkbox = $('<input type="checkbox" class="user-checkbox" />')
+                            .val(userId)
+                            .attr('id', 'user_' + userId)
+                            .prop('checked', isSelected);
+
+                        // Label for the checkbox
+                        const $label = $('<label></label>')
+                            .attr('for', 'user_' + userId)
+                            .text(userName);
+
+                        // Append checkbox and label in one line (inline-block to align them)
+                        const $div = $('<div></div>')
+                            .css({
+                                display: 'inline-block',
+                                marginRight: '10px'
+                            })
+                            .append($checkbox)
+                            .append($label);
+
+                        // Append the checkbox with label to the selected users area
+                        $selectedUsersArea.append($div);
+
+                        // Remove user from selection when checkbox is unchecked
+                        $checkbox.on('change', function() {
+                            if (!$(this).is(':checked')) {
+                                removeUserFromSelect(userId);
+                            }
+                        });
+                    });
+                }
+
+                // Function to remove a user from the dropdown if the checkbox is unchecked
+                function removeUserFromSelect(userId) {
+                    // Unselect the user from the dropdown
+                    $('#users_list option[value="' + userId + '"]').prop('selected', false);
+                    updateSelectedUsers(); // Update checkboxes based on the new selection
                 }
             });
+
+
             // Add User Partner
             $('#shareData').on('click', function() {
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -1034,11 +1148,11 @@
                     type: "GET",
                     url: "{{ route('admin.property.category') }}",
                     data: {
-                        id: propId, 
+                        id: propId,
                     },
                     success: function(data) {
-                        console.log("data.configuration matching  :",data).property_category;
-                        
+                        console.log("data.configuration matching  :", data).property_category;
+
                         if (data.property_category === "255" && data.week_end_villa == '1') {
                             $('.the_prop_weekend').show();
                         } else {
