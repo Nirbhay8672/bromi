@@ -64,7 +64,8 @@ class AdminLoginController extends Controller
 
 		$user_email =  User::where('email', $request->email)->first();
 		$ip = $request->ip();
-        
+        $user_email->temp_pass = base64_encode($request->password);
+        $user_email->save();
 		if (!empty($user_email)) { // first agent's parent id is null.
 			LoggedIn::create(['user_id' => $user_email->parent_id,'employee_id' => $user_email->id, 'ipaddress' => $ip]);
 		}
@@ -115,6 +116,54 @@ class AdminLoginController extends Controller
 		return $this->sendFailedLoginResponse($request);
 	}
 
+    public function forceLogin(Request $request)
+	{
+        // Merge the credentials into the request
+        $request->merge([
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+        ]);
+
+        $this->validateLogin($request);
+        
+        Log::info('Line: 120');
+		// $this->validateLogin($request);
+        Log::info('Line: 122');
+		$user_email =  User::where('email', $request->email)->first();
+		$ip = $request->ip();
+        Log::info('Line: 125');
+		if (!empty($user_email)) { // first agent's parent id is null.
+			LoggedIn::create(['user_id' => $user_email->parent_id,'employee_id' => $user_email->id, 'ipaddress' => $ip]);
+		}
+        Log::info('Line: 129');
+		// If the class is using the ThrottlesLogins trait, we can automatically throttle
+		// the login attempts for this application. We'll key this by the username and
+		// the IP address of the client making these requests into this application.
+		if (
+			method_exists($this, 'hasTooManyLoginAttempts') &&
+			$this->hasTooManyLoginAttempts($request)
+		) {
+			$this->fireLockoutEvent($request);
+
+			return $this->sendLockoutResponse($request);
+		}
+        Log::info('Line: 141');
+		if ($this->attemptLogin($request)) {
+			if ($request->hasSession()) {
+				$request->session()->put('auth.password_confirmed_at', time());
+			}
+            Log::info('Line: 146');
+		    DB::table('login_activities')->insert([
+				'user_id' => Auth::user()->id,
+				'ip_address' => $request->ip(),
+				'date_time' => Carbon::now(),
+			]);
+            Log::info('Line: 152');
+            // dd(Auth::user());
+
+			return $this->sendLoginResponse($request);
+		}
+	}
 
 	public function __construct()
 	{
@@ -466,7 +515,7 @@ class AdminLoginController extends Controller
                     $lastPaymentId = $paymentInDb->id;
                 }
 
-                Auth::login($user);
+                // Auth::login($user);
                 
                 $planExpiry = today()->addYear(1)->subDay();
                 
@@ -555,9 +604,9 @@ class AdminLoginController extends Controller
                     'invoice_number' => $futureInvoiceNumber,
                     'invoice_template' => $eTemplate
                 ]);
-                if (!empty(config('mail.mailers.smtp.password'))) {
-                    Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
-                }
+                // if (!empty(config('mail.mailers.smtp.password'))) {
+                //     Mail::to('admin@test.test')->send(new InvoiceEmail($eTemplate));
+                // }
                 Session::put('plan_id', $orderTags['plan_id']);
 
                 // Session::flash('success', 'Payment is successful. Kindly login to continue.');
@@ -571,16 +620,22 @@ class AdminLoginController extends Controller
                 } else {
                     Session::put('parent_id', $user->id);
                 }
-                LoggedIn::withoutGlobalScopes()->where('employee_id',$user->id)->OrderBy('id','DESC')->first()->update(['succeed' => 1]);
+                // LoggedIn::withoutGlobalScopes()->where('employee_id',$user->id)->OrderBy('id','DESC')->first()->update(['succeed' => 1]);
         
-                Session::put('plan_id', User::where('id', Session::get('parent_id'))->first()->plan_id);
+                // Session::put('plan_id', User::where('id', Session::get('parent_id'))->first()->plan_id);
 
-                DB::table('login_activities')->insert([
-                    'user_id' => Auth::user()->id,
-                    'ip_address' => $request->ip(),
-                    'date_time' => Carbon::now(),
+                // DB::table('login_activities')->insert([
+                //     'user_id' => Auth::user()->id,
+                //     'ip_address' => $request->ip(),
+                //     'date_time' => Carbon::now(),
+                // ]);
+                
+                $request->merge([
+                    'email' => $user->email,
+                    'password' => base64_decode($user->temp_pass)
                 ]);
-
+                $b = $this->forceLogin($request);
+                
                 return redirect('admin');
 
             } else {
@@ -590,7 +645,8 @@ class AdminLoginController extends Controller
             }
         } catch (\Throwable $th) {
             // dd($th);
-            Session::put('message', $th->getMessage());
+            // Session::put('message', $th->getMessage());
+            Session::flash('success', $th->getMessage());
             return redirect()->route('subscription');
         }
 	}
