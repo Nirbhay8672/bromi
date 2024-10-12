@@ -1081,10 +1081,13 @@ use Illuminate\Support\Facades\DB;
 																		</tr>
 																	</thead>
 																	<tbody>
+                                                                        <?php
+                                                                        $surveyPrice = App\Traits\HelperFn::formatIndianCurrency($property->survey_price);
+                                                                        ?>
 																		<td>{{ isset($property->survey_number) ? $property->survey_number : '-' }}</td>
 																		<td>{{ isset($property->fp_number) ? $property->fp_number : '-' }}</td>
 																		<td>{{ isset($property->tp_number) ? $property->tp_number : '-' }}</td>
-																		<td>{{ isset($property->survey_price) ? $property->survey_price : '-' }}</td>
+																		<td>{{ ($surveyPrice) ? $surveyPrice : '-' }}</td>
 																		<td>{{ isset($property->fp_plot_price) ? $property->fp_plot_price : '-' }}</td>
 																	</tbody>
 																</table>
@@ -2440,10 +2443,13 @@ use Illuminate\Support\Facades\DB;
 																</tr>
 															</thead>
 															<tbody>
+                                                                <?php
+                                                                $surveyPrice = App\Traits\HelperFn::formatIndianCurrency($property->survey_price);
+                                                                ?>
 																<td>{{ isset($property->survey_number) ? $property->survey_number : '-' }}</td>
 																<td>{{ isset($property->fp_number) ? $property->fp_number : '-' }}</td>
 																<td>{{ isset($property->tp_number) ? $property->tp_number : '-' }}</td>
-																<td>{{ isset($property->survey_price) ? $property->survey_price : '-' }}</td>
+																<td>{{ $surveyPrice ? $surveyPrice : '-' }}</td>
 																<td>{{ isset($property->fp_plot_price) ? $property->fp_plot_price : '-' }}</td>
 															</tbody>
 														</table>

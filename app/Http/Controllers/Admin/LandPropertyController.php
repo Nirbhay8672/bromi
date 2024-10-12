@@ -188,8 +188,11 @@ class LandPropertyController extends Controller
                         $theArea = explode('_-||-_', $value->salable_area)[0];
                     } elseif (!empty($value->salable_plot_area)) {
                         $theArea = explode('_-||-_', $value->salable_plot_area);
+                    }elseif(!empty($value->survey_plot_size)){
+                        $theArea = explode('_-||-_', $value->survey_plot_size);
+                    }else if(!empty($value->fp_plot_size)){
+                        $theArea = explode('_-||-_', $value->fp_plot_size);
                     }
-                
                     if (!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area)) {
                         return false;
                     }
@@ -212,6 +215,13 @@ class LandPropertyController extends Controller
                                 $allPrices[] = $value3['3'];
                             }
                         }
+                    }
+
+                    if(!empty($value->price)){
+                        $allPrices[] = $value->price;
+                    }
+                    if(!empty($value->price2)){
+                        $allPrices[] = $value->price2;
                     }
                 
                     if (!empty($request->filter_from_price)) {
