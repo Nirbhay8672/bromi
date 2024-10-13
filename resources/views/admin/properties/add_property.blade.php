@@ -2748,7 +2748,14 @@
 @push('scripts')
     <script src="{{ asset('admins/assets/js/form-wizard/property_wizard.js') }}"></script>
     <script>
-        // Hide State dropdown
+        function fmtFloatPrice(s) {
+            if (!s || isNaN(s)) return ''; // Handle non-numeric or empty values
+            var newvalue = s.replace(/,/g, '');
+            console.log("newvalue ....",newvalue);
+            
+            var valuewithcomma = Number(newvalue).toLocaleString('en-IN');
+            return valuewithcomma;
+        }
 
         //#B 5+BHK then add txtbox
         $('input[name="flat_type"][value="19"]').change(function() {
@@ -3015,6 +3022,26 @@
         areass = JSON.parse(areas);
         $(document).ready(function() {
             floatingField();
+
+             //Disable Price on Land
+        var $price1 = $('#price');
+        var $price2 = $('#price2');
+        $price1.on('input', function() {
+            if ($(this).val() !== '') {
+                $price2.prop('disabled', true);
+            } else {
+                $price2.prop('disabled', false);
+            }
+        });
+        $price2.on('input', function() {
+            if ($(this).val() !== '') {
+                $price1.prop('disabled', true);
+            } else {
+                $price1.prop('disabled', false);
+            }
+        });
+
+
             //#B Project default Open on add Prop first - time
             $('#project_id').select2().select2('open');
             $('#nextButton').click(function() {
@@ -3105,24 +3132,7 @@
             }
         });
 
-        //Disable Price on Land
-        var $price1 = $('#price');
-        var $price2 = $('#price2');
-        $price1.on('input', function() {
-            if ($(this).val() !== '') {
-                $price2.prop('disabled', true);
-            } else {
-                $price2.prop('disabled', false);
-            }
-        });
-        $price2.on('input', function() {
-            if ($(this).val() !== '') {
-                $price1.prop('disabled', true);
-            } else {
-                $price1.prop('disabled', false);
-            }
-        });
-
+       
         //Add property default select state-city-locality
         let id = '{{ isset($current_id) ? $current_id : 'null' }}';
         if (id === 'null') {
@@ -4327,24 +4337,24 @@
                         return
                     }
                     //Disable Price on Land
-                    // var $price1 = $('#price');
-                    // var $price2 = $('#price2');
+                    var $price1 = $('#price');
+                    var $price2 = $('#price2');
 
-                    // $price1.on('input', function() {
-                    //     if ($(this).val() !== '') {
-                    //         $price2.prop('disabled', true);
-                    //     } else {
-                    //         $price2.prop('disabled', false);
-                    //     }
-                    // });
+                    $price1.on('input', function() {
+                        if ($(this).val() !== '') {
+                            $price2.prop('disabled', true);
+                        } else {
+                            $price2.prop('disabled', false);
+                        }
+                    });
 
-                    // $price2.on('input', function() {
-                    //     if ($(this).val() !== '') {
-                    //         $price1.prop('disabled', true);
-                    //     } else {
-                    //         $price1.prop('disabled', false);
-                    //     }
-                    // });
+                    $price2.on('input', function() {
+                        if ($(this).val() !== '') {
+                            $price1.prop('disabled', true);
+                        } else {
+                            $price1.prop('disabled', false);
+                        }
+                    });
                     // edit property selected valdata.width_of_plot, 1
                     data = JSON.parse(data);
                     if (data.property_category == '262') {
@@ -4376,10 +4386,18 @@
                         $('input[name=plot_type][value=' + data.configuration + ']').prop('checked', true)
                         $('input[name=storage_type][value=' + data.configuration + ']').prop('checked', true)
                     }
-                    $('#price').val(data.survey_price);
-                    // if (data.survey_price !== '') {
-                    //     $('#price2').prop('disabled', true);
-                    // }
+                    console.log("data.fp_plot_price...",data.fp_plot_price);
+                    
+                    if (data.survey_price !== '' && data.survey_price !== 0) {
+                        $('#price2').prop('disabled', true);
+                    }
+                    if(data.fp_plot_price !== '' && data.fp_plot_price !== 0){
+                        $('#price').prop('disabled', true);
+                    }
+
+                    let formattedSurevyPrice = fmtFloatPrice(data.survey_price.toString());
+                    $('#price').val(formattedSurevyPrice);
+                    // $('#price').val(data.survey_price);
                     $('#price2').val(data.fp_plot_price);
 
                     $('#remarks').val(data.remarks);
@@ -4474,14 +4492,13 @@
                         true)
                     $('#two_road_corner').prop('checked', Number(data.two_road_corner)).trigger('change');
                     $('#survey_number').val(data.survey_number);
-                    $('#price').val(data.survey_price);
                     $('#tp_number').val(data.tp_number);
                     $('#fp_number').val(data.fp_number);
                     $('#plot_size').val(setSplitedValue(data.survey_plot_size, 1));
                     $('#survey_plot_measurement').val(setSplitedValue(data.survey_plot_size, 2));
                     $('#plot2_size').val(setSplitedValue(data.fp_plot_size, 1));
                     $('#plot2_measurement').val(setSplitedValue(data.fp_plot_size, 2));
-                    $('#price2').val(data.fp_plot_price);
+                    // $('#price2').val(data.fp_plot_price);
                     $('#owner_is').val(data.owner_is);
                     $('#owner_info_name').val(data.owner_name);
                     $('#owner_contact_specific_no').val(data.owner_contact);

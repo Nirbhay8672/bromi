@@ -90,6 +90,14 @@ class LandPropertyController extends Controller
                     return $query->whereIn('properties.locality_id', $request->filter_area_id)
                         ->where('properties.prop_status', 1);
                 })
+                ->when($request->filter_city_id, function ($query) use ($request) {
+                    return $query->where('properties.city_id', $request->filter_city_id)
+                        ->where('properties.prop_status', 1);
+                })
+                ->when($request->filter_zone_id, function ($query) use ($request) {
+                    return $query->where('properties.zone_id', $request->filter_zone_id)
+                        ->where('properties.prop_status', 1);
+                })
                 ->when($request->filter_Property_priority, function ($query) use ($request) {
                     return $query->where('Property_priority', $request->filter_Property_priority)
                         ->where('properties.prop_status', 1);
@@ -366,16 +374,12 @@ class LandPropertyController extends Controller
                         $survey_price = $row->survey_price;
                         $fp_plot_price = $row->fp_plot_price;
                         $formatted_price  = '';
-                        // Format the survey_price to Indian currency format
-                        if (!empty($survey_price)) {
-                            $formatted_survey_price = '₹ ' . HelperFn::formatIndianCurrency($survey_price);
-                            $formatted_price .= "S: " . $formatted_survey_price . "\n";
-                        }
-
-                        // Format the fp_plot_price to Indian currency format
                         if (!empty($fp_plot_price)) {
-                            $formatted_fp_plot_price = '₹ ' . HelperFn::formatIndianCurrency($fp_plot_price);
+                            $formatted_fp_plot_price = '₹ ' . HelperFn::formatIndianCurrencyStr($fp_plot_price);
                             $formatted_price .= "FP: " . $formatted_fp_plot_price;
+                        }else{
+                            $formatted_survey_price = '₹ ' . HelperFn::formatIndianCurrency($survey_price);
+                            $formatted_price .= "S: " . $formatted_survey_price;
                         }
                     }
 
@@ -584,7 +588,7 @@ class LandPropertyController extends Controller
                 ->make(true);
         }
         $areas = Areas::orderBy('name')->get();
-        $cities = City::orderBy('name')->get();
+        $cities = City::orderBy('name')->where('user_id', Auth::user()->id)->get();
         $states = State::orderBy('name')->get();
         $districts = District::orderBy('name')->where('user_id', Auth::user()->id)->get();
         $talukas = Taluka::orderBy('name')->where('user_id', Auth::user()->id)->get();
@@ -599,6 +603,7 @@ class LandPropertyController extends Controller
                 array_push($prop_type, $value['id']);
             }
         }
+
         $conatcts_numbers = [];
         $contacts = Enquiries::get();
 

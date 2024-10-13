@@ -17,6 +17,23 @@ trait HelperFn
         }
         return $formattedNum;
     }
+
+    public static function formatIndianCurrencyStr($num) {
+        $num = preg_replace('/[^\d]/', '', $num);
+        $lastThree = substr($num, -3);
+        $restUnits = substr($num, 0, -3);
+        if (strlen($restUnits) > 0) {
+            $restUnits = (strlen($restUnits) % 2 == 1) ? "0" . $restUnits : $restUnits;
+            $restUnits = chunk_split($restUnits, 2, ',');
+            $restUnits = rtrim($restUnits, ',');
+            $formattedNum = ltrim($restUnits, '0') . ',' . $lastThree;
+        } else {
+            $formattedNum = $lastThree;
+        }
+    
+        return $formattedNum;
+    }
+    
     
 
     public static function sendPushNotification($userId, $message) 

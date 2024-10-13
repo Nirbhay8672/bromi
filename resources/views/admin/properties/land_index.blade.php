@@ -22,23 +22,15 @@
                             <div class="row">
                                 @include('admin.properties.change_menu')
                                 <div class="col-md-8">
-
-
-
-
                                     @can('land-property-create')
                                         <a class="btn custom-icon-theme-button" href="{{ route('admin.property.add') }}"
                                             title="Add Property">
                                             <i class="fa fa-plus"></i>
                                         </a>
                                     @endcan
-
-
                                     <button class="btn ms-3 custom-icon-theme-button" type="button" data-bs-toggle="modal"
                                         data-bs-target="#filtermodal" id="filterBtn" title="Filter"><i
                                             class="fa fa-filter"></i></button>
-
-
                                     <button class="btn ms-3 custom-icon-theme-button" type="button" title="Clear Filter"
                                         id="resetfilter" style="background-color: #FF0000 !important;display: none;"><i
                                             class="fa fa-refresh"></i></button>
@@ -92,15 +84,11 @@
                                             <th>Property Info</th>
                                             <th>Unit</th>
                                             <th>Price</th>
-                                            {{-- <th>Details</th> --}}
                                             <th>Remarks</th>
-                                            {{-- <th>Contacts</th> --}}
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
-
                                     </tbody>
                                 </table>
                             </div>
@@ -184,7 +172,7 @@
                                         </div>
 
 
-                                        <div class="form-group col-md-4 m-b-4 mb-3 filter-project">
+                                        <div class="form-group col-md-3 m-b-4 mb-3 filter-project">
                                             <label class="select2_label" for="Select Project"> Project</label>
                                             <select class="form-select" id="filter_building_id" multiple>
                                                 @foreach ($projects as $building)
@@ -193,7 +181,18 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="form-group col-md-4 m-b-4 mb-3 filter-locality">
+
+                                        <div class="form-group col-md-3 m-b-4 mb-3 filter-city">
+                                            <select class="form-select" id="filter_city_id">
+                                                <option value=""> City</option>
+                                                @foreach ($cities as $city)
+                                                    <option data-parent_id="{{ $city }}"
+                                                        value="{{ $city->id }}">{{ $city->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-3 m-b-4 mb-3 filter-locality">
                                             <label class="select2_label" for="Select Area"> Locality</label>
                                             <select class="form-select" id="filter_area_id" multiple>
                                                 @foreach ($areas as $area)
@@ -228,7 +227,7 @@
                                             </select>
                                         </div>
 
-                                        <div class="form-group col-md-4 m-b-4 mb-3" id="filter_priority">
+                                        <div class="form-group col-md-3 m-b-4 mb-3" id="filter_priority">
                                             <select class="form-select" id="filter_Property_priority">
                                                 <option value="">Priority</option>
                                                 @forelse ($property_configuration_settings as $props)
@@ -265,6 +264,20 @@
                                                 <input class="form-control indian_currency_amount" name="filter_to_price"
                                                     id="filter_to_price" type="text" autocomplete="off">
                                             </div>
+                                        </div>
+                                        <div class="form-group col-md-3 m-b-4 mb-3 filter-zone">
+                                            <select class="form-select" id="filter_zone_id">
+                                                <option value=""> Zone</option>
+                                                @forelse ($property_configuration_settings as $props)
+                                                    @if ($props['dropdown_for'] == 'property_zone')
+                                                        <option data-parent_id="{{ $props['parent_id'] }}"
+                                                            value="{{ $props['id'] }}">
+                                                            {{ $props['name'] }}
+                                                        </option>
+                                                    @endif
+                                                @empty
+                                                @endforelse
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -867,15 +880,20 @@
                         $('.filter-taluka').hide();
                         $('.filter-village').hide();
                         $('.filter-locality').show();
+                        $('.filter-city').show();
                         $('.filter-project').show();
-                        $('#filter_priority').removeClass('col-md-3').addClass('col-md-4');
+                        $('.filter-zone').hide();
+                        // $('#filter_priority').removeClass('col-md-3').addClass('col-md-4');
                     } else if (parent_value === '85') {
                         $('.filter-project').hide();
                         $('.filter-locality').hide();
                         $('.filter-district').show();
+                        $('.filter-city').hide();
                         $('.filter-taluka').show();
                         $('.filter-village').show();
-                        $('#filter_priority').removeClass('col-md-4').addClass('col-md-3');
+                        $('.filter-zone').show();
+
+                        // $('#filter_priority').removeClass('col-md-4').addClass('col-md-3');
                     }
                 }
 
@@ -1023,6 +1041,8 @@
 
                                 d.filter_building_id = $('#filter_building_id').val();
                                 d.filter_area_id = $('#filter_area_id').val();
+                                d.filter_city_id = $('#filter_city_id').val();
+                                d.filter_zone_id = $('#filter_zone_id').val();
                                 d.filter_Property_priority = $('#filter_Property_priority').val();
                                 d.filter_from_price = $('#filter_from_price').val();
                                 d.filter_to_price = $('#filter_to_price').val();

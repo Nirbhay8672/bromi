@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
     $salableArray=explode("_-||-_",$property->salable_area);
     $land_units=$units->where('id',$salableArray[1])->first();
     
+    $surveyUnitArray=explode("_-||-_",$property->survey_plot_size);
+    $survey_units=$units->where('id',$surveyUnitArray[1])->first();
+    
+    $fpUnitArray=explode("_-||-_",$property->fp_plot_size);
+    $fp_units=$units->where('id',$fpUnitArray[1])->first();
     
     $carpetArray=explode("_-||-_",$property->carpet_area);
     $carpet_units=$units->where('id',$carpetArray[1])->first();
@@ -771,51 +776,15 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Survey Plot size</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_45">
-
-                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
-                                                                    {{-- @if (!empty(explode('_-||-_', $property->survey_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name']))
-                                                                        {{ explode('_-||-_', $property->survey_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name'] }}
-                                                                    @endif --}}
+                                                                <div>: {{$surveyUnitArray[0]}} {{ $survey_units->unit_name}}
                                                                 </div>
                                                             </div>
-
-                                                            {{-- <div class="form-group col-4 m-b-10 data_conent_46">
-                                                                <h6><b>Price</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_46">
-                                                                <div>:
-                                                                    {{ $property->survey_price ? $property->survey_price : '-' }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group col-4 m-b-10 data_conent_47">
-                                                                <h6><b>Tp Number</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_47">
-                                                                <div>:
-                                                                    {{ $property->tp_number ? $property->tp_number : '-' }}
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group col-4 m-b-10 data_conent_48">
-                                                                <h6><b>Fp Number</b></h6>
-                                                            </div>
-                                                            <div class="form-group col-8 m-b-10 data_conent_48">
-                                                                <div>:
-                                                                    {{ $property->fp_number ? $property->fp_number : '-' }}
-                                                                </div>
-                                                            </div> --}}
 
                                                             <div class="form-group col-4 m-b-10 data_conent_49">
                                                                 <h6><b>Fp Plot size</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_49">
-
-                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
-                                                                    {{-- @if (!empty(explode('_-||-_', $property->fp_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name']))
-                                                                        {{ explode('_-||-_', $property->fp_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name'] }} --}}
-                                                                    {{-- @endif --}}
-                                                                </div>
+                                                                <div>: {{$fpUnitArray[0]}} {{ $fp_units->unit_name}}</div>
                                                             </div>
 
                                                             {{-- <div class="form-group col-4 m-b-10 data_conent_50">
@@ -2171,13 +2140,10 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Survey Plot size</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_45">
-
-                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
-                                                                    {{-- @if (!empty(explode('_-||-_', $property->survey_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name']))
-                                                                        {{ explode('_-||-_', $property->survey_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->survey_plot_size)[1]]['unit_name'] }}
-                                                                    @endif --}}
+                                                                <div>: {{$surveyUnitArray[0]}} {{ $survey_units->unit_name}}
                                                                 </div>
                                                             </div>
+
 
                                                             {{-- <div class="form-group col-4 m-b-10 data_conent_46">
                                                                 <h6><b>Price</b></h6>
@@ -2210,12 +2176,7 @@ use Illuminate\Support\Facades\DB;
                                                                 <h6><b>Fp Plot size</b></h6>
                                                             </div>
                                                             <div class="form-group col-8 m-b-10 data_conent_49">
-
-                                                                <div>:{{$salableArray[0]}} {{ $land_units->unit_name}}
-                                                                    {{-- @if (!empty(explode('_-||-_', $property->fp_plot_size)[0]) && !empty($land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name']))
-                                                                        {{ explode('_-||-_', $property->fp_plot_size)[0] . ' ' . $land_units[explode('_-||-_', $property->fp_plot_size)[1]]['unit_name'] }}
-                                                                    @endif --}}
-                                                                </div>
+                                                                <div>: {{$fpUnitArray[0]}} {{ $fp_units->unit_name}}</div>
                                                             </div>
 
                                                             {{-- <div class="form-group col-4 m-b-10 data_conent_50">
