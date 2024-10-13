@@ -145,30 +145,63 @@ class LandPropertyController extends Controller
                             $query->whereIn('properties.configuration', json_decode($enq->configuration));
                         }
                         //property price & unit_price
+                        // if ($request->match_budget_from_type) {
+                        //     // dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
+                        //     $budgetFrom = str_replace(',', '', $enq->budget_from);
+                        //     $budgetTo = str_replace(',', '', $enq->budget_to);
+                        //     $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                        //         $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                        //             $query->where('properties.survey_price', '>=', $budgetFrom)
+                        //                 ->where('properties.survey_price', '<=', $budgetTo);
+                        //         })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+                        //             $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+                        //                 ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+                        //         })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+                        //             $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+                        //                 ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+                        //         });
+                        //     });
+                        // }
                         if ($request->match_budget_from_type) {
-                            // dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
                             $budgetFrom = str_replace(',', '', $enq->budget_from);
                             $budgetTo = str_replace(',', '', $enq->budget_to);
+                            
                             $query->where(function ($query) use ($budgetFrom, $budgetTo) {
                                 $query->where(function ($query) use ($budgetFrom, $budgetTo) {
-                                    $query->where('properties.survey_price', '>=', $budgetFrom)
-                                        ->where('properties.survey_price', '<=', $budgetTo);
+                                    // First check if fp_plot_price is available, then check survey_price
+                                    $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                                        // dd("in",$budgetFrom, $budgetTo);
+
+                                        $query->where('properties.fp_plot_price', '>=', $budgetFrom)
+                                            ->where('properties.fp_plot_price', '<=', $budgetTo);
+                                    })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+                                        // dd("out",$budgetFrom, $budgetTo);
+                                        $query->where('properties.survey_price', '>=', $budgetFrom)
+                                            ->where('properties.survey_price', '<=', $budgetTo);
+                                    });
                                 })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+                                    // Match for JSON extracted unit details (case 1)
                                     $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
                                         ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
                                 })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+                                    // Match for JSON extracted unit details (case 2)
                                     $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
                                         ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+                                })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+                                    // Match for JSON extracted unit details (case 3)
+                                    $query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+                                        ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
                                 });
                             });
                         }
-
+                        
                         if ($request->match_enquiry_size) {
                             $query->where(function ($query) use ($enq) {
                                 $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
                                     ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
-                                    ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
-                            });
+                                    ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                    ->orWhereRaw("SUBSTRING_INDEX(properties.fp_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
+                                });
                         }
                     }
                 })
@@ -377,7 +410,7 @@ class LandPropertyController extends Controller
                         if (!empty($fp_plot_price)) {
                             $formatted_fp_plot_price = '₹ ' . HelperFn::formatIndianCurrencyStr($fp_plot_price);
                             $formatted_price .= "FP: " . $formatted_fp_plot_price;
-                        }else{
+                        }else if(!empty($survey_price) && empty($fp_plot_price)){
                             $formatted_survey_price = '₹ ' . HelperFn::formatIndianCurrency($survey_price);
                             $formatted_price .= "S: " . $formatted_survey_price;
                         }
@@ -714,11 +747,13 @@ class LandPropertyController extends Controller
             $area = explode('_-||-_', $row->salable_plot_area)[0];
             $measure = explode('_-||-_', $row->salable_plot_area)[1];
         } elseif ($type == 'Land') {
-            if (($row->survey_plot_size)[0]) {
+            $fp = (explode('_-||-_', $row->fp_plot_size)[0]);
+            $sp = (explode('_-||-_', $row->survey_plot_size)[0]);
+            if ($sp) {
                 $area = explode('_-||-_', $row->survey_plot_size)[0];
                 $measure = explode('_-||-_', $row->survey_plot_size)[1];
             }
-            if (($row->fp_plot_size)[0]) {
+            if ($fp) {
                 $area = explode('_-||-_', $row->fp_plot_size)[0];
                 $measure = explode('_-||-_', $row->fp_plot_size)[1];
             }

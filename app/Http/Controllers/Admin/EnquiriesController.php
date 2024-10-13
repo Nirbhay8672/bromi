@@ -342,16 +342,19 @@ class EnquiriesController extends Controller
 							// price multi units details 
 							if ($request->match_budget_from_type) {
 								$survey_price = (int) $pro->survey_price; // Cast to integer
+								$fp_price =  $pro->fp_plot_price; // Cast to integer
+								// dd("fp_price",$survey_price);
 								$unitDetails = json_decode($pro->unit_details, true);
-							
-								$query->where(function ($q) use ($unitDetails, $survey_price, $pro) {
+								$query->where(function ($q) use ($unitDetails, $survey_price,$fp_price, $pro) {
 									foreach ($unitDetails as $unit) {
 										$unit_price =  str_replace(',', '', $unit[4]); // Assuming the price is at index 4
 										$sell_price = (int) str_replace(',', '', $unit[3]); // Assuming the sell price is at index 3
 										$both_price =  str_replace(',', '', $unit[7]); // Assuming the both price is at index 7
+										$fpPrice =  str_replace(',', '', $fp_price); // Assuming the both price is at index 7
 							
 										if (($unit_price !== 0 && $sell_price !== 0) || ($unit_price !== 0 && $both_price !== 0) || ($unit_price !== 0 && $sell_price !== 0)) {
-											$q->orWhere(function ($subQuery) use ($unit_price, $sell_price, $both_price) {
+											// dd("11");
+											$q->orWhere(function ($subQuery) use ($unit_price,$survey_price, $sell_price, $both_price,$fpPrice) {
 												$subQuery->where(function ($subSubQuery) use ($unit_price) {
 													$subSubQuery->where('budget_from', '<=', $unit_price)
 														->where('budget_to', '>=', $unit_price);
@@ -363,9 +366,18 @@ class EnquiriesController extends Controller
 												->orWhere(function ($subSubQuery) use ($both_price) {
 													$subSubQuery->where('budget_from', '<=', $both_price)
 														->where('budget_to', '>=', $both_price);
+												})
+												->orWhere(function ($subSubQuery) use ($fpPrice) {
+													$subSubQuery->where('budget_from', '<=', $fpPrice)
+														->where('budget_to', '>=', $fpPrice);
+												})	->orWhere(function ($subSubQuery) use ($survey_price) {
+													$subSubQuery->where('budget_from', '<=', $survey_price)
+														->where('budget_to', '>=', $survey_price);
 												});
 											});
 										} else if ($survey_price !== 0) {
+											// dd("112");
+
 											$q->orWhere(function ($subQuery) use ($survey_price) {
 												$subQuery->where('budget_from', '<=', $survey_price)
 													->where('budget_to', '>=', $survey_price)
@@ -373,6 +385,8 @@ class EnquiriesController extends Controller
 													->where('sell_price', '>=', $survey_price);
 											});
 										} else if ($unit_price !== 0) {
+											// dd("113");
+
 											$q->orWhere(function ($subQuery) use ($unit_price, $unit, $pro) {
 												$subQuery->where('budget_from', '<=', $unit_price)
 													->where('budget_to', '>=', $unit_price)
@@ -384,11 +398,15 @@ class EnquiriesController extends Controller
 													});
 											});
 										} else if ($sell_price !== 0 && !in_array($pro->property_category, ["260", "261", "256", "254"])) {
+											// dd("114");
+											
 											$q->orWhere(function ($subQuery) use ($sell_price) {
 												$subQuery->where('budget_from', '<=', $sell_price)
 													->where('budget_to', '>=', $sell_price);
 											});
 										} else if ($sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category === "260") {
+											// dd("115");
+											
 											$sell_price = (int) str_replace(',', '', $unit[3]);
 											$q->orWhere(function ($subQuery) use ($sell_price) {
 												$subQuery->where('budget_from', '<=', $sell_price)
@@ -404,13 +422,18 @@ class EnquiriesController extends Controller
 
 							// size range = prop salable area
 							if ($request->match_enquiry_size) {
-								// dd("match_enquiry_size ==>", $request->match_enquiry_size, '==',$pro->salable_plot_area,".1.", $pro->salable_area, ".2.", $pro->constructed_salable_area);
+								// dd("match_enquiry_size ==>", $request->match_enquiry_size, '==',$pro->salable_plot_area,".1.", $pro->salable_area, ".2.", $pro->constructed_salable_area,".3.",$pro->fp_plot_size,".4.",$pro->survey_plot_size);
 								$parts = explode("_-||-_", $pro->salable_area);
 								$result = $parts[0];
 								$result_unit = $parts[1];
 								$area_size_from = str_replace(',', '', $result);
 								$area_size_to = str_replace(',', '', $result);
 
+								$fpparts = explode("_-||-_", $pro->fp_plot_size);
+								$fp = $fpparts[0];
+								$fp_unit = $fpparts[1];
+								$fp_size_from = str_replace(',', '', $fp);
+								$fp_size_to = str_replace(',', '', $fp);
 								// $parts = explode("_-||-_", $pro->constructed_salable_area);
 								// $result2 = $parts[0];
 								// $result2_unit = $parts[1];
@@ -425,9 +448,9 @@ class EnquiriesController extends Controller
 
 
 								// dd("area_size_from",$area_size_from,"area_size_to",$area_size_to,"pro->property_category",$pro->property_category,"salable_plot_area",$pro->salable_plot_area);
-
+// salable
 								if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category !== "259" && $pro->property_category !== "260"  && $pro->property_category !== "254" && $pro->property_category !== "256") {
-									// dd("inn",$pro->property_category);
+									// dd("inn",$pro->property_category,$area_size_from,"--",$area_size_to);
 									$query->where('area_from', '<=', $area_size_from)
 										->where('area_to', '>=', $area_size_to);
 								} else if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category === "259" || $pro->property_category === "256" || $pro->property_category === "260" || $pro->property_category == "254") {
@@ -439,6 +462,14 @@ class EnquiriesController extends Controller
 										->where('area_to', '>=', $area_to_int);
 								}
 
+								// fp
+								if ($fp_size_from != '' && $fp_size_to != '' && $result_unit !== "") {
+									// dd("inn",$fp_size_from,"---",$fp_size_to);
+									$query->where('area_from', '<=', '1900')
+										->where('area_to', '>=', '1900');
+								} 
+
+
 								// if ($area_from != '' && $area_to != '' && $result2_unit !== "") {
 								// 	// dd("12");
 								// 	$query->where('area_from', '<=', $area_from)
@@ -448,19 +479,20 @@ class EnquiriesController extends Controller
 								// 	$query->where('area_from', '<=', $area_from3)
 								// 		->where('area_to', '>=', $area_from3);
 								// }
-
-								if ($result_unit) {
+								if ($result && $result_unit) {
+									// dd("12");
 									$query->where('area_from_measurement', '=', $result_unit)
 										->where('area_to_measurement', '>=', $result_unit);
-								} else if ($result3_unit) {
+								} else if ($result3 && $result3_unit) {
 									// dd('result3_unit', $result3_unit);
 									$query->where('area_from_measurement', '=', $result3_unit)
 										->where('area_to_measurement', '>=', $result3_unit);
 								}
-								// else if ($result2_unit) {
-								// 	$query->where('area_from_measurement', '=', $result2_unit)
-								// 		->where('area_to_measurement', '>=', $result2_unit);
-								// } 
+
+								 if ($fp && $fp_unit) {
+									$query->where('area_from_measurement', '=', $fp_unit)
+										->where('area_to_measurement', '=', $fp_unit);
+								} 
 							}
 						}
 					})
