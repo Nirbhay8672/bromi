@@ -747,11 +747,13 @@ class LandPropertyController extends Controller
             $area = explode('_-||-_', $row->salable_plot_area)[0];
             $measure = explode('_-||-_', $row->salable_plot_area)[1];
         } elseif ($type == 'Land') {
-            if (($row->survey_plot_size)[0]) {
+            $fp = (explode('_-||-_', $row->fp_plot_size)[0]);
+            $sp = (explode('_-||-_', $row->survey_plot_size)[0]);
+            if ($sp) {
                 $area = explode('_-||-_', $row->survey_plot_size)[0];
                 $measure = explode('_-||-_', $row->survey_plot_size)[1];
             }
-            if (($row->fp_plot_size)[0]) {
+            if ($fp) {
                 $area = explode('_-||-_', $row->fp_plot_size)[0];
                 $measure = explode('_-||-_', $row->fp_plot_size)[1];
             }
