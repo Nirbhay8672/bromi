@@ -145,7 +145,6 @@ class UserController extends Controller
 	{
 		$request->validate([
 			'first_name' => 'required',
-			'middle_name' => 'required',
 			'last_name' => 'required',
 			'birth_date' => 'required',
 			'hire_date' => 'required',
@@ -344,7 +343,10 @@ class UserController extends Controller
 		$branches = Branches::orderBy('name')->get();
 		$current_id = $request->id;
 
-		return view('admin.users.add_user', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches','current_id'));
+		$first_state = State::where('user_id',Auth::user()->id)->first();
+		$first_city = City::where('user_id',Auth::user()->id)->first();
+
+		return view('admin.users.add_user', compact('roles', 'cities', 'states', 'projects', 'property_configuration_settings', 'employees','branches','current_id','first_state', 'first_city'));
 	}
 
 	public function destroy(Request $request)
