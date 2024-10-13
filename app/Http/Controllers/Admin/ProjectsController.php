@@ -463,9 +463,9 @@ class ProjectsController extends Controller
 		$data->save();
 
 		if($request->id == '' || $request->id == null) {
-			Session::flash('message',  'Project has been created successfully.');
+			Session::flash('success_msg',  'Project has been created successfully.');
 		} else {
-			Session::flash('message',  'Project has been updated successfully.');
+			Session::flash('success_msg',  'Project has been updated successfully.');
 		}
 		
 		return response()->json([
