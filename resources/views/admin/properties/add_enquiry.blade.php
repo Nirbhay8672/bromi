@@ -1479,7 +1479,7 @@
                 $('.div_farm_house').show()
                 $(".the_week_end_enq").hide();
             } else if (category_type == 'Plot') {
-                $(".f-status").show();
+                $(".f-status").hide();
                 $('.div_land_plot').show()
                 $(".the_week_end_enq").hide();
             } else if (category_type == 'Vila/Bunglow') {
