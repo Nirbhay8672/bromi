@@ -15,15 +15,6 @@
                             <h5 class="mb-3">Projects</h5>
                             
                             <div class="row mt-3 mb-3 gy-3">
-                                <div style="width: 70px;">
-                                    <a  
-                                        class="btn custom-icon-theme-button tooltip-btn"
-                                        href="{{route('superadmin.project.add')}}"
-                                        data-tooltip="Add Project"
-                                    >
-                                        <i class="fa fa-plus"></i>
-                                    </a>
-                                </div>
                                 <div class="col-12 col-lg-2 col-md-2">
                                     <select
                                         id="filter_type"
@@ -68,11 +59,6 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @if(Session::has('message'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ Session::get('message') }}
-                                </div>
-                            @endif
                             <div class="table-responsive">
                                 <table class="display" id="projectTable">
                                     <thead>

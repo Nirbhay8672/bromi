@@ -616,43 +616,8 @@
             });
             
             function setSelectedValue() {
-                $('#permission_id_1').prop('checked', true);
-                $('#permission_id_2').prop('checked', true);
-                $('#permission_id_6').prop('checked', true);
-                $('#permission_id_17').prop('checked', true);
-                $('#permission_id_23').prop('checked', true);
-                $('#permission_id_31').prop('checked', true);
-                $('#permission_id_35').prop('checked', true);
-                $('#permission_id_42').prop('checked', true);
-                $('#permission_id_57').prop('checked', true);
-                $('#permission_id_65').prop('checked', true);
-                $('#permission_id_66').prop('checked', true);
-                $('#permission_id_67').prop('checked', true);
-                $('#permission_id_68').prop('checked', true);
-                $('#permission_id_69').prop('checked', true);
-                $('#permission_id_70').prop('checked', true);
-                $('#permission_id_71').prop('checked', true);
-                $('#permission_id_72').prop('checked', true);
-            }
-
-            function functionDisableAll() {
-                $('#permission_id_1').prop('checked', false);
-                $('#permission_id_2').prop('checked', false);
-                $('#permission_id_6').prop('checked', false);
-                $('#permission_id_17').prop('checked', false);
-                $('#permission_id_23').prop('checked', false);
-                $('#permission_id_31').prop('checked', false);
-                $('#permission_id_35').prop('checked', false);
-                $('#permission_id_42').prop('checked', false);
-                $('#permission_id_57').prop('checked', false);
-                $('#permission_id_65').prop('checked', false);
-                $('#permission_id_66').prop('checked', false);
-                $('#permission_id_67').prop('checked', false);
-                $('#permission_id_68').prop('checked', false);
-                $('#permission_id_69').prop('checked', false);
-                $('#permission_id_70').prop('checked', false);
-                $('#permission_id_71').prop('checked', false);
-                $('#permission_id_72').prop('checked', false);
+                $('.permission_checkbox').prop('checked', false);
+                $('#this_data_id').val('');
             }
 
             function setDefault() {
@@ -660,7 +625,6 @@
             }
 
             function getRole(data) {
-                functionDisableAll();
                 $('#modal_form').trigger("reset");
                 var id = $(data).attr('data-id');
                 $.ajax({

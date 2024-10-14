@@ -51,9 +51,9 @@
 
                         </div>
                         <div class="card-body">
-                            @if(Session::has('message'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ Session::get('message') }}
+                            @if(Session::has('success_msg'))
+                                <div class="alert alert-success" role="alert" style="border: 2px solid #0F5131;">
+                                    {{ Session::get('success_msg') }}
                                 </div>
                             @endif
                             <div class="table-responsive">
