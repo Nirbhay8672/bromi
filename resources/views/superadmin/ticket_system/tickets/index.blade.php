@@ -35,6 +35,18 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-12 col-lg-2 col-md-2">
+                            <select
+                                id="filter_status"
+                                class="form-control"
+                                style="border: 1px solid black;"
+                                onchange="updateFilter()"
+                            >
+                                <option value="">-- Select Status --</option>
+                                <option value="Open">Open</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="table-responsive">
                         <div id="builderTable_wrapper" class="dataTables_wrapper no-footer">
@@ -74,6 +86,7 @@
                         url: "{{ route('superadmin.tickets') }}",
                         data: function(d) {
                             d.filter_category = $("#filter_category").val();
+                            d.filter_status = $("#filter_status").val();
                         }
                     },
                     columns: [{

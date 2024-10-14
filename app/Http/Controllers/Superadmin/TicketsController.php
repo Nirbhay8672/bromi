@@ -35,6 +35,10 @@ class TicketsController extends Controller
                 $data->where('category_id', $request->filter_category);
 			}
 
+            if($request->filter_status !='') {
+                $data->where('status', $request->filter_status);
+			}
+
 			return DataTables::of($data->get())
 				->editColumn('category_name', function ($row) {
 					if (isset($row['category']['name'])) {
