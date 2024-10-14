@@ -249,7 +249,7 @@ class EnquiriesController extends Controller
                                 } else if ($pro->property_category === '258') {
                                     $query->whereJsonContains('configuration', ('0'));
                                 } else if ($pro->property_category == '256') {
-                                    $query->whereJsonContains('configuration', ["0"]);
+                                    // $query->whereJsonContains('configuration', '');
                                 }
                             }
 

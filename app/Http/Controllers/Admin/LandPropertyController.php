@@ -141,8 +141,10 @@ class LandPropertyController extends Controller
                         }
                         // property Sub Category
                         if ($request->match_specific_sub_type && !empty($enq->configuration)) {
-                            // dd("match_specific_sub_type", json_decode($enq->configuration), "..", $request->match_specific_sub_type);
-                            $query->whereIn('properties.configuration', json_decode($enq->configuration));
+                            // dd("match_specific_sub_type", json_decode($enq->configuration), "..", $request->match_specific_sub_type,'---',$enq->property_type);
+                           if($enq->property_type !== '256'){
+                               $query->whereIn('properties.configuration', json_decode($enq->configuration));
+                           }
                         }
                         //property price & unit_price
                         // if ($request->match_budget_from_type) {
