@@ -259,6 +259,17 @@ class RegisterController extends Controller
                 'state_id' => $new_state->id,
             ])->save();
         }
+
+        $lastRecord = Areas::latest()->first();
+
+        Branches::create([
+            'name' => $request->company_name,
+            'user_id' => $user->id,
+            'state_id' => $new_state->id,
+            'city_id' => $new_city->id,
+            'area_id' => $lastRecord->id
+        ]);
+
         $superRoleId = Role::where('name', 'Super Admin')->first()->id;
         $superUser = User::where('role_id', $superRoleId)->first();
 
