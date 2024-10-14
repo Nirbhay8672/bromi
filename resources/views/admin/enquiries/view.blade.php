@@ -599,11 +599,21 @@
                                                                 @if ($value->property_category !== '262')
                                                                     <td><a href="{{ route('admin.project.view', encrypt($value->id)) }}">{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</a></td>
                                                                 @else
-                                                                    <td>{{"-"}}</td>
+                                                                    <td>{{$value->Village->name}}</td>
                                                                 @endif
                                                                 <td>{{ $category_prop }}</td>
                                                                 <td>{{ implode(', ', $configuration_name) }}</td>
-                                                                <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->salable_plot_area)[0] .' '. $salable_units->unit_name}}</td>
+                                                                {{-- <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->salable_plot_area)[0] .' '. $salable_units->unit_name}}</td> --}}
+                                                                <td>
+                                                                    {{
+                                                                        explode("_-||-_", $value->salable_area)[0] 
+                                                                        ? explode("_-||-_", $value->salable_area)[0] . ' ' . $salable_units->unit_name 
+                                                                        : (explode("_-||-_", $value->salable_plot_area)[0] 
+                                                                            ? explode("_-||-_", $value->salable_plot_area)[0] . ' ' . $salable_units->unit_name 
+                                                                            : explode("_-||-_", $value->fp_plot_size)[0] . ' ' . $salable_units->unit_name)
+                                                                    }}
+                                                                </td>
+                                                                
                                                                 <td>{{ json_decode($value->unit_details)[0][2] }}</td>
                                                                 @php
                                                                 $unitDetails = json_decode($value->unit_details, true); // Decode as an associative array
@@ -611,21 +621,20 @@
                                                         
                                                                 // Check if unitDetails is an array and has at least one element
                                                                 if (is_array($unitDetails) && isset($unitDetails[0])) {
-                                                                    // Check for the specific indices in the first element of the array
                                                                     if (isset($unitDetails[0][3]) && $unitDetails[0][3] !== "") {
                                                                         $price = $unitDetails[0][3];
                                                                     } elseif (isset($unitDetails[0][4]) && $unitDetails[0][4] !== "") {
                                                                         $price = $unitDetails[0][4];
                                                                     } elseif (isset($unitDetails[0][7]) && $unitDetails[0][7] !== "") {
                                                                         $price = $unitDetails[0][7];
+                                                                    } elseif (isset($value->fp_plot_price) && $value->fp_plot_price !== "") {
+                                                                        $price = $value->fp_plot_price;
                                                                     } else {
-                                                                        // If none of the indices have a valid value, use the survey price if available
                                                                         $price = $value->survey_price ?: '-';
                                                                     }
                                                                 }
                                                                 @endphp
                                                                 <td>₹ {{ $price }}</td>
-
                                                                     <td>
                                                                         @if ($value->Property_priority == "91")
                                                                             Low
@@ -1104,13 +1113,23 @@
                                                     ?>
                                                         <tr>
                                                             @if ($value->property_category !== '262')
-                                                                <td><a href="{{ route('admin.project.view', encrypt($value->id)) }}">{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</a></td>
-                                                            @else
-                                                                <td>{{"-"}}</td>
-                                                            @endif
-                                                            <td>{{ $category_prop }}</td>
-                                                            <td>{{ implode(', ', $configuration_name) }}</td>
-                                                            <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->salable_plot_area)[0] .' '. $salable_units->unit_name}}</td>
+                                                                    <td><a href="{{ route('admin.project.view', encrypt($value->id)) }}">{{ $value->Projects->project_name ? $value->Projects->project_name : '-' }}</a></td>
+                                                                @else
+                                                                    <td>{{$value->Village->name}}</td>
+                                                                @endif
+                                                                <td>{{ $category_prop }}</td>
+                                                                <td>{{ implode(', ', $configuration_name) }}</td>
+                                                                {{-- <td>{{ explode("_-||-_", $value->salable_area)[0] ? explode("_-||-_", $value->salable_area)[0] .' '. $salable_units->unit_name : explode("_-||-_", $value->salable_plot_area)[0] .' '. $salable_units->unit_name}}</td> --}}
+                                                                <td>
+                                                                    {{
+                                                                        explode("_-||-_", $value->salable_area)[0] 
+                                                                        ? explode("_-||-_", $value->salable_area)[0] . ' ' . $salable_units->unit_name 
+                                                                        : (explode("_-||-_", $value->salable_plot_area)[0] 
+                                                                            ? explode("_-||-_", $value->salable_plot_area)[0] . ' ' . $salable_units->unit_name 
+                                                                            : explode("_-||-_", $value->fp_plot_size)[0] . ' ' . $salable_units->unit_name)
+                                                                    }}
+                                                                </td>
+                                                                
                                                             <td>{{ json_decode($value->unit_details)[0][2] }}</td>
                                                             @php
                                                             $unitDetails = json_decode($value->unit_details, true); // Decode as an associative array

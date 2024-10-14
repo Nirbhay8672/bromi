@@ -2663,11 +2663,14 @@ class PropertyController extends Controller
         $salable_plot_area = str_replace(',', '', $salable_plot_area_part[0]);
         $length_of_plot_part = explode("_-||-_", $property->length_of_plot);
         $length_of_plot = str_replace(',', '', $length_of_plot_part[0]);
+        $length_of_fp_part = explode("_-||-_", $property->fp_plot_size);
+        $length_of_fp = str_replace(',', '', $length_of_fp_part[0]);
         $constructed_area_unit = "";
         $area_size_unit = "";
         $length_of_plot_unit = "";
         $salable_plot_area_unit = "";
         $length_of_plot_part_unit = "";
+        $fp_part_unit = "";
         // if ($constructed_area !== "") {
         //     $constructed_area_unit = str_replace(',', '', $constructed_area_parts[1]);
         // } else 
@@ -2677,7 +2680,9 @@ class PropertyController extends Controller
             $salable_plot_area_unit = str_replace(',', '', $salable_plot_area_part[1]);
         } else if ($length_of_plot_part !== "") {
             $length_of_plot_part_unit = $length_of_plot_part[1];
-        }
+        }else if($length_of_fp_part !== "") {
+            $fp_part_unit = $length_of_fp_part[1];
+        } 
         // dd("con",$property->configuration);
 
         // matching view
@@ -2756,8 +2761,9 @@ class PropertyController extends Controller
             }
         });
 
+        // dd("property",$property->property_category);
         $enquiries = $enquiries->when($salable_plot_area !== "", function ($query) use ($property, $salable_plot_area, $salable_plot_area_part) {
-            // dd("property",$property->property_category);
+        
             if ($property->property_category !== '258' && $property->property_category !== '255') {
                 return $query->where('area_from', '<=', $salable_plot_area)
                     ->where('area_to', '>=', $salable_plot_area)
@@ -2770,8 +2776,17 @@ class PropertyController extends Controller
                 return $query;
             }
         });
+        // length_of_fp
+        // dd("sd",$property->property_category);
+        $enquiries = $enquiries->when(($length_of_fp !== "" && $property->property_category === '262' && $property->property_category !== null), function ($query) use ($length_of_fp, $length_of_fp_part) {
+            // dd("11",$length_of_fp_part[1]);
+            return $query->where('area_from', '<=', $length_of_fp)
+                ->where('area_to', '>=', $length_of_fp)
+                ->where('area_from_measurement', $length_of_fp_part[1]);
+        });
 
-        $enquiries = $enquiries->when(($length_of_plot !== "" && $property->property_category !== '256' && $property->property_category !== null), function ($query) use ($length_of_plot, $length_of_plot_part) {
+        $enquiries = $enquiries->when(($length_of_plot !== "" && $property->property_category !== '256' &&  $property->property_category !== '262' && $property->property_category !== null), function ($query) use ($length_of_plot, $length_of_plot_part) {
+            // dd("22");
             return $query->where('area_from', '<=', $length_of_plot)
                 ->where('area_to', '>=', $length_of_plot)
                 ->where('area_from_measurement', $length_of_plot_part[1]);

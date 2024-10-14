@@ -636,8 +636,8 @@
                                                                     style="text-transform: lowercase !important;"
                                                                     name="property_link" id="property_link"
                                                                     type="text" autocomplete="off">
-                                                            <div class="invalid-feedback" id="property_link_error"
-                                                                style="display: none;color:red;"></div>
+                                                                <div class="invalid-feedback" id="property_link_error"
+                                                                    style="display: none;color:red;"></div>
                                                             </div>
                                                         </div>
 
@@ -657,8 +657,7 @@
                                                                 <option value="">Zone</option>
                                                                 @forelse ($property_configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_zone')
-                                                                        <option
-                                                                            data-parent_id="{{ $props['parent_id'] }}"
+                                                                        <option data-parent_id="{{ $props['parent_id'] }}"
                                                                             value="{{ $props['id'] }}">
                                                                             {{ $props['name'] }}
                                                                         </option>
@@ -2083,7 +2082,7 @@
                                                                     <div class="form-group form_measurement">
                                                                         <select class="form-select measure_select"
                                                                             id="survey_plot_measurement">
-                                                                             @foreach ($land_units as $land_unit)
+                                                                            @foreach ($land_units as $land_unit)
                                                                                 <option value="{{ $land_unit->id }}"
                                                                                     {{ $land_unit->id == 1 ? 'selected' : '' }}>
                                                                                     {{ $land_unit->unit_name }}</option>
@@ -2127,7 +2126,7 @@
                                                                     <div class="form-group form_measurement">
                                                                         <select class="form-select measure_select"
                                                                             id="plot2_measurement">
-                                                                             @foreach ($land_units as $land_unit)
+                                                                            @foreach ($land_units as $land_unit)
                                                                                 <option value="{{ $land_unit->id }}"
                                                                                     {{ $land_unit->id == 1 ? 'selected' : '' }}>
                                                                                     {{ $land_unit->unit_name }}</option>
@@ -2748,11 +2747,12 @@
 @push('scripts')
     <script src="{{ asset('admins/assets/js/form-wizard/property_wizard.js') }}"></script>
     <script>
+      
         function fmtFloatPrice(s) {
             if (!s || isNaN(s)) return ''; // Handle non-numeric or empty values
             var newvalue = s.replace(/,/g, '');
-            console.log("newvalue ....",newvalue);
-            
+            console.log("newvalue ....", newvalue);
+
             var valuewithcomma = Number(newvalue).toLocaleString('en-IN');
             return valuewithcomma;
         }
@@ -2876,7 +2876,7 @@
                 if ($('input[name=property_category]:checked').attr('data-val') == 'Land') {
                     landConfiguration = $('input[name=plot_type]:checked').val();
                     console.log("landConfiguration ==", landConfiguration);
-                    if(landConfiguration == 10 || landConfiguration == 11){
+                    if (landConfiguration == 10 || landConfiguration == 11) {
                         $('.state-hide').hide();
                     }
 
@@ -3023,23 +3023,23 @@
         $(document).ready(function() {
             floatingField();
 
-             //Disable Price on Land
-        var $price1 = $('#price');
-        var $price2 = $('#price2');
-        $price1.on('input', function() {
-            if ($(this).val() !== '') {
-                $price2.prop('disabled', true);
-            } else {
-                $price2.prop('disabled', false);
-            }
-        });
-        $price2.on('input', function() {
-            if ($(this).val() !== '') {
-                $price1.prop('disabled', true);
-            } else {
-                $price1.prop('disabled', false);
-            }
-        });
+            //Disable Price on Land
+            var $price1 = $('#price');
+            var $price2 = $('#price2');
+            $price1.on('input', function() {
+                if ($(this).val() !== '') {
+                    $price2.prop('disabled', true);
+                } else {
+                    $price2.prop('disabled', false);
+                }
+            });
+            $price2.on('input', function() {
+                if ($(this).val() !== '') {
+                    $price1.prop('disabled', true);
+                } else {
+                    $price1.prop('disabled', false);
+                }
+            });
 
 
             //#B Project default Open on add Prop first - time
@@ -3132,7 +3132,7 @@
             }
         });
 
-       
+
         //Add property default select state-city-locality
         let id = '{{ isset($current_id) ? $current_id : 'null' }}';
         if (id === 'null') {
@@ -3591,7 +3591,7 @@
                 // $('.div_tp_details').hide()
                 $('.div_extra_land_details').show()
                 $(".cl-locality").hide();
-            $('.state-hide').hide();
+                $('.state-hide').hide();
 
                 $('.the-city-field').hide()
             } else if (theFor == 'industrial') {
@@ -3602,7 +3602,7 @@
                 $('.div_borewell').hide()
                 $('.div_extra_land_details').hide()
                 $('.the-city-field').hide()
-            $('.state-hide').hide();
+                $('.state-hide').hide();
 
                 $(".cl-locality").show();
             }
@@ -4337,24 +4337,27 @@
                         return
                     }
                     //Disable Price on Land
-                    var $price1 = $('#price');
-                    var $price2 = $('#price2');
+                    // var $price1 = $('#price');
+                    // var $price2 = $('#price2');
 
-                    $price1.on('input', function() {
-                        if ($(this).val() !== '') {
-                            $price2.prop('disabled', true);
-                        } else {
-                            $price2.prop('disabled', false);
-                        }
-                    });
+                    // $price1.on('input', function() {
+                    //     alert("111")
+                    //     if ($price1.val() !== '' && parseFloat($price1.val()) !== 0) {
+                    //         $price2.prop('disabled', true);
+                    //     } else {
+                    //         $price2.prop('disabled', false);
+                    //     }
+                    // });
 
-                    $price2.on('input', function() {
-                        if ($(this).val() !== '') {
-                            $price1.prop('disabled', true);
-                        } else {
-                            $price1.prop('disabled', false);
-                        }
-                    });
+                    // $price2.on('input', function() {
+                    //     alert("11122")
+
+                    //     if ($price2.val() !== '' && $.trim($price2.val()) !== '0') {
+                    //         $price1.prop('disabled', true);
+                    //     } else {
+                    //         $price1.prop('disabled', false);
+                    //     }
+                    // });
                     // edit property selected valdata.width_of_plot, 1
                     data = JSON.parse(data);
                     if (data.property_category == '262') {
@@ -4386,12 +4389,12 @@
                         $('input[name=plot_type][value=' + data.configuration + ']').prop('checked', true)
                         $('input[name=storage_type][value=' + data.configuration + ']').prop('checked', true)
                     }
-                    console.log("data.fp_plot_price...",data.fp_plot_price);
-                    
-                    if (data.survey_price !== '' && data.survey_price !== 0) {
+                    if (data.survey_price !== '' && parseFloat(data.survey_price) !== 0) {
+                        // alert("11")
                         $('#price2').prop('disabled', true);
                     }
-                    if(data.fp_plot_price !== '' && data.fp_plot_price !== 0){
+                    if (data.fp_plot_price !== '' && $.trim(data.fp_plot_price) !== '0') {
+                        // alert("112")
                         $('#price').prop('disabled', true);
                     }
 

@@ -125,9 +125,12 @@ class LandPropertyController extends Controller
                         // property for
                         if ($request->match_enquiry_for) {
                             $property_for = ($enq->enquiry_for == 'Buy') ? 'Sell' : $enq->enquiry_for;
-                            // dd("match_enquiry_for", $enq->enquiry_for, "..", $property_for);
-                            // dd($request->all(), $enq);
-                            $query->where('properties.property_for', $property_for);
+                            if ($property_for === 'Rent') {
+                                $query->whereIn('properties.property_for', ['Rent', 'Both']);
+                            }
+                            if ($property_for === 'Sell') {
+                                $query->whereIn('properties.property_for', ['Sell', 'Both']);
+                            }
                         }
                         //requirement ytpe
                         if ($request->match_property_type && !empty($enq->requirement_type)) {
