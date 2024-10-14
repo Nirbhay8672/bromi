@@ -21,9 +21,36 @@
                         <h5 class="mb-3">Tickets</h5>
                     </div>
                     <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-lg-2 col-md-2">
+                            <select
+                                id="filter_category"
+                                class="form-control"
+                                style="border: 1px solid black;"
+                                onchange="updateFilter()"
+                            >
+                                <option value="">-- Select Category --</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-12 col-lg-2 col-md-2">
+                            <select
+                                id="filter_status"
+                                class="form-control"
+                                style="border: 1px solid black;"
+                                onchange="updateFilter()"
+                            >
+                                <option value="">-- Select Status --</option>
+                                <option value="Open">Open</option>
+                                <option value="Closed">Closed</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <div id="builderTable_wrapper" class="dataTables_wrapper no-footer">
-                            <table class="display dataTable no-footer" id="builderTable" role="grid" aria-describedby="builderTable_info" style="width: 1296px;">
+                            <table class="display" id="ticketTable">
                                 <thead>
                                     <tr role="row">
                                         <th>Category</th>
@@ -37,51 +64,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($tickets as $ticket)
-                                    <tr style="text-transform: capitalize !important;">
-                                       <td>
-                                           {{ $ticket->category->name }}
-                                       </td>
-                                       <td>
-                                           <a>
-                                                {{ $ticket->title }}
-                                           </a>
-                                       </td>
-                                       <td>
-                                           @if ($ticket->status === 'Open')
-                                               <span class="label label-success p-1" style="border-radius: 5px;">{{ $ticket->status }}</span>
-                                           @else
-                                               <span class="label label-danger p-1" style="border-radius: 5px;">{{ $ticket->status }}</span>
-                                           @endif
-                                       </td>
-                                       <td>
-                                            {{ $ticket->user->first_name }} {{ $ticket->user->last_name }}
-                                       </td>
-                                       <td>
-                                            {{ $ticket->user->city->name }}
-                                       </td>
-                                       <td>
-                                            <?php if($ticket->attachment_file_path) : ?>
-                                                <a href="/bromi/public{{$ticket->attachment_file_path}}" target="_blank">View</a>
-                                            <?php else : ?>
-                                                <span>No Attachment</span>
-                                            <?php endif; ?>
-                                       </td>
-                                       <td>{{ $ticket->updated_at ? \Carbon\Carbon::parse($ticket->updated_at)->format('d/m/Y h:i:s A') : '-' }}</td>
-                                       <td class="w3-bar">
-                                            @if($ticket->status === 'Open')
-                                            
-                                            <form action="{{ url('superadmin/close_ticket/' . $ticket->ticket_id) }}" method="POST">
-                                                {!! csrf_field() !!}
-                                                <div class="text-center">
-                                                    <a href="{{ url('superadmin/tickets/'. $ticket->ticket_id) }}" id="demo" class="btn btn-primary">Comment</a>
-                                                    <button type="submit" class="btn btn-sm" style="background-color: red;color:white">Close</button>
-                                                </div>
-                                            </form>
-                                           @endif
-                                       </td>
-                                    </tr>
-                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -92,3 +74,81 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $(document).ready(function() {
+                $('#ticketTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "{{ route('superadmin.tickets') }}",
+                        data: function(d) {
+                            d.filter_category = $("#filter_category").val();
+                            d.filter_status = $("#filter_status").val();
+                        }
+                    },
+                    columns: [{
+                            data: 'category_name',
+                            name: 'category_name'
+                        },
+                        {
+                            data: 'title',
+                            name: 'title'
+                        },
+                        {
+                            data: 'ticket_status',
+                            name: 'ticket_status'
+                        },
+                        {
+                            data: 'user_name',
+                            name: 'user_name'
+                        },
+                        {
+                            data: 'city_name',
+                            name: 'city_name'
+                        },
+                        {
+                            data: 'attachement',
+                            name: 'attachement'
+                        },
+                        {
+                            data: 'updated_at',
+                            name: 'updated_at'
+                        },
+                        {
+                            data: 'Actions',
+                            name: 'Actions'
+                        },
+                    ]
+                });
+            });
+        });
+
+        function updateFilter() {
+            $('#ticketTable').DataTable().draw();
+        }
+
+        function closeTicket() {
+
+            let id = event.target.dataset.abc;
+            let url = "{{ url('superadmin/close_ticket/ticket_id') }}";
+            let newStr = url.replace("ticket_id", id);
+
+            event.target.classList.add('d-none');
+
+            $.ajax({
+                type: "POST",
+                url: newStr,
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    $('#ticketTable').DataTable().draw();
+                }
+            });
+        }
+    </script>
+@endpush

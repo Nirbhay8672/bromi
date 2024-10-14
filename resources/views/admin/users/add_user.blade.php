@@ -234,7 +234,7 @@
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-20">
-                                                                <label for="Office No">Office No</label>
+                                                                <label for="Office No">Employee No.</label>
                                                                 <input class="form-control" name="office_no" id="office_no"
                                                                     type="text" autocomplete="off">
                                                             </div>
