@@ -514,6 +514,12 @@ class HomeController extends Controller
 					->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
 					->count();
 
+				$total_prop_for_both = ApiProperties::where('property_for','Both')
+					->where('user_id',Auth::user()->id)
+					->whereNull('deleted_at')
+					->whereBetween('created_at',[$start_date ?? Carbon::now()->startOfMonth()->subMonth()->format('Y-m-d 00:00:00'),$end_date])
+					->count();
+
 				$total_prop_for_comm = ApiProperties::where('property_type',85)
 					->where('user_id',Auth::user()->id)
 					->whereNull('deleted_at')
@@ -528,7 +534,7 @@ class HomeController extends Controller
 
 				$filter_value = $request->date_range ?? 'this_month';
 				
-				return view('admin.dashboard', compact('filter_value','total_property','total_prop_for_sell','total_prop_for_rent','total_prop_for_comm','total_prop_for_rec','total_enquiry','first_chart','second_chart','third_chart','fifth_chart','seventh_chart','properties_tyeps_enquries','enqs','props','progess','todayEnquiry','disschedule','sitevisit','recentproperty','enqchart','chart1data','dropdownsarr','enqlatest','prop_added_for_rent','prop_added_for_sell','prop_rented','prop_sold','totalSource','total_project','total_win','total_lost','total_active_leads','totalsales','dashboard_widget_positions'));
+				return view('admin.dashboard', compact('filter_value','total_property','total_prop_for_both', 'total_prop_for_sell','total_prop_for_rent','total_prop_for_comm','total_prop_for_rec','total_enquiry','first_chart','second_chart','third_chart','fifth_chart','seventh_chart','properties_tyeps_enquries','enqs','props','progess','todayEnquiry','disschedule','sitevisit','recentproperty','enqchart','chart1data','dropdownsarr','enqlatest','prop_added_for_rent','prop_added_for_sell','prop_rented','prop_sold','totalSource','total_project','total_win','total_lost','total_active_leads','totalsales','dashboard_widget_positions'));
 			}
 			return redirect()->route('admin.login');
 

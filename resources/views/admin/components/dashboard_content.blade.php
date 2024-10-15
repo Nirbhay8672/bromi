@@ -20,7 +20,7 @@
     </div> 
     <div class="col"> 
         <div class="card o-hidden">
-            <div class="card-body bg-light-orange">
+            <div class="card-body bg-light-purpel">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{ $total_active_leads }}</h1>
@@ -44,7 +44,7 @@
     </div> 
     <div class="col"> 
         <div class="card o-hidden">
-            <div class="card-body bg-light-purpel">
+            <div class="card-body bg-light-orange">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{$total_win}}</h1>
@@ -83,7 +83,7 @@
     </div>
     <div class="col"> 
         <div class="card o-hidden">
-            <div class="card-body bg-light-green">
+            <div class="card-body bg-light-orange">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{ $total_prop_for_sell }}</h1>
@@ -95,7 +95,7 @@
     </div> 
     <div class="col"> 
         <div class="card o-hidden">
-            <div class="card-body bg-light-purpel">
+            <div class="card-body bg-light-green">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
                         <h1 class="font-roboto">{{ $total_prop_for_rent }}</h1>
@@ -107,23 +107,31 @@
     </div>
     <div class="col"> 
         <div class="card o-hidden">
-            <div class="card-body bg-light-orange">
+            <div class="card-body bg-light-purpel">
                 <div class="media static-widget my-3">
                     <div class="media-body text-center">
-                        <h1 class="font-roboto">{{ $total_prop_for_rec }}</h1>
-                        <h3 class="mb-0">Residential</h3>
+                        <h1 class="font-roboto">{{ $total_prop_for_both }}</h1>
+                        <h3 class="mb-0">Properties For Both</h3>
                     </div>
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
     <div class="col"> 
         <div class="card o-hidden">
             <div class="card-body bg-success">
-                <div class="media static-widget my-3">
+                <div class="media static-widget" style="margin-bottom: 21px;margin-top: 20px;">
                     <div class="media-body text-center">
-                        <h1 class="font-roboto">{{ $total_prop_for_comm }}</h1>
-                        <h3 class="mb-0">Commercial</h3>
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-6" style="border-right: 1px solid white;">
+                                <h2 class="font-roboto">{{ $total_prop_for_rec }}</h2>
+                                <h4 class="mb-0">Residential</h4>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6">
+                                <h2 class="font-roboto">{{ $total_prop_for_comm }}</h2>
+                                <h4 class="mb-0">Commercial</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
