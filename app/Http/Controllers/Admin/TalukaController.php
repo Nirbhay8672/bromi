@@ -47,7 +47,13 @@ class TalukaController extends Controller
 		}
 
 		$districts = District::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$super_admin_districts = District::orderBy('name')->where('user_id',6)->get();
+
+		$district_array = [];
+		foreach ($districts as $dist) {
+			array_push($district_array , $dist->name);
+		}
+
+		$super_admin_districts = District::orderBy('name')->whereIn('name', $district_array)->where('user_id',6)->get();
 
 		return view('admin.settings.taluka_index',compact('districts', 'super_admin_districts'));
 	}

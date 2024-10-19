@@ -261,7 +261,7 @@ class UserController extends Controller
 			$new_district->fill([
 				'name' => $city->name,
 				'state_id' => $new_state->id,
-				'user_id' => $user->id,
+				'user_id' => $data->id,
 			])->save();
 
 			$allarea = Areas::where('city_id',$request->city_id)
