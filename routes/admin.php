@@ -95,7 +95,9 @@ Route::group(['middleware' => 'revalidate'], function () {
                 return response()->json(['error' => true, 'data' => $th->getMessage()]);
             }
         })->name('admin.saveOnesignal');
+
 		Route::any('/districts', [DistrictController::class, 'index'])->name('admin.districts');
+		Route::post('/import-district', [DistrictController::class, 'districtImport'])->name('admin.importDistrict');
 		Route::post('/save-district', [DistrictController::class, 'saveDistrict'])->name('admin.save_district');
 		Route::post('/get-district', [DistrictController::class, 'getDistrict'])->name('admin.get_district');
 		Route::post('/delete-district', [DistrictController::class, 'destroy'])->name('admin.destroy-district');

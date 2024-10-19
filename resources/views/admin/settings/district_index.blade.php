@@ -39,6 +39,15 @@
                                         data-tooltip="Add District"
                                         onclick="reset()"
                                     ><i class="fa fa-plus"></i></button>
+
+                                    <button
+                                        class="btn custom-icon-theme-button tooltip-btn ms-3"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#importModal"
+                                        data-tooltip="Import District"
+                                        onclick="resetImportForm()"
+                                    ><i class="fa fa-download"></i></button>
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -96,6 +105,36 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="importModal" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importModalLabel">Import District</h5>
+                    <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row mb-2">
+                        <div class="form-group col-12 d-inline-block m-b-20">
+                            <label class="mb-0">District</label>
+                            <select id="import_district_id">
+                                <option value=""> District</option>
+                                @foreach ($districts as $district)
+                                    <option value="{{ $district['id'] }}">{{ $district['name'] }}</option>
+                                @endforeach
+                            </select>
+                            <span class="text-danger" id="district_error"></span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn custom-theme-button" id="importDistrict">Import</button>
+                        <button class="btn btn-secondary ms-3" style="border-radius: 5px;" type="button" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @push('scripts')
@@ -103,6 +142,7 @@
         $(document).ready(function() {
 
             $("#change_search_link").select2();
+            $("#import_district_id").select2();
                 
             $(document).on('change', '#change_search_link', function(e) {
                 window.location.href = $(this).val();
@@ -128,6 +168,48 @@
                 ]
             });
         });
+
+        $(document).on('click', '#importDistrict', function(e) {
+
+            let valid = true;
+            let import_state = $('#import_district_id').val();
+
+            let district_erorr = document.getElementById('district_error');
+            district_erorr.classList.add('d-none');
+
+            if(import_state == '') {
+                valid = false;
+                district_erorr.classList.remove('d-none');
+                district_erorr.innerHTML = 'Please select district';
+            }
+
+            if(valid) {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('admin.importDistrict') }}",
+                    data: {
+                        id: import_state,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        $('#stateTable').DataTable().draw();
+                        $('#importModal').modal('hide');
+                        resetImportForm();
+                    },
+                    error: function(xhr, status, error) {
+                        district_erorr.classList.remove('d-none');
+                        district_erorr.innerHTML = 'District is already exist';
+                    }
+                });
+            }
+        });
+
+        function resetImportForm() {
+            let district_erorr = document.getElementById('district_error');
+            district_erorr.classList.add('d-none');
+
+            $('#import_district_id').val('').trigger('change');
+        }
 
         function reset(data) {
             $('#this_data_id').val('');
