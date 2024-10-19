@@ -2074,12 +2074,19 @@ class PropertyController extends Controller
         }
         $data->user_id = Session::get('parent_id');
         $data->added_by = Auth::user()->id;
-        $data->project_id = $request->project_id;
-        $searched = Projects::find($request->project_id);
-        // do not update this if condition
-        $data->project_id = $request->project_id;
-        $searched = Projects::where('project_name', $request->project_id)->orWhere('id', $request->project_id)->first();
-        if (empty($searched->id)) {
+
+        // project condition start
+        $requested_project_id = $request->project_id;
+        $searched = Projects::where(function ($query) use ($requested_project_id) {
+            $query->where('id', $requested_project_id)
+                  ->orWhere('project_name', $requested_project_id);
+        })
+        ->where('user_id', Auth::user()->id)
+        ->first();
+
+        $project_id = null;
+
+        if($searched == null) {
             $new_project = new Projects();
             $new_project->fill([
                 'project_name' => $request->project_id,
@@ -2091,8 +2098,14 @@ class PropertyController extends Controller
                 'location_link' => $request->property_link,
                 'is_indirectly_store' => 1,
             ])->save();
-            $data->project_id = $new_project->id;
+            $project_id = $new_project->id;
+        } else {
+            $project_id = $searched->id;
         }
+
+        $data->project_id = $project_id;
+        // project condition end
+
         $surveyprice = 0.0;
         if ($request->survey_price) {
             $surveyprice = str_replace(',', '', $request->survey_price);
