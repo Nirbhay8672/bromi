@@ -75,6 +75,11 @@
                                 <strong>{{ $message }}</strong>
                             </div>
                         @endif
+                        @if (session('inactive_user'))
+                            <div class="alert alert-danger alert-block">
+                                <strong>{{ session('inactive_user') }}</strong>
+                            </div>
+                        @endif
                         <div class="form-group">
                             <div class="input-group"><span class="input-group-text"><i class="icon-email"></i></span>
                                 <input class="form-control custom-input-border" value="{{ old('email') }}" name="email" type="email"
