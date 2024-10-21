@@ -38,39 +38,42 @@ class ShareController extends Controller
                     //     $sharedProp->update(['accepted' => 1]);
                     //     return redirect()->route('admin.shared.properties');
                     // }
-                $sharedProp = SharedProperty::where('partner_id',$request->id)->load(['Partner', 'User']);
+                // $sharedProp = SharedProperty::where('user_id',$request->id);
+                $sharedProp = SharedProperty::with(['Partner', 'User'])->where('user_id',$request->id);
                 $sharedProp->update(['accepted' => 1]);
-                $receiver = $sharedProp->Partner;
-                $sender = $sharedProp->User;
+                // $receiver = $sharedProp->Partner;
+                // $sender = $sharedProp->User;
+                $deleted_prop = SharedProperty::where('id', $request->id)->delete();
+                return redirect()->route('admin.shared.properties');
                 
 		
-                // send notification to the sending user about the acceptance of the request.
-                $message = "$receiver->first_name $receiver->last_name has accepted your request regarding property share.";
-                try {
-                    UserNotifications::create([
-                        "user_id" => (int) $sender->id,
-                        "notification" => $message,
-                        "notification_type" => Constants::PROPERTY_REQUEST_ACCEPTED,
-                        'by_user' => (int) $receiver->id,
-                    ]);
-                    if (!empty($sender->onesignal_token)) {
-                        HelperFn::sendPushNotification($sender->onesignal_token, $message);
-                    } else {
-                        Log::error("Accept Property Share Request Error: ");
-                        Log::error("User id: $sender->id does not have onesignal token");
-                        Log::error("That's why notification not sent.");
-                    }
+                // // send notification to the sending user about the acceptance of the request.
+                // $message = "$receiver->first_name $receiver->last_name has accepted your request regarding property share.";
+                // try {
+                //     UserNotifications::create([
+                //         "user_id" => (int) $sender->id,
+                //         "notification" => $message,
+                //         "notification_type" => Constants::PROPERTY_REQUEST_ACCEPTED,
+                //         'by_user' => (int) $receiver->id,
+                //     ]);
+                //     if (!empty($sender->onesignal_token)) {
+                //         HelperFn::sendPushNotification($sender->onesignal_token, $message);
+                //     } else {
+                //         Log::error("Accept Property Share Request Error: ");
+                //         Log::error("User id: $sender->id does not have onesignal token");
+                //         Log::error("That's why notification not sent.");
+                //     }
 
-                    $deleted_prop = SharedProperty::where('id', $request->id)->delete();
-                // return response()->json(['success' => true, 'deleted_partner' => $deleted_prop]);
+                //     $deleted_prop = SharedProperty::where('id', $request->id)->delete();
+                // // return response()->json(['success' => true, 'deleted_partner' => $deleted_prop]);
 
-                    return redirect()->route('admin.shared.properties');
-                } catch (\Throwable $th) {
-                    // if notificaton creation failed.
-                    Log::error("On Accept property share request attempt failed by user Id: $receiver->id");
-                    Log::error("Error Message: $th->getMessage()");
-                    return redirect()->route('admin.shared.properties');
-                }
+                //     return redirect()->route('admin.shared.properties');
+                // } catch (\Throwable $th) {
+                //     // if notificaton creation failed.
+                //     Log::error("On Accept property share request attempt failed by user Id: $receiver->id");
+                //     Log::error("Error Message: $th->getMessage()");
+                //     return redirect()->route('admin.shared.properties');
+                // }
             }
         }
     }
@@ -216,6 +219,7 @@ class ShareController extends Controller
                 ->leftJoin('projects', 'properties.project_id', '=', 'projects.id')
                 ->leftJoin('areas', 'projects.area_id', '=', 'areas.id')
                 ->leftJoin('users', 'share_property.user_id', '=', 'users.id')
+                ->where('accepted','1')
                 ->when($request->filter_property_for || empty(Auth::user()->property_for_id), function ($query) use ($request) {
                     return $query->where(function ($query) use ($request) {
                         $query->where('properties.property_for', $request->filter_property_for)
@@ -279,6 +283,7 @@ class ShareController extends Controller
                 ->leftJoin('projects', 'properties.project_id', '=', 'projects.id')
                 ->leftJoin('areas', 'projects.area_id', '=', 'areas.id')
                 ->leftJoin('users', 'share_property.user_id', '=', 'users.id')
+                ->where('accepted','1')
                 ->when($request->filter_property_for || empty(Auth::user()->property_for_id), function ($query) use ($request) {
                     return $query->where(function ($query) use ($request) {
                         $query->where('properties.property_for', $request->filter_property_for)

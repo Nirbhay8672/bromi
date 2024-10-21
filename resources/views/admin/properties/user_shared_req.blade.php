@@ -31,7 +31,7 @@
                                             <th>Name</th>
                                             {{-- <th>Company Name</th> --}}
                                             <th>Email</th>
-                                            <th>Status</th>
+                                            <th>Company</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -135,7 +135,7 @@
                                 _token: '{{ csrf_token() }}'
                             },
                             success: function(data) {
-								console.log("Data ==>",data);
+								console.log("Data shared req ==>",data);
                                 $('#sharedUserTable').DataTable().draw();
                             }
                         });

@@ -15,16 +15,21 @@
                         <div class="card-header pb-0">
                             <h5 class="mb-3">Shared Properties</h5>
                             <div class="row">
-                            @include('admin.properties.change_menu')
-                            <div class="col">
-                                <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#filtermodal" data-tooltip="Filter"><i
-                                        class="fa fa-filter"></i></button>
-
-                                <button class="btn ms-3 custom-icon-theme-button"
-                                    style="background-color: #FF0000 !important;display: none; " type="button"
-                                    data-tooltip="Clear Filter" id="resetfilter"><i class="fa fa-refresh"></i></button>
-                            </div>
+                                @include('admin.properties.change_menu')
+                                <div class="col">
+                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#filtermodal" data-tooltip="Filter"><i
+                                            class="fa fa-filter"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button"
+                                        style="background-color: #FF0000 !important;display: none; " type="button"
+                                        data-tooltip="Clear Filter" id="resetfilter"><i class="fa fa-refresh"></i></button>
+                                    <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#recProperties" data-tooltip="In"><i
+                                            class="fa fa-filter"></i></button>
+                                            <button class="btn ms-3 custom-icon-theme-button tooltip-btn" type="button"
+                                            data-bs-toggle="modal" data-bs-target="#sendProperties" data-tooltip="Out"><i
+                                                class="fa fa-filter"></i></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">
@@ -202,20 +207,50 @@
                             d.filter_to_date = $('#filter_to_date').val();
                         }
                     },
-                    columns: [
-                        { data: 'project_name', name: 'project_name' },
-                        { data: 'super_builtup_area', name: 'super_builtup_area' },
-                        { data: 'price', name: 'price' },
-                        { data: 'contact_name', name: 'contact_name' },
-                        { data: 'action', name: 'action', orderable: false, searchable: false }
+                    columns: [{
+                            data: 'project_name',
+                            name: 'project_name'
+                        },
+                        {
+                            data: 'super_builtup_area',
+                            name: 'super_builtup_area'
+                        },
+                        {
+                            data: 'price',
+                            name: 'price'
+                        },
+                        {
+                            data: 'contact_name',
+                            name: 'contact_name'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        }
                     ],
-                    columnDefs: [
-                        { "width": "18%", "targets": 0 },
-                        { "width": "18%", "targets": 1 },
-                        { "width": "10%", "targets": 2 },
-                        { "width": "15%", "targets": 3 },
-                        { "width": "10%", "targets": 4 }
-                        ]
+                    columnDefs: [{
+                            "width": "18%",
+                            "targets": 0
+                        },
+                        {
+                            "width": "18%",
+                            "targets": 1
+                        },
+                        {
+                            "width": "10%",
+                            "targets": 2
+                        },
+                        {
+                            "width": "15%",
+                            "targets": 3
+                        },
+                        {
+                            "width": "10%",
+                            "targets": 4
+                        }
+                    ]
                 });
 
                 $('#filtersearch').click(function() {
@@ -229,48 +264,48 @@
                 });
 
                 $(document).on('click', '#filtersearch', function(e) {
-                e.preventDefault();
-                search_enq = '';
-                $('#resetfilter').show();
-                $('#resetfilter').removeClass('d-none');
-                $('#propertyTable').DataTable().draw();
-                $('#filtermodal').modal('hide');
-            });
+                    e.preventDefault();
+                    search_enq = '';
+                    $('#resetfilter').show();
+                    $('#resetfilter').removeClass('d-none');
+                    $('#propertyTable').DataTable().draw();
+                    $('#filtermodal').modal('hide');
+                });
 
-            $(document).on('click', '#resetfilter', function(e) {
-                e.preventDefault();
-                $(this).hide();
-                $('#filter_form').trigger("reset");
-                $('#propertyTable').DataTable().draw();
-                $('#filtermodal').modal('hide');
-                triggerResetFilter()
-            });
+                $(document).on('click', '#resetfilter', function(e) {
+                    e.preventDefault();
+                    $(this).hide();
+                    $('#filter_form').trigger("reset");
+                    $('#propertyTable').DataTable().draw();
+                    $('#filtermodal').modal('hide');
+                    triggerResetFilter()
+                });
 
             });
 
             function deleteShareProperty(data) {
-                    Swal.fire({
-                        title: "Are you sure?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes',
-                    }).then(function(isConfirm) {
-                        if (isConfirm.isConfirmed) {
-                            var id = $(data).attr('data-id');
-                            $.ajax({
-                                type: "POST",
-                                url: "{{ route('admin.deletedShareProp') }}",
-                                data: {
-                                    id: id,
-                                    _token: '{{ csrf_token() }}'
-                                },
-                                success: function(data) {
-                                    $('#propertyTable').DataTable().draw();
-                                }
-                            });
-                        }
-                    })
+                Swal.fire({
+                    title: "Are you sure?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                }).then(function(isConfirm) {
+                    if (isConfirm.isConfirmed) {
+                        var id = $(data).attr('data-id');
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('admin.deletedShareProp') }}",
+                            data: {
+                                id: id,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
+                                $('#propertyTable').DataTable().draw();
+                            }
+                        });
+                    }
+                })
 
-                }
+            }
         </script>
     @endpush
