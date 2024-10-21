@@ -8,6 +8,7 @@ use App\Models\District;
 use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Expr\New_;
 use Yajra\DataTables\DataTables;
 
 class DistrictController extends Controller
@@ -42,9 +43,11 @@ class DistrictController extends Controller
 		}
 
 		$states = State::where('user_id',Auth::user()->id)->get();
+		$districts = District::where('user_id',6)->get();
 		
 		return view('admin.settings.district_index')->with([
 			'states' => $states,
+			'districts' => $districts
 		]);
 	}
 
@@ -86,6 +89,43 @@ class DistrictController extends Controller
 		if (!empty($request->id)) {
 			$data = District::where('id', $request->id)->first()->toArray();
 			return json_encode($data);
+		}
+	}
+
+	public function districtImport(Request $request)
+	{
+		$district = District::find($request->id);
+		$current_user_district = District::where('name', $district->name)->where('user_id',Auth::user()->id)->first();
+
+		if($current_user_district) {
+			return response()->json(['error' => 'District already exist.'], 500);
+		} else {
+
+			$state = State::find($district->state_id);
+			$current_user_state = State::where('name', $state->name)->where('user_id', Auth::user()->id)->first();
+
+			$state_id = null;
+
+			if($current_user_state) {
+				$state_id = $current_user_state->id;
+			} else {
+				$new_state = new State();
+
+				$new_state->fill([
+					'name' => $state->name,
+					'user_id' => Auth::user()->id,
+				])->save();
+
+				$state_id = $new_state->id;
+			}
+
+			$new_district = new District();
+
+			$new_district->fill([
+				'name' => $district->name,
+				'user_id' => Auth::user()->id,
+				'state_id' => $state_id,
+			])->save();
 		}
 	}
 

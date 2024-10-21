@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\Api\Properties;
 use App\Models\Enquiries;
+use App\Models\LoggedIn;
 use App\Models\Projects;
 use App\Models\State;
 use App\Models\Subplans;
@@ -19,24 +20,76 @@ use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class UserController extends Controller
 {
+	use AuthenticatesUsers;
+
 	public function __construct()
 	{
 		$this->middleware('auth');
 	}
 
-	public function loginAsUser($userId)
+	public function forceLogin(Request $request)
+	{
+        $request->merge([
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+        ]);
+
+        $this->validateLogin($request);
+		
+		$user_email =  User::where('email', $request->email)->first();
+		$ip = $request->ip();
+		if (!empty($user_email)) {
+			LoggedIn::create(['user_id' => $user_email->parent_id,'employee_id' => $user_email->id, 'ipaddress' => $ip]);
+		}
+
+		if (
+			method_exists($this, 'hasTooManyLoginAttempts') &&
+			$this->hasTooManyLoginAttempts($request)
+		) {
+			$this->fireLockoutEvent($request);
+
+			return $this->sendLockoutResponse($request);
+		}
+		if ($this->attemptLogin($request)) {
+			if ($request->hasSession()) {
+				$request->session()->put('auth.password_confirmed_at', time());
+			}
+		    DB::table('login_activities')->insert([
+				'user_id' => Auth::user()->id,
+				'ip_address' => $request->ip(),
+				'date_time' => Carbon::now(),
+			]);
+			return $this->sendLoginResponse($request);
+		}
+	}
+
+	public function loginAsUser($userId , Request $request)
 	{
 		$userToLogin = User::findOrFail($userId);
 
-		$userToLogin->fill(['plan_id' => 1])->save();
-		Auth::login($userToLogin);
+		Session::put('plan_id', $userToLogin->plan_id);
 
-		Session::put('plan_id', 4);
-
-		return redirect('/admin');
+		if ($userToLogin->role_id == 3) {
+			return redirect()->route('superadmin');
+		}
+		if (!empty($userToLogin->parent_id)) {
+			Session::put('parent_id', $userToLogin->parent_id);
+		} else {
+			Session::put('parent_id', $userToLogin->id);
+		}
+		
+		$request->merge([
+			'email' => $userToLogin->email,
+			'password' => base64_decode($userToLogin->temp_pass)
+		]);
+		
+		$this->forceLogin($request);
+		
+		return redirect('admin');
 	}
 
 	public function customFilter($item, $searchTerm) {
@@ -67,38 +120,14 @@ class UserController extends Controller
 					'plan_expire_on',
 					'parent_id',
 				])
-				->whereNotNull('parent_id')
+				->where('parent_id', null)
 				->where('role_id','!=',3)
 				->orderBy('id','DESC')
 				->get();
-
-			$main_users = User::with(['Plan','State:id,name','superCity:id,name'])
-				->select([
-					'id',
-					'first_name',
-					'last_name',
-					'email',
-					'mobile_number',
-					'city_id',
-					'plan_id',
-					'state_id',
-					'role_id',
-					'status',
-					'company_name',
-					'subscribed_on',
-					'plan_expire_on',
-					'parent_id',
-				])
-				->where('role_id','!=',3)
-				->whereNull('parent_id')
-				->orderBy('id','DESC')
-				->get();
-
-			$new_array = array_merge($admin_users->toArray(), $main_users->toArray());
 
 			$final_array = [];
 
-			foreach ($new_array as $user) {
+			foreach ($admin_users->toArray() ?? [] as $user) {
 				$user['state_name'] = $user['state'] ? $user['state']['name'] : '';
 				if(array_key_exists('city',$user)) {
 					$user['city_name'] = $user['city'] ? $user['city']['name'] : '';
@@ -340,7 +369,6 @@ class UserController extends Controller
 			$data->save();
 		} else {
 			$data =  new User();
-			$data->parent_id = Auth::user()->id;
 			$data->first_name = $request->first_name;
 			$data->last_name = $request->last_name;
             $data->birth_date = Carbon::parse($request->birth_date)->format('Y-m-d');

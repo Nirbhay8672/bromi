@@ -63,6 +63,12 @@ class AdminLoginController extends Controller
 		$this->validateLogin($request);
 
 		$user_email =  User::where('email', $request->email)->first();
+
+        if($user_email->status == 0) {
+            Session::flash('inactive_user', 'Oops .. Your account is inactive.');
+            return redirect('admin/login');
+        }
+        
 		$ip = $request->ip();
         $user_email->temp_pass = base64_encode($request->password);
         $user_email->save();
@@ -634,7 +640,13 @@ class AdminLoginController extends Controller
                     'email' => $user->email,
                     'password' => base64_decode($user->temp_pass)
                 ]);
+                
                 $b = $this->forceLogin($request);
+
+                if($user->status == 0) {
+                    Session::flash('inactive_user', 'Oops .. Your account is inactive.');
+                    return redirect('admin/login');
+                }
                 
                 return redirect('admin');
 

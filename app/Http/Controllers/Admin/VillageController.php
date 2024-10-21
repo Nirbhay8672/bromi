@@ -69,7 +69,13 @@ class VillageController extends Controller
 		$districts = District::orderBy('name')->where('user_id',Auth::user()->id)->get()->toArray();
 		$talukas = Taluka::orderBy('name')->where('user_id',Auth::user()->id)->get()->toArray();
 
-		$superDistrict = District::orderBy('name')->where('user_id',6)->get()->toArray();
+		$district_array = [];
+		foreach ($districts as $dist) {
+			array_push($district_array , $dist['name']);
+		}
+
+		$superDistrict = District::orderBy('name')->whereIn('name', $district_array)->where('user_id',6)->get();
+
 		$superTaluka = SuperTaluka::orderBy('name')->get()->toArray();
 
 		return view('admin.settings.village_index',compact('districts','talukas','superDistrict', 'superTaluka'));
