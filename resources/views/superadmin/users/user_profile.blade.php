@@ -272,13 +272,6 @@
                                 <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-body">
-                                          
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="card">
-                                        <div class="card-body">
                                             <h3 class="text-center mb-3">Sub Users</h3>
                                             <div class="table-responsive">
                                                 <table class="table table-bordered">
@@ -289,7 +282,7 @@
                                                             <th>Last Name</th>
                                                             <th>Email</th>
                                                             <th>Phone</th>
-                                                            <th>Company Name</th>
+                                                            <th class="text-center">Status</th>
                                                             <th class="text-center">Action</th>
                                                         </tr>
                                                     </thead>
@@ -302,25 +295,20 @@
                                                             <td>{{ $user->last_name ?? '-' }}</td>
                                                             <td style="text-transform: none !important;">{{ $user->email ?? '-' }}</td>
                                                             <td>{{ $user->mobile_number ?? '-' }}</td>
-                                                            <td style="text-transform:capitalize !important;">{{ $user->company_name ?? '-' }}</td>
                                                             <td class="text-center">
-                                                                <div class="row">
-                                                                    <div class="col">
-                                                                        <div class="media-body text-center">
-                                                                            <label class="switch mb-0">
-                                                                                @if($user->status == 1)
-                                                                                    <input type="checkbox" onclick="userActivate({{ $user->id }} , 0 )" checked>
-                                                                                @else
-                                                                                    <input type="checkbox" onclick="userActivate({{ $user->id }} , 1 )">
-                                                                                @endif
-                                                                                <span class="switch-state"></span>
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col">
-                                                                        <a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary btn-sm" style="border-radius:5px;width:140px;" target="_blank">Login as user</a>
-                                                                    </div>
+                                                                <div class="media-body text-center">
+                                                                    <label class="switch mb-0">
+                                                                        @if($user->status == 1)
+                                                                            <input type="checkbox" onclick="userActivate({{ $user->id }} , 0 )" checked>
+                                                                        @else
+                                                                            <input type="checkbox" onclick="userActivate({{ $user->id }} , 1 )">
+                                                                        @endif
+                                                                        <span class="switch-state"></span>
+                                                                    </label>
                                                                 </div>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <a href="{{ route('login_as_user', ['id' => $user->id]) }}" class="btn btn-primary btn-sm" style="border-radius:5px;width:140px;" target="_blank">Login as user</a>
                                                             </td>
                                                         </tr>
                                                         @endforeach
