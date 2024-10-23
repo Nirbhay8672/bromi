@@ -103,7 +103,7 @@ class UserController extends Controller
 	{
 		if ($request->ajax())
 		{
-			$admin_users = User::with(['Plan','State:id,name','city:id,name'])
+			$admin_users = User::with(['Plan','State:id,name','superCity:id,name'])
 				->select([
 					'id',
 					'first_name',
