@@ -29,6 +29,16 @@ class AreaController extends Controller
 
 	public function index(Request $request)
 	{
+		if (Auth::check()) {
+            $status = Auth::user()->status;
+			if($status == 0) {
+				Auth::logout();
+				Session::flush();
+				Session::flash('inactive_user', 'Oops .. Your account is inactive.');
+				return redirect('admin/login');
+			}
+        }
+		
 		if ($request->ajax()) {
 			$data = DB::table('areas')
 				->select([

@@ -73,6 +73,16 @@ class HomeController extends Controller
 	 */
 	public function index(Request $request)
 	{
+		if (Auth::check()) {
+            $status = Auth::user()->status;
+			if($status == 0) {
+				Auth::logout();
+				Session::flush();
+				Session::flash('inactive_user', 'Oops .. Your account is inactive.');
+				return redirect('admin/login');
+			}
+        }
+		
 		try {
 		    
 			if (Auth::check()) {
@@ -1290,6 +1300,17 @@ class HomeController extends Controller
 	}
 
 	public function Settings(Request $request){
+
+		if (Auth::check()) {
+            $status = Auth::user()->status;
+			if($status == 0) {
+				Auth::logout();
+				Session::flush();
+				Session::flash('inactive_user', 'Oops .. Your account is inactive.');
+				return redirect('admin/login');
+			}
+        }
+		
 		$city =  City::get()->where('user_id',Auth::user()->id)->count();
 		$state =  State::get()->where('user_id',Auth::user()->id)->count();
 		$area =  Areas::get()->where('user_id',Auth::user()->id)->count();

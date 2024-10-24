@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Mailers\AppMailer;
+use Illuminate\Support\Facades\Session;
 use Str;
 
 class TicketsController extends Controller
@@ -24,6 +25,16 @@ class TicketsController extends Controller
      */
     public function index()
     {
+        if (Auth::check()) {
+            $status = Auth::user()->status;
+			if($status == 0) {
+				Auth::logout();
+				Session::flush();
+				Session::flash('inactive_user', 'Oops .. Your account is inactive.');
+				return redirect('admin/login');
+			}
+        }
+
         $auth=Auth::user()->id;
         $tickets = Ticket::where('user_id',$auth)->with('category')->paginate(10);
         return view('admin.ticket_system.tickets.index', compact('tickets'));
