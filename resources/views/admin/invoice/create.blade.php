@@ -111,7 +111,7 @@
                                                             <input class="form-control" type="text"
                                                                 value="" name="cust_email" id="cust_email"
                                                                 data-bs-original-title="" title=""
-                                                                placeholder="Email Here">
+                                                                placeholder="Email Here" style="text-transform: lowercase;">
                                                         </div>
                                                     </div>
                                                 </div>

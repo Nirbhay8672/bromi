@@ -20,6 +20,7 @@ use SoftDeletes;
 
 	protected $fillable = [
 		'user_id',
+		'state_id',
 		'city_id',
 		'area_id',
 		'name',

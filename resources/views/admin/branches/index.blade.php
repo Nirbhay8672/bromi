@@ -188,8 +188,8 @@
                         data = JSON.parse(data)
                         document.getElementById('city_id').disabled = false;
                         document.getElementById('area_id').disabled = false;
-                        $('#this_data_id').val(data.id)
-                        $('#branch_name').val(data.name)
+                        $('#this_data_id').val(data.id);
+                        $('#branch_name').val(data.name);
                         $('#state_id').val(data.state_id).trigger('change');
 						$('#area_id').val(data.area_id).trigger('change');
                         $('#city_id').val(data.city_id).trigger('change');

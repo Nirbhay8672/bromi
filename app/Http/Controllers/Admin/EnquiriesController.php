@@ -2046,7 +2046,7 @@ class EnquiriesController extends Controller
 	public function addEnquiry(Request $request)
 	{
 		$prop_list = Helper::get_property_units_helper();
-		$projects = Projects::orderBy('project_name')->get();
+		$projects = Projects::orderBy('project_name')->where('user_id', Auth::user()->id)->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
 		$enquiry_list = ['Commercial', 'Office'];
 		$prop_type = [];
@@ -2066,7 +2066,6 @@ class EnquiriesController extends Controller
 		$land_units = DB::table('land_units')->get();
 		$country_codes  = DB::table('countries')->get();
 
-
 		return view('admin.properties.add_enquiry', compact('country_codes', 'enquiry_list', 'land_units', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
 	}
 
@@ -2074,7 +2073,7 @@ class EnquiriesController extends Controller
 	{
 
 		$prop_list = Helper::get_property_units_helper();
-		$projects = Projects::orderBy('project_name')->get();
+		$projects = Projects::orderBy('project_name')->where('user_id', Auth::user()->id)->get();
 		$enquiry_list = Enquiries::where('id', $request->id)->get();
 		$configuration_settings = DropdownSettings::get()->toArray();
 		$prop_type = [];
