@@ -267,7 +267,8 @@ class RegisterController extends Controller
             'user_id' => $user->id,
             'state_id' => $new_state->id,
             'city_id' => $new_city->id,
-            'area_id' => $lastRecord->id
+            'area_id' => $lastRecord->id,
+            'status' => 1,
         ]);
 
         $superRoleId = Role::where('name', 'Super Admin')->first()->id;
