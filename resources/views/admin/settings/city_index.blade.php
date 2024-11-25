@@ -260,6 +260,14 @@
         <script>
 
             $(document).ready(function() {
+
+                $('#cityModal').on('hidden.bs.modal', function () {
+                    $("#this_data_id").val('');
+                    $("#city_name").val('');
+                    $("#modal_form").validate().resetForm();
+                    $("#state_id").val('').trigger('change');
+                });
+
                 $('#cityTable').DataTable({
                     processing: true,
                     serverSide: true,

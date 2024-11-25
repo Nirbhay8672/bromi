@@ -89,7 +89,7 @@
                             novalidate="">
                             <div class="form-row">
                                 <div class="form-group col-md-7 d-inline-block m-b-20">
-                                    <label for="City">Taluka</label>
+                                    <label for="taluka_name">Taluka</label>
                                     <input
                                         class="form-control"
                                         name="taluka_name"
@@ -176,6 +176,13 @@
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
         <script type="text/javascript">
+
+            $('#cityModal').on('hidden.bs.modal', function () {
+                $("#this_data_id").val('');
+                $("#district_id").val('').trigger('change');
+                $("#modal_form").validate().resetForm();
+                $("#taluka_name").val('');
+            });
 
             document.addEventListener('alpine:init', () => {
 

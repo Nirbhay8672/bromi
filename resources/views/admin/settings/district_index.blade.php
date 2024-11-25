@@ -141,6 +141,13 @@
     <script>
         $(document).ready(function() {
 
+            $('#stateModal').on('hidden.bs.modal', function () {
+                $("#this_data_id").val('');
+                $("#state_id").val('').trigger('change');
+                $("#modal_form").validate().resetForm();
+                $("#district_name").val('');
+            });
+
             $("#change_search_link").select2();
             $("#import_district_id").select2();
                 
