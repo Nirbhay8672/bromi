@@ -175,6 +175,12 @@
                 });
             });
 
+            $('#stateModal').on('hidden.bs.modal', function () {
+                $("#this_data_id").val('');
+                $("#state_name").val('');
+                $('.error').addClass('d-none');
+            });
+
             function getState(data) {
                 $('#modal_form').trigger("reset");
                 var id = $(data).attr('data-id');

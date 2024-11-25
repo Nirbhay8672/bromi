@@ -308,8 +308,6 @@ class LandPropertyController extends Controller
                 
                     return true;
                 });
-                
-
 
             return DataTables::of($data)
                 ->editColumn('project_id', function ($row) {
@@ -371,6 +369,8 @@ class LandPropertyController extends Controller
                         $salable_area_print = "";
                     }
 
+                    $zone  = $row->zone_id > 0 ? 'Zone - '. $dropdowns[$row->zone_id]['name'] : '';
+
                     try {
                         return '
                         <td style="vertical-align:top">
@@ -379,6 +379,8 @@ class LandPropertyController extends Controller
                         <br>
                         ' . $salable_area_print . '
                         </font>
+                        <br>
+                        <p>'. $zone .'</p>
                         </td>';
                     } catch (\Throwable $th) {
                         dd($th);

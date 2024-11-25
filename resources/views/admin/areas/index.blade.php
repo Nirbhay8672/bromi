@@ -236,6 +236,16 @@
 
         <script type="text/javascript">
 
+            $('#areaModal').on('hidden.bs.modal', function () {
+                $("#this_data_id").val('');
+                $("#city_id").val('').trigger('change');
+                $("#state_id").val('').trigger('change');
+                $("#modal_form").validate().resetForm();
+                $("#area_name").val('');
+                $("#pincode").val('');
+                $("#area_active").attr('checked', false);
+            });
+
             document.addEventListener('alpine:init', () => {
     
                 Alpine.data('area_form', () => ({

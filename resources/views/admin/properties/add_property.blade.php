@@ -2951,7 +2951,7 @@
                     isValid = validateField('#storage_centre_height', '#storage_centre_height_error',
                         'center height field is required') && isValid;
                 }
-                if (flateConfiguration || officeConf || retailConfiguration) {
+                if (officeConf || retailConfiguration) {
                     isValid = validateFloat('#ceiling_height', '#ceiling_height_error',
                         'ceiling height field is required and must be a number', numberRegex) && isValid;
                 }
@@ -2966,6 +2966,9 @@
                 $('input[name=plot_type]:checked').trigger('change');
                 // var isValid = true;
                 var isValid = validateForm();
+
+                console.log(isValid , 'Nux validation');
+
                 if (stateLength > 2 && (!landCategory)) {
                     console.log("enter in state ==");
                     isValid = validateDropdown($('#state_id'), $('#state_id_error'),
@@ -2981,10 +2984,6 @@
                     'City field is required.') && isValid;
                 isValid = validateDropdown($('#area_id'), $('#locality_id_error'),
                     'Locality field is required.') && isValid;
-                // isValid = validateDropdown($('#property_source'), $('#property_source_error'),
-                //     'property source field is required.') && isValid;
-                // isValid = validateDropdown($('#Property_priority'), $('#Property_priority_error'),
-                //     'property priority field is required.') && isValid;
 
                 if (theForLand === 'commercial' || theForLand === 'agriculture' || farmConf) {
                     isValid = validateDropdown($('#zone'), $('#zone_id_error'),
