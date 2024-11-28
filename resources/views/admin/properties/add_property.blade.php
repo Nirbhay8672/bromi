@@ -630,14 +630,21 @@
                                                                 <div id="village_id_error" style="color: red"></div>
                                                             </div>
 
-                                                            <div class="form-group col-md-3 m-b-4 mb-3 location_link_cls">
-                                                                <label for="Link">Location Link</label>
-                                                                <input class="form-control"
-                                                                    style="text-transform: lowercase !important;"
-                                                                    name="property_link" id="property_link"
-                                                                    type="text" autocomplete="off">
-                                                                <div class="invalid-feedback" id="property_link_error"
-                                                                    style="display: none;color:red;"></div>
+                                                            <div class="form-group col-md-4 m-b-4 mb-3">
+                                                                <select class="form-select" id="zone"
+                                                                    data-error="#zone_id_error">
+                                                                    <option value="">Zone</option>
+                                                                    @forelse ($property_configuration_settings as $props)
+                                                                        @if ($props['dropdown_for'] == 'property_zone')
+                                                                            <option data-parent_id="{{ $props['parent_id'] }}"
+                                                                                value="{{ $props['id'] }}">
+                                                                                {{ $props['name'] }}
+                                                                            </option>
+                                                                        @endif
+                                                                    @empty
+                                                                    @endforelse
+                                                                </select>
+                                                                <div id="zone_id_error" style="color: red"></div>
                                                             </div>
                                                         </div>
 
@@ -651,22 +658,17 @@
                                                                 style="display: none;color:red;"></div>
                                                         </div>
 
-                                                        <div class="form-group col-md-5 m-b-4 mb-3">
-                                                            <select class="form-select" id="zone"
-                                                                data-error="#zone_id_error">
-                                                                <option value="">Zone</option>
-                                                                @forelse ($property_configuration_settings as $props)
-                                                                    @if ($props['dropdown_for'] == 'property_zone')
-                                                                        <option data-parent_id="{{ $props['parent_id'] }}"
-                                                                            value="{{ $props['id'] }}">
-                                                                            {{ $props['name'] }}
-                                                                        </option>
-                                                                    @endif
-                                                                @empty
-                                                                @endforelse
-                                                            </select>
-                                                            <div id="zone_id_error" style="color: red"></div>
-                                                        </div>
+                                                        <div class="form-group col-md-3 m-b-4 mb-3 location_link_cls">
+                                                                <label for="Link">Location Link</label>
+                                                                <input class="form-control"
+                                                                    style="text-transform: lowercase !important;"
+                                                                    name="property_link" id="property_link"
+                                                                    type="text" autocomplete="off">
+                                                                <div class="invalid-feedback" id="property_link_error"
+                                                                    style="display: none;color:red;"></div>
+                                                            </div>
+
+                                                       
                                                     </div>
 
                                                     <div class="row div_area_size_details" id="">
