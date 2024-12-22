@@ -368,6 +368,13 @@ class LandPropertyController extends Controller
                     if (empty($salable_area_print)) {
                         $salable_area_print = "";
                     }
+                    if ($row->Property_priority == "91") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Blue-Star.png') . '" alt="">';
+                    } else if ($row->Property_priority == "90") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Yellow-Star.png') . '" alt="">';
+                    } else if ($row->Property_priority == "17") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Red-Star.png') . '" alt="">';
+                    }
 
                     $zone  = $row->zone_id > 0 ? 'Zone - '. $dropdowns[$row->zone_id]['name'] : '';
 
@@ -380,6 +387,7 @@ class LandPropertyController extends Controller
                         ' . $salable_area_print . '
                         </font>
                         <br>
+                        <br>' . $row->image_path . '
                         <p>'. $zone .'</p>
                         </td>';
                     } catch (\Throwable $th) {

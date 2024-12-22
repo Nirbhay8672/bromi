@@ -1655,7 +1655,7 @@
                                                     <div class="row div_property_source" id="">
                                                         <div class="form-group col-md-2 mb-3">
                                                             <select class="form-select" id="Property_priority">
-                                                                <option value="">Priority</option>
+                                                                <option value="">Priority 999</option>
                                                                 @forelse ($property_configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_priority_type')
                                                                         <option
@@ -2950,8 +2950,8 @@
                 }
                 if (storageConfiguration) {
                     console.log("enter in storage center ==");
-                    isValid = validateField('#storage_centre_height', '#storage_centre_height_error',
-                        'center height field is required') && isValid;
+                    // isValid = validateField('#storage_centre_height', '#storage_centre_height_error',
+                    //     'center height field is required') && isValid;
                 }
                 if (officeConf || retailConfiguration) {
                     isValid = validateFloat('#ceiling_height', '#ceiling_height_error',

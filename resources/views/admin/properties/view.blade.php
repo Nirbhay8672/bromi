@@ -889,11 +889,14 @@ use Illuminate\Support\Facades\DB;
                                                         <div class="form-group col-4 m-b-10 data_conent_67">
                                                             <h6><b>Mobile</b></h6>
                                                         </div>
-                                                        <div class="form-group col-8 m-b-10 data_conent_67">
-                                                            <div>:
-                                                                {{ $property->owner_contact ? $property->owner_contact : '-' }}
+                                                        <div class="form-group col-8 m-b-10 cursor-pointer color-code-popover data_conent_67" data-bs-trigger="hover focus">
+                                                            <div class="highlightable">:
+                                                                <a href="{{ $property->owner_contact ? $property->owner_contact : '#' }}">
+                                                                    {{ $property->owner_contact ? $property->owner_contact : '-' }}
+                                                                </a>
                                                             </div>
                                                         </div>
+                                                        
                                                         <div class="form-group col-4 m-b-10 data_conent_68">
                                                             <h6><b>NRI</b></h6>
                                                         </div>
@@ -2694,11 +2697,13 @@ use Illuminate\Support\Facades\DB;
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-4 m-b-10 data_conent_152">
-                                                    <h6><b>Mobile</b></h6>
+                                                    <h6><b>Mobile </b></h6>
                                                 </div>
-                                                <div class="form-group col-8 m-b-10 data_conent_152">
-                                                    <div>:
-                                                        {{ $property->owner_contact ? $property->owner_contact : '-' }}
+                                                <div class="form-group col-8 m-b-10 cursor-pointer color-code-popover data_conent_67" data-bs-trigger="hover focus">
+                                                    <div class="highlightable">:
+                                                        <a href="{{ $property->owner_contact ? $property->owner_contact : '#' }}">
+                                                            {{ $property->owner_contact ? $property->owner_contact : '-' }}
+                                                        </a>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-4 m-b-10 data_conent_153">

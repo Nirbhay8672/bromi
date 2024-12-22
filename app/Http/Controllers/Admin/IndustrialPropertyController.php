@@ -239,6 +239,14 @@ class IndustrialPropertyController extends Controller
 						$salable_area_print = "";
 					}
 
+					if ($row->Property_priority == "91") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Blue-Star.png') . '" alt="">';
+                    } else if ($row->Property_priority == "90") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Yellow-Star.png') . '" alt="">';
+                    } else if ($row->Property_priority == "17") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Red-Star.png') . '" alt="">';
+                    }
+
 					try {
 						return '
 						<td style="vertical-align:top">
@@ -247,6 +255,7 @@ class IndustrialPropertyController extends Controller
 						<br>
 						' . $salable_area_print . '
 						</font>
+						<br>' . $row->image_path . '
 						<br>' . $fstatus . '
 						</td>';
 					} catch (\Throwable $th) {
@@ -648,6 +657,7 @@ class IndustrialPropertyController extends Controller
 		$data->construction_area = $request->construction_area;
 		$data->construction_measurement = $request->construction_measurement;
 		$data->hot_property = $request->hot_property;
+		$data->Property_priority = $request->Property_priority;
 		$data->pre_leased = $request->is_pre_leased;
 		$data->property_description = $request->property_description;
 		$data->commission = $request->commision;
