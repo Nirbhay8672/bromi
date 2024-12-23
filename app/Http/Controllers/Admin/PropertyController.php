@@ -734,7 +734,16 @@ class PropertyController extends Controller
                     $first_end = '</font>';
                     // $second = '<br> <a href="' . $row->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '    </font> </a>';
                     $second = '<br>Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font>';
-                    $third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a>' : "");
+
+                    if ($row->Property_priority == "91") {
+                        $third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a> <img style="height:20px;bottom: 38px;margin-left:17px;" src="' . asset('assets/prop_images/Blue-Star.png') . '" alt="">' : "");
+                    } else if ($row->Property_priority == "90") {
+                        $third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a> <img style="height:20px;bottom: 38px;margin-left:17px;" src="' . asset('assets/prop_images/Yellow-Star.png') . '" alt="">' : "");
+                    } else if ($row->Property_priority == "17") {
+                        $third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a> <img style="height:20px;bottom: 38px;margin-left:17px;" src="' . asset('assets/prop_images/Red-Star.png') . '" alt="">' : "");
+                    }
+
+                    
                     if ($isShared) {
                         $forth = '<img style="height:24px;float:right;" src="' . asset('assets/images/sharedImg.png') . '" alt="">';
                     } else {
@@ -802,14 +811,6 @@ class PropertyController extends Controller
                     $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
                     if (empty($salable_area_print)) {
                         $salable_area_print = "Area Not Available";
-                    }
-
-                    if ($row->Property_priority == "91") {
-                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Blue-Star.png') . '" alt="">';
-                    } else if ($row->Property_priority == "90") {
-                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Yellow-Star.png') . '" alt="">';
-                    } else if ($row->Property_priority == "17") {
-                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Red-Star.png') . '" alt="">';
                     }
                     try {
                         $value = json_decode($row->unit_details)[0];
