@@ -19,13 +19,6 @@ use SoftDeletes;
 	protected static $recordEvents = ['created','updated','deleted'];
 	protected static $logAttributes = ['name'];
 
-
-	protected static function boot()
-	{
-		parent::boot();
-		static::addGlobalScope(new VendorScope);
-	}
-
 	protected $fillable = [
 		'user_id',
 		'name',

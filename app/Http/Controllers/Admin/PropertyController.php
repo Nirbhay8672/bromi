@@ -117,7 +117,16 @@ class PropertyController extends Controller
                     ->where('properties.property_category', '!=', '262');
 
                 if ($isSubAdmin->property_for_id && $isSubAdmin->property_for_id !== "null") {
-                    $data->where('properties.property_for', '=', $isSubAdmin->property_for_id);
+                    if($isSubAdmin->property_for_id != 'Both') {
+                        if($isSubAdmin->property_for_id == 'Sell') {
+                            $data->where('properties.property_for', '=', 'Sell');
+                            $data->orWhere('properties.property_for', '=', 'Both');
+                        }
+                        if($isSubAdmin->property_for_id == 'Rent') {
+                            $data->where('properties.property_for', '=', 'Rent');
+                            $data->orWhere('properties.property_for', '=', 'Both');
+                        }
+                    }
                 } else {
                     $data->orWhere('properties.property_for', '=', 'Rent');
                     $data->orWhere('properties.property_for', '=', 'Sell');

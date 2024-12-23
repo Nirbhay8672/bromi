@@ -138,7 +138,7 @@ class HomeController extends Controller
 				$total_project = Projects::select('id')->where('user_id', Auth::user()->id);
 
 				$total_active_leads = Enquiries::select('id')->whereHas('Progress', function($q){
-					$q->where('progress','Discussion');
+					$q->whereNotIn('progress', ['Lost', 'Booked' ,'New Lead']);
 				})->where('user_id', Auth::user()->id);
 
 				$total_lost = Enquiries::select('id')->whereHas('Progress', function($q){
