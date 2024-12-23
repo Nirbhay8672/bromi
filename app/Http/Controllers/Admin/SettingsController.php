@@ -356,7 +356,7 @@ class SettingsController extends Controller
 		} else {
 			$data =  new Builders();
 		}
-		$data->user_id = Session::get('parent_id');
+		$data->user_id = Auth::user()->id;
 		$data->name = $request->name;
 		$data->save();
 	}

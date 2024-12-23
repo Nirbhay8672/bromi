@@ -680,7 +680,7 @@ class ProjectsController extends Controller
 			->where('status',1)
 			->get();
 
-		$builders = Builders::orderBy('name')->get();
+		$builders = Builders::orderBy('name')->where('user_id' , Auth::user()->id)->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
 
 		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();
@@ -707,7 +707,7 @@ class ProjectsController extends Controller
 		$cities = City::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$states = State::orderBy('name')->where('user_id',Auth::user()->id)->get();
 		$areas = Areas::orderBy('name')->where('user_id',Auth::user()->id)->get();
-		$builders = Builders::orderBy('name')->get();
+		$builders = Builders::orderBy('name')->where('user_id' , Auth::user()->id)->get();
 		$project_configuration_settings = DropdownSettings::get()->toArray();
 
 		$data['property_configuration_settings'] = DropdownSettings::get()->toArray();

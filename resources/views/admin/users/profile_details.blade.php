@@ -479,10 +479,10 @@
                                                             </div>
                                                             <div class="col-12 d-flex">
                                                                 <div class="col-6">
-                                                                    <strong class="text-muted">{{ucfirst(str_replace('_', ' ', $lastPay->transaction_goal))}}</strong>
+                                                                    <strong class="text-muted">{{ucfirst(str_replace('_', ' ', $lastPay->transaction_goal ?? '-'))}}</strong>
                                                                 </div>
                                                                 <div class="col-6">
-                                                                    <strong class="text-muted">{{ $lastPay->payment_amount }}</strong>
+                                                                    <strong class="text-muted">{{ $lastPay->payment_amount ?? '-' }}</strong>
                                                                 </div>
                                                             </div>
                                                         </div>

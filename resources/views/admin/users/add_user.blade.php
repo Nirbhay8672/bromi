@@ -108,22 +108,20 @@
                                                                 <label class="form-check-label" for="working">Currently
                                                                     Working</label>
                                                             </div>
-                                                            <div>
-                                                                <label><b>Property Access</b></label>
-                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2">
                                                             <div class="form-group col-md-3 m-b-20 mb-3">
+                                                                <label><b>Property Access</b></label>
                                                                 <select class="form-select" id="property_for_id">
                                                                     <option value="" disabled>Property For</option>
                                                                     <option value="Rent">Rent</option>
                                                                     <option value="Sell">Sell</option>
-                                                                    <option value="Both">Both</option>
+                                                                    <option value="Both">All</option>
                                                                 </select>
                                                                 <span id="property_for_id_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
-
                                                             <div class="form-group col-md-3 m-b-20 mb-3">
-                                                                <label class="select2_label" for="Property Type">Property
-                                                                    Type</label>
+                                                                <label><b>Property Type</b></label>
                                                                 <select class="form-select" id="property_type_id" onchange="setCategory()" multiple>
                                                                     <option
                                                                         data-parent_id="null"
@@ -137,16 +135,14 @@
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-20 mb-3">
-                                                                <label class="select2_label" for="Specific Type">Specific
-                                                                    Type</label>
+                                                                <label><b>Specific Type</b></label>
                                                                 <select class="form-select" id="specific_properties"
                                                                     multiple="multiple">
                                                                 </select>
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-20 mb-3">
-                                                                <label class="select2_label" for="Building Access">Project
-                                                                    Access</label>
+                                                                <label><b>Project Access</b></label>
                                                                 <select class="form-select" id="buildings"
                                                                     multiple="multiple">
                                                                     @foreach ($projects as $project)
