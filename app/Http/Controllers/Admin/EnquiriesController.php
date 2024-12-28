@@ -1838,10 +1838,10 @@ class EnquiriesController extends Controller
 				$property_for = ($data->enquiry_for == 'Buy') ? 'Sell' : $data->enquiry_for;
 				if ($property_for === 'Rent') {
 					// dd("re",$property_for);
-					$query->whereIn('properties.property_for', ['Rent', 'Both']);
+					$query->whereIn('properties.property_for', ['Rent']);
 				} elseif ($property_for === 'Sell') {
 					// dd("sell",$property_for);
-					$query->whereIn('properties.property_for', ['Sell', 'Both']);
+					$query->whereIn('properties.property_for', ['Sell']);
 				}
 			})
 			->where('properties.property_category', $data->property_type)
@@ -1866,8 +1866,8 @@ class EnquiriesController extends Controller
 					->orWhere(function ($query) use ($budgetFrom, $budgetTo, $data) {
 						if ($data->enquiry_for == 'Rent') {
 							for ($i = 0; $i < 2; $i++) { // Loop through the JSON array
-								$query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
-									->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+								$query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+									->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
 							}
 						}
 					})

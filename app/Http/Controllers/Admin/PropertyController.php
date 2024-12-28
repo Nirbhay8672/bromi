@@ -2726,6 +2726,7 @@ class PropertyController extends Controller
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
+            ->where('enquiry_for', $property->property_for)
             ->where('weekend_enq', $property->week_end_villa)
             ->whereJsonContains('configuration', $property->configuration);
         if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0) || ($unit_price !== "" && $unit_price !== 0  && $both_price !== '' && $both_price !== 0)) {
@@ -2810,6 +2811,7 @@ class PropertyController extends Controller
                 return $query;
             }
         });
+        
         // length_of_fp
         // dd("sd",$property->property_category);
         $enquiries = $enquiries->when(($length_of_fp !== "" && $property->property_category === '262' && $property->property_category !== null), function ($query) use ($length_of_fp, $length_of_fp_part) {
