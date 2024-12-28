@@ -5,6 +5,15 @@
     $land_unit_name=$land_units->unit_name;
     use App\Traits\HelperFn;
 ?>
+
+<style>
+    @media (max-width: 576px) {
+        .sticky-nav-menu-tab .nav-item{
+            margin-top: 1rem;
+        }
+    }
+</style>
+
 @extends('admin.layouts.app')
 @section('content')
     <div class="page-body">
@@ -27,8 +36,8 @@
                             <div class="row px-3">
                                 <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-md-10">
-                                            <ul class="nav nav-pills sticky-nav-menu-tab mb-3" id="pills-tab"
+                                        <div class="col-12 col-md-10">
+                                            <ul class="nav nav-pills sticky-nav-menu-tab mb-3 gap-lg-1 gap-2" id="pills-tab"
                                                 role="tablist">
                                                 <li class="nav-item" role="presentation">
                                                     <button class="nav-link mx-1 active" id="v-customer-summary-tab"
@@ -77,59 +86,40 @@
                                                         aria-selected="false">Matching
                                                         Property</button>
                                                 </li>
-                                                <div class="row" style="float:right; display:contents;">
-                                                    <div class="col-md-1" style="float:right; padding-left:2%;">
-                                                        <a  data-id={{$data->id}} onclick="Status(this)">
-                                                            @if ($data->enq_status == 1)
+                                                <li class="nav-item" role="presentation">
+                                                    <a  data-id={{$data->id}} onclick="Status(this)">
+                                                        @if ($data->enq_status == 1)
+                                                        <button class="nav-link mx-1 active"
+                                                            id="v-view-summary-tab">Active</button>
+                                                            @else
                                                             <button class="nav-link mx-1 active"
-                                                                id="v-view-summary-tab">Active</button>
-                                                                @else
-                                                                <button class="nav-link mx-1 active"
-                                                                id="v-view-summary-tab">InActive</button>  
-                                                            @endif
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-md-1" style="float:right; padding-left:2%;">
-                                                        <a href={{ URL::to('admin/Enquiries') }}>
-                                                            <button class="nav-link mx-1 active"
-                                                                id="v-view-summary-tab">Back</button>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-md-1" style="float:right">
-                                                        <a href="{{ URL::to('admin/enquiry/edit/' . $data['id']) }}">
-                                                            <button class="nav-link mx-1 active"
-                                                                id="v-view-summary-tab">Edit</button>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                
+                                                            id="v-view-summary-tab">InActive</button>  
+                                                        @endif
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <a href={{ URL::to('admin/Enquiries') }}>
+                                                        <button class="nav-link mx-1 active"
+                                                            id="v-view-summary-tab">Back</button>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <a href="{{ URL::to('admin/enquiry/edit/' . $data['id']) }}">
+                                                        <button class="nav-link mx-1 active"
+                                                            id="v-view-summary-tab">Edit</button>
+                                                    </a>
+                                                </li>
                                             </ul>
-                                            {{-- <form action="{{route('admin.updateEnquiryStatus')}}" class="row row-cols g-1" method="get">
-                                                @csrf
-                                                @method('post')
-                                                <div class="col-lg-3 col-md-6 col-12">
-                                                    <input type="text" hidden value="{{$data['id']}}" name="id" onclick="status(this)">
-                                                    <select class="form-select" id="enquiry_progress_status" name="status">
-                                                        <option value="">Enquiry Progress</option>
-                                                        <option value="1">Active</option>
-                                                        <option value="0">Inactive</option>
-                                                    </select>
-                                                </div>
-        
-                                                <div class="col-lg-3 col-md-6 col-12" style="margin-left: 10px;">
-                                                    <button class="btn btn-primary" type="submit">Update</button>
-                                                </div>
-                                            </form> --}}
                                         </div>
                                        
-                                        <div class="col-md-2 align-self-center">
+                                        <div class="col-12 col-md-2 mt-2">
                                             <div class="input-group mb-3">
-                                                <select class="form-select form-control" id="enquiry_progress_status">
+                                                <select class="form-select form-control" id="enquiry_progress_status" style="border: 2px solid #1d2848;">
                                                     <option value="">Booked/Lost</option>
                                                     <option value="Booked">Booked</option>
                                                     <option value="Lost">Lost</option>
                                                 </select>
-                                                <div class="input-group-append">
+                                                <div class="input-group-append ms-3">
                                                     <button class="btn btn-primary"
                                                         id="save_enquiry_progress_status">Update</button>
                                                 </div>
