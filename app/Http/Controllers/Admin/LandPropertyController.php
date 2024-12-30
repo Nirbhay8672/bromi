@@ -628,10 +628,10 @@ class LandPropertyController extends Controller
                         $owner_type = 'Builder';
                     }
 
+                    $other_details = "";
                     if ($row->owner_contact) {
                         $other_details = $owner_type . ' - ' . $row->owner_name . ' - ' . $row->owner_contact;
                     }
-                    $other_details = "";
                     $contact_info = ($vvv != "") ? $vvv : ' ';
                     // $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
                     // $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';

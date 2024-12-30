@@ -302,7 +302,8 @@
                                         @foreach ($projects as $property)
                                             @if ($property->Projects && $property->Projects->project_name)
                                                 <option value="{{ $property->project_id }}">
-                                                    {{ $property->Projects->project_name }}</option>
+                                                    {{ $property->Projects->project_name }}
+                                                </option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -708,7 +709,8 @@
                                         @forelse ($configuration_settings as $props)
                                             @if ($props['dropdown_for'] == 'property_specific_type')
                                                 <option data-val="{{ $props['name'] }}" value="{{ $props['id'] }}">
-                                                    {{ $props['name'] }}</option>
+                                                    {{ $props['name'] }}
+                                                </option>
                                             @endif
                                         @empty
                                         @endforelse
@@ -794,134 +796,134 @@
                                                 : '';
                                         @endphp
                                         <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
-                                    @endif
-                                @empty
-                                @endforelse
+@endif
+@empty
+@endforelse
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="mb-0">Enquiry Progress: </label>
-                                            <select class="form-select" id="progress_enquiry_progress">
-                                                <option value="">Enquiry Progress </option>
-                                                <option value="New Lead">New Lead</option>
-                                                <option value="Lead Confirmed"> Lead Confirmed</option>
-                                                <option value="Discussion"> Discussion</option>
-                                                <option value="Booked"> Booked</option>
-                                                <option value="Lost"> Lost</option>
-                                                @forelse ($configuration_settings as $progs)
-                                                    @if ($progs['dropdown_for'] == 'enquiry_progress')
-                                                        @php
-                                                            $namee = isset(explode('___', $progs['name'])[0])
-                                                                ? explode('___', $progs['name'])[0]
-                                                                : '';
-                                                        @endphp
-                                                        <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
-                                                    @endif
-                                                @empty
-                                                @endforelse
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="mb-0">Enquiry Progress: </label>
+            <select class="form-select" id="progress_enquiry_progress">
+                <option value="">Enquiry Progress </option>
+                <option value="New Lead">New Lead</option>
+                <option value="Lead Confirmed"> Lead Confirmed</option>
+                <option value="Discussion"> Discussion</option>
+                <option value="Booked"> Booked</option>
+                <option value="Lost"> Lost</option>
+                @forelse ($configuration_settings as $progs)
+                @if ($progs['dropdown_for'] == 'enquiry_progress')
+                @php
+                $namee = isset(explode('___', $progs['name'])[0])
+                ? explode('___', $progs['name'])[0]
+                : '';
+                @endphp
+                <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
+                @endif
+                @empty
+                @endforelse
 
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="site_visit_date1" style="margin-top: 10px">NFD Date:</label>
-                                            <input class="form-control limitYear4digits" id="site_visit_date1"
-                                                name="nfdDate" max='31-12-2050' type="date"
-                                                oninput="limitYearTo4Digits1()">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="mb-0">Comments:</label>
-                                            <select class="form-select" id="progress_sales_comment">
-                                                <option value="">Sales Comments</option>
-                                                @forelse ($configuration_settings as $props)
-                                                    @if ($props['dropdown_for'] == 'enquiry_sales_comment')
-                                                        <option data-parent_id="{{ $props['parent_id'] }}"
-                                                            value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                        </option>
-                                                    @endif
-                                                @empty
-                                                @endforelse
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="nfdTime" style="margin-top: 10px">NFD Time:</label>
-                                            <input class="form-control" id="site_visit_time1" name="nfdTime"
-                                                type="time">
-                                        </div>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="site_visit_date1" style="margin-top: 10px">NFD Date:</label>
+            <input class="form-control limitYear4digits" id="site_visit_date1"
+                name="nfdDate" max='31-12-2050' type="date"
+                oninput="limitYearTo4Digits1()">
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="mb-0">Comments:</label>
+            <select class="form-select" id="progress_sales_comment">
+                <option value="">Sales Comments</option>
+                @forelse ($configuration_settings as $props)
+                @if ($props['dropdown_for'] == 'enquiry_sales_comment')
+                <option data-parent_id="{{ $props['parent_id'] }}"
+                    value="{{ $props['id'] }}">{{ $props['name'] }}
+                </option>
+                @endif
+                @empty
+                @endforelse
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="nfdTime" style="margin-top: 10px">NFD Time:</label>
+            <input class="form-control" id="site_visit_time1" name="nfdTime"
+                type="time">
+        </div>
 
-                                    </div>
-                                    <div class="col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label>Lead Type:</label><br>
-                                            <div class="form-check form-check-inline radio radio-primary"
-                                                style="margin-right:3rem">
-                                                <input class="form-check-input" id="progress_lead_type_1" type="radio"
-                                                    name="progress_lead_type" value="Hot Lead">
-                                                <label class="form-check-label mb-0" for="progress_lead_type_1">Hot
-                                                    Lead</label>
-                                            </div>
-                                            <div class="form-check form-check-inline radio radio-primary"
-                                                style="margin-right:3rem">
-                                                <input class="form-check-input" type="radio" id="progress_lead_type_2"
-                                                    name="progress_lead_type" value="Warm Lead">
-                                                <label class="form-check-label mb-0" for="progress_lead_type_2"> Warm
-                                                    Lead</label>
-                                            </div>
-                                            <div class="form-check form-check-inline radio radio-primary"
-                                                style="margin-right:3rem">
-                                                <input class="form-check-input" id="progress_lead_type_3" type="radio"
-                                                    name="progress_lead_type" value="Cold Lead">
-                                                <label class="form-check-label mb-0" for="progress_lead_type_3">Cold
-                                                    Lead</label>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-6 mt-2">
-                                        <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
-                                        <div class="form-group">
-                                            <div class="fname">
-                                                <select class="form-select" id="reminider_before_minute"
-                                                    multiple="multiple">
-                                                    <option value="" disabled>Select Minutes </option>
-                                                    <option value="30 mins">30 mins</option>
-                                                    <option value="1 hour">1 hour</option>
-                                                    <option value="90 mins">90 mins</option>
-                                                    <option value="120 mins">120 mins</option>
-                                                    <option value="24 hour">24 hour</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
-                                            type="remarks" autocomplete="off">
-                                    </div>
-                                    <div class="col-md-6 mt-2">
-                                        <div class="form-group">
-                                            <label for="progress_remarks">Remarks:</label>
-                                            <input class="form-control" name="progress_remarks" id="progress_remarks"
-                                                type="remarks" autocomplete="off">
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="text-center mt-3">
-                                    <button class="btn custom-theme-button" type="button"
-                                        id="saveProgress">Save</button>
-                                    <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-
-
-
-                </div>
+    </div>
+    <div class="col-md-12 mt-2">
+        <div class="form-group">
+            <label>Lead Type:</label><br>
+            <div class="form-check form-check-inline radio radio-primary"
+                style="margin-right:3rem">
+                <input class="form-check-input" id="progress_lead_type_1" type="radio"
+                    name="progress_lead_type" value="Hot Lead">
+                <label class="form-check-label mb-0" for="progress_lead_type_1">Hott
+                    Lead</label>
             </div>
-        </div> --}}
+            <div class="form-check form-check-inline radio radio-primary"
+                style="margin-right:3rem">
+                <input class="form-check-input" type="radio" id="progress_lead_type_2"
+                    name="progress_lead_type" value="Warm Lead">
+                <label class="form-check-label mb-0" for="progress_lead_type_2"> Warm
+                    Lead</label>
+            </div>
+            <div class="form-check form-check-inline radio radio-primary"
+                style="margin-right:3rem">
+                <input class="form-check-input" id="progress_lead_type_3" type="radio"
+                    name="progress_lead_type" value="Cold Lead">
+                <label class="form-check-label mb-0" for="progress_lead_type_3">Cold
+                    Lead</label>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-6 mt-2">
+        <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
+        <div class="form-group">
+            <div class="fname">
+                <select class="form-select" id="reminider_before_minute"
+                    multiple="multiple">
+                    <option value="" disabled>Select Minutes </option>
+                    <option value="30 mins">30 mins</option>
+                    <option value="1 hour">1 hour</option>
+                    <option value="90 mins">90 mins</option>
+                    <option value="120 mins">120 mins</option>
+                    <option value="24 hour">24 hour</option>
+                </select>
+            </div>
+        </div>
+        <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
+            type="remarks" autocomplete="off">
+    </div>
+    <div class="col-md-6 mt-2">
+        <div class="form-group">
+            <label for="progress_remarks">Remarks:</label>
+            <input class="form-control" name="progress_remarks" id="progress_remarks"
+                type="remarks" autocomplete="off">
+        </div>
+    </div>
+
+</div>
+<div class="text-center mt-3">
+    <button class="btn custom-theme-button" type="button"
+        id="saveProgress">Save</button>
+    <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
+        data-bs-dismiss="modal">Cancel</button>
+</div>
+</form>
+</div>
+</div>
+
+
+
+
+</div>
+</div>
+</div> --}}
 
         <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -1117,7 +1119,8 @@
                                         @foreach ($projects as $property)
                                             @if ($property->Projects && $property->Projects->project_name)
                                                 <option value="{{ $property->id }}">
-                                                    {{ $property->Projects->project_name }}</option>
+                                                    {{ $property->Projects->project_name }}
+                                                </option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -1182,20 +1185,56 @@
                                         type="remarks" autocomplete="off">
                                 </div>
                                 <div class="row">
-                                    <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="email_reminder_schedule" type="checkbox"
-                                            value="">
-                                        <label class="form-check-label" for="email_reminder_schedule">Email
-                                            Reminder</label>
+                                    <!-- First Group -->
+                                    <div class="form-group col-md-6 m-b-20">
+                                        <div class="row">
+                                            <div class="form-check checkbox checkbox-solid-success mb-0 col-md-4 m-b-20">
+                                                <input class="form-check-input" id="email_reminder_schedule"
+                                                    type="checkbox" value="">
+                                                <label class="form-check-label" for="email_reminder_schedule">Email
+                                                    Reminder</label>
+                                            </div>
+                                            <div class="form-check checkbox checkbox-solid-success mb-0 col-md-4 m-b-20">
+                                                <input class="form-check-input" id="sms_reminder_schedule"
+                                                    type="checkbox" value="">
+                                                <label class="form-check-label" for="sms_reminder_schedule">SMS
+                                                    Reminder</label>
+                                            </div>
+                                            <div class="form-check checkbox checkbox-solid-success mb-0 col-md-4 m-b-20">
+                                                <input class="form-check-input" id="wp_reminder" type="checkbox"
+                                                    value="">
+                                                <label class="form-check-label" for="wp_reminder">Whatsapp
+                                                    Reminder</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-check checkbox checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="sms_reminder_schedule" type="checkbox"
-                                            value="">
-                                        <label class="form-check-label" for="sms_reminder_schedule">SMS Reminder</label>
-                                    </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-3 m-b-20">
-                                        <input class="form-check-input" id="wp_reminder" type="checkbox" value="">
-                                        <label class="form-check-label" for="wp_reminder">Whatsapp Reminder</label>
+                                    <div class="form-group col-md-6 m-b-20">
+                                        <div class="col-12">
+                                            <div class="m-checkbox-inline custom-radio-ml">
+                                                <input type="hidden" name="filter_lead_type" value="" />
+                                                <div class="form-check form-check-inline radio radio-primary m-b-20">
+                                                    <input class="form-check-input" id="filter_lead_type_11"
+                                                        type="radio" name="filter_lead_type" value="Hot Lead" />
+                                                    <label class="form-check-label mb-0" for="filter_lead_type_11">Hot
+                                                        Lead</label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline radio radio-primary m-b-20">
+                                                    <input class="form-check-input" type="radio"
+                                                        id="filter_lead_type_12" name="filter_lead_type"
+                                                        value="Warm Lead" />
+                                                    <label class="form-check-label mb-0" for="filter_lead_type_12">Warm
+                                                        Lead</label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline radio radio-primary m-b-20">
+                                                    <input class="form-check-input" id="filter_lead_type_13"
+                                                        type="radio" name="filter_lead_type" value="Cold Lead" />
+                                                    <label class="form-check-label mb-0" for="filter_lead_type_13">Cold
+                                                        Lead</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -1270,7 +1309,8 @@
                                                 type="checkbox">
                                             <label class="form-check-label" for="match_enquiry_for">Enquiry For</label>
                                         </div>
-                                        <div class="form-check checkbox  checkbox-solid-success mb-0 m-b-10 the_enquiry_sub_cat">
+                                        <div
+                                            class="form-check checkbox  checkbox-solid-success mb-0 m-b-10 the_enquiry_sub_cat">
                                             <input class="form-check-input" checked id="match_specific_sub_type"
                                                 type="checkbox">
                                             <label class="form-check-label" for="match_specific_sub_type">Enquiry Sub
@@ -1301,7 +1341,8 @@
                                                 type="checkbox">
                                             <label class="form-check-label" for="match_enquiry_size">Enquiry Size</label>
                                         </div>
-                                        <div class="form-check checkbox the_matching_weekend checkbox-solid-success mb-0 m-b-10" style="display: none">
+                                        <div class="form-check checkbox the_matching_weekend checkbox-solid-success mb-0 m-b-10"
+                                            style="display: none">
                                             <input class="form-check-input" checked id="match_enquiry_weekend"
                                                 type="checkbox">
                                             <label class="form-check-label" for="match_enquiry_weekend">Property
@@ -1921,8 +1962,8 @@
                         id: enquiryID, // Pass the enquiryID directly
                     },
                     success: function(data) {
-                        console.log("data :",data.weekend_enq);
-                        
+                        console.log("data :", data.weekend_enq);
+
                         if (typeof data.configuration === "string") {
                             try {
                                 data.configuration = JSON.parse(data.configuration);
@@ -1939,10 +1980,10 @@
                             } else {
                                 $('.the_matching_weekend').hide();
                             }
-                        }else if(data.configuration == 0){
+                        } else if (data.configuration == 0) {
                             console.log("Is land category :");
                             $('.the_enquiry_sub_cat').hide();
-                        }else {
+                        } else {
                             $('.the_enquiry_sub_cat').show();
                             console.log("data.configuration is still not an array after parsing : ");
                         }
@@ -2315,11 +2356,13 @@
                 }
                 $(this).prop('disabled', true);
                 var id = $('#schedule_visit_id').val()
+
                 reminder_time_before = $('#reminider_before_minute').val();
                 var email_reminder = document.getElementById("email_reminder_schedule");
                 var sms_reminder = document.getElementById("sms_reminder_schedule");
                 var email = email_reminder.checked == true ? 1 : 0;
                 var sms = sms_reminder.checked == true ? 1 : 0;
+
 
                 $.ajax({
                     type: "POST",
@@ -2332,6 +2375,7 @@
                         assigned_to: $('#schedule_assigned_to').val(),
                         schedule_remind: $('#schedule_remind').val(),
                         property_list: JSON.stringify($('#property_list').val()),
+                        lead_type: $('input[name="filter_lead_type"]:checked').val(),
                         time_before: JSON.stringify(reminder_time_before),
                         email_reminder: email,
                         sms_reminder: sms,

@@ -104,11 +104,19 @@ class IndustrialPropertyController extends Controller
 				->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
 					if (!empty($enq)) {
 						// property for
+						// if ($request->match_enquiry_for) {
+						// 	$property_for = ($enq->enquiry_for == 'Buy') ? 'Sell' : $enq->enquiry_for;
+						// 	dd("match_enquiry_for", $enq->enquiry_for, "..", $property_for);
+						// 	$query->where('properties.property_for', $property_for);
+						// }
 						if ($request->match_enquiry_for) {
 							$property_for = ($enq->enquiry_for == 'Buy') ? 'Sell' : $enq->enquiry_for;
-							// dd("match_enquiry_for", $enq->enquiry_for, "..", $property_for);
-							// dd($request->all(), $enq);
-							$query->where('properties.property_for', $property_for);
+							if ($property_for === 'Rent') {
+								$query->whereIn('properties.property_for', ['Rent', 'Both']);
+							}
+							if ($property_for === 'Sell') {
+								$query->whereIn('properties.property_for', ['Sell', 'Both']);
+							}
 						}
 						//requirement ytpe
 						if ($request->match_property_type && !empty($enq->requirement_type)) {
@@ -127,7 +135,6 @@ class IndustrialPropertyController extends Controller
 						}
 						//property price & unit_price
 						if ($request->match_budget_from_type) {
-							// dd("match_budget_from_type", $enq->budget_from, "..", $request->match_budget_from_type, "...", $enq->budget_to);
 							$budgetFrom = str_replace(',', '', $enq->budget_from);
 							$budgetTo = str_replace(',', '', $enq->budget_to);
 							$query->where(function ($query) use ($budgetFrom, $budgetTo) {
@@ -138,11 +145,15 @@ class IndustrialPropertyController extends Controller
 									$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
 										->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
 								})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+									$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+										->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+								})->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
 									$query->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
 										->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[0][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
 								});
 							});
 						}
+						
 
 						if ($request->match_enquiry_size) {
 							$query->where(function ($query) use ($enq) {
@@ -154,7 +165,6 @@ class IndustrialPropertyController extends Controller
 						}
 					}
 				})
-
 				->orderBy('id', 'desc')->get();
 
 			return DataTables::of($data)
@@ -480,10 +490,10 @@ class IndustrialPropertyController extends Controller
 						$owner_type = 'Builder';
 					}
 
+					$other_details = "";
 					if ($row->owner_contact) {
 						$other_details = $owner_type . ' - ' . $row->owner_name . ' - ' . $row->owner_contact;
 					}
-					$other_details = "";
 					$contact_info = ($vvv != "") ? $vvv : ' ';
 					// $buttons =  $buttons . '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . $contact_info . '" data-bs-trigger="hover focus"></i>';
 					// $buttons .= '<i title="Contacts" class="fa fa-phone-square fa-2x cursor-pointer color-code-popover" data-container="body"  data-bs-content="' . ($contact_info != ' ' ? $contact_info : $row->owner_contact) . '" data-bs-trigger="hover focus"></i>';

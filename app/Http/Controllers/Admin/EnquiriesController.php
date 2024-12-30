@@ -734,7 +734,11 @@ class EnquiriesController extends Controller
 						}
 						$configuration_display = implode(', ', $configuration_names);
 					} else {
-						$category = (!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '';
+						$configuration_display = (!empty($dropdowns[$row->property_type]['name'])) ? ' | ' . $dropdowns[$row->property_type]['name'] : '';
+					}
+
+					if ($row->requirement_type === '87') {
+						$category =  (!empty($dropdowns[$row->property_type]['name'])) ?  $dropdowns[$row->property_type]['name'] . ' | ' : '' ;
 					}
 
 					if (!empty($row->area_ids)) {
@@ -779,7 +783,7 @@ class EnquiriesController extends Controller
 							}
 						}
 					}
-					$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_display)) ? ' | ' : $category) . $configuration_display . '</div>';
+					$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_display)) ? ' | ' : $configuration_display) . $category . $configuration_display . '</div>';
 					$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " - " . $row->area_to . " " . $area_form_m : "") . '</div>';
 					$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"></small></div>';
 					$req .= $fstatus;
@@ -1249,6 +1253,8 @@ class EnquiriesController extends Controller
 			$data->enquiry_id = $request->enquiry_id;
 			$data->user_id = Auth::user()->id;
 			$data->progress = $the_progress;
+			$data->lead_type = $request->lead_type;
+			
 			// $data->lead_type = $previous->lead_type;
 			$data->nfd = $request->visit_date;
 			$data->remarks = $request->description;

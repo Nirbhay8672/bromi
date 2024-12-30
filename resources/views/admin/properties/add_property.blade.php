@@ -1655,7 +1655,7 @@
                                                     <div class="row div_property_source" id="">
                                                         <div class="form-group col-md-2 mb-3">
                                                             <select class="form-select" id="Property_priority">
-                                                                <option value="">Priority 999</option>
+                                                                <option value="">Priority</option>
                                                                 @forelse ($property_configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_priority_type')
                                                                         <option
