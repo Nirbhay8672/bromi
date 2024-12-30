@@ -137,28 +137,41 @@ class PropertyController extends Controller
                 } else {
                     $data->whereIn('properties.property_type', ["85", "87"]);
                 }
-                if (count($subcategoryArray) > 0) {
-                    $data->whereIn('properties.property_category', $subcategoryArray);
-                } else {
-                    $data->orWhereIn('properties.property_category', ["254", "255", "256", "257", "258", "259", "260", "261", "262"]);
-                }
-                $data->when($request->filter_by, function ($query) use ($request) {
-                    if ($request->filter_by == 'reminder') {
-                        return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(7)->format('Y-m-d'))
-                            ->where('properties.prop_status', 1);
-                    } elseif ($request->filter_by == 'favourite') {
-                        return $query->where('is_favourite', 1)
-                            ->where('properties.prop_status', 1);
-                    } elseif ($request->filter_by == 'new') {
-                        return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'))
-                            ->where('properties.prop_status', 1);
+
+                    if (count($subcategoryArray) > 0) {
+                        
+                        if($request->filter_property_for) {
+                            $data->when($request->filter_property_for, function ($query) use ($request) {
+                                return $query->where(function ($query) use ($request) {
+                                    $query->where('properties.property_for', $request->filter_property_for);
+                                });
+                            });
+                        } else {
+                            $data->whereIn('properties.property_category', $subcategoryArray);
+                        }
+                    } else {
+                        if($request->filter_property_for) {
+                            $data->when($request->filter_property_for, function ($query) use ($request) {
+                                return $query->where(function ($query) use ($request) {
+                                    $query->where('properties.property_for', $request->filter_property_for);
+                                });
+                            });
+                        } else {
+                            $data->orWhereIn('properties.property_category', ["254", "255", "256", "257", "258", "259", "260", "261", "262"]);
+                        }
                     }
-                })
-                    ->when($request->filter_property_for, function ($query) use ($request) {
-                        return $query->where(function ($query) use ($request) {
-                            // dd("request->filter_property_for",$request->filter_property_for);
-                            $query->where('properties.property_for', $request->filter_property_for);
-                        });
+
+                    $data->when($request->filter_by, function ($query) use ($request) {
+                        if ($request->filter_by == 'reminder') {
+                            return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(7)->format('Y-m-d'))
+                                ->where('properties.prop_status', 1);
+                        } elseif ($request->filter_by == 'favourite') {
+                            return $query->where('is_favourite', 1)
+                                ->where('properties.prop_status', 1);
+                        } elseif ($request->filter_by == 'new') {
+                            return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'))
+                                ->where('properties.prop_status', 1);
+                        }
                     })
                     ->when($request->filter_property_type || empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
                         $filterPropertyType = intval($request->filter_property_type); // Convert to integer
