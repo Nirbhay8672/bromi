@@ -64,6 +64,11 @@ class AdminLoginController extends Controller
 
 		$user_email =  User::where('email', $request->email)->first();
 
+        if(!$user_email) {
+            Session::flash('inactive_user', 'Invalid username or password.');
+            return redirect('admin/login');
+        }
+
         if($user_email->status == 0) {
             Session::flash('inactive_user', 'Oops .. Your account is inactive.');
             return redirect('admin/login');
