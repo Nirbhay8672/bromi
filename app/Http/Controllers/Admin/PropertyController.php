@@ -132,34 +132,26 @@ class PropertyController extends Controller
                     $data->orWhere('properties.property_for', '=', 'Sell');
                     $data->orWhere('properties.property_for', '=', 'Both');
                 }
+
+                if($request->filter_property_for) {
+                    $data->where('properties.property_for', $request->filter_property_for);
+                }
+
                 if (count($propertyTypeIdArray) > 0) {
                     $data->whereIn('properties.property_type', $propertyTypeIdArray);
                 } else {
                     $data->whereIn('properties.property_type', ["85", "87"]);
                 }
 
-                    if (count($subcategoryArray) > 0) {
-                        
-                        if($request->filter_property_for) {
-                            $data->when($request->filter_property_for, function ($query) use ($request) {
-                                return $query->where(function ($query) use ($request) {
-                                    $query->where('properties.property_for', $request->filter_property_for);
-                                });
-                            });
-                        } else {
-                            $data->whereIn('properties.property_category', $subcategoryArray);
-                        }
+                if($request->filter_specific_type) {
+                    if (in_array($request->filter_specific_type,$subcategoryArray )) {
+                        $data->where('properties.property_category',$request->filter_specific_type);
                     } else {
-                        if($request->filter_property_for) {
-                            $data->when($request->filter_property_for, function ($query) use ($request) {
-                                return $query->where(function ($query) use ($request) {
-                                    $query->where('properties.property_for', $request->filter_property_for);
-                                });
-                            });
-                        } else {
-                            $data->orWhereIn('properties.property_category', ["254", "255", "256", "257", "258", "259", "260", "261", "262"]);
-                        }
+                        $data->where('properties.property_category',0);
                     }
+                } else {
+                    $data->orWhereIn('properties.property_category', $subcategoryArray);
+                }
 
                     $data->when($request->filter_by, function ($query) use ($request) {
                         if ($request->filter_by == 'reminder') {
@@ -172,17 +164,11 @@ class PropertyController extends Controller
                             return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'))
                                 ->where('properties.prop_status', 1);
                         }
-                    })
-                    ->when($request->filter_property_type || empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
+                    })->when($request->filter_property_type || empty(json_decode(Auth::user()->property_type_id)), function ($query) use ($request) {
                         $filterPropertyType = intval($request->filter_property_type); // Convert to integer
                         return $query->where('properties.property_type', $filterPropertyType)
                             ->where('properties.prop_status', 1);
-                    })
-                    ->when($request->filter_specific_type || empty(json_decode(Auth::user()->specific_properties)), function ($query) use ($request) {
-                        return $query->where('properties.property_category', $request->filter_specific_type)
-                            ->where('properties.prop_status', 1);
-                    })
-                    ->when($request->filter_configuration, function ($query) use ($request) {
+                    })->when($request->filter_configuration, function ($query) use ($request) {
                         return $query->where('properties.configuration', $request->filter_configuration)
                             ->where('properties.prop_status', 1);
                     })
@@ -358,8 +344,8 @@ class PropertyController extends Controller
                             }
                         }
                     })
-                    // ->where('prop_status', 1)
-                    ->orderByRaw('CASE
+                    ->where('prop_status', 1);
+                    $data->orderByRaw('CASE
                         WHEN properties.prop_status = 1 THEN 1
                         ELSE 2
                         END,  properties.id DESC');
