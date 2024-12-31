@@ -105,13 +105,13 @@
                                                                 
                                                                 $jsonString = str_replace("'", '"', Auth::user()->property_type_id);
                                                                 $user_property_types = json_decode($jsonString, true);
+
                                                                 
                                                                 $type_string = str_replace("'", '"', Auth::user()->specific_properties);
                                                                 $user_specific_types = json_decode($type_string, true);
                                                                 ?>
 
-
-                                                                @if (in_array('85', $user_property_types))
+                                                                @if (in_array('85', $user_property_types) || count($user_property_types) == 0)
                                                                     <input class="form-check-input" id="propertytype85"
                                                                         type="radio" name="property_type"
                                                                         data-val="Commercial" value="85" checked=""
@@ -120,7 +120,7 @@
                                                                         for="propertytype85">Commercial</label>
                                                                 @endif
 
-                                                                @if (in_array('87', $user_property_types))
+                                                                @if (in_array('87', $user_property_types) || count($user_property_types) == 0)
                                                                     <input class="form-check-input" id="propertytype87"
                                                                         type="radio" name="property_type"
                                                                         data-val="Residential" value="87"
@@ -139,7 +139,7 @@
                                                             <div class="m-checkbox-inline custom-radio-ml">
                                                                 @forelse ($property_configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_specific_type')
-                                                                        @if (in_array($props['id'], $user_specific_types))
+                                                                        @if (in_array($props['id'], $user_specific_types) || count($user_specific_types) == 0) 
                                                                             <div class="btn-group bromi-checkbox-btn me-1 property-type-element"
                                                                                 role="group"
                                                                                 aria-label="Basic radio toggle button group"
