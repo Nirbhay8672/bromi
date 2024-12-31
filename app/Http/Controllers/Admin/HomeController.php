@@ -1326,7 +1326,7 @@ class HomeController extends Controller
 		$building = DropdownSettings::where('dropdown_for', 'LIKE', "%building_%")->get()->count();
 		$property = DropdownSettings::where('dropdown_for', 'LIKE', "%property_%")->get()->count();
 
-		return view('admin.settings.settings_page',compact('city','state','builder','branch','area','user','role','enquiry','building','property','total_district','total_taluka','total_village'));
+		return view('admin.settings.settings_index',compact('city','state','builder','branch','area','user','role','enquiry','building','property','total_district','total_taluka','total_village'));
 	}
     
 	public function chnagePassword(Request $request)
