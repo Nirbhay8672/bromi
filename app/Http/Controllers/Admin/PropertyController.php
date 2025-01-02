@@ -761,6 +761,7 @@ class PropertyController extends Controller
                     return '<td style="vertical-align:top">
 					' . Carbon::parse($row->updated_at)->format('d-m-Y') . '<br>' . Carbon::parse($row->updated_at)->diffInDays() . ' days</td>';
                 })
+                
                 ->editColumn('property_category', function ($row) use ($dropdowns, $land_units) {
                     // $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk');
                     $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk', 'Test', 'testw');
@@ -783,7 +784,8 @@ class PropertyController extends Controller
                             }
                         }
                     }
-                    //$category = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | '. $dropdowns[$row->property_category]['name'] : '');
+                    $prop_type = ((!empty($dropdowns[$row->property_type]['name'])) ? $dropdowns[$row->property_type]['name'] . ' | ': '');
+                    $main_category = ((!empty($dropdowns[$row->property_category]['name'])) ? $dropdowns[$row->property_category]['name'] . ' | ': '');
                     $category = $sub_cat;
                     // BHARAT HIDE FURNISHED
                     if ($row->property_category == '256') {
@@ -962,7 +964,7 @@ class PropertyController extends Controller
                                         <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
                                         <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
                                             <div class="row">';
-                                
+
                                 $tooltipHtml .= (isset($value[9][0]) && $value[9][0] != "0") ?
                                     '<div class="col-12">
                                         <b class="m-2">Remarks:</b>
@@ -970,16 +972,15 @@ class PropertyController extends Controller
                                         <span class="full-text d-none">' . $value[9][0] . '</span>
                                         <a href="#" class="read-more-link">Read More</a>
                                     </div>' : '';
-                            
+
                                 $tooltipHtml .= '</div></div></div></div>';
-                            }
-                            else {
+                            } else {
                                 $tooltipHtml = "";
                             }
                         }
                         return '
                         <td style="vertical-align:top">
-                            ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
+                            ' . $prop_type .$main_category . '<br>'.((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
                             <font size="2" style="font-style:italic">
                             <br>
                             ' . $salable_area_print . '
