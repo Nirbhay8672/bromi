@@ -504,7 +504,7 @@
                                             @endforelse
                                         </select>
                                     </div>
-                                    {{-- Villa --}}
+
                                     <div class="form-group col-md-2 m-b-4 mb-3">
                                         <select class="form-select" id="filter_specific_type">
                                             <option value="">Category</option>
@@ -543,20 +543,6 @@
                                         </select>
                                     </div>
 
-                                    {{-- <div class="form-group col-md-3 m-b-4 mb-3">
-                                        <select class="form-select" id="filter_furnished_status">
-                                            <option value="">Furnished Status</option>
-                                            @forelse ($property_configuration_settings as $props)
-                                                @if ($props['dropdown_for'] == 'property_furniture_type')
-                                                    <option data-parent_id="{{ $props['parent_id'] }}"
-                                                        value="{{ $props['id'] }}">{{ $props['name'] }}
-                                                    </option>
-                                                @endif
-                                            @empty
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                     --}}
                                     <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_availability_status">
                                             <option value="">Availability Status</option>
@@ -598,10 +584,8 @@
                                             <option value="0">InActive</option>
                                         </select>
                                     </div>
-                                    {{-- <hr class="color-hr"> --}}
 
                                     <div class="form-group col-md-2 m-b-4 mb-3">
-                                        {{-- <label>&nbsp;</label> --}}
                                         <div>
                                             <label for="From Price">From Price</label>
                                             <input class="form-control indian_currency_amount" name="filter_from_price"
@@ -668,52 +652,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- <div class="modal fade" id="matchModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Match By</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close"> </button>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-bookmark needs-validation " method="post" id="match_modal" novalidate="">
-                            @csrf
-                            <div>
-                                <div class="row" id="matchbyfield">
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
-                                        <input class="form-check-input" checked id="match_property_type" type="checkbox">
-                                        <label class="form-check-label" for="match_property_type">Type</label>
-                                    </div>
-
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
-                                        <input class="form-check-input" checked id="match_specific_type" type="checkbox">
-                                        <label class="form-check-label" for="match_specific_type">Specific Type</label>
-                                    </div>
-
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
-                                        <input class="form-check-input" id="match_building" type="checkbox">
-                                        <label class="form-check-label" for="match_building">Project</label>
-                                    </div>
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
-                                        <input class="form-check-input" id="match_enquiry_for" type="checkbox">
-                                        <label class="form-check-label" for="match_enquiry_for">Enquiry For</label>
-                                    </div>
-
-                                    <div class="form-check checkbox  checkbox-solid-success mb-0 col-md-2 m-b-10">
-                                        <input class="form-check-input" id="match_inquiry_source" type="checkbox">
-                                        <label class="form-check-label" for="match_inquiry_source">Enquiry Source</label>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <button class="btn btn-secondary" type="button" id="matchagain">Match</button>
-                            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
 
         <div class="modal fade" id="matchModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-md" role="document">
@@ -825,38 +763,7 @@
                 </div>
             </div>
         @endif
-        {{-- shared modal --}}
-        {{-- <div class="modal fade" id="sharedModelId" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-l" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Users</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-bookmark needs-validation modal_form" route="" id="userRecordForm"
-                            novalidate="">
-                            <div class="row">
-                                <div class="form-group col-md-12 m-b-4 mb-5 mt-2">
-                                    <label class="select2_label" for="Property list">Select User </label>
-                                    <select class="form-select" id="users_list" multiple>
-                                    </select>
-                                </div>
-                                <div id="selectedUsersArea" class="col-md-12 m-b-4">
-                                </div>
-                                <span style="color: #FF0000" id="err_partner"></span>
-                                <div class="form-group m-b-4 mb-3 text-center">
-                                    <button class="btn custom-theme-button" id="shareData" data-id=""
-                                        type="button">Share Property</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
+
         <div class="modal fade" id="sharedModelId" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-l" role="document">
@@ -904,6 +811,9 @@
     @endsection
     @push('scripts')
         <script>
+
+            let filter_apply = 0;
+            
             $(document).on('click', '.read-more-link', function(e) {
                 e.preventDefault();
                 var $this = $(this);
@@ -1370,6 +1280,7 @@
                             d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
                             // d.match_building = Number($('#match_building').prop('checked'));
                             d.filter_by = filter_by;
+                            d.filter_apply = filter_apply;
                             d.location = window.location.href;
 
                         },
@@ -1776,6 +1687,7 @@
             })
 
             $(document).on('click', '#filtersearch', function(e) {
+                filter_apply = 1;
                 e.preventDefault();
                 search_enq = '';
                 $('#resetfilter').show();
@@ -1787,6 +1699,7 @@
             $(document).on('click', '#resetfilter', function(e) {
                 e.preventDefault();
                 $(this).hide();
+                filter_apply = 0;
                 $('#filter_form').trigger("reset");
                 $('#propertyTable').DataTable().draw();
                 $('#filtermodal').modal('hide');
