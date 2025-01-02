@@ -182,6 +182,40 @@ class PropertyController extends Controller
                         $data->where('properties.Property_priority', $request->input('filter_Property_priority'));
                     }
                     
+                    if ($request->filled('filter_area_id')) {
+                        $data->whereIn('projects.area_id', $request->input('filter_area_id'));
+                    }
+
+                    if ($request->filled('filter_availability_status')) {
+                        $data->where('properties.availability_status', $request->input('filter_availability_status'));
+                    }
+                    
+                    if ($request->filled('filter_owner_is')) {
+                        $data->where('properties.owner_is', $request->input('filter_owner_is'));
+                    }
+
+                    if ($request->filled('filter_property_status')) {
+                        $data->where('properties.status', $request->input('filter_property_status'));
+                    }
+                    if ($request->filled('filter_from_date')) {
+                        $data->whereDate('properties.created_at', '>=', $request->input('filter_from_date'));
+                    }
+                    if ($request->filled('filter_to_date')) {
+                        $data->where('properties.created_at','<=', $request->input('filter_to_date'));
+                    }
+
+                    if ($request->filled('filter_is_terraced')) {
+                        $data->where('properties.is_terrace', $request->input('filter_is_terraced'));
+                    }
+
+                    if ($request->filled('filter_is_weekend')) {
+                        $data->where('properties.week_end_villa', $request->input('filter_is_weekend'));
+                    }
+                    
+                    if ($request->filled('filter_is_hot')) {
+                        $data->where('properties.hot_property', $request->input('filter_is_hot'));
+                    }
+
                 } else {
                     if ($is_sub_admin->property_for_id) {
                         if($is_sub_admin->property_for_id != 'Both') {
@@ -216,58 +250,6 @@ class PropertyController extends Controller
                 //             return $query->whereDate('properties.created_at', '>=', Carbon::now()->subDays(30)->format('Y-m-d'))
                 //                 ->where('properties.prop_status', 1);
                 //         }
-                //     })
-                //     ->when($request->filter_building_id, function ($query) use ($request) {
-                //         return $query->whereIn('properties.project_id', ($request->filter_building_id))
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_area_id, function ($query) use ($request) {
-                //         return $query->whereIn('projects.area_id', $request->filter_area_id)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_furnished_status, function ($query) use ($request) {
-                //         return $query->where('furnished_status', $request->filter_furnished_status)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_availability_status, function ($query) use ($request) {
-                //         return $query->where('properties.availability_status', $request->filter_availability_status)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_owner_is, function ($query) use ($request) {
-                //         return $query->where('owner_is', $request->filter_owner_is)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_Property_priority, function ($query) use ($request) {
-                //         return $query->where('Property_priority', $request->filter_Property_priority)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when(($request->filter_property_status || $request->filter_property_status == '0'), function ($query) use ($request) {
-                //         return $query->where('properties.status', $request->filter_property_status)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_from_date, function ($query) use ($request) {
-                //         return $query->whereDate('properties.created_at', '>=', $request->filter_from_date)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_to_date, function ($query) use ($request) {
-                //         return $query->whereDate('properties.created_at', '<=', $request->filter_to_date)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_is_terraced, function ($query) use ($request) {
-                //         return $query->where('properties.is_terrace', $request->filter_is_terraced)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_is_weekend, function ($query) use ($request) {
-                //         return $query->where('properties.week_end_villa', $request->filter_is_weekend)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_is_hot, function ($query) use ($request) {
-                //         return $query->where('hot_property', $request->filter_is_hot)
-                //             ->where('properties.prop_status', 1);
-                //     })
-                //     ->when($request->filter_is_preleased, function ($query) use ($request) {
-                //         return $query->where('is_pre_leased', $request->filter_is_preleased)
-                //             ->where('properties.prop_status', 1);
                 //     })
                 //     ->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
                 //         if (!empty($enq)) {
