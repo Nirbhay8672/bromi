@@ -153,3 +153,72 @@ table.dataTable.display tbody tr:last-child td:last-child {
 .cust-top-20{
     top: 20px !important;
 }
+
+.o-hidden .media-body {
+    font-size: 4px;
+}
+
+.custom-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    border-radius: 15px;
+  }
+  .column {
+    flex: 1;
+    text-align: center;
+  }
+  .separator {
+    width: 2px;
+    background-color: #ddd;
+    height: 100%;
+    margin: 0 10px;
+  }
+  .total {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .name {
+    font-size: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    .custom-card {
+      flex-direction: column;
+      display: flex;
+    }
+    .custom-card {
+        width: column;
+    }
+    .separator {
+      display: none;
+    }
+    .column {
+      margin-bottom: 15px;
+    }
+  }
+  
+  /* Small devices (portrait tablets) */
+  @media (min-width: 577px) and (max-width: 768px) {
+    .custom-card {
+        display: grid;
+      }
+  }
+  
+  /* Medium devices (landscape tablets) */
+  @media (min-width: 769px) and (max-width: 992px) {
+    .custom-card {
+        display: grid;
+      }
+  }
+  
+  /* Large devices (laptops/desktops) */
+  @media (min-width: 993px) and (max-width: 1200px) {
+    .custom-card {
+        display: grid;
+      }
+  }
+  
+  
