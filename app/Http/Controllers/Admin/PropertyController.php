@@ -605,6 +605,81 @@ class PropertyController extends Controller
 				END,  properties.id DESC');
             }
 
+            $parts = explode('?', $request->location);
+
+            if (count($parts) > 1) {
+                $value = $parts[1];
+                $value = trim($value);
+
+                if (strpos($value, 'data_id') !== false) {
+                    $value_part = explode('=', $value);
+                    if ($value_part[1] > 0) {
+                        $data->where('properties.id', $value_part[1]);
+                    }
+                }
+            }
+            $data = $data->get()->filter(function ($value) use ($request) {
+                $theArea = 0;
+
+                if (!empty($value->salable_area)) {
+                    $theArea = explode('_-||-_', $value->salable_area)[0];
+                } elseif (!empty($value->salable_plot_area)) {
+                    $theArea = explode('_-||-_', $value->salable_plot_area);
+                }
+
+                if (!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area)) {
+                    return false;
+                }
+
+                if (!empty($request->filter_to_area) && !($theArea <= $request->filter_to_area)) {
+                    return false;
+                }
+
+                $allPrices = [];
+
+                if (!empty($value->unit_details) && !empty(json_decode($value->unit_details)[0])) {
+                    foreach (json_decode($value->unit_details) as $key3 => $value3) {
+                        if (!empty($value3['7'])) {
+                            $allPrices[] = $value3['7'];
+                        }
+                        if (!empty($value3['4'])) {
+                            $allPrices[] = $value3['4'];
+                        }
+                        if (!empty($value3['3'])) {
+                            $allPrices[] = $value3['3'];
+                        }
+                    }
+                }
+
+                if (!empty($request->filter_from_price)) {
+                    $from_passed = false;
+                    foreach ($allPrices as $key5 => $value5) {
+                        if ((Helper::c_to_n($value5) >= Helper::c_to_n($request->filter_from_price))) {
+                            $from_passed = true;
+                            break;
+                        }
+                    }
+                    if (!$from_passed) {
+                        return false;
+                    }
+                }
+
+                if (!empty($request->filter_to_price)) {
+                    $to_passed = false;
+                    foreach ($allPrices as $key6 => $value6) {
+                        if ((Helper::c_to_n($value6) <= Helper::c_to_n($request->filter_to_price))) {
+                            $to_passed = true;
+                            break;
+                        }
+                    }
+                    if (!$to_passed) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
             return DataTables::of($data)
                 ->editColumn('project_id', function ($row) use ($request) {
                     $isShared = ShareProperty::where('property_id', $row->id)->where('user_id', Auth::user()->id)->first();
