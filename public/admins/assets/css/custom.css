@@ -208,7 +208,7 @@ table.dataTable.display tbody tr:last-child td:last-child {
       }
   }
   
-  /* Medium devices (landscape tablets) */
+  /* Medium  devices (landscape tablets) */
   @media (min-width: 769px) and (max-width: 992px) {
     .custom-card {
         display: grid;

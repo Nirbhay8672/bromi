@@ -18,7 +18,6 @@
             </div>
         </div>
     </div>
-
     <div class="col">
         <div class="card o-hidden">
             <div class="card-body bg-light-purpel">
