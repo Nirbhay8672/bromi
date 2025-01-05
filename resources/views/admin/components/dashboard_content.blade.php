@@ -5,8 +5,8 @@
     }
 @endphp
 
-<div class="row"> 
-    <div class="col"> 
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 g-3">
+    <div class="col">
         <div class="card o-hidden">
             <div class="card-body bg-light-green">
                 <div class="media static-widget my-3">
@@ -17,8 +17,9 @@
                 </div>
             </div>
         </div>
-    </div> 
-    <div class="col"> 
+    </div>
+
+    <div class="col">
         <div class="card o-hidden">
             <div class="card-body bg-light-purpel">
                 <div class="media static-widget my-3">
@@ -29,8 +30,9 @@
                 </div>
             </div>
         </div>
-    </div> 
-    <div class="col"> 
+    </div>
+
+    <div class="col">
         <div class="card o-hidden">
             <div class="card-body bg-info">
                 <div class="media static-widget my-3">
@@ -41,8 +43,9 @@
                 </div>
             </div>
         </div>
-    </div> 
-    <div class="col"> 
+    </div>
+
+    <div class="col">
         <div class="card o-hidden">
             <div class="card-body bg-light-orange">
                 <div class="media static-widget my-3">
@@ -53,8 +56,9 @@
                 </div>
             </div>
         </div>
-    </div> 
-    <div class="col"> 
+    </div>
+
+    <div class="col">
         <div class="card o-hidden">
             <div class="card-body bg-secondary">
                 <div class="media static-widget my-3">
@@ -66,10 +70,8 @@
             </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col"> 
+    <div class="col">
         <div class="card o-hidden">
             <div class="card-body bg-info">
                 <div class="media static-widget my-3">
@@ -81,7 +83,8 @@
             </div>
         </div>
     </div>
-    <div class="col"> 
+
+    <div class="col">
         <div class="card o-hidden">
             <div class="card-body bg-light-orange">
                 <div class="media static-widget my-3">
@@ -92,8 +95,9 @@
                 </div>
             </div>
         </div>
-    </div> 
-    <div class="col"> 
+    </div>
+
+    <div class="col">
         <div class="card o-hidden">
             <div class="card-body bg-light-green">
                 <div class="media static-widget my-3">
@@ -105,7 +109,8 @@
             </div>
         </div>
     </div>
-    <div class="col"> 
+
+    <div class="col">
         <div class="card o-hidden">
             <div class="card-body bg-light-purpel">
                 <div class="media static-widget my-3">
@@ -117,29 +122,23 @@
             </div>
         </div>
     </div>
-    <div class="col"> 
-        <div class="card o-hidden">
-            <div class="card-body bg-success">
-                <div class="media static-widget" style="margin-bottom: 21px;margin-top: 20px;">
-                    <div class="media-body text-center">
-                        <div class="row">
-                            <div class="col-12 col-md-6 col-lg-6" style="border-right: 1px solid white;">
-                                <h2 class="font-roboto">{{ $total_prop_for_rec }}</h2>
-                                <h4 class="mb-0">Residential</h4>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-6">
-                                <h2 class="font-roboto">{{ $total_prop_for_comm }}</h2>
-                                <h4 class="mb-0">Commercial</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+    <div class="col">
+        <div class="custom-card bg-success o-hidden">
+            <div class="column">
+                <div class="total">{{ $total_prop_for_rec }}</div>
+                <div class="name">Residential</div>
+            </div>
+            <div class="separator"></div>
+            <div class="column">
+                <div class="total">{{ $total_prop_for_comm }}</div>
+                <div class="name">Commercial</div>
             </div>
         </div>
     </div>
-</div> 
+</div>
 
-<div class="row">
+<div class="row mt-2">
     <div class="col-md-12" x-show="isIncludes('New Leads')">
         <div class="card o-hidden">
             <div class="card-header pb-0">
