@@ -1423,7 +1423,7 @@ class EnquiriesController extends Controller
 		$budget_to = str_replace(',', '', $request->budget_to);
 
 		$data->added_by = Auth::user()->id;
-		$data->user_id = Auth::user()->id;
+		$data->user_id = Session::get('parent_id');
 		$data->client_name = $request->client_name;
 		$data->client_mobile = $request->client_mobile;
 		$data->country_id = $request->country_code;
