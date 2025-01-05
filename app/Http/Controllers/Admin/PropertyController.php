@@ -550,7 +550,7 @@ class PropertyController extends Controller
                 ->editColumn('project_id', function ($row) use ($request) {
                     $isShared = ShareProperty::where('property_id', $row->id)->where('user_id', Auth::user()->id)->first();
 
-                    $first =  '<td style="vertical-align:top">
+                    $first = '<td style="vertical-align:top">
                         <font size="3"><span class="me-2 d-none">'.$row->id .' - </span><a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . (!empty($row->Projects->project_name) ? $row->Projects->project_name : $row->Village->name) . '</a>';
 
                     $first_middle = '';
