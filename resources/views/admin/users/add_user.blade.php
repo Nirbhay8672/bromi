@@ -153,6 +153,7 @@
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-20 mb-3 mt-3">
+                                                                <label><b>Enquiry Access</b></label>
                                                                 <select class="form-select" id="enquiry_permission">
                                                                     <option value="" disabled>Enquiries Access</option>
                                                                     <option value="all">All Enquiries</option>
@@ -160,7 +161,28 @@
                                                                 </select>
                                                                 <span id="enquiry_permission_error" class="text-danger invalid-error d-none"></span>
                                                             </div>
-                                                        </div>
+
+                                                            <div class="form-group col-md-3 m-b-20 mb-3 mt-3">
+                                                                <label><b>Enquiry Type</b></label>
+                                                                <select class="form-select" id="enquiry_type_id" onchange="setEnCategory()" multiple>
+                                                                    <option
+                                                                        data-parent_id="null"
+                                                                        value="85"
+                                                                    >Commercial</option>
+                                                                    <option
+                                                                        data-parent_id="null"
+                                                                        value="87"
+                                                                    >Residential</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="form-group col-md-3 m-b-20 mb-3 mt-3">
+                                                                <label><b>Specific Enquiry Type</b></label>
+                                                                    <select class="form-select" id="specific_enquiry"
+                                                                        multiple="multiple">
+                                                                    </select>
+                                                                </div>
+                                                            </div>
 
                                                         <button
                                                             class="btn custom-theme-button nextBtn pull-right"
@@ -384,6 +406,29 @@
                     }
                 }
 
+
+                function setEnCategory() {
+                    let enquiry_types = $('#enquiry_type_id').val();
+
+                    let en_category_option = document.getElementById('specific_enquiry');
+                    en_category_option.innerHTML = "";
+
+                    if(enquiry_types.includes('87')) {
+                        en_category_option.innerHTML += '<option data-parent_id="87" value="254">Flat</option>';
+                        en_category_option.innerHTML += '<option data-parent_id="87" value="255">Vila/Bunglow</option>';
+                        en_category_option.innerHTML += '<option data-parent_id="87" value="256">Plot</option>';
+                        en_category_option.innerHTML += '<option data-parent_id="87" value="257">Penthouse</option>';
+                        en_category_option.innerHTML += '<option data-parent_id="87" value="258">Farmhouse</option>';
+                    }
+
+                    if(enquiry_types.includes('85')) {
+                        en_category_option.innerHTML += '<option data-parent_id="87" value="259">Office</option>';
+                        en_category_option.innerHTML += '<option data-parent_id="87" value="260">Retail</option>';
+                        en_category_option.innerHTML += '<option data-parent_id="87" value="261">Storage/industrial</option>';
+                        en_category_option.innerHTML += '<option data-parent_id="87" value="262">Land</option>';
+                    }
+                }
+
                 var shouldchangecity = 1;
 
                 var cities = @Json($city_encoded);
@@ -464,11 +509,13 @@
                             $('#working').prop('checked', Number(dataa.working));
                             shouldchangecity = 1;
                             $('#specific_properties').val([]).trigger('change');
+                            $('#specific_enquiry').val([]).trigger('change');
                             $('#buildings').val([]).trigger('change');
                             $('#enquiry_permission').val([]).trigger('change');
                             $('#branch_id').val([]).trigger('change');
                             $('#reporting_to').val([]).trigger('change');
                             $('#property_type_id').val([]).trigger('change');
+                            $('#enquiry_type_id').val([]).trigger('change');
                             $('#role_id').val(dataa.role_id).trigger('change');
                             
                             try {
@@ -477,7 +524,17 @@
                                 //
                             }
                             try {
+                                $('#enquiry_type_id').val(JSON.parse(dataa.enquiry_type)).trigger('change');
+                            } catch (error) {
+                                //
+                            }
+                            try {
                                 $('#specific_properties').val(JSON.parse(dataa.specific_properties)).trigger('change');
+                            } catch (error) {
+                                //
+                            }
+                            try {
+                                $('#specific_enquiry').val(JSON.parse(dataa.specific_enquiry)).trigger('change');
                             } catch (error) {
                                 //
                             }
@@ -558,7 +615,9 @@
                         form_data.set('role_id', $('#role_id').val() ?? '');
                         form_data.set('property_for_id', $('#property_for_id').val());
                         form_data.set('property_type_id', JSON.stringify($('#property_type_id').val()));
+                        form_data.set('enquiry_type_id', JSON.stringify($('#enquiry_type_id').val()));
                         form_data.set('specific_properties', JSON.stringify($('#specific_properties').val()));
+                        form_data.set('specific_enquiry', JSON.stringify($('#specific_enquiry').val()));
                         form_data.set('buildings', JSON.stringify($('#buildings').val()));
                         form_data.set('enquiry_permission', $('#enquiry_permission').val());
                         form_data.set('working', Number($('#working').prop('checked')));

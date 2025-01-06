@@ -79,7 +79,9 @@ class User extends Authenticatable
         'total_user_created',
         'total_free_user',
         'total_paid_user',
-        'temp_pass'
+        'temp_pass',
+		'enquiry_type',
+		'specific_enquiry',
 	];
 
 	/**
