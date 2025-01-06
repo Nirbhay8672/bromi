@@ -36,7 +36,9 @@ class TicketsController extends Controller
         }
 
         $auth=Auth::user()->id;
-        $tickets = Ticket::where('user_id',$auth)->with('category')->paginate(10);
+        
+        $tickets = Ticket::where('user_id',$auth)->with(['category'])->orderBy('id','DESC')->get();
+
         return view('admin.ticket_system.tickets.index', compact('tickets'));
     }
 

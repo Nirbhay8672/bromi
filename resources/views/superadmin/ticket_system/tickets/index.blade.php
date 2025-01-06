@@ -114,14 +114,14 @@
                             name: 'attachement'
                         },
                         {
-                            data: 'updated_at',
-                            name: 'updated_at'
+                            data: 'updated_at_format',
+                            name: 'updated_at_format'
                         },
                         {
                             data: 'Actions',
                             name: 'Actions'
                         },
-                    ]
+                    ],
                 });
             });
         });
