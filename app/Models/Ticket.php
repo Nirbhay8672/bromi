@@ -8,6 +8,10 @@ class Ticket extends Model
 {
     protected $guarded = [];
 
+    protected $cast = [
+        'updated_at' => 'date',
+    ];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
