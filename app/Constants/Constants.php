@@ -19,4 +19,5 @@ class Constants
     const LEAD_DISCUSSION = 'lead_discussion';
     const LEAD_BOOKED = 'lead_booked';
     const LEAD_LOST = 'lead_lost';
+    const NEW_TICKET = 'new_ticket';
 }

@@ -80,7 +80,7 @@ class TicketsController extends Controller
 				->editColumn('Actions', function ($row) {
                     if($row['status'] == 'Open') {
                         return '<div class="text-center">
-                            <a href="/superadmin/tickets/'.$row->ticket_id.'" id="demo" class="btn btn-primary">Comment</a>
+                            <a href="/bromi/public/superadmin/tickets/'.$row->ticket_id.'" id="demo" class="btn btn-primary">Comment</a>
                             <button type="button" class="btn btn-sm" style="background-color: red;color:white" data-abc="'.$row->ticket_id.'" onclick="closeTicket(this)">Close</button>
                         </div>';
                     }
