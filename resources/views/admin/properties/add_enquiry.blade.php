@@ -199,32 +199,46 @@
                                                             <div>
                                                                 <label><b>Requirement Type</b></label>
                                                             </div>
+                                                            <?php
+                                                            use Illuminate\Support\Facades\Auth;
+                                                            
+                                                            $jsonString = str_replace("'", '"', Auth::user()->enquiry_type);
+                                                            $user_enquiry_types = json_decode($jsonString, true);
+                                                            
+                                                            $type_string = str_replace("'", '"', Auth::user()->specific_enquiry);
+                                                            $user_specific_enq_types = json_decode($type_string, true);
+                                                            ?>
+
 
                                                             <div class="m-checkbox-inline custom-radio-ml">
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input type="radio" data-parent_id=""
-                                                                        class="btn-check" value="85"
-                                                                        data-val="Commercial" name="property_type"
-                                                                        id="propertytype-85" autocomplete="off"
-                                                                        data-bs-original-title="" title="">
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="propertytype-85">Commercial</label>
-                                                                </div>
-                                                                <div class="btn-group bromi-checkbox-btn me-1"
-                                                                    role="group"
-                                                                    aria-label="Basic radio toggle button group">
-                                                                    <input type="radio" data-parent_id=""
-                                                                        class="btn-check" value="87"
-                                                                        data-val="Residential" name="property_type"
-                                                                        id="propertytype-87" autocomplete="off"
-                                                                        data-bs-original-title="" title="">
-                                                                    <label
-                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                        for="propertytype-87">Residential</label>
-                                                                </div>
+                                                                @if (in_array('85', $user_enquiry_types) || count($user_enquiry_types) == 0)
+                                                                    <div class="btn-group bromi-checkbox-btn me-1"
+                                                                        role="group"
+                                                                        aria-label="Basic radio toggle button group">
+                                                                        <input type="radio" data-parent_id=""
+                                                                            class="btn-check" value="85"
+                                                                            data-val="Commercial" name="property_type"
+                                                                            id="propertytype-85" autocomplete="off"
+                                                                            data-bs-original-title="" title="">
+                                                                        <label
+                                                                            class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                            for="propertytype-85">Commercial</label>
+                                                                    </div>
+                                                                @endif
+                                                                @if (in_array('87', $user_enquiry_types) || count($user_enquiry_types) == 0)
+                                                                    <div class="btn-group bromi-checkbox-btn me-1"
+                                                                        role="group"
+                                                                        aria-label="Basic radio toggle button group">
+                                                                        <input type="radio" data-parent_id=""
+                                                                            class="btn-check" value="87"
+                                                                            data-val="Residential" name="property_type"
+                                                                            id="propertytype-87" autocomplete="off"
+                                                                            data-bs-original-title="" title="">
+                                                                        <label
+                                                                            class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                            for="propertytype-87">Residential</label>
+                                                                    </div>
+                                                                @endif
                                                             </div>
                                                             <div class="invalid-feedback" id="property_type_error"
                                                                 style="display: block;color:red;"></div>
@@ -238,24 +252,28 @@
                                                             <div class="m-checkbox-inline custom-radio-ml">
                                                                 @forelse ($configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_specific_type')
-                                                                        <div class="btn-group bromi-checkbox-btn me-1 enquiry-type-element"
-                                                                            role="group"
-                                                                            data-enquiry-id="{{ $props['id'] }}"
-                                                                            aria-label="Basic radio toggle button group">
-                                                                            <input type="radio"
-                                                                                data-parent_id="{{ $props['parent_id'] }}"
-                                                                                class="btn-check"
-                                                                                value="{{ $props['id'] }}"
-                                                                                data-val="{{ $props['name'] }}"
-                                                                                name="property_category"
-                                                                                id="category-{{ $props['id'] }}"
-                                                                                autocomplete="off" {{-- @if ($enquiry_list[0] == 'Office') {{ $props['name'] == 'Office' ? '' : '' }}
+                                                                        @if (in_array($props['id'], $user_specific_enq_types) ||
+                                                                                (is_array($user_specific_enq_types) && count($user_specific_enq_types) == 0))
+                                                                            <div class="btn-group bromi-checkbox-btn me-1 enquiry-type-element"
+                                                                                role="group"
+                                                                                data-enquiry-id="{{ $props['id'] }}"
+                                                                                aria-label="Basic radio toggle button group">
+                                                                                <input type="radio"
+                                                                                    data-parent_id="{{ $props['parent_id'] }}"
+                                                                                    class="btn-check"
+                                                                                    value="{{ $props['id'] }}"
+                                                                                    data-val="{{ $props['name'] }}"
+                                                                                    name="property_category"
+                                                                                    id="category-{{ $props['id'] }}"
+                                                                                    autocomplete="off"
+                                                                                    {{-- @if ($enquiry_list[0] == 'Office') {{ $props['name'] == 'Office' ? '' : '' }}
                                                                                 @else  {{ $props['id'] == $enquiry_list[0]['property_type'] ? 'checked' : '' }} @endif --}}>
 
-                                                                            <label
-                                                                                class="btn btn-outline-primary btn-pill btn-sm py-1"
-                                                                                for="category-{{ $props['id'] }}">{{ $props['name'] }}</label>
-                                                                        </div>
+                                                                                <label
+                                                                                    class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                                    for="category-{{ $props['id'] }}">{{ $props['name'] }}</label>
+                                                                            </div>
+                                                                        @endif
                                                                     @endif
                                                                 @empty
                                                                 @endforelse
