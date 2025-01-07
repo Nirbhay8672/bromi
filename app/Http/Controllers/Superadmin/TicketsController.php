@@ -29,7 +29,7 @@ class TicketsController extends Controller
 	{
 		if ($request->ajax()) {
 
-			$data = Ticket::with(['user.city', 'category'])->orderBy('id','DESC');
+			$data = Ticket::with(['user.city', 'category'])->orderBy('updated_at', 'DESC');
 
 			if($request->filter_category !='') {
                 $data->where('category_id', $request->filter_category);
@@ -74,13 +74,13 @@ class TicketsController extends Controller
                     }
                     return '';
 				})
-				->editColumn('updated_at', function ($row) {
+				->editColumn('updated_at_format', function ($row) {
 					return Carbon::parse($row['updated_at'])->format('d/m/Y h:i:s A');
 				})
 				->editColumn('Actions', function ($row) {
                     if($row['status'] == 'Open') {
                         return '<div class="text-center">
-                            <a href="/superadmin/tickets/'.$row->ticket_id.'" id="demo" class="btn btn-primary">Comment</a>
+                            <a href="/bromi/public/superadmin/tickets/'.$row->ticket_id.'" id="demo" class="btn btn-primary">Comment</a>
                             <button type="button" class="btn btn-sm" style="background-color: red;color:white" data-abc="'.$row->ticket_id.'" onclick="closeTicket(this)">Close</button>
                         </div>';
                     }
@@ -90,7 +90,7 @@ class TicketsController extends Controller
 				->make(true);
 		}
 
-        $tickets = Ticket::with(['user.city'])->orderBy('id','DESC')->get();
+        $tickets = Ticket::with(['user.city'])->orderBy('updated_at','DESC')->get();
         $categories = Category::all();
 
 		return view('superadmin.ticket_system.tickets.index', compact('tickets', 'categories'));

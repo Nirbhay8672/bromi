@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\Constants;
 use App\Models\Category;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Mailers\AppMailer;
+use App\Models\UserNotifications;
 use Illuminate\Support\Facades\Session;
 use Str;
 
@@ -36,7 +38,9 @@ class TicketsController extends Controller
         }
 
         $auth=Auth::user()->id;
-        $tickets = Ticket::where('user_id',$auth)->with('category')->paginate(10);
+        
+        $tickets = Ticket::where('user_id',$auth)->with(['category'])->orderBy('id','DESC')->get();
+
         return view('admin.ticket_system.tickets.index', compact('tickets'));
     }
 
@@ -85,6 +89,13 @@ class TicketsController extends Controller
         ]);
 
         $ticket->save();
+
+        UserNotifications::create([
+            "user_id" => Auth::user()->id,
+            "notification" => 'New ticket raised',
+            "notification_type" => Constants::NEW_TICKET,
+            'by_user' => Auth::user()->id,
+        ]);
 
         return redirect('admin/index')->with("status", "A ticket with ID: #$ticket->ticket_id has been opened.");
     }

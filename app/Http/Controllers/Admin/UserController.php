@@ -152,7 +152,7 @@ class UserController extends Controller
     }
 
 	public function saveUser(Request $request)
-	{
+	{	
 		$request->validate([
 			'first_name' => 'required',
 			'last_name' => 'required',
@@ -215,6 +215,10 @@ class UserController extends Controller
 		$data->reporting_to = $request->reporting_to;
 		$data->property_for_id = $request->property_for_id;
 		$data->property_type_id = $request->property_type_id;
+
+		$data->enquiry_type = $request->enquiry_type_id;
+		$data->specific_enquiry = $request->specific_enquiry;
+		
 		$data->specific_properties = $request->specific_properties;
 		$data->buildings = $request->buildings;
 		$data->enquiry_permission = $request->enquiry_permission;
