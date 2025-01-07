@@ -811,7 +811,7 @@ class PropertyController extends Controller
                         }
                         return '
                         <td style="vertical-align:top">
-                            ' . $prop_type .$main_category . '<br>'.((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
+                            ' . ((!empty($forr)) ? $forr : "") . ($category ? $category : $dropdowns[$row->property_category]['name']) . '
                             <font size="2" style="font-style:italic">
                             <br>
                             ' . $salable_area_print . '
