@@ -209,9 +209,38 @@
                                                             $user_specific_enq_types = json_decode($type_string, true);
                                                             ?>
 
-
                                                             <div class="m-checkbox-inline custom-radio-ml">
-                                                                @if (in_array('85', $user_enquiry_types) || count($user_enquiry_types) == 0)
+                                                                @if (Auth::user()->parent_id !== null)
+                                                                    @if (in_array('85', $user_enquiry_types) || count($user_enquiry_types) == 0)
+                                                                        <div class="btn-group bromi-checkbox-btn me-1"
+                                                                            role="group"
+                                                                            aria-label="Basic radio toggle button group">
+                                                                            <input type="radio" data-parent_id=""
+                                                                                class="btn-check" value="85"
+                                                                                data-val="Commercial" name="property_type"
+                                                                                id="propertytype-85" autocomplete="off"
+                                                                                data-bs-original-title="" title="">
+                                                                            <label
+                                                                                class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                                for="propertytype-85">Commercial</label>
+                                                                        </div>
+                                                                    @endif
+                                                                    @if (in_array('87', $user_enquiry_types) || count($user_enquiry_types) == 0)
+                                                                        <div class="btn-group bromi-checkbox-btn me-1"
+                                                                            role="group"
+                                                                            aria-label="Basic radio toggle button group">
+                                                                            <input type="radio" data-parent_id=""
+                                                                                class="btn-check" value="87"
+                                                                                data-val="Residential"
+                                                                                name="property_type" id="propertytype-87"
+                                                                                autocomplete="off"
+                                                                                data-bs-original-title="" title="">
+                                                                            <label
+                                                                                class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                                for="propertytype-87">Residential</label>
+                                                                        </div>
+                                                                    @endif
+                                                                @else
                                                                     <div class="btn-group bromi-checkbox-btn me-1"
                                                                         role="group"
                                                                         aria-label="Basic radio toggle button group">
@@ -224,8 +253,6 @@
                                                                             class="btn btn-outline-primary btn-pill btn-sm py-1"
                                                                             for="propertytype-85">Commercial</label>
                                                                     </div>
-                                                                @endif
-                                                                @if (in_array('87', $user_enquiry_types) || count($user_enquiry_types) == 0)
                                                                     <div class="btn-group bromi-checkbox-btn me-1"
                                                                         role="group"
                                                                         aria-label="Basic radio toggle button group">
@@ -252,8 +279,30 @@
                                                             <div class="m-checkbox-inline custom-radio-ml">
                                                                 @forelse ($configuration_settings as $props)
                                                                     @if ($props['dropdown_for'] == 'property_specific_type')
-                                                                        @if (in_array($props['id'], $user_specific_enq_types) ||
-                                                                                (is_array($user_specific_enq_types) && count($user_specific_enq_types) == 0))
+                                                                        @if ($user_specific_enq_types !== null)
+                                                                            @if (in_array($props['id'], $user_specific_enq_types) ||
+                                                                                    (is_array($user_specific_enq_types) && count($user_specific_enq_types) == 0))
+                                                                                <div class="btn-group bromi-checkbox-btn me-1 enquiry-type-element"
+                                                                                    role="group"
+                                                                                    data-enquiry-id="{{ $props['id'] }}"
+                                                                                    aria-label="Basic radio toggle button group">
+                                                                                    <input type="radio"
+                                                                                        data-parent_id="{{ $props['parent_id'] }}"
+                                                                                        class="btn-check"
+                                                                                        value="{{ $props['id'] }}"
+                                                                                        data-val="{{ $props['name'] }}"
+                                                                                        name="property_category"
+                                                                                        id="category-{{ $props['id'] }}"
+                                                                                        autocomplete="off"
+                                                                                        {{-- @if ($enquiry_list[0] == 'Office') {{ $props['name'] == 'Office' ? '' : '' }}
+                                                                                @else  {{ $props['id'] == $enquiry_list[0]['property_type'] ? 'checked' : '' }} @endif --}}>
+
+                                                                                    <label
+                                                                                        class="btn btn-outline-primary btn-pill btn-sm py-1"
+                                                                                        for="category-{{ $props['id'] }}">{{ $props['name'] }}</label>
+                                                                                </div>
+                                                                            @endif
+                                                                        @else
                                                                             <div class="btn-group bromi-checkbox-btn me-1 enquiry-type-element"
                                                                                 role="group"
                                                                                 data-enquiry-id="{{ $props['id'] }}"
@@ -1042,6 +1091,7 @@
                                                         </div>
                                                     </div>
 
+                                                    {{-- @dd("sadsad",$permissions); --}}
                                                     <div class="row">
                                                         <div>
                                                             <label><b>Enquiry Allocation</b></label>
@@ -1059,20 +1109,21 @@
                                                                 style="display: block;color:red;"></div>
 
                                                         </div>
+                                                        @if (in_array('only-assigned', $permissions))
+                                                            <div class="form-group col-md-4 m-b-4 mb-3">
+                                                                <select class="form-select" id="employee_id">
+                                                                    <option value=""> Employee</option>
+                                                                    @foreach ($employees as $employee)
+                                                                        <option value="{{ $employee->id }}">
+                                                                            {{ $employee->first_name . ' ' . $employee->last_name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <div class="invalid-feedback" id="employee_id_error"
+                                                                    style="display: block;color:red;"></div>
 
-                                                        <div class="form-group col-md-4 m-b-4 mb-3">
-                                                            <select class="form-select" id="employee_id">
-                                                                <option value=""> Employee</option>
-                                                                @foreach ($employees as $employee)
-                                                                    <option value="{{ $employee->id }}">
-                                                                        {{ $employee->first_name . ' ' . $employee->last_name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            <div class="invalid-feedback" id="employee_id_error"
-                                                                style="display: block;color:red;"></div>
-
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     <button class="btn btn-primary previousBtn2 me-2" type="button"
                                                         style="border-radius: 5px;">Previous</button>

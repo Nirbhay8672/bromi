@@ -2226,8 +2226,12 @@ class EnquiriesController extends Controller
 		$villages  = Village::orderBy('name')->get();
 		$land_units = DB::table('land_units')->get();
 		$country_codes  = DB::table('countries')->get();
+		$user = User::with(['roles', 'roles.permissions'])->where('id', Auth::user()->id)->first();
+			
+		$permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
 
-		return view('admin.properties.add_enquiry', compact('country_codes', 'enquiry_list', 'land_units', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
+
+		return view('admin.properties.add_enquiry', compact('permissions','country_codes', 'enquiry_list', 'land_units', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'districts', 'talukas', 'villages'));
 	}
 
 	public function editEnquiry(Request $request)
