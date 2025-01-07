@@ -72,16 +72,19 @@ class EnquiriesController extends Controller
 			$new = array_filter($user->roles[0]['permissions']->toArray(), function ($var) {
 				return ($var['name'] == 'only-assigned');
 			});
-			if (count($new) > 0 &&  $user->role_id != '1' || $user->enquiry_permission == "only_assigned") {
+
+			if ((count($new) > 0 && $user->role_id != '1') || $user->enquiry_permission == "only_assigned") {
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
 					->whereHas('AssignHistory', function ($query) {
 						$query->where('assign_id', '=', Auth::user()->id);
 					})
+					->orWhere(function ($query) {
+						$query->where('added_by', '=', Auth::user()->id)
+							->orWhere('employee_id', '=', Auth::user()->id);
+					})
 					->orderBy('id', 'desc')
 					->get();
 			} else {
-				// $assign_leads_ids = AssignHistory::where('assign_id', Auth::user()->id)->get()->pluck('enquiry_id');
-
 				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')->where('user_id', Auth::user()->id)
 					// ->orWhere(function ($query) use ($assign_leads_ids) {
 					// 	$query->whereIn('id', $assign_leads_ids);
@@ -738,7 +741,7 @@ class EnquiriesController extends Controller
 					}
 
 					if ($row->requirement_type === '87') {
-						$category =  (!empty($dropdowns[$row->property_type]['name'])) ?  $dropdowns[$row->property_type]['name'] . ' | ' : '' ;
+						$category =  (!empty($dropdowns[$row->property_type]['name'])) ?  $dropdowns[$row->property_type]['name'] . ' | ' : '';
 					}
 
 					if (!empty($row->area_ids)) {
@@ -1254,7 +1257,7 @@ class EnquiriesController extends Controller
 			$data->user_id = Auth::user()->id;
 			$data->progress = $the_progress;
 			$data->lead_type = $request->lead_type;
-			
+
 			// $data->lead_type = $previous->lead_type;
 			$data->nfd = $request->visit_date;
 			$data->remarks = $request->description;
