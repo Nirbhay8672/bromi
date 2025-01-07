@@ -108,7 +108,7 @@ class PropertyController extends Controller
                     $propertyTypeIdArray = str_replace("'", '"', $is_sub_admin->property_type_id);
                     $propertyTypeIdArray = json_decode($propertyTypeIdArray, true);
                 }
-                if (($is_sub_admin->property_type_id)) {
+                if (($is_sub_admin->specific_properties)) {
                     $specificpropertieStr = str_replace("'", '"', $is_sub_admin->specific_properties);
                     $subcategoryArray = json_decode($specificpropertieStr, true);
                 }
