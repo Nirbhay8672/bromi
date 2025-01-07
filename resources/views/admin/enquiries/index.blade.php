@@ -7,23 +7,6 @@
                 $class_colorr = isset(explode('___', $progs['name'])[1]) ? explode('___', $progs['name'])[1] : '';
                 $class_namee = Helper::cleanString($class_namee);
             @endphp
-            <style>
-                . {
-                        {
-                        $class_namee
-                    }
-                }
-
-                .fa-square {
-                    color: {
-                            {
-                            $class_colorr
-                        }
-                    }
-
-                    ;
-                }
-            </style>
         @endpush
     @endif
 @empty
@@ -100,16 +83,6 @@
                                             <th>Assigned</th>
                                             <th>Action</th>
                                         </tr>
-                                        <!-- {{-- <div class="col-sm-10 tab-info">
-											<span class="blue-inq"><i class="fa fa-square" style="color:#1d2848"></i> New Lead</span>
-											<span class="org-inq"><i class="fa fa-square" style="color:#ff7e00"></i> Lead Confirmed</span>
-											<span class="purple-inq"><i class="fa fa-square" style="color:#a200ff"></i> Site Visit Scheduled</span>
-											<span class="purple-inq"><i class="fa fa-square" style="color:#a200ff"></i> Site Visit Completed</span>
-											<span class="lblue-inq"><i class="fa fa-square" style="color:#00f0ff"></i> Discussion</span>
-											<span class="yellow-inq"><i class="fa fa-square" style="color:#fff600"></i>Booked</span>
-											<span class="green-inq"><i class="fa fa-square" style="color:#0d8c07"></i>Lost</span>
-
-										</div> --}} -->
                                     </thead>
                                     <tbody>
 
@@ -296,9 +269,6 @@
                                 <div class="form-group col-md-4 m-b-20 mb-3">
                                     <label class="select2_label" for="Select Project"> Project</label>
                                     <select class="form-select" id="building_id" multiple>
-                                        {{-- @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}">{{ $project->project_name }}</option>
-                                    @endforeach --}}
                                         @foreach ($projects as $property)
                                             @if ($property->Projects && $property->Projects->project_name)
                                                 <option value="{{ $property->project_id }}">
@@ -308,8 +278,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-
-
 
                                 <div class="form-group col-md-2 m-b-20 mb-3">
                                     <select class="form-select" id="project_status">
@@ -419,7 +387,6 @@
                                             <option value="">Enquiry For</option>
                                             <option value="Rent">Rent</option>
                                             <option value="Buy">Buy</option>
-                                            {{-- <option value="Both">Both</option> --}}
                                         </select>
                                     </div>
 
@@ -453,16 +420,6 @@
                                         </select>
                                     </div>
 
-                                    {{-- <div class="form-group col-md-3 m-b-4 mb-4">
-                                        <select class="form-select" id="filter_configuration">
-                                            <option value="">Sub Category</option>
-                                            @forelse (config('constant.property_configuration') as $key=>$props)
-                                                <option value="{{ $key }}">{{ $props }}
-                                </option>
-                                @empty
-                                @endforelse
-                                </select>
-                            </div> --}}
                                     <div class="form-group col-md-3 m-b-4 mb-3">
                                         <select class="form-select" id="filter_configuration">
                                             <option value="">Sub Category</option>
@@ -730,7 +687,7 @@
                 </div>
             </div>
         </div>
-        {{-- enq assign  --}}
+
         <div class="modal fade" id="transfermodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
@@ -773,157 +730,6 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" style="width:30rem" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add Progress</h5>
-                        <button class="btn-close btn-light" type="button" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <form class="form-bookmark needs-validation modal_form" method="post" id="progress_form"
-                                novalidate="">
-                                <input type="hidden" name="progress_enquiry_id" id="progress_enquiry_id">
-                                @forelse ($configuration_settings as $progs)
-                                    @if ($progs['dropdown_for'] == 'enquiry_progress')
-                                        @php
-                                            $namee = isset(explode('___', $progs['name'])[0])
-                                                ? explode('___', $progs['name'])[0]
-                                                : '';
-                                        @endphp
-                                        <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
-@endif
-@empty
-@endforelse
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="mb-0">Enquiry Progress: </label>
-            <select class="form-select" id="progress_enquiry_progress">
-                <option value="">Enquiry Progress </option>
-                <option value="New Lead">New Lead</option>
-                <option value="Lead Confirmed"> Lead Confirmed</option>
-                <option value="Discussion"> Discussion</option>
-                <option value="Booked"> Booked</option>
-                <option value="Lost"> Lost</option>
-                @forelse ($configuration_settings as $progs)
-                @if ($progs['dropdown_for'] == 'enquiry_progress')
-                @php
-                $namee = isset(explode('___', $progs['name'])[0])
-                ? explode('___', $progs['name'])[0]
-                : '';
-                @endphp
-                <option value="{{ $progs['id'] }}"> {{ $namee }}</option>
-                @endif
-                @empty
-                @endforelse
-
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="site_visit_date1" style="margin-top: 10px">NFD Date:</label>
-            <input class="form-control limitYear4digits" id="site_visit_date1"
-                name="nfdDate" max='31-12-2050' type="date"
-                oninput="limitYearTo4Digits1()">
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label class="mb-0">Comments:</label>
-            <select class="form-select" id="progress_sales_comment">
-                <option value="">Sales Comments</option>
-                @forelse ($configuration_settings as $props)
-                @if ($props['dropdown_for'] == 'enquiry_sales_comment')
-                <option data-parent_id="{{ $props['parent_id'] }}"
-                    value="{{ $props['id'] }}">{{ $props['name'] }}
-                </option>
-                @endif
-                @empty
-                @endforelse
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="nfdTime" style="margin-top: 10px">NFD Time:</label>
-            <input class="form-control" id="site_visit_time1" name="nfdTime"
-                type="time">
-        </div>
-
-    </div>
-    <div class="col-md-12 mt-2">
-        <div class="form-group">
-            <label>Lead Type:</label><br>
-            <div class="form-check form-check-inline radio radio-primary"
-                style="margin-right:3rem">
-                <input class="form-check-input" id="progress_lead_type_1" type="radio"
-                    name="progress_lead_type" value="Hot Lead">
-                <label class="form-check-label mb-0" for="progress_lead_type_1">Hott
-                    Lead</label>
-            </div>
-            <div class="form-check form-check-inline radio radio-primary"
-                style="margin-right:3rem">
-                <input class="form-check-input" type="radio" id="progress_lead_type_2"
-                    name="progress_lead_type" value="Warm Lead">
-                <label class="form-check-label mb-0" for="progress_lead_type_2"> Warm
-                    Lead</label>
-            </div>
-            <div class="form-check form-check-inline radio radio-primary"
-                style="margin-right:3rem">
-                <input class="form-check-input" id="progress_lead_type_3" type="radio"
-                    name="progress_lead_type" value="Cold Lead">
-                <label class="form-check-label mb-0" for="progress_lead_type_3">Cold
-                    Lead</label>
-            </div>
-        </div>
-
-    </div>
-    <div class="col-md-6 mt-2">
-        <label for="Site Visit Time" class="mb-0">Remind Before (Minutes):</label>
-        <div class="form-group">
-            <div class="fname">
-                <select class="form-select" id="reminider_before_minute"
-                    multiple="multiple">
-                    <option value="" disabled>Select Minutes </option>
-                    <option value="30 mins">30 mins</option>
-                    <option value="1 hour">1 hour</option>
-                    <option value="90 mins">90 mins</option>
-                    <option value="120 mins">120 mins</option>
-                    <option value="24 hour">24 hour</option>
-                </select>
-            </div>
-        </div>
-        <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
-            type="remarks" autocomplete="off">
-    </div>
-    <div class="col-md-6 mt-2">
-        <div class="form-group">
-            <label for="progress_remarks">Remarks:</label>
-            <input class="form-control" name="progress_remarks" id="progress_remarks"
-                type="remarks" autocomplete="off">
-        </div>
-    </div>
-
-</div>
-<div class="text-center mt-3">
-    <button class="btn custom-theme-button" type="button"
-        id="saveProgress">Save</button>
-    <button class="btn btn-primary ms-3" style="border-radius: 5px;" type="button"
-        data-bs-dismiss="modal">Cancel</button>
-</div>
-</form>
-</div>
-</div>
-
-
-
-
-</div>
-</div>
-</div> --}}
 
         <div class="modal fade" id="progressmodal" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -1029,13 +835,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- bharat date --}}
-                                {{-- <div class="form-group col-md-6 m-b-20">
-                                            <label for="nfd" class="mb-0">NFD:</label>
-                                            <input class="form-control " id="nfdDateTime" max='31-12-2050' name="nfdDateTime"
-                                                type="datetime-local">
-                                            <span style="color: red" id="err_date"></span>
-                                        </div> --}}
+
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="nfdDate" class="mb-0">Site Visit Date:</label>
                                     <input class="form-control limitYear4digits" id="site_visit_date1" name="nfdDate"
@@ -1163,12 +963,7 @@
                                     <input class="form-control d-none" name="schedule_remind" id="schedule_remind"
                                         type="remarks" autocomplete="off">
                                 </div>
-                                {{-- <div class="form-group col-md-3 m-b-20">
-                                    <label for="site_visit_time" class="mb-0">Site Visit Time:</label>
-                                    <input class="form-control " id="site_visit_time" max='31-10-2050'
-                                        name="site_visit_time" type="datetime-local" oninput="limitYearTo4Digits()">
-                                </div> --}}
-                                {{-- bharat date --}}
+
                                 <div class="form-group col-md-3 m-b-20">
                                     <label for="site_visit_date" class="mb-0">Site Visit Date:</label>
                                     <input class="form-control limitYear4digits" id="site_visit_date"
@@ -1185,7 +980,6 @@
                                         type="remarks" autocomplete="off">
                                 </div>
                                 <div class="row">
-                                    <!-- First Group -->
                                     <div class="form-group col-md-6 m-b-20">
                                         <div class="row">
                                             <div class="form-check checkbox checkbox-solid-success mb-0 col-md-4 m-b-20">
@@ -1395,39 +1189,36 @@
         </div>
 
         <?php
-        $matchEnquiryFor = isset($_GET['match_enquiry_for']) ? $_GET['match_enquiry_for'] : null;
-        $matchPropertyType = isset($_GET['match_property_type']) ? $_GET['match_property_type'] : null;
-        $matchSpecificType = isset($_GET['match_specific_type']) ? $_GET['match_specific_type'] : null;
-        $matchSpecificSubType = isset($_GET['match_specific_sub_type']) ? $_GET['match_specific_sub_type'] : null;
-        $matchEnquiryWeekend = isset($_GET['match_enquiry_weekend']) ? $_GET['match_enquiry_weekend'] : null;
-        $matchBudgetType = isset($_GET['match_budget_from_type']) ? $_GET['match_budget_from_type'] : null;
-        $matchEnqSize = isset($_GET['match_enquiry_size']) ? $_GET['match_enquiry_size'] : null;
-        $matchEnqSource = isset($_GET['match_inquiry_source']) ? $_GET['match_inquiry_source'] : null;
-        // dd($matchSpecificSubType,$matchEnquiryWeekend);
+            $matchEnquiryFor = isset($_GET['match_enquiry_for']) ? $_GET['match_enquiry_for'] : null;
+            $matchPropertyType = isset($_GET['match_property_type']) ? $_GET['match_property_type'] : null;
+            $matchSpecificType = isset($_GET['match_specific_type']) ? $_GET['match_specific_type'] : null;
+            $matchSpecificSubType = isset($_GET['match_specific_sub_type']) ? $_GET['match_specific_sub_type'] : null;
+            $matchEnquiryWeekend = isset($_GET['match_enquiry_weekend']) ? $_GET['match_enquiry_weekend'] : null;
+            $matchBudgetType = isset($_GET['match_budget_from_type']) ? $_GET['match_budget_from_type'] : null;
+            $matchEnqSize = isset($_GET['match_enquiry_size']) ? $_GET['match_enquiry_size'] : null;
+            $matchEnqSource = isset($_GET['match_inquiry_source']) ? $_GET['match_inquiry_source'] : null;
         ?>
     @endsection
     @push('scripts')
         <script>
+
+            let filter_apply = 0;
+
             $(document).on('change', '#import_category', function() {
                 var type = $('#import_category option:selected').attr('data-val')
-                console.log("typetype ==", type);
                 $('#import_url').attr('href', $('#import_url').attr('href') + '?type=' + type);
             })
 
             function limitYearTo4Digits1() {
                 const dateInput = document.getElementById('site_visit_date1');
                 const inputValue = dateInput.value;
-                // Split the input by the hyphen separator
                 const parts = inputValue.split('-');
                 if (parts.length === 3) {
-                    // Ensure the year part has 4 digits
                     const year = parts[0].trim();
                     if (year.length > 4) {
-                        parts[0] = year.slice(-4); // Keep only the last 4 digits
+                        parts[0] = year.slice(-4);
                     }
-                    // Reconstruct the formatted date
                     const formattedDate = parts.join('-');
-                    // Update the input value with the modified date
                     dateInput.value = formattedDate;
                 }
             }
@@ -1436,42 +1227,23 @@
                 const dateInput = document.getElementById('site_visit_date');
                 const inputValue = dateInput.value;
 
-                console.log("inputValue", inputValue);
-                // Split the input by the hyphen separator
                 const parts = inputValue.split('-');
 
                 if (parts.length === 3) {
-                    // Ensure the year part has 4 digits
                     const year = parts[0].trim();
                     if (year.length > 4) {
-                        parts[0] = year.slice(-4); // Keep only the last 4 digits
+                        parts[0] = year.slice(-4);
                     }
 
-                    // Reconstruct the formatted date
                     const formattedDate = parts.join('-');
 
-                    // Update the input value with the modified date
                     dateInput.value = formattedDate;
                 }
             }
         </script>
 
-        {{-- <script>
-            $(document).ready(function() {
-                $('#progress_enquiry_progress').on('change', function() {
-                    alert("clicekd bhrt")
-                    var selectedValue = $(this).val();
-                    if (selectedValue === 'Lead Confirmed') {
-                        $('#progress_enquiry_progress option[value="New Lead"]').prop('disabled', true);
-                    } else {
-                        $('#progress_enquiry_progress option[value="New Lead"]').prop('disabled', false);
-                    }
-                });
-            });
-        </script> --}}
         <script>
             $(document).ready(function() {
-                // Check or uncheck checkboxes based on PHP variables
                 $('#match_enquiry_for').prop('checked', <?= $matchEnquiryFor === '1' ? 'true' : 'false' ?>);
                 $('#match_property_type').prop('checked', <?= $matchPropertyType === '1' ? 'true' : 'false' ?>);
                 $('#match_specific_type').prop('checked', <?= $matchSpecificType === '1' ? 'true' : 'false' ?>);
@@ -1483,14 +1255,11 @@
                 $('#match_inquiry_source').prop('checked', <?= $matchEnqSource === '1' ? 'true' : 'false' ?>);
 
             });
-            // progress disable
             $(document).ready(function() {
                 const enquiryProgressDropdown = document.getElementById('progress_enquiry_progress');
                 $('#progress_enquiry_progress').on('change', function() {
                     const selectedValue = this.value;
                     const options = enquiryProgressDropdown.options;
-
-                    // Remove specific options based on the selected value
                     if (selectedValue === 'Lead Confirmed') {
                         removeOption('New Lead');
                     } else if (selectedValue === 'Discussion') {
@@ -1516,46 +1285,7 @@
                         }
                     }
                 }
-                //
             });
-            // category to sub category on change filter
-            // $('#filter_specific_type').on('change', function() {
-            //     let selectedCategory = this.options[this.selectedIndex].text.trim();
-            //     let url = "{{ route('admin.getEnquiryConfiguration') }}";
-
-            //     try {
-            //         var xhr = new XMLHttpRequest();
-            //         xhr.open("GET", `${url}?selectedCategory=${encodeURIComponent(selectedCategory)}`, true);
-
-            //         xhr.onreadystatechange = function() {
-            //             if (xhr.readyState === XMLHttpRequest.DONE) {
-            //                 if (xhr.status === 200) {
-            //                     var data = JSON.parse(xhr.responseText);
-            //                     console.log("data", data);
-
-            //                     var subCategorySelect = document.getElementById('filter_configuration');
-            //                     subCategorySelect.innerHTML = '<option value="">Sub Category</option>';
-
-            //                     for (var key in data) {
-            //                         if (data.hasOwnProperty(key)) {
-            //                             var option = document.createElement('option');
-            //                             option.value = key;
-            //                             option.text = data[key];
-            //                             option.dataset.category = data[key];
-            //                             subCategorySelect.appendChild(option);
-            //                         }
-            //                     }
-            //                 } else {
-            //                     console.error("An error occurred:", xhr.statusText);
-            //                 }
-            //             }
-            //         };
-
-            //         xhr.send();
-            //     } catch (error) {
-            //         console.error("An error occurred:", error);
-            //     }
-            // });
 
             $('#filter_specific_type').on('change', function() {
                 var selectedCategories = [];
@@ -1563,7 +1293,6 @@
                     selectedCategories.push($(this).text().trim());
                 });
 
-                console.log('selectedCategories ==', selectedCategories);
                 var url = "{{ route('admin.getEnquiryConfiguration') }}";
 
                 try {
@@ -1575,7 +1304,6 @@
                         if (xhr.readyState === XMLHttpRequest.DONE) {
                             if (xhr.status === 200) {
                                 var data = JSON.parse(xhr.responseText);
-                                console.log("data", data);
 
                                 var subCategorySelect = document.getElementById('filter_configuration');
                                 subCategorySelect.innerHTML = '<option value="">Sub Category</option>';
@@ -1590,19 +1318,14 @@
                                     }
                                 }
                             } else {
-                                console.error("An error occurred:", xhr.statusText);
                             }
                         }
                     };
 
                     xhr.send();
                 } catch (error) {
-                    console.error("An error occurred:", error);
                 }
             });
-
-
-
 
             var search_enq = '';
             var queryString = window.location.search;
@@ -1621,12 +1344,10 @@
                     $('.matchbutton').hide()
                 }
             } catch (error) {
-                console.log("error :", error);
             }
 
             $(document).on('click', '#matchagain', function(e) {
                 e.preventDefault();
-                // Gather selected checkbox values
                 let selectedCheckboxes = {
                     match_enquiry_for: $('#match_enquiry_for').prop('checked') ? 1 : 0,
                     match_property_type: $('#match_property_type').prop('checked') ? 1 : 0,
@@ -1638,7 +1359,6 @@
                     match_inquiry_source: $('#match_inquiry_source').prop('checked') ? 1 : 0,
                 };
 
-                // Construct the URL with selected checkbox values
                 let queryString = Object.entries(selectedCheckboxes)
                     .filter(([key, value]) => value === 1)
                     .map(([key, value]) => `${key}=${value}`)
@@ -1646,9 +1366,6 @@
 
                 let dataId = $(this).attr('data-id');
 
-                // let url = matching_property_url + '?' + queryString + '&enq=' + encryptSimpleString(dataId);
-                // console.log("url redirect", url);
-                // window.location = url;
                 $.ajax({
                     type: "GET",
                     url: "{{ route('admin.enquiry.category') }}",
@@ -1656,10 +1373,6 @@
                         id: dataId
                     },
                     success: function(data) {
-                        console.log("Dataaaa Matching Category :", data.property_type);
-                        // let redirectUrl = (data.property_type == 261) ? "{{ route('admin.industrial.properties') }}" :
-                        //      (data.property_category == 262) ? "{{ route('admin.land.properties') }}" :
-                        //      "{{ route('admin.properties') }}";
                         let redirectUrl;
                         if (data.property_type == 261) {
                             redirectUrl = "{{ route('admin.industrial.properties') }}";
@@ -1672,7 +1385,6 @@
                         window.location = url;
                     },
                     error: function(xhr, status, error) {
-                        console.error("Error Matching Category :", error);
                     }
                 });
             });
@@ -1771,7 +1483,6 @@
                 var queryString = window.location.search;
                 var urlParams = new URLSearchParams(queryString);
                 var go_data_id = urlParams.get('data_id')
-                console.log("window.location.pathname", window.location.pathname.toLowerCase());
                 if (window.location.pathname.toLowerCase() === '/admin/enquiries' && window.location.search === '?') {
                     $('#match_enquiry_all, #match_enquiry_for, #match_property_type, #match_specific_type, #match_specific_sub_type, #match_enquiry_weekend, #match_budget_from_type, #match_enquiry_size, #match_inquiry_source')
                         .prop('checked', true);
@@ -1825,12 +1536,11 @@
                             d.match_budget_from_type = Number($('#match_budget_from_type').prop('checked'));
                             d.match_enquiry_for = Number($('#match_enquiry_for').prop('checked'));
                             d.match_inquiry_source = Number($('#match_inquiry_source').prop('checked'));
-                            // d.match_budget_to_type = Number($('#match_budget_to_type').prop('checked'));
                             d.match_enquiry_size = Number($('#match_enquiry_size').prop('checked'));
-                            // d.match_building = Number($('#match_building').prop('checked'));
-                            d.filter_by = filter_by
-                            d.calendar_date = calendar_date
-                            d.calendar_type = calendar_type
+                            d.filter_by = filter_by;
+                            d.calendar_date = calendar_date;
+                            d.calendar_type = calendar_type;
+                            d.filter_apply = filter_apply;
                         },
                     },
                     columns: [{
@@ -1902,7 +1612,6 @@
                             "targets": 6
                         }
                     ],
-                    //#B To Change Background when enquiry_status = 0. 
                     "createdRow": function(row, data, dataIndex) {
                         if (data['enq_status'] == 0) {
                             $(row).addClass('important-row');
@@ -1923,7 +1632,7 @@
                     }
                 });
             });
-            //Read more / Read less
+
             $('#enquiryTable .read-more, #enquiryTable .read-less').css('cursor', 'pointer');
             $('#enquiryTable').on('click', '.read-more', function() {
                 $(this).siblings('.truncated').hide();
@@ -1935,22 +1644,11 @@
                 $(this).siblings('.truncated').show();
                 $(this).text('...Read More').removeClass('read-less').addClass('read-more');
             });
-            //matching popup
-            // function matchingProperty(data) {
-            //     $('#matchModal').modal('show');
-            //     $('#matchagain').attr('data-id', $(data).attr('data-id'));
-            //     let propertyId = $(this).data('id');
-            //     alert("prop ID :",propertyId);
-            //     console.log("property id :",propertyId);
-            //     // urll = matching_property_url + '?enq=' + matching_property_url($(data).attr('data-id'));
-            //     // window.location = urll;
-            // }
 
             function matchingProperty(data) {
                 $('#matchModal').modal('show');
                 let enquiryId = $(data).attr('data-id'); // Retrieve data-id attribute from 'data' parameter
                 $('#matchagain').attr('data-id', enquiryId); // Set data-id attribute for #matchagain button
-                console.log("enq in id: ", enquiryId); // Output property id to console
                 getEnquiryCategory(enquiryId);
             }
 
@@ -1962,14 +1660,11 @@
                         id: enquiryID, // Pass the enquiryID directly
                     },
                     success: function(data) {
-                        console.log("data :", data.weekend_enq);
 
                         if (typeof data.configuration === "string") {
                             try {
                                 data.configuration = JSON.parse(data.configuration);
-                                console.log("Parsed data.configuration:", data.configuration);
                             } catch (e) {
-                                console.error("Error parsing configuration:", e);
                             }
                         }
 
@@ -1981,16 +1676,13 @@
                                 $('.the_matching_weekend').hide();
                             }
                         } else if (data.configuration == 0) {
-                            console.log("Is land category :");
                             $('.the_enquiry_sub_cat').hide();
                         } else {
                             $('.the_enquiry_sub_cat').show();
-                            console.log("data.configuration is still not an array after parsing : ");
                         }
 
                     },
                     error: function(xhr, status, error) {
-                        console.error("Error:", error);
                     }
                 });
             }
@@ -1998,6 +1690,7 @@
 
             $(document).on('click', '#filtersearch', function(e) {
                 e.preventDefault();
+                filter_apply = 1;
                 go_data_id = '';
                 $('#enquiryTable').DataTable().draw();
                 $('#resetfilter').removeClass('d-none');
@@ -2007,16 +1700,13 @@
 
             $(document).on('click', '#resetfilter', function(e) {
                 e.preventDefault();
+                filter_apply = 0;
                 $(this).hide();
                 $('#filter_form').trigger("reset");
                 $('#enquiryTable').DataTable().draw();
                 $('#filtermodal').modal('hide');
-                // $('#filter_specific_type').val([]).trigger('change');
-                // $('#filter_area_id').val([]).trigger('change');
                 triggerResetFilter()
             });
-
-
 
             $(document).on("click", ".open_modal_with_this", function(e) {
                 $('#all_contacts').html('')
@@ -2164,72 +1854,6 @@
                 })
             }
 
-            // date disbale via type
-            // $(document).ready(function() {
-            //     // Get the input element
-            //     var nfdDateTimeInput = $("#nfdDateTime");
-
-            //     // Function to check if the input is typed or selected using the mouse
-            //     function isInputTyped() {
-            //         var inputValue = nfdDateTimeInput.val();
-            //         return inputValue !== '';
-            //     }
-
-            //     // Disable the input when typed manually
-            //     nfdDateTimeInput.on('keydown', function() {
-            //         nfdDateTimeInput.data('isTyped', true);
-            //         nfdDateTimeInput.prop("disabled", true);
-            //         $("#err_date").html("Please select a date instead of typing.");
-
-            //     });
-
-            //     // Check if the input was typed and show error
-            //     nfdDateTimeInput.on('click', function() {
-            //         if (!isInputTyped()) {
-            //             nfdDateTimeInput.data('isTyped', false);
-            //             nfdDateTimeInput.prop("disabled", false);
-            //         }
-            //     });
-
-            //     // Trigger validation on form submit
-            //     $("#progress_form").on('submit', function() {
-            //         nfdDateTimeInput.data('isTyped', isInputTyped());
-            //         $("#progress_form").valid();
-            //     });
-            // });
-
-            // $(document).ready(function() {
-            //     // Get the input element
-            //     var nfdDateTimeInput = $("#nfdDateTime");
-
-            //     // Function to check if the input is typed or selected using the mouse
-            //     function isInputTyped() {
-            //         var inputValue = nfdDateTimeInput.val();
-            //         return inputValue !== '';
-            //     }
-
-            //     // Disable the input when typed manually
-            //     nfdDateTimeInput.on('keydown', function() {
-            //         nfdDateTimeInput.data('isTyped', true);
-            //         $("#err_date").html("Please select a date instead of typing.");
-
-            //     });
-
-            //     // Check if the input was typed and show error
-            //     nfdDateTimeInput.on('click', function() {
-            //         if (!isInputTyped()) {
-            //             nfdDateTimeInput.data('isTyped', false);
-            //         }
-            //     });
-
-            //     // Trigger validation on form submit
-            //     $("#progress_form").on('submit', function() {
-            //         nfdDateTimeInput.data('isTyped', isInputTyped());
-            //         $("#progress_form").valid();
-            //     });
-            // });
-
-
             $.validator.addMethod("maxDate", function(value, element) {
                 var curDate = new Date("2050-12-31");
                 var inputDate = new Date(value);
@@ -2256,72 +1880,15 @@
                 return "Invalid Date!"; // Default error message
             });
 
-            // $("#progress_form").validate({
-            //     rules: {
-            //         nfdDateTime: {
-            //             date: true,
-            //             maxDate: true
-            //         }
-            //     }
-            // });
-
-            // $(document).ready(function() {
-            //     // Get the input element
-            //     var nfdDateTimeInput = $("#nfdDateTime");
-
-            //     // Function to check if the input is typed or selected using the mouse
-            //     function isInputTyped() {
-            //         var inputValue = nfdDateTimeInput.val();
-            //         return inputValue !== '';
-            //     }
-
-            //     // Disable the input when typed manually
-            //     nfdDateTimeInput.on('keydown', function() {
-            //         nfdDateTimeInput.prop("disabled", true);
-            //     });
-
-            //     // Enable the input when selected via mouse
-            //     nfdDateTimeInput.on('click', function() {
-            //         if (!isInputTyped()) {
-            //             nfdDateTimeInput.prop("disabled", false);
-            //         }
-            //     });
-            // });
-
-            // $.validator.addMethod("maxDate", function(value, element) {
-            //     var curDate = new Date("2050-12-31");
-            //     var inputDate = new Date(value);
-            //     if (value == '')
-            //         return true;
-            //     if (inputDate < curDate)
-            //         return true;
-            //     return false;
-            // }, "Invalid Date!"); // error message
-
-            // $("#progress_form").validate({
-            //     rules: {
-            //         nfdDateTime: {
-            //             date: true,
-            //             maxDate: true
-            //         }
-            //     }
-            // });
-
             // save progress
             $(document).on('click', '#saveProgress', function(e) {
-                console.log("saved progress 3 ==");
                 e.preventDefault();
-                console.log("Saved Progressgggg ==");
                 if (!$('#progress_form').valid()) {
-                    dd("onnnnnnnnnnn");
                     return;
                 }
                 $(this).prop('disabled', true);
-                var id = $('#progress_enquiry_id').val()
-                // var email_reminder = document.getElementById("email_reminder");
-                // var sms_reminder = document.getElementById("sms_reminder");
-                // var email = email_reminder.checked == true ? 1 : 0;
-                // var sms = sms_reminder.checked == true ? 1 : 0;
+
+                var id = $('#progress_enquiry_id').val();
 
                 $.ajax({
                     type: "POST",
@@ -2334,19 +1901,15 @@
                         nfd: $('#site_visit_date1').val() + ' ' + $('#site_visit_time1').val(),
                         remarks: $('#progress_remarks').val(),
                         time_before: JSON.stringify($('#reminider_before_minute').val()),
-                        // email_reminder: email,
-                        // sms_reminder: sms,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
-                        console.log("progres add sucess ==", data);
                         $('#enquiryTable').DataTable().draw();
                         $('#progressmodal').modal('hide');
                         $('#saveProgress').prop('disabled', false);
                     }
                 });
             });
-            console.log("NFD Schedule:", $('#site_visit_date').val(), $('#site_visit_time').val());
 
             // save Schedule Visit
             $(document).on('click', '#saveSchedule', function(e) {
@@ -2382,13 +1945,11 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
-                        console.log("data save schedule 1 ==", data);
                         $('#enquiryTable').DataTable().draw();
                         $('#showschedulemodal').modal('hide');
                         $('#saveSchedule').prop('disabled', false);
                     },
                     error: function(data) {
-                        console.log("err ==", data);
                         $('#saveSchedule').prop('disabled', false);
                     }
                 });
@@ -2596,8 +2157,6 @@
                 }
             }
 
-
-
             function getScheduleVisit(id) {
                 $('.schedule_data').html('')
                 $.ajax({
@@ -2642,7 +2201,6 @@
                                     ]['last_name'] +
                                     '</td>';
                             } else {
-                                console.log(data[i]['assigned_by']['first_name']);
                                 str += '<td></td>';
                             }
                             $('.schedule_data').append(str.replace('null', ''))
@@ -2778,7 +2336,6 @@
                     return false; // for demo
                 }
             });
-
 
 
             $(document).on('click', '#saveEnquiry', function(e) {
