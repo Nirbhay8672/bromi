@@ -155,7 +155,7 @@
                                                             <div class="form-group col-md-3 m-b-20 mb-3 mt-3">
                                                                 <label><b>Enquiry For</b></label>
                                                                 <select class="form-select" id="enquiry_for_id">
-                                                                    <option value="" disabled>Enquiry For</option>
+                                                                    <option value="">Enquiry For</option>
                                                                     <option value="Rent">Rent</option>
                                                                     <option value="Buy">Buy</option>
                                                                 </select>
@@ -164,7 +164,7 @@
                                                             <div class="form-group col-md-3 m-b-20 mb-3 mt-3">
                                                                 <label><b>Enquiry Access</b></label>
                                                                 <select class="form-select" id="enquiry_permission">
-                                                                    <option value="" disabled>Enquiries Access</option>
+                                                                    <option value="">Enquiries Access</option>
                                                                     <option value="all">All Enquiries</option>
                                                                     <option value="only_assigned">Only Assigned</option>
                                                                 </select>

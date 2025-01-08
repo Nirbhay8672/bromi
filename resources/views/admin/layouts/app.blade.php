@@ -557,7 +557,15 @@ Helper::set_default_measuerement();
                                     </g>
                                 </svg>
 
-                                <span class="badge rounded-pill badge-warning">{{(isset($notifications['noticount'])?$notifications['noticount']:0)}}</span>
+                                <?php $count = 0; ?>
+
+                                @forelse ($notifications['notification'] as $noti)
+                                    @if(Auth::user()->id == $noti['user_id'])
+                                        <?php $count++ ?> 
+                                    @endif
+                                @endforeach
+
+                                <span class="badge rounded-pill badge-warning">{{$count}}</span>
 
                             </div>
                             <div class="onhover-show-div notification-dropdown">
@@ -569,20 +577,20 @@ Helper::set_default_measuerement();
                                 </a>
                                 <ul class="custom-scrollbar">
                                     @forelse ($notifications['notification'] as $noti)
-                                    <a href="{{route('admin.notifications')}}">
-                                        <li>
-                                            <div class="media">
-                                                <div class="media-body m-l-0">
-                                                    <p>{{ $noti['notification'] }}</p>
-                                                    <span class="icomments">{{ $noti['created_at'] }}</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </a>
+                                        @if(Auth::user()->id == $noti['user_id'])
+                                            <a href="{{route('admin.notifications')}}">
+                                                <li>
+                                                    <div class="media">
+                                                        <div class="media-body m-l-0">
+                                                            <p>{{ $noti['notification'] }}</p>
+                                                            <span class="icomments">{{ $noti['created_at'] }}</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </a>
+                                        @endif
                                     @empty
                                     @endforelse
-
-
                                 </ul>
                             </div>
                         </li>
