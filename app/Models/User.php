@@ -80,6 +80,7 @@ class User extends Authenticatable
         'total_free_user',
         'total_paid_user',
         'temp_pass',
+		'enquiry_for_id',
 		'enquiry_type',
 		'specific_enquiry',
 	];

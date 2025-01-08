@@ -153,6 +153,15 @@
                                                             </div>
 
                                                             <div class="form-group col-md-3 m-b-20 mb-3 mt-3">
+                                                                <label><b>Enquiry For</b></label>
+                                                                <select class="form-select" id="enquiry_for_id">
+                                                                    <option value="" disabled>Enquiry For</option>
+                                                                    <option value="Rent">Rent</option>
+                                                                    <option value="Buy">Buy</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="form-group col-md-3 m-b-20 mb-3 mt-3">
                                                                 <label><b>Enquiry Access</b></label>
                                                                 <select class="form-select" id="enquiry_permission">
                                                                     <option value="" disabled>Enquiries Access</option>
@@ -505,7 +514,8 @@
 
 
                             $('#position').val(dataa.position).trigger('change');
-                            $('#property_for_id').val(dataa.property_for_id).trigger('change')
+                            $('#property_for_id').val(dataa.property_for_id).trigger('change');
+                            $('#enquiry_for_id').val(dataa.enquiry_for_id).trigger('change');
                             $('#working').prop('checked', Number(dataa.working));
                             shouldchangecity = 1;
                             $('#specific_properties').val([]).trigger('change');
@@ -614,6 +624,7 @@
                         form_data.set('password', $('#password').val());
                         form_data.set('role_id', $('#role_id').val() ?? '');
                         form_data.set('property_for_id', $('#property_for_id').val());
+                        form_data.set('enquiry_for_id', $('#enquiry_for_id').val());
                         form_data.set('property_type_id', JSON.stringify($('#property_type_id').val()));
                         form_data.set('enquiry_type_id', JSON.stringify($('#enquiry_type_id').val()));
                         form_data.set('specific_properties', JSON.stringify($('#specific_properties').val()));
