@@ -92,7 +92,6 @@ class Enquiries extends Model
 		'village_id',
 	];
 
-
 	protected static function boot()
 	{
 		parent::boot();

@@ -88,32 +88,61 @@ class EnquiriesController extends Controller
 					$enSpecArray = json_decode($en_spec_str, true);
 				}
 
-				$data = Enquiries::with('Employee', 'Progress', 'activeProgress')
-					->whereHas('AssignHistory', function ($query) {
-						$query->where('assign_id', '=', Auth::user()->id);
-					})
-					->orWhere(function ($query) {
-						$query->where('added_by', Auth::user()->id)
-							->orWhere('employee_id', '=', Auth::user()->id);
-					});
+				$data = Enquiries::with(['Employee', 'Progress', 'activeProgress']);
+
+				if($is_sub_admin->enquiry_permission) {
+					if($is_sub_admin->enquiry_permission == 'only_assigned') {
+						$data->where(function ($query) {
+							$query->whereHas('AssignHistory', function ($subQuery) {
+								$subQuery->where('assign_id', '=', Auth::user()->id);
+							})
+							->orWhere(function ($subQuery) {
+								$subQuery->whereIn('added_by', [Auth::user()->id])
+									->orWhere('employee_id', [Auth::user()->id]);
+							});
+						});
+					}
+					if($is_sub_admin->enquiry_permission == 'all') {
+						$data->where(function ($query) {
+							$query->whereHas('AssignHistory', function ($subQuery) {
+								$subQuery->where('assign_id', '=', Auth::user()->id);
+							})
+							->orWhere(function ($subQuery) {
+								$subQuery->whereIn('added_by', [Auth::user()->id , Auth::user()->parent_id])->orWhere('employee_id', [Auth::user()->id]);
+							});
+						});
+					}
+				} else {
+					$data->whereIn('added_by', [Auth::user()->id]);
+				}
+
+				if($is_sub_admin->enquiry_for_id) {
+					$data->where('enquiry_for', $is_sub_admin->enquiry_for_id);
+				}
+
+				if (count($enTypeArray) > 0) {
+					$data->whereIn('requirement_type', $enTypeArray);
+				} else {
+					$data->whereIn('requirement_type', ["85", "87"]);
+				}
+
+				if (count($enSpecArray) > 0) {
+					$data->whereIn('property_type', $enSpecArray);
+				}
 
 				if($request->filter_apply == 1) {
-
-					if (!empty($enTypeArray)) {
-						$data->whereIn('requirement_type', $enTypeArray);
-					}
-
-					if (!empty($enSpecArray)) {
-						$data->whereIn('property_type', $enSpecArray);
-					}
 
 					if ($request->filled('filter_property_type')) {
                         $data->where('requirement_type', $request->input('filter_property_type'));
                     }
 
-                    if ($request->filled('filter_specific_type')) {
-                        $data->where('property_type', $request->input('filter_specific_type'));
+                    if ($request->filled('filter_specific_type') && count(json_decode($request->filter_specific_type)) > 0) {
+						$data->whereIn('property_type', json_decode($request->filter_specific_type));
                     }
+
+					if ($request->filled('filter_enquiry_for')) {
+						$data->where('enquiry_for', $request->filter_enquiry_for);
+					}
 
 					$data->when($request->filter_by, function ($query) use ($request) {
 						if ($request->filter_by == 'new') {
@@ -139,8 +168,9 @@ class EnquiriesController extends Controller
 						} elseif ($request->filter_by == 'missed') {
 							return $query->whereDate('created_at', '<', Carbon::now()->format('Y-m-d'));
 						}
-					})
-					->when($request->calendar_date && $request->calendar_type, function ($query) use ($request) {
+					});
+					
+					$data->when($request->calendar_date && $request->calendar_type, function ($query) use ($request) {
 						if ($request->calendar_type == 'New Enquiry') {
 							return $query->whereDate('created_at', $request->calendar_date);
 						} else {
@@ -158,10 +188,11 @@ class EnquiriesController extends Controller
 					->when($request->filter_employee_id, function ($query) use ($request) {
 						return $query->where('employee_id', $request->filter_employee_id);
 					})
+
 					->when($request->filter_configuration, function ($query) use ($request) {
-						return $query->where('configuration', 'like', '%"' . $request->filter_configuration . '"%');
+						return $query->whereJsonContains('configuration', $request->filter_configuration);
 					})
-	
+
 					->when($request->filter_area_id, function ($query) use ($request) {
 						$query->where(function ($query) use ($request) {
 							$types = json_decode($request->filter_area_id);
@@ -171,9 +202,6 @@ class EnquiriesController extends Controller
 								}
 							}
 						});
-					})
-					->when($request->filter_enquiry_for, function ($query) use ($request) {
-						return $query->where('enquiry_for', $request->filter_enquiry_for);
 					})
 					->when($request->filter_enquiry_source, function ($query) use ($request) {
 						return $query->where('enquiry_source', $request->filter_enquiry_source);
@@ -237,40 +265,31 @@ class EnquiriesController extends Controller
 					->when($request->filter_prospect, function ($query) use ($request) {
 						return $query->whereDate('created_at', '<=', $request->filter_prospect);
 					})
-					//Matching Enquiry
+
 					->when(!empty($request->search_enq), function ($query) use ($request, $pro) {
 						if (!empty($pro)) {
-							// prop type = enq type req type
 							if ($request->match_property_type) {
-								// dd("requirement_type", $pro->property_type, "..", $request->match_property_type);
 								$query->where('requirement_type',   $pro->property_type);
 							}
 	
-							//prop category = enq category
 							if ($request->match_specific_type) {
-								// dd("property_type", $request->match_specific_type, "..", $pro->property_category);
 								$query->where('property_type',   $pro->property_category);
 							}
 	
 							if ($request->match_enquiry_weekend && ($pro->week_end_villa == '1')) {
-								// dd("pro->week_end_villa",$pro->week_end_villa);
 								$query->where('weekend_enq',   $pro->week_end_villa);
 							}
 	
 							if ($request->match_specific_sub_type) {
-								// dd("property_sub_type", $request->match_specific_sub_type, ".Conf.", $pro->configuration,$pro->property_category);
 								if ($pro->property_category !== '258' && $pro->property_category !== '256') {
 									$query->whereJsonContains('configuration', ($pro->configuration));
 								} else if ($pro->property_category === '258') {
 									$query->whereJsonContains('configuration', ('0'));
-								} else if ($pro->property_category == '256') {
-									// $query->whereJsonContains('configuration', '');
 								}
 							}
 	
 							// Property For = Enquiry for
 							if ($request->match_enquiry_for) {
-								// dd("enquiry_for .. ",$pro->property_for,$request->match_enquiry_for);
 								$enquiry_for = ($pro->property_for == 'Sell') ? 'Buy' : $pro->property_for;
 								if ($enquiry_for !== 'Both') {
 									$query->where('enquiry_for', $enquiry_for);
@@ -281,7 +300,6 @@ class EnquiriesController extends Controller
 							if ($request->match_budget_from_type) {
 								$survey_price = (int) $pro->survey_price; // Cast to integer
 								$fp_price =  $pro->fp_plot_price; // Cast to integer
-								// dd("fp_price",$survey_price);
 								$unitDetails = json_decode($pro->unit_details, true);
 								$query->where(function ($q) use ($unitDetails, $survey_price, $fp_price, $pro) {
 									foreach ($unitDetails as $unit) {
@@ -291,7 +309,6 @@ class EnquiriesController extends Controller
 										$fpPrice =  str_replace(',', '', $fp_price); // Assuming the both price is at index 7
 	
 										if (($unit_price !== 0 && $sell_price !== 0) || ($unit_price !== 0 && $both_price !== 0) || ($unit_price !== 0 && $sell_price !== 0)) {
-											// dd("11");
 											$q->orWhere(function ($subQuery) use ($unit_price, $survey_price, $sell_price, $both_price, $fpPrice) {
 												$subQuery->where(function ($subSubQuery) use ($unit_price) {
 													$subSubQuery->where('budget_from', '<=', $unit_price)
@@ -314,8 +331,6 @@ class EnquiriesController extends Controller
 													});
 											});
 										} else if ($survey_price !== 0) {
-											// dd("112");
-	
 											$q->orWhere(function ($subQuery) use ($survey_price) {
 												$subQuery->where('budget_from', '<=', $survey_price)
 													->where('budget_to', '>=', $survey_price)
@@ -323,7 +338,6 @@ class EnquiriesController extends Controller
 													->where('sell_price', '>=', $survey_price);
 											});
 										} else if ($unit_price !== 0) {
-											// dd("113");
 	
 											$q->orWhere(function ($subQuery) use ($unit_price, $unit, $pro) {
 												$subQuery->where('budget_from', '<=', $unit_price)
@@ -336,15 +350,11 @@ class EnquiriesController extends Controller
 													});
 											});
 										} else if ($sell_price !== 0 && !in_array($pro->property_category, ["260", "261", "256", "254"])) {
-											// dd("114");
-	
 											$q->orWhere(function ($subQuery) use ($sell_price) {
 												$subQuery->where('budget_from', '<=', $sell_price)
 													->where('budget_to', '>=', $sell_price);
 											});
 										} else if ($sell_price !== 0 && $pro->property_category !== "259" && $pro->property_category === "260") {
-											// dd("115");
-	
 											$sell_price = (int) str_replace(',', '', $unit[3]);
 											$q->orWhere(function ($subQuery) use ($sell_price) {
 												$subQuery->where('budget_from', '<=', $sell_price)
@@ -353,14 +363,10 @@ class EnquiriesController extends Controller
 										}
 									}
 								});
-	
-								// Add additional conditions if needed
 							}
 	
 	
-							// size range = prop salable area
 							if ($request->match_enquiry_size) {
-								// dd("match_enquiry_size ==>", $request->match_enquiry_size, '==',$pro->salable_plot_area,".1.", $pro->salable_area, ".2.", $pro->constructed_salable_area,".3.",$pro->fp_plot_size,".4.",$pro->survey_plot_size);
 								$parts = explode("_-||-_", $pro->salable_area);
 								$result = $parts[0];
 								$result_unit = $parts[1];
@@ -372,57 +378,29 @@ class EnquiriesController extends Controller
 								$fp_unit = $fpparts[1];
 								$fp_size_from = str_replace(',', '', $fp);
 								$fp_size_to = str_replace(',', '', $fp);
-								// $parts = explode("_-||-_", $pro->constructed_salable_area);
-								// $result2 = $parts[0];
-								// $result2_unit = $parts[1];
-								// $area_from = str_replace(',', '', $result2);
-								// $area_to = str_replace(',', '', $result2);
 	
 								$parts3 = explode("_-||-_", $pro->salable_plot_area);
 								$result3 = $parts3[0];
 								$result3_unit = $parts3[1];
-								$area_from3 = str_replace(',', '', $result3);
-								$area_to3 = str_replace(',', '', $result3);
-	
-	
-								// dd("area_size_from",$area_size_from,"area_size_to",$area_size_to,"pro->property_category",$pro->property_category,"salable_plot_area",$pro->salable_plot_area);
-								// salable
+
 								if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category !== "259" && $pro->property_category !== "260"  && $pro->property_category !== "254" && $pro->property_category !== "256") {
-									// dd("inn",$pro->property_category,$area_size_from,"--",$area_size_to);
 									$query->where('area_from', '<=', $area_size_from)
 										->where('area_to', '>=', $area_size_to);
 								} else if ($area_size_from != '' && $area_size_to != '' && $result_unit !== "" && $pro->property_category === "259" || $pro->property_category === "256" || $pro->property_category === "260" || $pro->property_category == "254") {
-									// dd("outt");
 									$area_from_int = (int) $area_size_from;
 									$area_to_int = (int) $area_size_to;
-									// dd("out",$area_from_int,$area_to_int);
 									$query->where('area_from', '<=', $area_from_int)
 										->where('area_to', '>=', $area_to_int);
 								}
-	
-								// fp
+
 								if ($fp_size_from != '' && $fp_size_to != '' && $result_unit !== "") {
-									// dd("inn",$fp_size_from,"---",$fp_size_to);
 									$query->where('area_from', '<=', '1900')
 										->where('area_to', '>=', '1900');
 								}
-	
-	
-								// if ($area_from != '' && $area_to != '' && $result2_unit !== "") {
-								// 	// dd("12");
-								// 	$query->where('area_from', '<=', $area_from)
-								// 		->where('area_to', '>=', $area_to);
-								// } else if ($area_from3 != '' && $area_to3 != '' && $result3_unit !== "") {
-								// 	// dd("area_from3",$area_from3,$area_to3);
-								// 	$query->where('area_from', '<=', $area_from3)
-								// 		->where('area_to', '>=', $area_from3);
-								// }
 								if ($result && $result_unit) {
-									// dd("12");
 									$query->where('area_from_measurement', '=', $result_unit)
 										->where('area_to_measurement', '>=', $result_unit);
 								} else if ($result3 && $result3_unit) {
-									// dd('result3_unit', $result3_unit);
 									$query->where('area_from_measurement', '=', $result3_unit)
 										->where('area_to_measurement', '>=', $result3_unit);
 								}
@@ -434,20 +412,6 @@ class EnquiriesController extends Controller
 							}
 						}
 					});
-
-				} else {
-					
-                    if (count($enTypeArray) > 0) {
-                        $data->whereIn('requirement_type', $enTypeArray);
-                    } else {
-                        $data->whereIn('requirement_type', ["85", "87"]);
-                    }
-
-					if (count($enSpecArray) > 0) {
-                        $data->whereIn('property_type', $enSpecArray);
-                    } else {
-                        $data->where('property_type', '!=' , 'Test');
-                    }
 				}
 
 				$data->orderByRaw('CASE
@@ -514,7 +478,7 @@ class EnquiriesController extends Controller
 					});
 				})
 				->when($request->filter_configuration, function ($query) use ($request) {
-					return $query->where('configuration', 'like', '%"' . $request->filter_configuration . '"%');
+					return $query->whereJsonContains('configuration', $request->filter_configuration);
 				})
 
 				->when($request->filter_area_id, function ($query) use ($request) {
@@ -810,17 +774,20 @@ class EnquiriesController extends Controller
 			}
 
 			$data = $data->orderBy('id', 'desc')->get();
-			$data = $data->filter(function ($value) use ($request) {
-				if (!empty($request->filter_from_budget) && !empty($value->budget_from) && !(Helper::c_to_n($value->budget_from) >= Helper::c_to_n($request->filter_from_budget))) {
-					return false;
-				}
 
-				if (!empty($request->filter_to_budget) && !empty($value->budget_to) && !(Helper::c_to_n($value->budget_to) <= Helper::c_to_n($request->filter_to_budget))) {
-					return false;
-				}
-
-				return true;
-			});
+			if($request->filled('filter_from_budget') && $request->filled('filter_to_budget')) {
+				$data = $data->filter(function ($value) use ($request) {
+					if (!empty($request->filter_from_budget) && !empty($value->budget_from) && !(Helper::c_to_n($value->budget_from) >= Helper::c_to_n($request->filter_from_budget))) {
+						return false;
+					}
+	
+					if (!empty($request->filter_to_budget) && !empty($value->budget_to) && !(Helper::c_to_n($value->budget_to) <= Helper::c_to_n($request->filter_to_budget))) {
+						return false;
+					}
+	
+					return true;
+				});
+			}
 
 		return DataTables::of($data)
 			->editColumn('client_name', function ($row) use ($dropdownsarr) {

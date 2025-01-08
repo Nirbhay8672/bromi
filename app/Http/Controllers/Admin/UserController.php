@@ -214,7 +214,7 @@ class UserController extends Controller
 		$data->branch_id = $request->branch_id;
 		$data->reporting_to = $request->reporting_to;
 		$data->property_for_id = $request->property_for_id;
-		$data->enquiry_for_id = $request->enquiry_for_id;
+		$data->enquiry_for_id = $request->enquiry_for_id !='' ? $request->enquiry_for_id : null;
 		$data->property_type_id = $request->property_type_id;
 
 		$data->enquiry_type = $request->enquiry_type_id;
