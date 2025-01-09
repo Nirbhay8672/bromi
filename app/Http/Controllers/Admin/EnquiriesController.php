@@ -264,9 +264,11 @@ class EnquiriesController extends Controller
 					})
 					->when($request->filter_prospect, function ($query) use ($request) {
 						return $query->whereDate('created_at', '<=', $request->filter_prospect);
-					})
+					});
+					
+				} else {
 
-					->when(!empty($request->search_enq), function ($query) use ($request, $pro) {
+					$data->when(!empty($request->search_enq), function ($query) use ($request, $pro) {
 						if (!empty($pro)) {
 							if ($request->match_property_type) {
 								$query->where('requirement_type',   $pro->property_type);
