@@ -906,7 +906,7 @@ class EnquiriesController extends Controller
 				}
 
 				$req = '<div class="mb-1">' . $row->enquiry_for . ((!empty($row->enquiry_for) && !empty($configuration_display)) ? ' | ' : $configuration_display) . $category . $configuration_display . '</div>';
-				$req .= '<div class="mb-1 fw-bold">' . ((!empty($dropdowns[$row->requirement_type]['name'])) ? $dropdowns[$row->requirement_type]['name'] : '') . '</div>';
+				// $req .= '<div class="mb-1 fw-bold">' . ((!empty($dropdowns[$row->requirement_type]['name'])) ? $dropdowns[$row->requirement_type]['name'] : '') . '</div>';
 				$req .= '<div class="mb-1">' . ((!empty($row->area_from) && !empty($row->area_to)) ? $row->area_from . " - " . $row->area_to . " " . $area_form_m : "") . '</div>';
 				$req .= '<div class="mb-1"><small style="font-style:italic; font-size:89% !important"></small></div>';
 				$req .= $fstatus;
@@ -2229,8 +2229,11 @@ class EnquiriesController extends Controller
 		$edit_category = Enquiries::where('id', $request->id)->pluck('property_type');
 		$land_units = DB::table('land_units')->get();
 		$country_codes  = DB::table('countries')->get();
+		$user = User::with(['roles', 'roles.permissions'])->where('id', Auth::user()->id)->first();
+			
+		$permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
 
-		return view('admin.properties.add_enquiry', compact('country_codes', 'edit_configuration', 'land_units', 'edit_category', 'enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'current_id', 'districts', 'talukas', 'villages'));
+		return view('admin.properties.add_enquiry', compact('permissions','country_codes', 'edit_configuration', 'land_units', 'edit_category', 'enquiry_list', 'prop_type', 'projects', 'branches', 'cities', 'areas', 'configuration_settings', 'employees', 'prop_list', 'current_id', 'districts', 'talukas', 'villages'));
 	}
 	// public function getEnquiryConfiguration(Request $request)
 	// {

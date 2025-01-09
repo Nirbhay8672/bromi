@@ -167,23 +167,51 @@
                                                             <div>
                                                                 <label><b>Customer Requirement</b></label>
                                                             </div>
-                                                            <input type="hidden" name="this_data_id" id="this_data_id">
-                                                            <div class="btn-group me-2" role="group"
-                                                                aria-label="Basic radio toggle button group">
-                                                                <input type="radio" value="Rent" class="btn-check"
-                                                                    name="enquiry_for" id="propertyfor1"
-                                                                    autocomplete="off" checked>
-                                                                <label class="btn btn-outline-info btn-pill btn-sm py-1"
-                                                                    for="propertyfor1">Rent</label>
-                                                            </div>
-                                                            <div class="btn-group me-2" role="group"
-                                                                aria-label="Basic radio toggle button group">
-                                                                <input type="radio" value="Buy" class="btn-check"
-                                                                    name="enquiry_for" id="propertyfor2"
-                                                                    autocomplete="off">
-                                                                <label class="btn btn-outline-info btn-pill btn-sm py-1"
-                                                                    for="propertyfor2">Buy</label>
-                                                            </div>
+                                                            @if (Auth::user()->parent_id !== null)
+                                                                <input type="hidden" name="this_data_id"
+                                                                    id="this_data_id">
+                                                                @if (Auth::user()->enquiry_for_id == 'Rent')
+                                                                    <div class="btn-group me-2" role="group"
+                                                                        aria-label="Basic radio toggle button group">
+                                                                        <input type="radio" value="Rent"
+                                                                            class="btn-check" name="enquiry_for"
+                                                                            id="propertyfor1" autocomplete="off" checked>
+                                                                        <label
+                                                                            class="btn btn-outline-info btn-pill btn-sm py-1"
+                                                                            for="propertyfor1">Rent</label>
+                                                                    </div>
+                                                                @endif
+                                                                @if (Auth::user()->enquiry_for_id == 'Buy')
+                                                                    <div class="btn-group me-2" role="group"
+                                                                        aria-label="Basic radio toggle button group">
+                                                                        <input type="radio" value="Buy"
+                                                                            class="btn-check" name="enquiry_for"
+                                                                            id="propertyfor2" autocomplete="off">
+                                                                        <label
+                                                                            class="btn btn-outline-info btn-pill btn-sm py-1"
+                                                                            for="propertyfor2">Buy</label>
+                                                                    </div>
+                                                                @endif
+                                                            @else
+                                                                <div class="btn-group me-2" role="group"
+                                                                    aria-label="Basic radio toggle button group">
+                                                                    <input type="radio" value="Rent"
+                                                                        class="btn-check" name="enquiry_for"
+                                                                        id="propertyfor1" autocomplete="off" checked>
+                                                                    <label
+                                                                        class="btn btn-outline-info btn-pill btn-sm py-1"
+                                                                        for="propertyfor1">Rent</label>
+                                                                </div>
+                                                                <div class="btn-group me-2" role="group"
+                                                                    aria-label="Basic radio toggle button group">
+                                                                    <input type="radio" value="Buy"
+                                                                        class="btn-check" name="enquiry_for"
+                                                                        id="propertyfor2" autocomplete="off">
+                                                                    <label
+                                                                        class="btn btn-outline-info btn-pill btn-sm py-1"
+                                                                        for="propertyfor2">Buy</label>
+                                                                </div>
+                                                            @endif
                                                             {{-- <div class="btn-group me-2" role="group"
                                                                 aria-label="Basic radio toggle button group">
                                                                 <input type="radio" value="Both" class="btn-check"
