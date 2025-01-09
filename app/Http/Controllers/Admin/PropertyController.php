@@ -98,13 +98,11 @@ class PropertyController extends Controller
                 $enq = Enquiries::find($request->search_enq);
             }
             $dropdowns = $dropdownsarr;
-
             $is_sub_admin = User::where('id', Auth::id())->whereNotNull('parent_id')->first();
-            
-            if ($is_sub_admin) {
 
-                // common part start
-                if (($is_sub_admin->property_type_id)) {
+            if ($is_sub_admin) {
+                 // common part start
+                 if (($is_sub_admin->property_type_id)) {
                     $propertyTypeIdArray = str_replace("'", '"', $is_sub_admin->property_type_id);
                     $propertyTypeIdArray = json_decode($propertyTypeIdArray, true);
                 }
@@ -237,6 +235,129 @@ class PropertyController extends Controller
                     } else {
                         $data->whereIn('properties.property_type', ["85", "87"]);
                     }
+                    
+                    $data->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
+                        if (!empty($enq)) {
+                            // property for
+                            if ($request->match_enquiry_for) {
+                                $property_for = ($enq->enquiry_for == 'Buy') ? 'Sell' : $enq->enquiry_for;
+                                // dd("match_enquiry_for", $enq->enquiry_for, "..", $property_for);
+                                // dd($request->all(), $enq);
+                                if ($property_for === 'Rent') {
+                                    $query->whereIn('properties.property_for', ['Rent', 'Both']);
+                                }
+                                if ($property_for === 'Sell') {
+                                    $query->whereIn('properties.property_for', ['Sell', 'Both']);
+                                }
+                            }
+                            //requirement ytpe
+                            if ($request->match_property_type && !empty($enq->requirement_type)) {
+                                // dd("match_property_type", $enq->requirement_type, "..", $request->match_property_type);
+                                $query->where('properties.property_type', $enq->requirement_type);
+                            }
+                            //property category
+                            if ($request->match_specific_type && !empty($enq->property_type)) {
+                                // dd("match_specific_type", $enq->property_type, "..", $request->match_specific_type);
+                                $query->where('properties.property_category', $enq->property_type);
+                            }
+
+                            if ($request->match_specific_sub_type && !empty($enq->configuration)) {
+                                $configurations = json_decode($enq->configuration, true);
+                                if (is_array($configurations)) {
+                                    $query->whereIn('properties.configuration', $configurations);
+                                }
+                            }
+                            if ($request->match_enquiry_weekend && ($enq->weekend_enq == '1')) {
+                                // dd("asdads",$enq->weekend_enq);
+                                // $query->where('properties.week_end_villa', $enq->weekend_enq);
+                                $query->where('properties.week_end_villa', $enq->weekend_enq);
+                            }
+                            
+                            // Property price & unit_price
+                            if ($request->match_budget_from_type) {
+                                $budgetFrom = str_replace(',', '', $enq->budget_from);
+                                $budgetTo = str_replace(',', '', $enq->budget_to);
+                                $rentPrice = str_replace(',', '', $enq->rent_price);
+                                $sellPrice = str_replace(',', '', $enq->sell_price);
+
+                                if ($budgetFrom !== "" && $budgetTo !== "" && $enq->enquiry_for !== "Both") {
+                                    $query->where(function ($query) use ($budgetFrom, $budgetTo, $enq) {
+                                        $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                                            $query->where('properties.survey_price', '>=', $budgetFrom)
+                                                ->where('properties.survey_price', '<=', $budgetTo);
+                                        })->orWhere(function ($query) use ($budgetFrom, $budgetTo, $enq) {
+                                            // Rent type properties
+                                            if ($enq->enquiry_for == 'Rent') {
+                                                $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                                                    for ($i = 0; $i < 2; $i++) { // assuming maximum 2 arrays to check
+                                                        $query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][4]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+                                                            ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][4]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+                                                    }
+                                                });
+                                            }
+                                        })->orWhere(function ($query) use ($budgetFrom, $budgetTo, $enq) {
+                                            if ($enq->enquiry_for == 'Buy') {
+                                                $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                                                    for ($i = 0; $i < 2; $i++) {
+                                                        $query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][3]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+                                                            ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][3]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+                                                    }
+                                                });
+                                            }
+                                        })->orWhere(function ($query) use ($budgetFrom, $budgetTo) {
+                                            $query->where(function ($query) use ($budgetFrom, $budgetTo) {
+                                                for ($i = 0; $i < 2; $i++) {
+                                                    $query->orWhereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][7]"), ",", ""), "\"", "") AS UNSIGNED) >= ?', $budgetFrom)
+                                                        ->whereRaw('CAST(REPLACE(REPLACE(JSON_EXTRACT(properties.unit_details, "$[' . $i . '][7]"), ",", ""), "\"", "") AS UNSIGNED) <= ?', $budgetTo);
+                                                }
+                                            });
+                                        });
+                                    });
+                                } else {
+                                    $query->where(function ($query) use ($rentPrice, $sellPrice) {
+                                        $query->where('properties.survey_price', '>=', $rentPrice)
+                                            ->where('properties.survey_price', '<=', $sellPrice);
+                                    });
+                                }
+                            }
+
+                            // size
+                            if ($request->match_enquiry_size) {
+                                // dd("request->match_enquiry_size",$request->match_enquiry_size,"enq->area_from,enq->area_to",$enq->area_from, $enq->area_to,"Measure",$enq->area_from_measurement,"enq->property_type",$enq->property_type);
+                                // $query->where(function ($query) use ($enq) {
+                                //     $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                //         ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                //         ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to]);
+                                // });
+
+                                $query->where(function ($query) use ($enq) {
+                                    if ($enq->property_type !== '259' && $enq->property_type !== '260' && $enq->property_type !== '254') {
+                                        // dd("inn");
+                                        $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                            ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                            ->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                            ->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                            // ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                            // ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                            ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                            ->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$enq->area_from_measurement]);
+                                    } else {
+                                        $area_from_int = (int) $enq->area_from;
+                                        $area_to_int = (int) $enq->area_to;
+                                        // dd("out",$area_from_int,$area_to_int);
+                                        $query->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$area_from_int, $area_to_int])
+                                            ->whereRaw("SUBSTRING_INDEX(properties.salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                            ->orWhereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from, $enq->area_to])
+                                            ->whereRaw("SUBSTRING_INDEX(properties.salable_plot_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                            // ->orWhereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from_int, $enq->area_to_int])
+                                            // ->whereRaw("SUBSTRING_INDEX(properties.constructed_salable_area, '_-||-_', -1) = ?", [$enq->area_from_measurement])
+                                            ->orWhereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', 1) BETWEEN ? AND ?", [$enq->area_from_int, $enq->area_to_int])
+                                            ->whereRaw("SUBSTRING_INDEX(properties.survey_plot_size, '_-||-_', -1) = ?", [$enq->area_from_measurement]);
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
 
                 $data->where('prop_status', 1);
@@ -470,8 +591,8 @@ class PropertyController extends Controller
 				WHEN properties.prop_status = 1 THEN 1
 				ELSE 2
 				END,  properties.id DESC');
+                // dd("data 22",$data);
             }
-
             $parts = explode('?', $request->location);
 
             if (count($parts) > 1) {
@@ -485,74 +606,139 @@ class PropertyController extends Controller
                     }
                 }
             }
-
             $data = $data->get()->filter(function ($value) use ($request) {
-                $getArea = function ($value) {
-                    if (!empty($value->salable_area)) {
-                        return explode('_-||-_', $value->salable_area)[0];
-                    } elseif (!empty($value->salable_plot_area)) {
-                        return explode('_-||-_', $value->salable_plot_area)[0];
-                    } elseif (!empty($value->constructed_salable_area)) {
-                        return explode('_-||-_', $value->constructed_salable_area)[0];
-                    }
-                    return null;
-                };
+                $theArea = 0;
 
-                $theArea = $getArea($value);
-            
+                if (!empty($value->salable_area)) {
+                    $theArea = explode('_-||-_', $value->salable_area)[0];
+                } elseif (!empty($value->salable_plot_area)) {
+                    $theArea = explode('_-||-_', $value->salable_plot_area);
+                }
+
                 if (!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area)) {
                     return false;
                 }
-            
+
                 if (!empty($request->filter_to_area) && !($theArea <= $request->filter_to_area)) {
                     return false;
                 }
-            
+
                 $allPrices = [];
+
                 if (!empty($value->unit_details) && !empty(json_decode($value->unit_details)[0])) {
-                    foreach (json_decode($value->unit_details) as $unit) {
-                        if (!empty($unit['7'])) {
-                            $allPrices[] = $unit['7'];
+                    foreach (json_decode($value->unit_details) as $key3 => $value3) {
+                        if (!empty($value3['7'])) {
+                            $allPrices[] = $value3['7'];
                         }
-                        if (!empty($unit['4'])) {
-                            $allPrices[] = $unit['4'];
+                        if (!empty($value3['4'])) {
+                            $allPrices[] = $value3['4'];
                         }
-                        if (!empty($unit['3'])) {
-                            $allPrices[] = $unit['3'];
-                        }
-                    }
-                }
-            
-                $filterPrices = function ($prices, $filterValue, $comparison) {
-                    foreach ($prices as $price) {
-                        if ($comparison(Helper::c_to_n($price), Helper::c_to_n($filterValue))) {
-                            return true;
+                        if (!empty($value3['3'])) {
+                            $allPrices[] = $value3['3'];
                         }
                     }
-                    return false;
-                };
-            
-                if (!empty($request->filter_from_price) && 
-                    !$filterPrices($allPrices, $request->filter_from_price, fn($price, $filter) => floatval($price) >= floatval($filter))) {
-                    return false;
                 }
-            
-                if (!empty($request->filter_to_price) && 
-                    !$filterPrices($allPrices, $request->filter_to_price, fn($price, $filter) => floatval($price) <= floatval($filter))) {
-                    return false;
+
+                if (!empty($request->filter_from_price)) {
+                    $from_passed = false;
+                    foreach ($allPrices as $key5 => $value5) {
+                        if ((Helper::c_to_n($value5) >= Helper::c_to_n($request->filter_from_price))) {
+                            $from_passed = true;
+                            break;
+                        }
+                    }
+                    if (!$from_passed) {
+                        return false;
+                    }
                 }
-            
+
+                if (!empty($request->filter_to_price)) {
+                    $to_passed = false;
+                    foreach ($allPrices as $key6 => $value6) {
+                        if ((Helper::c_to_n($value6) <= Helper::c_to_n($request->filter_to_price))) {
+                            $to_passed = true;
+                            break;
+                        }
+                    }
+                    if (!$to_passed) {
+                        return false;
+                    }
+                }
+
                 return true;
             });
-            
+            // foreach ($data->get() as $key => $value) {
+            //     $theArea = 0;
+            //     if (!empty($value->salable_area)) {
+            //         $theArea = explode('_-||-_', $value->salable_area)[0];
+            //     } elseif (!empty($value->salable_plot_area)) {
+            //         $theArea = explode('_-||-_', $value->salable_plot_area);
+            //     }
+            //     if ((!empty($request->filter_from_area) && !($theArea >= $request->filter_from_area))) {
+            //         unset($data[$key]);
+            //         continue;
+            //     }
+            //     if (!empty($request->filter_to_area) && !($theArea <= $request->filter_to_area)) {
+            //         unset($data[$key]);
+            //         continue;
+            //     }
+            //     $allPrices = [];
 
+            //     if (!empty($value->unit_details) && !empty(json_decode($value->unit_details)[0])) {
+            //         foreach (json_decode($value->unit_details) as $key3 => $value3) {
+            //             if (!empty($value3['7'])) {
+            //                 array_push($allPrices, $value3['7']);
+            //             }
+            //             if (!empty($value3['4'])) {
+            //                 array_push($allPrices, $value3['4']);
+            //             }
+            //             if (!empty($value3['3'])) {
+            //                 array_push($allPrices, $value3['3']);
+            //             }
+            //         }
+            //     }
+            //     if (!empty($request->filter_from_price)) {
+            //         $from_passed = 0;
+            //         foreach ($allPrices as $key5 => $value5) {
+            //             if ((Helper::c_to_n($value5) >= Helper::c_to_n($request->filter_from_price))) {
+            //                 $from_passed = 1;
+            //                 break;
+            //             }
+            //         }
+            //         if (!$from_passed) {
+            //             unset($data[$key]);
+            //             continue;
+            //         }
+            //     }
+            //     if (!empty($request->filter_to_price)) {
+            //         $to_passed = 0;
+            //         foreach ($allPrices as $key6 => $value6) {
+            //             if ((Helper::c_to_n($value6) <= Helper::c_to_n($request->filter_to_price))) {
+            //                 $to_passed = 1;
+            //                 break;
+            //             }
+            //         }
+            //         if (!$to_passed) {
+            //             unset($data[$key]);
+            //         }
+            //     }
+            // }
             return DataTables::of($data)
                 ->editColumn('project_id', function ($row) use ($request) {
                     $isShared = ShareProperty::where('property_id', $row->id)->where('user_id', Auth::user()->id)->first();
+                    // $first = '<td style="vertical-align:top">
+                    // 	<font size="3"><a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . ((isset($row->Projects->project_name)) ? $row->Projects->project_name : 'tests') . '</a>';
+                    $first =  '<td style="vertical-align:top">
+                        <font size="3"><a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . (!empty($row->Projects->project_name) ? $row->Projects->project_name : $row->Village->name) . '</a>';
 
-                    $first = '<td style="vertical-align:top">
-                        <font size="3"><span class="me-2 d-none">'.$row->id .' - </span><a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . (!empty($row->Projects->project_name) ? $row->Projects->project_name : $row->Village->name) . '</a>';
-
+                    //Project name or vilage
+                    // if ($row->property_category === '258' && $row->project_id !== '') {
+                    //     // dd("on");
+                    //     // if (isset($row->Village->name)) {
+                    //     //     $first = $row->Village->name;
+                    //     // }
+                    //     // return '<a href="' . route('admin.project.view', encrypt($row->id)) . '" style="font-weight: bold;">' . $name . '</a>';
+                    // }
                     $first_middle = '';
                     $forth = '';
                     if (isset($row->Projects->is_prime) && $row->Projects->is_prime) {
@@ -564,17 +750,7 @@ class PropertyController extends Controller
                     $first_end = '</font>';
                     // $second = '<br> <a href="' . $row->location_link . '" target="_blank"> <font size="2" style="font-style:italic">Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '    </font> </a>';
                     $second = '<br>Locality: ' . ((!empty($row->Projects->Area->name)) ? $row->Projects->Area->name : 'Null') . '	</font>';
-
-                    $third = '';
-
-                    if ($row->Property_priority == "91") {
-                        $third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a> <img style="height:20px;bottom: 38px;margin-left:17px;" src="' . asset('assets/prop_images/Blue-Star.png') . '" alt="">' : "");
-                    } else if ($row->Property_priority == "90") {
-                        $third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a> <img style="height:20px;bottom: 38px;margin-left:17px;" src="' . asset('assets/prop_images/Yellow-Star.png') . '" alt="">' : "");
-                    } else if ($row->Property_priority == "17") {
-                        $third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a> <img style="height:20px;bottom: 38px;margin-left:17px;" src="' . asset('assets/prop_images/Red-Star.png') . '" alt="">' : "");
-                    }
-                    
+                    $third = (!empty($row->location_link) ? '<br> <a href="' . $row->location_link . '" target="_blank"><i class="fa fa-map-marker fa-1x cursor-pointer color-code-popover" data-bs-trigger="hover focus">  check on map  </i></a>' : "");
                     if ($isShared) {
                         $forth = '<img style="height:24px;float:right;" src="' . asset('assets/images/sharedImg.png') . '" alt="">';
                     } else {
@@ -592,7 +768,6 @@ class PropertyController extends Controller
                     return '<td style="vertical-align:top">
 					' . Carbon::parse($row->updated_at)->format('d-m-Y') . '<br>' . Carbon::parse($row->updated_at)->diffInDays() . ' days</td>';
                 })
-                
                 ->editColumn('property_category', function ($row) use ($dropdowns, $land_units) {
                     // $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk');
                     $new_array = array('', 'office space', 'Co-working', 'Ground floor', '1st floor', '2nd floor', '3rd floor', 'Warehouse', 'Cold Storage', 'ind. shed', 'Commercial Land', 'Agricultural/Farm Land', 'Industrial Land', '1 rk', '1bhk', '2bhk', '3bhk', '4bhk', '5bhk', '5+bhk', 'Test', 'testw');
@@ -615,8 +790,7 @@ class PropertyController extends Controller
                             }
                         }
                     }
-                    $prop_type = ((!empty($dropdowns[$row->property_type]['name'])) ? $dropdowns[$row->property_type]['name'] . ' | ': '');
-                    $main_category = ((!empty($dropdowns[$row->property_category]['name'])) ? $dropdowns[$row->property_category]['name'] . ' | ': '');
+                    //$category = ((!empty($dropdowns[$row->property_category]['name'])) ? ' | '. $dropdowns[$row->property_category]['name'] : '');
                     $category = $sub_cat;
                     // BHARAT HIDE FURNISHED
                     if ($row->property_category == '256') {
@@ -644,6 +818,14 @@ class PropertyController extends Controller
                     $salable_area_print = $this->generateAreaUnitDetails($row, $dropdowns[$row->property_category]['name'], $land_units);
                     if (empty($salable_area_print)) {
                         $salable_area_print = "Area Not Available";
+                    }
+
+                    if ($row->Property_priority == "91") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Blue-Star.png') . '" alt="">';
+                    } else if ($row->Property_priority == "90") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Yellow-Star.png') . '" alt="">';
+                    } else if ($row->Property_priority == "17") {
+                        $row->image_path = '<img style="height:24px;float: right;bottom: 38px;right:17px;position:relative;" src="' . asset('assets/prop_images/Red-Star.png') . '" alt="">';
                     }
                     try {
                         $value = json_decode($row->unit_details)[0];
@@ -795,7 +977,7 @@ class PropertyController extends Controller
                                         <i class="dropbtn fa fa-info-circle p-0 text-dark"></i>
                                         <div class="dropdown-content py-2 px-2 mx-wd-350 cust-top-20 rounded">
                                             <div class="row">';
-
+                                
                                 $tooltipHtml .= (isset($value[9][0]) && $value[9][0] != "0") ?
                                     '<div class="col-12">
                                         <b class="m-2">Remarks:</b>
@@ -803,9 +985,10 @@ class PropertyController extends Controller
                                         <span class="full-text d-none">' . $value[9][0] . '</span>
                                         <a href="#" class="read-more-link">Read More</a>
                                     </div>' : '';
-
+                            
                                 $tooltipHtml .= '</div></div></div></div>';
-                            } else {
+                            }
+                            else {
                                 $tooltipHtml = "";
                             }
                         }
@@ -1085,6 +1268,7 @@ class PropertyController extends Controller
                 ->make(true);
         }
         $projects = Projects::whereNotNull('project_name')
+        ->where('id', '!=', 261)
         ->where('user_id', Auth::user()->id)
         ->get();
         $areas = Areas::where('user_id', Auth::user()->id)->get();
@@ -2556,7 +2740,6 @@ class PropertyController extends Controller
         $enquiries = Enquiries::with('Employee', 'Progress', 'activeProgress')
             ->where('requirement_type', $property->property_type)
             ->where('property_type', $property->property_category)
-            ->where('enquiry_for', $property->property_for)
             ->where('weekend_enq', $property->week_end_villa)
             ->whereJsonContains('configuration', $property->configuration);
         if (($unit_price !== "" && $unit_price !== 0 && $sell_price !== '' && $sell_price !== 0) || ($unit_price !== "" && $unit_price !== 0  && $both_price !== '' && $both_price !== 0)) {
@@ -2641,7 +2824,6 @@ class PropertyController extends Controller
                 return $query;
             }
         });
-        
         // length_of_fp
         // dd("sd",$property->property_category);
         $enquiries = $enquiries->when(($length_of_fp !== "" && $property->property_category === '262' && $property->property_category !== null), function ($query) use ($length_of_fp, $length_of_fp_part) {
