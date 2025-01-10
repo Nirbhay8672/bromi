@@ -236,6 +236,7 @@ class PropertyController extends Controller
                         $data->whereIn('properties.property_type', ["85", "87"]);
                     }
                     
+                    
                     $data->when(!empty($request->search_enq), function ($query) use ($request, $enq) {
                         if (!empty($enq)) {
                             // property for
