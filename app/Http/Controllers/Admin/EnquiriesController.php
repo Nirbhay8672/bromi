@@ -91,15 +91,15 @@ class EnquiriesController extends Controller
 				$data = Enquiries::with(['Employee', 'Progress', 'activeProgress']);
 
 				if($is_sub_admin->enquiry_permission) {
-					if($is_sub_admin->enquiry_permission == 'only_assigned') {
-						$data->where(function ($query) {
-							$query->whereHas('AssignHistory', function ($subQuery) {
-								$subQuery->where('assign_id', '=', Auth::user()->id);
-							})
-							->orWhere(function ($subQuery) {
-								$subQuery->whereIn('added_by', [Auth::user()->id])
-									->orWhere('employee_id', [Auth::user()->id]);
-							});
+					if ($is_sub_admin->enquiry_permission == 'only_assigned') {
+						$data->whereHas('AssignHistory', function ($subQuery) {
+							$subQuery->where('assign_id', '=', Auth::user()->id)
+								->where('status', '=', 0);
+						});
+
+						$data->orWhere(function ($subQuery) {
+							$subQuery->whereIn('added_by', [Auth::user()->id])
+								->orWhere('employee_id', [Auth::user()->id]);
 						});
 					}
 					if($is_sub_admin->enquiry_permission == 'all') {
@@ -1763,11 +1763,25 @@ class EnquiriesController extends Controller
 	public function transferNow(Request $request)
 	{
 		if (!empty($request->employee) && !empty($request->enquiry_id)) {
-			// 			Enquiries::where('id', $request->enquiry_id)->update(['employee_id' => $request->employee], ['transfer_date' => Carbon::now()->format('Y-m-d H:i:s')]);
+			Enquiries::where('added_by', Auth::user()->id)
+				->update([
+					'added_by' => 0,
+				]);
 			$dataEnq = Enquiries::where('id', $request->enquiry_id)->update([
 				'employee_id' => $request->employee,
 				'transfer_date' => Carbon::now()->format('Y-m-d H:i:s')
 			]);
+
+			$assignHistories = AssignHistory::where('enquiry_id', $request->enquiry_id)
+				->where('user_id', Auth::user()->id)
+				->get();
+			if ($assignHistories->isNotEmpty()) {
+				AssignHistory::where('enquiry_id', $request->enquiry_id)
+					->where('user_id', Auth::user()->id)
+					->where('status', 0)
+					->update(['status' => 1]);
+				// AssignHistory::create(['enquiry_id' => $request->enquiry_id, 'user_id' => Auth::user()->id, 'assign_id' => $request->employee, 'status' => 1]);
+			}
 			/* Stored Assign Enquiry History */
 			AssignHistory::create(['enquiry_id' => $request->enquiry_id, 'user_id' => Auth::user()->id, 'assign_id' => $request->employee]);
 
@@ -1966,10 +1980,12 @@ class EnquiriesController extends Controller
 				$property_for = ($data->enquiry_for == 'Buy') ? 'Sell' : $data->enquiry_for;
 				if ($property_for === 'Rent') {
 					// dd("re",$property_for);
-					$query->whereIn('properties.property_for', ['Rent']);
+					// $query->whereIn('properties.property_for', ['Rent']);
+					$query->whereIn('property_for', ['Rent','Both']);
 				} elseif ($property_for === 'Sell') {
 					// dd("sell",$property_for);
-					$query->whereIn('properties.property_for', ['Sell']);
+					// $query->whereIn('properties.property_for', ['Sell']);
+					$query->whereIn('property_for', ['Sell','Both']);
 				}
 			})
 			->where('properties.property_category', $data->property_type)

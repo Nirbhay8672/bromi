@@ -1187,7 +1187,7 @@ class PropertyController extends Controller
                         ->first();
                     $permissions = $user->roles[0]['permissions']->pluck('name')->toArray();
                     // bharat edit
-                    if (in_array('property-edit', $permissions) && $row->added_by == Auth::user()->id) {
+                    if (in_array('property-edit', $permissions)) {
                         $buttons = $buttons . '<a href="' . route('admin.property.edit', $row->id) . '"><i role="button" title="Edit" data-id="' . $row->id . '"  class="fs-22 py-2 mx-2 fa-pencil pointer fa  " type="button"></i></a>';
                     }
                     if (in_array('property-delete', $permissions)) {
