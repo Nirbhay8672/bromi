@@ -255,6 +255,27 @@ class UserController extends Controller
 		if (!empty($request->id) && $request->id != '') {
 
 		} else {
+
+			// create notification for new user
+			$msg = $data->first_name .' '. $data->last_name . " user created.";
+			
+			$userNotification = UserNotifications::create([
+				"user_id" => Auth::user()->id,
+				"notification" => $msg,
+				"notification_type" => Constants::NEW_USER,
+				"new_user_id" => $data->id
+			]);
+			// if notificaton creation failed.
+			if (!$userNotification) {
+				Log::error('Unable to create user notification');
+			}
+			$user = Auth::user();
+			// send if user has onesignal id
+			if (!empty($user->onesignal_token)) {
+				HelperFn::sendPushNotification($user->onesignal_token, $msg);
+			}
+			// create notification for new user end
+
 			$state = State::find($request->state_id);
 			$city = City::find($request->city_id);
 
@@ -297,23 +318,6 @@ class UserController extends Controller
 			}
 		}
 
-        $msg = "New user created.";
-        // create notification for new user
-        $userNotification = UserNotifications::create([
-            "user_id" => Auth::user()->id,
-            "notification" => $msg,
-            "notification_type" => Constants::NEW_USER,
-            "new_user_id" => $data->id
-        ]);
-        // if notificaton creation failed.
-        if (!$userNotification) {
-            Log::error('Unable to create user notification');
-        }
-        $user = Auth::user();
-        // send if user has onesignal id
-        if (!empty($user->onesignal_token)) {
-            HelperFn::sendPushNotification($user->onesignal_token, $msg);
-        }
 		return response()->json();
 	}
 
