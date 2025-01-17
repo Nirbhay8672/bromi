@@ -274,7 +274,8 @@ class RegisterController extends Controller
         $superRoleId = Role::where('name', 'Super Admin')->first()->id;
         $superUser = User::where('role_id', $superRoleId)->first();
 
-        $msg = "New user registered.";
+        $msg = $request->first_name . ' ' . $request->last_name . " user registered.";
+        
         // create notification for new user
         $userNotification = UserNotifications::create([
             "user_id" => $superUser->id,
